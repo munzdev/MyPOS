@@ -108,8 +108,8 @@ function(  app,
         {
             var id = $(event.currentTarget).attr('id');
 
-            var priceRegex = /[(0-9)]+/igm;
-            var menuid = id.match(priceRegex)[0];
+            var idRegex = /[(0-9)]+/igm;
+            var menuid = id.match(idRegex)[0];
 
             console.log("add " + menuid);
 
