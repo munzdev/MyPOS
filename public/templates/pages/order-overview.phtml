@@ -1,0 +1,58 @@
+ <div data-role="content">
+     <div class="nav-header"><%= header %></div>
+     <form autocomplete="off">
+         <input id="order-overview-filterTable-input" data-type="search">
+     </form>
+     <table data-role="table"  data-filter="true" data-input="#order-overview-filterTable-input"  id="order-overview-table" class="ui-responsive table-stroke table-stripe">
+         <thead>
+             <tr>
+                 <th>Tisch</th>
+                 <th>Summe</th>
+                 <th>Status</th>
+                 <th>Optionen</th>
+             </tr>
+         </thead>
+         <tbody>
+            <% orders.each(function(order){ %>
+		        <tr>
+                 <th><%- order.get('table_name') %></th>
+                 <td><%-  parseFloat(order.get('price')).toFixed(2) %> €</td>
+                 <td>
+                    <% switch(parseInt(order.get('status'))) {
+                       case ORDER_STATUS_WAITING: %>
+                        in Warteschlange
+                       <% break;
+                       case ORDER_STATUS_IN_PROGRESS: %>
+                        in Bearbeitung
+                       <% break;
+                       case ORDER_STATUS_FINISHED: %>
+                        Fertig
+                       <% break;
+                    } %>-
+                    <% if(order.get('payed') == order.get('price')) { %>
+                        <span style="color: green;">Bezahlt</span>
+                    <% } else if(order.get('payed') > 0) { %>
+                        <span style="color: orange;">Teilbezahlt</span>
+                    <% } else { %>
+                        <span style="color: red;">Unbezahlt</span>
+                    <% } %>
+                 </td>
+                 <td>
+                     <% if (order.get('button_info') ) { %>
+                        <a href="#order-info" class="ui-btn ui-icon-info ui-mini ui-btn-icon-left">Info</a>
+                     <% } %>
+                     <% if (order.get('button_pay') ) { %>
+                        <a href="#order-pay" class="ui-btn ui-icon-shop ui-mini ui-btn-icon-left">Bezahlen</a>
+                     <% } %>
+                     <% if (order.get('button_edit') ) { %>
+                        <a href="#order-edit" class="ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
+                     <% } %>
+                     <% if (order.get('button_cancel') ) { %>
+                        <a href="#order-storno" class="ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">Storno</a>
+                     <% } %>
+                 </td>
+                </tr>
+            <% }); %>
+         </tbody>
+     </table>
+ </div>

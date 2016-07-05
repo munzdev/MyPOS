@@ -1,0 +1,120 @@
+<div data-role="content">
+    <div class="nav-header"><%= header %></div>
+    <div data-role="tabs" id="order-modify-tabs">
+        <div data-role="navbar" data-iconpos="notext" id="order-modify-tabs-navbar" >
+                <ul>
+                    <% products.each(function(category){ %>
+                        <li><a data-role="tab"  href="#order-modify-<%- category.get('menu_typeid') %>"><%- category.get('name') %></a></li>
+                    <% }); %>
+                    <li><a data-role="tab" id="order-modify-tabs-navbar-overview" href="#order-modify-overview">Übersicht</a></li>
+                </ul>
+        </div>
+        <% products.each(function(category){ %>
+            <div id="order-modify-<%- category.get('menu_typeid') %>" >
+                <ul data-role="listview" data-inset="true">
+                    <% category.get('groupes').each(function(groupe){ %>
+                        <li data-role="list-divider"><%- groupe.get('name') %></li>
+                        <% groupe.get('menues').each(function(menu){ %>
+                            <li><a href="#order-modify-panel-<%- menu.get('menuid') %>" class='order-modify-menu-item'><%- menu.get('name') %> <span class="ui-li-count"><%- parseFloat(menu.get('price')).toFixed(2) %> €</span></a></li>
+                        <% }); %>
+                    <% }); %>
+                </ul>
+            </div>
+        <% }); %>
+        <div id="order-modify-overview">
+            <a href="#order-modify-panel-special" data-role="button" data-icon="action" data-mini="true">Sonderwunsch hinzufügen</a>
+            <ul data-role="listview" data-inset="true" id="order-modify-selected">
+            </ul>
+            <% if(mode == 'new') { %>
+                <h3 class="ui-bar ui-bar-a ui-corner-all">Summe</h3>
+                <div class="ui-body ui-body-a ui-corner-all">
+                        <h1 style="margin: 0; padding: 0" id='order-modify-total'>0,00€</h1>
+                </div>
+            <% } else if(mode == 'edit') { %>
+                <h3 class="ui-bar ui-bar-a ui-corner-all">Alte Summe</h3>
+                <div class="ui-body ui-body-a ui-corner-all">
+                    <h1 style="margin: 0; padding: 0" id='order-modify-total-old'>0,00€</h1>
+                </div>
+                <h3 class="ui-bar ui-bar-a ui-corner-all">Neue Summe</h3>
+                <div class="ui-body ui-body-a ui-corner-all">
+                    <h1 style="margin: 0; padding: 0" id='order-modify-total-new'>0,00€</h1>
+                    Differenz: <span>0,00€</span>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+<% products.each(function(category){ %>
+    <% category.get('groupes').each(function(groupe){ %>
+        <% groupe.get('menues').each(function(menu){ %>
+            <div data-role="panel" data-display="overlay" id="order-modify-panel-<%- menu.get('menuid') %>" class='order-modify-panel'>
+                <h3 class="ui-bar ui-bar-a ui-corner-all" style="margin: 0;"><%- menu.get('name') %> Details</h3>
+                <div class="ui-body ui-body-a ui-corner-all">
+                    <% if(menu.get('sizes').length > 1) { %>
+                        <fieldset data-role="controlgroup" data-mini="true">
+                            <legend>Größe:</legend>
+                            <% menu.get('sizes').each(function(size){ %>
+                               <input type="radio" name="size-<%- menu.get('menuid') %>" id="checkbox-size-<%- menu.get('menuid') %>-<%- size.get('menu_sizeid') %>" value="<%- size.get('menu_sizeid') %>">
+                               <label for="checkbox-size-<%- menu.get('menuid') %>-<%- size.get('menu_sizeid') %>"><%- size.get('name') %> <% if(size.get('price') != 0) { %><span class="ui-li-count"><%- parseFloat(size.get('price')).toFixed(2) %> €</span><% } %></label>
+                            <% }); %>
+                        </fieldset>
+                    <% } %>
+
+                    <% if(menu.get('extras').length > 0) { %>
+                        <fieldset data-role="controlgroup" data-mini="true">
+                            <legend>Besonderheiten:</legend>
+                            <% menu.get('extras').each(function(extra){ %>
+                                <input type="checkbox" name="extra-<%- menu.get('menuid') %>" id="extra-<%- menu.get('menuid') %>-<%- extra.get('menu_extraid') %>" value="<%- extra.get('menu_extraid') %>">
+                                <label for="extra-<%- menu.get('menuid') %>-<%- extra.get('menu_extraid') %>"><%- extra.get('name') %><% if(extra.get('price') != 0) { %><span class="ui-li-count"><%- parseFloat(extra.get('price')).toFixed(2) %> €</span><% } %></label>
+                            <% }); %>
+                        </fieldset>
+                    <% } %>
+
+                    <fieldset data-role="controlgroup" data-mini="true">
+                        <legend>Extras:</legend>
+                        <textarea cols="40" rows="2" name="extras-text-<%- menu.get('menuid') %>" id="extras-text-<%- menu.get('menuid') %>"></textarea>
+                    </fieldset>
+
+                    <div id="order-modify-panel-mixing-text-<%- menu.get('menuid') %>">
+                    </div>
+
+                    <% if(category.get('allowMixing') == true) { %>
+                        <a id="order-modify-panel-<%- menu.get('menuid') %>-mixing" class="order-modify-mixing ui-shadow ui-btn ui-mini ui-corner-all ui-icon-star ui-btn-icon-right">Spritzen mit</a>
+                    <% } %>
+                    <a id="order-modify-panel-<%- menu.get('menuid') %>-add" class="order-modify-add ui-shadow ui-btn ui-mini ui-corner-all ui-icon-plus ui-btn-icon-right">Hinzufügen</a>
+                    <a data-rel="close" id="order-modify-panel-<%- menu.get('menuid') %>-close" class="order-modify-close ui-shadow ui-btn ui-mini ui-corner-all ui-icon-back ui-btn-icon-right">Abbrechen</a>
+                </div>
+            </div>
+        <% }); %>
+    <% }); %>
+<% }); %>
+<div data-role="panel" data-display="overlay" id="order-modify-panel-special">
+    <h3 class="ui-bar ui-bar-a ui-corner-all" style="margin: 0;">Sonderwunsch hinzufügen</h3>
+    <div class="ui-body ui-body-a ui-corner-all">
+        <fieldset data-role="controlgroup" data-mini="true">
+            <legend>Extras:</legend>
+            <textarea cols="40" rows="2" name="order-modify-panel-special-extra" id="order-modify-panel-special-extra"></textarea>
+        </fieldset>
+
+        <a id="order-modify-panel-special-add" class="ui-shadow ui-btn ui-mini ui-corner-all ui-icon-plus ui-btn-icon-right">Hinzufügen</a>
+        <a data-rel="close" class="ui-shadow ui-btn ui-mini ui-corner-all ui-icon-back ui-btn-icon-right">Abbrechen</a>
+    </div>
+</div>
+<div data-role="footer" data-theme="b" data-position="fixed" >
+    <a id="order-modify-footer-back" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-carat-l">Zurück</a>
+    <a id="order-modify-footer-finish" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-check" style="float:right">Bestellen</a>
+</div>
+<div data-role="popup" id="order-modify-verify-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+    <div data-role="header" data-theme="a">
+        <% if(mode == 'new') { %>
+            <h1>Bestellung fertig?</h1>
+        <% } else { %>
+            <h1>Bestellung ändern?</h1>
+        <% } %>
+    </div>
+    <div role="main" class="ui-content">
+        <h3 class="ui-title">Sind sie sicher das die Bestellung fertig ist?</h3>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Abbrechen</a>
+        <a id='order-modify-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
+    </div>
+</div>

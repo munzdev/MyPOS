@@ -1,0 +1,28 @@
+<div class="ui-grid-a">
+    <div class="ui-block-a">
+        <h2 style="white-space: normal;"><%- name %></h2>
+        <p><strong style="white-space: normal;"><%- extras %></strong></p>
+    </div>
+    <div class="ui-block-b" style="top: 1em; right: 0em; text-align: right; font-size: .75em; font-weight: 400; margin: .6em 0;">
+        <% if(mode == 'pay') { %>
+	        in Rechnung: <strong><%- amount %></strong>
+	        <br/>
+	        Offen: <strong><%- open %></strong>
+	        <br/>
+        <% } else { %>
+	        Anzahl: <strong><%- amount %></strong>
+	        <br/>
+        <% } %>
+
+        <% if(isSpecialOrder == true) { %>
+            <strong>Preis wird von<br/>Manager noch<br/>festgelegt</strong>
+        <% } else { %>
+            Einzelpreis: <strong><%- parseFloat(price).toFixed(2) %>€</strong>
+            <br/>
+            Gesamt: <strong><%- parseFloat(totalPrice).toFixed(2) %>€</strong>
+        <% } %>
+        <br/>
+        <a data-menu-typeid="<%- menu_typeid %>" data-index="<%- index %>" class="order-item-up ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-notext">+</a>
+        <a data-menu-typeid="<%- menu_typeid %>" data-index="<%- index %>" class="order-item-down ui-btn ui-btn-inline ui-icon-minus ui-btn-icon-notext">-</a>
+    </div>
+</div>

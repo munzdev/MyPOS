@@ -1,0 +1,22 @@
+<div data-role="header" data-theme="b">
+    <h1>Login</h1>
+</div>
+<div data-role="content">
+    <form id='loginForm' action="#">
+    	<fieldset>
+	        <div data-role="fieldcontain">
+	          <label for="usrnm" class="ui-hidden-accessible">Benutzername:</label>
+	          <input type="text" name="username" id="username" placeholder="Benutzername">
+            </div>
+            <div data-role="fieldcontain">
+	          <label for="pswd" class="ui-hidden-accessible">Passwort:</label>
+	          <input type="password" name="password" id="password" placeholder="Passwort">
+            </div>
+            <div data-role="fieldcontain">
+	          <label for="rememberMe">Login merken</label>
+	          <input type="checkbox" name="rememberMe" id="rememberMe" value="1" data-mini="true">
+	        </div>
+    		<input type="button" id="login-submit" data-inline="true" value="Log in">
+        </fieldset>
+    </form>
+</div> 

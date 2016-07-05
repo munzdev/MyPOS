@@ -1,0 +1,83 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "fb056a07b534b04c0ed177c7102ac8e1",
+    "content-hash": "95c14f9abb0c6fe6eaa0c75128b17dc2",
+    "packages": [
+        {
+            "name": "mike42/escpos-php",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mike42/escpos-php.git",
+                "reference": "cfea4c4fc95516ac953e1e5b623f854632afa2ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mike42/escpos-php/zipball/cfea4c4fc95516ac953e1e5b623f854632afa2ee",
+                "reference": "cfea4c4fc95516ac953e1e5b623f854632afa2ee",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.5.*",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Mike42\\": "src/Mike42"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roni Saha",
+                    "email": "roni.cse@gmail.com"
+                },
+                {
+                    "name": "Michael Billington",
+                    "email": "michael.billington@gmail.com"
+                },
+                {
+                    "name": "Gergely Radics",
+                    "email": "gerifield@ustream.tv"
+                },
+                {
+                    "name": "Warren Doyle",
+                    "email": "w.doyle@fuelled.co"
+                },
+                {
+                    "name": "vharo",
+                    "email": "vharo@geepok.com"
+                }
+            ],
+            "description": "Thermal receipt printer library, for use with ESC/POS compatible printers",
+            "homepage": "https://github.com/mike42/escpos-php",
+            "keywords": [
+                "ESC-POS",
+                "driver",
+                "escpos",
+                "print",
+                "receipt"
+            ],
+            "time": "2016-04-25 01:14:07"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
