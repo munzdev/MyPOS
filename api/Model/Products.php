@@ -13,19 +13,19 @@ class Products
 	public function GetList($i_eventid)
 	{
 		$o_statement = $this->o_db->prepare("SELECT mt.menu_typeid,
-													mt.name as Type_Name,
-													mt.tax,
-													mt.allowMixing,
-													mg.menu_groupid,
-													mg.name as Group_Name,
-													m.menuid,
-													m.name,
-													m.price,
-													m.availability
-											 FROM menues m
-											 INNER JOIN menu_groupes mg ON mg.menu_groupid = m.menu_groupid
-											 INNER JOIN menu_types mt ON mt.menu_typeid = mg.menu_typeid
-											 WHERE m.eventid = :eventid");
+                                                            mt.name as Type_Name,
+                                                            mt.tax,
+                                                            mt.allowMixing,
+                                                            mg.menu_groupid,
+                                                            mg.name as Group_Name,
+                                                            m.menuid,
+                                                            m.name,
+                                                            m.price,
+                                                            m.availability
+                                                    FROM menues m
+                                                    INNER JOIN menu_groupes mg ON mg.menu_groupid = m.menu_groupid
+                                                    INNER JOIN menu_types mt ON mt.menu_typeid = mg.menu_typeid
+                                                    WHERE m.eventid = :eventid");
 
 		$o_statement->execute(array(':eventid' => $i_eventid));
 

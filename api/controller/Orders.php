@@ -33,16 +33,58 @@ class Orders extends SecurityController
         $a_params = Request::ValidateParams(array('order' => 'json',
                                                   'options' => 'array'));
 
-        $o_orders = new Model\Orders(Database::GetConnection());
+        $o_db = Database::GetConnection();
+
+        $o_orders = new Model\Orders($o_db);
+        $o_tables = new Model\Tables($o_db);
 
         $a_user = Login::GetCurrentUser();
 
-        $a_order = json_decode($a_params['order'], true);
+        $a_orders = json_decode($a_params['order'], true);
 
+        try
+        {
+            $o_db->beginTransaction();
 
-        $i_newId = $o_orders->Add($a_order);
+            $i_tableId = $o_tables->GetTableID($a_params['options']['tableNr']);
+            $i_orderId = $o_orders->AddOrder($a_user['eventid'], $a_user['userid'], $i_tableId);
 
-        return $i_newId;
+            foreach ($a_orders as $a_category)
+            {
+                foreach($a_category['order'] as $a_order)
+                {
+                    $a_extraIds_only = array();
+                    $a_mixingIds_only = array();
+
+                    foreach ($a_order['extras'] as $a_extra)
+                    {
+                        $a_extraIds_only[] = $a_extra['menu_extraid'];
+                    }
+
+                    foreach ($a_order['mixing'] as $a_mixing)
+                    {
+                        $a_mixingIds_only[] = $a_mixing['menuid'];
+                    }
+
+                    $o_orders->AddOrderDetail($i_orderId,
+                                              $a_order['menuid'],
+                                              $a_order['amount'],
+                                              $a_order['extra'],
+                                              $a_order['sizes'][0]['menu_sizeid'],
+                                              $a_extraIds_only,
+                                              $a_mixingIds_only);
+                }
+            }
+
+            $o_db->commit();
+
+            return $i_orderId;
+        }
+        catch (PDOException $o_exception)
+        {
+            $o_db->rollBack();
+            throw $o_exception;
+        }
     }
 
     public function ModifyOrderAction()
