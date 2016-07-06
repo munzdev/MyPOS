@@ -51,7 +51,7 @@ class Orders extends SecurityController
 
             foreach ($a_orders as $a_category)
             {
-                foreach($a_category['order'] as $a_order)
+                foreach($a_category['orders'] as $a_order)
                 {
                     $a_extraIds_only = array();
                     $a_mixingIds_only = array();
