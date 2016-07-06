@@ -45,16 +45,16 @@ class Orders
         public function AddOrder($i_eventid, $i_userid, $i_tableId)
         {
             $o_statement = $this->o_db->prepare("INSERT INTO orders(eventid, tableid, userid, ordertime, priority )
-                                                 VALUES(:eventid, :tableid, :userid, NOW(), (SELECT MAX(priority) + 1
-                                                                                             FROM orders
-                                                                                             WHERE eventid = :eventid))");
+                                                 VALUES(:eventid, :tableid, :userid, NOW(), (SELECT MAX(o.priority) + 1
+                                                                                             FROM orders o
+                                                                                             WHERE o.eventid = :eventid))");
 
-            $o_statement->bindparam(":eventid", $i_eventid);
-            $o_statement->bindparam(":tableid", $i_tableId);
-            $o_statement->bindparam(":userid", $i_userid);
+            $o_statement->bindParam(":eventid", $i_eventid);
+            $o_statement->bindParam(":tableid", $i_tableId);
+            $o_statement->bindParam(":userid", $i_userid);
             $o_statement->execute();
 
-            return $o_db->lastInsertId();
+            return $this->o_db->lastInsertId();
         }
 
         public function AddOrderDetail($i_orderId, $i_menuid, $i_amount, $str_extra_detail, $i_sizeid, $a_extraIds, $a_mixingIds)
@@ -68,16 +68,16 @@ class Orders
                                                   WHERE mpe.menu_extraid IN(:extraIds)
                                                         AND mpe.menues_menuid = :menuid) AS extraPrice");
 
-            $o_statement->bindparam(":menuid", $i_menuid);
-            $o_statement->bindparam(":extraIds", $a_extraIds);
-            $o_statement->bindparam(":sizeid", $i_sizeid);
+            $o_statement->bindParam(":menuid", $i_menuid);
+            $o_statement->bindValue(":extraIds", implode(',', $a_extraIds));
+            $o_statement->bindParam(":sizeid", $i_sizeid);
             $o_statement->execute();
 
             $a_price = $o_statement->fetch(\PDO::FETCH_ASSOC);
 
             $i_price = $a_price['basePrice'];
 
-            if(!empty($i_mixingId))
+            if(!empty($a_mixingIds))
             {
                 foreach ($a_mixingIds as $i_mixingId)
                 {
@@ -87,8 +87,8 @@ class Orders
                                                                                               AND mps.menu_sizeid = :sizeid
                                                          WHERE m.menuid  = :mixingId ");
 
-                    $o_statement->bindparam(":mixingId", $i_mixingId);
-                    $o_statement->bindparam(":sizeid", $i_sizeid);
+                    $o_statement->bindParam(":mixingId", $i_mixingId);
+                    $o_statement->bindParam(":sizeid", $i_sizeid);
                     $o_statement->execute();
 
                     $i_mixingPrice = $o_statement->fetchColumn();
@@ -111,8 +111,8 @@ class Orders
                                                          INNER JOIN menues m ON m.menuid = mps.menues_menuid
                                                          LIMIT 1");
 
-                    $o_statement->bindparam(":menuid", $i_mixingId);
-                    $o_statement->bindparam(":sizeid", $i_sizeid);
+                    $o_statement->bindParam(":menuid", $i_mixingId);
+                    $o_statement->bindParam(":sizeid", $i_sizeid);
                     $o_statement->execute();
 
                     $i_price += $o_statement->fetchColumn();
@@ -123,50 +123,66 @@ class Orders
 
             $i_price += $a_price['extraPrice'];
 
-            $o_statement = $this->o_db->prepare("INSERT INTO orders_details_(orderid, menuid, amount, single_price, extra_detail, extra_detail_verified )
-                                                 VALUES (:orderid, :menuid, :amount, :single_price, :extra_detail, :extra_detail_verified)");
-
-            $o_statement->bindparam(":orderid", $i_orderId);
-            $o_statement->bindparam(":menuid", $i_menuid);
-            $o_statement->bindparam(":amount", $i_amount);
-            $o_statement->bindparam(":single_price", $i_price);
-            $o_statement->bindparam(":extra_detail", $str_extra_detail);
-            $o_statement->bindparam(":extra_detail_verified", $i_menuid != 0);
-            $o_statement->execute();
-
-            $i_order_detailid = $this->o_db->lastInsertId();
-
-            $o_statement = $this->o_db->prepare("INSERT INTO orders_detail_sizes(orders_detailid, menues_possible_sizeid)
-                                                 VALUES (:orders_detailid, :sizeid)");
-
-            $o_statement->bindparam(":orders_detailid", $i_order_detailid);
-            $o_statement->bindparam(":sizeid", $i_sizeid);
-            $o_statement->execute();
-
-            $o_statement = $this->o_db->prepare("INSERT INTO orders_detail_extras(orders_detailid, menues_possible_extraid)
-                                                 VALUES (:orders_detailid, :extraid)");
-
-            $o_statement->bindparam(":orders_detailid", $i_order_detailid);
-
-            foreach($a_extraIds as $i_extraId)
+            if($i_menuid != 0)
             {
-                $o_statement->bindparam(":extraid", $i_extraId);
+                $o_statement = $this->o_db->prepare("INSERT INTO orders_details(orderid, menuid, amount, single_price, extra_detail )
+                                                 VALUES (:orderid, :menuid, :amount, :single_price, :extra_detail)");
+
+                $o_statement->bindParam(":orderid", $i_orderId);
+                $o_statement->bindParam(":menuid", $i_menuid);
+                $o_statement->bindParam(":amount", $i_amount);
+                $o_statement->bindParam(":single_price", $i_price);
+                $o_statement->bindParam(":extra_detail", $str_extra_detail);
                 $o_statement->execute();
-                $o_statement->closeCursor();
+
+                $i_order_detailid = $this->o_db->lastInsertId();
+
+                $o_statement = $this->o_db->prepare("INSERT INTO orders_detail_sizes(orders_detailid, menues_possible_sizeid)
+                                                     VALUES (:orders_detailid, :sizeid)");
+
+                $o_statement->bindParam(":orders_detailid", $i_order_detailid);
+                $o_statement->bindParam(":sizeid", $i_sizeid);
+                $o_statement->execute();
+
+                $o_statement = $this->o_db->prepare("INSERT INTO orders_detail_extras(orders_detailid, menues_possible_extraid)
+                                                     VALUES (:orders_detailid, :extraid)");
+
+                $o_statement->bindParam(":orders_detailid", $i_order_detailid);
+
+                foreach($a_extraIds as $i_extraId)
+                {
+                    $o_statement->bindParam(":extraid", $i_extraId);
+                    $o_statement->execute();
+                    $o_statement->closeCursor();
+                }
+
+                $o_statement = $this->o_db->prepare("INSERT INTO orders_details_mixed_with(orders_detailid, menues_menuid)
+                                                     VALUES (:orders_detailid, :menuid)");
+
+                $o_statement->bindParam(":orders_detailid", $i_order_detailid);
+
+                foreach($a_mixingIds as $i_mixingId)
+                {
+                    $o_statement->bindParam(":menuid", $i_mixingId);
+                    $o_statement->execute();
+                    $o_statement->closeCursor();
+                }
+
+                return $i_order_detailid;
             }
-
-            $o_statement = $this->o_db->prepare("INSERT INTO orders_details_mixed_with(orders_detailid, menues_menuid)
-                                                 VALUES (:orders_detailid, :menuid)");
-
-            $o_statement->bindparam(":orders_detailid", $i_order_detailid);
-
-            foreach($a_mixingIds as $i_mixingId)
+            else
             {
-                $o_statement->bindparam(":menuid", $i_mixingId);
-                $o_statement->execute();
-                $o_statement->closeCursor();
-            }
+                $o_statement = $this->o_db->prepare("INSERT INTO orders_details_special_extra(orderid, amount, single_price, extra_detail, verified )
+                                                     VALUES (:orderid, :amount, 0, :extra_detail, FALSE)");
 
-            return $i_order_detailid;
+                $o_statement->bindParam(":orderid", $i_orderId);
+                $o_statement->bindParam(":amount", $i_amount);
+                $o_statement->bindParam(":extra_detail", $str_extra_detail);
+                $o_statement->execute();
+
+                $i_orders_details_special_extraid = $this->o_db->lastInsertId();
+
+                return $i_orders_details_special_extraid;
+            }
         }
 }
