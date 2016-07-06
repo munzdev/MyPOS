@@ -27,7 +27,7 @@ define(["app", "jquery"], function(app) {
                 dataType: this.dataType,
                 success: this.success,
                 error: this.error,
-                timeout: 30000
+                timeout: ((DEBUG) ? 0 : 30000)
         });
     }
 
