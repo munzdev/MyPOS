@@ -18,7 +18,7 @@ class Orders extends SecurityController
         {
             $a_order['button_info'] = true;
             $a_order['button_edit'] = $a_order['status'] == MyPOS\ORDER_STATUS_WAITING;
-            $a_order['button_pay'] = $a_order['price'] != $a_order['payed'];
+            $a_order['button_pay'] = $a_order['open'] > 0;
             $a_order['button_cancel'] = $a_order['status'] == MyPOS\ORDER_STATUS_WAITING;
             $a_order['finished'] = $a_order['status'] == MyPOS\ORDER_STATUS_FINISHED;
 
@@ -92,6 +92,15 @@ class Orders extends SecurityController
         $o_orders = new Model\Orders(Database::GetConnection());
 
         $a_user = Login::GetCurrentUser();
+    }
+
+    public function GetOpenPaymentsAction()
+    {
+        $a_params = Request::ValidateParams(array('orderid' => 'numeric'));
+
+        $o_orders = new Model\Orders(Database::GetConnection());
+
+        return $o_orders->GetOpenPayments($a_params['orderid']);
     }
 
 }

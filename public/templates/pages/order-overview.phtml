@@ -29,26 +29,24 @@
                         Fertig
                        <% break;
                     } %>-
-                    <% if(order.get('payed') == order.get('price')) { %>
+                    <% if(order.get('open') == 0) { %>
                         <span style="color: green;">Bezahlt</span>
-                    <% } else if(order.get('payed') > 0) { %>
-                        <span style="color: orange;">Teilbezahlt</span>
                     <% } else { %>
                         <span style="color: red;">Unbezahlt</span>
                     <% } %>
                  </td>
                  <td>
                      <% if (order.get('button_info') ) { %>
-                        <a href="#order-info" class="ui-btn ui-icon-info ui-mini ui-btn-icon-left">Info</a>
+                        <a href="/order-info" class="ui-btn ui-icon-info ui-mini ui-btn-icon-left">Info</a>
                      <% } %>
                      <% if (order.get('button_pay') ) { %>
-                        <a href="#order-pay" class="ui-btn ui-icon-shop ui-mini ui-btn-icon-left">Bezahlen</a>
+                        <a href="/order-pay/id/<%- order.get('orderid') %>" class="ui-btn ui-icon-shop ui-mini ui-btn-icon-left">Bezahlen</a>
                      <% } %>
                      <% if (order.get('button_edit') ) { %>
-                        <a href="#order-edit" class="ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
+                        <a href="/order-edit" class="ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
                      <% } %>
                      <% if (order.get('button_cancel') ) { %>
-                        <a href="#order-storno" class="ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">Storno</a>
+                        <a href="/order-storno" class="ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">Storno</a>
                      <% } %>
                  </td>
                 </tr>

@@ -1,0 +1,37 @@
+<div data-role="content">
+    <div class="nav-header"><%= header %></div>
+        <div>
+                <a class="ui-btn ui-mini">Alles bezahlen</a>
+        </div>
+        <div>
+                <ul data-role="listview" data-inset="true">
+                </ul>
+        </div>
+        <div>
+                <h3 class="ui-bar ui-bar-a ui-corner-all">Summe für Rechnung</h3>
+                <div class="ui-body ui-body-a ui-corner-all">
+                        <h1 style="margin: 0; padding: 0">0,00 €</h1>
+                </div>
+        </div>
+        <div class="ui-body ui-body-a ui-corner-all">
+                <form>
+                        <fieldset data-role="controlgroup" data-mini="true">
+                                <input type="checkbox" name="checkbox-order-pay-print" id="checkbox-order-pay-print">
+                                <label for=checkbox-order-pay-print>Quittung drucken</label>
+                                <label for="checkbox-order-pay-printer">Basic:</label>
+                                <select name="checkbox-order-pay-printer" id="checkbox-order-pay-printer">
+                                    <% printers.each(function(printer){ %>
+                                        <option value="<%- printer.id %>">Drucker: <%- printer.name %></option>
+                                    <% }) %>
+                                </select>
+
+                        </fieldset>
+                        <fieldset data-role="controlgroup" data-mini="true">
+                                <input type="checkbox" name="checkbox-order-pay-continue" id="checkbox-order-pay-continue">
+                                <label for="checkbox-order-pay-continue">auf Seite bleiben</label>
+                        </fieldset>
+
+                        <input type="button" id="form-order-pay-submit" value="Bezahlt">
+                </form>
+        </div>
+</div>

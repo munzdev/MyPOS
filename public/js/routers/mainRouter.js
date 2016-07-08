@@ -10,8 +10,9 @@ define([ "app",
          "views/OrderOverviewView",
          "views/OrderNewView",
          "views/OrderModifyView",
+         "views/OrderPayView",
          "MyPOS"
- ], function( app, Backbone, SessionModel,  UserModel, LoginView, OrderOverviewView, OrderNewView, OrderModifyView, MyPOS ) {
+ ], function( app, Backbone, SessionModel,  UserModel, LoginView, OrderOverviewView, OrderNewView, OrderModifyView, OrderPayView, MyPOS ) {
     "use strict";
 
     // Extends Backbone.Router
@@ -113,6 +114,7 @@ define([ "app",
         order_pay: function(id)
         {
             if(DEBUG) console.log("Order PAY with id: " + id, "OK");
+            this.show(new OrderPayView({id: id}));
         }
 
     } );

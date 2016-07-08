@@ -401,10 +401,10 @@ function(  app,
                                    options: this.options};
             webservice.callback = {
                 success: function(result) {
-                    /*if(self.mode == 'new')
+                    if(self.mode == 'new')
                         MyPOS.ChangePage("#order-pay/id/" + result.id);
                     else
-                        MyPOS.ChangePage("#order-info/id/" + result.id);*/
+                        MyPOS.ChangePage("#order-info/id/" + result.id);
                 }
             };
             webservice.call();
