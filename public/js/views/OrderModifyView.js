@@ -402,7 +402,7 @@ function(  app,
             webservice.callback = {
                 success: function(result) {
                     if(self.mode == 'new')
-                        MyPOS.ChangePage("#order-pay/id/" + result.id);
+                        MyPOS.ChangePage("#order-pay/id/" + result.id + "/tableNr/" + self.options.tableNr);
                     else
                         MyPOS.ChangePage("#order-info/id/" + result.id);
                 }

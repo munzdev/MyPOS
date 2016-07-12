@@ -35,7 +35,7 @@ define([ "app",
             "order-new": "order_new",
             "order-overview": "order_overview",
             "order-modify(/id/:id)(/tableNr/:tableNr)": "order_modify",
-            "order-pay/id/:id": "order_pay"
+            "order-pay/id/:id/tableNr/:tableNr": "order_pay"
         },
 
         show: function(view, options){
@@ -111,10 +111,11 @@ define([ "app",
                                                tableNr: tableNr}));
         },
 
-        order_pay: function(id)
+        order_pay: function(id, tableNr)
         {
             if(DEBUG) console.log("Order PAY with id: " + id, "OK");
-            this.show(new OrderPayView({id: id}));
+            this.show(new OrderPayView({id: id,
+                                        tableNr: tableNr}));
         }
 
     } );

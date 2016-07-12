@@ -40,7 +40,7 @@
                         <a href="/order-info" class="ui-btn ui-icon-info ui-mini ui-btn-icon-left">Info</a>
                      <% } %>
                      <% if (order.get('button_pay') ) { %>
-                        <a href="/order-pay/id/<%- order.get('orderid') %>" class="ui-btn ui-icon-shop ui-mini ui-btn-icon-left">Bezahlen</a>
+                        <a href="/order-pay/id/<%- order.get('orderid') %>/tableNr/<%- order.get('table_name') %>" class="ui-btn ui-icon-shop ui-mini ui-btn-icon-left">Bezahlen</a>
                      <% } %>
                      <% if (order.get('button_edit') ) { %>
                         <a href="/order-edit" class="ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>

@@ -6,16 +6,24 @@
 // Includes file dependencies
 define([ "app",
          "MyPOS",
+         "Webservice",
          'models/order/payments/PaymentModel',
+         'collections/order/payments/OrderCollection',
+         'collections/order/payments/ExtraCollection',
          'collections/PrinterCollection',
          'views/headers/HeaderView',
-         'text!templates/pages/order-pay.phtml'],
+         'text!templates/pages/order-pay.phtml',
+         'text!templates/pages/order-item.phtml'],
 function(app,
          MyPOS,
+         Webservice,
          PaymentModel,
+         OrderCollection,
+         ExtraCollection,
          PrinterCollection,
          HeaderView,
-         Template) {
+         Template,
+         TemplateItem) {
     "use strict";
 
     // Extends Backbone.View
@@ -25,19 +33,256 @@ function(app,
     	el: 'body',
 
     	events: {
-
+            'click #order-pay-button-all': 'select_all',
+            'click #order-pay-show-all': 'set_mode_all',
+            'click #order-pay-show-single': 'set_mode_single',
+            'click #order-pay-submit': 'finish'
     	},
 
         // The View Constructor
         initialize: function(options) {
-            _.bindAll(this, "render");
+            _.bindAll(this, "render",
+                            "renderOpenOrders",
+                            "select_all",
+                            "order_count_up",
+                            "order_count_down",
+                            "set_mode_all",
+                            "set_mode_single",
+                            "finish");
 
             this.id = options.id;
+            this.tableNr = options.tableNr;
 
             this.payments = new PaymentModel();
+            this.printers = new PrinterCollection;
+            this.printerFetchStatus = this.printers.fetch({data: {eventid: app.session.user.get('eventid')},
+                                      success: this.render});
 
-            this.payments.fetch({data: {orderid: this.id},
-                                 success: this.render});
+            this.set_mode_all();
+        },
+
+        set_mode_all: function()
+        {
+            console.log("MODE: all");
+
+            this.mode = 'all';
+
+            var self = this;
+
+            $.when(this.printerFetchStatu).done(function(){
+                self.payments.fetch({data: {orderid: self.id,
+                                            tableNr: self.tableNr},
+                                     success: self.renderOpenOrders});
+            });
+        },
+
+        set_mode_single: function()
+        {
+            console.log("MODE: single");
+
+            this.mode = 'single';
+
+            var self = this;
+
+            $.when(this.printerFetchStatu).done(function(){
+                self.payments.fetch({data: {orderid: self.id},
+                                     success: self.renderOpenOrders});
+            });
+        },
+
+        select_all: function(event)
+        {
+            this.payments.get('orders').each(function(order){
+                order.set('currentInvoiceAmount', order.get('amount')) ;
+            });
+
+            this.payments.get('extras').each(function(extra){
+                extra.set('currentInvoiceAmount', extra.get('amount')) ;
+            });
+
+            this.renderOpenOrders();
+        },
+
+        order_count_up: function(event)
+        {
+            console.log("Up");
+
+            var menu_typeid = $(event.currentTarget).attr('data-menu-typeid');
+            var index = $(event.currentTarget).attr('data-index');
+
+            if(menu_typeid > 0)
+                var order = this.payments.get('orders')
+                                                  .findWhere({orders_detailid: index});
+            else
+                var order = this.payments.get('extras')
+                                                  .findWhere({orders_details_special_extraid: index});
+
+            var current_amount = order.get('currentInvoiceAmount');
+            current_amount++;
+
+            if(current_amount > order.get('amount'))
+                current_amount = order.get('amount');
+
+            if(menu_typeid > 0)
+                this.payments.get('orders')
+                             .findWhere({orders_detailid: index})
+                             .set('currentInvoiceAmount', current_amount);
+            else
+                this.payments.get('extras')
+                             .findWhere({orders_details_special_extraid: index})
+                             .set('currentInvoiceAmount', current_amount);
+
+            this.renderOpenOrders();
+        },
+
+        order_count_down: function(event)
+        {
+            console.log("Down");
+
+            var menu_typeid = $(event.currentTarget).attr('data-menu-typeid');
+            var index = $(event.currentTarget).attr('data-index');
+
+            if(menu_typeid > 0)
+                var order = this.payments.get('orders')
+                                                  .findWhere({orders_detailid: index});
+            else
+                var order = this.payments.get('extras')
+                                                  .findWhere({orders_details_special_extraid: index});
+
+            var current_amount = order.get('currentInvoiceAmount');
+            current_amount--;
+
+            if(current_amount < 0)
+                current_amount = 0;
+
+            if(menu_typeid > 0)
+                this.payments.get('orders')
+                             .findWhere({orders_detailid: index})
+                             .set('currentInvoiceAmount', current_amount);
+            else
+                this.payments.get('extras')
+                             .findWhere({orders_details_special_extraid: index})
+                             .set('currentInvoiceAmount', current_amount);
+
+            this.renderOpenOrders();
+        },
+
+        finish: function()
+        {
+            var self = this;
+            var webservice = new Webservice();
+            webservice.action = "Orders/MakePayment";
+            webservice.formData = {orderid: this.id,
+                                   mode: this.mode,
+                                   print: $('#order-pay-print').prop('checked') == 1,
+                                   printer: $('#order-pay-printer').val(),
+                                   payments: JSON.stringify(this.payments)};
+
+
+
+            webservice.callback = {
+                success: function() {
+                    if($('#order-pay-continue').checked)
+                        MyPOS.ChangePage("#" + self.title + " /id/" + self.id + "/tableNr/" + self.tableNr);
+                    else
+                        MyPOS.ChangePage("#order-overview");
+                }
+            };
+            webservice.call();
+        },
+
+        renderOpenOrders: function()
+        {
+            var itemTemplate = _.template(TemplateItem);
+
+            $('#order-pay-open-orders-list').empty();
+
+            var sortedOrders = {};
+
+            var totalSumPrice = 0;
+
+            this.payments.get('orders').each(function(order)
+            {
+                var menu_typeid = order.get('menu_typeid');
+
+                if(!(menu_typeid in sortedOrders))
+                {
+                    sortedOrders[menu_typeid] = {name: order.get('typeName'),
+                                                 orders: new OrderCollection,
+                                                 extras: new ExtraCollection};
+                }
+
+                var extras = order.get('sizeName');
+
+                if(order.get('selectedExtras'))
+                {
+                    extras += ', ' + order.get('selectedExtras');
+                }
+
+                if(order.get('extra_detail'))
+                {
+                    extras += ', ' + order.get('extra_detail');
+                }
+
+                order.set('extra_fulltext', extras);
+
+                sortedOrders[menu_typeid].orders.add(order);
+
+                totalSumPrice += order.get('single_price') * order.get('currentInvoiceAmount');
+
+            });
+
+            this.payments.get('extras').each(function(extra)
+            {
+                if(!(0 in sortedOrders))
+                {
+                    sortedOrders[0] = {name: "Sonderwünsche",
+                                       orders: new OrderCollection,
+                                       extras: new ExtraCollection};
+                }
+
+                sortedOrders[0].extras.add(extra);
+
+                if(extra.get('verified'))
+                    totalSumPrice += extra.get('single_price') * extra.get('currentInvoiceAmount');
+            });
+
+            _.each(sortedOrders, function(category){
+                $('#order-pay-open-orders-list').append("<li data-role='list-divider'>" + category.name + "</li>");
+                category.orders.each(function(order){
+                    var datas = {mode: 'pay',
+                                name: order.get('menuName'),
+                                extras: order.get('extra_fulltext'),
+                                amount: order.get('currentInvoiceAmount'),
+                                open: order.get('amount'),
+                                isSpecialOrder: false,
+                                price: order.get('single_price'),
+                                totalPrice: order.get('single_price') * order.get('currentInvoiceAmount'),
+                                menu_typeid: order.get('menu_typeid'),
+                                index: order.get('orders_detailid')};
+
+                    $('#order-pay-open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
+                });
+                category.extras.each(function(extra){
+                    var datas = {mode: 'pay',
+                                  name: 'Sonderwunsch',
+                                  extras: extra.get('extra_detail'),
+                                  amount: extra.get('currentInvoiceAmount'),
+                                  open: extra.get('amount'),
+                                  isSpecialOrder: extra.get('verified') == 0,
+                                  price: extra.get('single_price'),
+                                  totalPrice: extra.get('single_price') * extra.get('currentInvoiceAmount'),
+                                  menu_typeid: 0,
+                                  index: extra.get('orders_details_special_extraid')};
+                    $('#order-pay-open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
+                });
+            });
+
+            $('#order-pay-invoice-price').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
+
+            $('.order-item-up').click(this.order_count_up);
+            $('.order-item-down').click(this.order_count_down);
+            $('#order-pay-open-orders-list').listview('refresh');
         },
 
         // Renders all of the Category models on the UI
@@ -45,16 +290,14 @@ function(app,
             var header = new HeaderView();
             header.activeButton = 'order-overview';
 
-
             MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  printers: new PrinterCollection/* TEMP!! */,
-                                                                  payments: this.payments,
-                                                                  products: app.session.products});
+                                                                  printers: this.printers});
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");
 
             $.mobile.changePage( "#" + this.title);
+
             return this;
         }
     });

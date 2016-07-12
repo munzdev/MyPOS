@@ -80,7 +80,7 @@ class Orders extends SecurityController
 
             return $i_orderId;
         }
-        catch (PDOException $o_exception)
+        catch (Exception $o_exception)
         {
             $o_db->rollBack();
             throw $o_exception;
@@ -96,11 +96,47 @@ class Orders extends SecurityController
 
     public function GetOpenPaymentsAction()
     {
-        $a_params = Request::ValidateParams(array('orderid' => 'numeric'));
+        $a_params = Request::ValidateParams(array('orderid' => 'numeric',
+                                                  'tableNr' => 'optional!string'));
 
         $o_orders = new Model\Orders(Database::GetConnection());
 
-        return $o_orders->GetOpenPayments($a_params['orderid']);
+        if(isset($a_params['tableNr']))
+        {
+            return $o_orders->GetOpenPayments(null, $a_params['tableNr']);
+        }
+        else
+            return $o_orders->GetOpenPayments($a_params['orderid']);
     }
 
+    public function MakePaymentAction()
+    {
+        $a_params = Request::ValidateParams(array('orderid' => 'numeric',
+                                                  'mode' => 'string',
+                                                  'payments' => 'json',
+                                                  'print' => 'bool',
+                                                  'printer' => 'numberic'));
+
+        $o_db = Database::GetConnection();
+
+        $o_invoices = new Model\Invoices($o_db);
+
+        $a_payments = json_decode($a_params['payments'], true);
+
+        try
+        {
+            $o_db->beginTransaction();
+
+            $i_invoiceID = $o_invoices->Add();
+
+
+
+            $o_db->commit();
+        }
+        catch (Exception $o_exception)
+        {
+            $o_db->rollBack();
+            throw $o_exception;
+        }
+    }
 }

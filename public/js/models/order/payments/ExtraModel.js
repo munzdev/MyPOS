@@ -11,7 +11,9 @@ define(function(){
             amount: 0,
             single_price: 0,
             extra_detail: null,
-            amount_payed: 0
+            verified: false,
+            amount_payed: 0,
+            currentInvoiceAmount: 0
         }
 
     });

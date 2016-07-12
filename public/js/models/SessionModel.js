@@ -47,18 +47,18 @@ define([
         	var webservice = new Webservice();
         	webservice.action = "Users/IsLoggedIn";
         	webservice.callback = {
-        			success: function(result) {
-        				if(result == true)
-            			{
-                			self.updateSession(callback.success, callback.complete);
-            			}
-                		else
-            			{
-                			self.set({ logged_in : false });
+                    success: function(result) {
+                        if(result == true)
+                        {
+                            self.updateSession(callback.success, callback.complete);
+                        }
+                        else
+                        {
+                            self.set({ logged_in : false });
                             if('error' in callback) callback.error(result);
-                			if('complete' in callback) callback.complete();
-            			}
-        			}
+                            if('complete' in callback) callback.complete();
+                        }
+                    }
         	};
         	webservice.call();
         },

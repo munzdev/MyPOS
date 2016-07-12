@@ -12,8 +12,13 @@ define(function(){
             amount: 0,
             single_price: 0,
             extra_detail: null,
-            verified: false,
-            amount_payed: 0
+            amount_payed: 0,
+            menuName: '',
+            menu_typeid: 0,
+            typeName: '',
+            sizeName: '',
+            selectedExtras: '',
+            currentInvoiceAmount: 0
         }
 
     });

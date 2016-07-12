@@ -189,24 +189,71 @@ class Orders
         }
     }
 
-    public function GetOpenPayments($i_orderid)
+    public function GetOpenPayments($i_orderid, $str_tableNr = null)
     {
         $a_result = array();
 
-        $o_statement = $this->o_db->prepare("SELECT *
-                                             FROM orders_details_open
-                                             WHERE orderid = :orderid");
+        $str_query = "SELECT odo.*,
+                            m.name AS menuName,
+                            mt.menu_typeid,
+                            mt.name AS typeName,
+                            ms.name AS sizeName,
+                            GROUP_CONCAT(me.name SEPARATOR ', ') AS selectedExtras
+                     FROM orders_details_open odo
+                     INNER JOIN orders o ON o.orderid = odo.orderid
+                     INNER JOIN tables t ON t.tableid = o.tableid
+                     INNER JOIN menues m ON m.menuid = odo.menuid
+                     INNER JOIN menu_groupes mg ON mg.menu_groupid = m.menu_groupid
+                     INNER JOIN menu_types mt ON mt.menu_typeid = mg.menu_typeid
+                     INNER JOIN orders_detail_sizes ods ON ods.orders_detailid = odo.orders_detailid
+                     INNER JOIN menues_possible_sizes mps ON mps.menues_possible_sizeid = ods.menues_possible_sizeid
+                     INNER JOIN menu_sizes ms ON ms.menu_sizeid = mps.menu_sizeid
+                     LEFT JOIN orders_detail_extras ode ON ode.orders_detailid = odo.orders_detailid
+                     LEFT JOIN menues_possible_extras mpe ON mpe.menues_possible_extraid = ode.menues_possible_extraid
+                     LEFT JOIN menu_extras me ON me.menu_extraid = mpe.menu_extraid
+                     WHERE __WHERE__
+                     GROUP By odo.orders_detailid";
 
-        $o_statement->bindParam(":orderid", $i_orderid);
+        if(!empty($str_tableNr))
+        {
+            $str_query = str_replace("__WHERE__", "t.name = :tabeNr", $str_query );
+
+            $o_statement = $this->o_db->prepare($str_query);
+            $o_statement->bindParam(":tabeNr", $str_tableNr);
+        }
+        else
+        {
+            $str_query = str_replace("__WHERE__", "odo.orderid = :orderid", $str_query );
+
+            $o_statement = $this->o_db->prepare($str_query);
+            $o_statement->bindParam(":orderid", $i_orderid);
+        }
+
         $o_statement->execute();
 
         $a_result['orders'] = $o_statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $o_statement = $this->o_db->prepare("SELECT *
-                                             FROM orders_details_special_extra_open
-                                             WHERE orderid = :orderid");
+        $str_query = "SELECT odseo.*
+                      FROM orders_details_special_extra_open odseo
+                      INNER JOIN orders o ON o.orderid = odseo.orderid
+                      INNER JOIN tables t ON t.tableid = o.tableid
+                      WHERE __WHERE__";
 
-        $o_statement->bindParam(":orderid", $i_orderid);
+        if(!empty($str_tableNr))
+        {
+            $str_query = str_replace("__WHERE__", "t.name = :tabeNr", $str_query );
+
+            $o_statement = $this->o_db->prepare($str_query);
+            $o_statement->bindParam(":tabeNr", $str_tableNr);
+        }
+        else
+        {
+            $str_query = str_replace("__WHERE__", "odseo.orderid = :orderid", $str_query );
+
+            $o_statement = $this->o_db->prepare($str_query);
+            $o_statement->bindParam(":orderid", $i_orderid);
+        }
+
         $o_statement->execute();
 
         $a_result['extras'] = $o_statement->fetchAll(\PDO::FETCH_ASSOC);

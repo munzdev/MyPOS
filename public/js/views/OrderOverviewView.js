@@ -37,7 +37,7 @@ define([ "app",
         	header.activeButton = 'order-overview';
 
         	MyPOS.RenderPageTemplate(this, this.title, Template, {orders: this.ordersList,
-        														  header: header.render()});
+                                                                      header: header.render()});
 
         	this.setElement("#" + this.title);
         	header.setElement("#" + this.title + " .nav-header");
