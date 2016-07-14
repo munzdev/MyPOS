@@ -56,7 +56,7 @@ function(app,
             this.payments = new PaymentModel();
             this.printers = new PrinterCollection;
             this.printerFetchStatus = this.printers.fetch({data: {eventid: app.session.user.get('eventid')},
-                                      success: this.render});
+                                                           success: this.render});
 
             this.set_mode_all();
         },
@@ -69,7 +69,7 @@ function(app,
 
             var self = this;
 
-            $.when(this.printerFetchStatu).done(function(){
+            $.when(this.printerFetchStatus).done(function(){
                 self.payments.fetch({data: {orderid: self.id,
                                             tableNr: self.tableNr},
                                      success: self.renderOpenOrders});
@@ -84,7 +84,7 @@ function(app,
 
             var self = this;
 
-            $.when(this.printerFetchStatu).done(function(){
+            $.when(this.printerFetchStatus).done(function(){
                 self.payments.fetch({data: {orderid: self.id},
                                      success: self.renderOpenOrders});
             });
@@ -112,10 +112,10 @@ function(app,
 
             if(menu_typeid > 0)
                 var order = this.payments.get('orders')
-                                                  .findWhere({orders_detailid: index});
+                                         .at(index);
             else
                 var order = this.payments.get('extras')
-                                                  .findWhere({orders_details_special_extraid: index});
+                                         .at(index);
 
             var current_amount = order.get('currentInvoiceAmount');
             current_amount++;
@@ -125,11 +125,11 @@ function(app,
 
             if(menu_typeid > 0)
                 this.payments.get('orders')
-                             .findWhere({orders_detailid: index})
+                             .at(index)
                              .set('currentInvoiceAmount', current_amount);
             else
                 this.payments.get('extras')
-                             .findWhere({orders_details_special_extraid: index})
+                             .at(index)
                              .set('currentInvoiceAmount', current_amount);
 
             this.renderOpenOrders();
@@ -144,10 +144,10 @@ function(app,
 
             if(menu_typeid > 0)
                 var order = this.payments.get('orders')
-                                                  .findWhere({orders_detailid: index});
+                                         .at(index);
             else
                 var order = this.payments.get('extras')
-                                                  .findWhere({orders_details_special_extraid: index});
+                                         .at(index);
 
             var current_amount = order.get('currentInvoiceAmount');
             current_amount--;
@@ -157,11 +157,11 @@ function(app,
 
             if(menu_typeid > 0)
                 this.payments.get('orders')
-                             .findWhere({orders_detailid: index})
+                             .at(index)
                              .set('currentInvoiceAmount', current_amount);
             else
                 this.payments.get('extras')
-                             .findWhere({orders_details_special_extraid: index})
+                             .at(index)
                              .set('currentInvoiceAmount', current_amount);
 
             this.renderOpenOrders();
@@ -173,6 +173,7 @@ function(app,
             var webservice = new Webservice();
             webservice.action = "Orders/MakePayment";
             webservice.formData = {orderid: this.id,
+                                   tableNr: this.tableNr,
                                    mode: this.mode,
                                    print: $('#order-pay-print').prop('checked') == 1,
                                    printer: $('#order-pay-printer').val(),
@@ -182,8 +183,13 @@ function(app,
 
             webservice.callback = {
                 success: function() {
-                    if($('#order-pay-continue').checked)
-                        MyPOS.ChangePage("#" + self.title + " /id/" + self.id + "/tableNr/" + self.tableNr);
+                    if($('#order-pay-continue').prop('checked'))
+                    {
+                        if(self.mode == 'all')
+                            self.set_mode_all();
+                        else
+                            self.set_mode_single();
+                    }
                     else
                         MyPOS.ChangePage("#order-overview");
                 }
@@ -249,31 +255,31 @@ function(app,
 
             _.each(sortedOrders, function(category){
                 $('#order-pay-open-orders-list').append("<li data-role='list-divider'>" + category.name + "</li>");
-                category.orders.each(function(order){
+                category.orders.each(function(order, index){
                     var datas = {mode: 'pay',
                                 name: order.get('menuName'),
                                 extras: order.get('extra_fulltext'),
                                 amount: order.get('currentInvoiceAmount'),
-                                open: order.get('amount'),
+                                open: order.get('amount') - order.get('amount_payed'),
                                 isSpecialOrder: false,
                                 price: order.get('single_price'),
                                 totalPrice: order.get('single_price') * order.get('currentInvoiceAmount'),
                                 menu_typeid: order.get('menu_typeid'),
-                                index: order.get('orders_detailid')};
+                                index: index};
 
                     $('#order-pay-open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
                 });
-                category.extras.each(function(extra){
+                category.extras.each(function(extra, index){
                     var datas = {mode: 'pay',
                                   name: 'Sonderwunsch',
                                   extras: extra.get('extra_detail'),
                                   amount: extra.get('currentInvoiceAmount'),
-                                  open: extra.get('amount'),
+                                  open: extra.get('amount') - extra.get('amount_payed'),
                                   isSpecialOrder: extra.get('verified') == 0,
                                   price: extra.get('single_price'),
                                   totalPrice: extra.get('single_price') * extra.get('currentInvoiceAmount'),
                                   menu_typeid: 0,
-                                  index: extra.get('orders_details_special_extraid')};
+                                  index: index};
                     $('#order-pay-open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
                 });
             });

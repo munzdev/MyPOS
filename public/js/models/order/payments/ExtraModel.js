@@ -7,7 +7,6 @@ define(function(){
     var ExtraModel = Backbone.Model.extend({
 
         defaults: {
-            orders_details_special_extraid: 0,
             amount: 0,
             single_price: 0,
             extra_detail: null,

@@ -24,17 +24,16 @@
             <form>
                     <fieldset data-role="controlgroup" data-mini="true">
                             <input type="checkbox" name="order-pay-print" id="order-pay-print">
-                            <label for=checkbox-order-pay-print>Quittung drucken</label>
+                            <label for="order-pay-print">Quittung drucken</label>
                             <select name="checkbox-order-pay-printer" id="order-pay-printer">
                                 <% printers.each(function(printer){ %>
                                     <option value="<%- printer.get('events_printerid') %>">Drucker: <%- printer.get('name') %></option>
                                 <% }) %>
                             </select>
-
                     </fieldset>
                     <fieldset data-role="controlgroup" data-mini="true">
                             <input type="checkbox" name="order-pay-continue" id="order-pay-continue">
-                            <label for="checkbox-order-pay-continue">auf Seite bleiben</label>
+                            <label for="order-pay-continue">auf Seite bleiben</label>
                     </fieldset>
 
                     <input type="button" id="order-pay-submit" value="Bezahlt">

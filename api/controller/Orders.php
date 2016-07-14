@@ -112,6 +112,7 @@ class Orders extends SecurityController
     public function MakePaymentAction()
     {
         $a_params = Request::ValidateParams(array('orderid' => 'numeric',
+                                                  'tableNr' => 'optional!string',
                                                   'mode' => 'string',
                                                   'payments' => 'json',
                                                   'print' => 'bool',
@@ -120,6 +121,7 @@ class Orders extends SecurityController
         $o_db = Database::GetConnection();
 
         $o_invoices = new Model\Invoices($o_db);
+        $o_orders = new Model\Orders($o_db);
 
         $a_payments = json_decode($a_params['payments'], true);
 
@@ -127,9 +129,84 @@ class Orders extends SecurityController
         {
             $o_db->beginTransaction();
 
-            $i_invoiceID = $o_invoices->Add();
+            $i_invoiceId = $o_invoices->Add();
 
+            $a_open_orders = $o_orders->GetOpenPayments($a_params['orderid'], $a_params['tableNr'], false);
 
+            $a_update = array('orders' => array(),
+                              'extras' => array());
+
+            foreach ($a_payments['orders'] as $a_order)
+            {
+                $i_amount_in_invoice = $a_order['currentInvoiceAmount'];
+
+                foreach($a_open_orders['orders'] as $a_open_order)
+                {
+
+                    if($a_open_order['menuid'] == $a_order['menuid'] &&
+                        $a_open_order['single_price'] == $a_order['single_price'] &&
+                        $a_open_order['extra_detail'] == $a_order['extra_detail'] &&
+                        $a_open_order['sizeName'] == $a_order['sizeName'] &&
+                        $a_open_order['selectedExtras'] == $a_order['selectedExtras'])
+                    {
+                        $i_allready_payed = $a_open_order['amount_payed'];
+                        $i_amount_ordered = $a_open_order['amount'];
+                        $i_amount_open = $i_amount_ordered - $i_allready_payed;
+                        $i_amount_part = $i_amount_in_invoice;
+
+                        if($i_amount_part > $i_amount_open)
+                            $i_amount_part = $i_amount_open;
+
+                        $i_amount_in_invoice -= $i_amount_part;
+
+                        $a_update['orders'][$a_open_order['orders_detailid']] = $i_amount_part;
+
+                        if($i_amount_in_invoice == 0)
+                            continue 2;
+                    }
+                }
+            }
+
+            foreach ($a_payments['extras'] as $a_extra)
+            {
+                $i_amount_in_invoice = $a_extra['currentInvoiceAmount'];
+
+                foreach($a_open_orders['extras'] as $a_open_extra)
+                {
+                    if(!$a_open_extra['verified'])
+                        continue;
+
+                    if($a_open_extra['single_price'] == $a_extra['single_price'] &&
+                        $a_open_extra['extra_detail'] == $a_extra['extra_detail'] &&
+                        $a_open_extra['verified'] == $a_extra['verified'])
+                    {
+                        $i_allready_payed = $a_open_extra['amount_payed'];
+                        $i_amount_ordered = $a_open_extra['amount'];
+                        $i_amount_open = $i_amount_ordered - $i_allready_payed;
+                        $i_amount_part = $i_amount_in_invoice;
+
+                        if($i_amount_part > $i_amount_open)
+                            $i_amount_part = $i_amount_open;
+
+                        $i_amount_in_invoice -= $i_amount_part;
+
+                        $a_update['extras'][$a_open_extra['orders_details_special_extraid']] = $i_amount_part;
+
+                        if($i_amount_in_invoice == 0)
+                            continue 2;
+                    }
+                }
+            }
+
+            foreach($a_update['orders'] as $i_orderid => $i_amount)
+            {
+                $o_invoices->AddOrder($i_invoiceId, $i_orderid, $i_amount);
+            }
+
+            foreach($a_update['extras'] as $i_orders_details_special_extraid => $i_amount)
+            {
+                $o_invoices->AddExtra($i_invoiceId, $i_orders_details_special_extraid, $i_amount);
+            }
 
             $o_db->commit();
         }

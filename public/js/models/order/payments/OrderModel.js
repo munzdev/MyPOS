@@ -7,7 +7,6 @@ define(function(){
     var OrderModel = Backbone.Model.extend({
 
         defaults: {
-            orders_detailid: 0,
             menuid: 0,
             amount: 0,
             single_price: 0,

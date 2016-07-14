@@ -189,7 +189,7 @@ class Orders
         }
     }
 
-    public function GetOpenPayments($i_orderid, $str_tableNr = null)
+    public function GetOpenPayments($i_orderid, $str_tableNr = null, $b_merge = true)
     {
         $a_result = array();
 
@@ -198,7 +198,7 @@ class Orders
                             mt.menu_typeid,
                             mt.name AS typeName,
                             ms.name AS sizeName,
-                            GROUP_CONCAT(me.name SEPARATOR ', ') AS selectedExtras
+                            GROUP_CONCAT(me.name ORDER BY me.name SEPARATOR ', ') AS selectedExtras
                      FROM orders_details_open odo
                      INNER JOIN orders o ON o.orderid = odo.orderid
                      INNER JOIN tables t ON t.tableid = o.tableid
@@ -216,10 +216,10 @@ class Orders
 
         if(!empty($str_tableNr))
         {
-            $str_query = str_replace("__WHERE__", "t.name = :tabeNr", $str_query );
+            $str_query = str_replace("__WHERE__", "t.name = :tableNr", $str_query );
 
             $o_statement = $this->o_db->prepare($str_query);
-            $o_statement->bindParam(":tabeNr", $str_tableNr);
+            $o_statement->bindParam(":tableNr", $str_tableNr);
         }
         else
         {
@@ -233,6 +233,28 @@ class Orders
 
         $a_result['orders'] = $o_statement->fetchAll(\PDO::FETCH_ASSOC);
 
+        if(!empty($str_tableNr && $b_merge))
+        {
+            $a_order_verify = array();
+
+            foreach($a_result['orders'] as $a_order)
+            {
+                $str_index = "{$a_order['menuid']}-{$a_order['single_price']}-{$a_order['extra_detail']}-{$a_order['sizeName']}-{$a_order['selectedExtras']}";
+
+                if(!isset($a_order_verify[$str_index]))
+                {
+                    $a_order_verify[$str_index] = $a_order;
+                }
+                else
+                {
+                    $a_order_verify[$str_index]['amount'] += $a_order['amount'];
+                    $a_order_verify[$str_index]['amount_payed'] += $a_order['amount_payed'];
+                }
+            }
+
+            $a_result['orders'] = array_values($a_order_verify);
+        }
+
         $str_query = "SELECT odseo.*
                       FROM orders_details_special_extra_open odseo
                       INNER JOIN orders o ON o.orderid = odseo.orderid
@@ -241,10 +263,10 @@ class Orders
 
         if(!empty($str_tableNr))
         {
-            $str_query = str_replace("__WHERE__", "t.name = :tabeNr", $str_query );
+            $str_query = str_replace("__WHERE__", "t.name = :tableNr", $str_query );
 
             $o_statement = $this->o_db->prepare($str_query);
-            $o_statement->bindParam(":tabeNr", $str_tableNr);
+            $o_statement->bindParam(":tableNr", $str_tableNr);
         }
         else
         {
@@ -257,6 +279,28 @@ class Orders
         $o_statement->execute();
 
         $a_result['extras'] = $o_statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        if(!empty($str_tableNr) && $b_merge)
+        {
+            $a_extra_verify = array();
+
+            foreach($a_result['extras'] as $a_extra)
+            {
+                $str_index = "{$a_extra['single_price']}-{$a_extra['extra_detail']}-{$a_extra['verified']}";
+
+                if(!isset($a_extra_verify[$str_index]))
+                {
+                    $a_extra_verify[$str_index] = $a_extra;
+                }
+                else
+                {
+                    $a_extra_verify[$str_index]['amount'] += $a_extra['amount'];
+                    $a_extra_verify[$str_index]['amount_payed'] += $a_extra['amount_payed'];
+                }
+            }
+
+            $a_result['extras'] = array_values($a_extra_verify);
+        }
 
         return $a_result;
     }
