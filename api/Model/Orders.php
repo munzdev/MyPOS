@@ -1,11 +1,13 @@
 <?php
 namespace Model;
 
+use PDO;
+
 class Orders
 {
     private $o_db;
 
-    public function __construct(\PDO $o_db)
+    public function __construct(PDO $o_db)
     {
         $this->o_db = $o_db;
     }
@@ -40,7 +42,7 @@ class Orders
                                     ':finished' => $b_finished
         ));
 
-        $a_orders = $o_statement->fetchAll(\PDO::FETCH_ASSOC);
+        $a_orders = $o_statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $a_orders;
     }
@@ -76,7 +78,7 @@ class Orders
         $o_statement->bindParam(":sizeid", $i_sizeid);
         $o_statement->execute();
 
-        $a_price = $o_statement->fetch(\PDO::FETCH_ASSOC);
+        $a_price = $o_statement->fetch(PDO::FETCH_ASSOC);
 
         $i_price = $a_price['basePrice'];
 
@@ -231,7 +233,7 @@ class Orders
 
         $o_statement->execute();
 
-        $a_result['orders'] = $o_statement->fetchAll(\PDO::FETCH_ASSOC);
+        $a_result['orders'] = $o_statement->fetchAll(PDO::FETCH_ASSOC);
 
         if(!empty($str_tableNr && $b_merge))
         {
@@ -278,7 +280,7 @@ class Orders
 
         $o_statement->execute();
 
-        $a_result['extras'] = $o_statement->fetchAll(\PDO::FETCH_ASSOC);
+        $a_result['extras'] = $o_statement->fetchAll(PDO::FETCH_ASSOC);
 
         if(!empty($str_tableNr) && $b_merge)
         {

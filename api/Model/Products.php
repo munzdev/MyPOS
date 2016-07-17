@@ -1,11 +1,13 @@
 <?php
 namespace Model;
 
+use PDO;
+
 class Products
 {
 	private $o_db;
 
-	public function __construct(\PDO $o_db)
+	public function __construct(PDO $o_db)
 	{
 		$this->o_db = $o_db;
 	}
@@ -29,7 +31,7 @@ class Products
 
 		$o_statement->execute(array(':eventid' => $i_eventid));
 
-		$a_products = $o_statement->fetchAll(\PDO::FETCH_ASSOC);
+		$a_products = $o_statement->fetchAll(PDO::FETCH_ASSOC);
 
 		$a_return = array();
 
@@ -67,7 +69,7 @@ class Products
 
 			$o_statement->execute(array(':menuid' => $a_product['menuid']));
 
-			$a_products_sizes = $o_statement->fetchAll(\PDO::FETCH_ASSOC);
+			$a_products_sizes = $o_statement->fetchAll(PDO::FETCH_ASSOC);
 
 			$o_statement = $this->o_db->prepare("SELECT me.menu_extraid,
 														mpe.menues_menuid AS menuid,
@@ -80,7 +82,7 @@ class Products
 
 			$o_statement->execute(array(':menuid' => $a_product['menuid']));
 
-			$a_products_extras = $o_statement->fetchAll(\PDO::FETCH_ASSOC);
+			$a_products_extras = $o_statement->fetchAll(PDO::FETCH_ASSOC);
 
 			$a_return[$a_product['menu_typeid']]
 				['groupes']

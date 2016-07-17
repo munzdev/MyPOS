@@ -1,4 +1,5 @@
 <?php
+namespace Lib;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -9,6 +10,7 @@
 
 
 use Mike42\Escpos\Printer;
+use Mike42\Escpos\PrintConnectors\PrintConnector;
 use Invoice\Item;
 
 /**
@@ -31,7 +33,7 @@ class Invoice
 
     private $str_header;
 
-    public function __construct(Mike42\Escpos\PrintConnectors\PrintConnector $o_connector)
+    public function __construct(PrintConnector $o_connector)
     {
         $this->o_printer = new Printer($o_connector);
     }

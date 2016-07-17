@@ -1,25 +1,28 @@
 <?php
+namespace Controller;
 
-class Admin extends AdminController
+use Lib;
+
+class Admin extends Lib\AdminController
 {
 	public function GetPagesAction()
 	{
 		$this->b_raw_data = true;
-		
+
 		$a_page_files = $this->read_all_files(WWW_ROOT . "pages/admin/");
-		
+
 		foreach ($a_page_files['files'] as $str_file)
 		{
 			$str_filename = basename($str_file);
-		
+
 			if(substr($str_filename,-4) != ".php")
 				continue;
-		
+
 				require_once $str_file;
 		}
-		
+
 	}
-	
+
 
 	/**
 	 * Finds path, relative to the given root folder, of all files and directories in the given directory and its sub-directories non recursively.
@@ -37,9 +40,9 @@ class Admin extends AdminController
 		$directories  = array();
 		$last_letter  = $root[strlen($root)-1];
 		$root  = ($last_letter == '\\' || $last_letter == '/') ? $root : $root.DIRECTORY_SEPARATOR;
-	
+
 		$directories[]  = $root;
-	
+
 		while (sizeof($directories)) {
 			$dir  = array_pop($directories);
 			if ($handle = opendir($dir)) {
@@ -59,7 +62,7 @@ class Admin extends AdminController
 				closedir($handle);
 			}
 		}
-	
+
 		return $files;
 	}
 }

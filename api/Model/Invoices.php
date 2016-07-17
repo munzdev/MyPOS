@@ -1,11 +1,14 @@
 <?php
 namespace Model;
 
+use PDO;
+use MyPOS;
+
 class Invoices
 {
     private $o_db;
 
-    public function __construct(\PDO $o_db)
+    public function __construct(PDO $o_db)
     {
         $this->o_db = $o_db;
     }
@@ -18,7 +21,7 @@ class Invoices
         if($d_date)
             $o_statement->bindParam(":date", $d_date);
         else
-            $o_statement->bindValue(":date", date(\MyPOS\MYSQL_TIMEFORMAT));
+            $o_statement->bindValue(":date", date(MyPOS\MYSQL_TIMEFORMAT));
 
         $o_statement->execute();
 

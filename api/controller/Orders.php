@@ -1,4 +1,12 @@
 <?php
+namespace Controller;
+
+use Lib\SecurityController;
+use Lib\Database;
+use Lib\Login;
+use Lib\Request;
+use Model;
+use MyPOS;
 
 class Orders extends SecurityController
 {

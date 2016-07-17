@@ -1,15 +1,16 @@
 <?php
 namespace Model;
 
+use PDO;
+
 class Events
 {
     private $o_db;
 
-    public function __construct(\PDO $o_db)
+    public function __construct(PDO $o_db)
     {
         $this->o_db = $o_db;
     }
-
 
     public function GetRoles()
     {
@@ -17,7 +18,7 @@ class Events
 
         $o_statement->execute();
 
-        return $o_statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function AddUserToEvent($i_eventid, $i_userid, $i_role)
@@ -57,6 +58,6 @@ class Events
         $o_statement->bindParam(':eventid', $i_eventid);
         $o_statement->execute();
 
-        return $o_statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

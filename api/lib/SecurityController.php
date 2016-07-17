@@ -1,4 +1,5 @@
 <?php
+namespace Lib;
 
 class SecurityController extends Controller
 {
@@ -7,7 +8,7 @@ class SecurityController extends Controller
 	public function __construct()
 	{
             parent::__construct();
-            
+
             if(!Login::IsLoggedIn())
             {
                 throw new Exception("Zugriff verweigert!");

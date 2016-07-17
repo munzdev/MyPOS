@@ -1,4 +1,11 @@
 <?php
+namespace Controller;
+
+use Lib\Controller;
+use Lib\Login;
+use Lib\Database;
+use Lib\Request;
+use Model;
 
 class Users extends Controller
 {

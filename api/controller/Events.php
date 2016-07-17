@@ -1,4 +1,10 @@
 <?php
+namespace Controller;
+
+use Lib\SecurityController;
+use Lib\Database;
+use Lib\Login;
+use Model;
 
 class Events extends SecurityController
 {

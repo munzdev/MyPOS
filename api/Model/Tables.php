@@ -1,11 +1,13 @@
 <?php
 namespace Model;
 
+use PDO;
+
 class Tables
 {
     private $o_db;
 
-    public function __construct(\PDO $o_db)
+    public function __construct(PDO $o_db)
     {
         $this->o_db = $o_db;
     }
@@ -51,7 +53,7 @@ class Tables
 
         $o_statement->execute(array(':tableid' => $str_tableId));
 
-        $a_table = $o_statement->fetch(\PDO::FETCH_ASSOC);
+        $a_table = $o_statement->fetch(PDO::FETCH_ASSOC);
 
         return $a_table;
     }
@@ -63,7 +65,7 @@ class Tables
 
         $o_statement->execute();
 
-        $a_tables = $o_statement->fetchAll(\PDO::FETCH_ASSOC);
+        $a_tables = $o_statement->fetchAll(PDO::FETCH_ASSOC);
 
         return $a_tables;
     }
