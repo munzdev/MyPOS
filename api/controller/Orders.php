@@ -84,6 +84,8 @@ class Orders extends SecurityController
                 }
             }
 
+            $o_orders->CheckIfOrderDone($a_params['orderid']);
+
             $o_db->commit();
 
             return $i_orderId;
@@ -151,6 +153,8 @@ class Orders extends SecurityController
                     }
                 }
             }
+
+            $o_orders->CheckIfOrderDone($a_params['orderid']);
 
             $o_db->commit();
 
@@ -277,6 +281,8 @@ class Orders extends SecurityController
                 $o_invoices->AddExtra($i_invoiceId, $i_orders_details_special_extraid, $i_amount);
             }
 
+            $o_orders->CheckIfOrderDone($a_params['orderid']);
+
             $o_db->commit();
         }
         catch (Exception $o_exception)
@@ -293,5 +299,29 @@ class Orders extends SecurityController
         $o_orders = new Model\Orders(Database::GetConnection());
 
         return $o_orders->GetFullOrder($a_params['orderid']);
+    }
+
+    public function MakeCancelAction()
+    {
+        $a_params = Request::ValidateParams(array('orderid' => 'numeric'));
+
+        $o_db = Database::GetConnection();
+
+        $o_orders = new Model\Orders($o_db);
+
+        try
+        {
+            $o_db->beginTransaction();
+
+            $o_orders->CancelOrder($a_params['orderid']);
+            $o_orders->CheckIfOrderDone($a_params['orderid']);
+
+            $o_db->commit();
+        }
+        catch (Exception $o_exception)
+        {
+            $o_db->rollBack();
+            throw $o_exception;
+        }
     }
 }

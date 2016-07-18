@@ -135,8 +135,8 @@ class Orders
 
         if($i_menuid != 0)
         {
-            $o_statement = $this->o_db->prepare("INSERT INTO orders_details(orderid, menuid, amount, single_price, extra_detail )
-                                             VALUES (:orderid, :menuid, :amount, :single_price, :extra_detail)");
+            $o_statement = $this->o_db->prepare("INSERT INTO orders_details(orderid, menuid, amount, amount_recived, single_price, extra_detail )
+                                                 VALUES (:orderid, :menuid, :amount, 0, :single_price, :extra_detail)");
 
             $o_statement->bindParam(":orderid", $i_orderId);
             $o_statement->bindParam(":menuid", $i_menuid);
@@ -647,5 +647,46 @@ class Orders
         }
 
         return array_values($a_return);
+    }
+
+    public function CancelOrder($i_orderid)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE orders_details
+                                             SET amount = 0,
+                                                 finished = NOW()
+                                             WHERE orderid = :orderid");
+
+        $o_statement->bindParam(":orderid", $i_orderid);
+        $o_statement->execute();
+
+        return true;
+    }
+
+    public function CheckIfOrderDone($i_orderid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT
+                                                (SELECT count(*)
+                                                    FROM orders_details od
+                                                    WHERE od.orderid = :orderid
+                                                          AND od.finished IS NULL) AS count_unfinished,
+                                                (SELECT count(*)
+                                                    FROM orders_details_open odo
+                                                    WHERE odo.orderid = :orderid) AS count_unpayed");
+
+        $o_statement->bindParam(":orderid", $i_orderid);
+        $o_statement->execute();
+
+        $a_status = $o_statement->fetch(PDO::FETCH_ASSOC);
+
+        if($a_status['count_unfinished'] == 0 &&
+           $a_status['count_unpayed'] == 0 )
+        {
+            $o_statement = $this->o_db->prepare("UPDATE orders
+                                                 SET finished = NOW()
+                                                 WHERE orderid = :orderid");
+
+            $o_statement->bindParam(":orderid", $i_orderid);
+            $o_statement->execute();
+        }
     }
 }

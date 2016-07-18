@@ -4,11 +4,13 @@
 // Includes file dependencies
 define([ "app",
          "MyPOS",
+         "Webservice",
          'collections/OrderOverviewCollection',
          'views/headers/HeaderView',
          'text!templates/pages/order-overview.phtml'],
  function(  app,
             MyPOS,
+            Webservice,
             OrderOverviewCollection,
             HeaderView,
             Template ) {
@@ -22,11 +24,48 @@ define([ "app",
 
         // The View Constructor
         initialize: function() {
-            _.bindAll(this, "render");
+            _.bindAll(this, "render",
+                            "cancel_order_popup",
+                            "cancel_order",
+                            "success_popup_close");
 
             this.ordersList = new OrderOverviewCollection();
 
             this.ordersList.fetch({success: this.render});
+        },
+
+        events: {
+            'click .order-overview-cancel-btn': 'cancel_order_popup',
+            'click #order-overview-cancel-order-dialog-continue': 'cancel_order',
+            'popupafterclose #order-overview-cancel-success-popup': 'success_popup_close'
+        },
+
+        cancel_order_popup: function(event)
+        {
+            this.cancelOrderId = $(event.currentTarget).attr('data-order-id');
+
+            $('#order-overview-cancel-order-dialog').popup('open');
+        },
+
+        cancel_order: function()
+        {
+            $('#order-overview-cancel-order-dialog').popup('close')
+
+            var webservice = new Webservice();
+            webservice.action = "Orders/MakeCancel";
+            webservice.formData = {orderid: this.cancelOrderId};
+
+            webservice.callback = {
+                success: function() {
+                    $('#order-overview-cancel-success-popup').popup("open");
+                }
+            };
+            webservice.call();
+        },
+
+        success_popup_close: function()
+        {
+            Backbone.history.loadUrl();
         },
 
         // Renders all of the Category models on the UI
