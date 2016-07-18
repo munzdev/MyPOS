@@ -17,7 +17,9 @@ define(function(){
             typeName: '',
             sizeName: '',
             selectedExtras: '',
-            currentInvoiceAmount: 0
+            mixedWith: '',
+            currentInvoiceAmount: 0,
+            index: 0
         }
 
     });

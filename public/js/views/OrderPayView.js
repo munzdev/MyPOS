@@ -36,7 +36,8 @@ function(app,
             'click #order-pay-button-all': 'select_all',
             'click #order-pay-show-all': 'set_mode_all',
             'click #order-pay-show-single': 'set_mode_single',
-            'click #order-pay-submit': 'finish'
+            'click #order-pay-submit': 'finish',
+            'popupafterclose #order-pay-success-popup': 'success_popup_close'
     	},
 
         // The View Constructor
@@ -48,7 +49,8 @@ function(app,
                             "order_count_down",
                             "set_mode_all",
                             "set_mode_single",
-                            "finish");
+                            "finish",
+                            "success_popup_close");
 
             this.id = options.id;
             this.tableNr = options.tableNr;
@@ -117,11 +119,15 @@ function(app,
                 var order = this.payments.get('extras')
                                          .at(index);
 
+            var amount_open = order.get('amount') - order.get('amount_payed');
             var current_amount = order.get('currentInvoiceAmount');
             current_amount++;
 
-            if(current_amount > order.get('amount'))
-                current_amount = order.get('amount');
+            if(current_amount > amount_open && amount_open > 0)
+                current_amount = amount_open;
+            else if(current_amount > 0 && amount_open < 0)
+                current_amount = 0;
+
 
             if(menu_typeid > 0)
                 this.payments.get('orders')
@@ -149,11 +155,18 @@ function(app,
                 var order = this.payments.get('extras')
                                          .at(index);
 
+            var amount_open = order.get('amount') - order.get('amount_payed');
             var current_amount = order.get('currentInvoiceAmount');
             current_amount--;
 
-            if(current_amount < 0)
+            if((current_amount < 0 && amount_open > 0))
+            {
                 current_amount = 0;
+            }
+            else if(current_amount < amount_open && amount_open < 0)
+            {
+                current_amount = amount_open;
+            }
 
             if(menu_typeid > 0)
                 this.payments.get('orders')
@@ -179,22 +192,25 @@ function(app,
                                    printer: $('#order-pay-printer').val(),
                                    payments: JSON.stringify(this.payments)};
 
-
-
             webservice.callback = {
                 success: function() {
-                    if($('#order-pay-continue').prop('checked'))
-                    {
-                        if(self.mode == 'all')
-                            self.set_mode_all();
-                        else
-                            self.set_mode_single();
-                    }
-                    else
-                        MyPOS.ChangePage("#order-overview");
+                    $('#order-pay-success-popup').popup("open");
                 }
             };
             webservice.call();
+        },
+
+        success_popup_close: function()
+        {
+            if($('#order-pay-continue').prop('checked'))
+            {
+                if(this.mode == 'all')
+                    this.set_mode_all();
+                else
+                    this.set_mode_single();
+            }
+            else
+                MyPOS.ChangePage("#order-overview");
         },
 
         renderOpenOrders: function()
@@ -206,8 +222,10 @@ function(app,
             var sortedOrders = {};
 
             var totalSumPrice = 0;
+            var totalOpenProducts = 0;
+            var totalProductsInInvoice = 0;
 
-            this.payments.get('orders').each(function(order)
+            this.payments.get('orders').each(function(order, index)
             {
                 var menu_typeid = order.get('menu_typeid');
 
@@ -220,6 +238,11 @@ function(app,
 
                 var extras = order.get('sizeName');
 
+                if(order.get('mixedWith'))
+                {
+                    extras += ', Gemischt mit: ' + order.get('mixedWith');
+                }
+
                 if(order.get('selectedExtras'))
                 {
                     extras += ', ' + order.get('selectedExtras');
@@ -231,6 +254,7 @@ function(app,
                 }
 
                 order.set('extra_fulltext', extras);
+                order.set('index', index);
 
                 sortedOrders[menu_typeid].orders.add(order);
 
@@ -238,7 +262,7 @@ function(app,
 
             });
 
-            this.payments.get('extras').each(function(extra)
+            this.payments.get('extras').each(function(extra, index)
             {
                 if(!(0 in sortedOrders))
                 {
@@ -247,6 +271,7 @@ function(app,
                                        extras: new ExtraCollection};
                 }
 
+                extra.set('index', index);
                 sortedOrders[0].extras.add(extra);
 
                 if(extra.get('verified'))
@@ -255,7 +280,10 @@ function(app,
 
             _.each(sortedOrders, function(category){
                 $('#order-pay-open-orders-list').append("<li data-role='list-divider'>" + category.name + "</li>");
-                category.orders.each(function(order, index){
+                category.orders.each(function(order){
+                    totalOpenProducts += order.get('amount') - order.get('amount_payed');
+                    totalProductsInInvoice += order.get('currentInvoiceAmount');
+
                     var datas = {mode: 'pay',
                                 name: order.get('menuName'),
                                 extras: order.get('extra_fulltext'),
@@ -265,11 +293,14 @@ function(app,
                                 price: order.get('single_price'),
                                 totalPrice: order.get('single_price') * order.get('currentInvoiceAmount'),
                                 menu_typeid: order.get('menu_typeid'),
-                                index: index};
+                                index: order.get('index')};
 
                     $('#order-pay-open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
                 });
-                category.extras.each(function(extra, index){
+                category.extras.each(function(extra){
+                    totalOpenProducts += extra.get('amount') - extra.get('amount_payed');
+                    totalProductsInInvoice += extra.get('currentInvoiceAmount');
+
                     var datas = {mode: 'pay',
                                   name: 'Sonderwunsch',
                                   extras: extra.get('extra_detail'),
@@ -279,10 +310,15 @@ function(app,
                                   price: extra.get('single_price'),
                                   totalPrice: extra.get('single_price') * extra.get('currentInvoiceAmount'),
                                   menu_typeid: 0,
-                                  index: index};
+                                  index: extra.get('index')};
                     $('#order-pay-open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
                 });
             });
+
+            if(totalOpenProducts == totalProductsInInvoice)
+            {
+                $('#order-pay-continue').prop("checked", false).checkboxradio('refresh');
+            }
 
             $('#order-pay-invoice-price').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
 

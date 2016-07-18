@@ -1,12 +1,14 @@
 <?php
 namespace Lib;
 
+use Model\Users;
+
 class RememberMe
 {
     private $str_key = null;
     private $o_users;
 
-    function __construct(Model\Users $o_users, $str_privatekey)
+    function __construct(Users $o_users, $str_privatekey)
     {
         $this->str_key = $str_privatekey;
         $this->o_users = $o_users;

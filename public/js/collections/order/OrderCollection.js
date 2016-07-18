@@ -13,7 +13,12 @@ define([
         addOnce: function(newOrder)
         {
             var sameOrder = this.find( function(order){
-                return JSON.stringify(order.toJSON()) == JSON.stringify(newOrder.toJSON());
+                //-- only difference is the amount and backendID if equal. Fix this
+                var clone = order.clone();
+                clone.set('amount', newOrder.get('amount'));
+                clone.set('backendID', newOrder.get('backendID'));
+
+                return JSON.stringify(clone.toJSON()) == JSON.stringify(newOrder.toJSON());
             });
 
             if(sameOrder)

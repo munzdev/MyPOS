@@ -43,7 +43,7 @@
                         <a href="/order-pay/id/<%- order.get('orderid') %>/tableNr/<%- order.get('table_name') %>" class="ui-btn ui-icon-shop ui-mini ui-btn-icon-left">Bezahlen</a>
                      <% } %>
                      <% if (order.get('button_edit') ) { %>
-                        <a href="/order-edit" class="ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
+                        <a href="/order-modify/id/<%- order.get('orderid') %>/tableNr/<%- order.get('table_name') %>" class="ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
                      <% } %>
                      <% if (order.get('button_cancel') ) { %>
                         <a href="/order-storno" class="ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">Storno</a>

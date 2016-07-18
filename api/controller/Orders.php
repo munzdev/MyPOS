@@ -97,9 +97,70 @@ class Orders extends SecurityController
 
     public function ModifyOrderAction()
     {
-        $o_orders = new Model\Orders(Database::GetConnection());
+        $a_params = Request::ValidateParams(array('order' => 'json',
+                                                  'options' => 'array'));
 
-        $a_user = Login::GetCurrentUser();
+        $i_orderId = $a_params['options']['id'];
+
+        $o_db = Database::GetConnection();
+
+        $o_orders = new Model\Orders($o_db);
+
+        $a_orders = json_decode($a_params['order'], true);
+
+        try
+        {
+            $o_db->beginTransaction();
+
+            foreach ($a_orders as $a_category)
+            {
+                foreach($a_category['orders'] as $a_order)
+                {
+                    $i_backendId = $a_order['backendID'];
+                    if($i_backendId == 0)
+                    {
+                        $a_extraIds_only = array();
+                        $a_mixingIds_only = array();
+
+                        foreach ($a_order['extras'] as $a_extra)
+                        {
+                            $a_extraIds_only[] = $a_extra['menu_extraid'];
+                        }
+
+                        foreach ($a_order['mixing'] as $a_mixing)
+                        {
+                            $a_mixingIds_only[] = $a_mixing['menuid'];
+                        }
+
+                        $o_orders->AddOrderDetail($i_orderId,
+                                                  $a_order['menuid'],
+                                                  $a_order['amount'],
+                                                  $a_order['extra'],
+                                                  $a_order['sizes'][0]['menu_sizeid'],
+                                                  $a_extraIds_only,
+                                                  $a_mixingIds_only);
+                    }
+
+                    if($a_category['menu_typeid'] == 0) //-- Special Extra
+                    {
+                        $o_orders->SetSpecialExtraAmount($i_backendId, $a_order['amount']);
+                    }
+                    else
+                    {
+                        $o_orders->SetOrderDetailAmount($i_backendId, $a_order['amount']);
+                    }
+                }
+            }
+
+            $o_db->commit();
+
+            return $i_orderId;
+        }
+        catch (Exception $o_exception)
+        {
+            $o_db->rollBack();
+            throw $o_exception;
+        }
     }
 
     public function GetOpenPaymentsAction()
@@ -223,5 +284,14 @@ class Orders extends SecurityController
             $o_db->rollBack();
             throw $o_exception;
         }
+    }
+
+    public function GetOrderAction()
+    {
+        $a_params = Request::ValidateParams(array('orderid' => 'numeric'));
+
+        $o_orders = new Model\Orders(Database::GetConnection());
+
+        return $o_orders->GetFullOrder($a_params['orderid']);
     }
 }

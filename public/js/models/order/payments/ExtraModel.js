@@ -12,7 +12,8 @@ define(function(){
             extra_detail: null,
             verified: false,
             amount_payed: 0,
-            currentInvoiceAmount: 0
+            currentInvoiceAmount: 0,
+            index: 0
         }
 
     });

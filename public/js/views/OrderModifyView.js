@@ -67,7 +67,7 @@ function(  app,
 
             this.order = new OrderCollection();
 
-            // Broken Tabs widget with Backboen pushstate enabled  - manual fix it
+            // Broken Tabs widget with Backbone pushstate enabled  - manual fix it
             $(document).on('pagecreate', '#' + this.title, function(createEvent) {
                 self.hideTabs();
 
@@ -87,9 +87,13 @@ function(  app,
             {
                 this.mode = 'edit';
                 this.order.id = options.id;
+                this.order.tableNr = options.tableNr;
                 this.order.fetch({
-                    data: {id: options.id},
-                    success: this.renderOrder
+                    data: {orderid: options.id},
+                    success: function() {
+                        self.renderOrder();
+                        self.showOverview();
+                    }
                 });
             }
 
@@ -187,14 +191,18 @@ function(  app,
 
             group.get('orders').addOnce(menu);
 
+            this.showOverview();
+            this.renderOrder();
+            $('#order-modify-panel-' + menuid).panel("close");
+        },
+
+        showOverview: function()
+        {
             // Fix jQm Tabs handling as its broken by pushstate (normale simple .tabs(active: last) should work...
             this.hideTabs();
             $('#order-modify-overview').show();
             $('#order-modify-tabs-navbar a.ui-btn-active').removeClass('ui-btn-active');
             $('#order-modify-tabs-navbar-overview').addClass('ui-btn-active');
-
-            this.renderOrder();
-            $('#order-modify-panel-' + menuid).panel("close");
         },
 
         order_close: function(event)
@@ -401,10 +409,7 @@ function(  app,
                                    options: this.options};
             webservice.callback = {
                 success: function(result) {
-                    if(self.mode == 'new')
-                        MyPOS.ChangePage("#order-pay/id/" + result.id + "/tableNr/" + self.options.tableNr);
-                    else
-                        MyPOS.ChangePage("#order-info/id/" + result.id);
+                    MyPOS.ChangePage("#order-pay/id/" + result + "/tableNr/" + self.options.tableNr);
                 }
             };
             webservice.call();
@@ -483,7 +488,8 @@ function(  app,
                             // -- End Price calculation --
                         });
 
-                        price = parseFloat( ( price / (originalMenu.get('mixing').length + 1) ).toFixed(1) );  // avoid cents
+                        price = parseFloat( ( price / (originalMenu.get('mixing').length + 1) ) );
+                        price = Math.round(price * 10)/10;// avoid cents
 
                         extras = extras.slice(0, -3);
                         extras += ", ";
@@ -494,7 +500,7 @@ function(  app,
                         price += parseFloat(extra.get('price'));
                     });
 
-                    if(originalMenu.get('extra').length > 0)
+                    if(originalMenu.get('extra') && originalMenu.get('extra').length > 0)
                         extras += originalMenu.get('extra') + ", ";
 
                     if(extras.length > 0)
@@ -518,7 +524,21 @@ function(  app,
                 });
             });
 
-            $('#order-modify-total').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
+            if(this.mode == 'edit' && this.oldPrice === undefined)
+            {
+                this.oldPrice = parseFloat(totalSumPrice);
+                $('#order-modify-total-old').text(this.oldPrice.toFixed(2) + ' €');
+            }
+
+            if(this.mode == 'new')
+            {
+                $('#order-modify-total').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
+            }
+            else
+            {
+                $('#order-modify-total-new').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
+                $('#order-modify-total-difference').text(parseFloat(totalSumPrice - this.oldPrice).toFixed(2) + ' €');
+            }
 
             $('.order-item-up').click(this.order_count_up);
             $('.order-item-down').click(this.order_count_down);
@@ -526,14 +546,14 @@ function(  app,
         },
 
         // Renders all of the Category models on the UI
-        render: function() {
+        render: function()
+        {
             var header = new HeaderView();
 
             if(this.mode == 'new')
                 header.activeButton = 'order-new';
             else
                 header.activeButton = 'order-overview';
-
 
             MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
                                                                   mode: this.mode,

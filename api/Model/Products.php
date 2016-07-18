@@ -59,26 +59,26 @@ class Products
 			}
 
 			$o_statement = $this->o_db->prepare("SELECT ms.menu_sizeid,
-														mps.menues_menuid AS menuid,
+														mps.menuid AS menuid,
 														ms.name,
                                                                                                                 ms.factor,
 														mps.price
 												 FROM menues_possible_sizes mps
 												 INNER JOIN menu_sizes ms ON ms.menu_sizeid = mps.menu_sizeid
-												 WHERE mps.menues_menuid = :menuid");
+												 WHERE mps.menuid = :menuid");
 
 			$o_statement->execute(array(':menuid' => $a_product['menuid']));
 
 			$a_products_sizes = $o_statement->fetchAll(PDO::FETCH_ASSOC);
 
 			$o_statement = $this->o_db->prepare("SELECT me.menu_extraid,
-														mpe.menues_menuid AS menuid,
+														mpe.menuid AS menuid,
 														me.name,
 												  		me.availability,
 														mpe.price
 												 FROM menues_possible_extras mpe
 												 INNER JOIN menu_extras me ON me.menu_extraid = mpe.menu_extraid
-												 WHERE mpe.menues_menuid = :menuid");
+												 WHERE mpe.menuid = :menuid");
 
 			$o_statement->execute(array(':menuid' => $a_product['menuid']));
 

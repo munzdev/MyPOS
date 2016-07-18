@@ -14,33 +14,37 @@ class Orders
 
     public function GetList($i_eventid, $i_userid, $b_finished)
     {
-        $o_statement = $this->o_db->prepare("SELECT o.orderid,
-                                                    o.tableid,
-                                                    t.name AS table_name,
-                                                    o.ordertime,
-                                                    o.priority,
-                                                    IF(oip.done IS NULL, 1, IF(oip.done = FALSE, 2, 3)) AS status,
-                                                    (SELECT SUM(od1.amount * od1.single_price)
-                                                        FROM orders_details od1
-                                                        WHERE od1.orderid = o.orderid ) AS price,
-                                                    (SELECT count(*)
-                                                        FROM orders_details_open odo
-                                                        WHERE odo.orderid = o.orderid) +
-                                                       (SELECT count(*)
-                                                        FROM orders_details_special_extra_open odseo
-                                                        WHERE odseo.orderid = o.orderid) AS open
-                                             FROM orders o
-                                             INNER JOIN tables t ON t.tableid = o.tableid
-                                             LEFT JOIN orders_in_progress oip ON oip.orderid = o.orderid
-                                             WHERE o.eventid = :eventid
-                                                       AND o.userid = :userid
-                                                       AND o.finished = :finished
-                                             ORDER BY o.priority ASC");
+        $str_not = $b_finished ? 'NOT' : '';
 
-        $o_statement->execute(array(':eventid' => $i_eventid,
-                                    ':userid' => $i_userid,
-                                    ':finished' => $b_finished
-        ));
+        $str_query = "SELECT o.orderid,
+                             o.tableid,
+                             t.name AS table_name,
+                             o.ordertime,
+                             o.priority,
+                             IF(oip.done IS NULL, 1, IF(oip.done = FALSE, 2, 3)) AS status,
+                             (SELECT SUM(od1.amount * od1.single_price)
+                                 FROM orders_details od1
+                                 WHERE od1.orderid = o.orderid ) AS price,
+                             (SELECT count(*)
+                                 FROM orders_details_open odo
+                                 WHERE odo.orderid = o.orderid) +
+                                (SELECT count(*)
+                                 FROM orders_details_special_extra_open odseo
+                                 WHERE odseo.orderid = o.orderid) AS open
+                      FROM orders o
+                      INNER JOIN tables t ON t.tableid = o.tableid
+                      LEFT JOIN orders_in_progress oip ON oip.orderid = o.orderid
+                      WHERE o.eventid = :eventid
+                                AND o.userid = :userid
+                                AND o.finished IS $str_not NULL
+                      ORDER BY o.priority ASC";
+
+        $o_statement = $this->o_db->prepare($str_query);
+
+        $o_statement->bindParam(":eventid", $i_eventid);
+        $o_statement->bindParam(":userid", $i_userid);
+
+        $o_statement->execute();
 
         $a_orders = $o_statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -66,12 +70,12 @@ class Orders
     {
         $o_statement = $this->o_db->prepare("SELECT (SELECT m.price + mps.price
                                               FROM menues m
-                                              INNER JOIN menues_possible_sizes mps ON mps.menu_sizeid = :sizeid AND mps.menues_menuid = :menuid
+                                              INNER JOIN menues_possible_sizes mps ON mps.menu_sizeid = :sizeid AND mps.menuid = :menuid
                                               WHERE m.menuid = :menuid) AS basePrice,
                                              (SELECT SUM(mpe.price)
                                               FROM menues_possible_extras mpe
                                               WHERE mpe.menu_extraid IN(:extraIds)
-                                                    AND mpe.menues_menuid = :menuid) AS extraPrice");
+                                                    AND mpe.menuid = :menuid) AS extraPrice");
 
         $o_statement->bindParam(":menuid", $i_menuid);
         $o_statement->bindValue(":extraIds", implode(',', $a_extraIds));
@@ -88,7 +92,7 @@ class Orders
             {
                 $o_statement = $this->o_db->prepare("SELECT m.price + mps.price
                                                      FROM menues m
-                                                     INNER JOIN menues_possible_sizes mps ON mps.menues_menuid = m.menuid
+                                                     INNER JOIN menues_possible_sizes mps ON mps.menuid = m.menuid
                                                                                           AND mps.menu_sizeid = :sizeid
                                                      WHERE m.menuid  = :mixingId ");
 
@@ -111,9 +115,9 @@ class Orders
                                                              m.price AS basePrice
                                                      FROM menu_sizes ms
                                                      INNER JOIN menu_sizes ms2 ON ms2.menu_sizeid = :sizeid
-                                                     INNER JOIN menues_possible_sizes mps ON mps.menues_menuid = :menuid
+                                                     INNER JOIN menues_possible_sizes mps ON mps.menuid = :menuid
                                                                                           AND mps.menu_sizeid = ms.menu_sizeid
-                                                     INNER JOIN menues m ON m.menuid = mps.menues_menuid
+                                                     INNER JOIN menues m ON m.menuid = mps.menuid
                                                      LIMIT 1");
 
                 $o_statement->bindParam(":menuid", $i_mixingId);
@@ -124,6 +128,7 @@ class Orders
             }
 
             $i_price = $i_price / (count($a_mixingIds) + 1);
+            $i_price = round($i_price, 1); //-- avoid cents
         }
 
         $i_price += $a_price['extraPrice'];
@@ -143,16 +148,24 @@ class Orders
             $i_order_detailid = $this->o_db->lastInsertId();
 
             $o_statement = $this->o_db->prepare("INSERT INTO orders_detail_sizes(orders_detailid, menues_possible_sizeid)
-                                                 VALUES (:orders_detailid, :sizeid)");
+                                                 VALUES (:orders_detailid, (SELECT menues_possible_sizeid
+                                                                            FROM menues_possible_sizes
+                                                                            WHERE menu_sizeid = :sizeid
+                                                                                  AND menuid = :menuid))");
 
             $o_statement->bindParam(":orders_detailid", $i_order_detailid);
             $o_statement->bindParam(":sizeid", $i_sizeid);
+            $o_statement->bindParam(":menuid", $i_menuid);
             $o_statement->execute();
 
             $o_statement = $this->o_db->prepare("INSERT INTO orders_detail_extras(orders_detailid, menues_possible_extraid)
-                                                 VALUES (:orders_detailid, :extraid)");
+                                                 VALUES (:orders_detailid, (SELECT menues_possible_extraid
+                                                                            FROM menues_possible_extras
+                                                                            WHERE menu_extraid = :extraid
+                                                                                  AND menuid = :menuid))");
 
             $o_statement->bindParam(":orders_detailid", $i_order_detailid);
+            $o_statement->bindParam(":menuid", $i_menuid);
 
             foreach($a_extraIds as $i_extraId)
             {
@@ -161,7 +174,7 @@ class Orders
                 $o_statement->closeCursor();
             }
 
-            $o_statement = $this->o_db->prepare("INSERT INTO orders_details_mixed_with(orders_detailid, menues_menuid)
+            $o_statement = $this->o_db->prepare("INSERT INTO orders_details_mixed_with(orders_detailid, menuid)
                                                  VALUES (:orders_detailid, :menuid)");
 
             $o_statement->bindParam(":orders_detailid", $i_order_detailid);
@@ -200,7 +213,11 @@ class Orders
                             mt.menu_typeid,
                             mt.name AS typeName,
                             ms.name AS sizeName,
-                            GROUP_CONCAT(me.name ORDER BY me.name SEPARATOR ', ') AS selectedExtras
+                            GROUP_CONCAT(me.name ORDER BY me.name SEPARATOR ', ') AS selectedExtras,
+                            (SELECT GROUP_CONCAT(m2.name ORDER BY m2.name SEPARATOR ', ')
+                             FROM orders_details_mixed_with odmw
+                             INNER JOIN menues m2 ON m2.menuid = odmw.menuid
+                             WHERE odmw.orders_detailid = odo.orders_detailid) AS mixedWith
                      FROM orders_details_open odo
                      INNER JOIN orders o ON o.orderid = odo.orderid
                      INNER JOIN tables t ON t.tableid = o.tableid
@@ -241,7 +258,7 @@ class Orders
 
             foreach($a_result['orders'] as $a_order)
             {
-                $str_index = "{$a_order['menuid']}-{$a_order['single_price']}-{$a_order['extra_detail']}-{$a_order['sizeName']}-{$a_order['selectedExtras']}";
+                $str_index = "{$a_order['menuid']}-{$a_order['single_price']}-{$a_order['extra_detail']}-{$a_order['sizeName']}-{$a_order['selectedExtras']}-{$a_order['mixedWith']}";
 
                 if(!isset($a_order_verify[$str_index]))
                 {
@@ -305,5 +322,330 @@ class Orders
         }
 
         return $a_result;
+    }
+
+    public function GetOrder($i_orderId)
+    {
+        $o_statement = $this->o_db->prepare("SELECT eventid,
+                                                    tableid,
+                                                    userid,
+                                                    ordertime,
+                                                    priority,
+                                                    finished
+                                             FROM orders
+                                             WHERE orderid = :orderid");
+
+        $o_statement->bindParam(":orderid", $i_orderId);
+        $o_statement->execute();
+
+        return $o_statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function GetOrderDetails($i_orderId)
+    {
+        $o_statement = $this->o_db->prepare("SELECT od.orders_detailid,
+                                                    od.menuid,
+                                                    od.amount,
+                                                    od.single_price,
+                                                    od.extra_detail,
+                                                    od.finished,
+                                                    m.name AS nameMenu,
+                                                    m.price AS menuPrice,
+                                                    m.availability,
+                                                    mg.name AS nameGroup,
+                                                    mg.menu_groupid,
+                                                    mt.menu_typeid,
+                                                    mt.name AS nameType,
+                                                    mt.tax,
+                                                    mt.allowMixing,
+                                                    mps.price AS sizePrice,
+                                                    ms.menu_sizeid,
+                                                    ms.name AS nameSize,
+                                                    ms.factor
+                                             FROM orders_details od
+                                             INNER JOIN menues m ON m.menuid = od.menuid
+                                             INNER JOIN menu_groupes mg ON mg.menu_groupid = m.menu_groupid
+                                             INNER JOIN menu_types mt ON mg.menu_typeid = mt.menu_typeid
+                                             INNER JOIN orders_detail_sizes ods ON ods.orders_detailid = od.orders_detailid
+                                             INNER JOIN menues_possible_sizes mps ON mps.menues_possible_sizeid = ods.menues_possible_sizeid
+                                             INNER JOIN menu_sizes ms ON ms.menu_sizeid = mps.menu_sizeid
+                                             WHERE od.orderid = :orderid
+                                                    AND od.amount > 0");
+
+        $o_statement->bindParam(":orderid", $i_orderId);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function GetExtrasOfOrderDetail($i_orders_detailId)
+    {
+        $o_statement = $this->o_db->prepare("SELECT me.menu_extraid,
+                                                    me.eventid,
+                                                    mpe.price,
+                                                    mpe.menuid,
+                                                    me.name,
+                                                    me.availability
+                                             FROM orders_detail_extras ode
+                                             INNER JOIN orders_details od ON od.orders_detailid = ode.orders_detailid AND od.amount > 0
+                                             INNER JOIN menues_possible_extras mpe ON mpe.menues_possible_extraid = ode.menues_possible_extraid
+                                             INNER JOIN menu_extras me ON me.menu_extraid = mpe.menu_extraid
+                                             WHERE ode.orders_detailid = :orders_detailid");
+
+        $o_statement->bindParam(":orders_detailid", $i_orders_detailId);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function GetExtrasOfOrder($i_orderId)
+    {
+        $o_statement = $this->o_db->prepare("SELECT od.orders_detailid,
+                                                    me.menu_extraid,
+                                                    me.eventid,
+                                                    mpe.price,
+                                                    mpe.menuid,
+                                                    me.name,
+                                                    me.availability
+                                             FROM orders_details od
+                                             INNER JOIN orders_detail_extras ode ON ode.orders_detailid = od.orders_detailid
+                                             INNER JOIN menues_possible_extras mpe ON mpe.menues_possible_extraid = ode.menues_possible_extraid
+                                             INNER JOIN menu_extras me ON me.menu_extraid = mpe.menu_extraid
+                                             WHERE od.orderid = :orderid
+                                                   AND od.amount > 0");
+
+        $o_statement->bindParam(":orderid", $i_orderId);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function GetMixedWithFromOrderDetail($i_orders_detailid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT od.orders_detailid,
+                                                    m.menuid,
+                                                    m.menu_groupid,
+                                                    m.name,
+                                                    m.price,
+                                                    m.availability
+                                             FROM menues m
+                                             INNER JOIN orders_details_mixed_with odmw ON odmw.menuid = m.menuid
+                                             WHERE odmw.orders_detailid = :orders_detailid");
+
+        $o_statement->bindParam(":orders_detailid", $i_orders_detailid);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function GetMixedWithFromOrder($i_orderId)
+    {
+        $o_statement = $this->o_db->prepare("SELECT od.orders_detailid,
+                                                    m.menuid,
+                                                    m.menu_groupid,
+                                                    m.name,
+                                                    m.price,
+                                                    m.availability
+                                             FROM menues m
+                                             INNER JOIN orders_details_mixed_with odmw ON odmw.menuid = m.menuid
+                                             INNER JOIN orders_details od ON od.orders_detailid = odmw.orders_detailid
+                                             WHERE od.orderid = :orderid");
+
+        $o_statement->bindParam(":orderid", $i_orderId);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function GetSpecialExtrasOfOrder($i_orderId)
+    {
+        $o_statement = $this->o_db->prepare("SELECT odse.orders_details_special_extraid,
+                                                    odse.amount,
+                                                    odse.single_price,
+                                                    odse.single_price_modified_by_userid,
+                                                    odse.extra_detail,
+                                                    odse.verified,
+                                                    odse.finished
+                                             FROM orders_details_special_extra odse
+                                             WHERE odse.orderid = :orderid
+                                                   AND odse.amount > 0");
+
+        $o_statement->bindParam(":orderid", $i_orderId);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function GetSpecialExtra($i_orders_details_special_extraId)
+    {
+        $o_statement = $this->o_db->prepare("SELECT odse.orders_details_special_extraid,
+                                                    odse.amount,
+                                                    odse.single_price,
+                                                    odse.single_price_modified_by_userid,
+                                                    odse.extra_detail,
+                                                    odse.verified,
+                                                    odse.finished
+                                             FROM orders_details_special_extra odse
+                                             WHERE odse.orders_details_special_extraid = :orders_details_special_extraid
+                                                   AND odse.amount > 0");
+
+        $o_statement->bindParam(":orders_details_special_extraid", $i_orders_details_special_extraId);
+        $o_statement->execute();
+
+        return $o_statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function SetOrderDetailAmount($i_orders_detailId, $i_amount)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE orders_details
+                                             SET amount = :amount
+                                             WHERE orders_detailid = :orders_detailid");
+
+        $o_statement->bindParam(":orders_detailid", $i_orders_detailId);
+        $o_statement->bindParam(":amount", $i_amount);
+        $o_statement->execute();
+
+        return true;
+    }
+
+    public function DeleteOrderDetail($i_orders_detailId)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM orders_details
+                                             WHERE orders_detailid = :orders_detailid");
+
+        $o_statement->bindParam(":orders_detailid", $i_orders_detailId);
+        $o_statement->execute();
+
+        return true;
+    }
+
+    public function DeleteSpecialExtra($i_orders_details_special_extraId)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM orders_details_special_extra
+                                             WHERE orders_details_special_extraid = :orders_details_special_extra");
+
+        $o_statement->bindParam(":orders_details_special_extra", $i_orders_details_special_extraId);
+        $o_statement->execute();
+
+        return true;
+    }
+
+    public function SetSpecialExtraAmount($i_orders_details_special_extraId, $i_amount)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE orders_details_special_extra
+                                             SET amount = :amount
+                                             WHERE orders_details_special_extraid = :orders_details_special_extraid");
+
+        $o_statement->bindParam(":orders_details_special_extraid", $i_orders_details_special_extraId);
+        $o_statement->bindParam(":amount", $i_amount);
+        $o_statement->execute();
+
+        return true;
+    }
+
+    public function GetFullOrder($i_orderId)
+    {
+        $a_order_details = $this->GetOrderDetails($i_orderId);
+
+        $a_order_details_extras = $this->GetExtrasOfOrder($i_orderId);
+
+        $a_order_details_mixed_with = $this->GetMixedWithFromOrder($i_orderId);
+
+        $a_order_details_special_extras = $this->GetSpecialExtrasOfOrder($i_orderId);
+
+        $a_return = array();
+
+        foreach($a_order_details as $a_order_detail)
+        {
+            if(!isset($a_return[$a_order_detail['menu_typeid']]))
+            {
+                $a_return[$a_order_detail['menu_typeid']] = array(
+                    'menu_typeid' => $a_order_detail['menu_typeid'],
+                    'name' => $a_order_detail['nameType'],
+                    'orders' => array()
+                );
+            }
+
+            $a_to_add = array(
+                'backendID' => $a_order_detail['orders_detailid'],
+                'menuid' => $a_order_detail['menuid'],
+                'menu_groupid' => $a_order_detail['menu_groupid'],
+                'name' => $a_order_detail['nameMenu'],
+                'price' => $a_order_detail['single_price'],
+                'availability' => $a_order_detail['availability'],
+                'amount' => intval($a_order_detail['amount']),
+                'open' => 0,
+                'extra' => $a_order_detail['extra_detail'] ?: "",
+                'sizes' => array(
+                    array(
+                        'menu_sizeid' => $a_order_detail['menu_sizeid'],
+                        'menuid' => $a_order_detail['menuid'],
+                        'name' => $a_order_detail['nameSize'],
+                        'factor' => $a_order_detail['factor'],
+                        'price' => $a_order_detail['sizePrice']
+                    )
+                ),
+                'extras' => array(),
+                'mixing' => array()
+            );
+
+            foreach($a_order_details_extras as $a_order_detail_extra)
+            {
+                if($a_order_detail['orders_detailid'] == $a_order_detail_extra['orders_detailid'])
+                {
+                    $a_to_add['extras'][] = array(
+                        'menu_extraid' => $a_order_detail_extra['menu_extraid'],
+                        'menuid' => $a_order_detail_extra['menuid'],
+                        'name' => $a_order_detail_extra['name'],
+                        'price' => $a_order_detail_extra['price'],
+                        'availability' => $a_order_detail_extra['availability']
+                    );
+                }
+            }
+
+            foreach($a_order_details_mixed_with as $a_order_detail_mixed_with)
+            {
+                if($a_order_detail['orders_detailid'] == $a_order_detail_mixed_with['orders_detailid'])
+                {
+                    unset($a_order_detail_mixed_with['orders_detailid']);
+                    $a_to_add['mixing'][] = $a_order_detail_mixed_with;
+                }
+            }
+
+            $a_return[$a_order_detail['menu_typeid']]['orders'][] = $a_to_add;
+        }
+
+        if($a_order_details_special_extras)
+        {
+            $a_return[0] = array(
+                    'menu_typeid' => "0",
+                    'name' => "Sonderwünsche",
+                    'orders' => array()
+                );
+
+            foreach($a_order_details_special_extras as $a_order_detail_special_extra)
+            {
+                $a_to_add = array(
+                    'backendID' => $a_order_detail_special_extra['orders_details_special_extraid'],
+                    'menuid' => 0,
+                    'menu_groupid' => 0,
+                    'name' => "Sonderwunsch",
+                    'price' => $a_order_detail_special_extra['single_price'] ?: 0,
+                    'verified' => intval($a_order_detail_special_extra['verified']),
+                    'amount' => intval($a_order_detail_special_extra['amount']),
+                    'open' => 0,
+                    'extra' => $a_order_detail_special_extra['extra_detail'],
+                    'sizes' => array(
+                        array() //-- gets filled up by Backbone defaults
+                    ),
+                    'extras' => array(),
+                    'mixing' => array()
+                );
+
+                $a_return[0]['orders'][] = $a_to_add;
+            }
+        }
+
+        return array_values($a_return);
     }
 }
