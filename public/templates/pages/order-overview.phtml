@@ -37,13 +37,13 @@
                  </td>
                  <td>
                      <% if (order.get('button_info') ) { %>
-                        <a href="/order-info" class="ui-btn ui-icon-info ui-mini ui-btn-icon-left">Info</a>
+                        <a data-order-id="<%- order.get('orderid') %>" class="order-overview-info-btn ui-btn ui-icon-info ui-mini ui-btn-icon-left">Info</a>
                      <% } %>
                      <% if (order.get('button_pay') ) { %>
-                        <a href="/order-pay/id/<%- order.get('orderid') %>/tableNr/<%- order.get('table_name') %>" class="ui-btn ui-icon-shop ui-mini ui-btn-icon-left">Bezahlen</a>
+                        <a data-order-id="<%- order.get('orderid') %>" data-table-nr="<%- order.get('table_name') %>" class="order-overview-pay-btn ui-btn ui-icon-shop ui-mini ui-btn-icon-left">Bezahlen</a>
                      <% } %>
                      <% if (order.get('button_edit') ) { %>
-                        <a href="/order-modify/id/<%- order.get('orderid') %>/tableNr/<%- order.get('table_name') %>" class="ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
+                        <a data-order-id="<%- order.get('orderid') %>" data-table-nr="<%- order.get('table_name') %>"  class="order-overview-modify-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
                      <% } %>
                      <% if (order.get('button_cancel') ) { %>
                         <a data-order-id="<%- order.get('orderid') %>" class="order-overview-cancel-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">Storno</a>

@@ -36,6 +36,9 @@ define([ "app",
 
         events: {
             'click .order-overview-cancel-btn': 'cancel_order_popup',
+            'click .order-overview-pay-btn': 'click_btn_pay',
+            'click .order-overview-info-btn': 'click_btn_info',
+            'click .order-overview-modify-btn': 'click_btn_modify',
             'click #order-overview-cancel-order-dialog-continue': 'cancel_order',
             'popupafterclose #order-overview-cancel-success-popup': 'success_popup_close'
         },
@@ -61,6 +64,29 @@ define([ "app",
                 }
             };
             webservice.call();
+        },
+
+        click_btn_pay: function(event)
+        {
+            var orderid = $(event.currentTarget).attr('data-order-id');
+            var tableNr = $(event.currentTarget).attr('data-table-nr');
+
+            MyPOS.ChangePage("#order-pay/id/" + orderid + "/tableNr/" + tableNr);
+        },
+
+        click_btn_modify: function(event)
+        {
+            var orderid = $(event.currentTarget).attr('data-order-id');
+            var tableNr = $(event.currentTarget).attr('data-table-nr');
+
+            MyPOS.ChangePage("#order-modify/id/" + orderid + "/tableNr/" + tableNr);
+        },
+
+        click_btn_info: function(event)
+        {
+            var orderid = $(event.currentTarget).attr('data-order-id');
+
+            MyPOS.ChangePage("#order-info/id/" + orderid);
         },
 
         success_popup_close: function()
