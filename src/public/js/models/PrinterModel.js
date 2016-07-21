@@ -1,6 +1,3 @@
-/**
- * @desc		stores the POST state and response state of authentication for user
- */
 define([
     "app",
     "MyPOS"

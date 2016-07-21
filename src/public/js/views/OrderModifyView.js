@@ -517,7 +517,8 @@ function(  app,
                                 totalPrice: totalPrice,
                                 menu_typeid: category.get('menu_typeid'),
                                 index: counter,
-                                isSpecialOrder: isSpecialOrder};
+                                isSpecialOrder: isSpecialOrder,
+                                skipCounts: false};
 
                     $('#order-modify-selected').append("<li>" + itemTemplate(datas) + "</li>");
                     counter++;

@@ -21,8 +21,10 @@
             <br/>
             Gesamt: <strong><%- parseFloat(totalPrice).toFixed(2) %>€</strong>
         <% } %>
-        <br/>
-        <a data-menu-typeid="<%- menu_typeid %>" data-index="<%- index %>" class="order-item-up ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-notext">+</a>
-        <a data-menu-typeid="<%- menu_typeid %>" data-index="<%- index %>" class="order-item-down ui-btn ui-btn-inline ui-icon-minus ui-btn-icon-notext">-</a>
+        <% if(!skipCounts) { %>
+            <br/>
+            <a data-menu-typeid="<%- menu_typeid %>" data-index="<%- index %>" class="order-item-up ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-notext">+</a>
+            <a data-menu-typeid="<%- menu_typeid %>" data-index="<%- index %>" class="order-item-down ui-btn ui-btn-inline ui-icon-minus ui-btn-icon-notext">-</a>
+        <% } %>
     </div>
 </div>

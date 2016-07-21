@@ -689,4 +689,59 @@ class Orders
             $o_statement->execute();
         }
     }
+
+    public function GetOrderInfo($i_orderid)
+    {
+        $str_query = "SELECT o.orderid,
+                             o.tableid,
+                             t.name AS table_name,
+                             o.ordertime,
+                             CONCAT(u.firstname, ' ', u.lastname) AS user,
+                             o.priority,
+                             o.finished,
+                             IF(oip.done IS NULL, 1, IF(oip.done = FALSE, 2, 3)) AS status,
+
+                             (SELECT count(*)
+                                 FROM orders_details_open odo
+                                 WHERE odo.orderid = o.orderid) +
+                                (SELECT count(*)
+                                 FROM orders_details_special_extra_open odseo
+                                 WHERE odseo.orderid = o.orderid) AS open,
+
+                             ((SELECT COALESCE(SUM(iod.amount * od.single_price), 0)
+                               FROM orders_details od
+                               INNER JOIN invoices_orders_details iod ON od.orders_detailid = iod.orders_detailid
+                               WHERE od.orderid = o.orderid)
+                               +
+                               (SELECT COALESCE(SUM(iodse.amount * odse.single_price), 0)
+                               FROM orders_details_special_extra odse
+                               INNER JOIN invoices_orders_details_special_extra iodse ON iodse.orders_details_special_extraid = iodse.orders_details_special_extraid
+                               WHERE odse.orderid = o.orderid)) AS amountPayed,
+
+                             ( SELECT `date`
+                               FROM (SELECT i.`date`
+                                   FROM invoices i
+                                   INNER JOIN invoices_orders_details iod ON iod.invoiceid = i.invoiceid
+                                   INNER JOIN orders_details od2 ON od2.orders_detailid = iod.orders_detailid
+                                   WHERE od2.orderid = :orderid
+                                   UNION
+                                   SELECT i.`date`
+                                   FROM invoices i
+                                   INNER JOIN invoices_orders_details_special_extra iodse ON iodse.invoiceid = i.invoiceid
+                                   INNER JOIN orders_details_special_extra odse2 ON odse2.orders_details_special_extraid = iodse.orders_details_special_extraid
+                                   WHERE odse2.orderid = :orderid) AS result
+                               ORDER BY `date` DESC LIMIT 1)  AS last_paydate
+
+                      FROM orders o
+                      INNER JOIN tables t ON t.tableid = o.tableid
+                      INNER JOIN users u ON u.userid = o.userid
+                      LEFT JOIN orders_in_progress oip ON oip.orderid = o.orderid
+                      WHERE o.orderid = :orderid";
+
+        $o_statement = $this->o_db->prepare($str_query);
+        $o_statement->bindParam(":orderid", $i_orderid);
+        $o_statement->execute();
+
+        return $o_statement->fetch(PDO::FETCH_ASSOC);
+    }
 }

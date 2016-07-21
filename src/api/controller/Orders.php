@@ -324,4 +324,17 @@ class Orders extends SecurityController
             throw $o_exception;
         }
     }
+
+    public function GetOrderInfoAction()
+    {
+        $a_params = Request::ValidateParams(array('orderid' => 'numeric'));
+
+        $o_orders = new Model\Orders(Database::GetConnection());
+
+        $a_order = $o_orders->GetOrderInfo($a_params['orderid']);
+
+        $a_order['orders'] = $o_orders->GetFullOrder($a_params['orderid']);
+
+        return $a_order;
+    }
 }

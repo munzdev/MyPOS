@@ -293,7 +293,8 @@ function(app,
                                 price: order.get('single_price'),
                                 totalPrice: order.get('single_price') * order.get('currentInvoiceAmount'),
                                 menu_typeid: order.get('menu_typeid'),
-                                index: order.get('index')};
+                                index: order.get('index'),
+                                skipCounts: false};
 
                     $('#order-pay-open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
                 });
@@ -310,7 +311,8 @@ function(app,
                                   price: extra.get('single_price'),
                                   totalPrice: extra.get('single_price') * extra.get('currentInvoiceAmount'),
                                   menu_typeid: 0,
-                                  index: extra.get('index')};
+                                  index: extra.get('index'),
+                                  skipCounts: false};
                     $('#order-pay-open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
                 });
             });
