@@ -98,13 +98,13 @@ COMMIT;
 -- Data for table `orders_details`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `amount_recived`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 1, 1, 2, 0, 7.50, NULL, NULL, NULL);
-INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `amount_recived`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 2, 1, 1, 0, 9, NULL, NULL, NULL);
-INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `amount_recived`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 8, 2, 3, 0, 2.5, NULL, NULL, NULL);
-INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `amount_recived`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 14, 2, 2, 0, 2.80, NULL, NULL, NULL);
-INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `amount_recived`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 8, 3, 1, 0, 4, NULL, NULL, NULL);
-INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `amount_recived`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 1, 4, 2, 0, 7.50, NULL, NULL, NULL);
-INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `amount_recived`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 2, 4, 1, 0, 6.50, NULL, NULL, NULL);
+INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 1, 1, 2, 7.50, NULL, NULL, NULL);
+INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 2, 1, 1, 9, NULL, NULL, NULL);
+INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 8, 2, 3, 2.5, NULL, NULL, NULL);
+INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 14, 2, 2, 2.80, NULL, NULL, NULL);
+INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 8, 3, 1, 4, NULL, NULL, NULL);
+INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 1, 4, 2, 7.50, NULL, NULL, NULL);
+INSERT INTO `orders_details` (`orders_detailid`, `menuid`, `orderid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`) VALUES (DEFAULT, 2, 4, 1, 6.50, NULL, NULL, NULL);
 
 COMMIT;
 

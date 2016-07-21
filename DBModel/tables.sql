@@ -184,7 +184,6 @@ CREATE TABLE IF NOT EXISTS `orders_details` (
   `menuid` INT(11) NOT NULL,
   `orderid` INT(11) NOT NULL,
   `amount` TINYINT NOT NULL,
-  `amount_recived` TINYINT NOT NULL,
   `single_price` DECIMAL(7,2) NOT NULL,
   `single_price_modified_by_userid` INT(11) NULL,
   `extra_detail` VARCHAR(255) NULL,
@@ -195,7 +194,6 @@ CREATE TABLE IF NOT EXISTS `orders_details` (
   INDEX `fk_orders_details_orders1_idx` (`orderid` ASC),
   INDEX `fk_orders_details_users1_idx` (`single_price_modified_by_userid` ASC),
   INDEX `idx_amount` (`amount` ASC),
-  INDEX `idx_amount_recived` (`amount_recived` ASC),
   CONSTRAINT `fk_orders_details_menues1`
     FOREIGN KEY (`menuid`)
     REFERENCES `menues` (`menuid`)
@@ -405,6 +403,7 @@ CREATE TABLE IF NOT EXISTS `orders_in_progress` (
   `orderid` INT(11) NOT NULL,
   `menu_typeid` INT(11) NOT NULL,
   `userid` INT(11) NOT NULL,
+  `begin` DATETIME NOT NULL,
   `done` DATETIME NULL,
   PRIMARY KEY (`orders_in_progressid`, `orderid`, `menu_typeid`, `userid`),
   UNIQUE INDEX `orders_in_progressid_UNIQUE` (`orders_in_progressid` ASC),
@@ -688,6 +687,32 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `orders_in_progress_recieved`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `orders_in_progress_recieved` ;
+
+CREATE TABLE IF NOT EXISTS `orders_in_progress_recieved` (
+  `orders_detailid` INT(11) NOT NULL,
+  `orders_in_progressid` INT(11) NOT NULL,
+  `amount` TINYINT NOT NULL,
+  `finished` DATETIME NOT NULL,
+  PRIMARY KEY (`orders_detailid`, `orders_in_progressid`),
+  INDEX `fk_orders_details_has_orders_in_progress_orders_in_progress_idx` (`orders_in_progressid` ASC),
+  INDEX `fk_orders_details_has_orders_in_progress_orders_details1_idx` (`orders_detailid` ASC),
+  CONSTRAINT `fk_orders_details_has_orders_in_progress_orders_details1`
+    FOREIGN KEY (`orders_detailid`)
+    REFERENCES `orders_details` (`orders_detailid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_orders_details_has_orders_in_progress_orders_in_progress1`
+    FOREIGN KEY (`orders_in_progressid`)
+    REFERENCES `orders_in_progress` (`orders_in_progressid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Placeholder table for view `orders_details_open`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `orders_details_open` (`orderid` INT, `orders_detailid` INT, `menuid` INT, `amount` INT, `single_price` INT, `extra_detail` INT, `amount_payed` INT);
@@ -740,4 +765,3 @@ SELECT odse.orderid,
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
