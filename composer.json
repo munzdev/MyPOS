@@ -3,6 +3,9 @@
   "require" : {
     "mike42/escpos-php" : "v1.2.1"
   },
+  "config": {
+    "vendor-dir": "src/vendor"
+  },
   "repositories" : [ {
     "type" : "composer",
     "url" : "https://packagist.org/"

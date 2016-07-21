@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MyPOS" basedir="." default="build" description="PHP based POS System for events">
+    <property name="buildDir" value="build"/>
+    <property name="srcDir" value="src"/>
+
+    <target name="build">
+        <echo msg="Updating extranal libs" />
+        <composer composer="D:\xampp\php\composer.phar" command="update" />
+        <echo msg="Copying to build directory..."/>
+        <copy todir="${buildDir}">
+            <fileset dir="${srcDir}"/>
+        </copy>
+        <echo msg="Generate SQL script" />
+        <mkdir dir="${buildDir}/sql" />
+        <touch file="${buildDir}/sql/install.sql"/>
+        <append destFile="${buildDir}/sql/install.sql">
+            <filelist dir="DBModel/" files="tables.sql,data.sql" />
+        </append>
+    </target>
+
+    <target name="build-dev">
+        <echo msg="Updating extranal libs" />
+        <!-- composer command="update" /-->
+        <echo msg="Copying to build directory..."/>
+        <copy todir="${buildDir}">
+            <fileset dir="${srcDir}"/>
+        </copy>
+        <echo msg="Generate SQL script" />
+        <mkdir dir="${buildDir}/sql" />
+        <touch file="${buildDir}/sql/install.sql"/>
+        <append destFile="${buildDir}/sql/install.sql">
+            <filelist dir="DBModel/" files="tables.sql,data.sql,test-data.sql" />
+        </append>
+    </target>
+
+    <target name="clean">
+        <echo msg="Cleaning build..." />
+        <delete dir="${buildDir}" includeemptydirs="true" verbose="true" />
+        <mkdir dir="${buildDir}" />
+    </target>
+</project>
