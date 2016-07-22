@@ -682,10 +682,17 @@ class Orders
            $a_status['count_unpayed'] == 0 )
         {
             $o_statement = $this->o_db->prepare("UPDATE orders
-                                                 SET finished = NOW()
+                                                 SET finished = NOW(),
+                                                     priority = 0
                                                  WHERE orderid = :orderid");
 
             $o_statement->bindParam(":orderid", $i_orderid);
+            $o_statement->execute();
+
+            $o_statement = $this->o_db->prepare("UPDATE orders
+                                                 SET priority = priority - 1
+                                                 WHERE finished IS NULL");
+
             $o_statement->execute();
         }
     }
