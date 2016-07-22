@@ -3,7 +3,7 @@ namespace Lib;
 
 use PDO;
 
-class Database
+abstract class Database
 {
 	private static $o_pdo_connection;
 
