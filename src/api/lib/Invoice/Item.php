@@ -8,6 +8,8 @@
 
 namespace Lib\Invoice;
 
+use MyPOS;
+
 /**
  * Description of Item
  *
@@ -40,14 +42,13 @@ class Item
         if ($this->b_euroSign)  {
             $i_leftCols = $i_leftCols / 2 - $i_rightCols / 2;
         }
+        $str_name = $this->str_name;
         if ($this->i_amount)  {
-            $i_leftCols = $i_leftCols / 2 - $i_rightCols / 2;
+            $str_name = $this->i_amount . " $str_name";
         }
-        $str_left = str_pad($this->str_name, $i_leftCols);
+        $str_left = str_pad($str_name, $i_leftCols);
 
-        $str_left .= " " . $this->i_amount;
-
-        $str_sign = ($this -> b_euroSign ? '€ ' : '');
+        $str_sign = ($this -> b_euroSign ? (MyPOS\PRINTER_CARACTER_EURO) . ' ' : '');
         $str_right = str_pad($str_sign . $this -> i_price, $i_rightCols, ' ', STR_PAD_LEFT);
         return "$str_left$str_right\n";
     }

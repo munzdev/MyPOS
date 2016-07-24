@@ -11,7 +11,7 @@ namespace Lib;
 
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\PrintConnectors\PrintConnector;
-use Invoice\Item;
+use Lib\Invoice\Item;
 
 /**
  * Description of Invoice
@@ -36,6 +36,11 @@ class Invoice
     public function __construct(PrintConnector $o_connector)
     {
         $this->o_printer = new Printer($o_connector);
+    }
+
+    public function __destruct()
+    {
+        $this->o_printer->close();
     }
 
     public function Add($str_name, $i_amount, $i_price, $i_tax)
@@ -118,15 +123,15 @@ class Invoice
 
         foreach($a_taxes as $i_tax => $i_price)
         {
-            $this->o_printer -> text(new Item($i_tax . '% MwSt', '', $i_price));
+            $this->o_printer -> text(new Item($i_tax . '% MwSt', '', $i_price, true));
         }
 
         /* Footer */
         $this->o_printer -> feed(2);
         $this->o_printer -> setJustification(Printer::JUSTIFY_CENTER);
         $this->o_printer -> text("Danke für Ihren Besuch!\n");
-        $this->o_printer -> feed(2);
         $this->o_printer -> text(($this->d_date) ? $this->d_date : date("d-m-Y H:i:s") . "\n");
+        $this->o_printer -> feed(2);
 
         /* Cut the receipt and open the cash drawer */
         $this->o_printer -> cut();

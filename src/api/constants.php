@@ -10,3 +10,5 @@ const ORDER_STATUS_IN_PROGRESS = 2;
 const ORDER_STATUS_FINISHED = 3;
 
 const MYSQL_TIMEFORMAT = "Y-m-d H:i:s";
+
+const PRINTER_CARACTER_EURO = "\x1B\x74\x13\xD5";
