@@ -257,7 +257,7 @@ COMMIT;
 -- Data for table `events_printers`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `events_printers` (`events_printerid`, `eventid`, `name`, `ip`, `port`, `default`) VALUES (DEFAULT, 1, 'Default', '192.168.0.50', 9100, 1);
+INSERT INTO `events_printers` (`events_printerid`, `eventid`, `name`, `ip`, `port`, `default`, `characters_per_row`) VALUES (DEFAULT, 1, 'Default', '192.168.0.50', 9100, 1, 48);
 
 COMMIT;
 
