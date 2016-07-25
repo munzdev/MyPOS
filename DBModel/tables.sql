@@ -601,6 +601,7 @@ CREATE TABLE IF NOT EXISTS `orders_details_special_extra` (
   `extra_detail` VARCHAR(255) NOT NULL,
   `verified` TINYINT(1) NOT NULL,
   `finished` DATETIME NULL,
+  `availablility` ENUM('AVAIBLE', 'DELAYED', 'OUT OF ORDER') NULL,
   PRIMARY KEY (`orders_details_special_extraid`, `orderid`),
   UNIQUE INDEX `orders_details_special_extraid_UNIQUE` (`orders_details_special_extraid` ASC),
   INDEX `fk_orders_details_special_extra_orders1_idx` (`orderid` ASC),
@@ -720,6 +721,32 @@ CREATE TABLE IF NOT EXISTS `orders_in_progress_recieved` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_has_orders_in_progress_orders_in_progress1`
+    FOREIGN KEY (`orders_in_progressid`)
+    REFERENCES `orders_in_progress` (`orders_in_progressid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `orders_extras_in_progress_recieved`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `orders_extras_in_progress_recieved` ;
+
+CREATE TABLE IF NOT EXISTS `orders_extras_in_progress_recieved` (
+  `orders_details_special_extraid` INT(11) NOT NULL,
+  `orders_in_progressid` INT(11) NOT NULL,
+  `amount` TINYINT NOT NULL,
+  `finished` DATETIME NOT NULL,
+  PRIMARY KEY (`orders_details_special_extraid`, `orders_in_progressid`),
+  INDEX `fk_orders_details_special_extra_has_orders_in_progress_orde_idx` (`orders_in_progressid` ASC),
+  INDEX `fk_orders_details_special_extra_has_orders_in_progress_orde_idx1` (`orders_details_special_extraid` ASC),
+  CONSTRAINT `fk_orders_details_special_extra_has_orders_in_progress_orders1`
+    FOREIGN KEY (`orders_details_special_extraid`)
+    REFERENCES `orders_details_special_extra` (`orders_details_special_extraid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_orders_details_special_extra_has_orders_in_progress_orders2`
     FOREIGN KEY (`orders_in_progressid`)
     REFERENCES `orders_in_progress` (`orders_in_progressid`)
     ON DELETE NO ACTION
