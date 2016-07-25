@@ -738,6 +738,39 @@ CREATE TABLE IF NOT EXISTS `orders_details_open` (`orderid` INT, `orders_detaili
 CREATE TABLE IF NOT EXISTS `orders_details_special_extra_open` (`orderid` INT, `orders_details_special_extraid` INT, `amount` INT, `single_price` INT, `extra_detail` INT, `verified` INT, `amount_payed` INT);
 
 -- -----------------------------------------------------
+-- procedure open_orders_priority
+-- -----------------------------------------------------
+DROP procedure IF EXISTS `open_orders_priority`;
+
+DELIMITER $$
+CREATE PROCEDURE `open_orders_priority` ()
+BEGIN
+SET @rank:=0, @last_menu_groupid:=0, @last_orderid:=0;
+CREATE TEMPORARY TABLE IF NOT EXISTS tmp_open_orders_priority AS (
+SELECT t.orders_detailid, t.orders_details_special_extraid, t.menu_groupid, t.orderid,
+		IF(@last_menu_groupid != t.menu_groupid, @rank:=0, null) AS tmp1,
+        IF(@last_orderid != t.orderid, @rank:=@rank+1, null) AS tmp2,
+		IF(@last_menu_groupid != t.menu_groupid, @last_menu_groupid := t.menu_groupid, null) AS tmp3,
+        IF(@last_orderid != t.orderid, @last_orderid := t.orderid, null) AS tmp4,
+        @rank AS rank
+FROM (SELECT orders_detailid, orders_details_special_extraid, menu_groupid, priority, orderid
+FROM (SELECT od.orders_detailid, NULL AS orders_details_special_extraid, m.menu_groupid, o.priority, o.orderid
+			 FROM orders o
+			 INNER JOIN orders_details od ON od.orderid = o.orderid AND od.finished IS NULL
+			 INNER JOIN menues m ON m.menuid = od.menuid
+			 WHERE o.finished IS NULL
+	  UNION
+	  SELECT NULL AS orders_detailid, odse.orders_details_special_extraid, odse.menu_groupid, o.priority, o.orderid
+			 FROM orders o
+			 INNER JOIN orders_details_special_extra odse ON odse.orderid = o.orderid AND odse.menu_groupid IS NOT NULL AND odse.finished IS NULL
+			 WHERE o.finished IS NULL) f
+	  ORDER BY  menu_groupid ASC, priority ASC, orders_details_special_extraid ASC
+      LIMIT 18446744073709551615) t);
+END$$
+
+DELIMITER ;
+
+-- -----------------------------------------------------
 -- View `orders_details_open`
 -- -----------------------------------------------------
 DROP VIEW IF EXISTS `orders_details_open` ;
