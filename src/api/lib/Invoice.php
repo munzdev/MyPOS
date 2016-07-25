@@ -191,7 +191,7 @@ class Invoice
 
         /* Footer */
         $this->o_printer -> feed(2);
-        $this->o_printer -> text("Ausgabe: " . ($this->d_date) ? $this->d_date : date("d.m.Y H:i:s") . "\n");
+        $this->o_printer -> text("Ausgabe: " . (($this->d_date) ? $this->d_date : date("d.m.Y H:i:s")));
         $this->o_printer -> feed(2);
 
         /* Cut the receipt and open the cash drawer */
