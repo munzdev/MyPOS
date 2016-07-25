@@ -13,7 +13,6 @@ $o_connector = new NetworkPrintConnector("192.168.0.50", 9100);
 //$o_connector = new FilePrintConnector("php://stdout");
 
 $o_invoice = new Lib\Invoice($o_connector, 36);
-$o_invoice->SetHeader("HEADER TOP LINE\nSECOND LINE\n THIRD LINE");
 $o_invoice->SetNr(584);
 $o_invoice->SetTableNr("B32");
 $o_invoice->SetName("Test Order");
