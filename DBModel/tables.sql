@@ -626,8 +626,15 @@ DROP TABLE IF EXISTS `invoices` ;
 CREATE TABLE IF NOT EXISTS `invoices` (
   `invoiceid` INT(11) NOT NULL AUTO_INCREMENT,
   `date` DATETIME NOT NULL,
-  PRIMARY KEY (`invoiceid`),
-  UNIQUE INDEX `invoiceid_UNIQUE` (`invoiceid` ASC))
+  `cashier_userid` INT(11) NOT NULL,
+  PRIMARY KEY (`invoiceid`, `cashier_userid`),
+  UNIQUE INDEX `invoiceid_UNIQUE` (`invoiceid` ASC),
+  INDEX `fk_invoices_users1_idx` (`cashier_userid` ASC),
+  CONSTRAINT `fk_invoices_users1`
+    FOREIGN KEY (`cashier_userid`)
+    REFERENCES `users` (`userid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 

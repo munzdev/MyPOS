@@ -196,13 +196,15 @@ class Orders extends SecurityController
         $o_invoices = new Model\Invoices($o_db);
         $o_orders = new Model\Orders($o_db);
 
+        $a_user = Login::GetCurrentUser();
+
         $a_payments = json_decode($a_params['payments'], true);
 
         try
         {
             $o_db->beginTransaction();
 
-            $i_invoiceId = $o_invoices->Add();
+            $i_invoiceId = $o_invoices->Add($a_user['userid']);
 
             $a_open_orders = $o_orders->GetOpenPayments($a_params['orderid'], $a_params['tableNr'], false);
 

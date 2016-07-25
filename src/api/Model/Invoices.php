@@ -13,7 +13,7 @@ class Invoices
         $this->o_db = $o_db;
     }
 
-    public function Add($d_date = null)
+    public function Add($i_userid, $d_date = null)
     {
         $o_statement = $this->o_db->prepare("INSERT INTO invoices(date)
                                              VALUES(:date)");
