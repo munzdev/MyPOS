@@ -335,7 +335,7 @@ class Orders extends SecurityController
 
         $a_order = $o_orders->GetOrderInfo($a_params['orderid']);
 
-        $a_order['orders'] = $o_orders->GetFullOrder($a_params['orderid']);
+        $a_order['orders'] = $o_orders->GetFullOrder($a_params['orderid'], true);
 
         return $a_order;
     }

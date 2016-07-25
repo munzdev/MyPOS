@@ -543,7 +543,7 @@ class Orders
         return true;
     }
 
-    public function GetFullOrder($i_orderId)
+    public function GetFullOrder($i_orderId, $b_add_rank = false)
     {
         $a_order_details = $this->GetOrderDetails($i_orderId);
 
@@ -552,6 +552,11 @@ class Orders
         $a_order_details_mixed_with = $this->GetMixedWithFromOrder($i_orderId);
 
         $a_order_details_special_extras = $this->GetSpecialExtrasOfOrder($i_orderId);
+
+        if($b_add_rank)
+        {
+            $a_order_ranks = $this->GetOrderRank($i_orderId);
+        }
 
         $a_return = array();
 
@@ -588,6 +593,20 @@ class Orders
                 'extras' => array(),
                 'mixing' => array()
             );
+
+            if($b_add_rank)
+            {
+                $a_to_add['finished'] = $a_order_detail['finished'];
+
+                foreach($a_order_ranks as $a_order_rank)
+                {
+                    if($a_order_rank['orders_detailid'] == $a_order_detail['orders_detailid'])
+                    {
+                        $a_to_add['rank'] = $a_order_rank['rank'];
+                        break;
+                    }
+                }
+            }
 
             foreach($a_order_details_extras as $a_order_detail_extra)
             {
@@ -641,6 +660,19 @@ class Orders
                     'extras' => array(),
                     'mixing' => array()
                 );
+
+                if($b_add_rank)
+                {
+                    $a_to_add['finished'] = $a_order_detail_special_extra['finished'];
+
+                    foreach($a_order_ranks as $a_order_rank)
+                    {
+                        if($a_order_rank['orders_details_special_extraid'] == $a_order_detail_special_extra['orders_details_special_extraid'])
+                        {
+                            $a_to_add['rank'] = $a_order_rank['rank'];
+                        }
+                    }
+                }
 
                 $a_return[0]['orders'][] = $a_to_add;
             }
@@ -750,5 +782,20 @@ class Orders
         $o_statement->execute();
 
         return $o_statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function GetOrderRank($i_orderid)
+    {
+        $this->o_db->query("CALL open_orders_priority();");
+        $o_statement = $this->o_db->prepare("SELECT orders_detailid,
+                                                    orders_details_special_extraid,
+                                                    rank
+                                             FROM tmp_open_orders_priority
+                                             WHERE orderid = :orderid");
+
+        $o_statement->bindParam(":orderid", $i_orderid);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

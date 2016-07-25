@@ -1,7 +1,8 @@
 define([
     "app",
+    "MyPOS",
     "collections/OrderCollection"
-], function(app, OrderCollection){
+], function(app, MyPOS, OrderCollection){
     "use strict";
 
     var InfoModel = Backbone.Model.extend({
