@@ -266,6 +266,6 @@ COMMIT;
 -- Data for table `orders_details_special_extra`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `orders_details_special_extra` (`orders_details_special_extraid`, `orderid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `verified`, `finished`) VALUES (DEFAULT, 1, 1, NULL, NULL, 'Schnitzel ohne allem mit Schweinsbratten', 0, NULL);
+INSERT INTO `orders_details_special_extra` (`orders_details_special_extraid`, `orderid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `verified`, `finished`) VALUES (DEFAULT, 1, NULL, 1, NULL, NULL, 'Schnitzel ohne allem mit Schweinsbratten', 0, NULL);
 
 COMMIT;

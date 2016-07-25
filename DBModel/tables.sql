@@ -594,6 +594,7 @@ DROP TABLE IF EXISTS `orders_details_special_extra` ;
 CREATE TABLE IF NOT EXISTS `orders_details_special_extra` (
   `orders_details_special_extraid` INT(11) NOT NULL AUTO_INCREMENT,
   `orderid` INT(11) NOT NULL,
+  `menu_groupid` INT(11) NULL,
   `amount` TINYINT NOT NULL,
   `single_price` DECIMAL(7,2) NULL,
   `single_price_modified_by_userid` INT(11) NULL,
@@ -605,6 +606,7 @@ CREATE TABLE IF NOT EXISTS `orders_details_special_extra` (
   INDEX `fk_orders_details_special_extra_orders1_idx` (`orderid` ASC),
   INDEX `fk_orders_details_special_extra_users1_idx` (`single_price_modified_by_userid` ASC),
   INDEX `idx_amount` (`amount` ASC),
+  INDEX `fk_orders_details_special_extra_menu_groupes1_idx` (`menu_groupid` ASC),
   CONSTRAINT `fk_orders_details_special_extra_orders1`
     FOREIGN KEY (`orderid`)
     REFERENCES `orders` (`orderid`)
@@ -613,6 +615,11 @@ CREATE TABLE IF NOT EXISTS `orders_details_special_extra` (
   CONSTRAINT `fk_orders_details_special_extra_users1`
     FOREIGN KEY (`single_price_modified_by_userid`)
     REFERENCES `users` (`userid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_orders_details_special_extra_menu_groupes1`
+    FOREIGN KEY (`menu_groupid`)
+    REFERENCES `menu_groupes` (`menu_groupid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -625,8 +632,8 @@ DROP TABLE IF EXISTS `invoices` ;
 
 CREATE TABLE IF NOT EXISTS `invoices` (
   `invoiceid` INT(11) NOT NULL AUTO_INCREMENT,
-  `date` DATETIME NOT NULL,
   `cashier_userid` INT(11) NOT NULL,
+  `date` DATETIME NOT NULL,
   PRIMARY KEY (`invoiceid`, `cashier_userid`),
   UNIQUE INDEX `invoiceid_UNIQUE` (`invoiceid` ASC),
   INDEX `fk_invoices_users1_idx` (`cashier_userid` ASC),
