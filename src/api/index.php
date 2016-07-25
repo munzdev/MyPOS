@@ -17,6 +17,7 @@ try
 {
     require PROJECT_ROOT . "config.php";
     require 'constants.php';
+    require 'functions.php';
     require PROJECT_ROOT . "vendor/autoload.php";
 
     session_start();
