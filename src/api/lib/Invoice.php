@@ -134,6 +134,7 @@ class Invoice
         $this->o_printer -> text($this->str_tableNr  . "\n");
         $this->o_printer -> selectPrintMode();
         $this->o_printer -> text("AUFGENOMMEN VON: " . $this->str_name  . "\n");
+        $this->o_printer -> text("AUFGENOMMEN AM: " . $this->d_date . "\n");
         $this->o_printer -> setEmphasis(false);
 
         /* Items */
@@ -146,7 +147,6 @@ class Invoice
         $this->o_printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
 
         $i_leftCols = $this->i_paper_row_length;
-        $i_left_padding = self::LEFT_PADDING;
 
         $i_leftCols = $i_leftCols / 2;
 
@@ -164,9 +164,16 @@ class Invoice
                 for($i = 0; $i < count($a_left_elements); $i++)
                 {
                     $str_word = $a_left_elements[$i];
-                    $str_tmp = $str_row . ' ' . $str_word;
 
-                    if(strlen($str_tmp) > $i_leftCols)
+                    if($i == 0)
+                        $i_left_padding = strlen($str_word) + 1;
+
+                    if($str_row == '')
+                        $str_tmp = $str_word;
+                    else
+                        $str_tmp = $str_row . ' ' . $str_word;
+
+                    if($i > 1 && strlen($str_tmp) > $i_leftCols)
                     {
                         $a_final[$i_row_counter] .= mb_str_pad($str_row, $i_leftCols);
                         $i_row_counter++;
@@ -191,7 +198,7 @@ class Invoice
 
         /* Footer */
         $this->o_printer -> feed(2);
-        $this->o_printer -> text("Ausgabe: " . (($this->d_date) ? $this->d_date : date("d.m.Y H:i:s")));
+        $this->o_printer -> text("Ausgabe: " . date("d.m.Y H:i:s"));
         $this->o_printer -> feed(2);
 
         /* Cut the receipt and open the cash drawer */
