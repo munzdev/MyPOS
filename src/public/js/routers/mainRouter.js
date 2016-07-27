@@ -11,7 +11,8 @@ define([ "app",
          "views/OrderNewView",
          "views/OrderModifyView",
          "views/OrderPayView",
-         "views/OrderInfoView"
+         "views/OrderInfoView",
+         "views/DistributionView"
 ], function(app,
             Backbone,
             SessionModel,
@@ -21,7 +22,8 @@ define([ "app",
             OrderNewView,
             OrderModifyView,
             OrderPayView,
-            OrderInfoView) {
+            OrderInfoView,
+            DistributionView) {
     "use strict";
 
     // Extends Backbone.Router
@@ -45,7 +47,8 @@ define([ "app",
             "order-overview": "order_overview",
             "order-modify(/id/:id)(/tableNr/:tableNr)": "order_modify",
             "order-pay/id/:id/tableNr/:tableNr": "order_pay",
-            "order-info/id/:id": "order_info"
+            "order-info/id/:id": "order_info",
+            "distribution": "distribution"
         },
 
         show: function(view, options){
@@ -132,6 +135,12 @@ define([ "app",
         {
             if(DEBUG) console.log("Order INFO with id: " + id, "OK");
             this.show(new OrderInfoView({id: id}));
+        },
+
+        distribution: function()
+        {
+            if(DEBUG) console.log("Distriution", "OK");
+            this.show(new DistributionView());
         }
 
     } );
