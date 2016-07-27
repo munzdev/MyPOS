@@ -3,13 +3,12 @@
 
 // Includes file dependencies
 define([ "app",
-         "MyPOS",
          "models/order/info/InfoModel",
          'views/headers/HeaderView',
          'text!templates/pages/order-info.phtml',
-         'text!templates/pages/order-item.phtml'],
+         'text!templates/pages/order-item.phtml',
+         "jquery-dateFormat"],
  function(  app,
-            MyPOS,
             InfoModel,
             HeaderView,
             Template,
@@ -70,7 +69,6 @@ define([ "app",
                     {
                         extras = sizeToMixWith.get('name') + ", ";
                     }
-                    price += parseFloat(sizeToMixWith.get('price'));
 
                     if(originalMenu.get('mixing').length > 0)
                     {
@@ -78,54 +76,13 @@ define([ "app",
 
                         originalMenu.get('mixing').each(function(menuToMixWith){
                             extras += menuToMixWith.get('name') + " - ";
-
-                            var menuToMixWithSearch = _.find(app.session.products.searchHelper, function(obj) { return obj.menuid == menuToMixWith.get('menuid'); });
-
-                            var sizesOfMenuToMixWith = app.session.products.findWhere({menu_typeid: menuToMixWithSearch.menu_typeid})
-                                                                            .get('groupes')
-                                                                            .findWhere({menu_groupid: menuToMixWithSearch.menu_groupid})
-                                                                            .get('menues')
-                                                                            .findWhere({menuid: menuToMixWithSearch.menuid})
-                                                                            .get('sizes');
-
-                            // -- Price calculation --
-                            // First: try to find the same size for the mixing product and get this price
-                            var menuToMixWithHasSameSizeAsOriginal = sizesOfMenuToMixWith.findWhere({menu_sizeid: sizeToMixWith.get('menu_sizeid')});
-                            var menuToMixWithDefaultPrice = parseFloat(menuToMixWithSearch.menu.get('price'));
-
-                            if(menuToMixWithHasSameSizeAsOriginal)
-                            {
-                                var priceToAdd = menuToMixWithDefaultPrice + parseFloat(menuToMixWithHasSameSizeAsOriginal.get('price'));
-
-                                if(DEBUG) console.log("Mixing same size found: " + priceToAdd);
-
-                                price += priceToAdd;
-                                return;
-                            }
-
-                            // Second: Try to calculate the price based on factor value
-                            var menuToMixWithSize = menuToMixWithSearch.menu.get('sizes').at(0);
-
-                            var factor = sizeToMixWith.get('factor') / menuToMixWithSize.get('factor');
-
-                            var priceToAdd = (menuToMixWithDefaultPrice + parseFloat(menuToMixWithSize.get('price')) ) * factor;
-
-                            if(DEBUG) console.log("Mixing factor calculation: " + priceToAdd + " - " + priceToAdd.toFixed(1));
-
-                            price += priceToAdd;
-                            // -- End Price calculation --
                         });
-
-                        price = parseFloat( ( price / (originalMenu.get('mixing').length + 1) ) );
-                        price = Math.round(price * 10)/10;// avoid cents
-
                         extras = extras.slice(0, -3);
                         extras += ", ";
                     }
 
                     originalMenu.get('extras').each(function(extra){
                         extras += extra.get('name') + ", ";
-                        price += parseFloat(extra.get('price'));
                     });
 
                     if(originalMenu.get('extra') && originalMenu.get('extra').length > 0)
@@ -137,6 +94,17 @@ define([ "app",
                     var totalPrice = price * originalMenu.get('amount');
                     totalSumPrice += totalPrice;
 
+                    var status = ORDER_STATUS_WAITING;
+
+                    if(originalMenu.get('in_progress_begin') != null)
+                    {
+                        status = ORDER_STATUS_IN_PROGRESS;
+                    }
+                    if(originalMenu.get('in_progress_done') != null)
+                    {
+                        status = ORDER_STATUS_FINISHED;
+                    }
+
                     var datas = {name: originalMenu.get('name'),
                                 extras: extras,
                                 mode: 'modify',
@@ -146,7 +114,15 @@ define([ "app",
                                 menu_typeid: category.get('menu_typeid'),
                                 index: counter,
                                 isSpecialOrder: isSpecialOrder,
-                                skipCounts: true};
+                                skipCounts: true,
+                                statusInformation: true,
+                                rank: originalMenu.get('rank'),
+                                handled_by_name: originalMenu.get('handled_by_name'),
+                                in_progress_begin: originalMenu.get('in_progress_begin'),
+                                in_progress_done: originalMenu.get('in_progress_done'),
+                                amount_recieved_total: originalMenu.get('amount_recieved_total'),
+                                amount_recieved: originalMenu.get('amount_recieved'),
+                                status: status};
 
                     $('#order-info-details').append("<li>" + itemTemplate(datas) + "</li>");
                     counter++;

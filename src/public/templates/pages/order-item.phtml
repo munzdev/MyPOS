@@ -28,3 +28,41 @@
         <% } %>
     </div>
 </div>
+<% if(typeof statusInformation !== 'undefined') { %>
+    <div class="ui-grid-solo">
+        <div class="ui-block-a">
+            <% if(status == ORDER_STATUS_WAITING) { %>
+                <p>Warteschlange Pos <%- rank %></p>
+            <% } else if(status == ORDER_STATUS_IN_PROGRESS) { %>
+                <p style="color:orange;">
+                    in Bearbeitung seit
+                    <%- $.format.date(MyPOS.DateFromMysql(in_progress_begin), DATE_JS_TIMEFORMAT) %>
+                    Pos <%- rank %>
+                </p>
+                <p>Bearbeiter: <%- handled_by_name %></p>
+                <p>Erhalten: <%- amount_recieved_total %></p>
+                <p>Auslieferungen:</p>
+                <ul class="ui-mini">
+                    <% _.each(amount_recieved, function(current_amount, current_date){ %>
+                        <li><%- $.format.date(MyPOS.DateFromMysql(current_date), DATE_JS_TIMEFORMAT) %>: <%- current_amount %></li>
+                    <% }) %>
+                </ul>
+            <% } else if(status == ORDER_STATUS_FINISHED) { %>
+                <p style="color:green;">
+                        Fertig - Bearbeitet von
+                        <%- $.format.date(MyPOS.DateFromMysql(in_progress_begin), DATE_JS_TIMEFORMAT) %>
+                        bis
+                        <%- $.format.date(MyPOS.DateFromMysql(in_progress_done), DATE_JS_TIMEFORMAT) %>
+                </p>
+                <p>Bearbeiter: <%- handled_by_name %></p>
+                <p>Erhalten: <%- amount_recieved_total %></p>
+                <p>Auslieferungen:</p>
+                <ul class="ui-mini">
+                    <% _.each(amount_recieved, function(current_amount, current_date){ %>
+                        <li><%- $.format.date(MyPOS.DateFromMysql(current_date), DATE_JS_TIMEFORMAT) %>: <%- current_amount %></li>
+                    <% }) %>
+                </ul>
+            <% } %>
+        </div>
+    </div>
+<% } %>

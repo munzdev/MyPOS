@@ -36,14 +36,14 @@ define(["app", "jquery"], function(app) {
         if(result.error)
         {
             this.DisplayError(result.errorMessage);
-            if('error' in this.callback) this.callback.error(result);
+            if(this.callback && 'error' in this.callback) this.callback.error(result);
         }
         else
         {
-            if('success' in this.callback) this.callback.success(result.result);
+            if(this.callback && 'success' in this.callback) this.callback.success(result.result);
         }
 
-        if('complete' in this.callback) this.callback.complete();
+        if(this.callback && 'complete' in this.callback) this.callback.complete();
     }
 
     Webservice.prototype.error = function(jqXHR, textStatus, errorThrown)

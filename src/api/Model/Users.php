@@ -41,7 +41,7 @@ class Users
 
 		$o_statement->execute(array(':username' => $str_username));
 
-		return $o_statement->fetch(PDO::FETCH_ASSOC);
+		return $o_statement->fetch();
 	}
 
 	public function GetUserDetailsByID($i_userid)
@@ -52,7 +52,7 @@ class Users
 
 		$o_statement->execute(array(':userid' => $i_userid));
 
-		return $o_statement->fetch(PDO::FETCH_ASSOC);
+		return $o_statement->fetch();
 	}
 
 	public function GetAdminDetailsByUsername($str_username)
@@ -63,7 +63,7 @@ class Users
 
 		$o_statement->execute(array(':username' => $str_username));
 
-		return $o_statement->fetch(PDO::FETCH_ASSOC);
+		return $o_statement->fetch();
 	}
 
 	public function GetAdminDetailsByID($i_userid)
@@ -74,7 +74,7 @@ class Users
 
 		$o_statement->execute(array(':userid' => $i_userid));
 
-		return $o_statement->fetch(PDO::FETCH_ASSOC);
+		return $o_statement->fetch();
 	}
 
 	public function GetUserByID($i_userid)
@@ -97,7 +97,7 @@ class Users
 
 		$o_statement->execute(array(':userid' => $i_userid));
 
-		return $o_statement->fetch(PDO::FETCH_ASSOC);
+		return $o_statement->fetch();
 	}
 
 	public function GetAdminByID($i_userid)
@@ -119,7 +119,7 @@ class Users
 
 		$o_statement->execute(array(':userid' => $i_userid));
 
-		return $o_statement->fetch(PDO::FETCH_ASSOC);
+		return $o_statement->fetch();
 	}
 
 	public function SetAuthKey($i_userid, $str_key)

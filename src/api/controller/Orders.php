@@ -1,10 +1,12 @@
 <?php
 namespace Controller;
 
+use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Lib\SecurityController;
 use Lib\Database;
 use Lib\Login;
 use Lib\Request;
+use Lib\Invoice;
 use Model;
 use MyPOS;
 
@@ -84,7 +86,7 @@ class Orders extends SecurityController
                 }
             }
 
-            $o_orders->CheckIfOrderDone($a_params['orderid']);
+            $o_orders->CheckIfOrderDone($i_orderId);
 
             $o_db->commit();
 
@@ -154,7 +156,7 @@ class Orders extends SecurityController
                 }
             }
 
-            $o_orders->CheckIfOrderDone($a_params['orderid']);
+            $o_orders->CheckIfOrderDone($i_orderId);
 
             $o_db->commit();
 
@@ -187,9 +189,7 @@ class Orders extends SecurityController
         $a_params = Request::ValidateParams(array('orderid' => 'numeric',
                                                   'tableNr' => 'optional!string',
                                                   'mode' => 'string',
-                                                  'payments' => 'json',
-                                                  'print' => 'bool',
-                                                  'printer' => 'numberic'));
+                                                  'payments' => 'json'));
 
         $o_db = Database::GetConnection();
 
@@ -286,6 +286,8 @@ class Orders extends SecurityController
             $o_orders->CheckIfOrderDone($a_params['orderid']);
 
             $o_db->commit();
+
+            return $i_invoiceId;
         }
         catch (Exception $o_exception)
         {
@@ -338,5 +340,52 @@ class Orders extends SecurityController
         $a_order['orders'] = $o_orders->GetFullOrder($a_params['orderid'], true);
 
         return $a_order;
+    }
+
+    public function PrintInvoiceAction()
+    {
+        $a_params = Request::ValidateParams(array('invoiceid' => 'numberic',
+                                                  'printerid' => 'numberic'));
+
+        $o_db = Database::GetConnection();
+
+        $o_invoices = new Model\Invoices($o_db);
+        $o_events = new Model\Events($o_db);
+
+        $a_printer = $o_events->GetPrinter($a_params['printerid']);
+        $a_invoice = $o_invoices->GetInvoice($a_params['invoiceid']);
+        $a_config = $GLOBALS['a_config']['Organisation']['Invoice'];
+
+        $o_connector = new NetworkPrintConnector($a_printer['ip'], $a_printer['port']);
+
+        $o_invoice = new Invoice($o_connector, $a_printer['characters_per_row']);
+
+        if($a_config['Logo']['Use'])
+            $o_invoice->SetLogo($a_config['Logo']['Path'], $a_config['Logo']['Type']);
+
+        $o_invoice->SetHeader($a_config['Header']);
+        $o_invoice->SetNr($a_params['invoiceid']);
+        $o_invoice->SetTableNr($a_invoice['name']);
+        $o_invoice->SetName($a_invoice['cashier']);
+        $o_invoice->SetDate(date(MyPOS\DATE_PHP_TIMEFORMAT, strtotime($a_invoice['date']) ));
+
+        foreach($a_invoice['rows'] as $a_row)
+        {
+            $o_invoice->Add($a_row['name'],
+                            $a_row['amount'],
+                            $a_row['price'],
+                            $a_row['tax']);
+        }
+
+        try
+        {
+            $o_invoice->PrintInvoice();
+
+            return true;
+        }
+        catch(Exception $o_exception)
+        {
+            throw new Exception("Rechnungsdruck fehlgeschlagen! Bitte Vorgang wiederhollen! Rechnungsnummer: $a_params[invoiceid]", $o_exception->getCode(), $o_exception);
+        }
     }
 }

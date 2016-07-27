@@ -188,12 +188,20 @@ function(app,
             webservice.formData = {orderid: this.id,
                                    tableNr: this.tableNr,
                                    mode: this.mode,
-                                   print: $('#order-pay-print').prop('checked') == 1,
-                                   printer: $('#order-pay-printer').val(),
                                    payments: JSON.stringify(this.payments)};
 
             webservice.callback = {
-                success: function() {
+                success: function(result)
+                {
+                    if($('#order-pay-print').prop('checked') == 1)
+                    {
+                        var webservice = new Webservice();
+                        webservice.action = "Orders/PrintInvoice";
+                        webservice.formData = {invoiceid: result,
+                                               printerid: $('#order-pay-printer').val()};
+                        webservice.call();
+                    }
+
                     $('#order-pay-success-popup').popup("open");
                 }
             };

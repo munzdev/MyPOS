@@ -273,14 +273,14 @@ class Invoice
 
         foreach($a_taxes as $i_tax => $i_price)
         {
-            $this->PrintItem($i_tax . '% MwSt aus € ' . sprintf('%0.2f', $i_price), '', $i_price * ($i_tax / 100), true);
+            $this->PrintItem($i_tax . '% MwSt aus € ' . sprintf('%0.2f', $i_price), '', sprintf('%0.2f', $i_price * ($i_tax / 100)), true);
         }
 
         /* Footer */
         $this->o_printer -> feed(2);
         $this->o_printer -> setJustification(Printer::JUSTIFY_CENTER);
         $this->o_printer -> text("Danke für Ihren Besuch!\n");
-        $this->o_printer -> text(($this->d_date) ? $this->d_date : date("d.m.Y H:i:s") . "\n");
+        $this->o_printer -> text(($this->d_date) ? $this->d_date : date(MyPOS\DATE_PHP_TIMEFORMAT) . "\n");
         $this->o_printer -> feed(2);
 
         /* Cut the receipt and open the cash drawer */

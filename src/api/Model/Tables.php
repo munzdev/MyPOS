@@ -53,7 +53,7 @@ class Tables
 
         $o_statement->execute(array(':tableid' => $str_tableId));
 
-        $a_table = $o_statement->fetch(PDO::FETCH_ASSOC);
+        $a_table = $o_statement->fetch();
 
         return $a_table;
     }
@@ -65,7 +65,7 @@ class Tables
 
         $o_statement->execute();
 
-        $a_tables = $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        $a_tables = $o_statement->fetchAll();
 
         return $a_tables;
     }

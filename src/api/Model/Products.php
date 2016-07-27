@@ -31,7 +31,7 @@ class Products
 
 		$o_statement->execute(array(':eventid' => $i_eventid));
 
-		$a_products = $o_statement->fetchAll(PDO::FETCH_ASSOC);
+		$a_products = $o_statement->fetchAll();
 
 		$a_return = array();
 
@@ -69,7 +69,7 @@ class Products
 
 			$o_statement->execute(array(':menuid' => $a_product['menuid']));
 
-			$a_products_sizes = $o_statement->fetchAll(PDO::FETCH_ASSOC);
+			$a_products_sizes = $o_statement->fetchAll();
 
 			$o_statement = $this->o_db->prepare("SELECT me.menu_extraid,
 														mpe.menuid AS menuid,
@@ -82,7 +82,7 @@ class Products
 
 			$o_statement->execute(array(':menuid' => $a_product['menuid']));
 
-			$a_products_extras = $o_statement->fetchAll(PDO::FETCH_ASSOC);
+			$a_products_extras = $o_statement->fetchAll();
 
 			$a_return[$a_product['menu_typeid']]
 				['groupes']

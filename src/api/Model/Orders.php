@@ -21,7 +21,7 @@ class Orders
                              t.name AS table_name,
                              o.ordertime,
                              o.priority,
-                             IF(oip.done IS NULL, 1, IF(oip.done = FALSE, 2, 3)) AS status,
+                             IF(oip.begin IS NULL, 1, IF(oip.done IS NULL, 2, 3)) AS status,
                              (SELECT SUM(od1.amount * od1.single_price)
                                  FROM orders_details od1
                                  WHERE od1.orderid = o.orderid ) AS price,
@@ -46,7 +46,7 @@ class Orders
 
         $o_statement->execute();
 
-        $a_orders = $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        $a_orders = $o_statement->fetchAll();
 
         return $a_orders;
     }
@@ -82,7 +82,7 @@ class Orders
         $o_statement->bindParam(":sizeid", $i_sizeid);
         $o_statement->execute();
 
-        $a_price = $o_statement->fetch(PDO::FETCH_ASSOC);
+        $a_price = $o_statement->fetch();
 
         $i_price = $a_price['basePrice'];
 
@@ -102,7 +102,7 @@ class Orders
 
                 $i_mixingPrice = $o_statement->fetchColumn();
 
-                if($i_mixingPrice !== null)
+                if($i_mixingPrice !== false)
                 {
                     $i_price += $i_mixingPrice;
                     continue;
@@ -135,8 +135,8 @@ class Orders
 
         if($i_menuid != 0)
         {
-            $o_statement = $this->o_db->prepare("INSERT INTO orders_details(orderid, menuid, amount, amount_recived, single_price, extra_detail )
-                                                 VALUES (:orderid, :menuid, :amount, 0, :single_price, :extra_detail)");
+            $o_statement = $this->o_db->prepare("INSERT INTO orders_details(orderid, menuid, amount, single_price, extra_detail )
+                                                 VALUES (:orderid, :menuid, :amount, :single_price, :extra_detail)");
 
             $o_statement->bindParam(":orderid", $i_orderId);
             $o_statement->bindParam(":menuid", $i_menuid);
@@ -250,7 +250,7 @@ class Orders
 
         $o_statement->execute();
 
-        $a_result['orders'] = $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        $a_result['orders'] = $o_statement->fetchAll();
 
         if(!empty($str_tableNr && $b_merge))
         {
@@ -297,7 +297,7 @@ class Orders
 
         $o_statement->execute();
 
-        $a_result['extras'] = $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        $a_result['extras'] = $o_statement->fetchAll();
 
         if(!empty($str_tableNr) && $b_merge)
         {
@@ -338,7 +338,7 @@ class Orders
         $o_statement->bindParam(":orderid", $i_orderId);
         $o_statement->execute();
 
-        return $o_statement->fetch(PDO::FETCH_ASSOC);
+        return $o_statement->fetch();
     }
 
     public function GetOrderDetails($i_orderId)
@@ -375,7 +375,7 @@ class Orders
         $o_statement->bindParam(":orderid", $i_orderId);
         $o_statement->execute();
 
-        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        return $o_statement->fetchAll();
     }
 
     public function GetExtrasOfOrderDetail($i_orders_detailId)
@@ -395,7 +395,7 @@ class Orders
         $o_statement->bindParam(":orders_detailid", $i_orders_detailId);
         $o_statement->execute();
 
-        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        return $o_statement->fetchAll();
     }
 
     public function GetExtrasOfOrder($i_orderId)
@@ -417,7 +417,7 @@ class Orders
         $o_statement->bindParam(":orderid", $i_orderId);
         $o_statement->execute();
 
-        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        return $o_statement->fetchAll();
     }
 
     public function GetMixedWithFromOrderDetail($i_orders_detailid)
@@ -435,7 +435,7 @@ class Orders
         $o_statement->bindParam(":orders_detailid", $i_orders_detailid);
         $o_statement->execute();
 
-        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        return $o_statement->fetchAll();
     }
 
     public function GetMixedWithFromOrder($i_orderId)
@@ -454,7 +454,7 @@ class Orders
         $o_statement->bindParam(":orderid", $i_orderId);
         $o_statement->execute();
 
-        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        return $o_statement->fetchAll();
     }
 
     public function GetSpecialExtrasOfOrder($i_orderId)
@@ -473,7 +473,7 @@ class Orders
         $o_statement->bindParam(":orderid", $i_orderId);
         $o_statement->execute();
 
-        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        return $o_statement->fetchAll();
     }
 
     public function GetSpecialExtra($i_orders_details_special_extraId)
@@ -492,7 +492,7 @@ class Orders
         $o_statement->bindParam(":orders_details_special_extraid", $i_orders_details_special_extraId);
         $o_statement->execute();
 
-        return $o_statement->fetch(PDO::FETCH_ASSOC);
+        return $o_statement->fetch();
     }
 
     public function SetOrderDetailAmount($i_orders_detailId, $i_amount)
@@ -543,7 +543,7 @@ class Orders
         return true;
     }
 
-    public function GetFullOrder($i_orderId, $b_add_rank = false)
+    public function GetFullOrder($i_orderId, $b_add_status = false)
     {
         $a_order_details = $this->GetOrderDetails($i_orderId);
 
@@ -553,9 +553,9 @@ class Orders
 
         $a_order_details_special_extras = $this->GetSpecialExtrasOfOrder($i_orderId);
 
-        if($b_add_rank)
+        if($b_add_status)
         {
-            $a_order_ranks = $this->GetOrderRank($i_orderId);
+            $a_order_statuses = $this->GetOrderStatus($i_orderId);
         }
 
         $a_return = array();
@@ -594,16 +594,30 @@ class Orders
                 'mixing' => array()
             );
 
-            if($b_add_rank)
+            if($b_add_status)
             {
                 $a_to_add['finished'] = $a_order_detail['finished'];
 
-                foreach($a_order_ranks as $a_order_rank)
+                foreach($a_order_statuses as $a_order_status)
                 {
-                    if($a_order_rank['orders_detailid'] == $a_order_detail['orders_detailid'])
+                    if($a_order_status['orders_detailid'] == $a_order_detail['orders_detailid'])
                     {
-                        $a_to_add['rank'] = $a_order_rank['rank'];
-                        break;
+                        $a_to_add['rank'] = $a_order_status['rank'];
+                        $a_to_add['handled_by_name'] = $a_order_status['handled_by_name'];
+                        $a_to_add['in_progress_begin'] = $a_order_status['in_progress_begin'];
+                        $a_to_add['in_progress_done'] = $a_order_status['in_progress_done'];
+
+                        if(!isset($a_to_add['amount_recieved']))
+                        {
+                            $a_to_add['amount_recieved_total'] = 0;
+                            $a_to_add['amount_recieved'] = array();
+                        }
+
+                        if($a_order_status['amount'] != null)
+                        {
+                            $a_to_add['amount_recieved_total'] += $a_order_status['amount'];
+                            $a_to_add['amount_recieved'][$a_order_status['recieved']] = $a_order_status['amount'];
+                        }
                     }
                 }
             }
@@ -661,15 +675,30 @@ class Orders
                     'mixing' => array()
                 );
 
-                if($b_add_rank)
+                if($b_add_status)
                 {
                     $a_to_add['finished'] = $a_order_detail_special_extra['finished'];
 
-                    foreach($a_order_ranks as $a_order_rank)
+                    foreach($a_order_statuses as $a_order_status)
                     {
-                        if($a_order_rank['orders_details_special_extraid'] == $a_order_detail_special_extra['orders_details_special_extraid'])
+                        if($a_order_status['orders_details_special_extraid'] == $a_order_detail_special_extra['orders_details_special_extraid'])
                         {
-                            $a_to_add['rank'] = $a_order_rank['rank'];
+                            $a_to_add['rank'] = $a_order_status['rank'];
+                            $a_to_add['handled_by_name'] = $a_order_status['handled_by_name'];
+                            $a_to_add['in_progress_begin'] = $a_order_status['in_progress_begin'];
+                            $a_to_add['in_progress_done'] = $a_order_status['in_progress_done'];
+
+                            if(!isset($a_to_add['amount_recieved']))
+                            {
+                                $a_to_add['amount_recieved_total'] = 0;
+                                $a_to_add['amount_recieved'] = array();
+                            }
+
+                            if($a_order_status['amount'] != null)
+                            {
+                                $a_to_add['amount_recieved_total'] += $a_order_status['amount'];
+                                $a_to_add['amount_recieved'][$a_order_status['recieved']] = $a_order_status['amount'];
+                            }
                         }
                     }
                 }
@@ -708,7 +737,7 @@ class Orders
         $o_statement->bindParam(":orderid", $i_orderid);
         $o_statement->execute();
 
-        $a_status = $o_statement->fetch(PDO::FETCH_ASSOC);
+        $a_status = $o_statement->fetch();
 
         if($a_status['count_unfinished'] == 0 &&
            $a_status['count_unpayed'] == 0 )
@@ -738,7 +767,7 @@ class Orders
                              CONCAT(u.firstname, ' ', u.lastname) AS user,
                              o.priority,
                              o.finished,
-                             IF(oip.done IS NULL, 1, IF(oip.done = FALSE, 2, 3)) AS status,
+                             IF(oip.begin IS NULL, 1, IF(oip.done IS NULL, 2, 3)) AS status,
 
                              (SELECT count(*)
                                  FROM orders_details_open odo
@@ -781,21 +810,30 @@ class Orders
         $o_statement->bindParam(":orderid", $i_orderid);
         $o_statement->execute();
 
-        return $o_statement->fetch(PDO::FETCH_ASSOC);
+        return $o_statement->fetch();
     }
 
-    public function GetOrderRank($i_orderid)
+    public function GetOrderStatus($i_orderid)
     {
         $this->o_db->query("CALL open_orders_priority();");
-        $o_statement = $this->o_db->prepare("SELECT orders_detailid,
-                                                    orders_details_special_extraid,
-                                                    rank
-                                             FROM tmp_open_orders_priority
-                                             WHERE orderid = :orderid");
+        $o_statement = $this->o_db->prepare("SELECT toop.orders_detailid,
+                                                    toop.orders_details_special_extraid,
+                                                    toop.rank,
+                                                    oip.begin AS in_progress_begin,
+                                                    oip.done AS in_progress_done,
+                                                    CONCAT(u.firstname, ' ', u.lastname) AS handled_by_name,
+                                                    IF(toop.orders_detailid, oipr.amount, oeipr.amount) AS amount,
+                                                    IF(toop.orders_detailid, oipr.finished, oeipr.finished) AS recieved
+                                             FROM tmp_open_orders_priority toop
+                                             LEFT JOIN orders_in_progress oip ON oip.orderid = toop.orderid
+                                             LEFT JOIN users u ON u.userid = oip.userid
+                                             LEFT JOIN orders_in_progress_recieved oipr ON oipr.orders_in_progressid = oip.orders_in_progressid AND oipr.orders_detailid = toop.orders_detailid
+                                             LEFT JOIN orders_extras_in_progress_recieved oeipr ON oeipr.orders_in_progressid = oip.orders_in_progressid AND oeipr.orders_details_special_extraid = toop.orders_details_special_extraid
+                                             WHERE toop.orderid = :orderid");
 
         $o_statement->bindParam(":orderid", $i_orderid);
         $o_statement->execute();
 
-        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        return $o_statement->fetchAll();
     }
 }

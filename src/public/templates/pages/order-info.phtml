@@ -4,7 +4,7 @@
         <li data-role="list-divider" style="white-space: normal;">Informationen</li>
         <li style="white-space: normal;">Bestellungsnummer: <%- order.get('orderid') %></li>
         <li style="white-space: normal;">Tisch: <%- order.get('table_name') %></li>
-        <li style="white-space: normal;">Bestellzeit: <%- order.get('ordertime') %></li>
+        <li style="white-space: normal;">Bestellzeit: <%- $.format.date(MyPOS.DateFromMysql(order.get('ordertime')), DATE_JS_TIMEFORMAT) %></li>
         <li style="white-space: normal;">Kellner: <%- order.get('user') %></li>
         <li style="white-space: normal;">Status:
             <% switch(parseInt(order.get('status'))) {
@@ -24,20 +24,8 @@
                 <span style="color: red;">Unbezahlt</span>
             <% } %>
         </li>
-        <li style="white-space: normal;">Letzte Bezahlung: <%- order.get('last_paydate') %></li>
-        <li style="white-space: normal;">
-            Bearbeiter:
-            <p>Hauptspeisen: Josef Hagenhauer</p>
-            <p>AnitgetrÃ¤nke: Gerald Kaineder</p>
-            <p style="color:orange;">Biere: Warteschlange Pos 3</p>
-        </li>
-        <li style="white-space: normal;">
-            Bearbeitet:
-            <p>Hauptspeisen: 01.04.2016 17:39</p>
-            <p>AnitgetrÃ¤nke: 01.04.2016 17:34</p>
-            <p style="color:orange;">Biere: Warteschlange Pos 3</p>
-        </li>
-        <li style="white-space: normal;">Fertig: <%- order.get('finished') %></li>
+        <li style="white-space: normal;">Letzte Bezahlung: <% if(order.get('last_paydate')) { print($.format.date(MyPOS.DateFromMysql(order.get('last_paydate')), DATE_JS_TIMEFORMAT)) } %></li>
+        <li style="white-space: normal;">Fertig: <% if(order.get('finished')) { print($.format.date(MyPOS.DateFromMysql(order.get('finished')), DATE_JS_TIMEFORMAT)) } %></li>
         <li style="white-space: normal;">Bisher bezahlt: <%- order.get('amountPayed') %> €</li>
     </ul>
     <div>

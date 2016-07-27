@@ -434,6 +434,7 @@ function(  app,
                     var menuSearch = _.find(app.session.products.searchHelper, function(obj) { return obj.menuid == originalMenu.get('menuid'); });
                     var extras = '';
                     var price = parseFloat(originalMenu.get('price'));
+                    var priceFromDB = originalMenu.get('backendID') > 0;
 
                     var sizeToMixWith = originalMenu.get('sizes').at(0);
 
@@ -442,7 +443,7 @@ function(  app,
                     {
                         extras = sizeToMixWith.get('name') + ", ";
                     }
-                    price += parseFloat(sizeToMixWith.get('price'));
+                    if(!priceFromDB) price += parseFloat(sizeToMixWith.get('price'));
 
                     if(originalMenu.get('mixing').length > 0)
                     {
@@ -471,7 +472,7 @@ function(  app,
 
                                 if(DEBUG) console.log("Mixing same size found: " + priceToAdd);
 
-                                price += priceToAdd;
+                                if(!priceFromDB) price += priceToAdd;
                                 return;
                             }
 
@@ -484,12 +485,15 @@ function(  app,
 
                             if(DEBUG) console.log("Mixing factor calculation: " + priceToAdd + " - " + priceToAdd.toFixed(1));
 
-                            price += priceToAdd;
+                            if(!priceFromDB) price += priceToAdd;
                             // -- End Price calculation --
                         });
 
-                        price = parseFloat( ( price / (originalMenu.get('mixing').length + 1) ) );
-                        price = Math.round(price * 10)/10;// avoid cents
+                        if(!priceFromDB)
+                        {
+                            price = parseFloat( ( price / (originalMenu.get('mixing').length + 1) ) );
+                            price = Math.round(price * 10)/10;// avoid cents
+                        }
 
                         extras = extras.slice(0, -3);
                         extras += ", ";
@@ -497,7 +501,7 @@ function(  app,
 
                     originalMenu.get('extras').each(function(extra){
                         extras += extra.get('name') + ", ";
-                        price += parseFloat(extra.get('price'));
+                        if(!priceFromDB) price += parseFloat(extra.get('price'));
                     });
 
                     if(originalMenu.get('extra') && originalMenu.get('extra').length > 0)

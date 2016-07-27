@@ -18,7 +18,7 @@ class Events
 
         $o_statement->execute();
 
-        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        return $o_statement->fetchAll();
     }
 
     public function AddUserToEvent($i_eventid, $i_userid, $i_role)
@@ -51,13 +51,33 @@ class Events
     {
         $o_statement = $this->o_db->prepare("SELECT events_printerid,
                                                     name,
-                                                    `default`
+                                                    `default`,
+                                                    ip,
+                                                    port,
+                                                    characters_per_row
                                              FROM events_printers
                                              WHERE eventid = :eventid");
 
         $o_statement->bindParam(':eventid', $i_eventid);
         $o_statement->execute();
 
-        return $o_statement->fetchAll(PDO::FETCH_ASSOC);
+        return $o_statement->fetchAll();
+    }
+
+    public function GetPrinter($i_printerid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT eventid,
+                                                    name,
+                                                    `default`,
+                                                    ip,
+                                                    port,
+                                                    characters_per_row
+                                             FROM events_printers
+                                             WHERE events_printerid = :printerid");
+
+        $o_statement->bindParam(':printerid', $i_printerid);
+        $o_statement->execute();
+
+        return $o_statement->fetch();
     }
 }
