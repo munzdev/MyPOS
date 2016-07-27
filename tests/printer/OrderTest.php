@@ -12,10 +12,11 @@ use Mike42\Escpos\Printer;
 $o_connector = new NetworkPrintConnector("192.168.0.50", 9100);
 //$o_connector = new FilePrintConnector("php://stdout");
 
-$o_invoice = new Lib\Invoice($o_connector, 36);
+$o_invoice = new Lib\Invoice($o_connector, 48);
 $o_invoice->SetNr(584);
 $o_invoice->SetTableNr("B32");
 $o_invoice->SetName("Test Order");
+$o_invoice->SetDate(date("d.m.Y H:i:s", strtotime("-10 Minutes")));
 
 $o_invoice->Add("Colla 0.5L", "2");
 $o_invoice->Add("Colla 0.5L mit Zitronne", "1");
@@ -24,7 +25,7 @@ $o_invoice->Add("Mineral 0.25L", "2");
 
 $o_invoice->Add("Wiener Schnitzel", "1");
 $o_invoice->Add("Schweinsbratten ohne Knödel", "3");
-$o_invoice->Add("Schweinsbratten ohne Knödel, mit Wurstsemmel", "3");
+$o_invoice->Add("Schweinsbratten ohne Knödel, mit Wurstsemmel", "10");
 $o_invoice->Add("Wiener Schnitzel klein ohne Pommes, mit extra Ketchup, bla blalsaf bsadfsdafsda fsdasd ds", "1");
 $o_invoice->Add("Salat Klein", "1");
 

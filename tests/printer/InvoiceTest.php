@@ -12,7 +12,7 @@ use Mike42\Escpos\Printer;
 $o_connector = new NetworkPrintConnector("192.168.0.50", 9100);
 //$o_connector = new FilePrintConnector("php://stdout");
 
-$o_invoice = new Lib\Invoice($o_connector, 36);
+$o_invoice = new Lib\Invoice($o_connector, 48);
 $o_invoice->SetLogo("resources/escpos-php.png", MyPOS\PRINTER_LOGO_BIT_IMAGE_COLUMN);
 $o_invoice->SetHeader("HEADER TOP LINE\nSECOND LINE\n THIRD LINE");
 $o_invoice->SetNr(587472);
