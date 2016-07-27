@@ -14,8 +14,7 @@ function( app, HeaderView, Template ) {
     	title: 'distribution',
     	el: 'body',
         events: {
-            "click #distribution-current-menu div": "markOrder",
-            "click #distribution-tab-set-avaibility a": "setStatusPopup"
+            "click #distribution-current-menu div": "markOrder"
         },
 
         // The View Constructor
@@ -25,7 +24,6 @@ function( app, HeaderView, Template ) {
             // Broken Tabs widget with Backbone pushstate enabled  - manual fix it
             $(document).on('pagecreate', '#' + this.title, function(createEvent) {
                 self.hideTabs();
-                $('#distribution-status-dialog').popup({arrow: "r,l"});
 
                 $("#distribution-tabs a[data-role='tab']").click(function(event) {
                     self.hideTabs();
@@ -45,13 +43,6 @@ function( app, HeaderView, Template ) {
         {
             $('#distribution-tab-current-order').hide();
             $('#distribution-tab-set-avaibility').hide();
-        },
-
-        setStatusPopup: function(event)
-        {
-            $('#distribution-status-dialog').popup("open", { x: event.pageX,
-                                                             y: event.pageY});
-
         },
 
         // Renders all of the Category models on the UI
