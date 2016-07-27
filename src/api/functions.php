@@ -1,5 +1,16 @@
 <?php
 
+/**
+ * Original function from User comment on http://php.net/manual/de/function.str-pad.php
+ * User: wes@nospamplsexample.org
+ *
+ * @param string $str
+ * @param int $pad_len
+ * @param string $pad_str
+ * @param int $dir
+ * @param string $encoding
+ * @return string
+ */
 function mb_str_pad($str, $pad_len, $pad_str = ' ', $dir = STR_PAD_RIGHT, $encoding = NULL)
 {
     $encoding = $encoding === NULL ? mb_internal_encoding() : $encoding;
