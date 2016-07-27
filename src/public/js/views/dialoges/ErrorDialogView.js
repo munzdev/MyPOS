@@ -14,19 +14,19 @@ define([ "app", "MyPOS", 'text!templates/dialoges/error-dialog.phtml'], function
 
         // The View Constructor
         initialize: function() {
-    		this.render();
+            this.render();
         },
 
         // Renders all of the Category models on the UI
         render: function() {
-        	MyPOS.RenderDialogeTemplate(this, this.title, Template);
+            MyPOS.RenderDialogeTemplate(this, this.title, Template);
 
-        	$("#error-dialog-close").click(function(evt) {
+            $("#error-dialog-close").click(function(evt) {
             	evt.preventDefault();
             	$.mobile.changePage( $("#error-dialog-close").attr('href'), { transition: "flip" });
             });
 
-        	return this;
+            return this;
         },
 
         // Show alert classes and hide after specified timeout

@@ -6,9 +6,10 @@ define([
     "models/UserModel",
     "Webservice",
     "MyPOS",
-    "collections/ProductCollection"
-], function(app, UserModel, Webservice, MyPOS, ProductCollection){
-	"use strict";
+    "collections/ProductCollection",
+    "views/dialoges/OptionsDialogView"
+], function(app, UserModel, Webservice, MyPOS, ProductCollection, OptionsDialogView){
+    "use strict";
 
     var SessionModel = Backbone.Model.extend({
 
@@ -42,70 +43,72 @@ define([
          * and return a user object if authenticated
          */
         checkAuth: function(callback, args) {
-        	var self = this;
+            var self = this;
 
-        	var webservice = new Webservice();
-        	webservice.action = "Users/IsLoggedIn";
-        	webservice.callback = {
-                    success: function(result) {
-                        if(result == true)
-                        {
-                            self.updateSession(callback.success, callback.complete);
-                        }
-                        else
-                        {
-                            self.set({ logged_in : false });
-                            if('error' in callback) callback.error(result);
-                            if('complete' in callback) callback.complete();
-                        }
+            var webservice = new Webservice();
+            webservice.action = "Users/IsLoggedIn";
+            webservice.callback = {
+                success: function(result) {
+                    if(result == true)
+                    {
+                        self.updateSession(callback.success, callback.complete);
                     }
-        	};
-        	webservice.call();
+                    else
+                    {
+                        self.set({ logged_in : false });
+                        if('error' in callback) callback.error(result);
+                        if('complete' in callback) callback.complete();
+                    }
+                }
+            };
+            webservice.call();
         },
 
         login: function(opts, successCallback, errorCallback, args) {
-        	var self = this;
+            var self = this;
 
-        	var webservice = new Webservice();
-        	webservice.action = "Users/Login";
-        	webservice.formData = opts;
-        	webservice.callback = {
-                    success: function(result)
-                    {
-                        // if login was successfull
-                        if(result) {
-                            self.updateSession(successCallback);
-                        } else {
-                            errorCallback(result);
-                        }
+            var webservice = new Webservice();
+            webservice.action = "Users/Login";
+            webservice.formData = opts;
+            webservice.callback = {
+                success: function(result)
+                {
+                    // if login was successfull
+                    if(result) {
+                        self.updateSession(successCallback);
+                    } else {
+                        errorCallback(result);
                     }
-        	};
-        	webservice.call();
+                }
+            };
+            webservice.call();
         },
 
         updateSession: function(successCallback, completeCallback)
         {
-        	var self = this;
+            var self = this;
 
-        	var webservice = new Webservice();
-        	webservice.action = "Users/GetCurrentUser";
-        	webservice.callback = {
-                    success: function(user)
-                    {
-                        self.updateSessionUser( user );
-                        self.set({ userid: user.userid, logged_in: true });
+            var webservice = new Webservice();
+            webservice.action = "Users/GetCurrentUser";
+            webservice.callback = {
+                success: function(user)
+                {
+                    self.updateSessionUser( user );
+                    self.set({ userid: user.userid, logged_in: true });
 
-                        self.products.fetch({
-                            success: function()
-                            {
-                                    if(successCallback)
-                                            successCallback(user);
-                            },
-                            complete: completeCallback
-                        });
-                    },
-        	};
-        	webservice.call();
+                    self.optionsDialog = new OptionsDialogView({is_admin: user.is_admin});
+
+                    self.products.fetch({
+                        success: function()
+                        {
+                                if(successCallback)
+                                        successCallback(user);
+                        },
+                        complete: completeCallback
+                    });
+                },
+            };
+            webservice.call();
         },
 
         logout: function(opts, callback, args) {

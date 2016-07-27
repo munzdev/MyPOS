@@ -1,10 +1,10 @@
 <div data-role="header" data-theme="b" data-position="fixed" data-id="main-header" data-tap-toggle="false">
 	<h1 data-user="fullname"><%- name %></h1>
-	<a href="#main-header-options" data-rel="popup" data-icon="gear" class="ui-btn-right ui-notext" data-iconpos="notext"></a>		
-	
+	<a href="#options-dialog" id='navbar-header-options' data-icon="gear" class="ui-btn-right ui-notext" data-iconpos="notext"></a>
+
 	<div data-role="navbar" id="main-header-navbar">
 		<ul>
-		  <% if(rights & USER_ROLE_WAITRESS || is_admin) { %>   
+		  <% if(rights & USER_ROLE_WAITRESS || is_admin) { %>
 			<li><a href="#order-new" class="header-link<% if(activeButton == 'order-new') { %> ui-btn-active<% } %>" data-icon="plus" data-transition="none">Neu</a></li>
 		    <li><a href="#order-overview" class="header-link<% if(activeButton == 'order-overview') { %> ui-btn-active<% } %>"  data-icon="grid" data-transition="none">Bestellungen</a></li>
 		  <% } %>
@@ -13,7 +13,7 @@
           <% } %>
           <% if(rights & USER_ROLE_MANAGER || is_admin) { %>
             <li><a href="#manager" class="header-link <% if(activeButton == 'manager') { %> ui-btn-active<% } %>"  data-icon="eye" data-transition="none">Manager</a></li>
-          <% } %>									
+          <% } %>
 		</ul>
 	</div>
 </div>

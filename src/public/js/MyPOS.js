@@ -44,6 +44,24 @@ define(["app", "underscore", "jquery"], function(app) {
             }
 	};
 
+        MyPOS.RenderPopupTemplate = function(View, Name, Template, Datas, Extras)
+	{
+	    // Sets the view's template property
+            View.template = _.template(Template);
+
+            var page = $('#' + Name);
+
+            if(page.length > 0) {
+                    page.html(View.template(Datas));
+            } else {
+                //append the new page onto the end of the body
+                var popup = View.$el.append('<div data-role="popup" id="' + Name + '" ' + Extras + '>' + View.template(Datas) + '</div>');
+
+                //initialize the new page
+                $.mobile.initializePage();
+            }
+	};
+
 	MyPOS.ChangePage = function(View, options)
 	{
 		Backbone.history.navigate(View, true);

@@ -18,19 +18,28 @@ define([ "app",
     		activeButton: ''
     	},
         events: {
-            "click .header-link": "clicked"
+            "click .header-link": "clicked",
+            "click #navbar-header-options": "popupOptions"
         },
-		clicked: function(e) {
-			e.preventDefault();
 
-			var href = $(e.currentTarget).attr('href');
+        clicked: function(e) {
+            e.preventDefault();
 
-			//this.$el.find("[data-role='navbar'] a.ui-btn-active").removeClass( "ui-btn-active" );
-			//$(e.currentTarget).addClass( "ui-btn-active" );
+            var href = $(e.currentTarget).attr('href');
 
-			MyPOS.ChangePage(href);
-		},
+            //this.$el.find("[data-role='navbar'] a.ui-btn-active").removeClass( "ui-btn-active" );
+            //$(e.currentTarget).addClass( "ui-btn-active" );
 
+            MyPOS.ChangePage(href);
+        },
+
+        popupOptions: function(event)
+        {
+            event.preventDefault();
+            var href = $(event.currentTarget).attr('href');
+
+            $(href).popup( "open", { positionTo: $(event.currentTarget)} );
+        },
         // Renders all of the Category models on the UI
         render: function() {
 
@@ -38,7 +47,7 @@ define([ "app",
         								 rights: app.session.user.get('user_roles'),
         								 activeButton: this.activeButton,
         								 is_admin: app.session.user.get('is_admin')});
-        },
+        }
     } );
 
     // Returns the View class
