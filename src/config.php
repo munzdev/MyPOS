@@ -14,7 +14,8 @@ $a_config['Auth']['RememberMe_PrivateKey'] = 'MFswDQYJKoZIhvcNAQEBBQADSgAwRwJAfm
 
 $a_config['Organisation']['Name'] = "";
 $a_config['Organisation']['Invoice']['Header'] = "HEADER TOP LINE\nSECOND LINE\nTHIRD LINE";
-$a_config['Organisation']['Invoice']['UseLogo'] = false;
-$a_config['Organisation']['Invoice']['PathToLogo'] = "";
+$a_config['Organisation']['Invoice']['Logo']['Use'] = false;
+$a_config['Organisation']['Invoice']['Logo']['Path'] = "";
+$a_config['Organisation']['Invoice']['Logo']['Type'] = MyPOS\PRINTER_LOGO_DEFAULT;
 
 $a_config['App']['Distribution']['AmountOrdersToPreShow'] = 2;
