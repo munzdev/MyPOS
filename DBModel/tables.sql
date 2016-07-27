@@ -708,13 +708,15 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `orders_in_progress_recieved` ;
 
 CREATE TABLE IF NOT EXISTS `orders_in_progress_recieved` (
+  `orders_in_progress_recievedid` INT(11) NOT NULL AUTO_INCREMENT,
   `orders_detailid` INT(11) NOT NULL,
   `orders_in_progressid` INT(11) NOT NULL,
   `amount` TINYINT NOT NULL,
   `finished` DATETIME NOT NULL,
-  PRIMARY KEY (`orders_detailid`, `orders_in_progressid`),
+  PRIMARY KEY (`orders_in_progress_recievedid`, `orders_detailid`, `orders_in_progressid`),
   INDEX `fk_orders_details_has_orders_in_progress_orders_in_progress_idx` (`orders_in_progressid` ASC),
   INDEX `fk_orders_details_has_orders_in_progress_orders_details1_idx` (`orders_detailid` ASC),
+  UNIQUE INDEX `orders_in_progress_recievedid_UNIQUE` (`orders_in_progress_recievedid` ASC),
   CONSTRAINT `fk_orders_details_has_orders_in_progress_orders_details1`
     FOREIGN KEY (`orders_detailid`)
     REFERENCES `orders_details` (`orders_detailid`)
@@ -734,13 +736,15 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `orders_extras_in_progress_recieved` ;
 
 CREATE TABLE IF NOT EXISTS `orders_extras_in_progress_recieved` (
+  `orders_extras_in_progress_recieved` INT(11) NOT NULL AUTO_INCREMENT,
   `orders_details_special_extraid` INT(11) NOT NULL,
   `orders_in_progressid` INT(11) NOT NULL,
   `amount` TINYINT NOT NULL,
   `finished` DATETIME NOT NULL,
-  PRIMARY KEY (`orders_details_special_extraid`, `orders_in_progressid`),
+  PRIMARY KEY (`orders_extras_in_progress_recieved`, `orders_details_special_extraid`, `orders_in_progressid`),
   INDEX `fk_orders_details_special_extra_has_orders_in_progress_orde_idx` (`orders_in_progressid` ASC),
   INDEX `fk_orders_details_special_extra_has_orders_in_progress_orde_idx1` (`orders_details_special_extraid` ASC),
+  UNIQUE INDEX `orders_extras_in_progress_recieved_UNIQUE` (`orders_extras_in_progress_recieved` ASC),
   CONSTRAINT `fk_orders_details_special_extra_has_orders_in_progress_orders1`
     FOREIGN KEY (`orders_details_special_extraid`)
     REFERENCES `orders_details_special_extra` (`orders_details_special_extraid`)
