@@ -14,7 +14,26 @@ function( app, HeaderView, Template ) {
     	title: 'distribution',
     	el: 'body',
         events: {
-            "click #distribution-current-menu div": "markOrder"
+            "click #distribution-current-menu div": "markOrder",
+            "click #distribution-tab-set-avaibility a": "setStatusPopup"
+        },
+
+        // The View Constructor
+        initialize: function() {
+            var self = this;
+
+            // Broken Tabs widget with Backbone pushstate enabled  - manual fix it
+            $(document).on('pagecreate', '#' + this.title, function(createEvent) {
+                self.hideTabs();
+                $('#distribution-status-dialog').popup({arrow: "r,l"});
+
+                $("#distribution-tabs a[data-role='tab']").click(function(event) {
+                    self.hideTabs();
+                    $($(event.currentTarget).attr('href')).show();
+                });
+            });
+
+            this.render();
         },
 
         markOrder: function(event)
@@ -22,9 +41,17 @@ function( app, HeaderView, Template ) {
             $( event.currentTarget ).toggleClass('green-background');
         },
 
-        // The View Constructor
-        initialize: function() {
-            this.render();
+        hideTabs: function()
+        {
+            $('#distribution-tab-current-order').hide();
+            $('#distribution-tab-set-avaibility').hide();
+        },
+
+        setStatusPopup: function(event)
+        {
+            $('#distribution-status-dialog').popup("open", { x: event.pageX,
+                                                             y: event.pageY});
+
         },
 
         // Renders all of the Category models on the UI
