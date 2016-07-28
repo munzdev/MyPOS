@@ -2,6 +2,7 @@
 namespace Lib;
 
 use Model\Users;
+use Exception;
 
 class RememberMe
 {
