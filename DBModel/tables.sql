@@ -777,7 +777,8 @@ DELIMITER $$
 CREATE PROCEDURE `open_orders_priority` ()
 BEGIN
 SET @rank:=0, @last_menu_groupid:=0, @last_orderid:=0;
-CREATE TEMPORARY TABLE IF NOT EXISTS tmp_open_orders_priority AS (
+DROP TABLE IF EXISTS tmp_open_orders_priority;
+CREATE TEMPORARY TABLE tmp_open_orders_priority AS (
 SELECT t.orders_detailid, t.orders_details_special_extraid, t.menu_groupid, t.orderid,
 		IF(@last_menu_groupid != t.menu_groupid, @rank:=0, null) AS tmp1,
         IF(@last_orderid != t.orderid, @rank:=@rank+1, null) AS tmp2,
