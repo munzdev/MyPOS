@@ -25,11 +25,33 @@ function( app, MyPOS, Template ) {
 
             if(app.session.get('logged_in'))
             {
-                MyPOS.ChangePage("#order-overview");
+                this.sendToDefaultPage();
                 return;
             }
 
             this.render();
+        },
+
+        sendToDefaultPage: function()
+        {
+            var rights = app.session.user.get('user_roles');
+            
+            if(rights & USER_ROLE_WAITRESS)
+            {
+                MyPOS.ChangePage("#order-overview");
+            }
+            else if(rights & USER_ROLE_DISTRIBUTION)
+            {
+                MyPOS.ChangePage("#distribution");
+            }
+            else if(rights & USER_ROLE_MANAGER)
+            {
+                MyPOS.ChangePage("#manager");
+            }
+            else if(app.session.user.get('is_admin'))
+            {
+                MyPOS.ChangePage("#admin");
+            }
         },
 
         // Renders all of the Category models on the UI
@@ -56,6 +78,8 @@ function( app, MyPOS, Template ) {
             if(event)
                 event.preventDefault();
 
+            var self = this;
+
             if(this.$("#username").val() != '' && this.$("#password").val() != '')
             {
                 app.session.login({
@@ -65,7 +89,7 @@ function( app, MyPOS, Template ) {
                 },
                 function(user) {
                     if(DEBUG) console.log("SUCCESS", user);
-                    MyPOS.ChangePage("#order-overview");
+                    self.sendToDefaultPage();
                 },
                 function(result) {
                     if(DEBUG) console.log("ERROR", result);
