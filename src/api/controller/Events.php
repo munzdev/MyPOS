@@ -8,12 +8,12 @@ use Model;
 
 class Events extends SecurityController
 {
-	public function GetPrintersAction()
-	{
-		$o_events = new Model\Events(Database::GetConnection());
+    public function GetPrintersAction()
+    {
+        $o_events = new Model\Events(Database::GetConnection());
 
-		$a_printers = $o_events->GetPrinters(Login::GetCurrentUser()['eventid']);
+        $a_printers = $o_events->GetPrinters(Login::GetCurrentUser()['eventid']);
 
-		return $a_printers;
-	}
+        return $a_printers;
+    }
 }
