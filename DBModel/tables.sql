@@ -594,7 +594,7 @@ CREATE TABLE IF NOT EXISTS `orders_details_special_extra` (
   `extra_detail` VARCHAR(255) NOT NULL,
   `verified` TINYINT(1) NOT NULL,
   `finished` DATETIME NULL,
-  `availablility` ENUM('AVAILABLE', 'DELAYED', 'OUT OF ORDER') NULL,
+  `availability` ENUM('AVAILABLE', 'DELAYED', 'OUT OF ORDER') NULL,
   PRIMARY KEY (`orders_details_special_extraid`, `orderid`),
   UNIQUE INDEX `orders_details_special_extraid_UNIQUE` (`orders_details_special_extraid` ASC),
   INDEX `fk_orders_details_special_extra_orders1_idx` (`orderid` ASC),
