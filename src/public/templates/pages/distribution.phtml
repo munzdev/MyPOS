@@ -9,38 +9,20 @@
         </div>
         <div id="distribution-tab-current-order" class="ui-body-d ui-content">
             <div role="main" class="ui-content" id='distribution-current-menu'>
+                <% _.each(products, function(product) { %>
                 <div class="ui-grid-a ui-body-a ui-corner-all" style="float: left; min-width: 200px; min-height: 107px; margin: 5px; padding: 5px">
-                    <h2>2x Cola</h2>
-                    <p><strong style="white-space: normal;">0.25L</strong></p>
+                    <h2><%- product.name %></h2>
+                    <p><strong style="white-space: normal;">product.detail</strong></p>
                 </div>
-                <div class="ui-grid-a ui-body-a ui-corner-all" style="float: left; min-width: 200px; min-height: 107px; margin: 5px; padding: 5px">
-                    <h2>1x Cola</h2>
-                    <p><strong style="white-space: normal;">0.5L, gespritzt mit Mineral</strong></p>
-                </div>
-                <div class="ui-grid-a ui-body-a ui-corner-all" style="float: left; min-width: 200px; min-height: 107px; margin: 5px; padding: 5px">
-                    <h2>4x Ratsherrn</h2>
-                    <p><strong style="white-space: normal;">0.5L</strong></p>
-                </div>
-
-                <div class="ui-grid-a ui-body-a ui-corner-all" style="float: left; min-width: 200px; min-height: 107px; margin: 5px; padding: 5px">
-                    <h2 style="white-space: normal;">1x Wiener Schnitzel</h2>
-                    <p><strong style="white-space: normal;"></strong></p>
-                </div>
-
-                <div class="ui-grid-a ui-body-a ui-corner-all" style="float: left; min-width: 200px; min-height: 107px; margin: 5px; padding: 5px">
-                    <h2 style="white-space: normal;">2x Schweinsbraten</h2>
-                    <p><strong style="white-space: normal;"></strong></p>
-                </div>
-
-                <div class="ui-grid-a ui-body-a ui-corner-all" style="float: left; min-width: 200px; min-height: 107px; margin: 5px; padding: 5px">
-                    <h2 style="white-space: normal;">1x Wiener Schnitzel</h2>
-                    <p><strong style="white-space: normal;">mit Reis</strong></p>
-                </div>
+                <% }) %>
             </div>
             <div class="ui-grid-a">
                 <div class="ui-block-a" style="padding: 5px">
                     <ul data-role="listview" data-inset="true">
                         <li data-role="list-divider" style="white-space: normal;">Bestellungen in Warteliste</li>
+                        <% _.each(nextOrders, function(order) { %>
+                            <li style="white-space: normal;"><%- order.tableNr %> - <%- order.ordertime %> <span class="ui-li-count"><%- order.amount %></span></li>
+                        <% }) %>
                         <li style="white-space: normal;">A38 - 01.04.2016 17:30 <span class="ui-li-count">7</span></li>
                         <li style="white-space: normal;">B32 - 01.04.2016 17:31 <span class="ui-li-count">4</span></li>
                         <li style="white-space: normal;">B8 - 01.04.2016 17:34 <span class="ui-li-count">2</span></li>
@@ -51,9 +33,9 @@
                 <div class="ui-block-b" style="padding: 5px">
                     <ul data-role="listview" data-inset="true">
                         <li data-role="list-divider" style="white-space: normal;">Informationen</li>
-                        <li style="white-space: normal;">Offene Bestellungen: 12</li>
-                        <li style="white-space: normal;">Getätigte fertigstellungen letzten 5 min: 5</li>
-                        <li style="white-space: normal;">Neue Bestellungen letzten 5 min: 8</li>
+                        <li style="white-space: normal;">Offene Bestellungen: <%- amountOpenOrders %></li>
+                        <li style="white-space: normal;">Getätigte fertigstellungen letzten 5 min: <%- amountFinishedOrders %></li>
+                        <li style="white-space: normal;">Neue Bestellungen letzten 5 min: <%- amountNewOrders %></li>
                     </ul>
                 </div>
             </div>

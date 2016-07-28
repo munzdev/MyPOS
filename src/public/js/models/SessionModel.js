@@ -112,7 +112,12 @@ define([
         },
 
         logout: function(opts, callback, args) {
-            this.postAuth(_.extend(opts, { method: 'logout' }), callback);
+            var webservice = new Webservice();
+            webservice.action = "Users/Logout";
+            webservice.callback = {
+                success: MyPOS.UnloadWebsite
+            };
+            webservice.call();
         }
 
     });

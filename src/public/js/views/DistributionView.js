@@ -51,7 +51,12 @@ function( app, HeaderView, Template ) {
 
             header.activeButton = 'distribution';
 
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render()});
+            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
+                                                                  products: [],
+                                                                  nextOrders: [],
+                                                                  amountOpenOrders: 12,
+                                                                  amountFinishedOrders: 5,
+                                                                  amountNewOrders: 8});
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");

@@ -3,8 +3,9 @@
 
 // Includes file dependencies
 define(["app",
+        "Webservice",
         'text!templates/dialoges/options-dialog.phtml'],
-function(app, Template )
+function(app, Webservice, Template )
 {
     // Extends Backbone.View
     var OptionsDialogView = Backbone.View.extend( {
@@ -12,6 +13,7 @@ function(app, Template )
     	title: 'options-dialog',
     	el: 'body',
         events: {
+            "click #logout-link": "logout_link"
         },
 
         // The View Constructor
@@ -19,6 +21,11 @@ function(app, Template )
         {
             this.is_admin = options.is_admin;
             this.render();
+        },
+
+        logout_link: function()
+        {
+            app.session.logout();
         },
 
         // Renders all of the Category models on the UI

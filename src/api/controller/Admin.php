@@ -1,9 +1,9 @@
 <?php
 namespace Controller;
 
-use Lib;
+use Lib\AdminController;
 
-class Admin extends Lib\AdminController
+class Admin extends AdminController
 {
 	public function GetPagesAction()
 	{

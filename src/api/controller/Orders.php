@@ -12,6 +12,21 @@ use MyPOS;
 
 class Orders extends SecurityController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->a_security = array('AddOrder' => MyPOS\USER_ROLE_WAITRESS,
+                                  'GetOpenList' => MyPOS\USER_ROLE_WAITRESS,
+                                  'GetOpenPayments' => MyPOS\USER_ROLE_WAITRESS,
+                                  'GetOrder' => MyPOS\USER_ROLE_WAITRESS,
+                                  'GetOrderInfo' => MyPOS\USER_ROLE_WAITRESS,
+                                  'MakeCancel' => MyPOS\USER_ROLE_WAITRESS,
+                                  'MakePayment' => MyPOS\USER_ROLE_WAITRESS,
+                                  'ModifyOrder' => MyPOS\USER_ROLE_WAITRESS,
+                                  'PrintInvoice' => MyPOS\USER_ROLE_WAITRESS);
+    }
+
     public function GetOpenListAction()
     {
         $o_orders = new Model\Orders(Database::GetConnection());

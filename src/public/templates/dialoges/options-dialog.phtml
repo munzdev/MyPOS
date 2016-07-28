@@ -1,9 +1,10 @@
 <ul data-role="listview" data-inset="true" style="min-width:210px;">
     <li data-role="list-divider">Optionen</li>
     <% if(is_admin) { %>
-        <li><a href='#admin_events' data-icon='cloud' data-transition='none'>Admin</a></li>
+        <li data-icon='cloud'><a id="admin-link">Admin</a></li>
     <% } %>
-    <li data-icon="phone"><a href="#" data-rel="back" >Rückruf anfordern</a></li>
-    <li data-icon="tag"><a href="#order-request-invoice" data-transition="none">Quittung anfordern</a></li>
-    <li data-icon="power"><a href="#" id="logout-link">Logout</a></li>
+    <li data-icon="phone"><a id="request-call">Rückruf anfordern</a></li>
+    <li data-icon="comment"><a id="send-message">Nachricht schicken</a></li>
+    <li data-icon="search"><a id="search-order">Bestellung suchen</a></li>
+    <li data-icon="power"><a id="logout-link">Logout</a></li>
 </ul>

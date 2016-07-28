@@ -62,7 +62,7 @@ try
     if(!method_exists($o_controller, $str_action_method))
         throw new Exception("Invalid Action");
 
-    if(is_subclass_of($o_controller, "SecurityController"))
+    if(is_subclass_of($o_controller, 'Lib\SecurityController'))
         $o_controller->CheckAccess($str_action);
 
     $a_return['result'] = $o_controller->$str_action_method();
