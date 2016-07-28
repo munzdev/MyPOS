@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `menues` (
   `menu_groupid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
   `price` DECIMAL(7,2) NOT NULL,
-  `availability` ENUM('AVAIBLE', 'DELAYED', 'OUT OF ORDER') NOT NULL,
+  `availability` ENUM('AVAILABLE', 'DELAYED', 'OUT OF ORDER') NOT NULL,
   UNIQUE INDEX `menuid_UNIQUE` (`menuid` ASC),
   INDEX `fk_menues_menu_groupes1_idx` (`menu_groupid` ASC),
   PRIMARY KEY (`menuid`, `eventid`, `menu_groupid`),
@@ -222,7 +222,7 @@ CREATE TABLE IF NOT EXISTS `menu_extras` (
   `menu_extraid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
-  `availability` ENUM('AVAIBLE', 'DELAYED', 'OUT OF ORDER') NOT NULL,
+  `availability` ENUM('AVAILABLE', 'DELAYED', 'OUT OF ORDER') NOT NULL,
   PRIMARY KEY (`menu_extraid`, `eventid`),
   UNIQUE INDEX `menu_extraid_UNIQUE` (`menu_extraid` ASC),
   INDEX `fk_menu_extras_events1_idx` (`eventid` ASC),
@@ -401,23 +401,16 @@ DROP TABLE IF EXISTS `orders_in_progress` ;
 CREATE TABLE IF NOT EXISTS `orders_in_progress` (
   `orders_in_progressid` INT(11) NOT NULL AUTO_INCREMENT,
   `orderid` INT(11) NOT NULL,
-  `menu_typeid` INT(11) NOT NULL,
   `userid` INT(11) NOT NULL,
   `begin` DATETIME NOT NULL,
   `done` DATETIME NULL,
-  PRIMARY KEY (`orders_in_progressid`, `orderid`, `menu_typeid`, `userid`),
+  PRIMARY KEY (`orders_in_progressid`, `orderid`, `userid`),
   UNIQUE INDEX `orders_in_progressid_UNIQUE` (`orders_in_progressid` ASC),
   INDEX `fk_orders_in_progress_orders1_idx` (`orderid` ASC),
-  INDEX `fk_orders_in_progress_menu_types1_idx` (`menu_typeid` ASC),
   INDEX `fk_orders_in_progress_users1_idx` (`userid` ASC),
   CONSTRAINT `fk_orders_in_progress_orders1`
     FOREIGN KEY (`orderid`)
     REFERENCES `orders` (`orderid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_orders_in_progress_menu_types1`
-    FOREIGN KEY (`menu_typeid`)
-    REFERENCES `menu_types` (`menu_typeid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_in_progress_users1`
@@ -601,7 +594,7 @@ CREATE TABLE IF NOT EXISTS `orders_details_special_extra` (
   `extra_detail` VARCHAR(255) NOT NULL,
   `verified` TINYINT(1) NOT NULL,
   `finished` DATETIME NULL,
-  `availablility` ENUM('AVAIBLE', 'DELAYED', 'OUT OF ORDER') NULL,
+  `availablility` ENUM('AVAILABLE', 'DELAYED', 'OUT OF ORDER') NULL,
   PRIMARY KEY (`orders_details_special_extraid`, `orderid`),
   UNIQUE INDEX `orders_details_special_extraid_UNIQUE` (`orders_details_special_extraid` ASC),
   INDEX `fk_orders_details_special_extra_orders1_idx` (`orderid` ASC),

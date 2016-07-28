@@ -72,24 +72,24 @@ COMMIT;
 -- Data for table `menues`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 1, 'Wiener Schnitzel', 7.50, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 1, 'Schweinsbraten', 9, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 1, 'Pommes', 4, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 1, 'Bratwürstel', 5, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 1, 'Gemüselaibchen', 6.5, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 2, 'Gemischter Salat', 2.5, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 2, 'Kartoffelsalat', 2.5, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 3, 'Cola', 2.5, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 3, 'Sprite', 2.5, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 3, 'Fanta', 2.5, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 3, 'Cola-Mix', 2.5, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 3, 'Mineral', 1.5, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 3, 'Wasser', 1, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 4, 'Märzen', 2.8, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 4, 'Ratsherrn', 2.8, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 4, 'Radler', 2.5, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 5, 'Rot', 2.6, 'AVAIBLE');
-INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 5, 'Weis', 2.6, 'AVAIBLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 1, 'Wiener Schnitzel', 7.50, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 1, 'Schweinsbraten', 9, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 1, 'Pommes', 4, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 1, 'Bratwürstel', 5, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 1, 'Gemüselaibchen', 6.5, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 2, 'Gemischter Salat', 2.5, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 2, 'Kartoffelsalat', 2.5, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 3, 'Cola', 2.5, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 3, 'Sprite', 2.5, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 3, 'Fanta', 2.5, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 3, 'Cola-Mix', 2.5, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 3, 'Mineral', 1.5, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 3, 'Wasser', 1, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 4, 'Märzen', 2.8, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 4, 'Ratsherrn', 2.8, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 4, 'Radler', 2.5, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 5, 'Rot', 2.6, 'AVAILABLE');
+INSERT INTO `menues` (`menuid`, `eventid`, `menu_groupid`, `name`, `price`, `availability`) VALUES (DEFAULT, 1, 5, 'Weis', 2.6, 'AVAILABLE');
 
 COMMIT;
 
@@ -113,18 +113,18 @@ COMMIT;
 -- Data for table `menu_extras`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Pommes', 'AVAIBLE');
-INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Reis', 'AVAIBLE');
-INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Kartoffel', 'AVAIBLE');
-INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Salat', 'AVAIBLE');
-INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Knödel', 'AVAIBLE');
-INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'ohne Pommes', 'AVAIBLE');
-INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'ohne Reis', 'AVAIBLE');
-INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'ohne Kartoffel', 'AVAIBLE');
-INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'ohne Salat', 'AVAIBLE');
-INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Zitrone', 'AVAIBLE');
-INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'ohne Kraut', 'AVAIBLE');
-INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Kraut', 'AVAIBLE');
+INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Pommes', 'AVAILABLE');
+INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Reis', 'AVAILABLE');
+INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Kartoffel', 'AVAILABLE');
+INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Salat', 'AVAILABLE');
+INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Knödel', 'AVAILABLE');
+INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'ohne Pommes', 'AVAILABLE');
+INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'ohne Reis', 'AVAILABLE');
+INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'ohne Kartoffel', 'AVAILABLE');
+INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'ohne Salat', 'AVAILABLE');
+INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Zitrone', 'AVAILABLE');
+INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'ohne Kraut', 'AVAILABLE');
+INSERT INTO `menu_extras` (`menu_extraid`, `eventid`, `name`, `availability`) VALUES (DEFAULT, 1, 'mit Kraut', 'AVAILABLE');
 
 COMMIT;
 
