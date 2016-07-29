@@ -15,8 +15,12 @@ class Distribution extends SecurityController
         $this->a_security = array('GetNextOrder' => MyPOS\USER_ROLE_DISTRIBUTION);
     }
 
-    public function GetNextOrderAction()
+    public function GetOrderAction()
     {
+        $a_user = Login::GetCurrentUser();
 
+        $o_distribution = new Model\Distribution(Database::GetConnection());
+
+        $a_order = $o_distribution->GetOrder($a_user['eventid'], $a_user['userid']);
     }
 }

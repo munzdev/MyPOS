@@ -1,3 +1,17 @@
 .green-background {
-   background: #66ff66; 
+   background: #66ff66;
+}
+.controlgroup-textinput{
+    padding-top:.22em;
+    padding-bottom:.22em;
+}
+
+.controlgroup-textinput-mini{
+    padding-top:.12em;
+    padding-bottom:.12em;
+}
+
+.controlgroup-textinput-mini .ui-input-clear{
+    padding-top:.50em;
+    padding-bottom:.50em;
 }
