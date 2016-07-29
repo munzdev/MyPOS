@@ -1,5 +1,5 @@
 -- -----------------------------------------------------
--- Data for table `events_user_role`
+-- Mandatory Data required by MyPOS
 -- -----------------------------------------------------
 START TRANSACTION;
 INSERT INTO `events_user_role` (`events_user_roleid`, `name`) VALUES (1, 'Manager');
