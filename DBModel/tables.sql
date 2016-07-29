@@ -156,6 +156,7 @@ CREATE TABLE IF NOT EXISTS `menues` (
   `name` VARCHAR(64) NOT NULL,
   `price` DECIMAL(7,2) NOT NULL,
   `availability` ENUM('AVAILABLE', 'DELAYED', 'OUT OF ORDER') NOT NULL,
+  `availability_amount` SMALLINT UNSIGNED NULL,
   UNIQUE INDEX `menuid_UNIQUE` (`menuid` ASC),
   INDEX `fk_menues_menu_groupes1_idx` (`menu_groupid` ASC),
   PRIMARY KEY (`menuid`, `eventid`, `menu_groupid`),
@@ -223,6 +224,7 @@ CREATE TABLE IF NOT EXISTS `menu_extras` (
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
   `availability` ENUM('AVAILABLE', 'DELAYED', 'OUT OF ORDER') NOT NULL,
+  `availability_amount` SMALLINT UNSIGNED NULL,
   PRIMARY KEY (`menu_extraid`, `eventid`),
   UNIQUE INDEX `menu_extraid_UNIQUE` (`menu_extraid` ASC),
   INDEX `fk_menu_extras_events1_idx` (`eventid` ASC),
@@ -402,12 +404,14 @@ CREATE TABLE IF NOT EXISTS `orders_in_progress` (
   `orders_in_progressid` INT(11) NOT NULL AUTO_INCREMENT,
   `orderid` INT(11) NOT NULL,
   `userid` INT(11) NOT NULL,
+  `menu_groupid` INT(11) NOT NULL,
   `begin` DATETIME NOT NULL,
   `done` DATETIME NULL,
-  PRIMARY KEY (`orders_in_progressid`, `orderid`, `userid`),
+  PRIMARY KEY (`orders_in_progressid`, `orderid`, `userid`, `menu_groupid`),
   UNIQUE INDEX `orders_in_progressid_UNIQUE` (`orders_in_progressid` ASC),
   INDEX `fk_orders_in_progress_orders1_idx` (`orderid` ASC),
   INDEX `fk_orders_in_progress_users1_idx` (`userid` ASC),
+  INDEX `fk_orders_in_progress_menu_groupes1_idx` (`menu_groupid` ASC),
   CONSTRAINT `fk_orders_in_progress_orders1`
     FOREIGN KEY (`orderid`)
     REFERENCES `orders` (`orderid`)
@@ -417,9 +421,14 @@ CREATE TABLE IF NOT EXISTS `orders_in_progress` (
     FOREIGN KEY (`userid`)
     REFERENCES `users` (`userid`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_orders_in_progress_menu_groupes1`
+    FOREIGN KEY (`menu_groupid`)
+    REFERENCES `menu_groupes` (`menu_groupid`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beschreibt, welche Teile aus einer Bestellung zurzeit in Arbeit ist (Benutzer XYZ, der bei der Ausgabe ist, Bearbeitet zurzeit die Bestellungen vom Typen \"Essen\")';
+COMMENT = 'Beschreibt, welche Teile aus einer Bestellung zurzeit in Arbeit ist (Benutzer XYZ, der bei der Ausgabe \"Bierbar\" ist, Bearbeitet zurzeit die Bestellungen von  der Gruppe \"Biere\") Benutzer kann auch mehrere gleichzeitig bearbeiten (Beispiel: Benutzer A bearbeitet zur zeit die Bestellung XYZ und kümmert sich um die Menü Gruppen \"Antigetränk\", \"Biere\". Benutzer B kümmert sich um die Menügruppe \"Wein\". Kann auch eine andere Ausgabestelle sein, falls nötig.';
 
 
 -- -----------------------------------------------------
@@ -453,6 +462,27 @@ COMMENT = 'Beschreibt welche Benutzer bei welchem Event, welche Rechte haben. Be
 
 
 -- -----------------------------------------------------
+-- Table `distributions_places`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `distributions_places` ;
+
+CREATE TABLE IF NOT EXISTS `distributions_places` (
+  `distributions_placeid` INT(11) NOT NULL AUTO_INCREMENT,
+  `eventid` INT(11) NOT NULL,
+  `name` VARCHAR(64) NOT NULL,
+  PRIMARY KEY (`distributions_placeid`, `eventid`),
+  UNIQUE INDEX `events_distribution_placeid_UNIQUE` (`distributions_placeid` ASC),
+  INDEX `fk_events_distribution_places_events1_idx` (`eventid` ASC),
+  CONSTRAINT `fk_events_distribution_places_events1`
+    FOREIGN KEY (`eventid`)
+    REFERENCES `events` (`eventid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+COMMENT = 'Beinhaltelt die Ausgabestellen, die es auf einem Event gibt. n';
+
+
+-- -----------------------------------------------------
 -- Table `events_printers`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `events_printers` ;
@@ -475,34 +505,6 @@ CREATE TABLE IF NOT EXISTS `events_printers` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Enthält die IP:Port der Drucker, die bei einem Event zur verfügung stehen';
-
-
--- -----------------------------------------------------
--- Table `distributions_places`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `distributions_places` ;
-
-CREATE TABLE IF NOT EXISTS `distributions_places` (
-  `distributions_placeid` INT(11) NOT NULL,
-  `eventid` INT(11) NOT NULL,
-  `events_printerid` INT(11) NULL,
-  `name` VARCHAR(64) NOT NULL,
-  PRIMARY KEY (`distributions_placeid`, `eventid`, `events_printerid`),
-  UNIQUE INDEX `events_distribution_placeid_UNIQUE` (`distributions_placeid` ASC),
-  INDEX `fk_events_distribution_places_events1_idx` (`eventid` ASC),
-  INDEX `fk_distributions_places_events_printers1_idx` (`events_printerid` ASC),
-  CONSTRAINT `fk_events_distribution_places_events1`
-    FOREIGN KEY (`eventid`)
-    REFERENCES `events` (`eventid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_distributions_places_events_printers1`
-    FOREIGN KEY (`events_printerid`)
-    REFERENCES `events_printers` (`events_printerid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-COMMENT = 'Beinhaltelt die Ausgabestellen, die es auf einem Event gibt. Definiert außerdem, welcher Drucker dort zur verfügung steht, um Bons zu drucken';
 
 
 -- -----------------------------------------------------
@@ -538,9 +540,11 @@ DROP TABLE IF EXISTS `distributions_places_users` ;
 CREATE TABLE IF NOT EXISTS `distributions_places_users` (
   `distributions_placeid` INT(11) NOT NULL,
   `userid` INT(11) NOT NULL,
-  PRIMARY KEY (`distributions_placeid`, `userid`),
+  `events_printerid` INT(11) NOT NULL,
+  PRIMARY KEY (`distributions_placeid`, `userid`, `events_printerid`),
   INDEX `fk_distributions_places_has_users_users1_idx` (`userid` ASC),
   INDEX `fk_distributions_places_has_users_distributions_places1_idx` (`distributions_placeid` ASC),
+  INDEX `fk_distributions_places_users_events_printers1_idx` (`events_printerid` ASC),
   CONSTRAINT `fk_distributions_places_has_users_distributions_places1`
     FOREIGN KEY (`distributions_placeid`)
     REFERENCES `distributions_places` (`distributions_placeid`)
@@ -550,22 +554,29 @@ CREATE TABLE IF NOT EXISTS `distributions_places_users` (
     FOREIGN KEY (`userid`)
     REFERENCES `users` (`userid`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_distributions_places_users_events_printers1`
+    FOREIGN KEY (`events_printerid`)
+    REFERENCES `events_printers` (`events_printerid`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert, welcher Benutzer zugriff auf die Ausgabestelle hat bzw. sich um die Ausgabestelle kümmert';
+COMMENT = 'Definiert, welcher Benutzer zugriff auf die Ausgabestelle hat bzw. sich um die Ausgabestelle kümmert. Definiert außerdem, welcher Drucker im dort zur verfügung steht, um Bons zu drucke';
 
 
 -- -----------------------------------------------------
--- Table `distribution_places_tables`
+-- Table `distributions_places_tables`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `distribution_places_tables` ;
+DROP TABLE IF EXISTS `distributions_places_tables` ;
 
-CREATE TABLE IF NOT EXISTS `distribution_places_tables` (
+CREATE TABLE IF NOT EXISTS `distributions_places_tables` (
   `tableid` INT(11) NOT NULL,
   `distributions_placeid` INT(11) NOT NULL,
-  PRIMARY KEY (`tableid`, `distributions_placeid`),
+  `menu_groupid` INT(11) NOT NULL,
+  PRIMARY KEY (`tableid`, `distributions_placeid`, `menu_groupid`),
   INDEX `fk_tables_has_distributions_places_distributions_places1_idx` (`distributions_placeid` ASC),
   INDEX `fk_tables_has_distributions_places_tables1_idx` (`tableid` ASC),
+  INDEX `fk_distributions_places_tables_menu_groupes1_idx` (`menu_groupid` ASC),
   CONSTRAINT `fk_tables_has_distributions_places_tables1`
     FOREIGN KEY (`tableid`)
     REFERENCES `tables` (`tableid`)
@@ -575,8 +586,14 @@ CREATE TABLE IF NOT EXISTS `distribution_places_tables` (
     FOREIGN KEY (`distributions_placeid`)
     REFERENCES `distributions_places` (`distributions_placeid`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_distributions_places_tables_menu_groupes1`
+    FOREIGN KEY (`menu_groupid`)
+    REFERENCES `menu_groupes` (`menu_groupid`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Definiert welche tische standartmäßg von wo ihre Menüs erhalten. Jeder\nMenü Gruppe kann einem eigenem Ausgabeort zugeteilt werden';
 
 
 -- -----------------------------------------------------
@@ -595,12 +612,14 @@ CREATE TABLE IF NOT EXISTS `orders_details_special_extra` (
   `verified` TINYINT(1) NOT NULL,
   `finished` DATETIME NULL,
   `availability` ENUM('AVAILABLE', 'DELAYED', 'OUT OF ORDER') NULL,
+  `availability_amount` SMALLINT NULL,
   PRIMARY KEY (`orders_details_special_extraid`, `orderid`),
   UNIQUE INDEX `orders_details_special_extraid_UNIQUE` (`orders_details_special_extraid` ASC),
   INDEX `fk_orders_details_special_extra_orders1_idx` (`orderid` ASC),
   INDEX `fk_orders_details_special_extra_users1_idx` (`single_price_modified_by_userid` ASC),
   INDEX `idx_amount` (`amount` ASC),
   INDEX `fk_orders_details_special_extra_menu_groupes1_idx` (`menu_groupid` ASC),
+  UNIQUE INDEX `availability_amount_UNIQUE` (`availability_amount` ASC),
   CONSTRAINT `fk_orders_details_special_extra_orders1`
     FOREIGN KEY (`orderid`)
     REFERENCES `orders` (`orderid`)
@@ -616,7 +635,8 @@ CREATE TABLE IF NOT EXISTS `orders_details_special_extra` (
     REFERENCES `menu_groupes` (`menu_groupid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Beinhaltet Sonderbestellungen von Kunden. Diese müssen vom Manager geprüft und bestätigt werden. Er muss den Preis festlegen und die Menü Gruppe, um die es sich handelt, damit die korrekte Ausgabestelle sie bearbeiten kann';
 
 
 -- -----------------------------------------------------
@@ -636,7 +656,8 @@ CREATE TABLE IF NOT EXISTS `invoices` (
     REFERENCES `users` (`userid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Beinhaltet die Rechnungsnummer mit dem Aussstellungsdatum, die es gibt';
 
 
 -- -----------------------------------------------------
@@ -664,7 +685,8 @@ CREATE TABLE IF NOT EXISTS `invoices_orders_details` (
     REFERENCES `orders_details` (`orders_detailid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Beinhaltet die Zeilen einer Rechnung. Gibt an wieviel, von einer Bestellung bezahlt worden ist. Preis wird der Bestellung entnommen';
 
 
 -- -----------------------------------------------------
@@ -692,7 +714,8 @@ CREATE TABLE IF NOT EXISTS `invoices_orders_details_special_extra` (
     REFERENCES `orders_details_special_extra` (`orders_details_special_extraid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Beinhaltet die Zeilen einer Rechnung. Gibt an wieviel, von einer sonder Bestellung bezahlt worden ist. Preis wird der Bestellung entnommen';
 
 
 -- -----------------------------------------------------
@@ -720,7 +743,8 @@ CREATE TABLE IF NOT EXISTS `orders_in_progress_recieved` (
     REFERENCES `orders_in_progress` (`orders_in_progressid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Gibt an, wann und wieviel ein Kunde bereits von seiner Bestellung erhalten hat. Erhalt kann aufgeteitl sein falls zbs. nur mehr 2 Schnitzel vorhanden sind und 3 Bestellt wurden. 1 wird später nachgeliefert und ist ein eigener eintrag';
 
 
 -- -----------------------------------------------------
@@ -748,7 +772,38 @@ CREATE TABLE IF NOT EXISTS `orders_extras_in_progress_recieved` (
     REFERENCES `orders_in_progress` (`orders_in_progressid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Gibt an, wann und wieviel ein Kunde bereits von seiner sonder Bestellung erhalten hat. Erhalt kann aufgeteitl sein falls zbs. nur mehr 2 Schnitzel vorhanden sind und 3 Bestellt wurden. 1 wird später nachgeliefert und ist ein eigener eintrag';
+
+
+-- -----------------------------------------------------
+-- Table `users_chat`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `users_chat` ;
+
+CREATE TABLE IF NOT EXISTS `users_chat` (
+  `users_chatid` INT(11) NOT NULL AUTO_INCREMENT,
+  `from_events_userid` INT(11) NOT NULL,
+  `to_events_userid` INT(11) NOT NULL,
+  `message` TEXT NOT NULL,
+  `date` DATETIME NOT NULL,
+  PRIMARY KEY (`users_chatid`, `from_events_userid`, `to_events_userid`),
+  UNIQUE INDEX `users_chatid_UNIQUE` (`users_chatid` ASC),
+  INDEX `fk_users_chat_events_user1_idx` (`from_events_userid` ASC),
+  INDEX `fk_users_chat_events_user2_idx` (`to_events_userid` ASC),
+  INDEX `index5` (`date` ASC),
+  CONSTRAINT `fk_users_chat_events_user1`
+    FOREIGN KEY (`from_events_userid`)
+    REFERENCES `events_user` (`events_userid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_users_chat_events_user2`
+    FOREIGN KEY (`to_events_userid`)
+    REFERENCES `events_user` (`events_userid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+COMMENT = 'Beinhaltet die Kommunikationsnachrichten zwischen den Benutzern für den internen Chat';
 
 
 -- -----------------------------------------------------
