@@ -250,6 +250,8 @@ INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `
 INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 4, 4, DEFAULT);
 INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 5, 1, DEFAULT);
 INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 6, 7, DEFAULT);
+INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 7, 4, DEFAULT);
+INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 8, 4, DEFAULT);
 
 COMMIT;
 

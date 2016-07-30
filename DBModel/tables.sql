@@ -15,8 +15,8 @@ DROP TABLE IF EXISTS `users` ;
 
 CREATE TABLE IF NOT EXISTS `users` (
   `userid` INT(11) NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(255) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
+  `username` VARCHAR(64) NOT NULL,
+  `password` VARCHAR(64) NOT NULL,
   `firstname` VARCHAR(64) NOT NULL,
   `lastname` VARCHAR(64) NOT NULL,
   `autologin_hash` VARCHAR(255) NULL,
@@ -29,8 +29,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   INDEX `active` (`active` ASC),
   UNIQUE INDEX `userid_UNIQUE` (`userid` ASC))
 ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci
 COMMENT = 'Enthält alle Benutzer, die Zugriff auf die App haben';
 
 
@@ -777,18 +775,18 @@ COMMENT = 'Gibt an, wann und wieviel ein Kunde bereits von seiner sonder Bestell
 
 
 -- -----------------------------------------------------
--- Table `users_chat`
+-- Table `users_messages`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `users_chat` ;
+DROP TABLE IF EXISTS `users_messages` ;
 
-CREATE TABLE IF NOT EXISTS `users_chat` (
-  `users_chatid` INT(11) NOT NULL AUTO_INCREMENT,
-  `from_events_userid` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `users_messages` (
+  `users_messageid` INT(11) NOT NULL AUTO_INCREMENT,
+  `from_events_userid` INT(11) NULL,
   `to_events_userid` INT(11) NOT NULL,
   `message` TEXT NOT NULL,
   `date` DATETIME NOT NULL,
-  PRIMARY KEY (`users_chatid`, `from_events_userid`, `to_events_userid`),
-  UNIQUE INDEX `users_chatid_UNIQUE` (`users_chatid` ASC),
+  PRIMARY KEY (`users_messageid`, `to_events_userid`),
+  UNIQUE INDEX `users_chatid_UNIQUE` (`users_messageid` ASC),
   INDEX `fk_users_chat_events_user1_idx` (`from_events_userid` ASC),
   INDEX `fk_users_chat_events_user2_idx` (`to_events_userid` ASC),
   INDEX `index5` (`date` ASC),
@@ -803,7 +801,7 @@ CREATE TABLE IF NOT EXISTS `users_chat` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet die Kommunikationsnachrichten zwischen den Benutzern für den internen Chat';
+COMMENT = 'Beinhaltet die Kommunikationsnachrichten zwischen den Benutzern für den internen Chat. Auserdem beinhaltet es Systemnachrichten an die Benutzer (keine\'from_events_userid\')';
 
 
 -- -----------------------------------------------------
