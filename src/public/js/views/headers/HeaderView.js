@@ -19,7 +19,8 @@ define([ "app",
     	},
         events: {
             "click .header-link": "clicked",
-            "click #navbar-header-options": "popupOptions"
+            "click #navbar-header-options": "popupOpen",
+            "click #navbar-header-messages": "popupOpen"
         },
 
         clicked: function(e) {
@@ -33,13 +34,14 @@ define([ "app",
             MyPOS.ChangePage(href);
         },
 
-        popupOptions: function(event)
+        popupOpen: function(event)
         {
             event.preventDefault();
             var href = $(event.currentTarget).attr('href');
 
             $(href).popup( "open", { positionTo: $(event.currentTarget)} );
         },
+
         // Renders all of the Category models on the UI
         render: function() {
 

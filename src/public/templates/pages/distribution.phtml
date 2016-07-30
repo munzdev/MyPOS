@@ -9,11 +9,25 @@
         </div>
         <div id="distribution-tab-current-order" class="ui-body-d ui-content">
             <div role="main" class="ui-content" id='distribution-current-menu'>
-                <% _.each(products, function(product) { %>
-                <div class="ui-grid-a ui-body-a ui-corner-all" style="float: left; min-width: 200px; min-height: 107px; margin: 5px; padding: 5px">
-                    <h2><%- product.name %></h2>
-                    <p><strong style="white-space: normal;">product.detail</strong></p>
-                </div>
+                <% ordersSet.get('orders_details').each(function(order) { %>
+                    <div class="ui-grid-a ui-body-a ui-corner-all" style="float: left; min-width: 200px; min-height: 107px; margin: 5px; padding: 5px">
+                        <h2><%- order.get('amount') %>x <%- order.get('name') %></h2>
+                        <p>
+                            <strong style="white-space: normal;">
+                                <% if(order.get('menu_sizeid') != ORDER_DEFAULT_SIZEID) { %>
+                                    <%- order.get('sizeName') %>
+                                <% } %>
+                                <% if(order.get('mixedWithName')) { %>
+                                    Gemischt mit: <%- order.get('mixedWithName') %>
+                                    <% if(order.get('extrasName') || order.get('extra_detail')) { %>
+                                    ;
+                                    <% } %>
+                                <% } %>
+                                <%- order.get('extrasName') %>
+                                <%- order.get('extra_detail') %>
+                            </strong>
+                        </p>
+                    </div>
                 <% }) %>
             </div>
             <div class="ui-grid-a">

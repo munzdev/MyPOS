@@ -7,8 +7,15 @@ define([
     "Webservice",
     "MyPOS",
     "collections/ProductCollection",
-    "views/dialoges/OptionsDialogView"
-], function(app, UserModel, Webservice, MyPOS, ProductCollection, OptionsDialogView){
+    "views/dialoges/OptionsDialogView",
+    "views/dialoges/MessagesDialogView"
+], function(app,
+            UserModel,
+            Webservice,
+            MyPOS,
+            ProductCollection,
+            OptionsDialogView,
+            MessagesDialogView){
     "use strict";
 
     var SessionModel = Backbone.Model.extend({
@@ -97,6 +104,7 @@ define([
                     self.set({ userid: user.userid, logged_in: true });
 
                     self.optionsDialog = new OptionsDialogView({is_admin: user.is_admin});
+                    self.messagesDialog = new MessagesDialogView();
 
                     self.products.fetch({
                         success: function()

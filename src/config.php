@@ -19,3 +19,4 @@ $a_config['Organisation']['Invoice']['Logo']['Path'] = "";
 $a_config['Organisation']['Invoice']['Logo']['Type'] = MyPOS\PRINTER_LOGO_DEFAULT;
 
 $a_config['App']['Distribution']['AmountOrdersToPreShow'] = 2;
+$a_config['App']['Distribution']['OnStandbyAssistOtherDistributionPlaces'] = true;

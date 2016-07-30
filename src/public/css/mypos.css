@@ -15,3 +15,16 @@
     padding-top:.50em;
     padding-bottom:.50em;
 }
+
+#messages-dialog-popup {
+    width: 100%;
+}
+
+.messages-dialog-textarea {
+    width: 100%;
+    height: auto !important; /* !important is used to force override. */
+}
+
+.messages-dialog-input {
+    width: 70% !important;
+}

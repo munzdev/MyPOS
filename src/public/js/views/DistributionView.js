@@ -4,8 +4,9 @@
 // Includes file dependencies
 define([ "app",
          'views/headers/HeaderView',
+         'models/distribution/DistributionOrderSetModel',
          'text!templates/pages/distribution.phtml'],
-function( app, HeaderView, Template ) {
+function( app, HeaderView, DistributionOrderSetModel, Template ) {
     "use strict";
 
     // Extends Backbone.View
@@ -31,7 +32,12 @@ function( app, HeaderView, Template ) {
                 });
             });
 
-            this.render();
+            this.orderSet = new DistributionOrderSetModel();
+            this.orderSet.fetch({
+                success: function() {
+                    self.render();
+                }
+            });
         },
 
         markOrder: function(event)
@@ -52,6 +58,7 @@ function( app, HeaderView, Template ) {
             header.activeButton = 'distribution';
 
             MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
+                                                                  ordersSet: this.orderSet,
                                                                   products: [],
                                                                   nextOrders: [],
                                                                   amountOpenOrders: 12,

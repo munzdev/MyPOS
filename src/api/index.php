@@ -1,5 +1,10 @@
 <?php
 
+mb_internal_encoding('UTF-8');
+mb_http_output('UTF-8');
+mb_http_input('UTF-8');
+mb_regex_encoding('UTF-8');
+
 $a_vars = $_REQUEST;
 
 $a_return = array();
@@ -10,7 +15,7 @@ define('PROJECT_ROOT', __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATO
 define('API_ROOT', __DIR__ . DIRECTORY_SEPARATOR);
 define('WWW_ROOT', PROJECT_ROOT . "public" . DIRECTORY_SEPARATOR);
 
-set_error_handler("errorHandler");
+set_error_handler("errorHandler", E_ALL);
 spl_autoload_register('mypos_autoloader');
 
 try
@@ -69,6 +74,7 @@ try
 
     if($o_controller->GetRawData())
     {
+        header('Content-type: text/html; charset=utf-8');
         echo $a_return['result'];
         exit;
     }
