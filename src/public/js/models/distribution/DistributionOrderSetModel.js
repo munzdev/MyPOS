@@ -18,21 +18,10 @@ define([
 
         parse: function(response)
         {
-            if(response.error)
-            {
-                MyPOS.DisplayError(response.errorMessage);
-                return null;
-    	    }
-            else
-            {
-                if(response.result)
-                {
-                    response.result.orders_details = new DistributionOrdersDetailsCollection(response.result.orders_details, {parse: true});
-                    response.result.order_details_special_extra = new DistributionSpecialExtraCollection(response.result.order_details_special_extra, {parse: true});
-                }
+            response.orders_details = new DistributionOrdersDetailsCollection(response.orders_details, {parse: true});
+            response.order_details_special_extra = new DistributionSpecialExtraCollection(response.order_details_special_extra, {parse: true});
 
-                return response.result;
-            }
+            return response;
         }
 
     });

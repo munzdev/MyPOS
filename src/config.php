@@ -20,3 +20,5 @@ $a_config['Organisation']['Invoice']['Logo']['Type'] = MyPOS\PRINTER_LOGO_DEFAUL
 
 $a_config['App']['Distribution']['AmountOrdersToPreShow'] = 2;
 $a_config['App']['Distribution']['OnStandbyAssistOtherDistributionPlaces'] = true;
+$a_config['App']['Distribution']['AmountDisplayedInTodoList'] = 5;
+$a_config['App']['Distribution']['OrderProgressTimeRangeMinutes'] = 5;

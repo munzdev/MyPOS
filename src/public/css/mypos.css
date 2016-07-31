@@ -28,3 +28,11 @@
 .messages-dialog-input {
     width: 70% !important;
 }
+
+.distribution-order {
+    float: left;
+    min-width: 200px;
+    min-height: 107px;
+    margin: 5px;
+    padding: 5px
+}

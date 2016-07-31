@@ -7,7 +7,8 @@ define([
         defaults: {
             orders_details_special_extraid: 0,
             amount: 0,
-            extra_detail: ''
+            extra_detail: '',
+            availability_amount: 0
         }
     });
 

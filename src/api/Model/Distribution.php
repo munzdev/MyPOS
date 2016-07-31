@@ -8,55 +8,28 @@ class Distribution
 {
     private $o_db;
 
+    private static $b_tmp_table_created = false;
+
     public function __construct(PDO $o_db)
     {
         $this->o_db = $o_db;
     }
 
-    public function GetOrder($i_eventid, $i_userid, $b_assist)
+    public function CallOpenOrdersPriority()
     {
-        //-- Fetch allready started order to handle, whoes not finished yet (like page reloaded or the status of a product has changed back to available)
-        $a_orders_in_progressid = $this->GetUsersOpenInProgressOrders($i_userid, $i_eventid);
-
-        if(empty($a_orders_in_progressid)) //-- if no existing progress order found, take a new order from priority list
+        if(!self::$b_tmp_table_created)
         {
             $this->o_db->query("CALL open_orders_priority()");
-
-            $a_orders_to_handle = $this->GetDistributionPlaceNextOrders($i_userid, $i_eventid);
-
-            //-- Secondly try to find an order, which belongs to an other distribution place but has the same menu_groupid and can also be handeled by the users one
-            //-- this lets ordes be done faster
-            if(!$a_orders_to_handle && $b_assist)
-            {
-                $a_orders_to_handle = $this->GetAnyDistributionPlaceNextOrders($i_userid, $i_eventid);
-            }
-
-            if(!$a_orders_to_handle)
-            {
-                return null;
-            }
-
-            $a_orders_in_progressid = array();
-            $i_orderid = null;
-            foreach($a_orders_to_handle as $a_order_to_handle)
-            {
-                if($i_orderid === null)
-                    $i_orderid = $a_order_to_handle['orderid'];
-
-                if($i_orderid != $a_order_to_handle['orderid'])
-                    break;
-
-                $a_orders_in_progressid[] = $this->AddInProgress($i_userid, $i_orderid, $a_order_to_handle['menu_groupid']);
-            }
+            self::$b_tmp_table_created = true;
         }
-
-        return $this->GetOrderDetailsOfProgessIds($a_orders_in_progressid);
     }
 
     public function GetOrderDetailsOfProgessIds($a_orders_in_progressid)
     {
         if(empty($a_orders_in_progressid))
             return;
+
+        $str_orders_in_progressids = implode(',', array_filter( $a_orders_in_progressid, 'ctype_digit'));
 
         $o_statement = $this->o_db->prepare("SELECT t.orders_detailid,
                                                     t.amount - IFNULL(t.amount_recieved, 0) AS amount,
@@ -90,7 +63,7 @@ class Distribution
                                                      LEFT JOIN orders_details_mixed_with odmw ON odmw.orders_detailid = od.orders_detailid
                                                      LEFT JOIN menues m2 ON m2.menuid = odmw.menuid
                                                      LEFT JOIN orders_in_progress_recieved oipr ON oipr.orders_detailid = od.orders_detailid
-                                                     WHERE oip.orders_in_progressid IN (:orders_in_progressids)
+                                                     WHERE oip.orders_in_progressid IN ($str_orders_in_progressids)
                                                            AND m.availability = :availability
                                                      GROUP BY od.orders_detailid) t
                                              WHERE (t.extrasAvailability IS NULL
@@ -107,7 +80,6 @@ class Distribution
                                                         )
                                                     )");
 
-        $o_statement->bindValue(":orders_in_progressids", implode(",", $a_orders_in_progressid), PDO::PARAM_INT);
         $o_statement->bindValue(":availability", MyPOS\ORDER_AVAILABILITY_AVAILABLE, PDO::PARAM_STR);
         $o_statement->bindValue(":delayed", '%' . MyPOS\ORDER_AVAILABILITY_DELAYED . '%', PDO::PARAM_STR);
         $o_statement->bindValue(":out_of_order", '%' . MyPOS\ORDER_AVAILABILITY_OUT_OF_ORDER . '%', PDO::PARAM_STR);
@@ -118,18 +90,18 @@ class Distribution
         $o_statement = $this->o_db->prepare("SELECT odse.orders_details_special_extraid,
                                                     odse.amount,
                                                     odse.extra_detail,
-                                                    SUM(oeipr.amount) AS amount_recieved
+                                                    SUM(oeipr.amount) AS amount_recieved,
+                                                    odse.availability_amount
                                               FROM orders_in_progress oip
                                               INNER JOIN orders o ON o.orderid = oip.orderid
                                               INNER JOIN orders_details_special_extra odse ON odse.orderid = o.orderid
                                                                                               AND odse.finished IS NULL
                                                                                               AND odse.menu_groupid = oip.menu_groupid
                                               LEFT JOIN orders_extras_in_progress_recieved oeipr ON oeipr.orders_details_special_extraid = odse.orders_details_special_extraid
-                                              WHERE oip.orders_in_progressid IN (:orders_in_progressids)
+                                              WHERE oip.orders_in_progressid IN ($str_orders_in_progressids)
                                                     AND odse.availability = :availability
                                               GROUP BY odse.orders_details_special_extraid");
 
-        $o_statement->bindValue(":orders_in_progressids", implode(",", $a_orders_in_progressid), PDO::PARAM_INT);
         $o_statement->bindValue(":availability", MyPOS\ORDER_AVAILABILITY_AVAILABLE, PDO::PARAM_STR);
         $o_statement->execute();
 
@@ -140,7 +112,8 @@ class Distribution
         {
             $a_tmp[] = array('orders_details_special_extraid' => $a_order_detail_special_extra['orders_details_special_extraid'],
                              'amount' => $a_order_detail_special_extra['amount'] - $a_order_detail_special_extra['amount_recieved'],
-                             'extra_detail' => $a_order_detail_special_extra['extra_detail']);
+                             'extra_detail' => $a_order_detail_special_extra['extra_detail'],
+                             'availability_amount' => $a_order_detail_special_extra['availability_amount']);
 
         }
 
@@ -163,7 +136,7 @@ class Distribution
 
     public function GetUsersOpenInProgressOrders($i_userid, $i_eventid)
     {
-        $o_statement = $this->o_db->prepare("SELECT t.orders_in_progressid,
+        $o_statement = $this->o_db->prepare("SELECT DISTINCT t.orders_in_progressid,
                                                     t.orderid
                                              FROM ( SELECT oip.orders_in_progressid,
                                                            oip.orderid,
@@ -172,22 +145,33 @@ class Distribution
                                                            GROUP_CONCAT(m2.availability SEPARATOR ',') AS mixedWithAvailability
                                                     FROM orders_in_progress oip
                                                     INNER JOIN orders o ON o.orderid = oip.orderid
-                                                    LEFT JOIN orders_details od ON od.orderid = o.orderid
-                                                    LEFT JOIN menues m ON m.menuid = od.menuid
+                                                    INNER JOIN orders_details od ON od.orderid = o.orderid
+                                                    INNER JOIN menues m ON m.menuid = od.menuid AND m.menu_groupid = oip.menu_groupid
                                                     LEFT JOIN orders_detail_extras ode ON ode.orders_detailid = od.orders_detailid
                                                     LEFT JOIN menues_possible_extras mpe ON mpe.menues_possible_extraid = ode.menues_possible_extraid
                                                     LEFT JOIN menu_extras me ON me.menu_extraid = mpe.menu_extraid
                                                     LEFT JOIN orders_details_mixed_with odmw ON odmw.orders_detailid = od.orders_detailid
                                                     LEFT JOIN menues m2 ON m2.menuid = odmw.menuid
-                                                    LEFT JOIN orders_details_special_extra odse ON (odse.orderid = o.orderid
-                                                                                                    AND odse.verified = 1
-                                                                                                    AND odse.menu_groupid IS NOT NULL
-                                                                                                    AND odse.availability = :availability)
                                                     WHERE oip.userid = :userid
                                                           AND oip.done IS NULL
                                                           AND o.eventid = :eventid
-                                                          AND (m.availability = :availability OR odse.availability = :availability)
-                                                    GROUP BY od.orders_detailid) t
+                                                          AND m.availability = :availability
+                                                    GROUP BY oip.orders_in_progressid, od.orders_detailid
+                                                    UNION
+                                                    SELECT oip.orders_in_progressid,
+                                                           oip.orderid,
+                                                           o.priority,
+                                                           null as extrasAvailability,
+                                                           null as mixedWithAvailability
+                                                    FROM orders_in_progress oip
+                                                    INNER JOIN orders o ON o.orderid = oip.orderid
+                                                    INNER JOIN orders_details_special_extra odse ON (odse.orderid = o.orderid
+                                                                                                    AND odse.verified = 1
+                                                                                                    AND odse.menu_groupid = oip.menu_groupid)
+                                                    WHERE oip.userid = :userid
+                                                          AND oip.done IS NULL
+                                                          AND o.eventid = :eventid
+                                                          AND odse.availability = :availability) t
                                              WHERE (t.extrasAvailability IS NULL
                                                     OR (
                                                         t.extrasAvailability NOT LIKE :delayed
@@ -234,6 +218,8 @@ class Distribution
 
     public function GetAnyDistributionPlaceNextOrders($i_userid, $i_eventid)
     {
+        $this->CallOpenOrdersPriority();
+
         $o_statement = $this->o_db->prepare("SELECT t.orderid,
                                                     t.menu_groupid
                                              FROM (SELECT toop.orderid,
@@ -242,7 +228,7 @@ class Distribution
                                                           GROUP_CONCAT(me.availability SEPARATOR ',') AS extrasAvailability,
                                                           GROUP_CONCAT(m2.availability SEPARATOR ',') AS mixedWithAvailability
                                                    FROM tmp_open_orders_priority toop
-                                                   LEFT OUTER JOIN orders_in_progress oip ON oip.orderid = toop.orderid
+                                                   LEFT JOIN orders_in_progress oip ON oip.orderid = toop.orderid
                                                                                              AND toop.menu_groupid = oip.menu_groupid
                                                    INNER JOIN distributions_places_groupes dpg ON dpg.menu_groupid = toop.menu_groupid
                                                    INNER JOIN distributions_places dp ON dp.distributions_placeid = dpg.distributions_placeid
@@ -259,7 +245,9 @@ class Distribution
                                                                                                    AND odse.verified = 1
                                                                                                    AND odse.menu_groupid = toop.menu_groupid
                                                                                                    AND odse.availability = :availability)
-                                                   WHERE dpu.userid = :userid
+                                                   WHERE oip.orders_in_progressid IS NULL
+                                                         AND
+                                                         dpu.userid = :userid
                                                          AND
                                                          dp.eventid = :eventid
                                                          AND (m.availability = :availability OR odse.availability = :availability)
@@ -277,6 +265,7 @@ class Distribution
                                                     AND t.mixedWithAvailability NOT LIKE :out_of_order
                                                     )
                                                 )
+                                             GROUP BY t.orderid, t.menu_groupid
                                              ORDER BY t.rank ASC");
 
         $o_statement->bindParam(":userid", $i_userid);
@@ -291,6 +280,8 @@ class Distribution
 
     public function GetDistributionPlaceNextOrders($i_userid, $i_eventid)
     {
+        $this->CallOpenOrdersPriority();
+
         $o_statement = $this->o_db->prepare("SELECT t.orderid,
                                                     t.menu_groupid
                                              FROM (SELECT toop.orderid,
@@ -299,7 +290,7 @@ class Distribution
                                                           GROUP_CONCAT(me.availability SEPARATOR ',') AS extrasAvailability,
                                                           GROUP_CONCAT(m2.availability SEPARATOR ',') AS mixedWithAvailability
                                                    FROM tmp_open_orders_priority toop
-                                                   LEFT OUTER JOIN orders_in_progress oip ON oip.orderid = toop.orderid
+                                                   LEFT JOIN orders_in_progress oip ON oip.orderid = toop.orderid
                                                                                      AND toop.menu_groupid = oip.menu_groupid
                                                    INNER JOIN distributions_places_groupes dpg ON dpg.menu_groupid = toop.menu_groupid
                                                    INNER JOIN distributions_places dp ON dp.distributions_placeid = dpg.distributions_placeid
@@ -318,7 +309,9 @@ class Distribution
                                                    LEFT JOIN orders_details_special_extra odse ON (odse.orderid = o.orderid
                                                                                                    AND odse.verified = 1
                                                                                                    AND odse.menu_groupid = toop.menu_groupid)
-                                                   WHERE dpu.userid = :userid
+                                                   WHERE oip.orders_in_progressid IS NULL
+                                                         AND
+                                                         dpu.userid = :userid
                                                          AND
                                                          dp.eventid = :eventid
                                                          AND (m.availability = :availability OR odse.availability = :availability)
@@ -336,6 +329,7 @@ class Distribution
                                                     AND t.mixedWithAvailability NOT LIKE :out_of_order
                                                     )
                                                 )
+                                             GROUP BY t.orderid, t.menu_groupid
                                              ORDER BY t.rank ASC");
 
         $o_statement->bindParam(":userid", $i_userid);
@@ -343,6 +337,92 @@ class Distribution
         $o_statement->bindValue(":availability", MyPOS\ORDER_AVAILABILITY_AVAILABLE, PDO::PARAM_STR);
         $o_statement->bindValue(":delayed", '%' . MyPOS\ORDER_AVAILABILITY_DELAYED . '%', PDO::PARAM_STR);
         $o_statement->bindValue(":out_of_order", '%' . MyPOS\ORDER_AVAILABILITY_OUT_OF_ORDER . '%', PDO::PARAM_STR);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll();
+    }
+
+    public function GetOrderInfo($a_order_ids)
+    {
+        if(empty($a_order_ids))
+            return;
+
+        $str_orderids = implode(',', array_filter( $a_order_ids, 'ctype_digit'));
+
+        $o_statement = $this->o_db->prepare("SELECT t.name AS tableNr,
+                                                    o.ordertime,
+                                                    IFNULL(SUM(od.amount), 0) + IFNULL(SUM(odse.amount), 0) AS amount
+                                             FROM orders o
+                                             INNER JOIN tables t ON t.tableid = o.tableid
+                                             LEFT JOIN orders_details od ON od.orderid = o.orderid
+                                             LEFT JOIN orders_details_special_extra odse ON odse.orderid = o.orderid
+                                             WHERE o.orderid IN ($str_orderids)
+                                             GROUP BY o.orderid");
+
+        $o_statement->execute();
+
+        return $o_statement->fetchAll();
+    }
+
+    public function GetOrdersDone($i_userid, $i_eventid, $i_minutes)
+    {
+        $o_statement = $this->o_db->prepare("SELECT COUNT(oip.orderid)
+                                             FROM orders_in_progress oip
+                                             INNER JOIN orders o ON o.orderid = oip.orderid
+                                             LEFT JOIN orders_in_progress_recieved oipr ON oipr.orders_in_progressid = oip.orders_in_progressid
+                                             LEFT JOIN orders_extras_in_progress_recieved oeipr ON oipr.orders_in_progressid = oip.orders_in_progressid
+                                             WHERE oip.userid = :userid
+                                                   AND o.eventid = :eventid
+                                                   AND
+                                                   (
+                                                        oipr.finished >= (NOW() - INTERVAL :minutes MINUTE)
+                                                        OR
+                                                        oeipr.finished >= (NOW() - INTERVAL :minutes MINUTE)
+                                                   )
+                                             GROUP BY oip.orderid");
+
+        $o_statement->bindParam(":userid", $i_userid);
+        $o_statement->bindParam(":eventid", $i_eventid);
+        $o_statement->bindParam(":minutes", $i_minutes);
+        $o_statement->execute();
+
+        return $o_statement->fetchColumn();
+    }
+
+    public function GetOrdersNew($a_order_ids, $i_minutes)
+    {
+        $str_orderids = implode(',', array_filter( $a_order_ids, 'ctype_digit'));
+
+        $o_statement = $this->o_db->prepare("SELECT COUNT(*)
+                                             FROM orders
+                                             WHERE orderid IN ($str_orderids)
+                                                   AND ordertime >= (NOW() - INTERVAL :minutes MINUTE)");
+
+        $o_statement->bindParam(":minutes", $i_minutes);
+        $o_statement->execute();
+
+        return $o_statement->fetchColumn();
+    }
+
+    public function GetAvailabilitySpecialExtras($i_eventid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT odse.orders_details_special_extraid,
+                                                    odse.extra_detail,
+                                                    odse.availability,
+                                                    odse.availability_amount
+                                             FROM orders_details_special_extra odse
+                                             INNER JOIN orders o ON o.orderid = odse.orderid
+                                             WHERE o.eventid = :eventid
+                                                   AND odse.finished IS NULL
+                                                   AND odse.verified = 1
+                                                   AND
+                                                   (
+                                                        odse.availability <> :availability
+                                                        OR odse.availability_amount IS NOT NULL
+                                                   )");
+
+        $o_statement->bindParam(":eventid", $i_eventid);
+        $o_statement->bindValue(":availability", MyPOS\ORDER_AVAILABILITY_AVAILABLE, PDO::PARAM_STR);
         $o_statement->execute();
 
         return $o_statement->fetchAll();
