@@ -785,6 +785,7 @@ CREATE TABLE IF NOT EXISTS `users_messages` (
   `to_events_userid` INT(11) NOT NULL,
   `message` TEXT NOT NULL,
   `date` DATETIME NOT NULL,
+  `readed` TINYINT(1) NOT NULL,
   PRIMARY KEY (`users_messageid`, `to_events_userid`),
   UNIQUE INDEX `users_chatid_UNIQUE` (`users_messageid` ASC),
   INDEX `fk_users_chat_events_user1_idx` (`from_events_userid` ASC),
