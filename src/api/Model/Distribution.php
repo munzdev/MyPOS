@@ -114,7 +114,6 @@ class Distribution
                              'amount' => $a_order_detail_special_extra['amount'] - $a_order_detail_special_extra['amount_recieved'],
                              'extra_detail' => $a_order_detail_special_extra['extra_detail'],
                              'availability_amount' => $a_order_detail_special_extra['availability_amount']);
-
         }
 
         return array('orders_details' => $a_order_details,
@@ -275,7 +274,7 @@ class Distribution
         $o_statement->bindValue(":out_of_order", '%' . MyPOS\ORDER_AVAILABILITY_OUT_OF_ORDER . '%', PDO::PARAM_STR);
         $o_statement->execute();
 
-        $a_orders_to_handle = $o_statement->fetchAll();
+        return $o_statement->fetchAll();
     }
 
     public function GetDistributionPlaceNextOrders($i_userid, $i_eventid)
@@ -366,7 +365,7 @@ class Distribution
 
     public function GetOrdersDone($i_userid, $i_eventid, $i_minutes)
     {
-        $o_statement = $this->o_db->prepare("SELECT COUNT(oip.orderid)
+        $o_statement = $this->o_db->prepare("SELECT COUNT(*)
                                              FROM orders_in_progress oip
                                              INNER JOIN orders o ON o.orderid = oip.orderid
                                              LEFT JOIN orders_in_progress_recieved oipr ON oipr.orders_in_progressid = oip.orders_in_progressid
@@ -386,7 +385,12 @@ class Distribution
         $o_statement->bindParam(":minutes", $i_minutes);
         $o_statement->execute();
 
-        return $o_statement->fetchColumn();
+        $i_amount = $o_statement->fetchColumn();
+
+        if(!$i_amount)
+            $i_amount = 0;
+
+        return $i_amount;
     }
 
     public function GetOrdersNew($a_order_ids, $i_minutes)
@@ -401,7 +405,12 @@ class Distribution
         $o_statement->bindParam(":minutes", $i_minutes);
         $o_statement->execute();
 
-        return $o_statement->fetchColumn();
+        $i_amount = $o_statement->fetchColumn();
+
+        if(!$i_amount)
+            $i_amount = 0;
+
+        return $i_amount;
     }
 
     public function GetAvailabilitySpecialExtras($i_eventid)

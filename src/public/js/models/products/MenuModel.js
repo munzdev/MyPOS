@@ -15,6 +15,7 @@ define([
                 name: '',
                 price: 0,
                 availability: null,
+                availability_amount: null,
                 sizes: new SizeCollection,
                 extras: new ExtraCollection
             };

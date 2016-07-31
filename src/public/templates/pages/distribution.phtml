@@ -60,89 +60,90 @@
                 <div class="ui-block-a" style="padding: 5px">
                     <ul data-role="listview" data-inset="true">
                         <li data-role="list-divider" style="white-space: normal;">Bestellungen in Warteliste</li>
-                        <% _.each(nextOrders, function(order) { %>
-                            <li style="white-space: normal;"><%- order.tableNr %> - <%- order.ordertime %> <span class="ui-li-count"><%- order.amount %></span></li>
+                        <% ordersInTodoList.each(function(order) { %>
+                            <li style="white-space: normal;"><%- order.get('tableNr') %> - <%- $.format.date(MyPOS.DateFromMysql(order.get('ordertime')), DATE_JS_TIMEFORMAT) %> <span class="ui-li-count"><%- order.get('amount') %></span></li>
                         <% }) %>
-                        <li style="white-space: normal;">A38 - 01.04.2016 17:30 <span class="ui-li-count">7</span></li>
-                        <li style="white-space: normal;">B32 - 01.04.2016 17:31 <span class="ui-li-count">4</span></li>
-                        <li style="white-space: normal;">B8 - 01.04.2016 17:34 <span class="ui-li-count">2</span></li>
-                        <li style="white-space: normal;">A23 - 01.04.2016 17:35 <span class="ui-li-count">5</span></li>
-                        <li style="white-space: normal;">A15 - 01.04.2016 17:36 <span class="ui-li-count">1</span></li>
                     </ul>
                 </div>
                 <div class="ui-block-b" style="padding: 5px">
                     <ul data-role="listview" data-inset="true">
                         <li data-role="list-divider" style="white-space: normal;">Informationen</li>
-                        <li style="white-space: normal;">Offene Bestellungen: <%- amountOpenOrders %></li>
-                        <li style="white-space: normal;">Getätigte fertigstellungen letzten 5 min: <%- amountFinishedOrders %></li>
-                        <li style="white-space: normal;">Neue Bestellungen letzten 5 min: <%- amountNewOrders %></li>
+                        <li style="white-space: normal;">Offene Bestellungen: <%- orderDoneInformation.get('open_orders') %></li>
+                        <li style="white-space: normal;">Getätigte fertigstellungen letzten 5 min: <%- orderDoneInformation.get('done_orders') %></li>
+                        <li style="white-space: normal;">Neue Bestellungen letzten 5 min: <%- orderDoneInformation.get('new_orders') %></li>
                     </ul>
                 </div>
             </div>
-            <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false" >
+            <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
                 <a id="distribution-btn-verify-dialog" style="float:right" id='distribution-order-finished' class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-check">Bestellung fertig</a>
             </div>
         </div>
         <div id="distribution-tab-set-avaibility">
-            <ul data-role="listview" data-inset="true">
-                <li data-role="list-divider">Hauptspeisen</li>
-                <li>
-                    <div style="float: left; padding-top: .5em;"><h2>Wiener Schnitzel</h2></div>
-                    <div data-role="controlgroup" data-type="horizontal"  data-mini="true"  style="float: right">
-                        <input type="number" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
-                        <select  name="select-native-2" id="select-native-2">
-                            <option value="1">Verfügbar</option>
-                            <option value="2">Verspätet</option>
-                            <option value="3">Ausverkauft</option>
-                        </select>
-                    </div>
-                </li>
-                <li>
-                    <div style="float: left; padding-top: .5em;"><h2>Schweinsbratten</h2></div>
-                    <div data-role="controlgroup" data-type="horizontal"  data-mini="true" style="float: right">
-                        <input type="number" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
-                        <select  name="select-native-2" id="select-native-2">
-                            <option value="1">Verfügbar</option>
-                            <option value="2">Verspätet</option>
-                            <option value="3">Ausverkauft</option>
-                        </select>
-                    </div>
-                </li>
-                <li>
-                    <div style="float: left; padding-top: .5em;"><h2>Gemüselaibchen</h2></div>
-                    <div data-role="controlgroup" data-type="horizontal"  data-mini="true" style="float: right">
-                        <input type="number" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
-                        <select  name="select-native-2" id="select-native-2">
-                            <option value="1">Verfügbar</option>
-                            <option value="2">Verspätet</option>
-                            <option value="3">Ausverkauft</option>
-                        </select>
-                    </div>
-                </li>
-                <li data-role="list-divider">Salate</li>
-                <li>
-                    <div style="float: left; padding-top: .5em;"><h2>Kartoffel </h2></div>
-                    <div data-role="controlgroup" data-type="horizontal"  data-mini="true" style="float: right">
-                        <input type="number" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
-                        <select  name="select-native-2" id="select-native-2">
-                            <option value="1">Verfügbar</option>
-                            <option value="2">Verspätet</option>
-                            <option value="3">Ausverkauft</option>
-                        </select>
-                    </div>
-                </li>
-                <li>
-                    <div style="float: left; padding-top: .5em;"><h2>Grün</h2></div>
-                    <div data-role="controlgroup" data-type="horizontal"  data-mini="true" style="float: right">
-                        <input type="number" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
-                        <select  name="select-native-2" id="select-native-2">
-                            <option value="1">Verfügbar</option>
-                            <option value="2">Verspätet</option>
-                            <option value="3">Ausverkauft</option>
-                        </select>
-                    </div>
-                </li>
-            </ul>
+            <div data-role="collapsible-set">
+                <div data-role="collapsible">
+                    <h3>Menüs</h3>
+                    <p>
+                        <ul data-role="listview" data-inset="true">
+                            <% _.each(menuesArray, function(menues, typeName) { %>
+                                <li data-role="list-divider"><%- typeName %></li>
+                                <% _.each(menues, function(menu) { %>
+                                    <li>
+                                        <div style="float: left; padding-top: .5em;"><h2><%- menu.get('name') %></h2></div>
+                                        <div data-role="controlgroup" data-type="horizontal"  data-mini="true"  style="float: right">
+                                            <input type="number" value="<%- menu.get('availability_amount') %>" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
+                                            <select>
+                                                <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(menu.get('availability') == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>>Verfügbar</option>
+                                                <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(menu.get('availability') == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>>Verspätet</option>
+                                                <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(menu.get('availability') == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>>Ausverkauft</option>
+                                            </select>
+                                        </div>
+                                    </li>
+                                <% }) %>
+                            <% }) %>
+                        </ul>
+                    </p>
+                </div>
+                <div data-role="collapsible">
+                    <h3>Extras</h3>
+                    <p>
+                        <ul data-role="listview" data-inset="true">
+                            <% productsAvailability.get('extras').each(function(extra) { %>
+                                <li>
+                                    <div style="float: left; padding-top: .5em;"><h2><%- extra.get('name') %></h2></div>
+                                    <div data-role="controlgroup" data-type="horizontal"  data-mini="true"  style="float: right">
+                                        <input type="number" value="<%- extra.get('availability_amount') %>" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
+                                        <select>
+                                            <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(extra.get('availability') == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>>Verfügbar</option>
+                                            <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(extra.get('availability') == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>>Verspätet</option>
+                                            <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(extra.get('availability') == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>>Ausverkauft</option>
+                                        </select>
+                                    </div>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </p>
+                </div>
+                <div data-role="collapsible">
+                    <h3>Spezial Extras</h3>
+                    <p>
+                        <ul data-role="listview" data-inset="true">
+                            <% productsAvailability.get('special_extras').each(function(specialExtra) { %>
+                                <li>
+                                    <div style="float: left; padding-top: .5em;"><h2><%- specialExtra.get('extra_detail') %></h2></div>
+                                    <div data-role="controlgroup" data-type="horizontal"  data-mini="true"  style="float: right">
+                                        <input type="number" value="<%- specialExtra.get('availability_amount') %>" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
+                                        <select  name="select-native-2" id="select-native-2">
+                                            <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(specialExtra.get('availability') == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>>Verfügbar</option>
+                                            <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(specialExtra.get('availability') == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>>Verspätet</option>
+                                            <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(specialExtra.get('availability') == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>>Ausverkauft</option>
+                                        </select>
+                                    </div>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

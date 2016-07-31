@@ -12,7 +12,8 @@ define([
         		menuid: 0,
         		name: '',
         		price: 0,
-        		availability: null
+        		availability: null,
+                        availability_amount: null
         	};
         }
 

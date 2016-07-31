@@ -5,9 +5,20 @@
 define([ "app",
          'Webservice',
          'views/headers/HeaderView',
+         'collections/distribution/TodoListCollection',
          'models/distribution/DistributionOrderSetModel',
-         'text!templates/pages/distribution.phtml'],
-function( app, Webservice, HeaderView, DistributionOrderSetModel, Template ) {
+         'models/distribution/OrderDoneInformationModel',
+         'models/distribution/ProductsAvailabilitySetModel',
+         'text!templates/pages/distribution.phtml',
+         "jquery-dateFormat"],
+function( app,
+          Webservice,
+          HeaderView,
+          TodoListCollection,
+          DistributionOrderSetModel,
+          OrderDoneInformationModel,
+          ProductsAvailabilitySetModel,
+          Template ) {
     "use strict";
 
     // Extends Backbone.View
@@ -45,6 +56,9 @@ function( app, Webservice, HeaderView, DistributionOrderSetModel, Template ) {
                 success: function(result) {
                     self.orderDatas = result;
                     self.orderDatas.GetOrder = new DistributionOrderSetModel(self.orderDatas.GetOrder, {parse: true});
+                    self.orderDatas.GetOrdersInTodoList = new TodoListCollection(self.orderDatas.GetOrdersInTodoList, {parse: true});
+                    self.orderDatas.GetOrderDoneInformation = new OrderDoneInformationModel(self.orderDatas.GetOrderDoneInformation, {parse: true});
+                    self.orderDatas.GetProductsAvailability = new ProductsAvailabilitySetModel(self.orderDatas.GetProductsAvailability, {parse: true});
                     self.render();
                 }
             };
@@ -103,13 +117,23 @@ function( app, Webservice, HeaderView, DistributionOrderSetModel, Template ) {
 
             header.activeButton = 'distribution';
 
+            var menuesArray = {};
+
+            this.orderDatas.GetProductsAvailability.get('menues').each(function(menu) {
+                if(!(menu.get('Group_Name') in menuesArray))
+                {
+                    menuesArray[menu.get('Group_Name')] = [];
+                }
+
+                menuesArray[menu.get('Group_Name')].push(menu);
+            });
+
             MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
                                                                   ordersSet: this.orderDatas.GetOrder,
-                                                                  products: [],
-                                                                  nextOrders: [],
-                                                                  amountOpenOrders: 12,
-                                                                  amountFinishedOrders: 5,
-                                                                  amountNewOrders: 8});
+                                                                  ordersInTodoList: this.orderDatas.GetOrdersInTodoList,
+                                                                  orderDoneInformation: this.orderDatas.GetOrderDoneInformation,
+                                                                  productsAvailability: this.orderDatas.GetProductsAvailability,
+                                                                  menuesArray: menuesArray});
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");
