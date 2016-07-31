@@ -2,17 +2,14 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         "MyPOS",
-         'text!templates/headers/navbar.phtml'],
- function( app,
-		 MyPOS,
-		 Template ) {
-	"use strict";
+define(["app",
+        'text!templates/headers/navbar.phtml'],
+ function(app,
+          Template ) {
+    "use strict";
 
     // Extends Backbone.View
     var HeaderView = Backbone.View.extend( {
-
 
     	defaults: {
     		activeButton: ''
@@ -44,11 +41,17 @@ define([ "app",
 
         // Renders all of the Category models on the UI
         render: function() {
+            var template =  _.template(Template)({name: app.session.user.get('firstname') + " " + app.session.user.get('lastname'),
+                                                  rights: app.session.user.get('user_roles'),
+                                                  activeButton: this.activeButton,
+                                                  is_admin: app.session.user.get('is_admin')});
 
-        	return _.template(Template)({name: app.session.user.get('firstname') + " " + app.session.user.get('lastname'),
-        								 rights: app.session.user.get('user_roles'),
-        								 activeButton: this.activeButton,
-        								 is_admin: app.session.user.get('is_admin')});
+            if($('#main-header-navbar ul li', template).length <= 1)
+            {
+                template = $("<div/>").append($('#main-header-navbar', template).remove().end()).html();
+            }
+
+            return template;
         }
     } );
 
