@@ -24,12 +24,35 @@ class Distribution
         }
     }
 
-    public function GetOrderDetailsOfProgessIds($a_orders_in_progressid)
+    public function GetOrderInfoFromProgressIDs($a_orders_in_progressids)
     {
-        if(empty($a_orders_in_progressid))
+        if(empty($a_orders_in_progressids))
             return;
 
-        $str_orders_in_progressids = implode(',', array_filter( $a_orders_in_progressid, 'ctype_digit'));
+        $str_orders_in_progressids = implode(',', array_filter( $a_orders_in_progressids, 'ctype_digit'));
+
+        $o_statement = $this->o_db->prepare("SELECT o.orderid,
+                                                    t.name AS tableNr,
+                                                    o.ordertime,
+                                                    CONCAT(u.firstname, ' ', u.lastname) AS waitress
+                                             FROM orders_in_progress oip
+                                             INNER JOIN orders o ON o.orderid = oip.orderid
+                                             INNER JOIN tables t ON t.tableid = o.tableid
+                                             INNER JOIN users u ON u.userid = o.userid
+                                             WHERE oip.orders_in_progressid IN ($str_orders_in_progressids)
+                                             LIMIT 1");
+
+        $o_statement->execute();
+
+        return $o_statement->fetch();
+    }
+
+    public function GetOrderDetailsOfProgessIds($a_orders_in_progressids)
+    {
+        if(empty($a_orders_in_progressids))
+            return;
+
+        $str_orders_in_progressids = implode(',', array_filter( $a_orders_in_progressids, 'ctype_digit'));
 
         $o_statement = $this->o_db->prepare("SELECT t.orders_detailid,
                                                     t.amount - IFNULL(t.amount_recieved, 0) AS amount,
@@ -369,14 +392,16 @@ class Distribution
                                              FROM orders_in_progress oip
                                              INNER JOIN orders o ON o.orderid = oip.orderid
                                              LEFT JOIN orders_in_progress_recieved oipr ON oipr.orders_in_progressid = oip.orders_in_progressid
-                                             LEFT JOIN orders_extras_in_progress_recieved oeipr ON oipr.orders_in_progressid = oip.orders_in_progressid
+                                             LEFT JOIN distribution_giving_out dgo1 ON dgo1.distribution_giving_outid = oipr.distribution_giving_outid
+                                             LEFT JOIN orders_extras_in_progress_recieved oeipr ON oeipr.orders_in_progressid = oip.orders_in_progressid
+                                             LEFT JOIN distribution_giving_out dgo2 ON dgo2.distribution_giving_outid = oeipr.distribution_giving_outid
                                              WHERE oip.userid = :userid
                                                    AND o.eventid = :eventid
                                                    AND
                                                    (
-                                                        oipr.finished >= (NOW() - INTERVAL :minutes MINUTE)
+                                                        dgo1.date >= (NOW() - INTERVAL :minutes MINUTE)
                                                         OR
-                                                        oeipr.finished >= (NOW() - INTERVAL :minutes MINUTE)
+                                                        dgo2.date >= (NOW() - INTERVAL :minutes MINUTE)
                                                    )
                                              GROUP BY oip.orderid");
 
@@ -395,6 +420,9 @@ class Distribution
 
     public function GetOrdersNew($a_order_ids, $i_minutes)
     {
+        if(empty($a_order_ids))
+            return 0;
+
         $str_orderids = implode(',', array_filter( $a_order_ids, 'ctype_digit'));
 
         $o_statement = $this->o_db->prepare("SELECT COUNT(*)

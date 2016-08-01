@@ -78,6 +78,10 @@ class Distribution extends SecurityController
             }
 
             $a_order = $o_distribution->GetOrderDetailsOfProgessIds($a_orders_in_progressid);
+
+            $a_order_info = $o_distribution->GetOrderInfoFromProgressIDs($a_orders_in_progressid);
+
+            $a_order = array_merge($a_order, $a_order_info);
             $a_order['orders_in_progressids'] = $a_orders_in_progressid;
 
             $o_db->commit();

@@ -823,12 +823,14 @@ class Orders
                                                     oip.done AS in_progress_done,
                                                     CONCAT(u.firstname, ' ', u.lastname) AS handled_by_name,
                                                     IF(toop.orders_detailid, oipr.amount, oeipr.amount) AS amount,
-                                                    IF(toop.orders_detailid, oipr.finished, oeipr.finished) AS recieved
+                                                    IF(toop.orders_detailid, dgo1.date, dgo2.date) AS recieved
                                              FROM tmp_open_orders_priority toop
                                              LEFT JOIN orders_in_progress oip ON oip.orderid = toop.orderid
                                              LEFT JOIN users u ON u.userid = oip.userid
                                              LEFT JOIN orders_in_progress_recieved oipr ON oipr.orders_in_progressid = oip.orders_in_progressid AND oipr.orders_detailid = toop.orders_detailid
+                                             LEFT JOIN distribution_giving_out dgo1 ON dgo1.distribution_giving_outid = oipr.distribution_giving_outid
                                              LEFT JOIN orders_extras_in_progress_recieved oeipr ON oeipr.orders_in_progressid = oip.orders_in_progressid AND oeipr.orders_details_special_extraid = toop.orders_details_special_extraid
+                                             LEFT JOIN distribution_giving_out dgo2 ON dgo2.distribution_giving_outid = oeipr.distribution_giving_outid
                                              WHERE toop.orderid = :orderid");
 
         $o_statement->bindParam(":orderid", $i_orderid);

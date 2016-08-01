@@ -12,7 +12,10 @@ define([
         defaults: function() {
             return {
                 orders_details: new DistributionOrdersDetailsCollection,
-                order_details_special_extra: new DistributionSpecialExtraCollection
+                order_details_special_extra: new DistributionSpecialExtraCollection,
+                orderid: 0,
+                tableNr: '',
+                orders_in_progressids: []
             };
         },
 
