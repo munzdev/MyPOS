@@ -7,6 +7,7 @@ use Lib\Database;
 use Lib\Login;
 use Lib\Request;
 use Lib\Invoice;
+use Exception;
 use Model;
 use MyPOS;
 
