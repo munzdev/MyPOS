@@ -15,7 +15,10 @@ define([
                 order_details_special_extra: new DistributionSpecialExtraCollection,
                 orderid: 0,
                 tableNr: '',
-                orders_in_progressids: []
+                orders_in_progressids: [],
+                ordertime: null,
+                waitress: '',
+                events_printerid: 0
             };
         },
 

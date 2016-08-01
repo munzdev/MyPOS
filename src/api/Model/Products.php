@@ -137,4 +137,53 @@ class Products
 
         return $o_statement->fetchAll();
     }
+
+    public function SetMenuAvailabilityAmount($i_menuid, $i_amount)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE menues
+                                             SET availability_amount = :amount
+                                             WHERE menuid = :menuid");
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        $o_statement->bindParam(":amount", $i_amount);
+
+        return $o_statement->execute();
+    }
+
+    public function SetExtraAvailabilityAmount($i_menu_extraid, $i_amount)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE menu_extras
+                                             SET availability_amount = :amount
+                                             WHERE menu_extraid = :menu_extraid");
+
+        $o_statement->bindParam(":menu_extraid", $i_menu_extraid);
+        $o_statement->bindParam(":amount", $i_amount);
+
+        return $o_statement->execute();
+    }
+
+
+    public function SetMenuAvailabilityStatus($i_menuid, $str_status)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE menues
+                                             SET availability = :status
+                                             WHERE menuid = :menuid");
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        $o_statement->bindParam(":status", $str_status);
+
+        return $o_statement->execute();
+    }
+
+    public function SetExtraAvailabilityStatus($i_menu_extraid, $str_status)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE menu_extras
+                                             SET availability = :status
+                                             WHERE menu_extraid = :menu_extraid");
+
+        $o_statement->bindParam(":menu_extraid", $i_menu_extraid);
+        $o_statement->bindParam(":status", $str_status);
+
+        return $o_statement->execute();
+    }
 }

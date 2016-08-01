@@ -4,8 +4,10 @@ namespace Controller;
 use Lib\SecurityController;
 use Lib\Database;
 use Lib\Login;
+use Lib\Request;
 use Model;
 use MyPOS;
+use Exception;
 
 class Distribution extends SecurityController
 {
@@ -17,7 +19,11 @@ class Distribution extends SecurityController
                                   'GetOrder' => MyPOS\USER_ROLE_DISTRIBUTION,
                                   'GetOrdersInTodoList' => MyPOS\USER_ROLE_DISTRIBUTION,
                                   'GetOrderDoneInformation' => MyPOS\USER_ROLE_DISTRIBUTION,
-                                  'GetProductsAvailability' => MyPOS\USER_ROLE_DISTRIBUTION);
+                                  'GetProductsAvailability' => MyPOS\USER_ROLE_DISTRIBUTION,
+                                  'SetAvailabilityAmount' => MyPOS\USER_ROLE_DISTRIBUTION,
+                                  'SetAvailabilityStatus' => MyPOS\USER_ROLE_DISTRIBUTION,
+                                  'FinishOrder' => MyPOS\USER_ROLE_DISTRIBUTION,
+                                  'PrintOrder' => MyPOS\USER_ROLE_DISTRIBUTION);
     }
 
     public function GetDistributionOrderDatasAction()
@@ -167,5 +173,103 @@ class Distribution extends SecurityController
         $a_return['special_extras'] = $o_distribution->GetAvailabilitySpecialExtras($a_user['eventid']);
 
         return $a_return;
+    }
+
+    public function SetAvailabilityAmountAction()
+    {
+        $a_params = Request::ValidateParams(array('type' => 'string',
+                                                  'id' => 'numeric',
+                                                  'amount' => 'numeric'));
+
+        $o_db = Database::GetConnection();
+
+        if($a_params['amount'] == 0)
+            $a_params['amount'] = null;
+
+        if($a_params['type'] == 'menu')
+        {
+            $o_products = new Model\Products($o_db);
+
+            return $o_products->SetMenuAvailabilityAmount($a_params['id'], $a_params['amount']);
+        }
+        else if($a_params['type'] == 'extra')
+        {
+            $o_products = new Model\Products($o_db);
+
+            return $o_products->SetExtraAvailabilityAmount($a_params['id'], $a_params['amount']);
+        }
+        else if($a_params['type'] == 'special-extra')
+        {
+            $o_orders = new Model\Orders($o_db);
+
+            return $o_orders->SetSpecialExtraAvailabilityAmount($a_params['id'], $a_params['amount']);
+        }
+
+        return false;
+    }
+
+    public function SetAvailabilityStatusAction()
+    {
+        $a_params = Request::ValidateParams(array('type' => 'string',
+                                                  'id' => 'numeric',
+                                                  'status' => 'string'));
+
+        $o_db = Database::GetConnection();
+
+        if($a_params['type'] == 'menu')
+        {
+            $o_products = new Model\Products($o_db);
+
+            return $o_products->SetMenuAvailabilityStatus($a_params['id'], $a_params['status']);
+        }
+        else if($a_params['type'] == 'extra')
+        {
+            $o_products = new Model\Products($o_db);
+
+            return $o_products->SetExtraAvailabilityStatus($a_params['id'], $a_params['status']);
+        }
+        else if($a_params['type'] == 'special-extra')
+        {
+            $o_orders = new Model\Orders($o_db);
+
+            return $o_orders->SetSpecialExtraAvailabilityStatus($a_params['id'], $a_params['status']);
+        }
+
+        return false;
+    }
+
+    public function FinishOrderAction()
+    {
+        $a_params = Request::ValidateParams(array('order_in_progressids' => 'array',
+                                                  'order_details' => 'array',
+                                                  'order_details_special_extras' => 'array'));
+
+        $o_db = Database::GetConnection();
+
+        $o_distribution = new Model\Distribution($o_db);
+
+        try
+        {
+            $o_db->beginTransaction();
+
+            $i_distribution_giving_outid = $o_distribution->AddGivingOut();
+
+
+
+            $o_db->commit();
+
+            return $a_order;
+        }
+        catch (Exception $o_exception)
+        {
+            $o_db->rollBack();
+            throw $o_exception;
+        }
+    }
+
+    public function PrintOrderAction()
+    {
+        $a_params = Request::ValidateParams(array('distribution_giving_outid' => 'numeric',
+                                                  'events_printerid' => 'numeric'));
     }
 }

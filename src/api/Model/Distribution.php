@@ -34,10 +34,12 @@ class Distribution
         $o_statement = $this->o_db->prepare("SELECT o.orderid,
                                                     t.name AS tableNr,
                                                     o.ordertime,
-                                                    CONCAT(u.firstname, ' ', u.lastname) AS waitress
+                                                    CONCAT(u.firstname, ' ', u.lastname) AS waitress,
+                                                    dpu.events_printerid
                                              FROM orders_in_progress oip
                                              INNER JOIN orders o ON o.orderid = oip.orderid
                                              INNER JOIN tables t ON t.tableid = o.tableid
+                                             INNER JOIN distributions_places_users dpu ON dpu.userid = oip.userid
                                              INNER JOIN users u ON u.userid = o.userid
                                              WHERE oip.orders_in_progressid IN ($str_orders_in_progressids)
                                              LIMIT 1");
@@ -463,5 +465,15 @@ class Distribution
         $o_statement->execute();
 
         return $o_statement->fetchAll();
+    }
+
+    public function AddGivingOut()
+    {
+        $o_statement = $this->o_db->prepare("INSERT INTO distribution_giving_out(`date`)
+                                                         VALUES (NOW())");
+
+        $o_statement->execute();
+
+        return $this->o_db->lastInsertId();
     }
 }

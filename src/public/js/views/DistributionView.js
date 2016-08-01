@@ -30,12 +30,21 @@ function( app,
             "click .distribution-order": "markOrder",
             "click #distribution-btn-verify-dialog": "showVerifyDialog",
             "click #distribution-finished": "finished",
-            "change input[name='distribution-order-details-special-extra-amount']": "ordersDetailsSpecialExtraAmountChanged",
-            "change select[name='distribution-order-details-special-extra-status']": "ordersDetailsSpecialExtraAvaibilityChanged"
+            "change input[name='distribution-order-details-special-extra-amount']": "amountChanged",
+            "change select[name='distribution-order-details-special-extra-status']": "avaibilityChanged",
+            "change #distribution-availability-menues-list input": "amountChanged",
+            "change #distribution-availability-menues-list select": "avaibilityChanged",
+            "change #distribution-availability-extras-list input": "amountChanged",
+            "change #distribution-availability-extras-list select": "avaibilityChanged",
+            "change #distribution-availability-special-extras-list input": "amountChanged",
+            "change #distribution-availability-special-extras-list select": "avaibilityChanged"
         },
 
         // The View Constructor
         initialize: function() {
+            _.bindAll(this, "finished");
+
+
             var self = this;
 
             // Broken Tabs widget with Backbone pushstate enabled  - manual fix it
@@ -65,14 +74,43 @@ function( app,
             webservice.call();
         },
 
-        ordersDetailsSpecialExtraAvaibilityChanged: function(event)
+        amountChanged: function(event)
         {
-            alert(2);
+            var target = $(event.currentTarget);
+            var id = target.attr('data-id');
+            var type = target.attr('data-type');
+            var value = target.val();
+
+            if(value == '' || value < 0)
+                value = 0;
+
+            var webservice = new Webservice();
+            webservice.action = "Distribution/SetAvailabilityAmount";
+            webservice.formData = {type: type,
+                                   id: id,
+                                   amount: value};
+            webservice.callback = {
+                success: MyPOS.ReloadPage
+            };
+            webservice.call();
         },
 
-        ordersDetailsSpecialExtraAmountChanged: function(event)
+        avaibilityChanged: function(event)
         {
-            alert(1)  ;
+            var target = $(event.currentTarget);
+            var id = target.attr('data-id');
+            var type = target.attr('data-type');
+            var value = target.val();
+
+            var webservice = new Webservice();
+            webservice.action = "Distribution/SetAvailabilityStatus";
+            webservice.formData = {type: type,
+                                   id: id,
+                                   status: value};
+            webservice.callback = {
+                success: MyPOS.ReloadPage
+            };
+            webservice.call();
         },
 
         markOrder: function(event)
@@ -82,7 +120,42 @@ function( app,
 
         finished: function()
         {
-            alert("TODO: Implement");
+            var self = this;
+
+            var orders_finished = {order_in_progressids: this.orderDatas.GetOrder.get('orders_in_progressids'),
+                                   order_details: [],
+                                   order_details_special_extras: []};
+
+            $('.distribution-order').each(function() {
+                var type = $(this).attr('data-order-type');
+
+                if(type == 'order-detail')
+                {
+                    orders_finished.order_details.push({id: $(this).attr('data-id'),
+                                                        amount: $(this).attr('data-amount')});
+                }
+                else
+                {
+                    orders_finished.order_details_special_extras.push({id: $(this).attr('data-id'),
+                                                                       amount: $(this).attr('data-amount')});
+                }
+            });
+
+            var webservice = new Webservice();
+            webservice.action = "Distribution/FinishOrder";
+            webservice.formData = orders_finished;
+            webservice.callback = {
+                success: function(result) {
+                    var webservice = new Webservice();
+                    webservice.action = "Distribution/PrintOrder";
+                    webservice.formData = {distribution_giving_outid: result,
+                                           events_printerid: self.orderDatas.GetOrder.get('events_printerid')};
+                    webservice.call();
+
+                    MyPOS.ReloadPage();
+                }
+            };
+            webservice.call();
         },
 
         showVerifyDialog: function()

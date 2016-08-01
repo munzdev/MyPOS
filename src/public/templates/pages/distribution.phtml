@@ -16,7 +16,7 @@
                     <fieldset style="border: lightgrey solid thin ; border-radius: 10px; padding: 10px">
                         <legend><strong>Bestellung</strong></legend>
                         <% ordersSet.get('orders_details').each(function(order) { %>
-                            <div data-order-type="order-detail" data-id="<%- order.get('orders_detailid') %>" class="distribution-order ui-grid-a ui-body-a ui-corner-all">
+                            <div data-order-type="order-detail" data-amount='<%- order.get('amount') %> data-id="<%- order.get('orders_detailid') %>" class="distribution-order ui-grid-a ui-body-a ui-corner-all">
                                 <h2><%- order.get('amount') %>x <%- order.get('name') %></h2>
                                 <p>
                                     <strong style="white-space: normal;">
@@ -36,14 +36,14 @@
                             </div>
                         <% }) %>
                         <% ordersSet.get('order_details_special_extra').each(function(order) { %>
-                            <div data-order-type="order-detail-special-extra" data-id="<%- order.get('orders_details_special_extraid') %>" class="distribution-order ui-grid-a ui-body-a ui-corner-all">
+                            <div data-order-type="order-detail-special-extra" data-amount='<%- order.get('amount') %>' data-id="<%- order.get('orders_details_special_extraid') %>" class="distribution-order ui-grid-a ui-body-a ui-corner-all">
                                 <h2><%- order.get('amount') %>x Sonderwunsch</h2>
                                 <p>
                                     <strong style="white-space: normal;">
                                         <p><%- order.get('extra_detail') %></p>
                                         <div data-role="controlgroup" data-type="horizontal"  data-mini="true">
-                                            <input type="number" value="<%- order.get('availability_amount') %>" data-id="<%- order.get('orders_details_special_extraid') %>" name="distribution-order-details-special-extra-amount" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
-                                            <select data-id="<%- order.get('orders_details_special_extraid') %>"  name="distribution-order-details-special-extra-status" id="select-native-2">
+                                            <input type="number" data-type="special-extra" value="<%- order.get('availability_amount') %>" data-id="<%- order.get('orders_details_special_extraid') %>" name="distribution-order-details-special-extra-amount" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
+                                            <select  data-type="special-extra" data-id="<%- order.get('orders_details_special_extraid') %>"  name="distribution-order-details-special-extra-status" id="select-native-2">
                                                 <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>">Verfügbar</option>
                                                 <option value="<%- ORDER_AVAILABILITY_DELAYED %>">Verspätet</option>
                                                 <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>">Ausverkauft</option>
@@ -69,8 +69,8 @@
                     <ul data-role="listview" data-inset="true">
                         <li data-role="list-divider" style="white-space: normal;">Informationen</li>
                         <li style="white-space: normal;">Offene Bestellungen: <%- orderDoneInformation.get('open_orders') %></li>
-                        <li style="white-space: normal;">Getätigte fertigstellungen letzten 5 min: <%- orderDoneInformation.get('done_orders') %></li>
-                        <li style="white-space: normal;">Neue Bestellungen letzten 5 min: <%- orderDoneInformation.get('new_orders') %></li>
+                        <li style="white-space: normal;">Getätigte fertigstellungen letzten <%- MyPOSConfig['Distribution']['OrderProgressTimeRangeMinutes'] %> min: <%- orderDoneInformation.get('done_orders') %></li>
+                        <li style="white-space: normal;">Neue Bestellungen letzten <%- MyPOSConfig['Distribution']['OrderProgressTimeRangeMinutes'] %> min: <%- orderDoneInformation.get('new_orders') %></li>
                         <li style="white-space: normal;">Tisch: <strong><%- ordersSet.get('tableNr') %></strong></li>
                         <li style="white-space: normal;">Bestellnummer: <%- ordersSet.get('orderid') %></li>
                         <li style="white-space: normal;">Bestellzeit: <%- $.format.date(MyPOS.DateFromMysql(ordersSet.get('ordertime')), DATE_JS_TIMEFORMAT) %></li>
@@ -87,15 +87,15 @@
                 <div data-role="collapsible">
                     <h3>Menüs</h3>
                     <p>
-                        <ul data-role="listview" data-inset="true">
+                        <ul data-role="listview" id="distribution-availability-menues-list">
                             <% _.each(menuesArray, function(menues, typeName) { %>
                                 <li data-role="list-divider"><%- typeName %></li>
                                 <% _.each(menues, function(menu) { %>
                                     <li>
                                         <div style="float: left; padding-top: .5em;"><h2><%- menu.get('name') %></h2></div>
                                         <div data-role="controlgroup" data-type="horizontal"  data-mini="true"  style="float: right">
-                                            <input type="number" value="<%- menu.get('availability_amount') %>" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
-                                            <select>
+                                            <input type="number" data-type="menu" data-id="<%- menu.get('menuid') %>" value="<%- menu.get('availability_amount') %>" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
+                                            <select type="number" data-type="menu" data-id="<%- menu.get('menuid') %>">
                                                 <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(menu.get('availability') == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>>Verfügbar</option>
                                                 <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(menu.get('availability') == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>>Verspätet</option>
                                                 <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(menu.get('availability') == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>>Ausverkauft</option>
@@ -110,13 +110,13 @@
                 <div data-role="collapsible">
                     <h3>Extras</h3>
                     <p>
-                        <ul data-role="listview" data-inset="true">
+                        <ul data-role="listview" id="distribution-availability-extras-list">
                             <% productsAvailability.get('extras').each(function(extra) { %>
                                 <li>
                                     <div style="float: left; padding-top: .5em;"><h2><%- extra.get('name') %></h2></div>
                                     <div data-role="controlgroup" data-type="horizontal"  data-mini="true"  style="float: right">
-                                        <input type="number" value="<%- extra.get('availability_amount') %>" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
-                                        <select>
+                                        <input data-type="extra" type="number" data-id="<%- extra.get('menu_extraid') %>" value="<%- extra.get('availability_amount') %>" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
+                                        <select data-type="extra" data-id="<%- extra.get('menu_extraid') %>">
                                             <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(extra.get('availability') == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>>Verfügbar</option>
                                             <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(extra.get('availability') == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>>Verspätet</option>
                                             <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(extra.get('availability') == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>>Ausverkauft</option>
@@ -130,13 +130,13 @@
                 <div data-role="collapsible">
                     <h3>Spezial Extras</h3>
                     <p>
-                        <ul data-role="listview" data-inset="true">
+                        <ul data-role="listview" id="distribution-availability-special-extras-list">
                             <% productsAvailability.get('special_extras').each(function(specialExtra) { %>
                                 <li>
                                     <div style="float: left; padding-top: .5em;"><h2><%- specialExtra.get('extra_detail') %></h2></div>
                                     <div data-role="controlgroup" data-type="horizontal"  data-mini="true"  style="float: right">
-                                        <input type="number" value="<%- specialExtra.get('availability_amount') %>" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
-                                        <select  name="select-native-2" id="select-native-2">
+                                        <input type="number" data-type="special-extra" data-id="<%- specialExtra.get('orders_details_special_extraid') %>" value="<%- specialExtra.get('availability_amount') %>" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
+                                        <select data-type="special-extra" data-id="<%- specialExtra.get('orders_details_special_extraid') %>">
                                             <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(specialExtra.get('availability') == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>>Verfügbar</option>
                                             <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(specialExtra.get('availability') == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>>Verspätet</option>
                                             <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(specialExtra.get('availability') == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>>Ausverkauft</option>

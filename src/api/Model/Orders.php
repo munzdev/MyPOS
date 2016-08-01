@@ -838,4 +838,28 @@ class Orders
 
         return $o_statement->fetchAll();
     }
+
+    public function SetSpecialExtraAvailabilityAmount($i_orders_details_special_extraid, $i_amount)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE orders_details_special_extra
+                                             SET availability_amount = :amount
+                                             WHERE orders_details_special_extraid = :orders_details_special_extraid");
+
+        $o_statement->bindParam(":orders_details_special_extraid", $i_orders_details_special_extraid);
+        $o_statement->bindParam(":amount", $i_amount);
+
+        return $o_statement->execute();
+    }
+
+    public function SetSpecialExtraAvailabilityStatus($i_orders_details_special_extraid, $str_status)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE orders_details_special_extra
+                                             SET availability = :status
+                                             WHERE orders_details_special_extraid = :orders_details_special_extraid");
+
+        $o_statement->bindParam(":orders_details_special_extraid", $i_orders_details_special_extraid);
+        $o_statement->bindParam(":status", $str_status);
+
+        return $o_statement->execute();
+    }
 }
