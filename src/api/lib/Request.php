@@ -1,6 +1,8 @@
 <?php
 namespace Lib;
 
+use Exception;
+
 abstract class Request
 {
 	public static function ValidateParams($a_fields)
