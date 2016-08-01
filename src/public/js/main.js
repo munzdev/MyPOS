@@ -75,18 +75,39 @@ require([ "app",
     webservice.action = 'Utility/Constants';
     webservice.callback = {
         success: function(result){
-                _.each(result, function(val, key) {
-                        window[key] = val;
-                });
+            _.each(result, function(val, key) {
+                window[key] = val;
+            });
         },
         //-- reload Website on error:
         error: function(result)
         {
-                alert("Error! Please reload the site!");
+            alert("Error! Please reload the site!");
         },
         ajaxError: function()
         {
-                alert("Error! Please reload the site!");
+            alert("Error! Please reload the site!");
+        }
+    };
+    webservice.call();
+
+    var webservice = new Webservice();
+    webservice.action = 'Utility/GetConfig';
+    webservice.callback = {
+        success: function(result){
+            window['MyPOSConfig'] = [];
+            _.each(result, function(val, key) {
+                window['MyPOSConfig'][key] = val;
+            });
+        },
+        //-- reload Website on error:
+        error: function(result)
+        {
+            alert("Error! Please reload the site!");
+        },
+        ajaxError: function()
+        {
+            alert("Error! Please reload the site!");
         }
     };
     webservice.call();
