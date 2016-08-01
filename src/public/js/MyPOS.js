@@ -68,6 +68,11 @@ define(["app", "underscore", "jquery"], function(app)
         Backbone.history.navigate(View, true);
     }
 
+    MyPOS.ReloadPage = function()
+    {
+        Backbone.history.loadUrl();
+    }
+
     MyPOS.UnloadWebsite = function(result)
     {
         $(location).attr('href', app.URL);
