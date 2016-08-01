@@ -34,4 +34,11 @@ class Utility extends Controller
 
         return $a_js_constants;
     }
+
+    public function GetConfigAction()
+    {
+        $a_config = $GLOBALS['a_config'];
+
+        return $a_config['App'];
+    }
 }
