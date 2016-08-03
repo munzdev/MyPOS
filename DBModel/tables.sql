@@ -717,15 +717,15 @@ COMMENT = 'Beinhaltet die Zeilen einer Rechnung. Gibt an wieviel, von einer sond
 
 
 -- -----------------------------------------------------
--- Table `distribution_giving_out`
+-- Table `distributions_giving_outs`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `distribution_giving_out` ;
+DROP TABLE IF EXISTS `distributions_giving_outs` ;
 
-CREATE TABLE IF NOT EXISTS `distribution_giving_out` (
-  `distribution_giving_outid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `distributions_giving_outs` (
+  `distributions_giving_outid` INT(11) NOT NULL AUTO_INCREMENT,
   `date` DATETIME NOT NULL,
-  PRIMARY KEY (`distribution_giving_outid`),
-  UNIQUE INDEX `distribution_givin_outid_UNIQUE` (`distribution_giving_outid` ASC))
+  PRIMARY KEY (`distributions_giving_outid`),
+  UNIQUE INDEX `distribution_givin_outid_UNIQUE` (`distributions_giving_outid` ASC))
 ENGINE = InnoDB;
 
 
@@ -738,13 +738,13 @@ CREATE TABLE IF NOT EXISTS `orders_in_progress_recieved` (
   `orders_in_progress_recievedid` INT(11) NOT NULL AUTO_INCREMENT,
   `orders_detailid` INT(11) NOT NULL,
   `orders_in_progressid` INT(11) NOT NULL,
-  `distribution_giving_outid` INT(11) NOT NULL,
+  `distributions_giving_outid` INT(11) NOT NULL,
   `amount` TINYINT NOT NULL,
-  PRIMARY KEY (`orders_in_progress_recievedid`, `orders_detailid`, `orders_in_progressid`, `distribution_giving_outid`),
+  PRIMARY KEY (`orders_in_progress_recievedid`, `orders_detailid`, `orders_in_progressid`, `distributions_giving_outid`),
   INDEX `fk_orders_details_has_orders_in_progress_orders_in_progress_idx` (`orders_in_progressid` ASC),
   INDEX `fk_orders_details_has_orders_in_progress_orders_details1_idx` (`orders_detailid` ASC),
   UNIQUE INDEX `orders_in_progress_recievedid_UNIQUE` (`orders_in_progress_recievedid` ASC),
-  INDEX `fk_orders_in_progress_recieved_distribution_givin_out1_idx` (`distribution_giving_outid` ASC),
+  INDEX `fk_orders_in_progress_recieved_distribution_givin_out1_idx` (`distributions_giving_outid` ASC),
   CONSTRAINT `fk_orders_details_has_orders_in_progress_orders_details1`
     FOREIGN KEY (`orders_detailid`)
     REFERENCES `orders_details` (`orders_detailid`)
@@ -756,8 +756,8 @@ CREATE TABLE IF NOT EXISTS `orders_in_progress_recieved` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_in_progress_recieved_distribution_givin_out1`
-    FOREIGN KEY (`distribution_giving_outid`)
-    REFERENCES `distribution_giving_out` (`distribution_giving_outid`)
+    FOREIGN KEY (`distributions_giving_outid`)
+    REFERENCES `distributions_giving_outs` (`distributions_giving_outid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -773,13 +773,13 @@ CREATE TABLE IF NOT EXISTS `orders_extras_in_progress_recieved` (
   `orders_extras_in_progress_recieved` INT(11) NOT NULL AUTO_INCREMENT,
   `orders_details_special_extraid` INT(11) NOT NULL,
   `orders_in_progressid` INT(11) NOT NULL,
-  `distribution_giving_outid` INT(11) NOT NULL,
+  `distributions_giving_outid` INT(11) NOT NULL,
   `amount` TINYINT NOT NULL,
-  PRIMARY KEY (`orders_extras_in_progress_recieved`, `orders_details_special_extraid`, `orders_in_progressid`, `distribution_giving_outid`),
+  PRIMARY KEY (`orders_extras_in_progress_recieved`, `orders_details_special_extraid`, `orders_in_progressid`, `distributions_giving_outid`),
   INDEX `fk_orders_details_special_extra_has_orders_in_progress_orde_idx` (`orders_in_progressid` ASC),
   INDEX `fk_orders_details_special_extra_has_orders_in_progress_orde_idx1` (`orders_details_special_extraid` ASC),
   UNIQUE INDEX `orders_extras_in_progress_recieved_UNIQUE` (`orders_extras_in_progress_recieved` ASC),
-  INDEX `fk_orders_extras_in_progress_recieved_distribution_givin_ou_idx` (`distribution_giving_outid` ASC),
+  INDEX `fk_orders_extras_in_progress_recieved_distribution_givin_ou_idx` (`distributions_giving_outid` ASC),
   CONSTRAINT `fk_orders_details_special_extra_has_orders_in_progress_orders1`
     FOREIGN KEY (`orders_details_special_extraid`)
     REFERENCES `orders_details_special_extra` (`orders_details_special_extraid`)
@@ -791,8 +791,8 @@ CREATE TABLE IF NOT EXISTS `orders_extras_in_progress_recieved` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_extras_in_progress_recieved_distribution_givin_out1`
-    FOREIGN KEY (`distribution_giving_outid`)
-    REFERENCES `distribution_giving_out` (`distribution_giving_outid`)
+    FOREIGN KEY (`distributions_giving_outid`)
+    REFERENCES `distributions_giving_outs` (`distributions_giving_outid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
