@@ -26,6 +26,8 @@ class Invoice
 
     private $d_date;
 
+    private $d_date_footer;
+
     private $i_nr;
 
     private $str_tableNr;
@@ -73,6 +75,11 @@ class Invoice
     public function SetDate($d_date)
     {
         $this->d_date = $d_date;
+    }
+
+    public function SetDateFooter($d_date)
+    {
+        $this->d_date_footer = $d_date;
     }
 
     public function SetNr($i_nr)
@@ -198,7 +205,7 @@ class Invoice
 
         /* Footer */
         $this->o_printer -> feed(2);
-        $this->o_printer -> text("Ausgabe: " . date("d.m.Y H:i:s"));
+        $this->o_printer -> text("Ausgabe: " . $this->d_date_footer);
         $this->o_printer -> feed(2);
 
         /* Cut the receipt and open the cash drawer */

@@ -148,7 +148,7 @@ function( app,
                 success: function(result) {
                     var webservice = new Webservice();
                     webservice.action = "Distribution/PrintOrder";
-                    webservice.formData = {distribution_giving_outid: result,
+                    webservice.formData = {distributions_giving_outid: result,
                                            events_printerid: self.orderDatas.GetOrder.get('events_printerid')};
                     webservice.call();
 

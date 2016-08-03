@@ -16,7 +16,7 @@
                     <fieldset style="border: lightgrey solid thin ; border-radius: 10px; padding: 10px">
                         <legend><strong>Bestellung</strong></legend>
                         <% ordersSet.get('orders_details').each(function(order) { %>
-                            <div data-order-type="order-detail" data-amount='<%- order.get('amount') %> data-id="<%- order.get('orders_detailid') %>" class="distribution-order ui-grid-a ui-body-a ui-corner-all">
+                            <div data-order-type="order-detail" data-amount="<%- order.get('amount') %>" data-id="<%- order.get('orders_detailid') %>" class="distribution-order ui-grid-a ui-body-a ui-corner-all">
                                 <h2><%- order.get('amount') %>x <%- order.get('name') %></h2>
                                 <p>
                                     <strong style="white-space: normal;">
@@ -36,7 +36,7 @@
                             </div>
                         <% }) %>
                         <% ordersSet.get('order_details_special_extra').each(function(order) { %>
-                            <div data-order-type="order-detail-special-extra" data-amount='<%- order.get('amount') %>' data-id="<%- order.get('orders_details_special_extraid') %>" class="distribution-order ui-grid-a ui-body-a ui-corner-all">
+                            <div data-order-type="order-detail-special-extra" data-amount="<%- order.get('amount') %>" data-id="<%- order.get('orders_details_special_extraid') %>" class="distribution-order ui-grid-a ui-body-a ui-corner-all">
                                 <h2><%- order.get('amount') %>x Sonderwunsch</h2>
                                 <p>
                                     <strong style="white-space: normal;">

@@ -1,10 +1,12 @@
 <?php
 namespace Controller;
 
+use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Lib\SecurityController;
 use Lib\Database;
 use Lib\Login;
 use Lib\Request;
+use Lib\Invoice;
 use Model;
 use MyPOS;
 use Exception;
@@ -241,24 +243,37 @@ class Distribution extends SecurityController
     public function FinishOrderAction()
     {
         $a_params = Request::ValidateParams(array('order_in_progressids' => 'array',
-                                                  'order_details' => 'array',
-                                                  'order_details_special_extras' => 'array'));
+                                                  'order_details' => 'optional!array',
+                                                  'order_details_special_extras' => 'optional!array'));
 
         $o_db = Database::GetConnection();
 
         $o_distribution = new Model\Distribution($o_db);
+        $o_orders = new Model\Orders($o_db);
 
         try
         {
             $o_db->beginTransaction();
 
-            $i_distribution_giving_outid = $o_distribution->AddGivingOut();
+            $i_distributions_giving_outid = $o_distribution->AddGivingOut();
 
+            if(isset($a_params['order_details']))
+                $o_distribution->AddOrdersInProgressRecieved($i_distributions_giving_outid,
+                                                             $a_params['order_details']);
 
+            if(isset($a_params['order_details_special_extras']))
+                $o_distribution->AddOrdersExtrasInProgressRecieved( $i_distributions_giving_outid,
+                                                                    $a_params['order_details_special_extras']);
+
+            $i_orderid = $o_distribution->GetOrderIDFromProgressID($a_params['order_in_progressids'][0]);
+
+            $o_distribution->CheckIfInProgressOrderDone($a_params['order_in_progressids']);
+
+            $o_orders->CheckIfOrderDone($i_orderid);
 
             $o_db->commit();
 
-            return $a_order;
+            return $i_distributions_giving_outid;
         }
         catch (Exception $o_exception)
         {
@@ -269,7 +284,46 @@ class Distribution extends SecurityController
 
     public function PrintOrderAction()
     {
-        $a_params = Request::ValidateParams(array('distribution_giving_outid' => 'numeric',
+        $a_params = Request::ValidateParams(array('distributions_giving_outid' => 'numeric',
                                                   'events_printerid' => 'numeric'));
+
+        $o_db = Database::GetConnection();
+
+
+        $o_distribution = new Model\Distribution($o_db);
+        $o_events = new Model\Events($o_db);
+        $o_orders = new Model\Orders($o_db);
+
+
+        $a_printer = $o_events->GetPrinter($a_params['events_printerid']);
+        $a_giving_out = $o_distribution->GetGivingOut($a_params['distributions_giving_outid']);
+        $a_order_info = $o_orders->GetOrderInfo($a_giving_out['orderid']);
+
+        $o_connector = new NetworkPrintConnector($a_printer['ip'], $a_printer['port']);
+
+        $o_recipe = new Invoice($o_connector, $a_printer['characters_per_row']);
+
+        $o_recipe->SetNr($a_giving_out['orderid']);
+        $o_recipe->SetTableNr($a_order_info['table_name']);
+        $o_recipe->SetName($a_order_info['user']);
+        $o_recipe->SetDate(date(MyPOS\DATE_PHP_TIMEFORMAT, strtotime($a_order_info['ordertime']) ));
+        $o_recipe->SetDateFooter(date(MyPOS\DATE_PHP_TIMEFORMAT, strtotime($a_giving_out['date']) ));
+
+        foreach($a_giving_out['giving_outs'] as $a_row)
+        {
+            $o_recipe->Add($a_row['name'],
+                            $a_row['amount']);
+        }
+
+        try
+        {
+            $o_recipe->PrintOrder();
+
+            return true;
+        }
+        catch(Exception $o_exception)
+        {
+            throw new Exception("Bestellungsdruck fehlgeschlagen! Bitte Vorgang wiederhollen! Bestellungsdrucknummer: $a_params[distributions_giving_outid]", $o_exception->getCode(), $o_exception);
+        }
     }
 }
