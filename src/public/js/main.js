@@ -16,6 +16,7 @@ require.config( {
 		"backbone": "libs/backbone/backbone-min",
 		"text": "libs/require/text",
 		"localstorage": "libs/backbone/backbone.localStorage-min",
+                "wampy": "libs/wampy/wampy",
 
 		// Core Directorys
 		"templates": "../templates",
@@ -29,11 +30,11 @@ require.config( {
 	// Sets the configuration for your third party scripts that are not AMD compatible
 	shim: {
 		'underscore': {
-			exports: "_"
+                    exports: "_"
 		},
 		"backbone": {
-			"deps": [ "underscore", "jquery" ],
-			"exports": "Backbone"  //attaches "Backbone" to the window object
+                    "deps": [ "underscore", "jquery" ],
+                    "exports": "Backbone"  //attaches "Backbone" to the window object
 		}
 
 	} // end Shim Configuration
@@ -45,6 +46,8 @@ require([ "app",
           "jquery",
           "MyPOS",
           "Webservice",
+          "websocket/Chat",
+          "websocket/API",
           "routers/mainRouter",
           "models/SessionModel",
           "views/dialoges/ErrorDialogView",
@@ -53,6 +56,8 @@ require([ "app",
             $,
             MyPOS,
             Webservice,
+            WsChat,
+            WsAPI,
             MainRouter,
             SessionModel,
             ErrorDialogView) {
@@ -121,6 +126,11 @@ require([ "app",
     // Create a new session model and scope it to the app global
     // This will be a singleton, which other modules can access
     app.session = new SessionModel({});
+
+    // Init websocket services
+    app.ws = {};
+    app.ws.chat = new WsChat();
+    app.ws.api = new WsAPI();
 
     // Check the auth status upon initialization,
     // before rendering anything or matching routes

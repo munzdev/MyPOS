@@ -106,6 +106,9 @@ define([
                     self.optionsDialog = new OptionsDialogView({is_admin: user.is_admin});
                     self.messagesDialog = new MessagesDialogView();
 
+                    app.ws.api.Connect();
+                    app.ws.chat.Connect();
+
                     self.products.fetch({
                         success: function()
                         {

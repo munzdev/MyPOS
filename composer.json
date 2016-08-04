@@ -1,13 +1,14 @@
 {
-  "name" : "MyPOS",
-  "require" : {
-    "mike42/escpos-php" : "v1.2.1"
-  },
-  "config": {
-    "vendor-dir": "src/vendor"
-  },
-  "repositories" : [ {
-    "type" : "composer",
-    "url" : "https://packagist.org/"
-  } ]
+    "name" : "MyPOS",
+    "require" : {
+        "mike42/escpos-php" : "v1.2.1",
+        "cboden/ratchet": "0.3.*"
+    },
+    "config": {
+        "vendor-dir": "src/vendor"
+    },
+    "repositories" : [ {
+        "type" : "composer",
+        "url" : "https://packagist.org/"
+    } ]
 }

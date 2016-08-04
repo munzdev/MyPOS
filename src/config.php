@@ -18,6 +18,8 @@ $a_config['Organisation']['Invoice']['Logo']['Use'] = false;
 $a_config['Organisation']['Invoice']['Logo']['Path'] = "";
 $a_config['Organisation']['Invoice']['Logo']['Type'] = MyPOS\PRINTER_LOGO_DEFAULT;
 
+$a_config['App']['Domain'] = 'mypos.localhost';
+
 $a_config['App']['Distribution']['AmountOrdersToPreShow'] = 2;
 $a_config['App']['Distribution']['OnStandbyAssistOtherDistributionPlaces'] = true;
 $a_config['App']['Distribution']['AmountDisplayedInTodoList'] = 5;
