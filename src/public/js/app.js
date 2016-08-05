@@ -7,12 +7,12 @@ define([
     "backbone"
 ],
 function($, _, Backbone) {
-	"use strict";
-	
+    "use strict";
+
     var app = {
         root : "/",                     // The root path to run the application through.
         URL : "/",                      // Base application URL
-        API : "api/",                   // Base API URL (used by models & collections)        
+        API : "api/",                   // Base API URL (used by models & collections)
     };
 
     $.ajaxSetup({ cache: false });      // force ajax call on all browsers
