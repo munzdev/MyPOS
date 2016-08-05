@@ -13,12 +13,23 @@ function(app, Webservice, Template )
     	title: 'messages-dialog',
     	el: 'body',
         events: {
+            'click #messages-dialog-send': 'sendMessage'
         },
 
         // The View Constructor
         initialize: function(options)
         {
+            _.bindAll(this, "sendMessage");
+
             this.render();
+        },
+
+        sendMessage: function()
+        {
+            var message = $('#messages-dialog-message').val();
+            $('#messages-dialog-message').val('');
+
+            app.ws.chat.Send(1, message);
         },
 
         // Renders all of the Category models on the UI

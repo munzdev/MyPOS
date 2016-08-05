@@ -2,12 +2,15 @@
 // ----------
 
 //Includes file dependencies
-define([ "app", "wampy"], function()
+define([ "app", "wampy"], function(app)
 {
     "use strict";
 
     function Chat()
     {
+        _.bindAll(this, "onConnect",
+                        "_unregisterChanel");
+
         var location = window.location;
 
         this.websericeUrl = ((location.protocol === "https:") ? "wss://" : "ws://") +
@@ -20,7 +23,7 @@ define([ "app", "wampy"], function()
                               onConnect: this.onConnect,
                               onClose: this.onClose,
                               onReconnect: function () { console.log('Reconnecting...'); },
-                              onError: function () { console.log('Breakdown happened'); }});
+                              onError: this._unregisterChanel});
     }
 
     Chat.prototype.Connect = function()
@@ -28,8 +31,34 @@ define([ "app", "wampy"], function()
         this.ws.connect(this.websericeUrl);
     }
 
+    Chat.prototype._registerChanel = function()
+    {
+        if(DEBUG) console.log("REGISTERED TO CHANEL: " + app.session.user.get('events_userid'));
+
+        this.ws.subscribe(app.session.user.get('events_userid'),
+                          this._messageRecieved);
+    }
+
+    Chat.prototype._unregisterChanel = function()
+    {
+        if(DEBUG) console.log("UNREGISTERED TO CHANEL: " + app.session.user.get('userid'));
+
+        this.ws.unsubscribe(app.session.user.get('events_userid'));
+    }
+
+    Chat.prototype._messageRecieved = function(data)
+    {
+        console.log("DATA RECIEVED: " + data);
+    }
+
+    Chat.prototype.Send = function(userid, message)
+    {
+        this.ws.publish(userid, message);
+    }
+
     Chat.prototype.Disconnect = function()
     {
+        this._unregisterChanel();
         this.ws.disconnect();
     }
 
@@ -37,6 +66,8 @@ define([ "app", "wampy"], function()
     {
         // WAMP session established here ..
         if(DEBUG) console.log("Chat-Verbindung hergestellt!");
+
+        this._registerChanel();
     }
 
     Chat.prototype.onClose = function ()
