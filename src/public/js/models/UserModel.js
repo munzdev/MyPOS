@@ -11,6 +11,7 @@ define([
 
         defaults: {
             userid: 0,
+            events_userid: 0,
             username: '',
             firstname: '',
             lastname: '',
