@@ -26,7 +26,15 @@
 }
 
 .messages-dialog-input {
-    width: 70% !important;
+    
+}
+
+.messages-dialog-select {
+    text-align: center;
+}
+
+.messages-dialog-select .ui-select {
+    width: 180px !important;
 }
 
 .distribution-order {
