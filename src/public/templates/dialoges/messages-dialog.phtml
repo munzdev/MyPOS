@@ -1,13 +1,14 @@
-<div data-role="tabs" id="tabs">
-    <div data-role="navbar">
-        <ul>
-            <li><a>System</a></li>
-            <li><a>Manager</a></li>
-            <li><a class="ui-icon-plus ui-btn-icon-left">Neu</a></li>
-        </ul>
+<div>
+    <div data-role="controlgroup" data-type="horizontal" data-mini="true" class="messages-dialog-select">
+        <select id='messages-dialog-open-chats'>
+            <option value=''>System</option>
+        </select>
+        <select data-iconpos="left" data-icon="plus" id='messages-dialog-select-add'>
+            <option value=''>Neuer Chat</option>
+        </select>
     </div>
     <div>
-        <textarea readonly="true" rows="15" class="messages-dialog-textarea"></textarea>
+        <div id='messages-dialog-textarea' rows="15" class="messages-dialog-textarea"></div>
         <div data-role="controlgroup" data-type="horizontal" data-mini="true">
             <input type="text" id="messages-dialog-message" placeholder="Nachricht" data-wrapper-class="controlgroup-textinput-mini ui-btn" class="messages-dialog-input">
             <a id="messages-dialog-send" data-role="button" >Senden</a>

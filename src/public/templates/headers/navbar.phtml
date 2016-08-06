@@ -1,7 +1,7 @@
 <div data-role="header" data-theme="b" data-position="fixed" data-id="main-header" data-tap-toggle="false">
     <h1 data-user="fullname"><%- name %></h1>
     <div class="ui-btn-right">
-        <a href="#messages-dialog" data-role="button" id='navbar-header-messages' data-icon="comment">0</a>
+        <a href="#messages-dialog" data-role="button" id='navbar-header-messages' data-icon="comment" class='navbar-header-messages-counter'><%- unreadedMessages %></a>
         <a href="#options-dialog" data-role="button" id='navbar-header-options' data-icon="gear" data-iconpos="notext"></a>
     </div>
     <div data-role="navbar" id="main-header-navbar">

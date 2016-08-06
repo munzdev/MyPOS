@@ -49,6 +49,10 @@ define([ "app", "wampy"], function(app)
     Chat.prototype._messageRecieved = function(data)
     {
         console.log("DATA RECIEVED: " + data);
+
+        var message_data = JSON.parse(data);
+
+        app.session.messagesDialog.addMessage(message_data.sender, message_data.message, false, false);
     }
 
     Chat.prototype.Send = function(userid, message)

@@ -146,4 +146,27 @@ class Users
 
         return $o_statement;
     }
+
+    public function GetUsers($i_eventid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT u.userid,
+                                                    u.username,
+                                                    u.firstname,
+                                                    u.lastname,
+                                                    u.phonenumber,
+                                                    u.is_admin,
+                                                    eu.user_roles,
+                                                    eu.events_userid,
+                                                    e.eventid,
+                                                    e.name,
+                                                    e.date
+                                            FROM users u
+                                            INNER JOIN events_user eu ON eu.userid = u.userid
+                                            INNER JOIN events e ON e.eventid = eu.eventid AND e.active = 1
+                                            WHERE eu.eventid = :eventid");
+
+        $o_statement->execute(array(':eventid' => $i_eventid));
+
+        return $o_statement->fetchAll();
+    }
 }

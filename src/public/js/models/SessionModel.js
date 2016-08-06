@@ -7,6 +7,7 @@ define([
     "Webservice",
     "MyPOS",
     "collections/ProductCollection",
+    "collections/UserCollection",
     "views/dialoges/OptionsDialogView",
     "views/dialoges/MessagesDialogView"
 ], function(app,
@@ -14,6 +15,7 @@ define([
             Webservice,
             MyPOS,
             ProductCollection,
+            UserCollection,
             OptionsDialogView,
             MessagesDialogView){
     "use strict";
@@ -36,6 +38,7 @@ define([
 
             // create a products collection/model for later to fetch
             this.products = new ProductCollection();
+            this.userList = new UserCollection();
         },
 
         // Fxn to update user attributes after recieving API response
@@ -108,6 +111,14 @@ define([
 
                     app.ws.api.Connect();
                     app.ws.chat.Connect();
+
+                    self.userList.fetch({
+                        reset: true,
+                        success: function()
+                        {
+                            self.messagesDialog.fetchOldMessages();
+                        }
+                    });
 
                     self.products.fetch({
                         success: function()

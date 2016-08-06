@@ -44,6 +44,7 @@ define(["app",
             var template =  _.template(Template)({name: app.session.user.get('firstname') + " " + app.session.user.get('lastname'),
                                                   rights: app.session.user.get('user_roles'),
                                                   activeButton: this.activeButton,
+                                                  unreadedMessages: app.session.messagesDialog.unreadedMessages,
                                                   is_admin: app.session.user.get('is_admin')});
 
             if($('#main-header-navbar ul li', template).length <= 1)
