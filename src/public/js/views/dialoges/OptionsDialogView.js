@@ -13,6 +13,7 @@ function(app, Webservice, Template )
     	title: 'options-dialog',
     	el: 'body',
         events: {
+            "click #request-call": 'request_call',
             "click #logout-link": "logout_link"
         },
 
@@ -21,6 +22,20 @@ function(app, Webservice, Template )
         {
             this.is_admin = options.is_admin;
             this.render();
+        },
+
+        request_call: function()
+        {
+            var webservice = new Webservice();
+            webservice.formData = {reset: false};
+            webservice.action = "Users/CallRequest";
+            webservice.callback = {
+                success: function()
+                {
+                    MyPOS.DisplayError("Rückruf wurde erfolgreich angefordert!");
+                }
+            };
+            webservice.call();
         },
 
         logout_link: function()

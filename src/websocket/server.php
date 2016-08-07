@@ -31,7 +31,7 @@ $o_users_messages = new Model\Users_Messages($o_db);
 
 $app = new Ratchet\App($a_config['App']['Domain'], 8080, '0.0.0.0');
 $app->route('/chat', new Websocket\Chat($o_users_messages), array('*'));
-$app->route('/api', new Websocket\API($o_db), array('*'));
+$app->route('/api', new Websocket\API(), array('*'));
 
 $app->run();
 

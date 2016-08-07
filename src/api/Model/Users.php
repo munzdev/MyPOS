@@ -169,4 +169,23 @@ class Users
 
         return $o_statement->fetchAll();
     }
+
+    public function SetCallRequest($i_userid, $b_reset)
+    {
+        if($b_reset == 'true')
+        {
+            $o_statement = $this->o_db->prepare("UPDATE users
+                                                 SET call_request = NULL
+                                                 WHERE userid = :userid");
+        }
+        else
+        {
+            $o_statement = $this->o_db->prepare("UPDATE users
+                                                 SET call_request = NOW()
+                                                 WHERE userid = :userid");
+        }
+
+        $o_statement->bindParam(':userid', $i_userid);
+        return $o_statement->execute();
+    }
 }

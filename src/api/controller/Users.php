@@ -62,4 +62,15 @@ class Users extends Controller
 
         return $o_users->GetUsers($a_user['eventid']);
     }
+
+    public function CallRequestAction()
+    {
+        $a_params = Request::ValidateParams(array('reset' => 'bool'));
+
+        $o_users = new Model\Users(Database::GetConnection());
+
+        $a_user = $this->o_login->GetCurrentUser();
+
+        return $o_users->SetCallRequest($a_user['userid'], $a_params['reset']);
+    }
 }
