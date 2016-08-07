@@ -21,7 +21,8 @@ function(app, Webservice, Template )
             'change #messages-dialog-select-add': 'clickAddChatOption',
             'popupafteropen': 'popupafteropen',
             'popupafterclose': 'popupafterclose',
-            'change #messages-dialog-open-chats': 'switchChanel'
+            'change #messages-dialog-open-chats': 'switchChanel',
+            'keyup #messages-dialog-message': 'onMessageInputKeyup'
         },
 
         // The View Constructor
@@ -47,6 +48,15 @@ function(app, Webservice, Template )
             $('body').pagecontainer({change: self.checkMessagesStatus});
 
             this.render();
+        },
+
+        onMessageInputKeyup: function(event)
+        {
+            if(event.key == 'Enter'){
+                event.preventDefault();
+                this.sendMessage();
+                return false;
+            }
         },
 
         fetchOldMessages: function()
