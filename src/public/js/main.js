@@ -12,6 +12,7 @@ require.config( {
 		"jquery": "libs/jquery/jquery-2.2.4.min",
                 "jquery-dateFormat": "libs/jquery/jquery-dateFormat.min",
 		"jquerymobile": "libs/jqueryMobile/jquery.mobile-1.4.5.min",
+                "jquerymobile-datebox": "libs/jqueryMobile/jtsage-datebox.min",
                 "underscore": "libs/underscore/underscore-min",
 		"backbone": "libs/backbone/backbone-min",
 		"text": "libs/require/text",

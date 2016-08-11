@@ -1,0 +1,30 @@
+ <div data-role="content">
+    <div class="nav-header"><%= header %></div>
+    <div>
+
+        <fieldset id="order-overview-search-status" data-role="controlgroup" data-type="horizontal" data-mini="true">
+            <legend>Bestellungsstatus:</legend>
+            <a data-value="all" class="ui-btn ui-btn-active ui-corner-all">Alle</a>
+            <a data-value="done" class="ui-btn ui-corner-all">Abgeschlossen</a>
+            <a data-value="open" class="ui-btn ui-corner-all">Offen</a>
+        </fieldset>
+
+        <label for="order-overview-search-orderid">Bestellnummer:</label>
+        <input type="number" id="order-overview-search-orderid" data-mini="true" />
+
+        <label for="order-overview-search-tableNr">Tischnummer:</label>
+        <input type="search" id="order-overview-search-tableNr" data-mini="true" />
+
+        <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
+            <legend>Bestellungszeitraum:</legend>
+            <label for="order-overview-search-from">Von</label>
+            <input class="form-control" id="order-overview-search-from" type="text" data-role="datebox" data-datebox-mode="timeflipbox" data-options='{"useFocus":true}'/>
+            <label for="order-overview-search-to">Bis</label>
+            <input class="form-control" id="order-overview-search-to" type="text" data-role="datebox"  data-datebox-mode="timeflipbox" data-options='{"useFocus":true}'/>
+        </fieldset>
+    </div>
+</div>
+<div data-role="footer" data-theme="b" data-position="fixed" >
+    <a id="order-overview-search-footer-back" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-carat-l">Zurück</a>
+    <a id="order-overview-search-footer-search" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-search" style="float:right">Suchen</a>
+</div>

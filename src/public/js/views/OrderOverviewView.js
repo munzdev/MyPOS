@@ -23,7 +23,7 @@ define([ "app",
     	el: 'body',
 
         // The View Constructor
-        initialize: function() {
+        initialize: function(options) {
             _.bindAll(this, "render",
                             "cancel_order_popup",
                             "cancel_order",
@@ -40,6 +40,7 @@ define([ "app",
             'click .order-overview-info-btn': 'click_btn_info',
             'click .order-overview-modify-btn': 'click_btn_modify',
             'click #order-overview-cancel-order-dialog-continue': 'cancel_order',
+            'click #order-overview-search-btn': 'click_btn_search',
             'popupafterclose #order-overview-cancel-success-popup': 'success_popup_close'
         },
 
@@ -87,6 +88,11 @@ define([ "app",
             var orderid = $(event.currentTarget).attr('data-order-id');
 
             MyPOS.ChangePage("#order-info/id/" + orderid);
+        },
+
+        click_btn_search: function()
+        {
+            MyPOS.ChangePage("#" + this.title + "/search/");
         },
 
         success_popup_close: function()

@@ -8,6 +8,7 @@ define([ "app",
          "models/UserModel",
          "views/LoginView",
          "views/OrderOverviewView",
+         "views/OrderOverviewSearchView",
          "views/OrderNewView",
          "views/OrderModifyView",
          "views/OrderPayView",
@@ -19,6 +20,7 @@ define([ "app",
             UserModel,
             LoginView,
             OrderOverviewView,
+            OrderOverviewSearchView,
             OrderNewView,
             OrderModifyView,
             OrderPayView,
@@ -44,7 +46,8 @@ define([ "app",
             "login": "login",
             "error-dialog": "error_dialog",
             "order-new": "order_new",
-            "order-overview": "order_overview",
+            "order-overview(/status/:status(/orderid/:orderid)(/tableNr/:tableNr)(/from/:from)(/to/:to))": "order_overview",
+            "order-overview/search/": "order_search_overview",
             "order-modify(/id/:id)(/tableNr/:tableNr)": "order_modify",
             "order-pay/id/:id/tableNr/:tableNr": "order_pay",
             "order-info/id/:id": "order_info",
@@ -106,22 +109,36 @@ define([ "app",
             else this.show(new LoginView());
         },
 
-        order_overview: function() {
-        	if(DEBUG) console.log("Order Overview", "OK");
-        	this.show(new OrderOverviewView());
+        order_overview: function(status, orderid, tableNr, from, to) {
+            if(DEBUG) console.log("Order Overview", "OK");
+
+            if(status)
+                this.show(new OrderOverviewView({status: status,
+                                                 orderid: orderid,
+                                                 tableNr: tableNr,
+                                                 from: from,
+                                                 to: to}));
+            else
+                this.show(new OrderOverviewView());
+        },
+
+        order_search_overview: function()
+        {
+            if(DEBUG) console.log("Order Overview SEARCH", "OK");
+            this.show(new OrderOverviewSearchView());
         },
 
         order_new: function()
         {
-        	if(DEBUG) console.log("Order NEW", "OK");
-        	this.show(new OrderNewView());
+            if(DEBUG) console.log("Order NEW", "OK");
+            this.show(new OrderNewView());
         },
 
         order_modify: function(id, tableNr)
         {
-        	if(DEBUG) console.log("Order MODIFY with id: " + id + " - " + tableNr, "OK");
-        	this.show(new OrderModifyView({id: id,
-                                               tableNr: tableNr}));
+            if(DEBUG) console.log("Order MODIFY with id: " + id + " - " + tableNr, "OK");
+            this.show(new OrderModifyView({id: id,
+                                           tableNr: tableNr}));
         },
 
         order_pay: function(id, tableNr)
