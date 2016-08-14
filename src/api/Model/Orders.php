@@ -12,9 +12,37 @@ class Orders
         $this->o_db = $o_db;
     }
 
-    public function GetList($i_eventid, $i_userid, $b_finished)
+    public function GetList($i_eventid, $str_status, $i_orderid, $str_tablenr, $str_from, $str_to, $i_userid)
     {
-        $str_not = $b_finished ? 'NOT' : '';
+        $str_where = "";
+
+        if($str_status != 'all')
+        {
+            $str_not = ($str_status == 'done') ? 'NOT' : '';
+            $str_where .= " AND o.finished IS $str_not NULL";
+        }
+
+        if($i_orderid != null)
+            $str_where .= " AND o.orderid = :orderid";
+
+        if($str_tablenr != null)
+            $str_where .= " AND t.name = :tablenr";
+
+        if($i_userid != null)
+            $str_where .= " AND o.userid = :userid";
+
+        if($str_from != null && $str_to != null)
+        {
+            $str_where .= " AND o.ordertime BETWEEN :from AND :to";
+        }
+        elseif($str_from != null)
+        {
+            $str_where .= " AND o.ordertime >= :from";
+        }
+        elseif($str_to != null)
+        {
+            $str_where .= " AND o.ordertime <= :to";
+        }
 
         $str_query = "SELECT o.orderid,
                              o.tableid,
@@ -35,14 +63,18 @@ class Orders
                       INNER JOIN tables t ON t.tableid = o.tableid
                       LEFT JOIN orders_in_progress oip ON oip.orderid = o.orderid
                       WHERE o.eventid = :eventid
-                                AND o.userid = :userid
-                                AND o.finished IS $str_not NULL
+                            $str_where
                       ORDER BY o.priority ASC";
 
         $o_statement = $this->o_db->prepare($str_query);
 
         $o_statement->bindParam(":eventid", $i_eventid);
-        $o_statement->bindParam(":userid", $i_userid);
+
+        if($i_orderid != null) $o_statement->bindParam(":orderid", $i_orderid);
+        if($str_tablenr != null) $o_statement->bindParam(":tablenr", $str_tablenr);
+        if($i_userid != null) $o_statement->bindParam(":userid", $i_userid);
+        if($str_from != null) $o_statement->bindValue(":from", date('Y-m-d ') . $str_from . ":00", PDO::PARAM_STR);
+        if($str_to != null) $o_statement->bindValue(":to", date('Y-m-d ') . $str_to . ":00", PDO::PARAM_STR);
 
         $o_statement->execute();
 

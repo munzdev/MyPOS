@@ -30,13 +30,54 @@ class Orders extends SecurityController
 
     public function GetOpenListAction()
     {
+        $a_params = Request::ValidateParams(array('search' => 'optional!array'));
+
         $o_orders = new Model\Orders(Database::GetConnection());
 
         $a_user = Login::GetCurrentUser();
 
+        if(isset($a_params['search']))
+        {
+            $a_search = $a_params['search'];
+
+            $str_status = $a_search['status'];
+            $i_orderid = $a_search['orderid'];
+            $str_tablenr = $a_search['tableNr'];
+            $str_from = $a_search['from'];
+            $str_to = $a_search['to'];
+            $i_userid = $a_search['userid'];
+        }
+        else
+        {
+            $str_status = 'open';
+            $i_orderid = null;
+            $str_tablenr = null;
+            $str_from = null;
+            $str_to = null;
+            $i_userid = $a_user['userid'];
+        }
+
+        if($str_status != 'open' && $str_status != 'done' && $str_status != 'all')
+            throw new Exception ("Invalid status given!");
+
+        if($i_orderid != null && !is_numeric($i_orderid))
+            throw new Exception ("Invalid orderid given!");
+
+        if($i_userid != null && !is_numeric($i_userid))
+            throw new Exception ("Invalid userid given!");
+
+        $str_match = "/(2[0-4]|[01][1-9]|10):([0-5][0-9])/";
+        if(($str_from != null && !preg_match($str_match, $str_from)) ||
+           ($str_to != null && !preg_match($str_match, $str_to)))
+            throw new Exception ("Invalid time format given!");
+
         $a_orders_result = $o_orders->GetList($a_user['eventid'],
-                                              $a_user['userid'],
-                                              false);
+                                              $str_status,
+                                              $i_orderid,
+                                              $str_tablenr,
+                                              $str_from,
+                                              $str_to,
+                                              $i_userid);
 
         $a_orders = array();
 

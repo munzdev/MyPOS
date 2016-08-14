@@ -46,7 +46,8 @@ define([ "app",
             "login": "login",
             "error-dialog": "error_dialog",
             "order-new": "order_new",
-            "order-overview(/status/:status(/orderid/:orderid)(/tableNr/:tableNr)(/from/:from)(/to/:to))": "order_overview",
+            "order-overview": "order_overview",
+            "order-overview/status/:status(/orderid/:orderid)(/tableNr/:tableNr)(/from/:from)(/to/:to)(/userid/:userid)": "order_overview",
             "order-overview/search/": "order_search_overview",
             "order-modify(/id/:id)(/tableNr/:tableNr)": "order_modify",
             "order-pay/id/:id/tableNr/:tableNr": "order_pay",
@@ -109,15 +110,17 @@ define([ "app",
             else this.show(new LoginView());
         },
 
-        order_overview: function(status, orderid, tableNr, from, to) {
+        order_overview: function(status, orderid, tableNr, from, to, userid) {
             if(DEBUG) console.log("Order Overview", "OK");
 
             if(status)
-                this.show(new OrderOverviewView({status: status,
-                                                 orderid: orderid,
-                                                 tableNr: tableNr,
-                                                 from: from,
-                                                 to: to}));
+                this.show(new OrderOverviewView({search: {status: status,
+                                                          orderid: orderid,
+                                                          tableNr: tableNr,
+                                                          from: from,
+                                                          to: to,
+                                                          userid: userid}
+                                                }));
             else
                 this.show(new OrderOverviewView());
         },

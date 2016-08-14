@@ -29,9 +29,18 @@ define([ "app",
                             "cancel_order",
                             "success_popup_close");
 
+            var search = null;
+
+            if(options)
+                search = options.search;
+
             this.ordersList = new OrderOverviewCollection();
 
-            this.ordersList.fetch({success: this.render});
+            if(search)
+                this.ordersList.fetch({data: {search: search},
+                                       success: this.render});
+            else
+                this.ordersList.fetch({success: this.render});
         },
 
         events: {

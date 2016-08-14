@@ -18,10 +18,20 @@
         <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
             <legend>Bestellungszeitraum:</legend>
             <label for="order-overview-search-from">Von</label>
-            <input class="form-control" id="order-overview-search-from" type="text" data-role="datebox" data-datebox-mode="timeflipbox" data-options='{"useFocus":true}'/>
+            <input class="form-control" id="order-overview-search-from" type="text" data-role="datebox" data-datebox-mode="timeflipbox" data-options='{"useFocus":true,"overrideSetTimeButtonLabel":"Zeit setzen"}'/>
             <label for="order-overview-search-to">Bis</label>
-            <input class="form-control" id="order-overview-search-to" type="text" data-role="datebox"  data-datebox-mode="timeflipbox" data-options='{"useFocus":true}'/>
+            <input class="form-control" id="order-overview-search-to" type="text" data-role="datebox"  data-datebox-mode="timeflipbox" data-options='{"useFocus":true,"overrideSetTimeButtonLabel":"Zeit setzen"}'/>
         </fieldset>
+
+
+        <label for="order-overview-search-userid">Kellner:</label>
+        <select id="order-overview-search-userid" data-mini="true">
+            <option value="*">Alle</option>
+            <% userList.each(function(user) { %>
+                <option value="<%- user.get('userid') %>"><%- user.get('firstname') %> <%- user.get('lastname') %></option>
+            <% }) %>
+        </select>
+
     </div>
 </div>
 <div data-role="footer" data-theme="b" data-position="fixed" >
