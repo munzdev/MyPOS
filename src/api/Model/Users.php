@@ -188,4 +188,30 @@ class Users
         $o_statement->bindParam(':userid', $i_userid);
         return $o_statement->execute();
     }
+
+    public function GetCallRequestList($i_eventid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT u.userid,
+                                                    u.username,
+                                                    u.firstname,
+                                                    u.lastname,
+                                                    u.phonenumber,
+                                                    u.is_admin,
+                                                    u.call_request,
+                                                    eu.user_roles,
+                                                    eu.events_userid,
+                                                    e.eventid,
+                                                    e.name,
+                                                    e.date
+                                            FROM users u
+                                            INNER JOIN events_user eu ON eu.userid = u.userid
+                                            INNER JOIN events e ON e.eventid = eu.eventid AND e.active = 1
+                                            WHERE eu.eventid = :eventid
+                                                  AND call_request IS NOT NULL");
+
+        $o_statement->bindParam(":eventid", $i_eventid);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll();
+    }
 }

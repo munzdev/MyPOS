@@ -1,0 +1,24 @@
+<div data-role="content">
+    <div class="nav-header"><%= header %></div>
+    <table data-role="table"   id="manager-callback-table" class="ui-responsive table-stroke table-stripe">
+        <thead>
+            <tr>
+                <th>Benutzer</th>
+                <th>Anforderungszeit</th>
+                <th>Telefonnummer</th>
+                <th>Optionen</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% callbacks.each(function(user){ %>
+                <tr>
+                    <th><%- user.get('firstname') %> <%- user.get('lastname') %></th>
+                    <td><%- $.format.date(MyPOS.DateFromMysql(user.get('call_request')), DATE_JS_TIMEFORMAT) %></td>
+                    <td><%- user.get('phonenumber') %></td>
+                    <td><a data-user-id="<%- user.get('userid') %>" class="manager-callback-done-btn ui-btn ui-icon-check ui-mini ui-btn-icon-left">Als erledigt markieren</a></td>
+               </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+<%= footer %>

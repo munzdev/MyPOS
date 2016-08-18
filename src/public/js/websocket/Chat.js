@@ -60,6 +60,12 @@ define([ "app", "wampy"], function(app)
         this.ws.publish(userid, message);
     }
 
+    Chat.prototype.SystemMessage = function(userid, message)
+    {
+        this.ws.call("systemMessage", {userid: userid,
+                                       message: message});
+    }
+
     Chat.prototype.Disconnect = function()
     {
         this._unregisterChanel();

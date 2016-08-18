@@ -5,6 +5,7 @@ namespace Websocket;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\WampServerInterface;
 use Model\Users_Messages;
+use Model\Users;
 
 class Chat implements WampServerInterface {
 
@@ -30,6 +31,21 @@ class Chat implements WampServerInterface {
     }
 
     public function onCall(ConnectionInterface $conn, $id, $topic, array $params) {
+        if($id == 'systemMessage')
+        {
+            $i_sender_userid = $conn->WAMP->subscriptions->current()->getId();
+            $i_reciever_userid = $params['userid'];
+            $str_message = $params['message'];
+
+            echo "Sending System Message from $i_sender_userid to userid $i_reciever_userid: $str_message\n";
+            $this->o_users_messages->AddMessage(null, $i_reciever_userid, $str_message);
+
+            $a_message = array('sender' => 0,
+                               'message' => $str_message);
+
+            $topic->broadcast(json_encode($a_message));
+        }
+
         $conn->callError($id, $topic, 'RPC not supported');
     }
 

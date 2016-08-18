@@ -12,7 +12,7 @@ define(["app",
     var HeaderView = Backbone.View.extend( {
 
     	defaults: {
-    		activeButton: ''
+            activeButton: ''
     	},
         events: {
             "click .header-link": "clicked",
@@ -24,9 +24,6 @@ define(["app",
             e.preventDefault();
 
             var href = $(e.currentTarget).attr('href');
-
-            //this.$el.find("[data-role='navbar'] a.ui-btn-active").removeClass( "ui-btn-active" );
-            //$(e.currentTarget).addClass( "ui-btn-active" );
 
             MyPOS.ChangePage(href);
         },

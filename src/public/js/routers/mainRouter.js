@@ -13,7 +13,12 @@ define([ "app",
          "views/OrderModifyView",
          "views/OrderPayView",
          "views/OrderInfoView",
-         "views/DistributionView"
+         "views/DistributionView",
+         "views/ManagerView",
+         "views/ManagerCallbackView",
+         "views/ManagerCheckView",
+         "views/ManagerGroupmessageView",
+         "views/ManagerStatisticView"
 ], function(app,
             Backbone,
             SessionModel,
@@ -25,7 +30,12 @@ define([ "app",
             OrderModifyView,
             OrderPayView,
             OrderInfoView,
-            DistributionView) {
+            DistributionView,
+            ManagerView,
+            ManagerCallbackView,
+            ManagerCheckView,
+            ManagerGroupmessageView,
+            ManagerStatisticView) {
     "use strict";
 
     // Extends Backbone.Router
@@ -52,7 +62,12 @@ define([ "app",
             "order-modify(/id/:id)(/tableNr/:tableNr)": "order_modify",
             "order-pay/id/:id/tableNr/:tableNr": "order_pay",
             "order-info/id/:id": "order_info",
-            "distribution": "distribution"
+            "distribution": "distribution",
+            "manager": "manager",
+            "manager-callback": "manager_callback",
+            "manager-check": "manager_check",
+            "manager-groupmessage": "manager_groupmessage",
+            "manager-statistic": "manager_statistic",
         },
 
         show: function(view, options){
@@ -161,6 +176,36 @@ define([ "app",
         {
             if(DEBUG) console.log("Distriution", "OK");
             this.show(new DistributionView());
+        },
+
+        manager: function()
+        {
+            if(DEBUG) console.log("Manager", "OK");
+            this.show(new ManagerView());
+        },
+
+        manager_callback: function()
+        {
+            if(DEBUG) console.log("Manager Callback", "OK");
+            this.show(new ManagerCallbackView());
+        },
+
+        manager_check: function()
+        {
+            if(DEBUG) console.log("Manager Check", "OK");
+            this.show(new ManagerCheckView());
+        },
+
+        manager_groupmessage: function()
+        {
+            if(DEBUG) console.log("Manager Groupmessage", "OK");
+            this.show(new ManagerGroupmessageView());
+        },
+
+        manager_statistic: function()
+        {
+            if(DEBUG) console.log("Manager Statistic", "OK");
+            this.show(new ManagerStatisticView());
         }
 
     } );
