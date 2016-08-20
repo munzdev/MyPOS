@@ -14,7 +14,7 @@ class Events
 
     public function GetRoles()
     {
-        $o_statement = $this->o_db->prepare("SELECT * FROM events_user_roles");
+        $o_statement = $this->o_db->prepare("SELECT * FROM events_user_role");
 
         $o_statement->execute();
 
