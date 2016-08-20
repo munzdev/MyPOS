@@ -65,7 +65,7 @@ class Users_Messages
                                                    OR
                                                    (from_events_userid = :to_events_userid
                                                     AND to_events_userid = :from_events_userid)
-                                             ORDER BY `date` DESC
+                                             ORDER BY `date` ASC
                                              LIMIT 15");
 
         foreach($a_message_groupes as $a_message_groupe)
