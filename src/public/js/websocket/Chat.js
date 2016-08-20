@@ -62,8 +62,7 @@ define([ "app", "wampy"], function(app)
 
     Chat.prototype.SystemMessage = function(userid, message)
     {
-        this.ws.call("systemMessage", {userid: userid,
-                                       message: message});
+        this.ws.call("systemMessage", {}, userid, message);
     }
 
     Chat.prototype.Disconnect = function()

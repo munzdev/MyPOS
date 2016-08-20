@@ -20,18 +20,25 @@ function(app, Webservice, Template )
         // The View Constructor
         initialize: function(options)
         {
+            _.bindAll(this, "request_call");
+
             this.is_admin = options.is_admin;
             this.render();
         },
 
         request_call: function()
         {
+            var self = this;
+
             var webservice = new Webservice();
             webservice.formData = {reset: false};
             webservice.action = "Users/CallRequest";
             webservice.callback = {
                 success: function()
                 {
+                    $('#' + self.title).popup('close');
+                    app.ws.api.Trigger("manager-callback");
+
                     MyPOS.DisplayError("Rückruf wurde erfolgreich angefordert!");
                 }
             };

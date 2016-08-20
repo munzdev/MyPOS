@@ -11,67 +11,93 @@ class Chat implements WampServerInterface {
 
     private $o_users_messages = null;
 
+    private $a_subscribers = array();
+
     public function __construct(Users_Messages $o_users_messages)
     {
         $this->o_users_messages = $o_users_messages;
     }
 
-    public function onPublish(ConnectionInterface $conn, $topic, $event, array $exclude, array $eligible) {
-        $conn->WAMP->subscriptions->rewind();
-        $i_sender_userid = $conn->WAMP->subscriptions->current()->getId();
-        $i_reciever_userid = $topic->getId();
+    public function onPublish(ConnectionInterface $o_connection, $o_topic, $str_event, array $a_exclude, array $a_eligible) {
+        $o_connection->WAMP->subscriptions->rewind();
+        $i_sender_userid = $o_connection->WAMP->subscriptions->current()->getId();
+        $i_reciever_userid = $o_topic->getId();
 
-        echo "Sending message from $i_sender_userid to userid $i_reciever_userid: $event\n";
-        $this->o_users_messages->AddMessage($i_sender_userid, $i_reciever_userid, $event);
+        echo "Sending message from $i_sender_userid to userid $i_reciever_userid: $str_event\n";
+        $this->o_users_messages->AddMessage($i_sender_userid, $i_reciever_userid, $str_event);
 
         $a_message = array('sender' => $i_sender_userid,
-                           'message' => $event);
+                           'message' => $str_event);
 
-        $topic->broadcast(json_encode($a_message));
+        $o_topic->broadcast(json_encode($a_message));
     }
 
-    public function onCall(ConnectionInterface $conn, $id, $topic, array $params) {
-        if($id == 'systemMessage')
+    public function onCall(ConnectionInterface $o_connection, $str_id, $o_topic, array $a_params) {
+        if($o_topic->getId() == 'systemMessage')
         {
-            $i_sender_userid = $conn->WAMP->subscriptions->current()->getId();
-            $i_reciever_userid = $params['userid'];
-            $str_message = $params['message'];
+            $i_reciever_userid = $a_params[0];
+            $str_message = $a_params[1];
 
-            echo "Sending System Message from $i_sender_userid to userid $i_reciever_userid: $str_message\n";
+            echo "Sending System Message to userid $i_reciever_userid: $str_message\n";
             $this->o_users_messages->AddMessage(null, $i_reciever_userid, $str_message);
 
-            $a_message = array('sender' => 0,
+            $a_message = array('sender' => '',
                                'message' => $str_message);
 
-            $topic->broadcast(json_encode($a_message));
+            if(isset($this->a_subscribers[$i_reciever_userid]))
+            {
+                $o_target_topic = $this->a_subscribers[$i_reciever_userid]['topic'];
+
+                $o_target_topic->broadcast(json_encode($a_message));
+            }
+
+            return $o_connection->callResult($str_id);
         }
 
-        $conn->callError($id, $topic, 'RPC not supported');
+        return $o_connection->callError($str_id, $o_topic, 'RPC not supported');
     }
 
     // No need to anything, since WampServer adds and removes subscribers to Topics automatically
-    public function onSubscribe(ConnectionInterface $conn, $topic)
+    public function onSubscribe(ConnectionInterface $o_connection, $o_topic)
     {
-        echo "Chat Subscriber: $conn->resourceId for Userid: $topic\n";
+        echo "Chat Subscriber: $o_connection->resourceId for Userid: $o_topic\n";
+
+        if(!isset($this->a_subscribers[$o_topic->getId()]))
+        {
+            $this->a_subscribers[$o_topic->getId()] = array('amount' => 1,
+                                                          'topic' => $o_topic);
+        }
+        else
+        {
+            $this->a_subscribers[$o_topic->getId()]['amount']++;
+        }
     }
 
-    public function onUnSubscribe(ConnectionInterface $conn, $topic)
+    public function onUnSubscribe(ConnectionInterface $o_connection, $o_topic)
     {
-        echo "Chat Unsubscriber: $conn->resourceId for Userid: $topic\n";
+        echo "Chat Unsubscriber: $o_connection->resourceId for Userid: $o_topic\n";
+
+        if(isset($this->a_subscribers[$o_topic->getId()]))
+        {
+            $this->a_subscribers[$o_topic->getId()]['amount']--;
+
+            if($this->a_subscribers[$o_topic->getId()]['amount'] == 0)
+                unset($this->a_subscribers[$o_topic->getId()]);
+        }
     }
 
-    public function onOpen(ConnectionInterface $conn)
+    public function onOpen(ConnectionInterface $o_connection)
     {
-        echo "Chat Connection open: $conn->resourceId\n";
+        echo "Chat Connection open: $o_connection->resourceId\n";
     }
 
-    public function onClose(ConnectionInterface $conn)
+    public function onClose(ConnectionInterface $o_connection)
     {
-        echo "Chat Connection closed: $conn->resourceId\n";
+        echo "Chat Connection closed: $o_connection->resourceId\n";
     }
 
-    public function onError(ConnectionInterface $conn, \Exception $e)
+    public function onError(ConnectionInterface $o_connection, \Exception $o_exception)
     {
-        echo "Chat Connection error: $conn->resourceId -> $e\n";
+        echo "Chat Connection error: $o_connection->resourceId -> $o_exception\n";
     }
 }

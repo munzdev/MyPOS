@@ -52,6 +52,14 @@ function( app,
             webservice.call();
         },
 
+        apiCommandReciever: function(command)
+        {
+            if(command == 'manager-callback')
+            {
+                MyPOS.ReloadPage();
+            }
+        },
+
         // Renders all of the Category models on the UI
         render: function() {
             var header = new HeaderView();
