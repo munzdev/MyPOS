@@ -16,4 +16,12 @@ class Events extends SecurityController
 
         return $a_printers;
     }
+
+
+    public function GetRolesAction()
+    {
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->GetRoles();
+    }
 }
