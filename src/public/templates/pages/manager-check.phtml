@@ -1,5 +1,109 @@
 <div data-role="content">
     <div class="nav-header"><%= header %></div>
-    Checks!!!
+    <div data-role="navbar" id="manager-check-verified-status" >
+        <ul>
+            <li><a data-role="tab"  data-value="0" class="manager-check-verify-status-btn <% if(verifiedStatus == '0') { %>ui-btn-active<% } %>">Aktuelle Prüfungen</a></li>
+            <li><a data-role="tab" data-value="1" class="manager-check-verify-status-btn <% if(verifiedStatus == '1') { %>ui-btn-active<% } %>">Erledigte Prüfungen</a></li>
+        </ul>
+    </div>
+    <table data-role="table" id="manager-check-table" class="ui-responsive table-stroke table-stripe">
+        <thead>
+            <tr>
+                <th>Tisch</th>
+                <th>Bestellnummer</th>
+                <th>Menügruppe</th>
+                <th>Anzahl</th>
+                <th>Einzelpreis</th>
+                <th>Detail</th>
+                <th>Optionen</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% checks.each(function(check){ %>
+                <tr>
+                    <th><%- check.get('nameTable') %></th>
+                    <td><%- check.get('orderid') %></td>
+                    <td><%- check.get('nameGroup') %></td>
+                    <td><%- check.get('amount') %></td>
+                    <td><% if(check.get('single_price') != null) {  print(parseFloat(check.get('single_price')).toFixed(2) + ' €'); } %></td>
+                    <td><%- check.get('extra_detail') %></td>
+                    <td>
+                        <a data-id="<%- check.get('orders_details_special_extraid') %>" class="manager-check-info-btn ui-btn ui-icon-info ui-mini ui-btn-icon-left">Details</a>
+                        <% if(check.get('verified') == 0) { %>
+                            <a data-id="<%- check.get('orders_details_special_extraid') %>" class="manager-check-verify-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
+                        <% } %>
+                    </td>
+               </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+<div data-role="popup" id="manager-check-info-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+    <div data-role="header" data-theme="a">
+        <h1>Details</h1>
+    </div>
+    <div role="main" class="ui-content">
+        <ul data-role="listview" data-inset="true">
+            <li style="white-space: normal;">Tisch: <span id="manager-check-info-tablenr"></span></li>
+            <li style="white-space: normal;">Bestellnummer: <span id="manager-check-info-orderid"></span></li>
+            <li style="white-space: normal;">Kellner: <span id="manager-check-info-nameUser"></span></li>
+            <li style="white-space: normal;">Menügruppe: <span id="manager-check-info-menu-group"></span></li>
+            <li style="white-space: normal;">Anzahl: <span id="manager-check-info-amount"></span></li>
+            <li style="white-space: normal;">Einzelpreis: <span id="manager-check-info-single-price"></span></li>
+            <li style="white-space: normal;">Einzelpreis festgelegt von: <span id="manager-check-info-single-price-modified-by"></span></li>
+            <li style="white-space: normal;">Detail: <span id="manager-check-info-extra-detail"></span></li>
+            <li style="white-space: normal;">Geprüft: <span id="manager-check-info-verified"></span></li>
+            <li style="white-space: normal;">Fertig: <span id="manager-check-info-finished"></span></li>
+            <li style="white-space: normal;">Verfügbarkeit: <span id="manager-check-info-availability"></span></li>
+            <li style="white-space: normal;">Verfügbarkeit Anzahl: <span id="manager-check-info-availability-amount"></span></li>
+        </ul>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Schliessen</a>
+    </div>
+</div>
+<div data-role="popup" id="manager-check-verify-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+    <div data-role="header" data-theme="a">
+        <h1>Bearbeiten</h1>
+    </div>
+    <div role="main" class="ui-content">
+        <ul data-role="listview" data-inset="true">
+            <li style="white-space: normal;">Tisch: <span id="manager-check-verify-tablenr"></span></li>
+            <li style="white-space: normal;">Bestellnummer: <span id="manager-check-verify-orderid"></span></li>
+        </ul>
+        <form>
+            <div class="ui-field-contain">
+                <label for="manager-check-verify-single-price">Einzelpreis:</label>
+                <input type="number" id="manager-check-verify-single-price" />
+            </div>
+
+            <div class="ui-field-contain">
+                <label for="manager-check-verify-menu-group">Menügruppe:</label>
+                <select id="manager-check-verify-menu-group">
+                    <% products.each(function(category){ %>
+                        <optgroup label="<%- category.get('name') %>">
+                            <% category.get('groupes').each(function(groupe){ %>
+                                <option value="<%- groupe.get('menu_groupid') %>"><%- groupe.get('name') %></option>
+                            <% }); %>
+                        </optgroup>
+                    <% }); %>
+                </select>
+            </div>
+
+            <div class="ui-field-contain">
+                <label for="manager-check-verify-availability">Verfügbarkeit:</label>
+                <select id="manager-check-verify-availability">
+                    <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>">Verfügbar</option>
+                    <option value="<%- ORDER_AVAILABILITY_DELAYED %>" >Verspätet</option>
+                    <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>">Ausverkauft</option>
+                </select>
+            </div>
+
+            <div class="ui-field-contain">
+                <label for="manager-check-verify-availability-amount">Verfügbarkeit Anzahl:</label>
+                <input type="number" id="manager-check-verify-availability-amount" placeholder="Ohne Limit" />
+            </div>
+        </form>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-inline" data-rel="back">Abbrechen</a>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-inline" id='manager-check-verify-finished-btn'>Speichern</a>
+    </div>
 </div>
 <%= footer %>

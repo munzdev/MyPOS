@@ -31,6 +31,20 @@ class API implements WampServerInterface {
                 }
                 break;
 
+            case 'manager-check':
+                if(isset($this->a_subscribers[MyPOS\USER_ROLE_MANAGER]))
+                {
+                    echo "API command manager-check\n";
+
+                    $o_target_topic = $this->a_subscribers[MyPOS\USER_ROLE_MANAGER]['topic'];
+
+                    $a_message = array('command' => $o_topic->getId(),
+                                       'options' => array('systemMessage' => 'Ein Sonderwunsch wurde hinzugefügt!'));
+
+                    $o_target_topic->broadcast(json_encode($a_message));
+                }
+                break;
+
             default:
                 $o_connection->callError($id, $o_topic, 'Command not supported');
                 break;
@@ -52,6 +66,7 @@ class API implements WampServerInterface {
             $this->a_subscribers[$o_topic->getId()]['amount']++;
         }
     }
+
     public function onUnSubscribe(ConnectionInterface $o_connection, $o_connection)
     {
         echo "API Unsubscriber: $o_connection->resourceId for Role: $o_topic\n";

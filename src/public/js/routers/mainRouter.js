@@ -65,7 +65,7 @@ define([ "app",
             "distribution": "distribution",
             "manager": "manager",
             "manager-callback": "manager_callback",
-            "manager-check": "manager_check",
+            "manager-check(/verified/:verified)": "manager_check",
             "manager-groupmessage": "manager_groupmessage",
             "manager-statistic": "manager_statistic",
         },
@@ -190,10 +190,10 @@ define([ "app",
             this.show(new ManagerCallbackView());
         },
 
-        manager_check: function()
+        manager_check: function(verified)
         {
             if(DEBUG) console.log("Manager Check", "OK");
-            this.show(new ManagerCheckView());
+            this.show(new ManagerCheckView({verified: verified}));
         },
 
         manager_groupmessage: function()

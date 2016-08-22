@@ -409,6 +409,19 @@ function(  app,
                                    options: this.options};
             webservice.callback = {
                 success: function(result) {
+                    var hasSpecialOrders = false;
+
+                    self.order.each(function(category) {
+                        if(!hasSpecialOrders)
+                        {
+                            var isSpecialOrder = category.get('menu_typeid') == "0";
+                            hasSpecialOrders = isSpecialOrder;
+                        }
+                    });
+
+                    if(hasSpecialOrders)
+                        app.ws.api.Trigger("manager-check");
+
                     MyPOS.ChangePage("#order-pay/id/" + result + "/tableNr/" + self.options.tableNr);
                 }
             };

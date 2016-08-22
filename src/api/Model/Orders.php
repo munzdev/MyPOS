@@ -508,6 +508,62 @@ class Orders
         return $o_statement->fetchAll();
     }
 
+    public function GetSpecialExtraList($i_eventid, $b_verified)
+    {
+        $o_statement = $this->o_db->prepare("SELECT odse.orders_details_special_extraid,
+                                                    odse.orderid,
+                                                    u1.userid,
+                                                    CONCAT(u1.firstname, ' ', u1.lastname) AS nameUser,
+                                                    t.name AS nameTable,
+                                                    odse.menu_groupid,
+                                                    mg.name AS nameGroup,
+                                                    odse.amount,
+                                                    odse.single_price,
+                                                    odse.single_price_modified_by_userid,
+                                                    CONCAT(u2.firstname, ' ', u2.lastname) AS single_price_modified_by,
+                                                    odse.extra_detail,
+                                                    odse.verified,
+                                                    odse.finished,
+                                                    odse.availability,
+                                                    odse.availability_amount
+                                             FROM orders_details_special_extra odse
+                                             INNER JOIN orders o ON o.orderid = odse.orderid
+                                             INNER JOIN users u1 ON u1.userid = o.userid
+                                             INNER JOIN tables t ON t.tableid = o.tableid
+                                             LEFT JOIN users u2 ON u2.userid = odse.single_price_modified_by_userid
+                                             LEFT JOIN menu_groupes mg ON mg.menu_groupid = odse.menu_groupid
+                                             WHERE o.eventid = :eventid
+                                                   AND odse.verified = :verified
+                                                   AND odse.amount > 0");
+
+        $o_statement->bindParam(":eventid", $i_eventid);
+        $o_statement->bindParam(":verified", $b_verified);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll();
+    }
+
+    public function SetSpexialExtraDetails($i_orders_details_special_extraid, $i_single_price, $i_menu_groupid, $str_availability, $i_availability_amount, $i_single_price_modified_by_userid)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE orders_details_special_extra
+                                             SET single_price = :single_price,
+                                                 menu_groupid = :menu_groupid,
+                                                 availability = :availability,
+                                                 availability_amount = :availability_amount,
+                                                 verified = 1,
+                                                 single_price_modified_by_userid = :single_price_modified_by_userid
+                                             WHERE orders_details_special_extraid = :orders_details_special_extraid");
+
+        $o_statement->bindParam(":single_price", $i_single_price);
+        $o_statement->bindParam(":menu_groupid", $i_menu_groupid);
+        $o_statement->bindParam(":availability", $str_availability);
+        $o_statement->bindParam(":availability_amount", empty($i_availability_amount) ? null : $i_availability_amount);
+        $o_statement->bindParam(":single_price_modified_by_userid", $i_single_price_modified_by_userid);
+        $o_statement->bindParam(":orders_details_special_extraid", $i_orders_details_special_extraid);
+
+        return $o_statement->execute();
+    }
+
     public function GetSpecialExtra($i_orders_details_special_extraId)
     {
         $o_statement = $this->o_db->prepare("SELECT odse.orders_details_special_extraid,
