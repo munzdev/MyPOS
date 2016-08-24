@@ -21,7 +21,7 @@ class Users
 
     private $str_select_admin_details = "SELECT *,
                                                 NULL AS events_userid,
-                                                (SELECT SUM(user_roleid) FROM user_role) AS user_roles,
+                                                (SELECT SUM(events_user_roleid) FROM events_user_role) AS user_roles,
                                                 0 AS eventid,
                                                 'Admin Login' AS name,
                                                 NOW() AS date
