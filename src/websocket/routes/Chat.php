@@ -57,7 +57,6 @@ class Chat implements WampServerInterface {
         return $o_connection->callError($str_id, $o_topic, 'RPC not supported');
     }
 
-    // No need to anything, since WampServer adds and removes subscribers to Topics automatically
     public function onSubscribe(ConnectionInterface $o_connection, $o_topic)
     {
         echo "Chat Subscriber: $o_connection->resourceId for Userid: $o_topic\n";
@@ -65,7 +64,7 @@ class Chat implements WampServerInterface {
         if(!isset($this->a_subscribers[$o_topic->getId()]))
         {
             $this->a_subscribers[$o_topic->getId()] = array('amount' => 1,
-                                                          'topic' => $o_topic);
+                                                            'topic' => $o_topic);
         }
         else
         {
