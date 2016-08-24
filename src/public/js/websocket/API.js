@@ -39,15 +39,18 @@ define([ "app", "Webservice", "wampy"], function(app, Webservice)
             success: function(roles)
             {
                 var user_roles = app.session.user.get('user_roles');
+                var userid = app.session.user.get('userid');
 
                 _.each(roles, function(role) {
                     if(user_roles & role.events_user_roleid)
                     {
                         if(DEBUG) console.log("REGISTERED TO API ROLE: " + role.name);
 
-                        self.rolesSubscribed.push(role);
+                        var chanelName = userid + "-" + role.events_user_roleid;
 
-                        self.ws.subscribe(role.events_user_roleid,
+                        self.rolesSubscribed.push(chanelName);
+
+                        self.ws.subscribe(chanelName,
                                           self._commandRecieved);
                     }
                 });
@@ -60,10 +63,10 @@ define([ "app", "Webservice", "wampy"], function(app, Webservice)
     {
         var self = this;
 
-        _.each(self.rolesSubscribed, function(role) {
-            if(DEBUG) console.log("UNREGISTERED TO API ROLE: " + role.name);
+        _.each(self.rolesSubscribed, function(chanelName) {
+            if(DEBUG) console.log("UNREGISTERED TO API ROLE: " + chanelName);
 
-            self.ws.unsubscribe(role.events_user_roleid);
+            self.ws.unsubscribe(chanelName);
         });
 
     }
@@ -92,7 +95,7 @@ define([ "app", "Webservice", "wampy"], function(app, Webservice)
 
     API.prototype.Trigger = function(command, callback)
     {
-        this.ws.call(command, callback);
+        this.ws.call.apply(this.ws, arguments);
     }
 
     API.prototype.Connect = function()

@@ -45,38 +45,57 @@ class API implements WampServerInterface {
                 }
                 break;
 
+            case 'manager-groupmessage':
+                $i_user_roleid = $params[0];
+
+                $a_user_ids = array();
+
+                if(isset($this->a_subscribers[$i_user_roleid]))
+                {
+                    $a_user_ids = array_values($this->a_subscribers[$i_user_roleid]['users']);
+                }
+
+                return $o_connection->callResult($id, $a_user_ids);
+                break;
+
             default:
                 $o_connection->callError($id, $o_topic, 'Command not supported');
                 break;
         }
     }
 
-    // No need to anything, since WampServer adds and removes subscribers to Topics automatically
     public function onSubscribe(ConnectionInterface $o_connection, $o_topic)
     {
-        echo "API Subscriber: $o_connection->resourceId for Role: $o_topic\n";
+        list($i_userid, $i_user_roleid) = explode('-', $o_topic->getId());
 
-        if(!isset($this->a_subscribers[$o_topic->getId()]))
+        echo "API Subscriber: $o_connection->resourceId with Userid $i_userid for Role: $i_user_roleid\n";
+
+        if(!isset($this->a_subscribers[$i_user_roleid]))
         {
-            $this->a_subscribers[$o_topic->getId()] = array('amount' => 1,
-                                                            'topic' => $o_topic);
+            $this->a_subscribers[$i_user_roleid] = array('users' => array($o_connection->resourceId => $i_userid),
+                                                         'topic' => $o_topic);
         }
         else
         {
-            $this->a_subscribers[$o_topic->getId()]['amount']++;
+            $this->a_subscribers[$i_user_roleid]['users'][$o_connection->resourceId] = $i_userid;
         }
     }
 
-    public function onUnSubscribe(ConnectionInterface $o_connection, $o_connection)
+    public function onUnSubscribe(ConnectionInterface $o_connection, $o_topic)
     {
-        echo "API Unsubscriber: $o_connection->resourceId for Role: $o_topic\n";
+        list($i_userid, $i_user_roleid) = explode('-', $o_topic->getId());
 
-        if(isset($this->a_subscribers[$o_topic->getId()]))
+        echo "API Unsubscriber: $o_connection->resourceId with Userid $i_userid  for Role: $i_user_roleid\n";
+
+        if(isset($this->a_subscribers[$i_user_roleid]))
         {
-            $this->a_subscribers[$o_topic->getId()]['amount']--;
+            $i_resourceId = array_search($i_userid, $this->a_subscribers[$i_user_roleid]['users']);
 
-            if($this->a_subscribers[$o_topic->getId()]['amount'] == 0)
-                unset($this->a_subscribers[$o_topic->getId()]);
+            if($i_resourceId)
+                unset($this->a_subscribers[$i_user_roleid]['users'][$i_resourceId]);
+
+            if(count($this->a_subscribers[$i_user_roleid]['users']) == 0)
+                unset($this->a_subscribers[$i_user_roleid]);
         }
     }
 

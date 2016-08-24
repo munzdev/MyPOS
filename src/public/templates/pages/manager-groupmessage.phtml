@@ -1,5 +1,15 @@
 <div data-role="content">
     <div class="nav-header"><%= header %></div>
-    Groupmessage!!!
+    <fieldset data-role="controlgroup" id="manager-groupmessage-userRoles">
+        <legend>Benutzergruppen:</legend>
+        <% userRoleCollection.each(function(userRole) { %>
+            <input type="checkbox" name="userRole" value="<%- userRole.get('events_user_roleid') %>" id="manager-groupmessage-checkbox-<%- userRole.get('events_user_roleid') %>">
+            <label for="manager-groupmessage-checkbox-<%- userRole.get('events_user_roleid') %>"><%- userRole.get('name') %></label>
+        <% }); %>
+    </fieldset>
+    <div class="ui-field-contain">
+        <input type="text" id="manager-groupmessage-message" placeholder="Nachricht" />
+        <a id="manager-groupmessage-send" class="ui-btn ui-btn-inline" data-rel="back">Senden</a>
+    </div>
 </div>
 <%= footer %>
