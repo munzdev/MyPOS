@@ -596,6 +596,21 @@ class Orders
         return true;
     }
 
+    public function SetOrderDetailPrice($i_orders_detailId, $i_price, $i_userid)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE orders_details
+                                             SET single_price = :price,
+                                                 single_price_modified_by_userid = :userid
+                                             WHERE orders_detailid = :orders_detailid");
+
+        $o_statement->bindParam(":orders_detailid", $i_orders_detailId);
+        $o_statement->bindParam(":price", $i_price);
+        $o_statement->bindParam(":userid", $i_userid);
+        $o_statement->execute();
+
+        return true;
+    }
+
     public function DeleteOrderDetail($i_orders_detailId)
     {
         $o_statement = $this->o_db->prepare("DELETE FROM orders_details
@@ -939,6 +954,21 @@ class Orders
         return $o_statement->execute();
     }
 
+    public function SetSpecialExtraAvailabilityPrice($i_orders_details_special_extraid, $i_price, $i_userid)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE orders_details_special_extra
+                                             SET single_price = :price,
+                                                 single_price_modified_by_userid = :userid
+                                             WHERE orders_details_special_extraid = :i_orders_details_special_extraid");
+
+        $o_statement->bindParam(":i_orders_details_special_extraid", $i_orders_details_special_extraid);
+        $o_statement->bindParam(":price", $i_price);
+        $o_statement->bindParam(":userid", $i_userid);
+        $o_statement->execute();
+
+        return true;
+    }
+
     public function SetSpecialExtraAvailabilityStatus($i_orders_details_special_extraid, $str_status)
     {
         $o_statement = $this->o_db->prepare("UPDATE orders_details_special_extra
@@ -948,6 +978,28 @@ class Orders
         $o_statement->bindParam(":orders_details_special_extraid", $i_orders_details_special_extraid);
         $o_statement->bindParam(":status", $str_status);
 
+        return $o_statement->execute();
+    }
+
+    public function SetPriority($i_orderid, $i_eventid)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE orders
+                                             SET priority = 1
+                                             WHERE orderid = :orderid");
+
+        $o_statement->bindParam(":orderid", $i_orderid);
+        $o_statement->execute();
+
+        $o_statement = $this->o_db->prepare("SET @pos:=1;
+                                             UPDATE orders
+                                             SET priority = (SELECT @pos:=@pos + 1)
+                                             WHERE orderid <> :orderid
+                                                   AND eventid = :eventid
+                                                   AND finished IS NULL
+                                             ORDER BY priority ASC");
+
+        $o_statement->bindParam(":orderid", $i_orderid);
+        $o_statement->bindParam(":eventid", $i_eventid);
         return $o_statement->execute();
     }
 }

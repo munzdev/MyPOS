@@ -18,6 +18,7 @@ define([
                 button_edit: false,
                 button_pay: false,
                 button_cancel: false,
+                manage: false,
                 finished: false
             };
         }

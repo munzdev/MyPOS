@@ -14,55 +14,62 @@
             </tr>
         </thead>
         <tbody>
-           <% orders.each(function(order){ %>
-                       <tr>
-                <th><%- order.get('table_name') %></th>
-                <td><%-  parseFloat(order.get('price')).toFixed(2) %> €</td>
-                <td>
-                   <% switch(parseInt(order.get('status'))) {
-                      case ORDER_STATUS_WAITING: %>
-                       in Warteschlange
-                      <% break;
-                      case ORDER_STATUS_IN_PROGRESS: %>
-                       in Bearbeitung
-                      <% break;
-                      case ORDER_STATUS_FINISHED: %>
-                       Fertig
-                      <% break;
-                   } %>-
-                   <% if(order.get('open') == 0) { %>
-                       <span style="color: green;">Bezahlt</span>
-                   <% } else { %>
-                       <span style="color: red;">Unbezahlt</span>
-                   <% } %>
-                </td>
-                <td>
-                    <% if (order.get('button_info') ) { %>
-                       <a data-order-id="<%- order.get('orderid') %>" class="order-overview-info-btn ui-btn ui-icon-info ui-mini ui-btn-icon-left">Info</a>
-                    <% } %>
-                    <% if (order.get('button_pay') ) { %>
-                       <a data-order-id="<%- order.get('orderid') %>" data-table-nr="<%- order.get('table_name') %>" class="order-overview-pay-btn ui-btn ui-icon-shop ui-mini ui-btn-icon-left">Bezahlen</a>
-                    <% } %>
-                    <% if (order.get('button_edit') ) { %>
-                       <a data-order-id="<%- order.get('orderid') %>" data-table-nr="<%- order.get('table_name') %>"  class="order-overview-modify-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
-                    <% } %>
-                    <% if (order.get('button_cancel') ) { %>
-                       <a data-order-id="<%- order.get('orderid') %>" class="order-overview-cancel-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">Storno</a>
-                    <% } %>
-                </td>
-               </tr>
-           <% }); %>
+            <% orders.each(function(order){ %>
+                <tr>
+                    <th><%- order.get('table_name') %></th>
+                    <td><%-  parseFloat(order.get('price')).toFixed(2) %> €</td>
+                    <td>
+                        <% switch(parseInt(order.get('status'))) {
+                            case ORDER_STATUS_WAITING: %>
+                                in Warteschlange
+                            <% break;
+                            case ORDER_STATUS_IN_PROGRESS: %>
+                                in Bearbeitung
+                            <% break;
+                            case ORDER_STATUS_FINISHED: %>
+                                Fertig
+                            <% break;
+                        } %>
+                        -
+                        <% if(order.get('open') == 0) { %>
+                            <span style="color: green;">Bezahlt</span>
+                        <% } else { %>
+                            <span style="color: red;">Unbezahlt</span>
+                        <% } %>
+                    </td>
+                    <td>
+                        <% if (order.get('button_info') ) { %>
+                           <a data-order-id="<%- order.get('orderid') %>" class="order-overview-info-btn ui-btn ui-icon-info ui-mini ui-btn-icon-left">Info</a>
+                        <% } %>
+                        <% if (order.get('button_pay') ) { %>
+                           <a data-order-id="<%- order.get('orderid') %>" data-table-nr="<%- order.get('table_name') %>" class="order-overview-pay-btn ui-btn ui-icon-shop ui-mini ui-btn-icon-left">Bezahlen</a>
+                        <% } %>
+                        <% if (order.get('button_edit') ) { %>
+                           <a data-order-id="<%- order.get('orderid') %>" data-table-nr="<%- order.get('table_name') %>"  class="order-overview-modify-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
+                        <% } %>
+                        <% if (order.get('button_cancel') ) { %>
+                           <a data-order-id="<%- order.get('orderid') %>" class="order-overview-cancel-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">Storno</a>
+                        <% } %>
+                        <% if (order.get('manage') && parseInt(order.get('status')) == ORDER_STATUS_WAITING) { %>
+                            <a data-order-id="<%- order.get('orderid') %>" class="order-overview-manage-priority-btn ui-btn ui-icon-alert ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">An erste stelle reihen</a>
+                        <% } %>
+                        <% if (order.get('manage') ) { %>
+                           <a data-order-id="<%- order.get('orderid') %>" class="order-overview-manage-price-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">Preise ändern</a>
+                        <% } %>
+                    </td>
+                </tr>
+            <% }); %>
         </tbody>
     </table>
 </div>
-<div data-role="popup" id="order-overview-cancel-order-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+<div data-role="popup" id="order-overview-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
     <div data-role="header" data-theme="a">
-        <h1>Bestellung stornieren?</h1>
+        <h1 id="order-overview-dialog-title"></h1>
     </div>
     <div role="main" class="ui-content">
-        <h3 class="ui-title">Sind sie sicher das die Bestellung storniert werden soll?</h3>
+        <h3 class="ui-title" id="order-overview-dialog-text"></h3>
         <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Abbrechen</a>
-        <a id='order-overview-cancel-order-dialog-continue' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
+        <a id='order-overview-dialog-continue' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
     </div>
 </div>
 <div data-role="popup" data-overlay-theme="b" data-theme="b" data-position-to="window" id="order-overview-cancel-success-popup" class="ui-content">

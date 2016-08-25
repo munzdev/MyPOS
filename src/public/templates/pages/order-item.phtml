@@ -21,6 +21,10 @@
             <br/>
             Gesamt: <strong><%- parseFloat(totalPrice).toFixed(2) %>€</strong>
         <% } %>
+        <% if(typeof edit !== "undefined") { %>
+            <br/>
+            <a data-menu-typeid="<%- menu_typeid %>" data-index="<%- index %>" class="order-item-edit ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-left ui-mini">Bearbeiten</a>
+        <% } %>
         <% if(!skipCounts) { %>
             <br/>
             <a data-menu-typeid="<%- menu_typeid %>" data-index="<%- index %>" class="order-item-up ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-notext">+</a>

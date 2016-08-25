@@ -12,6 +12,7 @@ define([ "app",
          "views/OrderNewView",
          "views/OrderModifyView",
          "views/OrderPayView",
+         "views/OrderModifyPriceView",
          "views/OrderInfoView",
          "views/DistributionView",
          "views/ManagerView",
@@ -29,6 +30,7 @@ define([ "app",
             OrderNewView,
             OrderModifyView,
             OrderPayView,
+            OrderModifyPriceView,
             OrderInfoView,
             DistributionView,
             ManagerView,
@@ -68,6 +70,7 @@ define([ "app",
             "manager-check(/verified/:verified)": "manager_check",
             "manager-groupmessage": "manager_groupmessage",
             "manager-statistic": "manager_statistic",
+            "order-modify-price/orderid/:id": "order_modify_price",
         },
 
         show: function(view, options){
@@ -206,6 +209,12 @@ define([ "app",
         {
             if(DEBUG) console.log("Manager Statistic", "OK");
             this.show(new ManagerStatisticView());
+        },
+
+        order_modify_price: function(orderid)
+        {
+            if(DEBUG) console.log("Order Modify Price", "OK");
+            this.show(new OrderModifyPriceView({orderid: orderid}));
         }
 
     } );

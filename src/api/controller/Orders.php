@@ -87,6 +87,7 @@ class Orders extends SecurityController
             $a_order['button_edit'] = $a_order['status'] == MyPOS\ORDER_STATUS_WAITING;
             $a_order['button_pay'] = $a_order['open'] > 0;
             $a_order['button_cancel'] = $a_order['status'] == MyPOS\ORDER_STATUS_WAITING;
+            $a_order['manage'] = $a_user['user_roles'] & MyPOS\USER_ROLE_MANAGER;
             $a_order['finished'] = $a_order['status'] == MyPOS\ORDER_STATUS_FINISHED;
 
             $a_orders[] = $a_order;
