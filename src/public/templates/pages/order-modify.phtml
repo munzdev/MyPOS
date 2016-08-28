@@ -15,7 +15,11 @@
                     <% category.get('groupes').each(function(groupe){ %>
                         <li data-role="list-divider"><%- groupe.get('name') %></li>
                         <% groupe.get('menues').each(function(menu){ %>
-                            <li><a href="#order-modify-panel-<%- menu.get('menuid') %>" class='order-modify-menu-item'><%- menu.get('name') %> <span class="ui-li-count"><%- parseFloat(menu.get('price')).toFixed(2) %> €</span></a></li>
+                            <% if(menu.get('availability') == ORDER_AVAILABILITY_OUT_OF_ORDER) { %>
+                                <li><a style="color: red"><%- menu.get('name') %><span class="ui-li-count"><%- parseFloat(menu.get('price')).toFixed(2) %> €</span></a></li>
+                            <% } else { %>
+                                <li><a href="#order-modify-panel-<%- menu.get('menuid') %>" class='order-modify-menu-item' <% if(menu.get('availability') == ORDER_AVAILABILITY_DELAYED) { %> style="color: orange" <% } %> ><%- menu.get('name') %><span class="ui-li-count"><%- parseFloat(menu.get('price')).toFixed(2) %> €</span></a></li>
+                            <% } %>
                         <% }); %>
                     <% }); %>
                 </ul>
@@ -64,8 +68,13 @@
                         <fieldset data-role="controlgroup" data-mini="true">
                             <legend>Besonderheiten:</legend>
                             <% menu.get('extras').each(function(extra){ %>
-                                <input type="checkbox" name="extra-<%- menu.get('menuid') %>" id="extra-<%- menu.get('menuid') %>-<%- extra.get('menu_extraid') %>" value="<%- extra.get('menu_extraid') %>">
-                                <label for="extra-<%- menu.get('menuid') %>-<%- extra.get('menu_extraid') %>"><%- extra.get('name') %><% if(extra.get('price') != 0) { %><span class="ui-li-count"><%- parseFloat(extra.get('price')).toFixed(2) %> €</span><% } %></label>
+                                <% if(extra.get('availability') == ORDER_AVAILABILITY_OUT_OF_ORDER) { %>
+                                    <input type="checkbox" id="extra-<%- menu.get('menuid') %>-<%- extra.get('menu_extraid') %>" value="<%- extra.get('menu_extraid') %>" disabled="" >
+                                    <label for="extra-<%- menu.get('menuid') %>-<%- extra.get('menu_extraid') %>" style="color: red"><%- extra.get('name') %><% if(extra.get('price') != 0) { %><span class="ui-li-count"><%- parseFloat(extra.get('price')).toFixed(2) %> €</span><% } %></label>
+                                <% } else {%>
+                                    <input type="checkbox" name="extra-<%- menu.get('menuid') %>" id="extra-<%- menu.get('menuid') %>-<%- extra.get('menu_extraid') %>" value="<%- extra.get('menu_extraid') %>">
+                                    <label for="extra-<%- menu.get('menuid') %>-<%- extra.get('menu_extraid') %>" <% if(extra.get('availability') == ORDER_AVAILABILITY_DELAYED) { %> style="color: orange" <% } %>><%- extra.get('name') %><% if(extra.get('price') != 0) { %><span class="ui-li-count"><%- parseFloat(extra.get('price')).toFixed(2) %> €</span><% } %></label>
+                                <% } %>
                             <% }); %>
                         </fieldset>
                     <% } %>
