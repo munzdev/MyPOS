@@ -422,6 +422,8 @@ function(  app,
                     if(hasSpecialOrders)
                         app.ws.api.Trigger("manager-check");
 
+                    app.ws.api.Trigger("distribution-update");
+
                     MyPOS.ChangePage("#order-pay/id/" + result + "/tableNr/" + self.options.tableNr);
                 }
             };

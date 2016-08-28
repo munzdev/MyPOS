@@ -82,7 +82,7 @@ define([ "app", "Webservice", "wampy"], function(app, Webservice)
             app.router.currentView.apiCommandReciever(commandData.command, commandData.options);
         }
 
-        if(commandData.options.systemMessage)
+        if(typeof commandData.options !== 'undefined' && commandData.options.systemMessage)
         {
             app.ws.chat.SystemMessage(app.session.user.get('userid'), commandData.options.systemMessage);
         }
@@ -90,6 +90,11 @@ define([ "app", "Webservice", "wampy"], function(app, Webservice)
         if(commandData.command.substring(0, 7) == 'global:')
         {
             var command = commandData.command.substring(7);
+
+            if(command == 'product-update')
+            {
+                app.session.products.fetch({});
+            }
         }
     }
 

@@ -90,7 +90,10 @@ function( app,
                                    id: id,
                                    amount: value};
             webservice.callback = {
-                success: MyPOS.ReloadPage
+                success: function(){
+                    app.ws.api.Trigger('global:product-update');
+                    MyPOS.ReloadPage();
+                }
             };
             webservice.call();
         },
@@ -108,7 +111,10 @@ function( app,
                                    id: id,
                                    status: value};
             webservice.callback = {
-                success: MyPOS.ReloadPage
+                success: function(){
+                    app.ws.api.Trigger('global:product-update');
+                    MyPOS.ReloadPage();
+                }
             };
             webservice.call();
         },
@@ -182,6 +188,14 @@ function( app,
         {
             $('#distribution-tab-current-order').hide();
             $('#distribution-tab-set-avaibility').hide();
+        },
+
+        apiCommandReciever: function(command)
+        {
+            if(command == 'distribution-update' && this.orderDatas.GetOrder.get('orders_details').length == 0)
+            {
+                MyPOS.ReloadPage();
+            }
         },
 
         // Renders all of the Category models on the UI

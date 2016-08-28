@@ -15,13 +15,13 @@ class API implements WampServerInterface {
     }
 
     public function onCall(ConnectionInterface $o_connection, $id, $o_topic, array $params) {
+        echo "API command " . $o_topic->getId() . "\n";
+
         switch($o_topic->getId())
         {
             case 'manager-callback':
                 if(isset($this->a_subscribers[MyPOS\USER_ROLE_MANAGER]))
                 {
-                    echo "API command manager-callback\n";
-
                     $o_target_topic = $this->a_subscribers[MyPOS\USER_ROLE_MANAGER]['topic'];
 
                     $a_message = array('command' => $o_topic->getId(),
@@ -34,8 +34,6 @@ class API implements WampServerInterface {
             case 'manager-check':
                 if(isset($this->a_subscribers[MyPOS\USER_ROLE_MANAGER]))
                 {
-                    echo "API command manager-check\n";
-
                     $o_target_topic = $this->a_subscribers[MyPOS\USER_ROLE_MANAGER]['topic'];
 
                     $a_message = array('command' => $o_topic->getId(),
@@ -58,6 +56,44 @@ class API implements WampServerInterface {
                 return $o_connection->callResult($id, $a_user_ids);
                 break;
 
+            case 'distribution-update':
+                if(isset($this->a_subscribers[MyPOS\USER_ROLE_DISTRIBUTION]))
+                {
+                    $o_target_topic = $this->a_subscribers[MyPOS\USER_ROLE_DISTRIBUTION]['topic'];
+
+                    $a_message = array('command' => $o_topic->getId());
+
+                    $o_target_topic->broadcast(json_encode($a_message));
+                }
+                break;
+
+            case 'global:product-update':
+                $a_userids = array();
+
+                foreach ($this->a_subscribers as $a_subscriber)
+                {
+                    $o_target_topic = $a_subscriber['topic'];
+
+                    $a_userids_message_recieved = array_intersect($a_subscriber['users'], $a_userids);
+
+                    $a_exclude = array();
+
+                    foreach($a_subscriber['users'] as $i_sessionId => $i_userid)
+                    {
+                        if(array_search($i_userid, $a_userids_message_recieved) !== false)
+                        {
+                            $a_exclude[] = $i_sessionId;
+                        }
+                    }
+
+                    $a_message = array('command' => $o_topic->getId());
+
+                    $o_target_topic->broadcast(json_encode($a_message), $a_exclude);
+
+                    $a_userids = array_merge($a_subscriber['users'], $a_userids);
+                }
+                break;
+
             default:
                 $o_connection->callError($id, $o_topic, 'Command not supported');
                 break;
@@ -72,7 +108,7 @@ class API implements WampServerInterface {
 
         if(!isset($this->a_subscribers[$i_user_roleid]))
         {
-            $this->a_subscribers[$i_user_roleid] = array('users' => array($o_connection->resourceId => $i_userid),
+            $this->a_subscribers[$i_user_roleid] = array('users' => array($o_connection->WAMP->sessionId => $i_userid),
                                                          'topic' => $o_topic);
         }
         else
