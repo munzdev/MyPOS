@@ -13,6 +13,7 @@ function(app, Webservice, Template )
     	title: 'options-dialog',
     	el: 'body',
         events: {
+            "click #admin-link": 'admin_link',
             "click #request-call": 'request_call',
             "click #logout-link": "logout_link"
         },
@@ -24,6 +25,11 @@ function(app, Webservice, Template )
 
             this.is_admin = options.is_admin;
             this.render();
+        },
+
+        admin_link: function()
+        {
+            MyPOS.ChangePage("#admin");
         },
 
         request_call: function()

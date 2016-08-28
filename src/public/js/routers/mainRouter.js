@@ -19,7 +19,11 @@ define([ "app",
          "views/ManagerCallbackView",
          "views/ManagerCheckView",
          "views/ManagerGroupmessageView",
-         "views/ManagerStatisticView"
+         "views/ManagerStatisticView",
+         "views/admin/AdminView",
+         "views/admin/AdminEventView",
+         "views/admin/AdminUserView",
+         "views/admin/AdminMenuView"
 ], function(app,
             Backbone,
             SessionModel,
@@ -37,7 +41,11 @@ define([ "app",
             ManagerCallbackView,
             ManagerCheckView,
             ManagerGroupmessageView,
-            ManagerStatisticView) {
+            ManagerStatisticView,
+            AdminView,
+            AdminEventView,
+            AdminUserView,
+            AdminMenuView) {
     "use strict";
 
     // Extends Backbone.Router
@@ -71,6 +79,10 @@ define([ "app",
             "manager-groupmessage": "manager_groupmessage",
             "manager-statistic": "manager_statistic",
             "order-modify-price/orderid/:id": "order_modify_price",
+            "admin": "admin",
+            "admin/event": "admin_event",
+            "admin/user": "admin_user",
+            "admin/menu": "admin_menu"
         },
 
         show: function(view, options){
@@ -215,6 +227,30 @@ define([ "app",
         {
             if(DEBUG) console.log("Order Modify Price", "OK");
             this.show(new OrderModifyPriceView({orderid: orderid}));
+        },
+
+        admin: function()
+        {
+            if(DEBUG) console.log("Admin", "OK");
+            this.show(new AdminView());
+        },
+
+        admin_event: function()
+        {
+            if(DEBUG) console.log("Admin Event", "OK");
+            this.show(new AdminEventView());
+        },
+
+        admin_user: function()
+        {
+            if(DEBUG) console.log("Admin User", "OK");
+            this.show(new AdminUserView());
+        },
+
+        admin_menu: function()
+        {
+            if(DEBUG) console.log("Admin Menu", "OK");
+            this.show(new AdminMenuView());
         }
 
     } );
