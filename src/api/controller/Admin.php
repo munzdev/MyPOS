@@ -2,67 +2,49 @@
 namespace Controller;
 
 use Lib\AdminController;
+use Lib\Database;
+use Lib\Request;
+use MyPOS;
+use Model;
 
 class Admin extends AdminController
 {
-	public function GetPagesAction()
-	{
-		$this->b_raw_data = true;
+    public function GetEventsListAction()
+    {
+        $o_events = new Model\Events(Database::GetConnection());
 
-		$a_page_files = $this->read_all_files(WWW_ROOT . "pages/admin/");
+        $a_events = $o_events->GetEventsList();
 
-		foreach ($a_page_files['files'] as $str_file)
-		{
-			$str_filename = basename($str_file);
+        return $a_events;
+    }
 
-			if(substr($str_filename,-4) != ".php")
-				continue;
+    public function AddEventAction()
+    {
+        $a_params = Request::ValidateParams(array('name' => 'string',
+                                                  'date' => 'string'));
 
-				require_once $str_file;
-		}
+        $o_events = new Model\Events(Database::GetConnection());
 
-	}
+        $d_date = date(MyPOS\DATE_MYSQL_TIMEFORMAT, strtotime($a_params['date']));
 
+        return $o_events->AddEvent($a_params['name'], $d_date, 0);
+    }
 
-	/**
-	 * Finds path, relative to the given root folder, of all files and directories in the given directory and its sub-directories non recursively.
-	 * Will return an array of the form
-	 * array(
-	 *   'files' => [],
-	 *   'dirs'  => [],
-	 * )
-	 * @author sreekumar
-	 * @param string $root
-	 * @result array
-	 */
-	function read_all_files($root = '.'){
-		$files  = array('files'=>array(), 'dirs'=>array());
-		$directories  = array();
-		$last_letter  = $root[strlen($root)-1];
-		$root  = ($last_letter == '\\' || $last_letter == '/') ? $root : $root.DIRECTORY_SEPARATOR;
+    public function EventSetActiveAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric'));
 
-		$directories[]  = $root;
+        $o_events = new Model\Events(Database::GetConnection());
 
-		while (sizeof($directories)) {
-			$dir  = array_pop($directories);
-			if ($handle = opendir($dir)) {
-				while (false !== ($file = readdir($handle))) {
-					if ($file == '.' || $file == '..') {
-						continue;
-					}
-					$file  = $dir.$file;
-					if (is_dir($file)) {
-						$directory_path = $file.DIRECTORY_SEPARATOR;
-						array_push($directories, $directory_path);
-						$files['dirs'][]  = $directory_path;
-					} elseif (is_file($file)) {
-						$files['files'][]  = $file;
-					}
-				}
-				closedir($handle);
-			}
-		}
+        return $o_events->SetActive($a_params['eventid']);
+    }
 
-		return $files;
-	}
+    public function EventDeleteAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->Delete($a_params['eventid']);
+    }
 }

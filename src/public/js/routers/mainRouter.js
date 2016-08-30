@@ -22,6 +22,8 @@ define([ "app",
          "views/ManagerStatisticView",
          "views/admin/AdminView",
          "views/admin/AdminEventView",
+         "views/admin/AdminEventModifyView",
+         "views/admin/AdminEventModifyDetailsView",
          "views/admin/AdminUserView",
          "views/admin/AdminMenuView"
 ], function(app,
@@ -44,6 +46,8 @@ define([ "app",
             ManagerStatisticView,
             AdminView,
             AdminEventView,
+            AdminEventModifyView,
+            AdminEventModifyDetailsView,
             AdminUserView,
             AdminMenuView) {
     "use strict";
@@ -81,6 +85,8 @@ define([ "app",
             "order-modify-price/orderid/:id": "order_modify_price",
             "admin": "admin",
             "admin/event": "admin_event",
+            "admin/event/add": "admin_event_add",
+            "admin/event/modify/:id": "admin_event_modify",
             "admin/user": "admin_user",
             "admin/menu": "admin_menu"
         },
@@ -239,6 +245,18 @@ define([ "app",
         {
             if(DEBUG) console.log("Admin Event", "OK");
             this.show(new AdminEventView());
+        },
+
+        admin_event_add: function()
+        {
+            if(DEBUG) console.log("Admin Event Add", "OK");
+            this.show(new AdminEventModifyDetailsView({id: 'new'}));
+        },
+
+        admin_event_modify: function(id)
+        {
+            if(DEBUG) console.log("Admin Event Modify", "OK");
+            this.show(new AdminEventModifyView({id: id}));
         },
 
         admin_user: function()
