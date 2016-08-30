@@ -46,8 +46,3 @@
     margin: 5px;
     padding: 5px
 }
-
-.navbar-7-items {
-    width: 14.28% !important;  /* 12.5% for 8 tabs wide */
-    clear: none !important;  /* Prevent line break caused by ui-block-a */
-}
