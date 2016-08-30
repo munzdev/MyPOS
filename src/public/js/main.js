@@ -49,7 +49,8 @@ require([ "app",
           "Webservice",
           "websocket/Chat",
           "websocket/API",
-          "routers/mainRouter",
+          "routers/MainRouter",
+          "routers/AdminRouter",
           "models/SessionModel",
           "views/dialoges/ErrorDialogView",
           "jquerymobile" ],
@@ -60,6 +61,7 @@ require([ "app",
             WsChat,
             WsAPI,
             MainRouter,
+            AdminRouter,
             SessionModel,
             ErrorDialogView) {
 
@@ -119,7 +121,9 @@ require([ "app",
     webservice.call();
 
     // Instantiates a new Backbone.js Mobile Router
-    app.router = new MainRouter();
+    app.routers = {};
+    app.routers.main = new MainRouter();
+    app.routers.admin = new AdminRouter();
 
     // Error Displaying
     app.error = new ErrorDialogView();
