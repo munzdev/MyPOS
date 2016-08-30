@@ -89,17 +89,17 @@ CREATE TABLE IF NOT EXISTS `orders` (
   CONSTRAINT `fk_orders_tables`
     FOREIGN KEY (`tableid`)
     REFERENCES `tables` (`tableid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_users1`
     FOREIGN KEY (`userid`)
     REFERENCES `users` (`userid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `events` (`eventid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Enthält die Bestellungen die von einem Tisch gemacht wurden durch einen Benutzer';
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `menu_groupes` (
   CONSTRAINT `fk_menu_groupes_menu_types1`
     FOREIGN KEY (`menu_typeid`)
     REFERENCES `menu_types` (`menu_typeid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Enhält die Untergruppen der Menükarte (Hauptspeise, Beilagen, Antigetränke, Biere, ... )';
@@ -162,12 +162,12 @@ CREATE TABLE IF NOT EXISTS `menues` (
   CONSTRAINT `fk_menues_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
     REFERENCES `menu_groupes` (`menu_groupid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_menues_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `events` (`eventid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Enhält das Menü das Angeboten werden kann (Schnitzel, Schweinsbaraten, Cola, Sprite, Wasser, ...) mit dem Standartpreis';
@@ -196,17 +196,17 @@ CREATE TABLE IF NOT EXISTS `orders_details` (
   CONSTRAINT `fk_orders_details_menues1`
     FOREIGN KEY (`menuid`)
     REFERENCES `menues` (`menuid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_orders1`
     FOREIGN KEY (`orderid`)
     REFERENCES `orders` (`orderid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_users1`
     FOREIGN KEY (`single_price_modified_by_userid`)
     REFERENCES `users` (`userid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Enthält die genauen Bestell-Positionen einner Bestellung, die getätigte Zahlung dafür und wie oft diese Position bestellt wurde. menuid is leer(0), wenn es sich um einen \"extrawunsch\" handelt.';
@@ -229,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `menu_extras` (
   CONSTRAINT `fk_menu_extras_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `events` (`eventid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Definiert alle möglichen Extras die zu einer Speise bestellt werden können (miz Pommes, mit Reis, kein Salat, ...)';
@@ -266,12 +266,12 @@ CREATE TABLE IF NOT EXISTS `menues_possible_sizes` (
   CONSTRAINT `fk_menues_possible_sizes_menu_sizes1`
     FOREIGN KEY (`menu_sizeid`)
     REFERENCES `menu_sizes` (`menu_sizeid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_menues_possible_sizes_menues1`
     FOREIGN KEY (`menuid`)
     REFERENCES `menues` (`menuid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Definiert, welche Größen für die verschiedene Speisen verfügbar ist mit dem angepassten Preis (Schnitzel kann als Beispiel \"Normal\" und als \"Kleine Portion\" bestellt werden. Cola in 0,25, 0,5L, ....)';
@@ -293,12 +293,12 @@ CREATE TABLE IF NOT EXISTS `menues_possible_extras` (
   CONSTRAINT `fk_menues_possible_extras_menu_extras1`
     FOREIGN KEY (`menu_extraid`)
     REFERENCES `menu_extras` (`menu_extraid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_menues_possible_extras_menues1`
     FOREIGN KEY (`menuid`)
     REFERENCES `menues` (`menuid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Definiert, welche extras für die verschiedene Speisen/Getränke verfügbar ist mit dem angepassten Preis (Schnitzel \"mit Reis\" statt Pommes, Schweinsbraten \"mit Kartoffel\" statt Knödel, Cola \"mit Zitrone\"...)';
@@ -318,12 +318,12 @@ CREATE TABLE IF NOT EXISTS `orders_detail_sizes` (
   CONSTRAINT `fk_orders_detail_extras_orders_details1`
     FOREIGN KEY (`orders_detailid`)
     REFERENCES `orders_details` (`orders_detailid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_detail_extras_menues_possible_sizes1`
     FOREIGN KEY (`menues_possible_sizeid`)
     REFERENCES `menues_possible_sizes` (`menues_possible_sizeid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Gibt an welche Größe einer Speise/eines Getränks bestellt worden ist';
@@ -343,12 +343,12 @@ CREATE TABLE IF NOT EXISTS `orders_detail_extras` (
   CONSTRAINT `fk_orders_detail_sizes_orders_details1`
     FOREIGN KEY (`orders_detailid`)
     REFERENCES `orders_details` (`orders_detailid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_detail_sizes_menues_possible_extras1`
     FOREIGN KEY (`menues_possible_extraid`)
     REFERENCES `menues_possible_extras` (`menues_possible_extraid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Gibt an welches Extra einer Speise/eines Getränkens bestellt worden ist';
@@ -367,12 +367,12 @@ CREATE TABLE IF NOT EXISTS `orders_details_mixed_with` (
   CONSTRAINT `fk_orders_details_mixed_with_orders_details1`
     FOREIGN KEY (`orders_detailid`)
     REFERENCES `orders_details` (`orders_detailid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_mixed_with_menues1`
     FOREIGN KEY (`menuid`)
     REFERENCES `menues` (`menuid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Enthält Referenzen zu gespritzten Getränken (Cola gespritzt mit Mineral )';
@@ -413,17 +413,17 @@ CREATE TABLE IF NOT EXISTS `orders_in_progress` (
   CONSTRAINT `fk_orders_in_progress_orders1`
     FOREIGN KEY (`orderid`)
     REFERENCES `orders` (`orderid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_in_progress_users1`
     FOREIGN KEY (`userid`)
     REFERENCES `users` (`userid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_in_progress_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
     REFERENCES `menu_groupes` (`menu_groupid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Beschreibt, welche Teile aus einer Bestellung zurzeit in Arbeit ist (Benutzer XYZ, der bei der Ausgabe \"Bierbar\" ist, Bearbeitet zurzeit die Bestellungen von  der Gruppe \"Biere\") Benutzer kann auch mehrere gleichzeitig bearbeiten (Beispiel: Benutzer A bearbeitet zur zeit die Bestellung XYZ und kümmert sich um die Menü Gruppen \"Antigetränk\", \"Biere\". Benutzer B kümmert sich um die Menügruppe \"Wein\". Kann auch eine andere Ausgabestelle sein, falls nötig.';
@@ -448,12 +448,12 @@ CREATE TABLE IF NOT EXISTS `events_user` (
   CONSTRAINT `fk_events_has_users_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `events` (`eventid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_events_has_users_users1`
     FOREIGN KEY (`userid`)
     REFERENCES `users` (`userid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Beschreibt welche Benutzer bei welchem Event, welche Rechte haben. Beispiel: Heuer ist Benutzer X der Admin, nächstes Event nur ein Kellner';
@@ -474,7 +474,7 @@ CREATE TABLE IF NOT EXISTS `distributions_places` (
   CONSTRAINT `fk_events_distribution_places_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `events` (`eventid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Beinhaltelt die Ausgabestellen, die es auf einem Event gibt. n';
@@ -499,7 +499,7 @@ CREATE TABLE IF NOT EXISTS `events_printers` (
   CONSTRAINT `fk_printers_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `events` (`eventid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Enthält die IP:Port der Drucker, die bei einem Event zur verfügung stehen';
@@ -519,12 +519,12 @@ CREATE TABLE IF NOT EXISTS `distributions_places_groupes` (
   CONSTRAINT `fk_distributions_places_has_menu_groupes_distributions_places1`
     FOREIGN KEY (`distributions_placeid`)
     REFERENCES `distributions_places` (`distributions_placeid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_distributions_places_has_menu_groupes_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
     REFERENCES `menu_groupes` (`menu_groupid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Definiert, welche Ausgaben bei einer Ausgabestelle gemacht werden (Essensausgabe: Hauptgerichte, Salat; Bar: Antigetränk, Bier, Wein, Schnaps; Süsswarne: Kuchen; ...)';
@@ -546,17 +546,17 @@ CREATE TABLE IF NOT EXISTS `distributions_places_users` (
   CONSTRAINT `fk_distributions_places_has_users_distributions_places1`
     FOREIGN KEY (`distributions_placeid`)
     REFERENCES `distributions_places` (`distributions_placeid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_distributions_places_has_users_users1`
     FOREIGN KEY (`userid`)
     REFERENCES `users` (`userid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_distributions_places_users_events_printers1`
     FOREIGN KEY (`events_printerid`)
     REFERENCES `events_printers` (`events_printerid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Definiert, welcher Benutzer zugriff auf die Ausgabestelle hat bzw. sich um die Ausgabestelle kümmert. Definiert außerdem, welcher Drucker im dort zur verfügung steht, um Bons zu drucke';
@@ -578,17 +578,17 @@ CREATE TABLE IF NOT EXISTS `distributions_places_tables` (
   CONSTRAINT `fk_tables_has_distributions_places_tables1`
     FOREIGN KEY (`tableid`)
     REFERENCES `tables` (`tableid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tables_has_distributions_places_distributions_places1`
     FOREIGN KEY (`distributions_placeid`)
     REFERENCES `distributions_places` (`distributions_placeid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_distributions_places_tables_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
     REFERENCES `menu_groupes` (`menu_groupid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Definiert welche tische standartmäßg von wo ihre Menüs erhalten. Jeder\nMenü Gruppe kann einem eigenem Ausgabeort zugeteilt werden';
@@ -621,17 +621,17 @@ CREATE TABLE IF NOT EXISTS `orders_details_special_extra` (
   CONSTRAINT `fk_orders_details_special_extra_orders1`
     FOREIGN KEY (`orderid`)
     REFERENCES `orders` (`orderid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_special_extra_users1`
     FOREIGN KEY (`single_price_modified_by_userid`)
     REFERENCES `users` (`userid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_special_extra_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
     REFERENCES `menu_groupes` (`menu_groupid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Beinhaltet Sonderbestellungen von Kunden. Diese müssen vom Manager geprüft und bestätigt werden. Er muss den Preis festlegen und die Menü Gruppe, um die es sich handelt, damit die korrekte Ausgabestelle sie bearbeiten kann';
@@ -652,7 +652,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   CONSTRAINT `fk_invoices_users1`
     FOREIGN KEY (`cashier_userid`)
     REFERENCES `users` (`userid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Beinhaltet die Rechnungsnummer mit dem Aussstellungsdatum, die es gibt';
@@ -676,12 +676,12 @@ CREATE TABLE IF NOT EXISTS `invoices_orders_details` (
   CONSTRAINT `fk_invoices_has_orders_details_invoices1`
     FOREIGN KEY (`invoiceid`)
     REFERENCES `invoices` (`invoiceid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_invoices_has_orders_details_orders_details1`
     FOREIGN KEY (`orders_detailid`)
     REFERENCES `orders_details` (`orders_detailid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Beinhaltet die Zeilen einer Rechnung. Gibt an wieviel, von einer Bestellung bezahlt worden ist. Preis wird der Bestellung entnommen';
@@ -705,12 +705,12 @@ CREATE TABLE IF NOT EXISTS `invoices_orders_details_special_extra` (
   CONSTRAINT `fk_invoices_has_orders_details_special_extra_invoices1`
     FOREIGN KEY (`invoiceid`)
     REFERENCES `invoices` (`invoiceid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_invoices_has_orders_details_special_extra_orders_details_s1`
     FOREIGN KEY (`orders_details_special_extraid`)
     REFERENCES `orders_details_special_extra` (`orders_details_special_extraid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Beinhaltet die Zeilen einer Rechnung. Gibt an wieviel, von einer sonder Bestellung bezahlt worden ist. Preis wird der Bestellung entnommen';
@@ -748,17 +748,17 @@ CREATE TABLE IF NOT EXISTS `orders_in_progress_recieved` (
   CONSTRAINT `fk_orders_details_has_orders_in_progress_orders_details1`
     FOREIGN KEY (`orders_detailid`)
     REFERENCES `orders_details` (`orders_detailid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_has_orders_in_progress_orders_in_progress1`
     FOREIGN KEY (`orders_in_progressid`)
     REFERENCES `orders_in_progress` (`orders_in_progressid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_in_progress_recieved_distribution_givin_out1`
     FOREIGN KEY (`distributions_giving_outid`)
     REFERENCES `distributions_giving_outs` (`distributions_giving_outid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Gibt an, wann und wieviel ein Kunde bereits von seiner Bestellung erhalten hat. Erhalt kann aufgeteitl sein falls zbs. nur mehr 2 Schnitzel vorhanden sind und 3 Bestellt wurden. 1 wird später nachgeliefert und ist ein eigener eintrag';
@@ -783,17 +783,17 @@ CREATE TABLE IF NOT EXISTS `orders_extras_in_progress_recieved` (
   CONSTRAINT `fk_orders_details_special_extra_has_orders_in_progress_orders1`
     FOREIGN KEY (`orders_details_special_extraid`)
     REFERENCES `orders_details_special_extra` (`orders_details_special_extraid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_special_extra_has_orders_in_progress_orders2`
     FOREIGN KEY (`orders_in_progressid`)
     REFERENCES `orders_in_progress` (`orders_in_progressid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_extras_in_progress_recieved_distribution_givin_out1`
     FOREIGN KEY (`distributions_giving_outid`)
     REFERENCES `distributions_giving_outs` (`distributions_giving_outid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Gibt an, wann und wieviel ein Kunde bereits von seiner sonder Bestellung erhalten hat. Erhalt kann aufgeteitl sein falls zbs. nur mehr 2 Schnitzel vorhanden sind und 3 Bestellt wurden. 1 wird später nachgeliefert und ist ein eigener eintrag';
@@ -819,12 +819,12 @@ CREATE TABLE IF NOT EXISTS `users_messages` (
   CONSTRAINT `fk_users_chat_events_user1`
     FOREIGN KEY (`from_events_userid`)
     REFERENCES `events_user` (`events_userid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_users_chat_events_user2`
     FOREIGN KEY (`to_events_userid`)
     REFERENCES `events_user` (`events_userid`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Beinhaltet die Kommunikationsnachrichten zwischen den Benutzern für den internen Chat. Auserdem beinhaltet es Systemnachrichten an die Benutzer (keine\'from_events_userid\')';
