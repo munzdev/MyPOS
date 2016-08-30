@@ -47,4 +47,26 @@ class Admin extends AdminController
 
         return $o_events->Delete($a_params['eventid']);
     }
+
+    public function GetEventAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->GetEvent($a_params['eventid']);
+    }
+
+    public function SetEventAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric',
+                                                  'name' => 'string',
+                                                  'date' => 'string'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        $d_date = date(MyPOS\DATE_MYSQL_TIMEFORMAT, strtotime($a_params['date']));
+
+        return $o_events->SetEvent($a_params['eventid'], $a_params['name'], $d_date);
+    }
 }

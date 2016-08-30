@@ -4,20 +4,18 @@
 // Includes file dependencies
 define([ "app",
          'Webservice',
-         'views/headers/HeaderView',
-         'views/footers/ManagerFooterView',
-         'text!templates/pages/manager.phtml'],
+         'views/headers/AdminHeaderView',
+         'text!templates/pages/admin/admin-table.phtml'],
 function( app,
           Webservice,
-          HeaderView,
-          ManagerFooterView,
+          AdminHeaderView,
           Template ) {
     "use strict";
 
     // Extends Backbone.View
-    var ManagerView = Backbone.View.extend( {
+    var AdminTableView = Backbone.View.extend( {
 
-    	title: 'manager',
+    	title: 'admin-table',
     	el: 'body',
         events: {
 
@@ -32,18 +30,14 @@ function( app,
 
         // Renders all of the Category models on the UI
         render: function() {
-            var header = new HeaderView();
-            var footer = new ManagerFooterView();
+            var header = new AdminHeaderView();
 
-            header.activeButton = 'manager';
-            footer.activeButton = 'dashboard';
+            header.activeButton = 'table';
 
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  footer: footer.render()});
+            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render()});
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");
-            footer.setElement("#" + this.title + " .nav-footer");
 
             $.mobile.changePage( "#" + this.title);
             return this;
@@ -52,6 +46,6 @@ function( app,
     } );
 
     // Returns the View class
-    return ManagerView;
+    return AdminTableView;
 
 } );

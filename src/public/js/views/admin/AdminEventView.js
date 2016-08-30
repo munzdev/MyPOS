@@ -37,14 +37,14 @@ function( app,
         {
             var id = $(event.currentTarget).attr('data-event-id');
 
-            MyPOS.ChangePage('admin/event/copy/id/'+id);
+            MyPOS.ChangePage('admin/event/copy/'+id);
         },
 
         click_edit_btn: function(event)
         {
             var id = $(event.currentTarget).attr('data-event-id');
 
-            MyPOS.ChangePage('admin/event/modify/'+id);
+            MyPOS.ChangePage('admin/event/modify/'+id+'/detail');
         },
 
         click_delete_btn: function(event)

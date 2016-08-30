@@ -5,15 +5,16 @@
     </div>
     <fieldset data-role="controlgroup">
         <legend>Name:</legend>
-        <input type="text" id="admin-event-modify-details-name">
+        <input type="text" id="admin-event-modify-details-name" value="<%- name %>">
         <label for="admin-event-modify-name"></label>
     </fieldset>
 
     <fieldset data-role="controlgroup">
         <legend>Datum:</legend>
-        <input type="text" id="admin-event-modify-details-date" data-role="datebox" data-options='{"mode":"calbox", "overrideDateFormat": "%d.%m.%Y"}'>
+        <input type="text" id="admin-event-modify-details-date" data-role="datebox" data-options='{"mode":"calbox", "overrideDateFormat": "%d.%m.%Y"}'  value="<% if(date != '') { print($.format.date(MyPOS.DateFromMysql(date), DATE_JS_DATEFORMAT)); } %>">
     </fieldset>
     <div class="ui-field-contain">
         <a id="admin-event-modify-details-save-btn" class="ui-btn ui-btn-inline">Speichern</a>
     </div>
 </div>
+<% if(mode == 'edit') { print(footer); } %>

@@ -113,4 +113,32 @@ class Events
         $o_statement->bindParam(':eventid', $i_eventid);
         return $o_statement->execute();
     }
+
+    public function GetEvent($i_eventid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT eventid,
+                                                    name,
+                                                    date,
+                                                    active
+                                            FROM events
+                                            WHERE eventid = :eventid");
+
+        $o_statement->bindParam(':eventid', $i_eventid);
+        $o_statement->execute();
+
+        return $o_statement->fetch();
+    }
+
+    public function SetEvent($i_eventid, $str_name, $d_date)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE events
+                                             SET name = :name,
+                                                 date = :date
+                                            WHERE eventid = :eventid");
+
+        $o_statement->bindParam(':name', $str_name);
+        $o_statement->bindParam(':date', $d_date);
+        $o_statement->bindParam(':eventid', $i_eventid);
+        return $o_statement->execute();
+    }
 }

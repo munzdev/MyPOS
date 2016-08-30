@@ -6,7 +6,7 @@ define([ "app",
          'Webservice',
          'views/headers/AdminHeaderView',
          'views/footers/AdminFooterView',
-         'text!templates/pages/admin/admin-event-modify.phtml'],
+         'text!templates/pages/admin/admin-event-modify-user.phtml'],
 function( app,
           Webservice,
           AdminHeaderView,
@@ -15,9 +15,9 @@ function( app,
     "use strict";
 
     // Extends Backbone.View
-    var AdminEventView = Backbone.View.extend( {
+    var AdminEventModifyUserView = Backbone.View.extend( {
 
-    	title: 'admin-event',
+    	title: 'admin-event-modify-user',
     	el: 'body',
         events: {
 
@@ -38,6 +38,7 @@ function( app,
             var footer = new AdminFooterView({id: this.id});
 
             header.activeButton = 'event';
+            footer.activeButton = 'user';
 
             MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
                                                                   footer: footer.render()});
@@ -53,6 +54,6 @@ function( app,
     } );
 
     // Returns the View class
-    return AdminEventView;
+    return AdminEventModifyUserView;
 
 } );
