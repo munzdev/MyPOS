@@ -30,7 +30,7 @@ COMMIT;
 -- Data for table `events`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `events` (`eventid`, `name`, `date`, `active`) VALUES (DEFAULT, 'Frühschoppen', '01.09.2016', true);
+INSERT INTO `events` (`eventid`, `name`, `date`, `active`) VALUES (DEFAULT, 'Frühschoppen', '2016-01-01 00:00:00', true);
 
 COMMIT;
 
