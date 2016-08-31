@@ -21,6 +21,7 @@ Features:
 - Create an Web installer
 - Create a Desktop installer witch install XAMPP package + MyPOS on Desktop
 - Multilanguage support
+- Advaned User Permissions system
 
 Database rework:
 
