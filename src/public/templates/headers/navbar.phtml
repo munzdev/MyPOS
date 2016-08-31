@@ -6,8 +6,10 @@
     </div>
     <div data-role="navbar" id="main-header-navbar">
         <ul>
-            <% if(rights & USER_ROLE_WAITRESS) { %>
+            <% if(rights & USER_ROLE_ORDER_ADD) { %>
                 <li><a href="#order-new" class="header-link<% if(activeButton == 'order-new') { %> ui-btn-active<% } %>" data-icon="plus" data-transition="none">Neu</a></li>
+            <% } %>
+            <% if(rights & USER_ROLE_ORDER_OVERVIEW) { %>
                 <li><a href="#order-overview" class="header-link<% if(activeButton == 'order-overview') { %> ui-btn-active<% } %>"  data-icon="grid" data-transition="none">Bestellungen</a></li>
             <% } %>
             <% if(rights & USER_ROLE_DISTRIBUTION) { %>

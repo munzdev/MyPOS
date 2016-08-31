@@ -35,10 +35,14 @@ function( app, MyPOS, Template ) {
         sendToDefaultPage: function()
         {
             var rights = app.session.user.get('user_roles');
-            
-            if(rights & USER_ROLE_WAITRESS)
+
+            if(rights & USER_ROLE_ORDER_OVERVIEW)
             {
                 MyPOS.ChangePage("#order-overview");
+            }
+            else if(rights & USER_ROLE_ORDER_ADD)
+            {
+                MyPOS.ChangePage("#order-new");
             }
             else if(rights & USER_ROLE_DISTRIBUTION)
             {

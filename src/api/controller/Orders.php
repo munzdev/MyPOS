@@ -17,15 +17,15 @@ class Orders extends SecurityController
     {
         parent::__construct();
 
-        $this->a_security = array('AddOrder' => MyPOS\USER_ROLE_WAITRESS,
-                                  'GetOpenList' => MyPOS\USER_ROLE_WAITRESS,
-                                  'GetOpenPayments' => MyPOS\USER_ROLE_WAITRESS,
-                                  'GetOrder' => MyPOS\USER_ROLE_WAITRESS,
-                                  'GetOrderInfo' => MyPOS\USER_ROLE_WAITRESS,
-                                  'MakeCancel' => MyPOS\USER_ROLE_WAITRESS,
-                                  'MakePayment' => MyPOS\USER_ROLE_WAITRESS,
-                                  'ModifyOrder' => MyPOS\USER_ROLE_WAITRESS,
-                                  'PrintInvoice' => MyPOS\USER_ROLE_WAITRESS);
+        $this->a_security = array('AddOrder' => MyPOS\USER_ROLE_ORDER_ADD,
+                                  'GetOpenList' => MyPOS\USER_ROLE_ORDER_OVERVIEW,
+                                  'GetOpenPayments' => MyPOS\USER_ROLE_ORDER_OVERVIEW,
+                                  'GetOrder' => MyPOS\USER_ROLE_ORDER_OVERVIEW,
+                                  'GetOrderInfo' => MyPOS\USER_ROLE_ORDER_OVERVIEW,
+                                  'MakeCancel' => MyPOS\USER_ROLE_ORDER_OVERVIEW,
+                                  'MakePayment' => MyPOS\USER_ROLE_ORDER_OVERVIEW,
+                                  'ModifyOrder' => MyPOS\USER_ROLE_ORDER_ADD,
+                                  'PrintInvoice' => MyPOS\USER_ROLE_ORDER_OVERVIEW | MyPOS\USER_ROLE_ORDER_ADD);
     }
 
     public function GetOpenListAction()

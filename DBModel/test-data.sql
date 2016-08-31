@@ -135,6 +135,7 @@ COMMIT;
 -- Data for table `menu_sizes`
 -- -----------------------------------------------------
 START TRANSACTION;
+INSERT INTO `menu_sizes` (`menu_sizeid`, `name`, `factor`) VALUES (DEFAULT, 'Normal', 1);
 INSERT INTO `menu_sizes` (`menu_sizeid`, `name`, `factor`) VALUES (DEFAULT, '0,2L', 0.2);
 INSERT INTO `menu_sizes` (`menu_sizeid`, `name`, `factor`) VALUES (DEFAULT, '0,25L', 0.25);
 INSERT INTO `menu_sizes` (`menu_sizeid`, `name`, `factor`) VALUES (DEFAULT, '0,5L', 0.5);
@@ -244,12 +245,12 @@ COMMIT;
 -- Data for table `events_user`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 1, 7, DEFAULT);
+INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 1, 31, DEFAULT);
 INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 2, 2, DEFAULT);
 INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 3, 4, DEFAULT);
 INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 4, 4, DEFAULT);
 INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 5, 1, DEFAULT);
-INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 6, 7, DEFAULT);
+INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 6, 31, DEFAULT);
 INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 7, 4, DEFAULT);
 INSERT INTO `events_user` (`events_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 8, 4, DEFAULT);
 
