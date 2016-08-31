@@ -1,11 +1,26 @@
 # Codename MyPOS
 
-## v1.0.0-alpha2 - planned##
+## v1.0 - planned##
+
+- Bugfixing and optimizations
+- Project naming
+
+## v1.0-beta - planned##
+
+Testing
+
+- advanced unit tests and UI tests
+- multible real usage testing
+- Bugfixing and optimizations
+
+
+## v1.0-alpha2 - planned##
 
 Features:
 
 - Create an Web installer
 - Create a Desktop installer witch install XAMPP package + MyPOS on Desktop
+- Multilanguage support
 
 Database rework:
 
@@ -16,19 +31,22 @@ Database rework:
 
 Code refatoring:
 
+- New PHP Codebase version 7.1
 - refactor PHP API classes. Use CleanCode and SOLID.
 - refactor API names/uris. Planning a Service-oriented-design to match a better RESTful Service principe (PUT, GET, DELETE, PATCH)
 - possible use slim and
 - refactor JS Code with models, views and collections to match the RESTful API (PUT, GET, DELETE, PATCH)
 - possible use marionette.js in order to handle subviews?
+- optimize performance of PHP, SQL and JS code. Reduce RAM usage and DOM manipulation (better smartphone performance)
 
 Testing:
 
 - Start application testing
 - create basic Unit tests for PHP code and JS Code
-- bugfixing
+- Bugfixing and optimizations
 
-## v1.0.0-alpha - In Progress##
+## v1.0-alpha - in progress##
 
+- PHP Codebase version 5.6
 - Finishing current planned interfaces, Database models and features
 - no testing yet, no installer
