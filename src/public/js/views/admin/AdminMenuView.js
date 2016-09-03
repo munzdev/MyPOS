@@ -5,10 +5,12 @@
 define([ "app",
          'Webservice',
          'views/headers/AdminHeaderView',
+         'collections/admin/MenuTypeCollection',
          'text!templates/pages/admin/admin-menu.phtml'],
 function( app,
           Webservice,
           AdminHeaderView,
+          MenuTypeCollection,
           Template ) {
     "use strict";
 
@@ -23,9 +25,10 @@ function( app,
 
         // The View Constructor
         initialize: function() {
-            //_.bindAll(this, "finished");
+            _.bindAll(this, "render");
 
-            this.render();
+            this.menuList = new MenuTypeCollection();
+            this.menuList.fetch({success: this.render});
         },
 
         // Renders all of the Category models on the UI
@@ -34,7 +37,8 @@ function( app,
 
             header.activeButton = 'menu';
 
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render()});
+            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
+                                                                  products: this.menuList});
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");

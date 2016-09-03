@@ -1,4 +1,13 @@
 <div data-role="content">
     <div class="nav-header"><%= header %></div>
-    Admin Menues!!!!
+    <a class="admin-menu-group-add-btn ui-btn ui-icon-plus ui-mini ui-btn-icon-left">Typ Hinzufügen</a>
+    <ul data-role="listview" data-inset="true" data-divider-theme="a">
+        <% products.each(function(type) { %>
+            <li data-role="list-divider"><%- type.get('name') %></li>
+            <li data-icon="plus"><a style="color: orange">Gruppe Hinzufügen</a></li>
+            <% type.get('groupes').each(function(group) { %>
+            <li><a><%- group.get('name') %></a></li>
+            <% }); %>
+        <% }); %>
+    </ul>
 </div>

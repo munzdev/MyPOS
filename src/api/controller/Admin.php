@@ -70,6 +70,36 @@ class Admin extends AdminController
         return $o_events->SetEvent($a_params['eventid'], $a_params['name'], $d_date);
     }
 
+    public function GetMenuListAction()
+    {
+        $o_products = new Model\Products(Database::GetConnection());
+
+        $a_types = $o_products->GetTypesList();
+        $a_groupes = $o_products->GetGroupesList();
+
+
+        $a_return = array();
+
+        foreach($a_types as $a_type)
+        {
+            foreach($a_groupes as $a_group)
+            {
+                if($a_type['menu_typeid'] != $a_group['menu_typeid'])
+                    continue;
+
+                if(!isset($a_return[$a_type['menu_typeid']]))
+                {
+                    $a_return[$a_type['menu_typeid']] = $a_type;
+                    $a_return[$a_type['menu_typeid']]['groupes'] = array();
+                }
+
+                $a_return[$a_type['menu_typeid']]['groupes'][] = $a_group;
+            }
+        }
+
+        return array_values($a_return);
+    }
+
     public function GetUsersListAction()
     {
         $o_users = new Model\Users(Database::GetConnection());

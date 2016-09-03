@@ -186,4 +186,29 @@ class Products
 
         return $o_statement->execute();
     }
+
+    public function GetTypesList()
+    {
+         $o_statement = $this->o_db->prepare("SELECT menu_typeid,
+                                                     name,
+                                                     tax,
+                                                     allowMixing
+                                              FROM menu_types");
+
+        $o_statement->execute();
+
+        return $o_statement->fetchAll();
+    }
+
+    public function GetGroupesList()
+    {
+         $o_statement = $this->o_db->prepare("SELECT menu_groupid,
+                                                     menu_typeid,
+                                                     name
+                                              FROM menu_groupes");
+
+        $o_statement->execute();
+
+        return $o_statement->fetchAll();
+    }
 }
