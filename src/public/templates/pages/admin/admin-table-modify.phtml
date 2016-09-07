@@ -1,0 +1,21 @@
+<div data-role="content">
+    <div class="nav-header"><%= header %></div>
+    <div data-role="header">
+        <h2><% if(mode == 'new') { print('Neuer Tisch'); } else { print('Tisch Bearbeiten'); } %></h2>
+    </div>
+    <fieldset data-role="controlgroup">
+        <legend>Tischnummer:</legend>
+        <input type="text" id="admin-table-modify-name" value="<%- name %>">
+        <label for="admin-table-modify-name"></label>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend>Daten:</legend>
+        <input type="text" id="admin-table-modify-data" value="<%- data %>">
+        <label for="admin-table-modify-data"></label>
+    </fieldset>´
+
+    <div class="ui-field-contain">
+        <a id="admin-table-modify-save-btn" class="ui-btn ui-btn-inline">Speichern</a>
+    </div>
+</div>

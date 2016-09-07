@@ -250,4 +250,53 @@ class Admin extends AdminController
 
         return $o_products->DeleteType($a_params['id']);
     }
+
+    public function GetTableListAction()
+    {
+        $o_tables = new Model\Tables(Database::GetConnection());
+
+        return $o_tables->GetAll();
+    }
+
+    public function AddTableAction()
+    {
+        $a_params = Request::ValidateParams(array('name' => 'string',
+                                                  'data' => 'string'));
+
+        $o_tables = new Model\Tables(Database::GetConnection());
+
+        return $o_tables->AddTable($a_params['name'], $a_params['data']);
+
+    }
+
+    public function GetTableAction()
+    {
+        $a_params = Request::ValidateParams(array('tableid' => 'numeric'));
+
+        $o_tables = new Model\Tables(Database::GetConnection());
+
+        return $o_tables->GetTable($a_params['tableid']);
+    }
+
+    public function SetTableAction()
+    {
+        $a_params = Request::ValidateParams(array('tableid' => 'numeric',
+                                                  'name' => 'string',
+                                                  'data' => 'string'));
+
+        $o_tables = new Model\Tables(Database::GetConnection());
+
+        return $o_tables->SetTable($a_params['tableid'],
+                                   $a_params['name'],
+                                   $a_params['data']);
+    }
+
+    public function TableDeleteAction()
+    {
+        $a_params = Request::ValidateParams(array('tableid' => 'numeric'));
+
+        $o_tables = new Model\Tables(Database::GetConnection());
+
+        return $o_tables->Delete($a_params['tableid']);
+    }
 }

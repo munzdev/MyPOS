@@ -40,33 +40,56 @@ class Tables
         $o_statement->bindparam(":name", $str_tableNr);
         $o_statement->bindparam(":data", $str_data);
 
-        $o_statement->execute();
-
-        return $o_statement;
+        return $o_statement->execute();
     }
 
-    public function GetTable($str_tableId)
+    public function GetTable($str_tableid)
     {
-        $o_statement = $this->o_db->prepare("SELECT *
+        $o_statement = $this->o_db->prepare("SELECT tableid,
+                                                    name,
+                                                    data
                                              FROM tables
                                              WHERE tableid = :tableid");
 
-        $o_statement->execute(array(':tableid' => $str_tableId));
+        $o_statement->bindParam(":tableid", $str_tableid);
+        $o_statement->execute();
 
-        $a_table = $o_statement->fetch();
-
-        return $a_table;
+        return $o_statement->fetch();
     }
 
     public function GetAll()
     {
-        $o_statement = $this->o_db->prepare("SELECT *
+        $o_statement = $this->o_db->prepare("SELECT tableid,
+                                                    name,
+                                                    data
                                              FROM tables");
 
         $o_statement->execute();
 
-        $a_tables = $o_statement->fetchAll();
+        return $o_statement->fetchAll();
+    }
 
-        return $a_tables;
+    public function SetTable($i_tableid, $str_tableNr, $str_data)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE tables
+                                             SET name = :name,
+                                                 data = :data
+                                             WHERE tableid = :tableid");
+
+        $o_statement->bindparam(":tableid", $i_tableid);
+        $o_statement->bindparam(":name", $str_tableNr);
+        $o_statement->bindparam(":data", $str_data);
+
+        return $o_statement->execute();
+    }
+
+    public function Delete($i_tableid)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM tables
+                                             WHERE tableid = :tableid");
+
+        $o_statement->bindparam(":tableid", $i_tableid);
+
+        return $o_statement->execute();
     }
 }
