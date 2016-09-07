@@ -193,7 +193,8 @@ class Products
                                                      name,
                                                      tax,
                                                      allowMixing
-                                              FROM menu_types");
+                                              FROM menu_types
+                                              ORDER BY name");
 
         $o_statement->execute();
 
@@ -205,10 +206,103 @@ class Products
          $o_statement = $this->o_db->prepare("SELECT menu_groupid,
                                                      menu_typeid,
                                                      name
-                                              FROM menu_groupes");
+                                              FROM menu_groupes
+                                              ORDER BY name");
 
         $o_statement->execute();
 
         return $o_statement->fetchAll();
+    }
+
+    public function GetType($i_menu_typeid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT name,
+                                                    tax,
+                                                    allowMixing
+                                             FROM menu_types
+                                             WHERE menu_typeid = :menu_typeid");
+
+        $o_statement->bindParam(":menu_typeid", $i_menu_typeid);
+        $o_statement->execute();
+
+        return $o_statement->fetch();
+    }
+
+    public function GetGroup($i_menu_groupid)
+    {
+         $o_statement = $this->o_db->prepare("SELECT menu_typeid,
+                                                     name
+                                              FROM menu_groupes
+                                              WHERE menu_groupid = :menu_groupid");
+
+        $o_statement->bindParam(":menu_groupid", $i_menu_groupid);
+        $o_statement->execute();
+
+        return $o_statement->fetch();
+    }
+
+    public function AddType($str_name, $i_tax, $b_allowMixing)
+    {
+        $o_statement = $this->o_db->prepare("INSERT INTO menu_types (name, tax, allowMixing)
+                                             VALUES (:name, :tax, :allowMixing)");
+
+        $o_statement->bindParam(":name", $str_name);
+        $o_statement->bindParam(":tax", $i_tax);
+        $o_statement->bindParam(":allowMixing", $b_allowMixing);
+        return $o_statement->execute();
+    }
+
+    public function SetType($i_menu_typeid, $str_name, $i_tax, $b_allowMixing)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE menu_types
+                                             SET name = :name,
+                                                 tax = :tax,
+                                                 allowMixing = :allowMixing
+                                             WHERE menu_typeid = :menu_typeid");
+
+        $o_statement->bindParam(":menu_typeid", $i_menu_typeid);
+        $o_statement->bindParam(":name", $str_name);
+        $o_statement->bindParam(":tax", $i_tax);
+        $o_statement->bindParam(":allowMixing", $b_allowMixing);
+        return $o_statement->execute();
+    }
+
+    public function AddGroup($i_menu_typeid, $str_name)
+    {
+        $o_statement = $this->o_db->prepare("INSERT INTO menu_groupes (menu_typeid, name)
+                                             VALUES (:menu_typeid, :name)");
+
+        $o_statement->bindParam(":menu_typeid", $i_menu_typeid);
+        $o_statement->bindParam(":name", $str_name);
+        return $o_statement->execute();
+    }
+
+    public function SetGroup($i_menu_groupid, $str_name)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE menu_groupes
+                                             SET name = :name
+                                             WHERE menu_groupid = :menu_groupid");
+
+        $o_statement->bindParam(":menu_groupid", $i_menu_groupid);
+        $o_statement->bindParam(":name", $str_name);
+        return $o_statement->execute();
+    }
+
+    public function DeleteGroup($i_menu_groupid)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM menu_groupes
+                                             WHERE menu_groupid = :menu_groupid");
+
+        $o_statement->bindParam(":menu_groupid", $i_menu_groupid);
+        return $o_statement->execute();
+    }
+
+    public function DeleteType($i_menu_typeid)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM menu_types
+                                             WHERE menu_typeid = :menu_typeid");
+
+        $o_statement->bindParam(":menu_typeid", $i_menu_typeid);
+        return $o_statement->execute();
     }
 }

@@ -63,7 +63,17 @@ function( app,
         deleteTyp: function()
         {
             $('#admin-menu-item-delete-dialog').popup('close');
-            console.log("Delete Typ " + this.editId);
+
+            var webservice = new Webservice();
+            webservice.action = "Admin/DeleteMenuType";
+            webservice.formData = {id: this.editId};
+            webservice.callback = {
+                success: function()
+                {
+                    MyPOS.ReloadPage();
+                }
+            };
+            webservice.call();
         },
 
         click_menu_group_item: function(event)
@@ -96,7 +106,17 @@ function( app,
         deleteGroup: function()
         {
             $('#admin-menu-item-delete-dialog').popup('close');
-            console.log("Delete Group " + this.editId);
+
+            var webservice = new Webservice();
+            webservice.action = "Admin/DeleteMenuGroup";
+            webservice.formData = {id: this.editId};
+            webservice.callback = {
+                success: function()
+                {
+                    MyPOS.ReloadPage();
+                }
+            };
+            webservice.call();
         },
 
         click_menu_group_edit: function(event)
