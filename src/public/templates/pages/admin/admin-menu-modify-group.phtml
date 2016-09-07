@@ -1,0 +1,17 @@
+<div data-role="content">
+    <div class="nav-header"><%= header %></div>
+    <div data-role="header">
+        <h2>
+            <% if(mode == 'new') { print('Neue Gruppe'); } else { print('Gruppe Bearbeiten'); } %>
+        </h2>
+    </div>
+    <fieldset data-role="controlgroup">
+        <legend>Name:</legend>
+        <input type="text" id="admin-menu-modify-group-name" value="<%- name %>">
+        <label for="admin-menu-modify-group-name"></label>
+    </fieldset>
+
+    <div class="ui-field-contain">
+        <a id="admin-menu-modify-group-save-btn" class="ui-btn ui-btn-inline">Speichern</a>
+    </div>
+</div>

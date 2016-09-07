@@ -15,6 +15,8 @@ define([ "app",
          "views/admin/AdminUserView",
          "views/admin/AdminUserModifyView",
          "views/admin/AdminMenuView",
+         "views/admin/AdminMenuModifyGroupView",
+         "views/admin/AdminMenuModifyTypeView",
          "views/admin/AdminTableView"
 ], function(app,
             BaseRouter,
@@ -29,6 +31,8 @@ define([ "app",
             AdminUserView,
             AdminUserModifyView,
             AdminMenuView,
+            AdminMenuModifyGroupView,
+            AdminMenuModifyTypeView,
             AdminTableView) {
     "use strict";
 
@@ -51,6 +55,10 @@ define([ "app",
             "admin/user/add": "admin_user_add",
             "admin/user/modify/:id": "admin_user_modify",
             "admin/menu": "admin_menu",
+            "admin/menu/add": "admin_menu_type_add",
+            "admin/menu/add/:id": "admin_menu_group_add",
+            "admin/menu/modify/type/:id": "admin_menu_type_modify",
+            "admin/menu/modify/group/:id": "admin_menu_group_modify",
             "admin/table": "admin_table"
         },
 
@@ -130,6 +138,31 @@ define([ "app",
         {
             if(DEBUG) console.log("Admin Menu", "OK");
             this.show(new AdminMenuView());
+        },
+
+        admin_menu_type_add: function()
+        {
+            if(DEBUG) console.log("Admin Menu Type Add", "OK");
+            this.show(new AdminMenuModifyTypeView({id: 'new'}));
+        },
+
+        admin_menu_group_add: function(menu_typeid)
+        {
+            if(DEBUG) console.log("Admin Menu Group Add", "OK");
+            this.show(new AdminMenuModifyGroupView({id: 'new',
+                                                    menu_typeid: menu_typeid}));
+        },
+
+        admin_menu_type_modify: function(id)
+        {
+            if(DEBUG) console.log("Admin Menu Type Modify", "OK");
+            this.show(new AdminMenuModifyTypeView({id: id}));
+        },
+
+        admin_menu_group_modify: function(id)
+        {
+            if(DEBUG) console.log("Admin Menu Group Modify", "OK");
+            this.show(new AdminMenuModifyGroupView({id: id}));
         },
 
         admin_table: function()

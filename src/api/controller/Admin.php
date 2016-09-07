@@ -82,16 +82,13 @@ class Admin extends AdminController
 
         foreach($a_types as $a_type)
         {
+            $a_return[$a_type['menu_typeid']] = $a_type;
+            $a_return[$a_type['menu_typeid']]['groupes'] = array();
+
             foreach($a_groupes as $a_group)
             {
                 if($a_type['menu_typeid'] != $a_group['menu_typeid'])
                     continue;
-
-                if(!isset($a_return[$a_type['menu_typeid']]))
-                {
-                    $a_return[$a_type['menu_typeid']] = $a_type;
-                    $a_return[$a_type['menu_typeid']]['groupes'] = array();
-                }
 
                 $a_return[$a_type['menu_typeid']]['groupes'][] = $a_group;
             }
@@ -168,5 +165,89 @@ class Admin extends AdminController
         $o_users = new Model\Users(Database::GetConnection());
 
         return $o_users->Delete($a_params['userid']);
+    }
+
+    public function GetMenuTypeAction()
+    {
+        $a_params = Request::ValidateParams(array('id' => 'numeric'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->GetType($a_params['id']);
+    }
+
+    public function GetMenuGroupAction()
+    {
+        $a_params = Request::ValidateParams(array('id' => 'numeric'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->GetGroup($a_params['id']);
+    }
+
+    public function AddMenuTypeAction()
+    {
+        $a_params = Request::ValidateParams(array('name' => 'string',
+                                                  'tax' => 'numeric',
+                                                  'allowMixing' => 'bool'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->AddType($a_params['name'],
+                                    $a_params['tax'],
+                                    $a_params['allowMixing'] == 'true' ? 1 : 0);
+    }
+
+    public function AddMenuGroupAction()
+    {
+        $a_params = Request::ValidateParams(array('name' => 'string',
+                                                  'menu_typeid' => 'numeric'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->AddGroup($a_params['menu_typeid'], $a_params['name']);
+    }
+
+    public function SetMenuTypeAction()
+    {
+        $a_params = Request::ValidateParams(array('id' => 'numeric',
+                                                  'name' => 'string',
+                                                  'tax' => 'numeric',
+                                                  'allowMixing' => 'bool'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->SetType($a_params['id'],
+                                    $a_params['name'],
+                                    $a_params['tax'],
+                                    $a_params['allowMixing'] == 'true' ? 1 : 0);
+    }
+
+    public function SetMenuGroupAction()
+    {
+        $a_params = Request::ValidateParams(array('id' => 'numeric',
+                                                  'name' => 'string'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->SetGroup($a_params['id'], $a_params['name']);
+    }
+
+    public function DeleteMenuGroupAction()
+    {
+        $a_params = Request::ValidateParams(array('id' => 'numeric'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->DeleteGroup($a_params['id']);
+    }
+
+    public function DeleteMenuTypeAction()
+    {
+        $a_params = Request::ValidateParams(array('id' => 'numeric'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->DeleteType($a_params['id']);
     }
 }

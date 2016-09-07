@@ -1,0 +1,29 @@
+<div data-role="content">
+    <div class="nav-header"><%= header %></div>
+    <div data-role="header">
+        <h2>
+            <% if(mode == 'new') { print('Neue Typ'); } else { print('Typ Bearbeiten'); } %>
+        </h2>
+    </div>
+    <fieldset data-role="controlgroup">
+        <legend>Name:</legend>
+        <input type="text" id="admin-menu-modify-type-name" value="<%- name %>">
+        <label for="admin-menu-modify-type-name"></label>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend>Steuersatz:</legend>
+        <input type="number" id="admin-menu-modify-type-tax" value="<%- tax %>">
+        <label for="admin-menu-modify-type-tax"></label>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend>Optionen</legend>
+        <input type="checkbox" id="admin-menu-modify-type-allowMixing" <% if(allowMixing == 1) { print('checked="checked"'); } %>>
+        <label for="admin-menu-modify-type-allowMixing">Mischen von Produkten erlaubt</label>
+    </fieldset>
+
+    <div class="ui-field-contain">
+        <a id="admin-menu-modify-type-save-btn" class="ui-btn ui-btn-inline">Speichern</a>
+    </div>
+</div>
