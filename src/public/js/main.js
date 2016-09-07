@@ -49,7 +49,7 @@ require([ "app",
           "Webservice",
           "websocket/Chat",
           "websocket/API",
-          "routers/BasicRouter",
+          "routers/GlobalRouter",
           "routers/AdminRouter",
           "models/SessionModel",
           "views/dialoges/ErrorDialogView",
@@ -60,7 +60,7 @@ require([ "app",
             Webservice,
             WsChat,
             WsAPI,
-            BasicRouter,
+            GlobalRouter,
             AdminRouter,
             SessionModel,
             ErrorDialogView) {
@@ -122,7 +122,7 @@ require([ "app",
 
     // Instantiates a new Backbone.js Mobile Router
     app.routers = {};
-    app.routers.basic = new BasicRouter();
+    app.routers.global = new GlobalRouter();
     app.routers.admin = new AdminRouter();
 
     // Error Displaying
