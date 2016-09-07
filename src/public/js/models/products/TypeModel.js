@@ -3,18 +3,18 @@ define([
     "MyPOS",
     "collections/products/GroupCollection"
 ], function(app, MyPOS, GroupCollection){
-	"use strict";
+    "use strict";
 
     var TypeModel = Backbone.Model.extend({
 
         defaults: function() {
-        	return {
-        		menu_typeid: 0,
-        		name: '',
+            return {
+                menu_typeid: 0,
+                name: '',
                 tax: 0,
                 allowMixing: false,
                 groupes: new GroupCollection
-        	};
+            };
         },
 
         parse: function(response)

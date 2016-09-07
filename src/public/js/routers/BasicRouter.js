@@ -22,8 +22,7 @@ define([ "app",
          "views/ManagerStatisticView",
          "views/admin/AdminView",
          "views/admin/AdminEventView",
-         "views/admin/AdminEventModifyView",
-         "views/admin/AdminEventModifyDetailsView",
+         "views/admin/AdminEventModifyDetailView",
          "views/admin/AdminUserView",
          "views/admin/AdminMenuView"
 ], function(app,
@@ -46,8 +45,7 @@ define([ "app",
             ManagerStatisticView,
             AdminView,
             AdminEventView,
-            AdminEventModifyView,
-            AdminEventModifyDetailsView,
+            AdminEventModifyDetailView,
             AdminUserView,
             AdminMenuView) {
     "use strict";
@@ -250,7 +248,7 @@ define([ "app",
         admin_event_add: function()
         {
             if(DEBUG) console.log("Admin Event Add", "OK");
-            this.show(new AdminEventModifyDetailsView({id: 'new'}));
+            this.show(new AdminEventModifyDetailView({id: 'new'}));
         },
 
         admin_event_modify: function(id)

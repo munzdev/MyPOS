@@ -69,4 +69,104 @@ class Admin extends AdminController
 
         return $o_events->SetEvent($a_params['eventid'], $a_params['name'], $d_date);
     }
+
+    public function GetMenuListAction()
+    {
+        $o_products = new Model\Products(Database::GetConnection());
+
+        $a_types = $o_products->GetTypesList();
+        $a_groupes = $o_products->GetGroupesList();
+
+
+        $a_return = array();
+
+        foreach($a_types as $a_type)
+        {
+            foreach($a_groupes as $a_group)
+            {
+                if($a_type['menu_typeid'] != $a_group['menu_typeid'])
+                    continue;
+
+                if(!isset($a_return[$a_type['menu_typeid']]))
+                {
+                    $a_return[$a_type['menu_typeid']] = $a_type;
+                    $a_return[$a_type['menu_typeid']]['groupes'] = array();
+                }
+
+                $a_return[$a_type['menu_typeid']]['groupes'][] = $a_group;
+            }
+        }
+
+        return array_values($a_return);
+    }
+
+    public function GetUsersListAction()
+    {
+        $o_users = new Model\Users(Database::GetConnection());
+
+        return $o_users->GetAllUsers();
+    }
+
+    public function AddUserAction()
+    {
+        $a_params = Request::ValidateParams(array('username' => 'string',
+                                                  'password' => 'string',
+                                                  'firstname' => 'string',
+                                                  'lastname' => 'string',
+                                                  'phonenumber' => 'string',
+                                                  'isAdmin' => 'bool',
+                                                  'active' => 'bool'));
+
+        $o_users = new Model\Users(Database::GetConnection());
+
+        return $o_users->AddUser($a_params['username'],
+                                 $a_params['password'],
+                                 $a_params['firstname'],
+                                 $a_params['lastname'],
+                                 $a_params['phonenumber'],
+                                 $a_params['isAdmin'] == true ? 1 : 0,
+                                 $a_params['active'] == true ? 1 : 0);
+
+    }
+
+    public function GetUserAction()
+    {
+        $a_params = Request::ValidateParams(array('userid' => 'numeric'));
+
+        $o_users = new Model\Users(Database::GetConnection());
+
+        return $o_users->GetUser($a_params['userid']);
+    }
+
+    public function SetUserAction()
+    {
+        $a_params = Request::ValidateParams(array('userid' => 'numeric',
+                                                  'username' => 'string',
+                                                  'password' => 'string',
+                                                  'firstname' => 'string',
+                                                  'lastname' => 'string',
+                                                  'phonenumber' => 'string',
+                                                  'isAdmin' => 'bool',
+                                                  'active' => 'bool'));
+
+        $o_users = new Model\Users(Database::GetConnection());
+
+        return $o_users->SetUser($a_params['userid'],
+                                 $a_params['username'],
+                                 $a_params['password'],
+                                 $a_params['firstname'],
+                                 $a_params['lastname'],
+                                 $a_params['phonenumber'],
+                                 $a_params['isAdmin'] == 'true' ? 1 : 0,
+                                 $a_params['active'] == 'true' ? 1 : 0);
+    }
+
+    public function UserDeleteAction()
+    {
+        $a_params = Request::ValidateParams(array('userid' => 'numeric'));
+
+        $o_users = new Model\Users(Database::GetConnection());
+
+        return $o_users->Delete($a_params['userid']);
+    }
 }
