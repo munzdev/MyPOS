@@ -131,10 +131,10 @@ class Users
         return $o_statement->execute(array(':userid' => $i_userid, ':hash' => $str_key));
     }
 
-    public function AddUser($str_username, $str_password, $str_firstname, $str_lastname, $str_phonenumber, $b_is_admin)
+    public function AddUser($str_username, $str_password, $str_firstname, $str_lastname, $str_phonenumber, $b_is_admin, $b_active)
     {
-        $o_statement = $this->o_db->prepare("INSERT INTO users(username, password, firstname, lastname, phonenumber, is_admin )
-                                     VALUES(:username, MD5(:password), :firstname, :lastname, :phonenumber, :is_admin)");
+        $o_statement = $this->o_db->prepare("INSERT INTO users(username, password, firstname, lastname, phonenumber, is_admin, active )
+                                             VALUES(:username, MD5(:password), :firstname, :lastname, :phonenumber, :is_admin, :active)");
 
         $o_statement->bindparam(":username", $str_username);
         $o_statement->bindparam(":password", $str_password);
@@ -142,6 +142,42 @@ class Users
         $o_statement->bindparam(":lastname", $str_lastname);
         $o_statement->bindparam(":phonenumber", $str_phonenumber);
         $o_statement->bindparam(":is_admin", $b_is_admin);
+        $o_statement->bindparam(":active", $b_active);
+        $o_statement->execute();
+
+        return $o_statement;
+    }
+
+    public function SetUser($i_userid, $str_username, $str_password, $str_firstname, $str_lastname, $str_phonenumber, $b_is_admin, $b_active)
+    {
+        $str_password_update = "";
+
+        if(!empty($str_password))
+        {
+            $str_password_update = "password = MD5(:password),";
+        }
+
+        $o_statement = $this->o_db->prepare("UPDATE users
+                                             SET username = :username,
+                                                 $str_password_update
+                                                 firstname = :firstname,
+                                                 lastname = :lastname,
+                                                 phonenumber = :phonenumber,
+                                                 is_admin = :is_admin,
+                                                 active = :active
+                                             WHERE userid = :userid");
+
+        $o_statement->bindparam(":userid", $i_userid);
+        $o_statement->bindparam(":username", $str_username);
+        $o_statement->bindparam(":firstname", $str_firstname);
+        $o_statement->bindparam(":lastname", $str_lastname);
+        $o_statement->bindparam(":phonenumber", $str_phonenumber);
+        $o_statement->bindparam(":is_admin", $b_is_admin);
+        $o_statement->bindparam(":active", $b_active);
+
+        if(!empty($str_password))
+            $o_statement->bindparam(":password", $str_password);
+
         $o_statement->execute();
 
         return $o_statement;
@@ -166,6 +202,39 @@ class Users
                                             WHERE eu.eventid = :eventid");
 
         $o_statement->execute(array(':eventid' => $i_eventid));
+
+        return $o_statement->fetchAll();
+    }
+
+    public function GetUser($i_userid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT u.username,
+                                                    u.firstname,
+                                                    u.lastname,
+                                                    u.phonenumber,
+                                                    u.is_admin,
+                                                    u.active
+                                            FROM users u
+                                            WHERE u.userid = :userid");
+
+        $o_statement->bindParam(":userid", $i_userid);
+        $o_statement->execute();
+
+        return $o_statement->fetch();
+    }
+
+    public function GetAllUsers()
+    {
+        $o_statement = $this->o_db->prepare("SELECT u.userid,
+                                                    u.username,
+                                                    u.firstname,
+                                                    u.lastname,
+                                                    u.phonenumber,
+                                                    u.is_admin,
+                                                    u.active
+                                            FROM users u");
+
+        $o_statement->execute();
 
         return $o_statement->fetchAll();
     }
@@ -213,5 +282,14 @@ class Users
         $o_statement->execute();
 
         return $o_statement->fetchAll();
+    }
+
+    public function Delete($i_userid)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM users
+                                             WHERE userid = :userid");
+
+        $o_statement->bindParam(":userid", $i_userid);
+        return $o_statement->execute();
     }
 }

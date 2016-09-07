@@ -121,8 +121,8 @@ class Admin extends AdminController
                                  $a_params['firstname'],
                                  $a_params['lastname'],
                                  $a_params['phonenumber'],
-                                 $a_params['isAdmin'] == true ? 1 : 0,
-                                 $a_params['active'] == true ? 1 : 0);
+                                 $a_params['isAdmin'] == 'true' ? 1 : 0,
+                                 $a_params['active'] == 'true' ? 1 : 0);
 
     }
 
