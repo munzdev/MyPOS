@@ -6,7 +6,9 @@ define(["app",
         "Webservice",
         'text!templates/dialoges/messages-dialog.phtml',
         "jquery-dateFormat"],
-function(app, Webservice, Template )
+function(app,
+         Webservice,
+         Template )
 {
     "use strict";
 

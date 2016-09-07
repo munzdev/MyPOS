@@ -2,8 +2,10 @@
 // =============
 
 // Includes file dependencies
-define([ "app", "MyPOS", 'text!templates/dialoges/login.phtml'],
-function( app, MyPOS, Template ) {
+define([ "app",
+         'text!templates/dialoges/login.phtml'],
+function( app,
+          Template ) {
     "use strict";
 
     // Extends Backbone.View

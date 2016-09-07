@@ -5,8 +5,12 @@
 define(["app",
         "Webservice",
         'text!templates/dialoges/options-dialog.phtml'],
-function(app, Webservice, Template )
+function(app,
+         Webservice,
+         Template )
 {
+    "use strict";
+
     // Extends Backbone.View
     var OptionsDialogView = Backbone.View.extend( {
 

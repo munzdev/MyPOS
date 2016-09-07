@@ -1,8 +1,7 @@
 define([
     "app",
-    "MyPOS",
     "models/PrinterModel"
-], function(app, MyPOS, PrinterModel){
+], function(app, PrinterModel){
     "use strict";
 
     var PrinterCollection = Backbone.Collection.extend({

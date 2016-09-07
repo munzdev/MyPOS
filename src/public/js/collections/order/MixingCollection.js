@@ -1,9 +1,8 @@
 define([
     "app",
-    "MyPOS",
     "models/order/MixingModel"
-], function(app, MyPOS, MixingModel){
-	"use strict";
+], function(app, MixingModel){
+    "use strict";
 
     var MixingCollection = Backbone.Collection.extend({
         model: MixingModel

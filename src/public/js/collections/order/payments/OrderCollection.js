@@ -4,7 +4,6 @@ define([
     "use strict";
 
     var OrderCollection = Backbone.Collection.extend({
-
         model: OrderModel
     });
 

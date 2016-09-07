@@ -5,7 +5,6 @@
 
 // Includes file dependencies
 define([ "app",
-         "MyPOS",
          "Webservice",
          "collections/OrderCollection",
          "models/order/TypeModel",
@@ -16,7 +15,6 @@ define([ "app",
          'text!templates/pages/order-modify.phtml',
          'text!templates/pages/order-item.phtml'],
 function(  app,
-            MyPOS,
             Webservice,
             OrderCollection,
             TypeModel,

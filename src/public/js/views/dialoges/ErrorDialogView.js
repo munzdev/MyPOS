@@ -2,7 +2,11 @@
 // =============
 
 // Includes file dependencies
-define([ "app", "MyPOS", 'text!templates/dialoges/error-dialog.phtml'], function( app, MyPOS, Template ) {
+define([ "app",
+         'text!templates/dialoges/error-dialog.phtml'],
+function( app,
+          Template ) {
+    "use strict";
 
     // Extends Backbone.View
     var ErrorDialogView = Backbone.View.extend( {

@@ -1,8 +1,7 @@
 define([
     "app",
-    "MyPOS",
     "models/products/TypeModel"
-], function(app, MyPOS, TypeModel){
+], function(app, TypeModel){
     "use strict";
 
     var ProductCollection = Backbone.Collection.extend({
@@ -16,11 +15,11 @@ define([
         	this.each(function(category){
                     category.get('groupes').each(function(groupe){
                         groupe.get('menues').each(function(menu) {
-                                self.searchHelper.push({menu_typeid: category.get('menu_typeid'),
-                                                        menu_groupid: groupe.get('menu_groupid'),
-                                                        name: category.get('name'),
-                                                        menuid: menu.get('menuid'),
-                                                        menu: menu});
+                            self.searchHelper.push({menu_typeid: category.get('menu_typeid'),
+                                                    menu_groupid: groupe.get('menu_groupid'),
+                                                    name: category.get('name'),
+                                                    menuid: menu.get('menuid'),
+                                                    menu: menu});
                         });
                     });
         	});

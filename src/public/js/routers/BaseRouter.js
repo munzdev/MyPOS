@@ -11,9 +11,7 @@ define([ "app"
 
         // The Router constructor
         initialize: function() {
-
             this.loadedViews = [];
-
         },
 
         show: function(view, options){

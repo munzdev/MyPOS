@@ -5,7 +5,6 @@
 
 // Includes file dependencies
 define([ "app",
-         "MyPOS",
          "Webservice",
          'models/order/payments/PaymentModel',
          'collections/order/payments/OrderCollection',
@@ -15,7 +14,6 @@ define([ "app",
          'text!templates/pages/order-pay.phtml',
          'text!templates/pages/order-item.phtml'],
 function(app,
-         MyPOS,
          Webservice,
          PaymentModel,
          OrderCollection,

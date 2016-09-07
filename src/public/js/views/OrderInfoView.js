@@ -31,11 +31,11 @@ define([ "app",
             var self = this;
 
             this.infoModel.fetch({
-                    data: {orderid: options.id},
-                    success: function() {
-                        self.render();
-                    }
-                });
+                data: {orderid: options.id},
+                success: function() {
+                    self.render();
+                }
+            });
         },
 
         events: {

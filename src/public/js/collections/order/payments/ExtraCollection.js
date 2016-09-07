@@ -4,7 +4,6 @@ define([
     "use strict";
 
     var ExtraCollection = Backbone.Collection.extend({
-
         model: ExtraModel
     });
 

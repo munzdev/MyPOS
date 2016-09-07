@@ -1,9 +1,8 @@
 define([
     "app",
-    "MyPOS",
     "models/OrdersOverviewModel"
-], function(app, MyPOS, OrdersOverviewModel){
-	"use strict";
+], function(app, OrdersOverviewModel){
+    "use strict";
 
     var OrdersOverviewCollection = Backbone.Collection.extend({
 
