@@ -34,7 +34,8 @@ Database rework:
 Code refatoring:
 
 - New PHP Codebase version 7.1
-- refactor PHP API classes. Use CleanCode and SOLID.
+- Use ECMAScript 6 for JavaScript
+- refactor PHP API and JS classes. Use CleanCode and SOLID.
 - refactor API names/uris. Planning a Service-oriented-design to match a better RESTful Service principe (PUT, GET, DELETE, PATCH)
 - possible use slim and
 - refactor JS Code with models, views and collections to match the RESTful API (PUT, GET, DELETE, PATCH)

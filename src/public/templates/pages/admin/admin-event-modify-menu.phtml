@@ -1,5 +1,41 @@
 <div data-role="content">
     <div class="nav-header"><%= header %></div>
-    Menu Overview
+    <ul data-role="listview" data-inset="true" data-divider-theme="a">
+
+        <div data-role="collapsible-set" >
+            <% products.each(function(type) { %>
+                <div data-role="collapsible">
+                    <h2><%- type.get('name') %></h2>
+                    <ul data-role="listview">
+                        <% type.get('groupes').each(function(group) { %>
+                            <li data-role="list-divider"><%- group.get('name') %></li>
+                            <li data-icon='plus'><a class="admin-event-modify-menu-add-btn" data-group-id="<%- group.get('menu_groupid') %>" >Hinzufügen</a></li>
+                            <% group.get('menues').each(function(menu) { %>
+                                <li><a data-menu-id="<%- menu.get('menuid') %>" class='admin-event-modify-menu-item'><%- menu.get('name') %><span class="ui-li-count"><%- menu.get('price') %></span></a></li>
+                            <% }); %>
+                        <% }); %>
+                    </ul>
+                </div>
+            <% }); %>
+        </div>
+
+    </ul>
 </div>
 <%= footer %>
+<div data-role="popup" id="admin-event-modify-menu-item-dialog" data-theme="b" data-overlay-theme="b">
+    <ul data-role="listview" data-inset="true" style="min-width:210px;">
+        <li data-role="list-divider">Optionen</li>
+        <li><a id="admin-event-modify-menu-item-edit">Bearbeiten</a></li>
+        <li><a id="admin-event-modify-menu-item-delete">Löschen</a></li>
+    </ul>
+</div>
+<div data-role="popup" id="admin-event-modify-menu-item-delete-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+    <div data-role="header" data-theme="a">
+        <h1>Löschen</h1>
+    </div>
+    <div role="main" class="ui-content">
+        <h3 class="ui-title">Sind Sie sicher das das Sie das Menü löschen wollen? Alle zugeordneten Bestellungen, Rechnungen, etc. werden gelöscht</h3>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Abbrechen</a>
+        <a id="admin-event-modify-menu-item-delete-finish-btn" class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
+    </div>
+</div>

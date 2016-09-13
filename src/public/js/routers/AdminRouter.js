@@ -9,6 +9,7 @@ define([ "app",
          "views/admin/AdminEventCopyView",
          "views/admin/AdminEventModifyDetailView",
          "views/admin/AdminEventModifyMenuView",
+         "views/admin/AdminEventModifyMenuModifyView",
          "views/admin/AdminEventModifyDistributionView",
          "views/admin/AdminEventModifyPrinterView",
          "views/admin/AdminEventModifyUserView",
@@ -26,6 +27,7 @@ define([ "app",
             AdminEventCopyView,
             AdminEventModifyDetailView,
             AdminEventModifyMenuView,
+            AdminEventModifyMenuModifyView,
             AdminEventModifyDistributionView,
             AdminEventModifyPrinterView,
             AdminEventModifyUserView,
@@ -50,6 +52,8 @@ define([ "app",
             "admin/event/copy/:id": "admin_event_copy",
             "admin/event/modify/:id/detail": "admin_event_modify_detail",
             "admin/event/modify/:id/menu": "admin_event_modify_menu",
+            "admin/event/modify/:id/menu/add/:groupid": "admin_event_modify_menu_add",
+            "admin/event/modify/:id/menu/:menuid": "admin_event_modify_menu_modify",
             "admin/event/modify/:id/distribution": "admin_event_modify_distribution",
             "admin/event/modify/:id/printer": "admin_event_modify_printer",
             "admin/event/modify/:id/user": "admin_event_modify_user",
@@ -100,6 +104,20 @@ define([ "app",
         {
             if(DEBUG) console.log("Admin Event Modify Menu", "OK");
             this.show(new AdminEventModifyMenuView({id: id}));
+        },
+
+        admin_event_modify_menu_add: function(id, groupid)
+        {
+            if(DEBUG) console.log("Admin Event Modify Menu Add", "OK");
+            this.show(new AdminEventModifyMenuModifyView({id: id,
+                                                          groupid: groupid}));
+        },
+
+        admin_event_modify_menu_modify: function(id, menuid)
+        {
+            if(DEBUG) console.log("Admin Event Modify Menu Modify", "OK");
+            this.show(new AdminEventModifyMenuModifyView({id: id,
+                                                          menuid: menuid}));
         },
 
         admin_event_modify_distribution: function(id)

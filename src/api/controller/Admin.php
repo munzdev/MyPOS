@@ -299,4 +299,62 @@ class Admin extends AdminController
 
         return $o_tables->Delete($a_params['tableid']);
     }
+
+    public function GetEventMenuListAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->GetList($a_params['eventid']);
+    }
+
+    public function GetEventExtrasAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->GetExtras($a_params['eventid']);
+    }
+
+    public function GetMenuSizesAction()
+    {
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->GetSizes();
+    }
+
+    public function AddMenuAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric',
+                                                  'groupid' => 'numeric',
+                                                  'name' => 'string',
+                                                  'price' => 'numeric',
+                                                  'availability' => 'string',
+                                                  'availabilityAmount' => 'numeric',
+                                                  'extras' => 'array',
+                                                  'sizes' => 'array'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        $i_menuid = $o_products->AddMenu($a_params['eventid'],
+                                         $a_params['groupid'],
+                                         $a_params['name'],
+                                         $a_params['price'],
+                                         $a_params['availability'],
+                                         $a_params['availabilityAmount']);
+
+        foreach($a_params['extras'] as $i_extraid => $i_price)
+        {
+            $o_products->AddMenuExtra($i_menuid, $i_extraid, $i_price);
+        }
+
+        foreach($a_params['sizes'] as $i_sizeid => $i_price)
+        {
+            $o_products->AddMenuSize($i_menuid, $i_sizeid, $i_price);
+        }
+
+        return $i_menuid;
+    }
 }

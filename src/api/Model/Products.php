@@ -138,6 +138,18 @@ class Products
         return $o_statement->fetchAll();
     }
 
+    public function GetSizes()
+    {
+        $o_statement = $this->o_db->prepare("SELECT menu_sizeid,
+                                                    name,
+                                                    factor
+                                                 FROM menu_sizes");
+
+        $o_statement->execute();
+
+        return $o_statement->fetchAll();
+    }
+
     public function SetMenuAvailabilityAmount($i_menuid, $i_amount)
     {
         $o_statement = $this->o_db->prepare("UPDATE menues
@@ -304,5 +316,47 @@ class Products
 
         $o_statement->bindParam(":menu_typeid", $i_menu_typeid);
         return $o_statement->execute();
+    }
+
+    public function AddMenu($i_eventid, $i_menu_groupid, $str_name, $i_price, $str_availability, $i_availability_amount)
+    {
+        $o_statement = $this->o_db->prepare("INSERT INTO menues (eventid, menu_groupid, name, price, availability, availability_amount)
+                                             VALUES (:eventid, :menu_groupid, :name, :price, :availability, :availability_amount)");
+
+        $o_statement->bindParam(":eventid", $i_eventid);
+        $o_statement->bindParam(":menu_groupid", $i_menu_groupid);
+        $o_statement->bindParam(":name", $str_name);
+        $o_statement->bindParam(":price", $i_price);
+        $o_statement->bindParam(":availability", $str_availability);
+        $o_statement->bindParam(":availability_amount", $i_availability_amount);
+        $o_statement->execute();
+
+        return $this->o_db->lastInsertId();
+    }
+
+    public function AddMenuExtra($i_menuid, $i_extraid, $i_price)
+    {
+        $o_statement = $this->o_db->prepare("INSERT INTO menues_possible_extras (menuid, menu_extraid, price)
+                                             VALUES (:menuid, :menu_extraid, :price)");
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        $o_statement->bindParam(":menu_extraid", $i_extraid);
+        $o_statement->bindParam(":price", $i_price);
+        $o_statement->execute();
+
+        return $this->o_db->lastInsertId();
+    }
+
+    public function AddMenuSize($i_menuid, $i_sizeid, $i_price)
+    {
+        $o_statement = $this->o_db->prepare("INSERT INTO menues_possible_sizes (menuid, menu_sizeid, price)
+                                             VALUES (:menuid, :menu_sizeid, :price)");
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        $o_statement->bindParam(":menu_sizeid", $i_sizeid);
+        $o_statement->bindParam(":price", $i_price);
+        $o_statement->execute();
+
+        return $this->o_db->lastInsertId();
     }
 }

@@ -1,0 +1,94 @@
+<div data-role="content">
+    <div class="nav-header"><%= header %></div>
+    <div data-role="header">
+        <h2>
+            <% if(mode == 'new') { print('Neues Menü'); } else { print('Menü Bearbeiten'); } %>
+        </h2>
+    </div>
+    <fieldset data-role="controlgroup">
+        <legend>Name:</legend>
+        <input type="text" id="admin-event-modify-menu-modify-name" value="<%- name %>">
+        <label for="admin-event-modify-menu-modify-name"></label>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend>Preis:</legend>
+        <input type="number" id="admin-event-modify-menu-modify-price" value="<%- price %>">
+        <label for="admin-event-modify-menu-modify-price"></label>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend>Verfügbarkeit:</legend>
+        <select id="admin-event-modify-menu-modify-availability">
+            <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(availability == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>>Verfügbar</option>
+            <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(availability == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>>Verspätet</option>
+            <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(availability == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>>Ausverkauft</option>
+        </select>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend>Verfügbarkeit Anzahl:</legend>
+        <input type="number" id="admin-event-modify-menu-modify-availability-amount" value="<%- availabilityAmount %>" data-clear-btn="true" placeholder="Ohne Limit">
+        <label for="admin-event-modify-menu-modify-availability-amount"></label>
+    </fieldset>
+
+    <fieldset class="ui-grid-a" id="admin-event-modify-menu-modify-optons">
+        <div class="ui-block-a">
+            <fieldset data-role="controlgroup">
+                <legend>Verfügbare Extras</legend>
+                <table  class="ui-responsive table-stroke">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Preisdifferenz</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% extras.each(function(extra) { %>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" id="admin-event-modify-menu-modify-extra-<%- extra.get('menu_extraid') %>" value="<%- extra.get('menu_extraid') %>" name="admin-event-modify-menu-modify-extra">
+                                    <label for="admin-event-modify-menu-modify-extra-<%- extra.get('menu_extraid') %>"><%- extra.get('name') %></label>
+                                </td>
+                                <td>
+                                    <input type="number" id="admin-event-modify-menu-modify-extra-price-<%- extra.get('menu_extraid') %>" value=""  />
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+        <div class="ui-block-b">
+            <fieldset data-role="controlgroup">
+                <legend>Verfügbare Größen</legend>
+                <table  class="ui-responsive table-stroke">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Preisdifferenz</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% sizes.each(function(size) { %>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" id="admin-event-modify-menu-modify-size-<%- size.get('menu_sizeid') %>" value="<%- size.get('menu_sizeid') %>" name="admin-event-modify-menu-modify-size">
+                                    <label for="admin-event-modify-menu-modify-size-<%- size.get('menu_sizeid') %>"><%- size.get('name') %></label>
+                                </td>
+                                <td>
+                                    <input type="number" id="admin-event-modify-menu-modify-size-price-<%- size.get('menu_sizeid') %>" value=""  />
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </fieldset>
+        </div>
+    </fieldset>
+
+    <div class="ui-field-contain">
+        <a id="admin-event-modify-menu-modify-save-btn" class="ui-btn">Speichern</a>
+    </div>
+</div>
+<%= footer %>

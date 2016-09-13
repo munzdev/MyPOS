@@ -5,7 +5,18 @@ define([
     "use strict";
 
     var ExtraCollection = Backbone.Collection.extend({
-        model: ExtraModel
+        model: ExtraModel,
+        parse: function (response) {
+            if(response.error)
+            {
+                MyPOS.DisplayError(response.errorMessage);
+                return null;
+    	    }
+            else
+            {
+                return response.result;
+            }
+        }
     });
 
     return ExtraCollection;
