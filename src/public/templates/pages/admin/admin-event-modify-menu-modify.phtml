@@ -44,14 +44,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% extras.each(function(extra) { %>
+                        <% extrasList.each(function(extra) { %>
                             <tr>
                                 <td>
-                                    <input type="checkbox" id="admin-event-modify-menu-modify-extra-<%- extra.get('menu_extraid') %>" value="<%- extra.get('menu_extraid') %>" name="admin-event-modify-menu-modify-extra">
+                                    <input type="checkbox" id="admin-event-modify-menu-modify-extra-<%- extra.get('menu_extraid') %>" value="<%- extra.get('menu_extraid') %>" name="admin-event-modify-menu-modify-extra" <% if(extra.get('menu_extraid') in extras) { print('checked="true"'); } %>>
                                     <label for="admin-event-modify-menu-modify-extra-<%- extra.get('menu_extraid') %>"><%- extra.get('name') %></label>
                                 </td>
                                 <td>
-                                    <input type="number" id="admin-event-modify-menu-modify-extra-price-<%- extra.get('menu_extraid') %>" value=""  />
+                                    <input type="number" id="admin-event-modify-menu-modify-extra-price-<%- extra.get('menu_extraid') %>" value="<% if(extra.get('menu_extraid') in extras) { print(extras[extra.get('menu_extraid')]); } %>"  />
                                 </td>
                             </tr>
                         <% }); %>
@@ -70,14 +70,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% sizes.each(function(size) { %>
+                        <% sizesList.each(function(size) { %>
                             <tr>
                                 <td>
-                                    <input type="checkbox" id="admin-event-modify-menu-modify-size-<%- size.get('menu_sizeid') %>" value="<%- size.get('menu_sizeid') %>" name="admin-event-modify-menu-modify-size">
+                                    <input type="checkbox" id="admin-event-modify-menu-modify-size-<%- size.get('menu_sizeid') %>" value="<%- size.get('menu_sizeid') %>" name="admin-event-modify-menu-modify-size" <% if(size.get('menu_sizeid') in sizes) { print('checked="true"'); } %>>
                                     <label for="admin-event-modify-menu-modify-size-<%- size.get('menu_sizeid') %>"><%- size.get('name') %></label>
                                 </td>
                                 <td>
-                                    <input type="number" id="admin-event-modify-menu-modify-size-price-<%- size.get('menu_sizeid') %>" value=""  />
+                                    <input type="number" id="admin-event-modify-menu-modify-size-price-<%- size.get('menu_sizeid') %>" value="<% if(size.get('menu_sizeid') in sizes) { print(sizes[size.get('menu_sizeid')]); } %>"  />
                                 </td>
                             </tr>
                         <% }); %>

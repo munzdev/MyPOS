@@ -29,6 +29,8 @@ function( app,
 
         click_save_btn: function()
         {
+            var self = this;
+
             var name = $.trim($('#admin-event-modify-menu-modify-name').val());
             var price = $.trim($('#admin-event-modify-menu-modify-price').val());
             var availability = $.trim($('#admin-event-modify-menu-modify-availability').val());
@@ -120,7 +122,7 @@ function( app,
                 webservice.callback = {
                     success: function()
                     {
-                        MyPOS.ChangePage('#admin/menu/modify/' + this.eventid + "/menu");
+                        MyPOS.ChangePage('#admin/event/modify/' + self.eventid + "/menu");
                     }
                 };
                 webservice.call();
@@ -129,7 +131,7 @@ function( app,
             {
                 var webservice = new Webservice();
                 webservice.action = "Admin/SetMenu";
-                webservice.formData = {id: this.menuid,
+                webservice.formData = {menuid: this.menuid,
                                        name: name,
                                        price: price,
                                        availability: availability,
@@ -139,7 +141,7 @@ function( app,
                 webservice.callback = {
                     success: function()
                     {
-                        MyPOS.ChangePage('#admin/menu/modify/' + this.eventid + "/menu");
+                        MyPOS.ChangePage('#admin/event/modify/' + self.eventid + "/menu");
                     }
                 };
                 webservice.call();
@@ -160,6 +162,8 @@ function( app,
             this.availabilityValue = "";
             this.availabilityAmountValue = "";
             this.allowMixingValue = 0;
+            this.sizesValue = {};
+            this.extrasValue = {};
 
             this.extrasList = new ExtraCollection();
             this.extrasList.url = app.API + "Admin/GetEventExtras/";
@@ -182,7 +186,7 @@ function( app,
 
                     var webservice = new Webservice();
                     webservice.action = "Admin/GetMenu";
-                    webservice.formData = {id: self.menuid};
+                    webservice.formData = {menuid: self.menuid};
                     webservice.callback = {
                         success: function(data)
                         {
@@ -191,6 +195,8 @@ function( app,
                             self.availabilityValue = data.availability;
                             self.availabilityAmountValue = data.availabilityAmount;
                             self.allowMixingValue = data.allowMixing;
+                            self.sizesValue = data.sizes;
+                            self.extrasValue = data.extras;
                             self.render();
                         }
                     };
@@ -211,12 +217,14 @@ function( app,
                                                                   footer: footer.render(),
                                                                   mode: this.mode,
                                                                   name: this.nameValue,
-                                                                  price: this.availabilityAmountValue,
+                                                                  price: this.priceValue,
                                                                   availability: this.availabilityValue,
                                                                   availabilityAmount: this.availabilityAmountValue,
+                                                                  extras: this.extrasValue,
+                                                                  sizes: this.sizesValue,
                                                                   allowMixing: this.allowMixingValue,
-                                                                  sizes: this.sizesList,
-                                                                  extras: this.extrasList});
+                                                                  sizesList: this.sizesList,
+                                                                  extrasList: this.extrasList});
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");

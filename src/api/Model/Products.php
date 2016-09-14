@@ -334,6 +334,49 @@ class Products
         return $this->o_db->lastInsertId();
     }
 
+    public function GetMenu($i_menuid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT eventid,
+                                                    menu_groupid,
+                                                    name,
+                                                    price,
+                                                    availability,
+                                                    availability_amount
+                                             FROM menues
+                                             WHERE menuid = :menuid");
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        $o_statement->execute();
+
+        return $o_statement->fetch();
+    }
+
+    public function SetMenu($i_menuid, $str_name, $i_price, $str_availability, $i_availability_amount)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE menues
+                                             SET name = :name,
+                                                 price = :price,
+                                                 availability = :availability,
+                                                 availability_amount = :availability_amount
+                                             WHERE menuid = :menuid");
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        $o_statement->bindParam(":name", $str_name);
+        $o_statement->bindParam(":price", $i_price);
+        $o_statement->bindParam(":availability", $str_availability);
+        $o_statement->bindParam(":availability_amount", $i_availability_amount);
+        return $o_statement->execute();
+    }
+
+    public function DeleteMenu($i_menuid)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM menues
+                                             WHERE menuid = :menuid");
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        return $o_statement->execute();
+    }
+
     public function AddMenuExtra($i_menuid, $i_extraid, $i_price)
     {
         $o_statement = $this->o_db->prepare("INSERT INTO menues_possible_extras (menuid, menu_extraid, price)
@@ -345,6 +388,114 @@ class Products
         $o_statement->execute();
 
         return $this->o_db->lastInsertId();
+    }
+
+    public function GetMenuExtras($i_menuid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT menues_possible_extraid,
+                                                    menu_extraid,
+                                                    price
+                                             FROM menues_possible_extras
+                                             WHERE menuid = :menuid");
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll();
+    }
+
+    public function GetMenuExtra($i_menuid, $i_menu_extraid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT menues_possible_extraid,
+                                                    price
+                                             FROM menues_possible_extras
+                                             WHERE menuid = :menuid
+                                                   AND menu_extraid = :menu_extraid");
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        $o_statement->bindParam(":menu_extraid", $i_menu_extraid);
+        $o_statement->execute();
+
+        return $o_statement->fetch();
+    }
+
+    public function SetMenuExtraPrice($i_menues_possible_extraid, $i_price)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE menues_possible_extras
+                                             SET price = :price
+                                             WHERE menues_possible_extraid = :menues_possible_extraid");
+
+        $o_statement->bindParam(":menues_possible_extraid", $i_menues_possible_extraid);
+        $o_statement->bindParam(":price", $i_price);
+        return $o_statement->execute();
+    }
+
+    public function DeleteMenuExtrasWhereExtraNotIn($i_menuid, $a_extraids)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM menues_possible_extras
+                                             WHERE menuid = :menuid
+                                                   AND menu_extraid NOT IN (:extraids)");
+
+        if(empty($a_extraids))
+            $a_extraids[] = 0;
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        $o_statement->bindValue(":extraids", join(',', $a_extraids));
+        return $o_statement->execute();
+    }
+
+    public function GetMenuSizes($i_menuid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT menues_possible_sizeid,
+                                                    menu_sizeid,
+                                                    price
+                                             FROM menues_possible_sizes
+                                             WHERE menuid = :menuid");
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll();
+    }
+
+    public function GetMenuSize($i_menuid, $i_menu_sizeid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT menues_possible_sizeid,
+                                                    price
+                                             FROM menues_possible_sizes
+                                             WHERE menuid = :menuid
+                                                   AND menu_sizeid = :menu_sizeid");
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        $o_statement->bindParam(":menu_sizeid", $i_menu_sizeid);
+        $o_statement->execute();
+
+        return $o_statement->fetch();
+    }
+
+    public function SetMenuSizePrice($i_menues_possible_sizeid, $i_price)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE menues_possible_sizes
+                                             SET price = :price
+                                             WHERE menues_possible_sizeid = :menues_possible_sizeid");
+
+        $o_statement->bindParam(":menues_possible_sizeid", $i_menues_possible_sizeid);
+        $o_statement->bindParam(":price", $i_price);
+        return $o_statement->execute();
+    }
+
+    public function DeleteMenuSizesWhereSizeNotIn($i_menuid, $a_sizeids)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM menues_possible_sizes
+                                             WHERE menuid = :menuid
+                                                   AND menu_sizeid NOT IN (:sizeids)");
+
+        if(empty($a_sizeids))
+            $a_sizeids[] = 0;
+
+        $o_statement->bindParam(":menuid", $i_menuid);
+        $o_statement->bindValue(":sizeids", join(',', $a_sizeids));
+        return $o_statement->execute();
     }
 
     public function AddMenuSize($i_menuid, $i_sizeid, $i_price)

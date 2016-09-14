@@ -336,25 +336,139 @@ class Admin extends AdminController
                                                   'extras' => 'array',
                                                   'sizes' => 'array'));
 
+        $o_db = Database::GetConnection();
+
+        $o_products = new Model\Products($o_db);
+
+        try
+        {
+            $o_db->beginTransaction();
+
+            $i_menuid = $o_products->AddMenu($a_params['eventid'],
+                                             $a_params['groupid'],
+                                             $a_params['name'],
+                                             $a_params['price'],
+                                             $a_params['availability'],
+                                             $a_params['availabilityAmount']);
+
+            foreach($a_params['extras'] as $i_extraid => $i_price)
+            {
+                $o_products->AddMenuExtra($i_menuid, $i_extraid, $i_price);
+            }
+
+            foreach($a_params['sizes'] as $i_sizeid => $i_price)
+            {
+                $o_products->AddMenuSize($i_menuid, $i_sizeid, $i_price);
+            }
+
+            $o_db->commit();
+
+            return $i_menuid;
+        }
+        catch (Exception $o_exception)
+        {
+            $o_db->rollBack();
+            throw $o_exception;
+        }
+    }
+
+    public function GetMenuAction()
+    {
+        $a_params = Request::ValidateParams(array('menuid' => 'numeric'));
+
         $o_products = new Model\Products(Database::GetConnection());
 
-        $i_menuid = $o_products->AddMenu($a_params['eventid'],
-                                         $a_params['groupid'],
-                                         $a_params['name'],
-                                         $a_params['price'],
-                                         $a_params['availability'],
-                                         $a_params['availabilityAmount']);
+        $a_menu = $o_products->GetMenu($a_params['menuid']);
+        $a_menu['sizes'] = array();
+        $a_menu['extras'] = array();
 
-        foreach($a_params['extras'] as $i_extraid => $i_price)
+        $a_sizes = $o_products->GetMenuSizes($a_params['menuid']);
+        $a_extras = $o_products->GetMenuExtras($a_params['menuid']);
+
+        foreach ($a_sizes as $a_sizes)
         {
-            $o_products->AddMenuExtra($i_menuid, $i_extraid, $i_price);
+            $a_menu['sizes'][$a_sizes['menu_sizeid']] = $a_sizes['price'];
         }
 
-        foreach($a_params['sizes'] as $i_sizeid => $i_price)
+        foreach ($a_extras as $a_extra)
         {
-            $o_products->AddMenuSize($i_menuid, $i_sizeid, $i_price);
+            $a_menu['extras'][$a_extra['menu_extraid']] = $a_extra['price'];
         }
 
-        return $i_menuid;
+        return $a_menu;
+    }
+
+    public function SetMenuAction()
+    {
+        $a_params = Request::ValidateParams(array('menuid' => 'numeric',
+                                                  'name' => 'string',
+                                                  'price' => 'numeric',
+                                                  'availability' => 'string',
+                                                  'availabilityAmount' => 'numeric',
+                                                  'extras' => 'array',
+                                                  'sizes' => 'array'));
+
+        $o_db = Database::GetConnection();
+
+        $o_products = new Model\Products($o_db);
+
+        try
+        {
+            $o_db->beginTransaction();
+
+            $o_products->SetMenu($a_params['menuid'],
+                                 $a_params['name'],
+                                 $a_params['price'],
+                                 $a_params['availability'],
+                                 $a_params['availabilityAmount']);
+
+            foreach($a_params['extras'] as $i_extraid => $i_price)
+            {
+                $a_size = $o_products->GetMenuExtra($a_params['menuid'], $i_extraid);
+
+                if(empty($a_size))
+                {
+                    $o_products->AddMenuExtra($a_params['menuid'], $i_extraid, $i_price);
+                }
+                else
+                {
+                    $o_products->SetMenuExtraPrice($a_size['menues_possible_extraid'], $i_price);
+                }
+            }
+
+            $o_products->DeleteMenuExtrasWhereExtraNotIn($a_params['menuid'], array_keys($a_params['extras']));
+
+            foreach($a_params['sizes'] as $i_sizeid => $i_price)
+            {
+                $a_size = $o_products->GetMenuSize($a_params['menuid'], $i_sizeid);
+
+                if(empty($a_size))
+                {
+                    $o_products->AddMenuSize($a_params['menuid'], $i_sizeid, $i_price);
+                }
+                else
+                {
+                    $o_products->SetMenuSizePrice($a_size['menues_possible_sizeid'], $i_price);
+                }
+            }
+
+            $o_products->DeleteMenuSizesWhereSizeNotIn($a_params['menuid'], array_keys($a_params['sizes']));
+
+            $o_db->commit();
+        }
+        catch (Exception $o_exception)
+        {
+            $o_db->rollBack();
+            throw $o_exception;
+        }
+    }
+
+    public function DeleteMenuAction()
+    {
+        $a_params = Request::ValidateParams(array('id' => 'numeric'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->DeleteMenu($a_params['id']);
     }
 }
