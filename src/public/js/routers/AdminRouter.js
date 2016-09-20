@@ -13,6 +13,7 @@ define([ "app",
          "views/admin/AdminEventModifyDistributionView",
          "views/admin/AdminEventModifyPrinterView",
          "views/admin/AdminEventModifyUserView",
+         "views/admin/AdminEventModifyUserModifyView",
          "views/admin/AdminUserView",
          "views/admin/AdminUserModifyView",
          "views/admin/AdminMenuView",
@@ -31,6 +32,7 @@ define([ "app",
             AdminEventModifyDistributionView,
             AdminEventModifyPrinterView,
             AdminEventModifyUserView,
+            AdminEventModifyUserModifyView,
             AdminUserView,
             AdminUserModifyView,
             AdminMenuView,
@@ -57,6 +59,8 @@ define([ "app",
             "admin/event/modify/:id/distribution": "admin_event_modify_distribution",
             "admin/event/modify/:id/printer": "admin_event_modify_printer",
             "admin/event/modify/:id/user": "admin_event_modify_user",
+            "admin/event/modify/:id/user/add": "admin_event_modify_user_add",
+            "admin/event/modify/:id/user/modify/:events_userid": "admin_event_modify_user_modify",
             "admin/user": "admin_user",
             "admin/user/add": "admin_user_add",
             "admin/user/modify/:id": "admin_user_modify",
@@ -136,6 +140,19 @@ define([ "app",
         {
             if(DEBUG) console.log("Admin Event Modify User", "OK");
             this.show(new AdminEventModifyUserView({id: id}));
+        },
+
+        admin_event_modify_user_add: function(id)
+        {
+            if(DEBUG) console.log("Admin Event Modify User Add", "OK");
+            this.show(new AdminEventModifyUserModifyView({id: id}));
+        },
+
+        admin_event_modify_user_modify: function(id, events_userid)
+        {
+            if(DEBUG) console.log("Admin Event Modify User Modify", "OK");
+            this.show(new AdminEventModifyUserModifyView({id: id,
+                                                          events_userid: events_userid}));
         },
 
         admin_user: function()

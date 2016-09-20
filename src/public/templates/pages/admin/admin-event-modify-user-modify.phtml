@@ -1,0 +1,37 @@
+<div data-role="content">
+    <div class="nav-header"><%= header %></div>
+    <div data-role="header">
+        <h2><% if(mode == 'new') { print('Neue Berechtigung'); } else { print('Berechtigung Bearbeiten'); } %></h2>
+    </div>
+
+    <% if(mode == 'new') { %>
+        <fieldset data-role="controlgroup">
+            <legend>Benutzer:</legend>
+            <select id="admin-event-modify-user-modify-userid">
+                <% userList.each(function(user) { %>
+                    <option value="<%- user.get('userid') %>"><%- user.get('username') %> - <%- user.get('firstname') %> <%- user.get('lastname') %></option>
+                <% }); %>
+            </select>
+        </fieldset>
+    <% } %>
+
+    <fieldset data-role="controlgroup">
+        <legend>Berechtigungen:</legend>
+        <% userRoleList.each(function(role) { %>
+            <input type="checkbox" name='admin-event-modify-user-modify-role' id="admin-event-modify-user-modify-role-<%- role.get('events_user_roleid') %>" value='<%- role.get('events_user_roleid') %>' <% if(role.get('events_user_roleid') & roles) { print('checked="checked"'); } %>>
+            <label for="admin-event-modify-user-modify-role-<%- role.get('events_user_roleid') %>"><%- role.get('name') %></label>
+        <% }); %>
+    </fieldset>
+
+
+    <fieldset data-role="controlgroup">
+        <legend>Startgeld:</legend>
+        <input type="number" id="admin-event-modify-user-modify-begin-money" value="<%- beginMoney %>">
+        <label for="admin-event-modify-user-modify-begin-money"></label>
+    </fieldset>
+
+    <div class="ui-field-contain">
+        <a id="admin-event-modify-user-modify-save-btn" class="ui-btn">Speichern</a>
+    </div>
+</div>
+<%= footer %>

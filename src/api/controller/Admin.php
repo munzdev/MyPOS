@@ -471,4 +471,54 @@ class Admin extends AdminController
 
         return $o_products->DeleteMenu($a_params['id']);
     }
+
+    public function GetEventUserListAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->GetUserList($a_params['eventid']);
+    }
+
+    public function GetEventUserAction()
+    {
+        $a_params = Request::ValidateParams(array('events_userid' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->GetUser($a_params['events_userid']);
+    }
+
+    public function SetEventUserAction()
+    {
+        $a_params = Request::ValidateParams(array('events_userid' => 'numeric',
+                                                  'user_roles' => 'numeric',
+                                                  'begin_money' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->SetUser($a_params['events_userid'], $a_params['user_roles'], $a_params['begin_money']);
+    }
+
+    public function AddEventUserAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric',
+                                                  'userid' => 'numeric',
+                                                  'user_roles' => 'numeric',
+                                                  'begin_money' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->AddUser($a_params['eventid'], $a_params['userid'], $a_params['user_roles'], $a_params['begin_money']);
+    }
+
+    public function DeleteEventUserAction()
+    {
+        $a_params = Request::ValidateParams(array('events_userid' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->DeleteUser($a_params['events_userid']);
+    }
 }

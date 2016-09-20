@@ -35,12 +35,13 @@ class Events
         return $o_statement->fetchAll();
     }
 
-    public function AddUserToEvent($i_eventid, $i_userid, $i_role)
+    public function AddUser($i_eventid, $i_userid, $i_role, $i_begin_money)
     {
         $o_statement = $this->o_db->prepare("INSERT INTO events_user(eventid, userid, user_roles, begin_money)
-                                             VALUES(:eventid, :userid, :roles, 0)");
+                                             VALUES(:eventid, :userid, :user_roles, :begin_money)");
 
         $o_statement->bindparam(":eventid", $i_eventid);
+        $o_statement->bindparam(":begin_money", $i_begin_money);
         $o_statement->bindparam(":userid", $i_userid);
         $o_statement->bindparam(":user_roles", $i_role);
         return $o_statement->execute();
@@ -139,6 +140,62 @@ class Events
         $o_statement->bindParam(':name', $str_name);
         $o_statement->bindParam(':date', $d_date);
         $o_statement->bindParam(':eventid', $i_eventid);
+        return $o_statement->execute();
+    }
+
+    public function GetUserList($i_eventid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT eu.events_userid,
+                                                    eu.userid,
+                                                    u.username,
+                                                    CONCAT(u.firstname, ' ', u.lastname) AS name,
+                                                    eu.user_roles,
+                                                    GROUP_CONCAT(eur.name SEPARATOR ', ') AS roles,
+                                                    eu.begin_money
+                                            FROM events_user eu
+                                            INNER JOIN users u ON u.userid = eu.userid
+                                            LEFT JOIN events_user_role eur ON eur.events_user_roleid & eu.user_roles
+                                            WHERE eu.eventid = :eventid
+                                            GROUP BY eu.events_userid");
+
+        $o_statement->bindParam(':eventid', $i_eventid);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll();
+    }
+
+    public function GetUser($i_events_userid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT user_roles,
+                                                    begin_money
+                                             FROM events_user
+                                             WHERE events_userid = :events_userid");
+
+        $o_statement->bindParam(':events_userid', $i_events_userid);
+        $o_statement->execute();
+
+        return $o_statement->fetch();
+    }
+
+    public function SetUser($i_events_userid, $i_user_roles, $i_begin_money)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE events_user
+                                             SET user_roles = :user_roles,
+                                                 begin_money = :begin_money
+                                             WHERE events_userid = :events_userid");
+
+        $o_statement->bindParam(':user_roles', $i_user_roles);
+        $o_statement->bindParam(':begin_money', $i_begin_money);
+        $o_statement->bindParam(':events_userid', $i_events_userid);
+        return $o_statement->execute();
+    }
+
+    public function DeleteUser($i_events_userid)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM events_user
+                                             WHERE events_userid = :events_userid");
+
+        $o_statement->bindParam(':events_userid', $i_events_userid);
         return $o_statement->execute();
     }
 }
