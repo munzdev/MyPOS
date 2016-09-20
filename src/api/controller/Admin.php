@@ -521,4 +521,66 @@ class Admin extends AdminController
 
         return $o_events->DeleteUser($a_params['events_userid']);
     }
+
+    public function GetEventPrinterListAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->GetPrinters($a_params['eventid']);
+    }
+
+    public function GetEventPrinterAction()
+    {
+        $a_params = Request::ValidateParams(array('events_printerid' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->GetPrinter($a_params['events_printerid']);
+    }
+
+    public function SetEventPrinterAction()
+    {
+        $a_params = Request::ValidateParams(array('events_printerid' => 'numeric',
+                                                  'name' => 'string',
+                                                  'ip' => 'String',
+                                                  'port' => 'numeric',
+                                                  'characters_per_row' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->SetPrinter($a_params['events_printerid'], $a_params['name'], $a_params['ip'], $a_params['port'], $a_params['characters_per_row']);
+    }
+
+    public function SetEventPrinterDefaultAction()
+    {
+        $a_params = Request::ValidateParams(array('events_printerid' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->SetPrinterDefault($a_params['events_printerid']);
+    }
+
+    public function AddEventPrinterAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric',
+                                                  'name' => 'string',
+                                                  'ip' => 'String',
+                                                  'port' => 'numeric',
+                                                  'characters_per_row' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->AddPrinter($a_params['eventid'], $a_params['name'], $a_params['ip'], $a_params['port'], $a_params['characters_per_row']);
+    }
+
+    public function DeleteEventPrinterAction()
+    {
+        $a_params = Request::ValidateParams(array('events_printerid' => 'numeric'));
+
+        $o_events = new Model\Events(Database::GetConnection());
+
+        return $o_events->DeletePrinter($a_params['events_printerid']);
+    }
 }

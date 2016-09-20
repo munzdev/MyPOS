@@ -1,0 +1,35 @@
+<div data-role="content">
+    <div class="nav-header"><%= header %></div>
+    <div data-role="header">
+        <h2><% if(mode == 'new') { print('Neuer Drucker'); } else { print('Drucker Bearbeiten'); } %></h2>
+    </div>
+
+    <fieldset data-role="controlgroup">
+        <legend>Name:</legend>
+        <input type="text" id="admin-event-modify-printer-modify-name" value="<%- name %>">
+        <label for="admin-event-modify-printer-modify-name"></label>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend>IP:</legend>
+        <input type="text" id="admin-event-modify-printer-modify-ip" value="<%- ip %>">
+        <label for="admin-event-modify-printer-modify-ip"></label>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend>Port:</legend>
+        <input type="number" id="admin-event-modify-printer-modify-port" value="<%- port %>">
+        <label for="admin-event-modify-printer-modify-port"></label>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend>Druckergröße:</legend>
+        <input type="number" id="admin-event-modify-printer-modify-characters-per-row" value="<%- charactersPerRow %>">
+        <label for="admin-event-modify-printer-modify-characters-per-row"></label>
+    </fieldset>
+
+    <div class="ui-field-contain">
+        <a id="admin-event-modify-printer-modify-save-btn" class="ui-btn">Speichern</a>
+    </div>
+</div>
+<%= footer %>

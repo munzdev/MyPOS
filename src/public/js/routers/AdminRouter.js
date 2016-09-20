@@ -12,6 +12,7 @@ define([ "app",
          "views/admin/AdminEventModifyMenuModifyView",
          "views/admin/AdminEventModifyDistributionView",
          "views/admin/AdminEventModifyPrinterView",
+         "views/admin/AdminEventModifyPrinterModifyView",
          "views/admin/AdminEventModifyUserView",
          "views/admin/AdminEventModifyUserModifyView",
          "views/admin/AdminUserView",
@@ -31,6 +32,7 @@ define([ "app",
             AdminEventModifyMenuModifyView,
             AdminEventModifyDistributionView,
             AdminEventModifyPrinterView,
+            AdminEventModifyPrinterModifyView,
             AdminEventModifyUserView,
             AdminEventModifyUserModifyView,
             AdminUserView,
@@ -58,6 +60,8 @@ define([ "app",
             "admin/event/modify/:id/menu/:menuid": "admin_event_modify_menu_modify",
             "admin/event/modify/:id/distribution": "admin_event_modify_distribution",
             "admin/event/modify/:id/printer": "admin_event_modify_printer",
+            "admin/event/modify/:id/printer/add": "admin_event_modify_printer_add",
+            "admin/event/modify/:id/printer/modify/:events_printerid": "admin_event_modify_printer_modify",
             "admin/event/modify/:id/user": "admin_event_modify_user",
             "admin/event/modify/:id/user/add": "admin_event_modify_user_add",
             "admin/event/modify/:id/user/modify/:events_userid": "admin_event_modify_user_modify",
@@ -134,6 +138,19 @@ define([ "app",
         {
             if(DEBUG) console.log("Admin Event Modify Printer", "OK");
             this.show(new AdminEventModifyPrinterView({id: id}));
+        },
+
+        admin_event_modify_printer_add: function(id)
+        {
+            if(DEBUG) console.log("Admin Event Modify Printer Add", "OK");
+            this.show(new AdminEventModifyPrinterModifyView({id: id}));
+        },
+
+        admin_event_modify_printer_modify: function(id, events_printerid)
+        {
+            if(DEBUG) console.log("Admin Event Modify Printer Modify", "OK");
+            this.show(new AdminEventModifyPrinterModifyView({id: id,
+                                                             events_printerid: events_printerid}));
         },
 
         admin_event_modify_user: function(id)

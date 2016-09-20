@@ -6,11 +6,13 @@ define([ "app",
          'Webservice',
          'views/headers/AdminHeaderView',
          'views/footers/AdminFooterView',
+         'collections/PrinterCollection',
          'text!templates/pages/admin/admin-event-modify-printer.phtml'],
 function( app,
           Webservice,
           AdminHeaderView,
           AdminFooterView,
+          PrinterCollection,
           Template ) {
     "use strict";
 
@@ -20,7 +22,11 @@ function( app,
     	title: 'admin-event-modify-printer',
     	el: 'body',
         events: {
-
+            'click #admin-event-modify-printer-add-btn': 'click_add_btn',
+            'click .admin-event-modify-printer-default-btn': 'click_default_btn',
+            'click .admin-event-modify-printer-edit-btn': 'click_edit_btn',
+            'click .admin-event-modify-printer-delete-btn': 'click_delete_btn',
+            'click #admin-event-modify-printer-delete-dialog-finished': 'click_delete_finished_btn'
         },
 
         // The View Constructor
@@ -29,7 +35,63 @@ function( app,
 
             this.id = options.id;
 
-            this.render();
+            this.printerList = new PrinterCollection();
+            this.printerList.url = app.API + "Admin/GetEventPrinterList/";
+            this.printerList.fetch({data: {eventid: this.id},
+                                    success: this.render});
+        },
+
+        click_add_btn: function()
+        {
+            MyPOS.ChangePage('#admin/event/modify/' + this.id + '/printer/add');
+        },
+
+        click_default_btn: function(event)
+        {
+            var id = $(event.currentTarget).attr('data-printer-id');
+
+            var webservice = new Webservice();
+            webservice.action = "Admin/SetEventPrinterDefault";
+            webservice.formData = {events_printerid: id};
+            webservice.callback = {
+                success: function()
+                {
+                    MyPOS.ReloadPage();
+                }
+            };
+            webservice.call();
+        },
+
+        click_edit_btn: function(event)
+        {
+            var id = $(event.currentTarget).attr('data-printer-id');
+
+            MyPOS.ChangePage('#admin/event/modify/' + this.id + '/printer/modify/' + id);
+        },
+
+        click_delete_btn: function(event)
+        {
+            var id = $(event.currentTarget).attr('data-printer-id');
+
+            this.deleteId = id;
+
+            $('#admin-event-modify-printer-delete-dialog').popup('open');
+        },
+
+        click_delete_finished_btn: function()
+        {
+            $('#admin-event-modify-printer-delete-dialog').popup('close');
+
+            var webservice = new Webservice();
+            webservice.action = "Admin/DeleteEventPrinter";
+            webservice.formData = {events_printerid: this.deleteId};
+            webservice.callback = {
+                success: function()
+                {
+                    MyPOS.ReloadPage();
+                }
+            };
+            webservice.call();
         },
 
         // Renders all of the Category models on the UI
@@ -41,7 +103,8 @@ function( app,
             footer.activeButton = 'printer';
 
             MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  footer: footer.render()});
+                                                                  footer: footer.render(),
+                                                                  printers: this.printerList});
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");

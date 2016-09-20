@@ -47,6 +47,71 @@ class Events
         return $o_statement->execute();
     }
 
+    public function AddPrinter($i_eventid, $str_name, $str_ip, $i_port, $i_characters_per_row)
+    {
+        $o_statement = $this->o_db->prepare("INSERT INTO events_printers(eventid, name, ip, port, characters_per_row, `default`)
+                                             VALUES(:eventid, :name, :ip, :port, :characters_per_row, 0)");
+
+        $o_statement->bindparam(":eventid", $i_eventid);
+        $o_statement->bindparam(":name", $str_name);
+        $o_statement->bindparam(":ip", $str_ip);
+        $o_statement->bindparam(":port", $i_port);
+        $o_statement->bindparam(":characters_per_row", $i_characters_per_row);
+        return $o_statement->execute();
+    }
+
+    public function SetPrinter($i_events_printerid, $str_name, $str_ip, $i_port, $i_characters_per_row)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE events_printers
+                                             SET name = :name,
+                                                 ip = :ip,
+                                                 port = :port,
+                                                 characters_per_row = :characters_per_row
+                                             WHERE events_printerid = :events_printerid");
+
+        $o_statement->bindparam(":events_printerid", $i_events_printerid);
+        $o_statement->bindparam(":name", $str_name);
+        $o_statement->bindparam(":ip", $str_ip);
+        $o_statement->bindparam(":port", $i_port);
+        $o_statement->bindparam(":characters_per_row", $i_characters_per_row);
+        return $o_statement->execute();
+    }
+
+    public function SetPrinterDefault($i_events_printerid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT eventid
+                                             FROM events_printers
+                                             WHERE events_printerid = :events_printerid");
+
+        $o_statement->bindparam(":events_printerid", $i_events_printerid);
+        $o_statement->execute();
+
+        $i_eventid = $o_statement->fetchColumn();
+
+        $o_statement = $this->o_db->prepare("UPDATE events_printers
+                                             SET `default` = 0
+                                             WHERE eventid = :eventid");
+
+        $o_statement->bindparam(":eventid", $i_eventid);
+        $o_statement->execute();
+
+        $o_statement = $this->o_db->prepare("UPDATE events_printers
+                                             SET `default` = 1
+                                             WHERE events_printerid = :events_printerid");
+
+        $o_statement->bindparam(":events_printerid", $i_events_printerid);
+        return $o_statement->execute();
+    }
+
+    public function DeletePrinter($i_events_printerid)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM events_printers
+                                             WHERE events_printerid = :events_printerid");
+
+        $o_statement->bindparam(":events_printerid", $i_events_printerid);
+        return $o_statement->execute();
+    }
+
     public function AddEvent($str_name, $d_date, $b_active)
     {
         $o_statement = $this->o_db->prepare("INSERT INTO events(name, date, active)
