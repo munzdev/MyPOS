@@ -10,7 +10,10 @@ define([
         defaults: {
             events_printerid: 0,
             name: '',
-            default: false
+            default: false,
+            ip: '',
+            port: 0,
+            characters_per_row: 0
         }
 
     });
