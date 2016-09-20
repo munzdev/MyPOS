@@ -17,7 +17,7 @@ function( app,
     "use strict";
 
     // Extends Backbone.View
-    var AdminUserView = Backbone.View.extend( {
+    var AdminEventModifyUserView = Backbone.View.extend( {
 
     	title: 'admin-event-modify-user',
     	el: 'body',
@@ -99,6 +99,6 @@ function( app,
     } );
 
     // Returns the View class
-    return AdminUserView;
+    return AdminEventModifyUserView;
 
 } );
