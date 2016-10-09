@@ -583,4 +583,113 @@ class Admin extends AdminController
 
         return $o_events->DeletePrinter($a_params['events_printerid']);
     }
+
+    public function GetEventDistributionListAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric'));
+
+        $o_distribution = new Model\Distribution(Database::GetConnection());
+
+        return $o_distribution->GetDistributions($a_params['eventid']);
+    }
+
+    public function GetEventDistributionAction()
+    {
+        $a_params = Request::ValidateParams(array('distributions_placeid' => 'numeric'));
+
+        $o_distribution = new Model\Distribution(Database::GetConnection());
+
+        $str_name = $o_distribution->GetDistribution($a_params['distributions_placeid']);
+        $a_menues = $o_distribution->GetDistributionMenuGroupes($a_params['distributions_placeid']);
+        $a_users = $o_distribution->GetDistributionUsers($a_params['distributions_placeid']);
+        $a_tables = $o_distribution->GetDistributionTables($a_params['distributions_placeid']);
+        
+        return array('name' => $str_name,
+                     'menues' => $a_menues,
+                     'users' => $a_users,
+                     'tables' => $a_tables);
+    }
+
+    public function SetEventDistributionAction()
+    {
+        $a_params = Request::ValidateParams(array('distributions_placeid' => 'numeric',
+                                                  'name' => 'string',
+                                                  'menues' => 'array',
+                                                  'users' => 'array',
+                                                  'tablesList' => 'array'));
+        
+        $o_db = Database::GetConnection();
+
+        $o_distribution = new Model\Distribution($o_db);
+
+        try
+        {
+            $o_db->beginTransaction();
+
+            $o_distribution->SetDistribution($a_params['distributions_placeid'], 
+                                             $a_params['name']);
+
+            $o_distribution->SetDistributionMenuGroupes($a_params['distributions_placeid'], $a_params['menues']);
+            $o_distribution->SetDistributionUsers($a_params['distributions_placeid'], $a_params['users']);
+
+            foreach($a_params['tablesList'] as $i_menu_groupid => $a_tables)
+            {
+                $o_distribution->SetDistributionTables($a_params['distributions_placeid'], $i_menu_groupid, $a_tables);
+            }            
+            
+            $o_db->commit();
+        }
+        catch (Exception $o_exception)
+        {
+            $o_db->rollBack();
+            throw $o_exception;
+        }
+    }
+
+    public function AddEventDistributionAction()
+    {
+        $a_params = Request::ValidateParams(array('eventid' => 'numeric',
+                                                  'name' => 'string',
+                                                  'menues' => 'array',
+                                                  'users' => 'array',
+                                                  'tablesList' => 'array'));
+        
+        $o_db = Database::GetConnection();
+
+        $o_distribution = new Model\Distribution($o_db);
+
+        try
+        {
+            $o_db->beginTransaction();
+
+            $i_distributionid = $o_distribution->AddDistribution($a_params['eventid'], 
+                                                                 $a_params['name']);
+
+            $o_distribution->SetDistributionMenuGroupes($i_distributionid, $a_params['menues']);
+            $o_distribution->SetDistributionUsers($i_distributionid, $a_params['users']);
+
+            foreach($a_params['tablesList'] as $i_menu_groupid => $a_tables)
+            {
+                $o_distribution->SetDistributionTables($i_distributionid, $i_menu_groupid, $a_tables);
+            }            
+            
+            $o_db->commit();
+            
+            return $i_distributionid;
+        }
+        catch (Exception $o_exception)
+        {
+            $o_db->rollBack();
+            throw $o_exception;
+        }
+    }
+
+    public function DeleteEventDistributionAction()
+    {
+        $a_params = Request::ValidateParams(array('distributions_placeid' => 'numeric'));
+
+        $o_distribution = new Model\Distribution(Database::GetConnection());
+
+        return $o_distribution->DeleteDistribution($a_params['distributions_placeid']);
+    }
 }

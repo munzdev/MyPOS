@@ -11,6 +11,7 @@ define([ "app",
          "views/admin/AdminEventModifyMenuView",
          "views/admin/AdminEventModifyMenuModifyView",
          "views/admin/AdminEventModifyDistributionView",
+         "views/admin/AdminEventModifyDistributionModifyView",
          "views/admin/AdminEventModifyPrinterView",
          "views/admin/AdminEventModifyPrinterModifyView",
          "views/admin/AdminEventModifyUserView",
@@ -31,6 +32,7 @@ define([ "app",
             AdminEventModifyMenuView,
             AdminEventModifyMenuModifyView,
             AdminEventModifyDistributionView,
+            AdminEventModifyDistributionModifyView,
             AdminEventModifyPrinterView,
             AdminEventModifyPrinterModifyView,
             AdminEventModifyUserView,
@@ -59,6 +61,8 @@ define([ "app",
             "admin/event/modify/:id/menu/add/:groupid": "admin_event_modify_menu_add",
             "admin/event/modify/:id/menu/:menuid": "admin_event_modify_menu_modify",
             "admin/event/modify/:id/distribution": "admin_event_modify_distribution",
+            "admin/event/modify/:id/distribution/add": "admin_event_modify_distribution_add",
+            "admin/event/modify/:id/distribution/modify/:distributions_placeid": "admin_event_modify_distribution_modify",
             "admin/event/modify/:id/printer": "admin_event_modify_printer",
             "admin/event/modify/:id/printer/add": "admin_event_modify_printer_add",
             "admin/event/modify/:id/printer/modify/:events_printerid": "admin_event_modify_printer_modify",
@@ -132,6 +136,19 @@ define([ "app",
         {
             if(DEBUG) console.log("Admin Event Modify Distribution", "OK");
             this.show(new AdminEventModifyDistributionView({id: id}));
+        },
+
+        admin_event_modify_distribution_add: function(id)
+        {
+            if(DEBUG) console.log("Admin Event Modify Distribution Add", "OK");
+            this.show(new AdminEventModifyDistributionModifyView({id: id}));
+        },
+
+        admin_event_modify_distribution_modify: function(id, distributions_placeid)
+        {
+            if(DEBUG) console.log("Admin Event Modify Distribution Modify", "OK");
+            this.show(new AdminEventModifyDistributionModifyView({id: id,
+                                                                  distributions_placeid: distributions_placeid}));
         },
 
         admin_event_modify_printer: function(id)

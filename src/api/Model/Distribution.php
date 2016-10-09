@@ -793,4 +793,166 @@ class Distribution
 
         return $a_return;
     }
+
+    public function GetDistributions($i_eventid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT distributions_placeid,
+                                                    name
+                                             FROM distributions_places
+                                             WHERE eventid = :eventid");
+
+        $o_statement->bindParam(':eventid', $i_eventid);
+        $o_statement->execute();
+
+        return $o_statement->fetchAll();
+    }
+    
+    public function AddDistribution($i_eventid, $str_name)
+    {
+        $o_statement = $this->o_db->prepare("INSERT INTO distributions_places (eventid, name)
+                                             VALUES(:eventid, :name)");
+
+        $o_statement->bindparam(":eventid", $i_eventid);
+        $o_statement->bindparam(":name", $str_name);
+
+        $o_statement->execute();
+        
+        return $this->o_db->lastInsertId();
+    }
+    
+    public function SetDistribution($i_distributions_placeid, $str_name)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE distributions_places
+                                             SET name = :name
+                                             WHERE distributions_placeid = :distributionid");
+
+        $o_statement->bindparam(":distributionid", $i_distributions_placeid);
+        $o_statement->bindparam(":name", $str_name);
+
+        return $o_statement->execute();
+    }
+    
+    public function SetDistributionMenuGroupes($i_distributionid, $a_menues)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM distributions_places_groupes
+                                             WHERE distributions_placeid = :distributionid");
+
+        $o_statement->bindparam(":distributionid", $i_distributionid);
+        $o_statement->execute();
+        
+        $o_statement = $this->o_db->prepare("INSERT INTO distributions_places_groupes (distributions_placeid, menu_groupid)
+                                             VALUES(:distributionid, :menu_groupid)");        
+        
+        $o_statement->bindparam(":distributionid", $i_distributionid);
+        
+        foreach($a_menues as $i_menu_groupid)
+        {            
+            $o_statement->bindparam(":menu_groupid", $i_menu_groupid);
+            $o_statement->execute();
+            $o_statement->closeCursor();
+        }
+    }
+    
+    public function SetDistributionUsers($i_distributionid, $a_users)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM distributions_places_users
+                                             WHERE distributions_placeid = :distributionid");
+
+        $o_statement->bindparam(":distributionid", $i_distributionid);
+        $o_statement->execute();
+        
+        $o_statement = $this->o_db->prepare("INSERT INTO distributions_places_users (distributions_placeid, userid, events_printerid)
+                                             VALUES(:distributionid, :userid, :printerid)");        
+        
+        $o_statement->bindparam(":distributionid", $i_distributionid);
+        
+        foreach($a_users as $i_userid => $i_printerid)
+        {            
+            $o_statement->bindparam(":userid", $i_userid);
+            $o_statement->bindparam(":printerid", $i_printerid);
+            $o_statement->execute();
+            $o_statement->closeCursor();
+        }
+    }
+    
+    public function SetDistributionTables($i_distributionid, $i_menu_groupid, $a_tables)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM distributions_places_tables
+                                             WHERE distributions_placeid = :distributionid");
+
+        $o_statement->bindparam(":distributionid", $i_distributionid);
+        $o_statement->execute();
+        
+        $o_statement = $this->o_db->prepare("INSERT INTO distributions_places_tables (distributions_placeid, tableid, menu_groupid)
+                                             VALUES(:distributionid, :menu_groupid, :tableid)");        
+        
+        $o_statement->bindparam(":distributionid", $i_distributionid);
+        $o_statement->bindparam(":menu_groupid", $i_menu_groupid);
+        
+        foreach($a_tables as $i_tableid)
+        {            
+            $o_statement->bindparam(":tableid", $i_tableid);
+            $o_statement->execute();
+            $o_statement->closeCursor();
+        }
+    }
+    
+    public function DeleteDistribution($i_distributionid)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM distributions_places
+                                             WHERE distributions_placeid = :distributionid");
+        
+        $o_statement->bindparam(":distributionid", $i_distributionid);
+        return $o_statement->execute();
+    }
+    
+    public function GetDistribution($i_distributionid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT name 
+                                             FROM distributions_places
+                                             WHERE distributions_placeid = :distributionid");
+        
+        $o_statement->bindParam(":distributionid", $i_distributionid);
+        $o_statement->execute();
+        
+        return $o_statement->fetchColumn();
+    }
+    
+    public function GetDistributionMenuGroupes($i_distributionid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT menu_groupid 
+                                             FROM distributions_places_groupes
+                                             WHERE distributions_placeid = :distributionid");
+        
+        $o_statement->bindParam(":distributionid", $i_distributionid);
+        $o_statement->execute();
+        
+        return $o_statement->fetchAll(PDO::FETCH_COLUMN);
+    }
+    
+    public function GetDistributionUsers($i_distributionid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT userid,
+                                                    events_printerid
+                                             FROM distributions_places_users
+                                             WHERE distributions_placeid = :distributionid");
+        
+        $o_statement->bindParam(":distributionid", $i_distributionid);
+        $o_statement->execute();
+        
+        return $o_statement->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+    
+    public function GetDistributionTables($i_distributionid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT tableid,
+                                                    menu_groupid
+                                             FROM distributions_places_tables
+                                             WHERE distributions_placeid = :distributionid");
+        
+        $o_statement->bindParam(":distributionid", $i_distributionid);
+        $o_statement->execute();
+        
+        return $o_statement->fetchAll(PDO::FETCH_COLUMN | PDO::FETCH_GROUP);
+    }
 }

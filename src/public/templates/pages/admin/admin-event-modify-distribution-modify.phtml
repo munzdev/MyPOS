@@ -1,0 +1,50 @@
+<div data-role="content">
+    <div class="nav-header"><%= header %></div>
+    <div data-role="header">
+        <h2><% if(mode == 'new') { print('Neue Ausgabestelle'); } else { print('Ausgabestelle Bearbeiten'); } %></h2>
+    </div>
+
+    <fieldset data-role="controlgroup">
+        <legend>Name:</legend>
+        <input type="text" id="admin-event-modify-distribution-modify-name" value="<%- name %>">
+        <label for="admin-event-modify-distribution-modify-name"></label>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend>Menügruppen:</legend>
+        <select id="admin-event-modify-distribution-modify-groupes" data-native-menu="false" multiple="multiple">
+            <option>Bitte wählen</option>
+            <% menu.each(function(type) { %>
+                <optgroup label="<%- type.get('name') %>">
+                    <% type.get('groupes').each(function(group) { %>
+                        <option value="<%- group.get('menu_groupid') %>" <% if(_.contains(menuesValue, group.get('menu_groupid'))) { print('selected="true"'); } %>><%- group.get('name') %></option>
+                    <% }); %>
+                </optgroup>
+            <% }); %>
+        </select>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend>Benutzer:</legend>
+        <select id="admin-event-modify-distribution-modify-users" data-native-menu="false" multiple="multiple">
+            <% users.each(function(user){ %>
+                <option value="<%- user.get('userid') %>" <% if(user.get('userid') in usersValue) { print('selected="true"'); } %>><%- user.get('name') %></option>
+            <% }); %>
+        </select>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <h3 class="ui-bar ui-bar-a">Benutzer Standartdrucker:</h3>
+        <div id="admin-event-modify-distribution-modify-users-printer"></div>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <h3 class="ui-bar ui-bar-a">Tischzuordnung</h3>
+        <div id="admin-event-modify-distribution-modify-tables"></div>
+    </fieldset>
+
+    <div class="ui-field-contain">
+        <a id="admin-event-modify-distribution-modify-save-btn" class="ui-btn">Speichern</a>
+    </div>
+</div>
+<%= footer %>
