@@ -123,6 +123,7 @@ define([
                     self.products.fetch({
                         success: function()
                         {
+                            console.log(self.products);
                                 if(successCallback)
                                         successCallback(user);
                         },

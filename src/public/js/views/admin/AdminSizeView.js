@@ -5,7 +5,7 @@
 define([ "app",
          'Webservice',
          'views/headers/AdminHeaderView',
-         'collections/products/SizeCollection',
+         'collections/admin/SizeCollection',
          'text!templates/pages/admin/admin-size.phtml'],
 function( app,
           Webservice,
