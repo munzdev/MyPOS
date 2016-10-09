@@ -14,7 +14,7 @@ Testing
 - Bugfixing and optimizations
 
 
-## v1.0-alpha2 - planned##
+## v1.0-alpha2 - in progress##
 
 Features:
 
@@ -48,7 +48,7 @@ Testing:
 - create basic Unit tests for PHP code and JS Code
 - Bugfixing and optimizations
 
-## v1.0-alpha - in progress##
+## v1.0-alpha - finished##
 
 - PHP Codebase version 5.6
 - Finishing current planned interfaces, Database models and features
