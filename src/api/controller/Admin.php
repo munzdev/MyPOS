@@ -634,7 +634,8 @@ class Admin extends AdminController
 
             foreach($a_params['tablesList'] as $i_menu_groupid => $a_tables)
             {
-                $o_distribution->SetDistributionTables($a_params['distributions_placeid'], $i_menu_groupid, $a_tables);
+                if(!empty($a_tables))
+                    $o_distribution->SetDistributionTables($a_params['distributions_placeid'], $i_menu_groupid, $a_tables);
             }            
             
             $o_db->commit();
@@ -691,5 +692,47 @@ class Admin extends AdminController
         $o_distribution = new Model\Distribution(Database::GetConnection());
 
         return $o_distribution->DeleteDistribution($a_params['distributions_placeid']);
+    }
+    
+    public function AddSizeAction()
+    {
+        $a_params = Request::ValidateParams(array('name' => 'string',
+                                                  'factor' => 'string'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->AddSize($a_params['name'], $a_params['factor']);
+
+    }
+
+    public function GetSizeAction()
+    {
+        $a_params = Request::ValidateParams(array('menu_sizeid' => 'numeric'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->GetSize($a_params['menu_sizeid']);
+    }
+
+    public function SetSizeAction()
+    {
+        $a_params = Request::ValidateParams(array('menu_sizeid' => 'numeric',
+                                                  'name' => 'string',
+                                                  'factor' => 'string'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->SetSize($a_params['menu_sizeid'],
+                                    $a_params['name'],
+                                    $a_params['factor']);
+    }
+
+    public function DeleteSizeAction()
+    {
+        $a_params = Request::ValidateParams(array('menu_sizeid' => 'numeric'));
+
+        $o_products = new Model\Products(Database::GetConnection());
+
+        return $o_products->DeleteSize($a_params['menu_sizeid']);
     }
 }

@@ -23,6 +23,8 @@ define([ "app",
          "views/admin/AdminMenuModifyTypeView",
          "views/admin/AdminTableView",
          "views/admin/AdminTableModifyView",
+         "views/admin/AdminSizeView",
+         "views/admin/AdminSizeModifyView",
 ], function(app,
             BaseRouter,
             AdminView,
@@ -43,7 +45,9 @@ define([ "app",
             AdminMenuModifyGroupView,
             AdminMenuModifyTypeView,
             AdminTableView,
-            AdminTableModifyView) {
+            AdminTableModifyView,
+            AdminSizeView,
+            AdminSizeModifyView) {
     "use strict";
 
     // Extends Backbone.Router
@@ -79,7 +83,10 @@ define([ "app",
             "admin/menu/modify/group/:id": "admin_menu_group_modify",
             "admin/table": "admin_table",
             "admin/table/add": "admin_table_add",
-            "admin/table/modify/:id": "admin_table_modify"
+            "admin/table/modify/:id": "admin_table_modify",
+            "admin/size": "admin_size",
+            "admin/size/add": "admin_size_add",
+            "admin/size/modify/:id": "admin_size_modify"
         },
 
         admin: function()
@@ -254,6 +261,24 @@ define([ "app",
         {
             if(DEBUG) console.log("Admin Table Modify", "OK");
             this.show(new AdminTableModifyView({id: id}));
+        },
+
+        admin_size: function()
+        {
+            if(DEBUG) console.log("Admin Size", "OK");
+            this.show(new AdminSizeView());
+        },
+
+        admin_size_add: function()
+        {
+            if(DEBUG) console.log("Admin Size Add", "OK");
+            this.show(new AdminSizeModifyView({id: 'new'}));
+        },
+
+        admin_size_modify: function(id)
+        {
+            if(DEBUG) console.log("Admin Size Modify", "OK");
+            this.show(new AdminSizeModifyView({id: id}));
         }
 
     } );

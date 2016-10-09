@@ -1,0 +1,21 @@
+<div data-role="content">
+    <div class="nav-header"><%= header %></div>
+    <div data-role="header">
+        <h2><% if(mode == 'new') { print('Neue Größe'); } else { print('Größe Bearbeiten'); } %></h2>
+    </div>
+    <fieldset data-role="controlgroup">
+        <legend>Name:</legend>
+        <input type="text" id="admin-size-modify-name" value="<%- name %>">
+        <label for="admin-size-modify-name"></label>
+    </fieldset>
+
+    <fieldset data-role="controlgroup">
+        <legend>Faktor:</legend>
+        <input type="number" id="admin-size-modify-factor" value="<%- factor %>">
+        <label for="admin-size-modify-factor"></label>
+    </fieldset>´
+
+    <div class="ui-field-contain">
+        <a id="admin-size-modify-save-btn" class="ui-btn ui-btn-inline">Speichern</a>
+    </div>
+</div>

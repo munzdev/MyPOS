@@ -46,3 +46,8 @@
     margin: 5px;
     padding: 5px
 }
+
+.navbar-6-items {
+    width: 16.66% !important;  /* 12.5% for 8 tabs wide */
+    clear: none !important;  /* Prevent line break caused by ui-block-a */
+}

@@ -149,6 +149,54 @@ class Products
 
         return $o_statement->fetchAll();
     }
+    
+    public function AddSize($str_name, $i_factor)
+    {
+        $o_statement = $this->o_db->prepare("INSERT INTO menu_sizes(name, factor)
+                                             VALUES(:name, :factor)");
+
+        $o_statement->bindParam(":name", $str_name);
+        $o_statement->bindParam(":factor", $i_factor);
+
+        $o_statement->execute();
+        
+        return $this->o_db->lastInsertId();
+    }
+    
+    public function GetSize($i_menu_sizeid)
+    {
+        $o_statement = $this->o_db->prepare("SELECT name,
+                                                    factor
+                                             FROM menu_sizes
+                                             WHERE menu_sizeid = :menu_sizeid");
+
+        $o_statement->bindParam(":menu_sizeid", $i_menu_sizeid);
+        $o_statement->execute();
+        
+        return $o_statement->fetch();
+    }
+    
+    public function SetSize($i_menu_sizeid, $str_name, $i_factor)
+    {
+        $o_statement = $this->o_db->prepare("UPDATE menu_sizes
+                                             SET name = :name,
+                                                 factor = :factor
+                                             WHERE menu_sizeid = :menu_sizeid");
+
+        $o_statement->bindParam(":menu_sizeid", $i_menu_sizeid);
+        $o_statement->bindParam(":name", $str_name);
+        $o_statement->bindParam(":factor", $i_factor);
+        return $o_statement->execute();
+    }
+    
+    public function DeleteSize($i_menu_sizeid)
+    {
+        $o_statement = $this->o_db->prepare("DELETE FROM menu_sizes
+                                             WHERE menu_sizeid = :menu_sizeid");
+
+        $o_statement->bindParam(":menu_sizeid", $i_menu_sizeid);
+        return $o_statement->execute();
+    }
 
     public function SetMenuAvailabilityAmount($i_menuid, $i_amount)
     {

@@ -1,0 +1,35 @@
+<div data-role="content">
+    <div class="nav-header"><%= header %></div>
+    <a id="admin-size-add-btn" class="ui-btn ui-icon-plus ui-mini ui-btn-icon-left">Hinzufügen</a>
+    <table data-role="table" id="admin-size" class="ui-responsive table-stroke table-stripe">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Faktor</th>
+                <th>Optionen</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% sizes.each(function(size){ %>
+                <tr>
+                    <th><%- size.get('name') %></th>
+                    <th><%- size.get('factor') %></th>
+                    <td>
+                        <a data-size-id="<%- size.get('menu_sizeid') %>" class="admin-size-edit-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
+                        <a data-size-id="<%- size.get('menu_sizeid') %>" class="admin-size-delete-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left">Löschen</a>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+<div data-role="popup" id="admin-size-delete-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+    <div data-role="header" data-theme="a">
+        <h1>Größe löschen?</h1>
+    </div>
+    <div role="main" class="ui-content">
+        <h3 class="ui-title">Sind Sie sicher das Sie die Größe löschen wollen? Es werden alle Menüs, Bestellungen, Rechnungen, Statistiken, etc. aus der Datenbank entfernt, die zu dieser Größe gehören</h3>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Abbrechen</a>
+        <a id='admin-size-delete-dialog-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
+    </div>
+</div>
