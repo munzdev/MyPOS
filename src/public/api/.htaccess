@@ -1,4 +1,4 @@
 RewriteEngine on
-
-RewriteRule ^(.*)/(.*)/$ index.php?controller=$1&action=$2 [QSA]
-RewriteRule ^$ index.php/$1 [L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . index.php [L]
