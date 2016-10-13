@@ -1,8 +1,11 @@
 {
     "name" : "MyPOS",
     "require" : {
+        "php": ">=7.0",
         "mike42/escpos-php" : "v1.2.1",
-        "cboden/ratchet": "0.3.*"
+        "cboden/ratchet": "0.3.*",
+        "slim/slim": "^3.0",
+        "propel/propel": "~2.0@dev"
     },
     "config": {
         "vendor-dir": "src/vendor"
