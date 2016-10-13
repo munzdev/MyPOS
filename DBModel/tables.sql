@@ -33,22 +33,6 @@ COMMENT = 'Enthält alle Benutzer, die Zugriff auf die App haben';
 
 
 -- -----------------------------------------------------
--- Table `tables`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `tables` ;
-
-CREATE TABLE IF NOT EXISTS `tables` (
-  `tableid` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(32) NOT NULL,
-  `data` VARCHAR(255) NULL,
-  UNIQUE INDEX `tableid_UNIQUE` (`tableid` ASC),
-  INDEX `tables_name` (`name` ASC),
-  PRIMARY KEY (`tableid`))
-ENGINE = InnoDB
-COMMENT = 'Enthält Tischnummer, die es gibt';
-
-
--- -----------------------------------------------------
 -- Table `events`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `events` ;
@@ -63,6 +47,29 @@ CREATE TABLE IF NOT EXISTS `events` (
   INDEX `events_active` (`active` ASC))
 ENGINE = InnoDB
 COMMENT = 'Enthält die verschiedene Events, bei dem das POS System verwendet wird';
+
+
+-- -----------------------------------------------------
+-- Table `events_tables`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `events_tables` ;
+
+CREATE TABLE IF NOT EXISTS `events_tables` (
+  `events_tableid` INT(11) NOT NULL AUTO_INCREMENT,
+  `eventid` INT(11) NOT NULL,
+  `name` VARCHAR(32) NOT NULL,
+  `data` VARCHAR(255) NULL,
+  UNIQUE INDEX `tableid_UNIQUE` (`events_tableid` ASC),
+  INDEX `tables_name` (`name` ASC),
+  PRIMARY KEY (`events_tableid`, `eventid`),
+  INDEX `fk_tables_events1_idx` (`eventid` ASC),
+  CONSTRAINT `fk_tables_events1`
+    FOREIGN KEY (`eventid`)
+    REFERENCES `events` (`eventid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+COMMENT = 'Enthält Tischnummer, die es gibt';
 
 
 -- -----------------------------------------------------
@@ -88,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   INDEX `finished` (`finished` ASC),
   CONSTRAINT `fk_orders_tables`
     FOREIGN KEY (`tableid`)
-    REFERENCES `tables` (`tableid`)
+    REFERENCES `events_tables` (`events_tableid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_users1`
@@ -112,11 +119,18 @@ DROP TABLE IF EXISTS `menu_types` ;
 
 CREATE TABLE IF NOT EXISTS `menu_types` (
   `menu_typeid` INT(11) NOT NULL AUTO_INCREMENT,
+  `eventid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
   `tax` SMALLINT NOT NULL,
   `allowMixing` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`menu_typeid`),
-  UNIQUE INDEX `menu_typeid_UNIQUE` (`menu_typeid` ASC))
+  PRIMARY KEY (`menu_typeid`, `eventid`),
+  UNIQUE INDEX `menu_typeid_UNIQUE` (`menu_typeid` ASC),
+  INDEX `fk_menu_types_events1_idx` (`eventid` ASC),
+  CONSTRAINT `fk_menu_types_events1`
+    FOREIGN KEY (`eventid`)
+    REFERENCES `events` (`eventid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Enthält die grundlegende Nahrungstypen ( Essen, Trinken, ...) und die dafür gesetzlichen Steuern';
 
@@ -143,34 +157,68 @@ COMMENT = 'Enhält die Untergruppen der Menükarte (Hauptspeise, Beilagen, Antig
 
 
 -- -----------------------------------------------------
+-- Table `availabilitys`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `availabilitys` ;
+
+CREATE TABLE IF NOT EXISTS `availabilitys` (
+  `availabilityid` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(24) NOT NULL,
+  PRIMARY KEY (`availabilityid`),
+  UNIQUE INDEX `availabilityid_UNIQUE` (`availabilityid` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `menues`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `menues` ;
 
 CREATE TABLE IF NOT EXISTS `menues` (
   `menuid` INT(11) NOT NULL AUTO_INCREMENT,
-  `eventid` INT(11) NOT NULL,
   `menu_groupid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
   `price` DECIMAL(7,2) NOT NULL,
-  `availability` ENUM('AVAILABLE', 'DELAYED', 'OUT OF ORDER') NOT NULL,
+  `availabilityid` INT NOT NULL,
   `availability_amount` SMALLINT UNSIGNED NULL,
   UNIQUE INDEX `menuid_UNIQUE` (`menuid` ASC),
   INDEX `fk_menues_menu_groupes1_idx` (`menu_groupid` ASC),
-  PRIMARY KEY (`menuid`, `eventid`, `menu_groupid`),
-  INDEX `fk_menues_events1_idx` (`eventid` ASC),
+  PRIMARY KEY (`menuid`, `menu_groupid`),
+  INDEX `fk_menues_availabilitys1_idx` (`availabilityid` ASC),
   CONSTRAINT `fk_menues_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
     REFERENCES `menu_groupes` (`menu_groupid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_menues_events1`
-    FOREIGN KEY (`eventid`)
-    REFERENCES `events` (`eventid`)
-    ON DELETE CASCADE
+  CONSTRAINT `fk_menues_availabilitys1`
+    FOREIGN KEY (`availabilityid`)
+    REFERENCES `availabilitys` (`availabilityid`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Enhält das Menü das Angeboten werden kann (Schnitzel, Schweinsbaraten, Cola, Sprite, Wasser, ...) mit dem Standartpreis';
+
+
+-- -----------------------------------------------------
+-- Table `menu_sizes`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `menu_sizes` ;
+
+CREATE TABLE IF NOT EXISTS `menu_sizes` (
+  `menu_sizeid` INT(11) NOT NULL AUTO_INCREMENT,
+  `eventid` INT(11) NOT NULL,
+  `name` VARCHAR(32) NOT NULL,
+  `factor` DECIMAL(3,2) NOT NULL,
+  PRIMARY KEY (`menu_sizeid`, `eventid`),
+  UNIQUE INDEX `menu_sizeid_UNIQUE` (`menu_sizeid` ASC),
+  INDEX `fk_menu_sizes_events1_idx` (`eventid` ASC),
+  CONSTRAINT `fk_menu_sizes_events1`
+    FOREIGN KEY (`eventid`)
+    REFERENCES `events` (`eventid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+COMMENT = 'Enhält die verschiedene Einheitsgröße, die es für eine Speise/Getränk geben kann. (Normal, Kleine Speise, 0,25L, 0,5L, ...)';
 
 
 -- -----------------------------------------------------
@@ -180,19 +228,27 @@ DROP TABLE IF EXISTS `orders_details` ;
 
 CREATE TABLE IF NOT EXISTS `orders_details` (
   `orders_detailid` INT(11) NOT NULL AUTO_INCREMENT,
-  `menuid` INT(11) NOT NULL,
   `orderid` INT(11) NOT NULL,
+  `menuid` INT(11) NULL,
+  `menu_sizeid` INT(11) NULL,
+  `menu_groupid` INT(11) NULL,
   `amount` TINYINT NOT NULL,
   `single_price` DECIMAL(7,2) NOT NULL,
   `single_price_modified_by_userid` INT(11) NULL,
   `extra_detail` VARCHAR(255) NULL,
   `finished` DATETIME NULL,
-  PRIMARY KEY (`orders_detailid`, `menuid`, `orderid`),
+  `availabilityid` INT NULL,
+  `availability_amount` SMALLINT NULL,
+  `verified` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`orders_detailid`, `orderid`),
   UNIQUE INDEX `orders_detailid_UNIQUE` (`orders_detailid` ASC),
   INDEX `fk_orders_details_menues1_idx` (`menuid` ASC),
   INDEX `fk_orders_details_orders1_idx` (`orderid` ASC),
   INDEX `fk_orders_details_users1_idx` (`single_price_modified_by_userid` ASC),
   INDEX `idx_amount` (`amount` ASC),
+  INDEX `fk_orders_details_menu_sizes1_idx` (`menu_sizeid` ASC),
+  INDEX `fk_orders_details_menu_groupes1_idx` (`menu_groupid` ASC),
+  INDEX `fk_orders_details_availabilitys1_idx` (`availabilityid` ASC),
   CONSTRAINT `fk_orders_details_menues1`
     FOREIGN KEY (`menuid`)
     REFERENCES `menues` (`menuid`)
@@ -207,6 +263,21 @@ CREATE TABLE IF NOT EXISTS `orders_details` (
     FOREIGN KEY (`single_price_modified_by_userid`)
     REFERENCES `users` (`userid`)
     ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_orders_details_menu_sizes1`
+    FOREIGN KEY (`menu_sizeid`)
+    REFERENCES `menu_sizes` (`menu_sizeid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_orders_details_menu_groupes1`
+    FOREIGN KEY (`menu_groupid`)
+    REFERENCES `menu_groupes` (`menu_groupid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_orders_details_availabilitys1`
+    FOREIGN KEY (`availabilityid`)
+    REFERENCES `availabilitys` (`availabilityid`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Enthält die genauen Bestell-Positionen einner Bestellung, die getätigte Zahlung dafür und wie oft diese Position bestellt wurde. menuid is leer(0), wenn es sich um einen \"extrawunsch\" handelt.';
@@ -221,33 +292,24 @@ CREATE TABLE IF NOT EXISTS `menu_extras` (
   `menu_extraid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
-  `availability` ENUM('AVAILABLE', 'DELAYED', 'OUT OF ORDER') NOT NULL,
+  `availabilityid` INT NOT NULL,
   `availability_amount` SMALLINT UNSIGNED NULL,
   PRIMARY KEY (`menu_extraid`, `eventid`),
   UNIQUE INDEX `menu_extraid_UNIQUE` (`menu_extraid` ASC),
   INDEX `fk_menu_extras_events1_idx` (`eventid` ASC),
+  INDEX `fk_menu_extras_availabilitys1_idx` (`availabilityid` ASC),
   CONSTRAINT `fk_menu_extras_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `events` (`eventid`)
     ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_menu_extras_availabilitys1`
+    FOREIGN KEY (`availabilityid`)
+    REFERENCES `availabilitys` (`availabilityid`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Definiert alle möglichen Extras die zu einer Speise bestellt werden können (miz Pommes, mit Reis, kein Salat, ...)';
-
-
--- -----------------------------------------------------
--- Table `menu_sizes`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `menu_sizes` ;
-
-CREATE TABLE IF NOT EXISTS `menu_sizes` (
-  `menu_sizeid` INT(11) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(32) NOT NULL,
-  `factor` DECIMAL(3,2) NOT NULL,
-  PRIMARY KEY (`menu_sizeid`),
-  UNIQUE INDEX `menu_sizeid_UNIQUE` (`menu_sizeid` ASC))
-ENGINE = InnoDB
-COMMENT = 'Enhält die verschiedene Einheitsgröße, die es für eine Speise/Getränk geben kann. (Normal, Kleine Speise, 0,25L, 0,5L, ...)';
 
 
 -- -----------------------------------------------------
@@ -305,31 +367,6 @@ COMMENT = 'Definiert, welche extras für die verschiedene Speisen/Getränke verf
 
 
 -- -----------------------------------------------------
--- Table `orders_detail_sizes`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `orders_detail_sizes` ;
-
-CREATE TABLE IF NOT EXISTS `orders_detail_sizes` (
-  `orders_detailid` INT(11) NOT NULL,
-  `menues_possible_sizeid` INT(11) NOT NULL,
-  PRIMARY KEY (`orders_detailid`, `menues_possible_sizeid`),
-  INDEX `fk_orders_detail_extras_menues_possible_sizes1_idx` (`menues_possible_sizeid` ASC),
-  UNIQUE INDEX `UNIQUE` (`orders_detailid` ASC, `menues_possible_sizeid` ASC),
-  CONSTRAINT `fk_orders_detail_extras_orders_details1`
-    FOREIGN KEY (`orders_detailid`)
-    REFERENCES `orders_details` (`orders_detailid`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_orders_detail_extras_menues_possible_sizes1`
-    FOREIGN KEY (`menues_possible_sizeid`)
-    REFERENCES `menues_possible_sizes` (`menues_possible_sizeid`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-COMMENT = 'Gibt an welche Größe einer Speise/eines Getränks bestellt worden ist';
-
-
--- -----------------------------------------------------
 -- Table `orders_detail_extras`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `orders_detail_extras` ;
@@ -379,15 +416,15 @@ COMMENT = 'Enthält Referenzen zu gespritzten Getränken (Cola gespritzt mit Min
 
 
 -- -----------------------------------------------------
--- Table `events_user_role`
+-- Table `user_role`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `events_user_role` ;
+DROP TABLE IF EXISTS `user_role` ;
 
-CREATE TABLE IF NOT EXISTS `events_user_role` (
-  `events_user_roleid` TINYINT NOT NULL,
+CREATE TABLE IF NOT EXISTS `user_role` (
+  `user_roleid` TINYINT NOT NULL,
   `name` VARCHAR(64) NOT NULL,
-  PRIMARY KEY (`events_user_roleid`),
-  UNIQUE INDEX `user_roleid_UNIQUE` (`events_user_roleid` ASC),
+  PRIMARY KEY (`user_roleid`),
+  UNIQUE INDEX `user_roleid_UNIQUE` (`user_roleid` ASC),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC))
 ENGINE = InnoDB
 COMMENT = 'Enthält die Zugriffsrechte, die Benutzer haben können';
@@ -577,7 +614,7 @@ CREATE TABLE IF NOT EXISTS `distributions_places_tables` (
   INDEX `fk_distributions_places_tables_menu_groupes1_idx` (`menu_groupid` ASC),
   CONSTRAINT `fk_tables_has_distributions_places_tables1`
     FOREIGN KEY (`tableid`)
-    REFERENCES `tables` (`tableid`)
+    REFERENCES `events_tables` (`events_tableid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tables_has_distributions_places_distributions_places1`
@@ -595,49 +632,6 @@ COMMENT = 'Definiert welche tische standartmäßg von wo ihre Menüs erhalten. J
 
 
 -- -----------------------------------------------------
--- Table `orders_details_special_extra`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `orders_details_special_extra` ;
-
-CREATE TABLE IF NOT EXISTS `orders_details_special_extra` (
-  `orders_details_special_extraid` INT(11) NOT NULL AUTO_INCREMENT,
-  `orderid` INT(11) NOT NULL,
-  `menu_groupid` INT(11) NULL,
-  `amount` TINYINT NOT NULL,
-  `single_price` DECIMAL(7,2) NULL,
-  `single_price_modified_by_userid` INT(11) NULL,
-  `extra_detail` VARCHAR(255) NOT NULL,
-  `verified` TINYINT(1) NOT NULL,
-  `finished` DATETIME NULL,
-  `availability` ENUM('AVAILABLE', 'DELAYED', 'OUT OF ORDER') NULL,
-  `availability_amount` SMALLINT NULL,
-  PRIMARY KEY (`orders_details_special_extraid`, `orderid`),
-  UNIQUE INDEX `orders_details_special_extraid_UNIQUE` (`orders_details_special_extraid` ASC),
-  INDEX `fk_orders_details_special_extra_orders1_idx` (`orderid` ASC),
-  INDEX `fk_orders_details_special_extra_users1_idx` (`single_price_modified_by_userid` ASC),
-  INDEX `idx_amount` (`amount` ASC),
-  INDEX `fk_orders_details_special_extra_menu_groupes1_idx` (`menu_groupid` ASC),
-  UNIQUE INDEX `availability_amount_UNIQUE` (`availability_amount` ASC),
-  CONSTRAINT `fk_orders_details_special_extra_orders1`
-    FOREIGN KEY (`orderid`)
-    REFERENCES `orders` (`orderid`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_orders_details_special_extra_users1`
-    FOREIGN KEY (`single_price_modified_by_userid`)
-    REFERENCES `users` (`userid`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_orders_details_special_extra_menu_groupes1`
-    FOREIGN KEY (`menu_groupid`)
-    REFERENCES `menu_groupes` (`menu_groupid`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-COMMENT = 'Beinhaltet Sonderbestellungen von Kunden. Diese müssen vom Manager geprüft und bestätigt werden. Er muss den Preis festlegen und die Menü Gruppe, um die es sich handelt, damit die korrekte Ausgabestelle sie bearbeiten kann';
-
-
--- -----------------------------------------------------
 -- Table `invoices`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `invoices` ;
@@ -646,33 +640,37 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   `invoiceid` INT(11) NOT NULL AUTO_INCREMENT,
   `cashier_userid` INT(11) NOT NULL,
   `date` DATETIME NOT NULL,
+  `canceled` DATETIME NULL,
   PRIMARY KEY (`invoiceid`, `cashier_userid`),
   UNIQUE INDEX `invoiceid_UNIQUE` (`invoiceid` ASC),
   INDEX `fk_invoices_users1_idx` (`cashier_userid` ASC),
   CONSTRAINT `fk_invoices_users1`
     FOREIGN KEY (`cashier_userid`)
     REFERENCES `users` (`userid`)
-    ON DELETE CASCADE
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Beinhaltet die Rechnungsnummer mit dem Aussstellungsdatum, die es gibt';
 
 
 -- -----------------------------------------------------
--- Table `invoices_orders_details`
+-- Table `invoices_items`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `invoices_orders_details` ;
+DROP TABLE IF EXISTS `invoices_items` ;
 
-CREATE TABLE IF NOT EXISTS `invoices_orders_details` (
-  `invoices_orders_detailsid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `invoices_items` (
+  `invoices_itemid` INT(11) NOT NULL AUTO_INCREMENT,
   `invoiceid` INT(11) NOT NULL,
   `orders_detailid` INT(11) NOT NULL,
   `amount` TINYINT NOT NULL,
-  PRIMARY KEY (`invoices_orders_detailsid`, `invoiceid`, `orders_detailid`),
+  `price` DECIMAL(7,2) NOT NULL,
+  `description` VARCHAR(255) NOT NULL,
+  `tax` SMALLINT NOT NULL,
+  PRIMARY KEY (`invoices_itemid`, `invoiceid`, `orders_detailid`),
   INDEX `fk_invoices_has_orders_details_orders_details1_idx` (`orders_detailid` ASC),
   INDEX `fk_invoices_has_orders_details_invoices1_idx` (`invoiceid` ASC),
   INDEX `idx_amount` (`amount` ASC),
-  UNIQUE INDEX `invoices_orders_detailsid_UNIQUE` (`invoices_orders_detailsid` ASC),
+  UNIQUE INDEX `invoices_orders_detailsid_UNIQUE` (`invoices_itemid` ASC),
   CONSTRAINT `fk_invoices_has_orders_details_invoices1`
     FOREIGN KEY (`invoiceid`)
     REFERENCES `invoices` (`invoiceid`)
@@ -681,39 +679,10 @@ CREATE TABLE IF NOT EXISTS `invoices_orders_details` (
   CONSTRAINT `fk_invoices_has_orders_details_orders_details1`
     FOREIGN KEY (`orders_detailid`)
     REFERENCES `orders_details` (`orders_detailid`)
-    ON DELETE CASCADE
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Beinhaltet die Zeilen einer Rechnung. Gibt an wieviel, von einer Bestellung bezahlt worden ist. Preis wird der Bestellung entnommen';
-
-
--- -----------------------------------------------------
--- Table `invoices_orders_details_special_extra`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `invoices_orders_details_special_extra` ;
-
-CREATE TABLE IF NOT EXISTS `invoices_orders_details_special_extra` (
-  `invoices_orders_details_special_extraid` INT(11) NOT NULL AUTO_INCREMENT,
-  `invoiceid` INT(11) NOT NULL,
-  `orders_details_special_extraid` INT(11) NOT NULL,
-  `amount` TINYINT NOT NULL,
-  PRIMARY KEY (`invoices_orders_details_special_extraid`, `invoiceid`, `orders_details_special_extraid`),
-  INDEX `fk_invoices_has_orders_details_special_extra_orders_details_idx` (`orders_details_special_extraid` ASC),
-  INDEX `fk_invoices_has_orders_details_special_extra_invoices1_idx` (`invoiceid` ASC),
-  INDEX `idx_amount` (`amount` ASC),
-  UNIQUE INDEX `invoices_orders_details_special_extraid_UNIQUE` (`invoices_orders_details_special_extraid` ASC),
-  CONSTRAINT `fk_invoices_has_orders_details_special_extra_invoices1`
-    FOREIGN KEY (`invoiceid`)
-    REFERENCES `invoices` (`invoiceid`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_invoices_has_orders_details_special_extra_orders_details_s1`
-    FOREIGN KEY (`orders_details_special_extraid`)
-    REFERENCES `orders_details_special_extra` (`orders_details_special_extraid`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-COMMENT = 'Beinhaltet die Zeilen einer Rechnung. Gibt an wieviel, von einer sonder Bestellung bezahlt worden ist. Preis wird der Bestellung entnommen';
 
 
 -- -----------------------------------------------------
@@ -765,41 +734,6 @@ COMMENT = 'Gibt an, wann und wieviel ein Kunde bereits von seiner Bestellung erh
 
 
 -- -----------------------------------------------------
--- Table `orders_extras_in_progress_recieved`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `orders_extras_in_progress_recieved` ;
-
-CREATE TABLE IF NOT EXISTS `orders_extras_in_progress_recieved` (
-  `orders_extras_in_progress_recieved` INT(11) NOT NULL AUTO_INCREMENT,
-  `orders_details_special_extraid` INT(11) NOT NULL,
-  `orders_in_progressid` INT(11) NOT NULL,
-  `distributions_giving_outid` INT(11) NOT NULL,
-  `amount` TINYINT NOT NULL,
-  PRIMARY KEY (`orders_extras_in_progress_recieved`, `orders_details_special_extraid`, `orders_in_progressid`, `distributions_giving_outid`),
-  INDEX `fk_orders_details_special_extra_has_orders_in_progress_orde_idx` (`orders_in_progressid` ASC),
-  INDEX `fk_orders_details_special_extra_has_orders_in_progress_orde_idx1` (`orders_details_special_extraid` ASC),
-  UNIQUE INDEX `orders_extras_in_progress_recieved_UNIQUE` (`orders_extras_in_progress_recieved` ASC),
-  INDEX `fk_orders_extras_in_progress_recieved_distribution_givin_ou_idx` (`distributions_giving_outid` ASC),
-  CONSTRAINT `fk_orders_details_special_extra_has_orders_in_progress_orders1`
-    FOREIGN KEY (`orders_details_special_extraid`)
-    REFERENCES `orders_details_special_extra` (`orders_details_special_extraid`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_orders_details_special_extra_has_orders_in_progress_orders2`
-    FOREIGN KEY (`orders_in_progressid`)
-    REFERENCES `orders_in_progress` (`orders_in_progressid`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_orders_extras_in_progress_recieved_distribution_givin_out1`
-    FOREIGN KEY (`distributions_giving_outid`)
-    REFERENCES `distributions_giving_outs` (`distributions_giving_outid`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-COMMENT = 'Gibt an, wann und wieviel ein Kunde bereits von seiner sonder Bestellung erhalten hat. Erhalt kann aufgeteitl sein falls zbs. nur mehr 2 Schnitzel vorhanden sind und 3 Bestellt wurden. 1 wird später nachgeliefert und ist ein eigener eintrag';
-
-
--- -----------------------------------------------------
 -- Table `users_messages`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `users_messages` ;
@@ -831,14 +765,103 @@ COMMENT = 'Beinhaltet die Kommunikationsnachrichten zwischen den Benutzern für 
 
 
 -- -----------------------------------------------------
+-- Table `payment_types`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `payment_types` ;
+
+CREATE TABLE IF NOT EXISTS `payment_types` (
+  `idpayment_typeid` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(24) NOT NULL,
+  PRIMARY KEY (`idpayment_typeid`),
+  UNIQUE INDEX `idpayment_typeid_UNIQUE` (`idpayment_typeid` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `payments`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `payments` ;
+
+CREATE TABLE IF NOT EXISTS `payments` (
+  `paymentid` INT UNSIGNED NOT NULL,
+  `payment_typeid` INT NOT NULL,
+  `invoiceid` INT(11) NOT NULL,
+  `date` DATETIME NOT NULL,
+  `amount` DECIMAL(7,2) NOT NULL,
+  `canceled` DATETIME NULL,
+  PRIMARY KEY (`paymentid`, `payment_typeid`, `invoiceid`),
+  INDEX `fk_payment_types_has_invoices_invoices1_idx` (`invoiceid` ASC),
+  INDEX `fk_payment_types_has_invoices_payment_types1_idx` (`payment_typeid` ASC),
+  CONSTRAINT `fk_payment_types_has_invoices_payment_types1`
+    FOREIGN KEY (`payment_typeid`)
+    REFERENCES `payment_types` (`idpayment_typeid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_payment_types_has_invoices_invoices1`
+    FOREIGN KEY (`invoiceid`)
+    REFERENCES `invoices` (`invoiceid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Coupons`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `Coupons` ;
+
+CREATE TABLE IF NOT EXISTS `Coupons` (
+  `couponid` INT NOT NULL AUTO_INCREMENT,
+  `eventid` INT(11) NOT NULL,
+  `created_by` INT(11) NOT NULL,
+  `code` VARCHAR(24) NOT NULL,
+  `created` DATETIME NOT NULL,
+  `value` DECIMAL(7,2) NOT NULL,
+  PRIMARY KEY (`couponid`, `eventid`, `created_by`),
+  INDEX `fk_Coupons_events1_idx` (`eventid` ASC),
+  INDEX `fk_Coupons_users1_idx` (`created_by` ASC),
+  CONSTRAINT `fk_Coupons_events1`
+    FOREIGN KEY (`eventid`)
+    REFERENCES `events` (`eventid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Coupons_users1`
+    FOREIGN KEY (`created_by`)
+    REFERENCES `users` (`userid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `payments_coupons`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `payments_coupons` ;
+
+CREATE TABLE IF NOT EXISTS `payments_coupons` (
+  `couponid` INT NOT NULL,
+  `paymentid` INT UNSIGNED NOT NULL,
+  `value_used` DECIMAL(7,2) NOT NULL,
+  PRIMARY KEY (`couponid`, `paymentid`),
+  INDEX `fk_Coupons_has_payments_payments1_idx` (`paymentid` ASC),
+  INDEX `fk_Coupons_has_payments_Coupons1_idx` (`couponid` ASC),
+  CONSTRAINT `fk_Coupons_has_payments_Coupons1`
+    FOREIGN KEY (`couponid`)
+    REFERENCES `Coupons` (`couponid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Coupons_has_payments_payments1`
+    FOREIGN KEY (`paymentid`)
+    REFERENCES `payments` (`paymentid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Placeholder table for view `orders_details_open`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `orders_details_open` (`orderid` INT, `orders_detailid` INT, `menuid` INT, `amount` INT, `single_price` INT, `extra_detail` INT, `amount_payed` INT);
-
--- -----------------------------------------------------
--- Placeholder table for view `orders_details_special_extra_open`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `orders_details_special_extra_open` (`orderid` INT, `orders_details_special_extraid` INT, `amount` INT, `single_price` INT, `extra_detail` INT, `verified` INT, `amount_payed` INT);
 
 -- -----------------------------------------------------
 -- procedure open_orders_priority
@@ -851,24 +874,19 @@ BEGIN
 SET @rank:=0, @last_menu_groupid:=0, @last_orderid:=0;
 DROP TABLE IF EXISTS tmp_open_orders_priority;
 CREATE TEMPORARY TABLE tmp_open_orders_priority AS (
-SELECT t.orders_detailid, t.orders_details_special_extraid, t.menu_groupid, t.orderid,
+SELECT t.orders_detailid, t.menu_groupid, t.orderid,
 		IF(@last_menu_groupid != t.menu_groupid, @rank:=0, null) AS tmp1,
         IF(@last_orderid != t.orderid, @rank:=@rank+1, null) AS tmp2,
 		IF(@last_menu_groupid != t.menu_groupid, @last_menu_groupid := t.menu_groupid, null) AS tmp3,
         IF(@last_orderid != t.orderid, @last_orderid := t.orderid, null) AS tmp4,
         @rank AS rank
-FROM (SELECT orders_detailid, orders_details_special_extraid, menu_groupid, priority, orderid
-FROM (SELECT od.orders_detailid, NULL AS orders_details_special_extraid, m.menu_groupid, o.priority, o.orderid
+FROM (SELECT orders_detailid, menu_groupid, priority, orderid
+FROM (SELECT od.orders_detailid, m.menu_groupid, o.priority, o.orderid
 			 FROM orders o
 			 INNER JOIN orders_details od ON od.orderid = o.orderid AND od.finished IS NULL
 			 INNER JOIN menues m ON m.menuid = od.menuid
-			 WHERE o.finished IS NULL
-	  UNION
-	  SELECT NULL AS orders_detailid, odse.orders_details_special_extraid, odse.menu_groupid, o.priority, o.orderid
-			 FROM orders o
-			 INNER JOIN orders_details_special_extra odse ON odse.orderid = o.orderid AND odse.menu_groupid IS NOT NULL AND odse.finished IS NULL
 			 WHERE o.finished IS NULL) f
-	  ORDER BY  menu_groupid ASC, priority ASC, orders_details_special_extraid ASC
+	  ORDER BY  menu_groupid ASC, priority ASC
       LIMIT 18446744073709551615) t);
 END$$
 
@@ -880,39 +898,19 @@ DELIMITER ;
 DROP VIEW IF EXISTS `orders_details_open` ;
 DROP TABLE IF EXISTS `orders_details_open`;
 CREATE  OR REPLACE VIEW `orders_details_open` AS
-SELECT od.orderid,
+SELECT od.orderid, 
 		od.orders_detailid,
 		od.menuid,
 		od.amount,
 		od.single_price,
 		od.extra_detail,
 		(SELECT COALESCE(SUM(iod.amount), 0)
-		 FROM invoices_orders_details iod
+		 FROM invoices_items iod
 		 WHERE iod.orders_detailid = od.orders_detailid) AS amount_payed
  FROM orders_details od
  WHERE od.amount <> (SELECT COALESCE(SUM(iod2.amount), 0)
-						 FROM invoices_orders_details iod2
+						 FROM invoices_items iod2
 						 WHERE iod2.orders_detailid = od.orders_detailid);
-
--- -----------------------------------------------------
--- View `orders_details_special_extra_open`
--- -----------------------------------------------------
-DROP VIEW IF EXISTS `orders_details_special_extra_open` ;
-DROP TABLE IF EXISTS `orders_details_special_extra_open`;
-CREATE  OR REPLACE VIEW `orders_details_special_extra_open` AS
-SELECT odse.orderid,
-		odse.orders_details_special_extraid,
-		odse.amount,
-		odse.single_price,
-		odse.extra_detail,
-		odse.verified,
-		(SELECT COALESCE(SUM(iodse.amount), 0)
-		 FROM invoices_orders_details_special_extra iodse
-		 WHERE iodse.orders_details_special_extraid = odse.orders_details_special_extraid) AS amount_payed
- FROM orders_details_special_extra odse
- WHERE odse.amount <> (SELECT COALESCE(SUM(iodse2.amount), 0)
-								 FROM invoices_orders_details_special_extra iodse2
-								 WHERE iodse2.orders_details_special_extraid = odse.orders_details_special_extraid);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
