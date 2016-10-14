@@ -1,2 +1,2 @@
 <?php
-require_once '../../API/index.php';
+require_once '../../API/bootstrap.php';
