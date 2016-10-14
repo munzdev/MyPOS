@@ -28,7 +28,7 @@ class Constants extends Controller
     public function __invoke(Request $request, Response $response, $args)
     {
         $a_defined_constants = get_defined_constants(TRUE)['user'];
-
+        
         $a_js_constants = array();
 
         foreach ($a_defined_constants as $str_name => $value)
