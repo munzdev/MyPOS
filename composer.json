@@ -5,7 +5,19 @@
         "mike42/escpos-php" : "v1.2.1",
         "cboden/ratchet": "0.3.*",
         "slim/slim": "^3.0",
+        "monolog/monolog": "^1.13",
         "propel/propel": "~2.0@dev"
+    },
+    "authors": [
+        {
+            "name": "Thomas Munz",
+            "homepage": "https://github.com/munzdev/MyPOS"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "API\\": "src/API"
+        }
     },
     "config": {
         "vendor-dir": "src/vendor"

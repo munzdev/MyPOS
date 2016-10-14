@@ -14,7 +14,7 @@ return [
             'schemaDir' => 'DBModel',
 
             // The directory where Propel should output generated object model classes.
-            'phpDir' => 'src/api',
+            'phpDir' => 'src',
         ],
         /*
         'database' => [
