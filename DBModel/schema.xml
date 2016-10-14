@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
-  <table name="availabilitys" idMethod="native" phpName="Availabilitys" namespace="Model\Menues">
+  <table name="availabilitys" idMethod="native" phpName="Availabilitys" namespace="API\Models\Menues">
     <column name="availabilityid" phpName="Availabilityid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="24" required="true"/>
     <unique name="availabilityid_UNIQUE">
@@ -10,7 +10,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="coupons" idMethod="native" phpName="Coupons" namespace="Model\Payment">
+  <table name="coupons" idMethod="native" phpName="Coupons" namespace="API\Models\Payment">
     <column name="couponid" phpName="Couponid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="created_by" phpName="CreatedBy" type="INTEGER" primaryKey="true" required="true"/>
@@ -33,7 +33,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distributions_giving_outs" idMethod="native" phpName="DistributionsGivingOuts" namespace="Model\OIP">
+  <table name="distributions_giving_outs" idMethod="native" phpName="DistributionsGivingOuts" namespace="API\Models\OIP">
     <column name="distributions_giving_outid" phpName="DistributionsGivingOutid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <unique name="distribution_givin_outid_UNIQUE">
@@ -43,7 +43,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distributions_places" idMethod="native" phpName="DistributionsPlaces" namespace="Model\DistributionPlace">
+  <table name="distributions_places" idMethod="native" phpName="DistributionsPlaces" namespace="API\Models\DistributionPlace">
     <column name="distributions_placeid" phpName="DistributionsPlaceid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
@@ -60,7 +60,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distributions_places_groupes" idMethod="native" phpName="DistributionsPlacesGroupes" namespace="Model\DistributionPlace">
+  <table name="distributions_places_groupes" idMethod="native" phpName="DistributionsPlacesGroupes" namespace="API\Models\DistributionPlace">
     <column name="distributions_placeid" phpName="DistributionsPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
     <foreign-key foreignTable="distributions_places" name="fk_distributions_places_has_menu_groupes_distributions_places1" onDelete="CASCADE">
@@ -79,7 +79,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distributions_places_tables" idMethod="native" phpName="DistributionsPlacesTables" namespace="Model\DistributionPlace">
+  <table name="distributions_places_tables" idMethod="native" phpName="DistributionsPlacesTables" namespace="API\Models\DistributionPlace">
     <column name="tableid" phpName="Tableid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="distributions_placeid" phpName="DistributionsPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
@@ -105,7 +105,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distributions_places_users" idMethod="native" phpName="DistributionsPlacesUsers" namespace="Model\DistributionPlace">
+  <table name="distributions_places_users" idMethod="native" phpName="DistributionsPlacesUsers" namespace="API\Models\DistributionPlace">
     <column name="distributions_placeid" phpName="DistributionsPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="events_printerid" phpName="EventsPrinterid" type="INTEGER" primaryKey="true" required="true"/>
@@ -131,7 +131,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="events" idMethod="native" phpName="Events" namespace="Model\Event">
+  <table name="events" idMethod="native" phpName="Events" namespace="API\Models\Event">
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="45" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
@@ -146,7 +146,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="events_printers" idMethod="native" phpName="EventsPrinters" namespace="Model\Event">
+  <table name="events_printers" idMethod="native" phpName="EventsPrinters" namespace="API\Models\Event">
     <column name="events_printerid" phpName="EventsPrinterid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
@@ -167,7 +167,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="events_tables" idMethod="native" phpName="EventsTables" namespace="Model\Event">
+  <table name="events_tables" idMethod="native" phpName="EventsTables" namespace="API\Models\Event">
     <column name="events_tableid" phpName="EventsTableid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="32" required="true"/>
@@ -188,7 +188,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="events_user" idMethod="native" phpName="EventsUser" namespace="Model\Event">
+  <table name="events_user" idMethod="native" phpName="EventsUser" namespace="API\Models\Event">
     <column name="events_userid" phpName="EventsUserid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
@@ -217,7 +217,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="invoices" idMethod="native" phpName="Invoices" namespace="Model\Invoice">
+  <table name="invoices" idMethod="native" phpName="Invoices" namespace="API\Models\Invoice">
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="cashier_userid" phpName="CashierUserid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
@@ -235,7 +235,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="invoices_items" idMethod="native" phpName="InvoicesItems" namespace="Model\Invoice">
+  <table name="invoices_items" idMethod="native" phpName="InvoicesItems" namespace="API\Models\Invoice">
     <column name="invoices_itemid" phpName="InvoicesItemid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="orders_detailid" phpName="OrdersDetailid" type="INTEGER" primaryKey="true" required="true"/>
@@ -265,7 +265,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="menu_extras" idMethod="native" phpName="MenuExtras" namespace="Model\Menues">
+  <table name="menu_extras" idMethod="native" phpName="MenuExtras" namespace="API\Models\Menues">
     <column name="menu_extraid" phpName="MenuExtraid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
@@ -290,7 +290,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="menu_groupes" idMethod="native" phpName="MenuGroupes" namespace="Model\Menues">
+  <table name="menu_groupes" idMethod="native" phpName="MenuGroupes" namespace="API\Models\Menues">
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="menu_typeid" phpName="MenuTypeid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
@@ -307,7 +307,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="menu_sizes" idMethod="native" phpName="MenuSizes" namespace="Model\Menues">
+  <table name="menu_sizes" idMethod="native" phpName="MenuSizes" namespace="API\Models\Menues">
     <column name="menu_sizeid" phpName="MenuSizeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="32" required="true"/>
@@ -325,7 +325,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="menu_types" idMethod="native" phpName="MenuTypes" namespace="Model\Menues">
+  <table name="menu_types" idMethod="native" phpName="MenuTypes" namespace="API\Models\Menues">
     <column name="menu_typeid" phpName="MenuTypeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
@@ -344,7 +344,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="menues" idMethod="native" phpName="Menues" namespace="Model\Menues">
+  <table name="menues" idMethod="native" phpName="Menues" namespace="API\Models\Menues">
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
@@ -370,7 +370,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="menues_possible_extras" idMethod="native" phpName="MenuesPossibleExtras" namespace="Model\Menues">
+  <table name="menues_possible_extras" idMethod="native" phpName="MenuesPossibleExtras" namespace="API\Models\Menues">
     <column name="menues_possible_extraid" phpName="MenuesPossibleExtraid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="menu_extraid" phpName="MenuExtraid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
@@ -394,7 +394,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="menues_possible_sizes" idMethod="native" phpName="MenuesPossibleSizes" namespace="Model\Menues">
+  <table name="menues_possible_sizes" idMethod="native" phpName="MenuesPossibleSizes" namespace="API\Models\Menues">
     <column name="menues_possible_sizeid" phpName="MenuesPossibleSizeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="menu_sizeid" phpName="MenuSizeid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
@@ -418,7 +418,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="orders" idMethod="native" phpName="Orders" namespace="Model\Ordering">
+  <table name="orders" idMethod="native" phpName="Orders" namespace="API\Models\Ordering">
     <column name="orderid" phpName="Orderid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="tableid" phpName="Tableid" type="INTEGER" primaryKey="true" required="true"/>
@@ -460,7 +460,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="orders_detail_extras" idMethod="native" phpName="OrdersDetailExtras" namespace="Model\Ordering">
+  <table name="orders_detail_extras" idMethod="native" phpName="OrdersDetailExtras" namespace="API\Models\Ordering">
     <column name="orders_detailid" phpName="OrdersDetailid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menues_possible_extraid" phpName="MenuesPossibleExtraid" type="INTEGER" primaryKey="true" required="true"/>
     <foreign-key foreignTable="menues_possible_extras" name="fk_orders_detail_sizes_menues_possible_extras1" onDelete="CASCADE">
@@ -480,7 +480,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="orders_details" idMethod="native" phpName="OrdersDetails" namespace="Model\Ordering">
+  <table name="orders_details" idMethod="native" phpName="OrdersDetails" namespace="API\Models\Ordering">
     <column name="orders_detailid" phpName="OrdersDetailid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="orderid" phpName="Orderid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER"/>
@@ -540,7 +540,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="orders_details_mixed_with" idMethod="native" phpName="OrdersDetailsMixedWith" namespace="Model\Ordering">
+  <table name="orders_details_mixed_with" idMethod="native" phpName="OrdersDetailsMixedWith" namespace="API\Models\Ordering">
     <column name="orders_detailid" phpName="OrdersDetailid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
     <foreign-key foreignTable="menues" name="fk_orders_details_mixed_with_menues1" onDelete="CASCADE">
@@ -556,7 +556,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="orders_in_progress" idMethod="native" phpName="OrdersInProgress" namespace="Model\OIP">
+  <table name="orders_in_progress" idMethod="native" phpName="OrdersInProgress" namespace="API\Models\OIP">
     <column name="orders_in_progressid" phpName="OrdersInProgressid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="orderid" phpName="Orderid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
@@ -588,7 +588,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="orders_in_progress_recieved" idMethod="native" phpName="OrdersInProgressRecieved" namespace="Model\OIP">
+  <table name="orders_in_progress_recieved" idMethod="native" phpName="OrdersInProgressRecieved" namespace="API\Models\OIP">
     <column name="orders_in_progress_recievedid" phpName="OrdersInProgressRecievedid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="orders_detailid" phpName="OrdersDetailid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="orders_in_progressid" phpName="OrdersInProgressid" type="INTEGER" primaryKey="true" required="true"/>
@@ -619,7 +619,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="payment_types" idMethod="native" phpName="PaymentTypes" namespace="Model\Payment">
+  <table name="payment_types" idMethod="native" phpName="PaymentTypes" namespace="API\Models\Payment">
     <column name="idpayment_typeid" phpName="IdpaymentTypeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="24" required="true"/>
     <unique name="idpayment_typeid_UNIQUE">
@@ -629,7 +629,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="payments" idMethod="native" phpName="Payments" namespace="Model\Payment">
+  <table name="payments" idMethod="native" phpName="Payments" namespace="API\Models\Payment">
     <column name="paymentid" phpName="Paymentid" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
     <column name="payment_typeid" phpName="PaymentTypeid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" required="true"/>
@@ -652,7 +652,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="payments_coupons" idMethod="native" phpName="PaymentsCoupons" namespace="Model\Payment">
+  <table name="payments_coupons" idMethod="native" phpName="PaymentsCoupons" namespace="API\Models\Payment">
     <column name="couponid" phpName="Couponid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="paymentid" phpName="Paymentid" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
     <column name="value_used" phpName="ValueUsed" type="DECIMAL" size="7" scale="2" required="true"/>
@@ -672,7 +672,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="user_role" idMethod="native" phpName="UserRole" namespace="Model\User">
+  <table name="user_role" idMethod="native" phpName="UserRole" namespace="API\Models\User">
     <column name="user_roleid" phpName="UserRoleid" type="TINYINT" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
     <unique name="user_roleid_UNIQUE">
@@ -685,7 +685,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="users" idMethod="native" phpName="Users" namespace="Model\User">
+  <table name="users" idMethod="native" phpName="Users" namespace="API\Models\User">
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="username" phpName="Username" type="VARCHAR" size="64" required="true"/>
     <column name="password" phpName="Password" type="VARCHAR" size="64" required="true"/>
@@ -709,7 +709,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="users_messages" idMethod="native" phpName="UsersMessages" namespace="Model\User\Messages">
+  <table name="users_messages" idMethod="native" phpName="UsersMessages" namespace="API\Models\User\Messages">
     <column name="users_messageid" phpName="UsersMessageid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="from_events_userid" phpName="FromEventsUserid" type="INTEGER"/>
     <column name="to_events_userid" phpName="ToEventsUserid" type="INTEGER" primaryKey="true" required="true"/>
