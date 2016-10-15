@@ -40,7 +40,7 @@ return [
                 'Logo' => [
                     'Use' => false,
                     'Path' => "",
-                    'Type' => MyPOS\PRINTER_LOGO_DEFAULT
+                    'Type' => API\PRINTER_LOGO_DEFAULT
                 ]
             ]
         ],

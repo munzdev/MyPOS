@@ -33,7 +33,7 @@ class Constants extends Controller
 
         foreach ($a_defined_constants as $str_name => $value)
         {
-            $str_namespace = "MyPOS\\";
+            $str_namespace = "API\\";
             $i_start = strlen($str_namespace);
 
             if (0 === strpos($str_name, $str_namespace))
