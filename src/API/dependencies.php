@@ -1,7 +1,7 @@
 <?php
 // DIC configuration
 
-$container = $app->getContainer();
+$o_container = $app->getContainer();
 
 // -----------------------------------------------------------------------------
 // Service providers
@@ -11,8 +11,8 @@ $container = $app->getContainer();
 // -----------------------------------------------------------------------------
 
 // monolog
-$container['logger'] = function ($c) {
-    $settings = $c->get('settings');
+$o_container['logger'] = function ($o_container) {
+    $settings = $o_container->get('settings');
     $logger = new Monolog\Logger($settings['logger']['name']);
     $logger->pushProcessor(new Monolog\Processor\UidProcessor());
     $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['logger']['path'], Monolog\Logger::DEBUG));
@@ -20,9 +20,9 @@ $container['logger'] = function ($c) {
 };
 
 // Propel
-$container['db'] = function($c)
+$o_container['db'] = function($o_container)
 {
-    $settings = $c->get('settings');
+    $settings = $o_container->get('settings');
     $db = $settings['propel']['database']['connections']['default'];
     
     $serviceContainer = \Propel\Runtime\Propel::getServiceContainer();
@@ -49,9 +49,15 @@ $container['db'] = function($c)
 };
 
 // -----------------------------------------------------------------------------
-// Action factories
+// Prepare DI for all Controllers
 // -----------------------------------------------------------------------------
 
-$container[API\Controllers\Utility\Constants::class] = function ($c) use ($app) {
-    return new API\Controllers\Utility\Constants($app, $c->get('logger'));
-};
+foreach (glob(__DIR__ . "/Controllers/*/*.php") as $str_filename)
+{    
+    $str_path = substr($str_filename, strlen(__DIR__), -4);
+    $str_classname = "API" . str_replace("/", "\\", $str_path);
+    
+    $o_container[$str_classname] = function($o_container) use ($app, $str_classname) {
+        return new $str_classname($app, $o_container->get('logger'));
+    };
+}

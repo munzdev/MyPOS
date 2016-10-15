@@ -17,6 +17,9 @@ require 'functions.php';
 
 session_start();
 
+if(API\DEBUG) 
+    set_time_limit(0);
+
 // Instantiate the app
 $settings = require 'settings.php';
 $app = new \Slim\App($settings);
