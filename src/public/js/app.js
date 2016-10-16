@@ -10,9 +10,8 @@ function($, _, Backbone) {
     "use strict";
 
     var app = {
-        root : "/",                     // The root path to run the application through.
         URL : "/",                      // Base application URL
-        API : "api/",                   // Base API URL (used by models & collections)
+        API : "API/",                   // Base API URL (used by models & collections)
     };
 
     $.ajaxSetup({ cache: false });      // force ajax call on all browsers
