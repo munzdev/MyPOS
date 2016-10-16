@@ -1,7 +1,7 @@
 <?php
 // Routes
 
-foreach (glob(__DIR__ . "/Routes/*.php") as $str_filename)
+foreach (glob(__DIR__ . "/Routes/*.php", GLOB_NOSORT) as $str_filename)
 {
     require $str_filename;
 }
