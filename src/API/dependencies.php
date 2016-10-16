@@ -47,17 +47,3 @@ $o_container['db'] = function($o_container)
     
     return true;
 };
-
-// -----------------------------------------------------------------------------
-// Prepare DI for all Controllers
-// -----------------------------------------------------------------------------
-
-foreach (glob(__DIR__ . "/Controllers/*/*.php") as $str_filename)
-{    
-    $str_path = substr($str_filename, strlen(__DIR__), -4);
-    $str_classname = "API" . str_replace("/", "\\", $str_path);
-    
-    $o_container[$str_classname] = function($o_container) use ($app, $str_classname) {
-        return new $str_classname($app, $o_container->get('logger'));
-    };
-}

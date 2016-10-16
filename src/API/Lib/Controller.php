@@ -12,10 +12,10 @@ abstract class Controller
     protected $o_app;
     protected $o_logger;
     
-    public function __construct(App $o_app, LoggerInterface $o_logger)
+    public function __construct(App $o_app)
     {
         $this->o_app = $o_app;        
-        $this->o_logger = $o_logger;
+        $this->o_logger = $o_app->getContainer()->get('logger');
     }
     
     public function __invoke(Request $o_request, Response $o_response, $a_args)
