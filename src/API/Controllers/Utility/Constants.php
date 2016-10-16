@@ -8,7 +8,7 @@ use Slim\Http\Response;
 
 class Constants extends Controller
 {    
-    protected function GET(Request $o_request, Response $o_response, $a_args)            
+    protected function ANY(Request $o_request, Response $o_response, $a_args)            
     {
         $a_defined_constants = get_defined_constants(TRUE)['user'];
         
