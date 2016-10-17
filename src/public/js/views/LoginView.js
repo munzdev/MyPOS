@@ -92,12 +92,12 @@ function( app,
                     username: this.$("#username").val(),
                     password: this.$("#password").val(),
                     rememberMe: this.$("#rememberMe").val()
-                },
-                function(user) {
+                })
+                .done((user) => {
                     if(DEBUG) console.log("SUCCESS", user);
                     self.sendToDefaultPage();
-                },
-                function(result) {
+                })
+                .fail((result) => {
                     if(DEBUG) console.log("ERROR", result);
                     app.error.showAlert('Login fehler!', 'Login ist fehlgeschlagen!');
                 });
