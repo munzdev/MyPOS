@@ -52,94 +52,50 @@ define([
          * The API will parse client cookies using its secret token
          * and return a user object if authenticated
          */
-        checkAuth: function(callback, args) {
-            var self = this;
-
-            var webservice = new Webservice();
-            webservice.action = "Users/IsLoggedIn";
-            webservice.callback = {
-                success: function(result) {
-                    if(result == true)
-                    {
-                        self.updateSession(callback.success, callback.complete);
-                    }
-                    else
-                    {
-                        self.set({ logged_in : false });
-                        if('error' in callback) callback.error(result);
-                        if('complete' in callback) callback.complete();
-                    }
-                }
-            };
-            webservice.call();
-        },
-
-        login: function(opts, successCallback, errorCallback, args) {
+        checkAuth: function() {
             var self = this;
 
             var webservice = new Webservice();
             webservice.action = "Users/Login";
-            webservice.formData = opts;
-            webservice.callback = {
-                success: function(result)
-                {
-                    // if login was successfull
-                    if(result) {
-                        self.updateSession(successCallback);
-                    } else {
-                        errorCallback(result);
-                    }
-                }
-            };
-            webservice.call();
+            webservice.type = "OPTIONS";
+            return webservice.call()
+                .done(self.updateSession)        
+                .fail(() => {
+                    self.set({ logged_in : false });
+                });
         },
 
-        updateSession: function(successCallback, completeCallback)
-        {
-            var self = this;
-
+        login: function(opts) {
             var webservice = new Webservice();
-            webservice.action = "Users/GetCurrentUser";
-            webservice.callback = {
-                success: function(user)
-                {
-                    self.updateSessionUser( user );
-                    self.set({ userid: user.userid, logged_in: true });
+            webservice.action = "Users/Login";
+            webservice.formData = opts;
+            return webservice.call().done(this.updateSession);
+        },
 
-                    self.optionsDialog = new OptionsDialogView({is_admin: user.is_admin});
-                    self.messagesDialog = new MessagesDialogView();
+        updateSession: function()
+        {
+            var webservice = new Webservice();
+            webservice.action = "Users/Login";
+            webservice.type = "GET";
+            return webservice.call()
+                .done((user) => {
+                    this.updateSessionUser( user );
+                    this.set({ userid: user.userid, logged_in: true });
+
+                    this.optionsDialog = new OptionsDialogView({is_admin: user.is_admin});
+                    this.messagesDialog = new MessagesDialogView();
 
                     app.ws.api.Connect();
                     app.ws.chat.Connect();
-
-                    self.userList.fetch({
-                        reset: true,
-                        success: function()
-                        {
-                            self.messagesDialog.fetchOldMessages();
-                        }
-                    });
-
-                    self.products.fetch({
-                        success: function()
-                        {                            
-                            if(successCallback)
-                                    successCallback(user);
-                        },
-                        complete: completeCallback
-                    });
-                },
-            };
-            webservice.call();
+                })
+                .then(this.userList.fetch)
+                .then(this.products.fetch);
         },
 
-        logout: function(opts, callback, args) {
+        logout: function() {
             var webservice = new Webservice();
-            webservice.action = "Users/Logout";
-            webservice.callback = {
-                success: MyPOS.UnloadWebsite
-            };
-            webservice.call();
+            webservice.action = "Users/Logout";            
+            webservice.call().done(MyPOS.UnloadWebsite);
         }
 
     });
