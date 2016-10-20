@@ -3,77 +3,68 @@
  */
 define([
     "app",
+    "models/LoginModel",
     "models/UserModel",
     "Webservice",
-    "MyPOS",
     "collections/ProductCollection",
     "collections/UserCollection",
     "views/dialoges/OptionsDialogView",
     "views/dialoges/MessagesDialogView"
 ], function(app,
+            LoginModel,
             UserModel,
-            Webservice,
-            MyPOS,
+            Webservice,            
             ProductCollection,
             UserCollection,
             OptionsDialogView,
             MessagesDialogView){
     "use strict";
-
-    var SessionModel = Backbone.Model.extend({
-
-        // Initialize with negative/empty defaults
-        // These will be overriden after the initial checkAuth
-        defaults: {
-            logged_in: false,
-            userid: ''
-        },
-
-        initialize: function(){
-            //_.bindAll(this);
-
-            // Singleton user object
-            // Access or listen on this throughout any module with app.session.user
+    
+    return class SessionModel extends Backbone.Model
+    {
+        initialize() {
             this.user = new UserModel();
+            this.login = new LoginModel();
 
             // create a products collection/model for later to fetch
             this.products = new ProductCollection();
             this.userList = new UserCollection();
-        },
-
-        // Fxn to update user attributes after recieving API response
-        updateSessionUser: function( userData ){
+        }
+        
+        defaults() {
+            return {
+                logged_in: false,
+                userid: ''
+            }; 
+        }
+        
+        updateSessionUser(userData) {
             this.user.set(_.pick(userData, _.keys(this.user.defaults)));
-        },
-
-
-        /*
-         * Check for session from API
-         * The API will parse client cookies using its secret token
-         * and return a user object if authenticated
-         */
-        checkAuth: function() {
-            var self = this;
-
+        }
+        
+        checkAuth() {
             var webservice = new Webservice();
             webservice.action = "Users/Login";
             webservice.type = "OPTIONS";
             return webservice.call()
-                .done(self.updateSession)        
+                .done(this.updateSession)        
                 .fail(() => {
-                    self.set({ logged_in : false });
+                    this.set({ logged_in : false });
                 });
-        },
-
-        login: function(opts) {
-            var webservice = new Webservice();
-            webservice.action = "Users/Login";
-            webservice.formData = opts;
-            return webservice.call().done(this.updateSession);
-        },
-
-        updateSession: function()
-        {
+        }
+        
+        login(username, password, rememberMe) {
+            if(!this.login.isNew())
+                this.login.destroy();
+            
+            this.login.set('username', username);
+            this.login.set('password', password);
+            this.login.set('rememberMe', rememberMe);
+            this.login.save()
+                .done(this.updateSession);
+        }
+        
+        updateSession() {
             var webservice = new Webservice();
             webservice.action = "Users/Login";
             webservice.type = "GET";
@@ -90,15 +81,11 @@ define([
                 })
                 .then(this.userList.fetch)
                 .then(this.products.fetch);
-        },
-
-        logout: function() {
-            var webservice = new Webservice();
-            webservice.action = "Users/Logout";            
-            webservice.call().done(MyPOS.UnloadWebsite);
         }
-
-    });
-
-    return SessionModel;
+        
+        logout() {
+            this.login.destroy()
+                .done(MyPOS.UnloadWebsite);
+        }
+    }
 });
