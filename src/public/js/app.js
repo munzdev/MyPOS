@@ -1,12 +1,16 @@
 /**
  * @desc        app globals
  */
-define([
-    "jquery",
-    "underscore",
-    "backbone"
+define(["views/PageView",
+        "views/DialogView",
+        "views/PopupView",
+        "jquery",
+        "underscore",
+        "backbone"
 ],
-function($, _, Backbone) {
+function(PageView,
+         DialogView,
+         PopupView) {
     "use strict";
 
     var app = {
@@ -18,6 +22,11 @@ function($, _, Backbone) {
 
     // Global event aggregator
     app.eventAggregator = _.extend({}, Backbone.Events);
+    
+    // Define views
+    app.PageView = PageView;
+    app.DialogView = DialogView;
+    app.PopupView = PopupView;
 
     return app;
 
