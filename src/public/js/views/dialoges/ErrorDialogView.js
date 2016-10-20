@@ -2,47 +2,40 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'text!templates/dialoges/error-dialog.phtml'],
-function( app,
-          Template ) {
+define(["app",
+        'text!templates/dialoges/error.phtml'],
+function(app,
+         Template ) {
     "use strict";
 
-    // Extends Backbone.View
-    var ErrorDialogView = Backbone.View.extend( {
-
-    	title: 'error-dialog',
-    	el: 'body',
-        events: {
-        },
-
-        // The View Constructor
-        initialize: function() {
+    return class ErrorDialogView extends app.DialogView
+    {
+        initialize() {                        
             this.render();
-        },
-
-        // Renders all of the Category models on the UI
-        render: function() {
-            MyPOS.RenderDialogeTemplate(this, this.title, Template);
-
-            $("#error-dialog-close").click(function(evt) {
-            	evt.preventDefault();
-            	$.mobile.changePage( $("#error-dialog-close").attr('href'), { transition: "flip" });
-            });
+        }
+        
+        events() {
+            return { 'click #close': 'close' }
+    	}
+        
+        close(evt)
+        {
+            evt.preventDefault();
+            $.mobile.changePage( this.$("#close").attr('href'), { transition: "flip" });
+        }
+        
+        render() {
+            this.renderTemplate(Template);            
 
             return this;
-        },
+        }
 
         // Show alert classes and hide after specified timeout
-        showAlert: function(title, text) {
-            $("#error-dialog-header").html(title);
-            $("#error-dialog-content").html(text);
-            $("#error-dialog-close").attr("href", '#' + $.mobile.activePage.attr('id'));
-            $.mobile.changePage( "#" + this.title, { transition: "flip" });
+        showAlert(title, text) {
+            this.$("#header").html(title);
+            this.$("#content").html(text);
+            this.$("#close").attr("href", '#' + $.mobile.activePage.attr('id'));
+            $.mobile.changePage( "#" + this.id, { transition: "flip" });
         }
-    });
-
-    // Returns the View class
-    return ErrorDialogView;
-
+    }
 } );
