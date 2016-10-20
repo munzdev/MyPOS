@@ -15,7 +15,6 @@ define([ "app"
         },
 
         show: function(view, options){
-
             // Every page view in the router should need a header.
             // Instead of creating a base parent view, just assign the view to this
             // so we can create it if it doesn't yet exist
@@ -45,7 +44,7 @@ define([ "app"
 
             } else {
 
-            	if(!this.loadedViews[this.currentView.title])
+            	if(!this.loadedViews[this.currentView.id()])
                 {
                     // Render inside the page wrapper
                     //$('#content').html(this.currentView.render().$el);
@@ -53,11 +52,11 @@ define([ "app"
 
                     //$('body').append(this.currentView.render());
 
-                    this.loadedViews[this.currentView.title] = this.currentView;
+                    this.loadedViews[this.currentView.id()] = this.currentView;
                 }
 
             	// Programatically changes to the current categories page
-                $.mobile.changePage( "#" + this.currentView.title);
+                $.mobile.changePage( "#" + this.currentView.id());
             }
 
         },
