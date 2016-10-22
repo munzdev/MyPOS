@@ -19,9 +19,9 @@ function( app,
             _.bindAll(this, "render");
 
             // Listen for session logged_in state changes and re-render
-            app.session.on("change:logged_in", this.render);
+            //app.auth.on("change:logged_in", this.render);
 
-            if(app.session.get('logged_in'))
+            if(app.auth.logged_in)
             {
                 this.sendToDefaultPage();
                 return;
@@ -81,11 +81,11 @@ function( app,
 
             if(this.$("#username").val() != '' && this.$("#password").val() != '')
             {
-                app.session.login({
-                    username: this.$("#username").val(),
-                    password: this.$("#password").val(),
-                    rememberMe: this.$("#rememberMe").val()
-                })
+                app.auth.login(
+                    this.$("#username").val(),
+                    this.$("#password").val(),
+                    this.$("#rememberMe").is(":checked")
+                )
                 .done((user) => {
                     if(DEBUG) console.log("SUCCESS", user);
                     self.sendToDefaultPage();

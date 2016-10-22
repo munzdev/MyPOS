@@ -35,7 +35,7 @@ function(app,
             this.$("#header").html(title);
             this.$("#content").html(text);
             this.$("#close").attr("href", '#' + $.mobile.activePage.attr('id'));
-            $.mobile.changePage( "#" + this.id, { transition: "flip" });
+            $.mobile.changePage( "#" + this.id(), { transition: "flip" });
         }
     }
 } );

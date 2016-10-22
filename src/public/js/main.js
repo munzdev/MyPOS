@@ -41,22 +41,30 @@ require.config( {
 // Includes File Dependencies
 require([ "app",
           "Webservice",
+          "Auth",
           "websocket/Chat",
           "websocket/API",
           "routers/GlobalRouter",
-          "routers/AdminRouter",
-          "models/SessionModel",
-          "views/dialoges/ErrorDialogView",
+          "routers/AdminRouter",          
+          "collections/ProductCollection",
+          "collections/UserCollection",
+          "views/dialoges/ErrorDialogView",          
+          "views/dialoges/OptionsDialogView",
+          "views/dialoges/MessagesDialogView",
           "jquerymobile",      
           "jquery"],
   function( app,
             Webservice,
+            Auth,
             WsChat,
             WsAPI,
             GlobalRouter,
             AdminRouter,
-            SessionModel,
-            ErrorDialogView) {
+            ProductCollection,
+            UserCollection,
+            ErrorDialogView,
+            OptionsDialogView,
+            MessagesDialogView) {
     
     // Disabling this will prevent jQuery Mobile from handling hash changes
     $.mobile.hashListeningEnabled = false;
@@ -86,9 +94,12 @@ require([ "app",
             app.routers.global = new GlobalRouter();
             app.routers.admin = new AdminRouter();           
 
-            // Create a new session model and scope it to the app global
-            // This will be a singleton, which other modules can access
-            app.session = new SessionModel({});
+            // Create Authentication instance
+            app.auth = new Auth();
+            
+            // create a products collection/model for later to fetch
+            app.products = new ProductCollection();
+            app.userList = new UserCollection();
 
             // Init websocket services
             app.ws = {};
@@ -97,7 +108,17 @@ require([ "app",
 
             // Check the auth status upon initialization,
             // before rendering anything or matching routes
-            app.session.checkAuth()            
+            app.auth.checkAuth()
+                .done(() => {             
+                    app.products.fetch();
+                    app.userList.fetch();
+            
+                    app.optionsDialog = new OptionsDialogView({is_admin: app.auth.authUser.get('is_admin')});
+                    app.messagesDialog = new MessagesDialogView();
+
+                    app.ws.api.Connect();
+                    app.ws.chat.Connect();
+                })
                 .fail(() => {
                     app.error.showAlert("Error Loading App", "Please reload the App!");
                 });

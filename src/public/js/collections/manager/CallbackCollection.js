@@ -1,6 +1,6 @@
 define([
     "app",
-    "models/UserModel"
+    "models/Auth/AuthUserModel"
 ], function(app, UserModel){
     "use strict";
 
