@@ -1,8 +1,7 @@
 define([
     "app",
-    "MyPOS",
     "collections/products/GroupCollection"
-], function(app, MyPOS, GroupCollection){
+], function(app, GroupCollection){
     "use strict";
 
     var TypeModel = Backbone.Model.extend({

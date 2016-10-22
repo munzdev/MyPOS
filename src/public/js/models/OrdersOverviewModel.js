@@ -1,7 +1,6 @@
 define([
     "app",
-    "MyPOS"
-], function(app, MyPOS){
+], function(app){
     "use strict";
 
     var OrdersOverviewModel = Backbone.Model.extend({

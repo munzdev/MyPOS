@@ -1,10 +1,8 @@
 define([
     "app",
-    "MyPOS",
     "models/products/MenuModel",
     "collections/order/MixingCollection"
 ], function(app,
-            MyPOS,
             ProductsMenuModel,
             MixingCollection){
     "use strict";
