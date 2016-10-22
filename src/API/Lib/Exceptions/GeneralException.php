@@ -2,4 +2,4 @@
 
 namespace API\Lib\Exceptions;
 
-class GeneralException extends Exception {}
+class GeneralException extends \Exception {}

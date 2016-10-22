@@ -1,6 +1,8 @@
 <?php
 
 $app->group('/Users', function () {
-    $this->any('/Login', new API\Controllers\Users\Login($this))
-         ->setName('Users-Login');
+    $this->any('/', new API\Controllers\Users\Users($this))
+         ->setName('Users');
+    $this->any('/Current', new API\Controllers\Users\Users($this))
+         ->setName('Users-Current');
 });

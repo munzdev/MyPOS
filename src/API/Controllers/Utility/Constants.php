@@ -3,12 +3,10 @@
 namespace API\Controllers\Utility;
 
 use API\Lib\Controller;
-use Slim\Http\Request;
-use Slim\Http\Response;
 
 class Constants extends Controller
 {    
-    protected function ANY(Request $o_request, Response $o_response, $a_args)            
+    protected function ANY()            
     {
         $a_defined_constants = get_defined_constants(TRUE)['user'];
         
@@ -30,6 +28,6 @@ class Constants extends Controller
             }
         }
 
-        $o_response->withJson($a_js_constants);
+        $this->o_response->withJson($a_js_constants);
     }
 }

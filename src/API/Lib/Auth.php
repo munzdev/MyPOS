@@ -5,7 +5,7 @@ use Model;
 use API\Models\User\UsersQuery;
 use API\Lib\RememberMe;
 
-class Login
+class Auth
 {
     private $o_usersQuery;
 
@@ -41,7 +41,7 @@ class Login
          }
     }
 
-    public function CheckLogin(string $str_username, string $str_password, bool $b_remember_me)
+    public function CheckLogin(string $str_username, string $str_password, bool $b_rememberMe)
     {
         $a_user = $this->o_usersQuery->GetUserDetailsByUsername($str_username);
 
@@ -54,7 +54,7 @@ class Login
         {
             if(md5($str_password) == $a_user['password'])
             {
-                $this->DoLogin($str_username, $b_remember_me);
+                $this->DoLogin($str_username, $b_rememberMe);
 
                 return true;
             }

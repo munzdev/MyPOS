@@ -2,67 +2,146 @@
 
 namespace API\Lib;
 
+use API\Lib\Exceptions\InvalidRequestException;
+use Respect\Validation\Exceptions\NestedValidationException;
 use Slim\App;
-use Psr\Log\LoggerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
-use API\Lib\Exceptions\InvalidRequestException;
 
 abstract class Controller
 {
     protected $o_app;
     protected $o_logger;
-    
+    protected $a_json;
+    protected $o_request;
+    protected $o_response;
+    protected $a_args;
+
+
     public function __construct(App $o_app)
     {
         $this->o_app = $o_app;        
-        $this->o_logger = $o_app->getContainer()->get('logger');
+        $this->o_logger = $o_app->getContainer()->get('logger');                
     }
     
     public function __invoke(Request $o_request, Response $o_response, $a_args)
     {
+        $this->o_request = $o_request;
+        $this->o_response = $o_response;
+        $this->a_args = $a_args;
+                
         try
         {                    
+            $this->a_json = $o_request->getParsedBody();
+            
             $this->ANY($o_request, $o_response, $a_args);
 
             if($o_request->isGet())
-                $this->GET($o_request, $o_response, $a_args);
+                $this->GET();
             elseif($o_request->isPost())
-                $this->POST($o_request, $o_response, $a_args);
+                $this->POST();
             elseif($o_request->isPut())
-                $this->PUT($o_request, $o_response, $a_args);
+                $this->PUT();
             elseif($o_request->isDelete())
-                $this->DELETE($o_request, $o_response, $a_args);
+                $this->DELETE();
             elseif($o_request->isHead())
-                $this->HEAD($o_request, $o_response, $a_args);
+                $this->HEAD();
             elseif($o_request->isPatch())
-                $this->PATCH($o_request, $o_response, $a_args);
+                $this->PATCH();
             elseif($o_request->isOptions())
-                $this->OPTIONS($o_request, $o_response, $a_args);        
+                $this->OPTIONS();        
         } catch (InvalidRequestException $o_exception) {                  
-            $this->GenerateJSONErrorFromException($o_response, $o_exception, 400);
+            $this->GenerateJSONErrorFromException($o_exception, 400);
         } catch (\Exception $o_exception) {
-            $this->GenerateJSONErrorFromException($o_response, $o_exception, 500);
+            $this->GenerateJSONErrorFromException($o_exception, 500);
         }
     }
     
-    private function GenerateJSONErrorFromException(Response $o_response, \Exception $o_exception, int $i_statusCode)
+    protected function validate($a_validators)
     {
-        $o_response->withStatus($i_statusCode);
-        $o_response->withJson(array(
+        $a_errors = $this->recursiveValidate($this->a_json, $a_validators);
+        
+        if($a_errors)
+        {
+            $str_error = "";
+            
+            foreach ($a_errors as $str_context => $str_message)
+            {
+                $str_error .= "$str_context: $str_message\n";
+            }
+            
+            throw new InvalidRequestException(trim($str_error));
+        }
+    }
+    
+    private function recursiveValidate($a_json = [], $a_validators = [], $a_actualKeys = [])
+    {
+        $a_errors = [];
+        
+        foreach ($a_validators as $str_key => $o_validator) {
+            $a_actualKeys[] = $str_key;
+            $str_value = $this->getNestedParam($a_json, $a_actualKeys);
+            if (is_array($o_validator)) {
+                $this->recursiveValidate($a_json, $o_validator, $a_actualKeys);
+            } else {
+                try {
+                    $o_validator->assert($str_value);
+                } catch (NestedValidationException $exception) {                  
+                    $a_errors[implode('.', $a_actualKeys)] = $exception->getFullMessage();
+                }
+            }
+
+            //Remove the key added in this foreach
+            array_pop($a_actualKeys);
+        }
+        
+        return $a_errors;
+    }
+
+    /**
+     * Get the nested parameter value.
+     *
+     * @param array $a_json An array that represents the values of the parameters.
+     * @param array $a_keys   An array that represents the tree of keys to use.
+     *
+     * @return mixed The nested parameter value by the given params and tree of keys.
+     */
+    private function getNestedParam($a_json = [], $a_keys = [])
+    {
+        if (empty($a_keys)) {
+            return $a_json;
+        } else {
+            $str_firstKey = array_shift($a_keys);
+            if (array_key_exists($str_firstKey, $a_json)) {
+                $a_json = (array) $a_json;
+                $str_jsonValue = $a_json[$str_firstKey];
+
+                return $this->getNestedParam($str_jsonValue, $a_keys);
+            } else {
+                return;
+            }
+        }
+    }
+    
+    private function GenerateJSONErrorFromException(\Exception $o_exception, int $i_statusCode)
+    {        
+        $this->o_response = $this->o_response->withJson(array(
             'status' => $i_statusCode,
             'code' => $o_exception->getCode(),
             'title' => $o_exception->getMessage(),
             'detail' => $o_exception->__toString()          
-        ));
+        ), $i_statusCode);
+        
+        $this->o_app->respond($this->o_response);
+        exit;
     }
     
-    protected function ANY(Request $o_request, Response $o_response, $a_args) {}    
-    protected function POST(Request $o_request, Response $o_response, $a_args) {}
-    protected function GET(Request $o_request, Response $o_response, $a_args) {}
-    protected function PUT(Request $o_request, Response $o_response, $a_args) {}
-    protected function DELETE(Request $o_request, Response $o_response, $a_args) {}
-    protected function HEAD(Request $o_request, Response $o_response, $a_args) {}
-    protected function PATCH(Request $o_request, Response $o_response, $a_args) {}
-    protected function OPTIONS(Request $o_request, Response $o_response, $a_args) {}
+    protected function ANY() {}    
+    protected function POST() {}
+    protected function GET() {}
+    protected function PUT() {}
+    protected function DELETE() {}
+    protected function HEAD() {}
+    protected function PATCH() {}
+    protected function OPTIONS() {}
 }
