@@ -6,7 +6,8 @@
         "cboden/ratchet": "0.3.*",
         "slim/slim": "^3.0",
         "monolog/monolog": "^1.13",
-        "propel/propel": "~2.0@dev"
+        "propel/propel": "~2.0@dev",
+        "respect/validation": "dev-master"
     },
     "authors": [
         {
