@@ -24,7 +24,7 @@ abstract class Controller
         $this->o_logger = $o_app->getContainer()->get('logger');                
     }
     
-    public function __invoke(Request $o_request, Response $o_response, $a_args)
+    public function __invoke(Request $o_request, Response $o_response, $a_args) : void
     {
         $this->o_request = $o_request;
         $this->o_response = $o_response;
@@ -57,7 +57,7 @@ abstract class Controller
         }
     }
     
-    protected function validate($a_validators)
+    protected function validate($a_validators) : void
     {
         $a_errors = $this->recursiveValidate($this->a_json, $a_validators);
         
@@ -74,7 +74,7 @@ abstract class Controller
         }
     }
     
-    private function recursiveValidate($a_json = [], $a_validators = [], $a_actualKeys = [])
+    private function recursiveValidate($a_json = [], $a_validators = [], $a_actualKeys = []) : array
     {
         $a_errors = [];
         
@@ -106,7 +106,7 @@ abstract class Controller
      *
      * @return mixed The nested parameter value by the given params and tree of keys.
      */
-    private function getNestedParam($a_json = [], $a_keys = [])
+    private function getNestedParam($a_json = [], $a_keys = []) // : ?array
     {
         if (empty($a_keys)) {
             return $a_json;
@@ -118,12 +118,12 @@ abstract class Controller
 
                 return $this->getNestedParam($str_jsonValue, $a_keys);
             } else {
-                return;
+                return null;
             }
         }
     }
     
-    private function GenerateJSONErrorFromException(\Exception $o_exception, int $i_statusCode)
+    private function GenerateJSONErrorFromException(\Exception $o_exception, int $i_statusCode) : void
     {        
         $this->o_response = $this->o_response->withJson(array(
             'status' => $i_statusCode,
@@ -136,12 +136,12 @@ abstract class Controller
         exit;
     }
     
-    protected function ANY() {}    
-    protected function POST() {}
-    protected function GET() {}
-    protected function PUT() {}
-    protected function DELETE() {}
-    protected function HEAD() {}
-    protected function PATCH() {}
-    protected function OPTIONS() {}
+    protected function ANY() : void {}    
+    protected function POST() : void {}
+    protected function GET() : void {}
+    protected function PUT() : void {}
+    protected function DELETE() : void {}
+    protected function HEAD() : void {}
+    protected function PATCH() : void {}
+    protected function OPTIONS() : void {}
 }

@@ -105,19 +105,24 @@ require([ "app",
             app.ws = {};
             app.ws.chat = new WsChat();
             app.ws.api = new WsAPI();
+            
+            // Function that inits connections and datas after login
+            app.init = () => {
+                app.products.fetch();
+                app.userList.fetch();
+
+                app.optionsDialog = new OptionsDialogView({is_admin: app.auth.authUser.get('is_admin')});
+                app.messagesDialog = new MessagesDialogView();
+
+                app.ws.api.Connect();
+                app.ws.chat.Connect();
+            }
 
             // Check the auth status upon initialization,
             // before rendering anything or matching routes
             app.auth.checkAuth()
                 .done(() => {             
-                    app.products.fetch();
-                    app.userList.fetch();
-            
-                    app.optionsDialog = new OptionsDialogView({is_admin: app.auth.authUser.get('is_admin')});
-                    app.messagesDialog = new MessagesDialogView();
-
-                    app.ws.api.Connect();
-                    app.ws.chat.Connect();
+                    app.init();
                 })
                 .fail(() => {
                     app.error.showAlert("Error Loading App", "Please reload the App!");

@@ -7,15 +7,13 @@ use Exception;
 class RememberMe
 {
     private $str_key = null;
-    private $o_usersQuery;
 
-    function __construct(UsersQuery $o_usersQuery, $str_privatekey)
+    function __construct(string $str_privateKey)
     {
-        $this->str_key = $str_privatekey;
-        $this->o_usersQuery = $o_usersQuery;
+        $this->str_key = $str_privateKey;
     }
 
-    public function auth()
+    public function parseCookie()
     {
         // Check if remeber me cookie is present
         if (! isset($_COOKIE["auto"]) || empty($_COOKIE["auto"]))
@@ -43,27 +41,32 @@ class RememberMe
             self::Destroy();
             throw new Exception("Cokies has been tampared with");
         }
+        
+        return $cookie['user'];
+    }
+    
+    public function validateHash($str_hash)
+    {        
 
         // Check Database
-        $a_user = $this->o_usersQuery->GetUserDetailsByID($cookie['user']);
-        $info = $a_user['autologin_hash'];
-        if (! $info)
+        //$a_user = $this->o_usersQuery->GetUserDetailsByID($cookie['user']);
+        if (!$str_hash)
         {
-                return false; // User must have deleted accout
+            return false; // User must have deleted accout
         }
 
         // Check User Data
-        if (! $info = json_decode($info, true))
+        if (!$a_info = json_decode($str_hash, true))
         {
-                self::Destroy();
-                throw new Exception("User Data corrupted");
+            self::Destroy();
+            throw new Exception("User Data corrupted");
         }
 
         // Verify Token
-        if ($info['token'] !== $cookie['token'])
+        if ($a_info['token'] !== $cookie['token'])
         {
-                self::Destroy();
-                throw new Exception("System Hijacked or User use another browser");
+            self::Destroy();
+            throw new Exception("System Hijacked or User use another browser");
         }
 
         /**
@@ -72,11 +75,11 @@ class RememberMe
          * reset the Token information
          */
 
-        $this->remember($info['user']);
-        return $a_user;
+        $this->remember($a_info['user']);
+        return true;
     }
 
-    public function remember($i_userid) {
+    public function remember(int $i_userid) {
         $cookie = [
                         "user" => $i_userid,
                         "token" => $this->getRand(64),
@@ -86,7 +89,7 @@ class RememberMe
         $encoded = json_encode($cookie);
 
         // Add User to database
-        $this->o_usersQuery->SetAuthKey($i_userid, $encoded);
+        //$this->o_usersQuery->SetAuthKey($i_userid, $encoded);
 
         /**
          * Set Cookies
@@ -95,9 +98,11 @@ class RememberMe
          * "example.com", 1, 1);
          */
         setcookie("auto", $encoded, time() + 31536000, "/", null, null, 1);
+        
+        return $encoded;
     }
 
-    public function verify($data, $hash)
+    public function verify(string $data, string $hash)
     {
         $rand = substr($hash, 0, 4);
         return $this->hash($data, $rand) === $hash;
@@ -109,18 +114,15 @@ class RememberMe
         setcookie('auto', null, -1, '/');
     }
 
-    private function hash($value, $rand = null)
+    private function hash(string $value, string $rand = null)
     {
         $rand = $rand === null ? $this->getRand(4) : $rand;
         return $rand . bin2hex(hash_hmac('sha256', $value . $rand, $this->str_key, true));
     }
 
-    private function getRand($length)
+    private function getRand(int $length)
     {
         switch (true) {
-            case function_exists("mcrypt_create_iv") :
-                $r = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
-                break;
             case function_exists("openssl_random_pseudo_bytes") :
                 $r = openssl_random_pseudo_bytes($length);
                 break;

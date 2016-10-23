@@ -15,6 +15,6 @@ class Users extends Controller
         $o_app->getContainer()['db'];
     }
     
-    protected function GET() {
+    protected function GET() : void {
     }
 }

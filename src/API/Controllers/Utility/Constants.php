@@ -6,7 +6,7 @@ use API\Lib\Controller;
 
 class Constants extends Controller
 {    
-    protected function ANY()            
+    protected function ANY() : void            
     {
         $a_defined_constants = get_defined_constants(TRUE)['user'];
         

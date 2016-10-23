@@ -8,29 +8,32 @@ use API\Lib\RememberMe;
 class Auth
 {
     private $o_usersQuery;
+    private $str_privateKey;
 
-    public function __construct(UsersQuery $o_usersQuery)
+    public function __construct(UsersQuery $o_usersQuery, $str_privateKey)
     {
         $this->o_usersQuery = $o_usersQuery;
+        $this->str_privateKey = $str_privateKey;
     }
 
-    public function DoLogin(string $str_username, bool $b_remember_me = false)
+    public function DoLogin(string $str_username, bool $b_rememberMe = false) : bool
     {
-        $a_user = $this->o_usersQuery->GetUserDetailsByUsername($str_username);
+        $o_user = $this->FindUserObject($str_username);
 
-        if(empty($a_user))
+        if($o_user)
         {
-            $a_user = $this->o_usersQuery->GetAdminDetailsByUsername($str_username);
-        }
-
-        if($a_user)
-        {
+            $a_user = $o_user->toArray();            
+            unset($a_user['Password']);
+            unset($a_user['AutologinHash']);
+        
             $this->SetLogin($a_user);
 
-            if($b_remember_me)
+            if($b_rememberMe)
             {
-                    $o_rememberMe = new RememberMe($this->o_usersQuery, $GLOBALS['a_config']['Auth']['RememberMe_PrivateKey']);
-                    $o_rememberMe->remember($a_user['userid']);
+                $o_rememberMe = new RememberMe($this->str_privateKey);
+                $str_hash = $o_rememberMe->remember($o_user->getUserid());                
+                $o_user->setAutologinHash($str_hash);
+                $o_user->save();
             }
 
             return true;
@@ -41,50 +44,69 @@ class Auth
          }
     }
 
-    public function CheckLogin(string $str_username, string $str_password, bool $b_rememberMe)
+    public function CheckLogin(string $str_username, string $str_password, bool $b_rememberMe) : bool
     {
-        $a_user = $this->o_usersQuery->GetUserDetailsByUsername($str_username);
-
-        if(empty($a_user))
+        $o_user = $this->FindUserObject($str_username);
+        
+        if($o_user)
         {
-            $a_user = $this->o_usersQuery->GetAdminDetailsByUsername($str_username);
-        }
-
-        if($a_user)
-        {
-            if(md5($str_password) == $a_user['password'])
+            if(password_verify($str_password, $o_user->getPassword()))
             {
-                $this->DoLogin($str_username, $b_rememberMe);
-
-                return true;
-            }
-            else
-            {
-                return false;
+                return $this->DoLogin($str_username, $b_rememberMe);
             }
         }
-
+        
+        return false;
     }
-
-    public function SetLogin(array $a_user)
+    
+    private function FindUserObject($str_username) // : ?Base\Users
     {
-        $_SESSION['Login'] = $a_user;
+        $o_user = $this->o_usersQuery->joinEventsUser()
+                                     ->useEventsUserQuery()
+                                        ->joinEvents()
+                                        ->useEventsQuery()
+                                            ->filterByActive(true)
+                                        ->endUse()
+                                     ->endUse()                                        
+                                     ->filterByUsername($str_username)
+                                     ->filterByActive(true)
+                                     ->findOne();
+        
+        if(!$o_user)
+        {
+            $o_user = $this->o_usersQuery->filterByUsername($str_username)
+                                         ->filterByIsAdmin(true)
+                                         ->filterByActive(true)
+                                         ->findOne();
+        }
+        
+        return $o_user;
     }
 
-    public static function GetCurrentUser()
+    public function SetLogin(array $a_user) : void
     {
-        return isset($_SESSION['Login']) ? $_SESSION['Login'] : null;
+        $_SESSION['Auth'] = $a_user;
     }
-
-    public static function IsLoggedIn()
+    
+    public function GetPrivateKey()
     {
-        return isset($_SESSION['Login']);
+        return $this->str_privateKey;
     }
 
-    public function Logout()
+    public static function GetCurrentUser() // : ?array
+    {
+        return isset($_SESSION['Auth']) ? $_SESSION['Auth'] : null;
+    }
+
+    public static function IsLoggedIn() : bool
+    {
+        return isset($_SESSION['Auth']);
+    }
+
+    public function Logout() : void
     {
         RememberMe::Destroy();
-        $_SESSION['Login'] = null;
-        unset($_SESSION['Login']);
+        $_SESSION['Auth'] = null;
+        unset($_SESSION['Auth']);
     }
 }

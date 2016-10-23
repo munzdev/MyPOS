@@ -25,8 +25,10 @@ define([
         
         checkAuth() {            
             return this.loginData.fetch()
-                .done(this.updateSession)        
+                .done(this.updateSession)
                 .fail(() => {
+                    if(DEBUG) console.log("Autologin failed");
+            
                     this.set({ logged_in : false });
                 });
         }
@@ -46,8 +48,8 @@ define([
             return this.authUser.fetch()
                 .done((user) => {
                     this.updateSessionUser( user );
-                    this.set({ userid: user.userid, logged_in: true });
-                })
+                    this.logged_in = true;
+                });
         }
         
         logout() {

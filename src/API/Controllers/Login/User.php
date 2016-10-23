@@ -17,9 +17,13 @@ class User extends Controller
         $o_app->getContainer()['db'];
         
         $this->o_usersQuery = UsersQuery::create();
-        $this->o_auth = new Auth($this->o_usersQuery);
+        $this->o_auth = new Auth($this->o_usersQuery,
+                                 $this->o_app->getContainer()['settings']['Auth']['RememberMe_PrivateKey']);
     }
     
-    protected function GET() {
+    protected function GET() : void {
+        $a_user = $this->o_auth->GetCurrentUser();        
+
+        $this->o_response->withJson($a_user);
     }
 }

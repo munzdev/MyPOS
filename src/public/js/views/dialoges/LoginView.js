@@ -77,8 +77,6 @@ function( app,
             if(event)
                 event.preventDefault();
 
-            var self = this;
-
             if(this.$("#username").val() != '' && this.$("#password").val() != '')
             {
                 app.auth.login(
@@ -88,7 +86,10 @@ function( app,
                 )
                 .done((user) => {
                     if(DEBUG) console.log("SUCCESS", user);
-                    self.sendToDefaultPage();
+            
+                    app.init();
+                    
+                    this.sendToDefaultPage();
                 })
                 .fail((result) => {
                     if(DEBUG) console.log("ERROR", result);
