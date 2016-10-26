@@ -11,27 +11,14 @@ class RememberMe
     function __construct(string $str_privateKey)
     {
         $this->str_key = $str_privateKey;
-    }
+    }        
 
     public function parseCookie()
     {
-        // Check if remeber me cookie is present
-        if (! isset($_COOKIE["auto"]) || empty($_COOKIE["auto"]))
-        {
+        $cookie = $this->getCookie();
+        
+        if($cookie === false)
             return false;
-        }
-
-        // Decode cookie value
-        if (! $cookie = @json_decode($_COOKIE["auto"], true))
-        {
-            return false;
-        }
-
-        // Check all parameters
-        if (! (isset($cookie['user']) || isset($cookie['token']) || isset($cookie['signature'])))
-        {
-            return false;
-        }
 
         $var = $cookie['user'] . $cookie['token'];
 
@@ -47,9 +34,12 @@ class RememberMe
     
     public function validateHash($str_hash)
     {        
-
+        $cookie = $this->getCookie();
+        
+        if($cookie === false)
+            return false;
+        
         // Check Database
-        //$a_user = $this->o_usersQuery->GetUserDetailsByID($cookie['user']);
         if (!$str_hash)
         {
             return false; // User must have deleted accout
@@ -75,8 +65,7 @@ class RememberMe
          * reset the Token information
          */
 
-        $this->remember($a_info['user']);
-        return true;
+        return $this->remember($a_info['user']);
     }
 
     public function remember(int $i_userid) {
@@ -138,5 +127,28 @@ class RememberMe
                 break;
         }
         return substr(bin2hex($r), 0, $length);
+    }
+    
+    private function getCookie()
+    {
+        // Check if remeber me cookie is present
+        if (! isset($_COOKIE["auto"]) || empty($_COOKIE["auto"]))
+        {
+            return false;
+        }
+
+        // Decode cookie value
+        if (! $cookie = @json_decode($_COOKIE["auto"], true))
+        {
+            return false;
+        }
+
+        // Check all parameters
+        if (! (isset($cookie['user']) || isset($cookie['token']) || isset($cookie['signature'])))
+        {
+            return false;
+        }
+        
+        return $cookie;
     }
 }

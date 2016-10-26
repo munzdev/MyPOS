@@ -3,38 +3,28 @@ namespace API\Lib;
 
 use Model;
 use API\Models\User\UsersQuery;
+use API\Models\User\Base\Users;
 use API\Lib\RememberMe;
 
 class Auth
 {
     private $o_usersQuery;
-    private $str_privateKey;
 
-    public function __construct(UsersQuery $o_usersQuery, $str_privateKey)
+    public function __construct(string $str_usersQuery)
     {
-        $this->o_usersQuery = $o_usersQuery;
-        $this->str_privateKey = $str_privateKey;
+        $this->o_usersQuery = $str_usersQuery::create();
     }
 
-    public function DoLogin(string $str_username, bool $b_rememberMe = false) : bool
+    public function DoLogin(string $str_username) : bool
     {
         $o_user = $this->FindUserObject($str_username);
 
         if($o_user)
         {
-            $a_user = $o_user->toArray();            
-            unset($a_user['Password']);
-            unset($a_user['AutologinHash']);
+            $o_user->setAutologinHash(null);
+            $o_user->setPassword(null);
         
-            $this->SetLogin($a_user);
-
-            if($b_rememberMe)
-            {
-                $o_rememberMe = new RememberMe($this->str_privateKey);
-                $str_hash = $o_rememberMe->remember($o_user->getUserid());                
-                $o_user->setAutologinHash($str_hash);
-                $o_user->save();
-            }
+            $this->SetLogin($o_user);
 
             return true;
          }
@@ -44,7 +34,7 @@ class Auth
          }
     }
 
-    public function CheckLogin(string $str_username, string $str_password, bool $b_rememberMe) : bool
+    public function CheckLogin(string $str_username, string $str_password) : bool
     {
         $o_user = $this->FindUserObject($str_username);
         
@@ -52,7 +42,7 @@ class Auth
         {
             if(password_verify($str_password, $o_user->getPassword()))
             {
-                return $this->DoLogin($str_username, $b_rememberMe);
+                return $this->DoLogin($str_username);
             }
         }
         
@@ -83,19 +73,19 @@ class Auth
         return $o_user;
     }
 
-    public function SetLogin(array $a_user) : void
+    public function SetLogin(Users $o_user) : void
     {
-        $_SESSION['Auth'] = $a_user;
-    }
-    
-    public function GetPrivateKey()
-    {
-        return $this->str_privateKey;
-    }
+        $_SESSION['Auth'] = serialize($o_user);
+    }    
 
-    public static function GetCurrentUser() // : ?array
+    public static function GetCurrentUser() // : ?Users
     {
-        return isset($_SESSION['Auth']) ? $_SESSION['Auth'] : null;
+        if(isset($_SESSION['Auth']))
+        {
+            return unserialize($_SESSION['Auth']);
+        }
+        
+        return null;
     }
 
     public static function IsLoggedIn() : bool
@@ -104,8 +94,7 @@ class Auth
     }
 
     public function Logout() : void
-    {
-        RememberMe::Destroy();
+    {        
         $_SESSION['Auth'] = null;
         unset($_SESSION['Auth']);
     }

@@ -9,21 +9,18 @@ use API\Models\User\UsersQuery;
 class User extends Controller
 {    
     protected $o_auth;
-    protected $o_usersQuery;
     
     public function __construct(App $o_app) {
         parent::__construct($o_app);
         
         $o_app->getContainer()['db'];
         
-        $this->o_usersQuery = UsersQuery::create();
-        $this->o_auth = new Auth($this->o_usersQuery,
-                                 $this->o_app->getContainer()['settings']['Auth']['RememberMe_PrivateKey']);
+        $this->o_auth = new Auth(UsersQuery::class);
     }
     
     protected function GET() : void {
-        $a_user = $this->o_auth->GetCurrentUser();        
+        $o_user = $this->o_auth->GetCurrentUser();        
 
-        $this->o_response->withJson($a_user);
+        $this->o_response->withJson($o_user->toArray());
     }
 }
