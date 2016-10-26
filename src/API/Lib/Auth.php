@@ -49,7 +49,12 @@ class Auth
         return false;
     }
     
-    private function FindUserObject($str_username) // : ?Base\Users
+    /**
+     * 
+     * @param string $str_username
+     * @return Users|null
+     */
+    private function FindUserObject(string $str_username) // : ?Base\Users
     {
         $o_user = $this->o_usersQuery->joinEventsUser()
                                      ->useEventsUserQuery()
@@ -78,6 +83,10 @@ class Auth
         $_SESSION['Auth'] = serialize($o_user);
     }    
 
+    /**
+     * 
+     * @return Users|null
+     */
     public static function GetCurrentUser() // : ?Users
     {
         if(isset($_SESSION['Auth']))

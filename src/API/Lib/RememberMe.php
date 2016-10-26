@@ -13,6 +13,11 @@ class RememberMe
         $this->str_key = $str_privateKey;
     }        
 
+    /**
+     * 
+     * @return string|false
+     * @throws Exception
+     */
     public function parseCookie()
     {
         $cookie = $this->getCookie();
@@ -32,7 +37,13 @@ class RememberMe
         return $cookie['user'];
     }
     
-    public function validateHash($str_hash)
+    /**
+     * 
+     * @param string $str_hash
+     * @return string|false
+     * @throws Exception
+     */
+    public function validateHash(string $str_hash)
     {        
         $cookie = $this->getCookie();
         
@@ -68,6 +79,11 @@ class RememberMe
         return $this->remember($a_info['user']);
     }
 
+    /**
+     * 
+     * @param int $i_userid
+     * @return string
+     */
     public function remember(int $i_userid) {
         $cookie = [
                         "user" => $i_userid,
@@ -129,6 +145,10 @@ class RememberMe
         return substr(bin2hex($r), 0, $length);
     }
     
+    /**
+     * 
+     * @return array|false
+     */
     private function getCookie()
     {
         // Check if remeber me cookie is present
