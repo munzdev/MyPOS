@@ -13,6 +13,8 @@ define([
     return class Auth 
     {
         constructor() {
+            _.bindAll(this, "updateSession");
+            
             this.logged_in = false;
             
             this.authUser = new AuthUserModel();
@@ -29,7 +31,7 @@ define([
                 .fail(() => {
                     if(DEBUG) console.log("Autologin failed");
             
-                    this.set({ logged_in : false });
+                    this.logged_in = false;                
                 });
         }
         
@@ -44,11 +46,16 @@ define([
                              .done(this.updateSession);
         }
         
-        updateSession() {            
+        updateSession() {                 
             return this.authUser.fetch()
                 .done((user) => {
+                    if(DEBUG)  console.log("SESSION UPDATE SUCCESS", user);
+            
                     this.updateSessionUser( user );
                     this.logged_in = true;
+                })
+                .fail((result) => {
+                    if(DEBUG) console.log("SESSION UPDATE FAILED", result);
                 });
         }
         

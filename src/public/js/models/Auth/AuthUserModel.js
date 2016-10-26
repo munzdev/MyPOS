@@ -5,20 +5,14 @@ define([
     
     return class AuthUserModel extends Backbone.Model
     {
-        urlRoot() { return app.API + "Users/Current"; }
+        urlRoot() { return app.API + "Login/User"; }
         defaults() {
             return {
-                userid: 0,
-                events_userid: 0,
-                username: '',
-                firstname: '',
-                lastname: '',
-                phonenumber: '',
-                is_admin: 0,
-                user_roles: 0,
-                eventid: 0,
-                name: '',
-                data: ''
+                Userid: 0,
+                Username: '',
+                Firstname: '',
+                Lastname: '',
+                IsAdmin: 0
             }
         }
     }

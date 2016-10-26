@@ -84,15 +84,15 @@ function( app,
                     this.$("#password").val(),
                     this.$("#rememberMe").is(":checked")
                 )
-                .done((user) => {
-                    if(DEBUG) console.log("SUCCESS", user);
+                .done(() => {
+                    if(DEBUG) console.log("Login erfolgreich");
             
                     app.init();
                     
                     this.sendToDefaultPage();
                 })
                 .fail((result) => {
-                    if(DEBUG) console.log("ERROR", result);
+                    if(DEBUG) console.log("Login fehlgeschlagen!", result);
                     app.error.showAlert('Login fehler!', 'Login ist fehlgeschlagen!');
                 });
             }

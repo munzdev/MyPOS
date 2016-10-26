@@ -111,7 +111,7 @@ require([ "app",
                 app.products.fetch();
                 app.userList.fetch();
 
-                app.optionsDialog = new OptionsDialogView({is_admin: app.auth.authUser.get('is_admin')});
+                app.optionsDialog = new OptionsDialogView({is_admin: app.auth.authUser.get('IsAdmin')});
                 app.messagesDialog = new MessagesDialogView();
 
                 app.ws.api.Connect();
@@ -124,9 +124,6 @@ require([ "app",
                 .done(() => {             
                     app.init();
                 })
-                .fail(() => {
-                    app.error.showAlert("Error Loading App", "Please reload the App!");
-                });
         })
 
         .fail(() => {
