@@ -1,7 +1,8 @@
 <?php
 namespace API\Lib;
 
-use API\Models\User\Base\User;
+use API\Models\Event\Map\EventUserTableMap;
+use API\Models\User\User;
 
 class Auth
 {
@@ -52,8 +53,11 @@ class Auth
      * @return User|null
      */
     private function FindUserObject(string $str_username) // : ?User
-    {
-        $o_user = $this->str_queryClass::create()->joinEventUser()
+    {            
+        $str_userRoleFieldName = $this->str_queryClass::getUserRoleFieldName();
+        
+        $o_user = $this->str_queryClass::create()->withColumn(EventUserTableMap::COL_USER_ROLES, $str_userRoleFieldName)
+                                                 ->joinEventUser()
                                                  ->useEventUserQuery()
                                                     ->joinEvent()
                                                     ->useEventQuery()
@@ -66,7 +70,8 @@ class Auth
         
         if(!$o_user)
         {
-            $o_user = $this->str_queryClass::create()->filterByUsername($str_username)
+            $o_user = $this->str_queryClass::create()->withColumn("'0'", $str_userRoleFieldName)
+                                                     ->filterByUsername($str_username)
                                                      ->filterByIsAdmin(true)
                                                      ->filterByActive(true)
                                                      ->findOne();

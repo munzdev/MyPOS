@@ -3,11 +3,11 @@
 namespace API\Controllers\Users;
 
 use Slim\App;
-use API\Lib\Controller;
+use API\Lib\SecurityController;
 
-class Users extends Controller
+class Users extends SecurityController
 {    
-    protected $o_usersQuery;
+    protected $o_usersQuery;        
     
     public function __construct(App $o_app) {
         parent::__construct($o_app);

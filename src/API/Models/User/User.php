@@ -16,5 +16,36 @@ use API\Models\User\Base\User as BaseUser;
  */
 class User extends BaseUser
 {
+    use UserTrait;
+    
+    /**
+     * 
+     * Only for Auth Lib!
+     * 
+     * @return int|null
+     */
+    public function getUserRoles()
+    {
+        $str_userRoleFieldName = $this->getUserRoleFieldName();
+        
+        if($this->hasVirtualColumn($str_userRoleFieldName))        
+        {
+            return $this->getVirtualColumn($str_userRoleFieldName);
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 
+     * Only for Auth Lib!
+     * 
+     * @return $this
+     */
+    public function setUserRoles(int $v)
+    {                
+        $this->setVirtualColumn($this->getUserRoleFieldName(), $v);
 
+        return $this;
+    }    
 }

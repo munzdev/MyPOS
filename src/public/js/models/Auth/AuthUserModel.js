@@ -12,7 +12,8 @@ define([
                 Username: '',
                 Firstname: '',
                 Lastname: '',
-                IsAdmin: 0
+                IsAdmin: 0,
+                UserRoles: 0
             }
         }
     }
