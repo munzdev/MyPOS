@@ -5,12 +5,6 @@ if (PHP_SAPI === 'cli-server' && $_SERVER['SCRIPT_FILENAME'] !== __FILE__) {
     return false;
 }
 
-// Verify UTF-8 encoding is enabled
-mb_internal_encoding('UTF-8');
-mb_http_output('UTF-8');
-mb_http_input('UTF-8');
-mb_regex_encoding('UTF-8');
-
 // Load up composers libs
 require __DIR__ . '/../vendor/autoload.php';
 
