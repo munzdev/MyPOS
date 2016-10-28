@@ -6,7 +6,6 @@ use API\Models\DistributionPlace\Map\DistributionPlaceTableMap;
 use API\Models\Event\Event;
 use API\Models\Event\EventQuery;
 use API\Models\Menu\Map\MenuExtraTableMap;
-use API\Models\Ordering\Map\OrderTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -211,13 +210,6 @@ class EventTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, 'MenuTypes', false);
-        $this->addRelation('Order', '\\API\\Models\\Ordering\\Order', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), 'CASCADE', null, 'Orders', false);
     } // buildRelations()
     /**
      * Method to invalidate the instance pool of all tables related to event     * by a foreign key with ON DELETE CASCADE
@@ -230,7 +222,6 @@ class EventTableMap extends TableMap
         EventPrinterTableMap::clearInstancePool();
         EventUserTableMap::clearInstancePool();
         MenuExtraTableMap::clearInstancePool();
-        OrderTableMap::clearInstancePool();
     }
 
     /**

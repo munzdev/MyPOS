@@ -4,7 +4,6 @@ namespace API\Models\Ordering\Base;
 
 use \Exception;
 use \PDO;
-use API\Models\Event\Event;
 use API\Models\Event\EventTable;
 use API\Models\OIP\OrderInProgress;
 use API\Models\Ordering\Order as ChildOrder;
@@ -25,7 +24,6 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  * @method     ChildOrderQuery orderByOrderid($order = Criteria::ASC) Order by the orderid column
- * @method     ChildOrderQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
  * @method     ChildOrderQuery orderByEventTableid($order = Criteria::ASC) Order by the event_tableid column
  * @method     ChildOrderQuery orderByUserid($order = Criteria::ASC) Order by the userid column
  * @method     ChildOrderQuery orderByOrdertime($order = Criteria::ASC) Order by the ordertime column
@@ -33,7 +31,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery orderByFinished($order = Criteria::ASC) Order by the finished column
  *
  * @method     ChildOrderQuery groupByOrderid() Group by the orderid column
- * @method     ChildOrderQuery groupByEventid() Group by the eventid column
  * @method     ChildOrderQuery groupByEventTableid() Group by the event_tableid column
  * @method     ChildOrderQuery groupByUserid() Group by the userid column
  * @method     ChildOrderQuery groupByOrdertime() Group by the ordertime column
@@ -47,16 +44,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildOrderQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildOrderQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
- *
- * @method     ChildOrderQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
- * @method     ChildOrderQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
- * @method     ChildOrderQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
- *
- * @method     ChildOrderQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
- *
- * @method     ChildOrderQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
- * @method     ChildOrderQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
- * @method     ChildOrderQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
  *
  * @method     ChildOrderQuery leftJoinEventTable($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventTable relation
  * @method     ChildOrderQuery rightJoinEventTable($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventTable relation
@@ -98,13 +85,12 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery rightJoinWithOrderInProgress() Adds a RIGHT JOIN clause and with to the query using the OrderInProgress relation
  * @method     ChildOrderQuery innerJoinWithOrderInProgress() Adds a INNER JOIN clause and with to the query using the OrderInProgress relation
  *
- * @method     \API\Models\Event\EventQuery|\API\Models\Event\EventTableQuery|\API\Models\User\UserQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\Event\EventTableQuery|\API\Models\User\UserQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildOrder findOne(ConnectionInterface $con = null) Return the first ChildOrder matching the query
  * @method     ChildOrder findOneOrCreate(ConnectionInterface $con = null) Return the first ChildOrder matching the query, or a new ChildOrder object populated from the query conditions when no match is found
  *
  * @method     ChildOrder findOneByOrderid(int $orderid) Return the first ChildOrder filtered by the orderid column
- * @method     ChildOrder findOneByEventid(int $eventid) Return the first ChildOrder filtered by the eventid column
  * @method     ChildOrder findOneByEventTableid(int $event_tableid) Return the first ChildOrder filtered by the event_tableid column
  * @method     ChildOrder findOneByUserid(int $userid) Return the first ChildOrder filtered by the userid column
  * @method     ChildOrder findOneByOrdertime(string $ordertime) Return the first ChildOrder filtered by the ordertime column
@@ -115,7 +101,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder requireOne(ConnectionInterface $con = null) Return the first ChildOrder matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildOrder requireOneByOrderid(int $orderid) Return the first ChildOrder filtered by the orderid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByEventid(int $eventid) Return the first ChildOrder filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByEventTableid(int $event_tableid) Return the first ChildOrder filtered by the event_tableid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByUserid(int $userid) Return the first ChildOrder filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByOrdertime(string $ordertime) Return the first ChildOrder filtered by the ordertime column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -124,7 +109,6 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildOrder[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
  * @method     ChildOrder[]|ObjectCollection findByOrderid(int $orderid) Return ChildOrder objects filtered by the orderid column
- * @method     ChildOrder[]|ObjectCollection findByEventid(int $eventid) Return ChildOrder objects filtered by the eventid column
  * @method     ChildOrder[]|ObjectCollection findByEventTableid(int $event_tableid) Return ChildOrder objects filtered by the event_tableid column
  * @method     ChildOrder[]|ObjectCollection findByUserid(int $userid) Return ChildOrder objects filtered by the userid column
  * @method     ChildOrder[]|ObjectCollection findByOrdertime(string $ordertime) Return ChildOrder objects filtered by the ordertime column
@@ -179,10 +163,10 @@ abstract class OrderQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34, 56, 78), $con);
+     * $obj = $c->findPk(array(12, 34, 56), $con);
      * </code>
      *
-     * @param array[$orderid, $eventid, $event_tableid, $userid] $key Primary key to use for the query
+     * @param array[$orderid, $event_tableid, $userid] $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildOrder|array|mixed the result, formatted by the current formatter
@@ -207,7 +191,7 @@ abstract class OrderQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = OrderTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2]), (null === $key[3] || is_scalar($key[3]) || is_callable([$key[3], '__toString']) ? (string) $key[3] : $key[3])]))))) {
+        if ((null !== ($obj = OrderTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]))))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -228,13 +212,12 @@ abstract class OrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT orderid, eventid, event_tableid, userid, ordertime, priority, finished FROM order WHERE orderid = :p0 AND eventid = :p1 AND event_tableid = :p2 AND userid = :p3';
+        $sql = 'SELECT orderid, event_tableid, userid, ordertime, priority, finished FROM order WHERE orderid = :p0 AND event_tableid = :p1 AND userid = :p2';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
             $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
             $stmt->bindValue(':p2', $key[2], PDO::PARAM_INT);
-            $stmt->bindValue(':p3', $key[3], PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -245,7 +228,7 @@ abstract class OrderQuery extends ModelCriteria
             /** @var ChildOrder $obj */
             $obj = new ChildOrder();
             $obj->hydrate($row);
-            OrderTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2]), (null === $key[3] || is_scalar($key[3]) || is_callable([$key[3], '__toString']) ? (string) $key[3] : $key[3])]));
+            OrderTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]));
         }
         $stmt->closeCursor();
 
@@ -305,9 +288,8 @@ abstract class OrderQuery extends ModelCriteria
     public function filterByPrimaryKey($key)
     {
         $this->addUsingAlias(OrderTableMap::COL_ORDERID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(OrderTableMap::COL_EVENTID, $key[1], Criteria::EQUAL);
-        $this->addUsingAlias(OrderTableMap::COL_EVENT_TABLEID, $key[2], Criteria::EQUAL);
-        $this->addUsingAlias(OrderTableMap::COL_USERID, $key[3], Criteria::EQUAL);
+        $this->addUsingAlias(OrderTableMap::COL_EVENT_TABLEID, $key[1], Criteria::EQUAL);
+        $this->addUsingAlias(OrderTableMap::COL_USERID, $key[2], Criteria::EQUAL);
 
         return $this;
     }
@@ -326,12 +308,10 @@ abstract class OrderQuery extends ModelCriteria
         }
         foreach ($keys as $key) {
             $cton0 = $this->getNewCriterion(OrderTableMap::COL_ORDERID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(OrderTableMap::COL_EVENTID, $key[1], Criteria::EQUAL);
+            $cton1 = $this->getNewCriterion(OrderTableMap::COL_EVENT_TABLEID, $key[1], Criteria::EQUAL);
             $cton0->addAnd($cton1);
-            $cton2 = $this->getNewCriterion(OrderTableMap::COL_EVENT_TABLEID, $key[2], Criteria::EQUAL);
+            $cton2 = $this->getNewCriterion(OrderTableMap::COL_USERID, $key[2], Criteria::EQUAL);
             $cton0->addAnd($cton2);
-            $cton3 = $this->getNewCriterion(OrderTableMap::COL_USERID, $key[3], Criteria::EQUAL);
-            $cton0->addAnd($cton3);
             $this->addOr($cton0);
         }
 
@@ -377,49 +357,6 @@ abstract class OrderQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(OrderTableMap::COL_ORDERID, $orderid, $comparison);
-    }
-
-    /**
-     * Filter the query on the eventid column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByEventid(1234); // WHERE eventid = 1234
-     * $query->filterByEventid(array(12, 34)); // WHERE eventid IN (12, 34)
-     * $query->filterByEventid(array('min' => 12)); // WHERE eventid > 12
-     * </code>
-     *
-     * @see       filterByEvent()
-     *
-     * @param     mixed $eventid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
-     */
-    public function filterByEventid($eventid = null, $comparison = null)
-    {
-        if (is_array($eventid)) {
-            $useMinMax = false;
-            if (isset($eventid['min'])) {
-                $this->addUsingAlias(OrderTableMap::COL_EVENTID, $eventid['min'], Criteria::GREATER_EQUAL);
-                $useMinMax = true;
-            }
-            if (isset($eventid['max'])) {
-                $this->addUsingAlias(OrderTableMap::COL_EVENTID, $eventid['max'], Criteria::LESS_EQUAL);
-                $useMinMax = true;
-            }
-            if ($useMinMax) {
-                return $this;
-            }
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(OrderTableMap::COL_EVENTID, $eventid, $comparison);
     }
 
     /**
@@ -633,83 +570,6 @@ abstract class OrderQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(OrderTableMap::COL_FINISHED, $finished, $comparison);
-    }
-
-    /**
-     * Filter the query by a related \API\Models\Event\Event object
-     *
-     * @param \API\Models\Event\Event|ObjectCollection $event The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @throws \Propel\Runtime\Exception\PropelException
-     *
-     * @return ChildOrderQuery The current query, for fluid interface
-     */
-    public function filterByEvent($event, $comparison = null)
-    {
-        if ($event instanceof \API\Models\Event\Event) {
-            return $this
-                ->addUsingAlias(OrderTableMap::COL_EVENTID, $event->getEventid(), $comparison);
-        } elseif ($event instanceof ObjectCollection) {
-            if (null === $comparison) {
-                $comparison = Criteria::IN;
-            }
-
-            return $this
-                ->addUsingAlias(OrderTableMap::COL_EVENTID, $event->toKeyValue('PrimaryKey', 'Eventid'), $comparison);
-        } else {
-            throw new PropelException('filterByEvent() only accepts arguments of type \API\Models\Event\Event or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Event relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildOrderQuery The current query, for fluid interface
-     */
-    public function joinEvent($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Event');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Event');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Event relation Event object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \API\Models\Event\EventQuery A secondary query class using the current class as primary query
-     */
-    public function useEventQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinEvent($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Event', '\API\Models\Event\EventQuery');
     }
 
     /**
@@ -1023,10 +883,9 @@ abstract class OrderQuery extends ModelCriteria
     {
         if ($order) {
             $this->addCond('pruneCond0', $this->getAliasedColName(OrderTableMap::COL_ORDERID), $order->getOrderid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(OrderTableMap::COL_EVENTID), $order->getEventid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond2', $this->getAliasedColName(OrderTableMap::COL_EVENT_TABLEID), $order->getEventTableid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond3', $this->getAliasedColName(OrderTableMap::COL_USERID), $order->getUserid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2', 'pruneCond3'), Criteria::LOGICAL_OR);
+            $this->addCond('pruneCond1', $this->getAliasedColName(OrderTableMap::COL_EVENT_TABLEID), $order->getEventTableid(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond2', $this->getAliasedColName(OrderTableMap::COL_USERID), $order->getUserid(), Criteria::NOT_EQUAL);
+            $this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2'), Criteria::LOGICAL_OR);
         }
 
         return $this;

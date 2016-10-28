@@ -11,7 +11,6 @@ use API\Models\Event\Map\EventTableMap;
 use API\Models\Menu\MenuExtra;
 use API\Models\Menu\MenuSize;
 use API\Models\Menu\MenuType;
-use API\Models\Ordering\Order;
 use API\Models\Payment\Coupon;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -124,17 +123,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery rightJoinWithMenuType() Adds a RIGHT JOIN clause and with to the query using the MenuType relation
  * @method     ChildEventQuery innerJoinWithMenuType() Adds a INNER JOIN clause and with to the query using the MenuType relation
  *
- * @method     ChildEventQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
- * @method     ChildEventQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
- * @method     ChildEventQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
- *
- * @method     ChildEventQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
- *
- * @method     ChildEventQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
- * @method     ChildEventQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
- * @method     ChildEventQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
- *
- * @method     \API\Models\Payment\CouponQuery|\API\Models\DistributionPlace\DistributionPlaceQuery|\API\Models\Event\EventPrinterQuery|\API\Models\Event\EventTableQuery|\API\Models\Event\EventUserQuery|\API\Models\Menu\MenuExtraQuery|\API\Models\Menu\MenuSizeQuery|\API\Models\Menu\MenuTypeQuery|\API\Models\Ordering\OrderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\Payment\CouponQuery|\API\Models\DistributionPlace\DistributionPlaceQuery|\API\Models\Event\EventPrinterQuery|\API\Models\Event\EventTableQuery|\API\Models\Event\EventUserQuery|\API\Models\Menu\MenuExtraQuery|\API\Models\Menu\MenuSizeQuery|\API\Models\Menu\MenuTypeQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildEvent findOne(ConnectionInterface $con = null) Return the first ChildEvent matching the query
  * @method     ChildEvent findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEvent matching the query, or a new ChildEvent object populated from the query conditions when no match is found
@@ -1063,79 +1052,6 @@ abstract class EventQuery extends ModelCriteria
         return $this
             ->joinMenuType($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'MenuType', '\API\Models\Menu\MenuTypeQuery');
-    }
-
-    /**
-     * Filter the query by a related \API\Models\Ordering\Order object
-     *
-     * @param \API\Models\Ordering\Order|ObjectCollection $order the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildEventQuery The current query, for fluid interface
-     */
-    public function filterByOrder($order, $comparison = null)
-    {
-        if ($order instanceof \API\Models\Ordering\Order) {
-            return $this
-                ->addUsingAlias(EventTableMap::COL_EVENTID, $order->getEventid(), $comparison);
-        } elseif ($order instanceof ObjectCollection) {
-            return $this
-                ->useOrderQuery()
-                ->filterByPrimaryKeys($order->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByOrder() only accepts arguments of type \API\Models\Ordering\Order or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Order relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildEventQuery The current query, for fluid interface
-     */
-    public function joinOrder($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Order');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Order');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Order relation Order object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \API\Models\Ordering\OrderQuery A secondary query class using the current class as primary query
-     */
-    public function useOrderQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinOrder($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Order', '\API\Models\Ordering\OrderQuery');
     }
 
     /**

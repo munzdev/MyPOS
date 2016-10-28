@@ -5,8 +5,6 @@ namespace API\Models\Ordering\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
-use API\Models\Event\Event;
-use API\Models\Event\EventQuery;
 use API\Models\Event\EventTable;
 use API\Models\Event\EventTableQuery;
 use API\Models\OIP\OrderInProgress;
@@ -84,13 +82,6 @@ abstract class Order implements ActiveRecordInterface
     protected $orderid;
 
     /**
-     * The value for the eventid field.
-     *
-     * @var        int
-     */
-    protected $eventid;
-
-    /**
      * The value for the event_tableid field.
      *
      * @var        int
@@ -124,11 +115,6 @@ abstract class Order implements ActiveRecordInterface
      * @var        DateTime
      */
     protected $finished;
-
-    /**
-     * @var        Event
-     */
-    protected $aEvent;
 
     /**
      * @var        EventTable
@@ -408,16 +394,6 @@ abstract class Order implements ActiveRecordInterface
     }
 
     /**
-     * Get the [eventid] column value.
-     *
-     * @return int
-     */
-    public function getEventid()
-    {
-        return $this->eventid;
-    }
-
-    /**
      * Get the [event_tableid] column value.
      *
      * @return int
@@ -506,30 +482,6 @@ abstract class Order implements ActiveRecordInterface
 
         return $this;
     } // setOrderid()
-
-    /**
-     * Set the value of [eventid] column.
-     *
-     * @param int $v new value
-     * @return $this|\API\Models\Ordering\Order The current object (for fluent API support)
-     */
-    public function setEventid($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->eventid !== $v) {
-            $this->eventid = $v;
-            $this->modifiedColumns[OrderTableMap::COL_EVENTID] = true;
-        }
-
-        if ($this->aEvent !== null && $this->aEvent->getEventid() !== $v) {
-            $this->aEvent = null;
-        }
-
-        return $this;
-    } // setEventid()
 
     /**
      * Set the value of [event_tableid] column.
@@ -678,25 +630,22 @@ abstract class Order implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : OrderTableMap::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->orderid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : OrderTableMap::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->eventid = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : OrderTableMap::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : OrderTableMap::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_tableid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : OrderTableMap::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : OrderTableMap::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->userid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : OrderTableMap::translateFieldName('Ordertime', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : OrderTableMap::translateFieldName('Ordertime', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->ordertime = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : OrderTableMap::translateFieldName('Priority', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : OrderTableMap::translateFieldName('Priority', TableMap::TYPE_PHPNAME, $indexType)];
             $this->priority = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : OrderTableMap::translateFieldName('Finished', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : OrderTableMap::translateFieldName('Finished', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -709,7 +658,7 @@ abstract class Order implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = OrderTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = OrderTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Ordering\\Order'), 0, $e);
@@ -731,9 +680,6 @@ abstract class Order implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aEvent !== null && $this->eventid !== $this->aEvent->getEventid()) {
-            $this->aEvent = null;
-        }
         if ($this->aEventTable !== null && $this->event_tableid !== $this->aEventTable->getEventTableid()) {
             $this->aEventTable = null;
         }
@@ -779,7 +725,6 @@ abstract class Order implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aEvent = null;
             $this->aEventTable = null;
             $this->aUser = null;
             $this->collOrderDetails = null;
@@ -890,13 +835,6 @@ abstract class Order implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aEvent !== null) {
-                if ($this->aEvent->isModified() || $this->aEvent->isNew()) {
-                    $affectedRows += $this->aEvent->save($con);
-                }
-                $this->setEvent($this->aEvent);
-            }
-
             if ($this->aEventTable !== null) {
                 if ($this->aEventTable->isModified() || $this->aEventTable->isNew()) {
                     $affectedRows += $this->aEventTable->save($con);
@@ -985,9 +923,6 @@ abstract class Order implements ActiveRecordInterface
         if ($this->isColumnModified(OrderTableMap::COL_ORDERID)) {
             $modifiedColumns[':p' . $index++]  = 'orderid';
         }
-        if ($this->isColumnModified(OrderTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventid';
-        }
         if ($this->isColumnModified(OrderTableMap::COL_EVENT_TABLEID)) {
             $modifiedColumns[':p' . $index++]  = 'event_tableid';
         }
@@ -1016,9 +951,6 @@ abstract class Order implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'orderid':
                         $stmt->bindValue($identifier, $this->orderid, PDO::PARAM_INT);
-                        break;
-                    case 'eventid':
-                        $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
                     case 'event_tableid':
                         $stmt->bindValue($identifier, $this->event_tableid, PDO::PARAM_INT);
@@ -1101,21 +1033,18 @@ abstract class Order implements ActiveRecordInterface
                 return $this->getOrderid();
                 break;
             case 1:
-                return $this->getEventid();
-                break;
-            case 2:
                 return $this->getEventTableid();
                 break;
-            case 3:
+            case 2:
                 return $this->getUserid();
                 break;
-            case 4:
+            case 3:
                 return $this->getOrdertime();
                 break;
-            case 5:
+            case 4:
                 return $this->getPriority();
                 break;
-            case 6:
+            case 5:
                 return $this->getFinished();
                 break;
             default:
@@ -1149,19 +1078,18 @@ abstract class Order implements ActiveRecordInterface
         $keys = OrderTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getOrderid(),
-            $keys[1] => $this->getEventid(),
-            $keys[2] => $this->getEventTableid(),
-            $keys[3] => $this->getUserid(),
-            $keys[4] => $this->getOrdertime(),
-            $keys[5] => $this->getPriority(),
-            $keys[6] => $this->getFinished(),
+            $keys[1] => $this->getEventTableid(),
+            $keys[2] => $this->getUserid(),
+            $keys[3] => $this->getOrdertime(),
+            $keys[4] => $this->getPriority(),
+            $keys[5] => $this->getFinished(),
         );
-        if ($result[$keys[4]] instanceof \DateTime) {
-            $result[$keys[4]] = $result[$keys[4]]->format('c');
+        if ($result[$keys[3]] instanceof \DateTime) {
+            $result[$keys[3]] = $result[$keys[3]]->format('c');
         }
 
-        if ($result[$keys[6]] instanceof \DateTime) {
-            $result[$keys[6]] = $result[$keys[6]]->format('c');
+        if ($result[$keys[5]] instanceof \DateTime) {
+            $result[$keys[5]] = $result[$keys[5]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1170,21 +1098,6 @@ abstract class Order implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aEvent) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'event';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'event';
-                        break;
-                    default:
-                        $key = 'Event';
-                }
-
-                $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
             if (null !== $this->aEventTable) {
 
                 switch ($keyType) {
@@ -1283,21 +1196,18 @@ abstract class Order implements ActiveRecordInterface
                 $this->setOrderid($value);
                 break;
             case 1:
-                $this->setEventid($value);
-                break;
-            case 2:
                 $this->setEventTableid($value);
                 break;
-            case 3:
+            case 2:
                 $this->setUserid($value);
                 break;
-            case 4:
+            case 3:
                 $this->setOrdertime($value);
                 break;
-            case 5:
+            case 4:
                 $this->setPriority($value);
                 break;
-            case 6:
+            case 5:
                 $this->setFinished($value);
                 break;
         } // switch()
@@ -1330,22 +1240,19 @@ abstract class Order implements ActiveRecordInterface
             $this->setOrderid($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setEventid($arr[$keys[1]]);
+            $this->setEventTableid($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setEventTableid($arr[$keys[2]]);
+            $this->setUserid($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setUserid($arr[$keys[3]]);
+            $this->setOrdertime($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setOrdertime($arr[$keys[4]]);
+            $this->setPriority($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setPriority($arr[$keys[5]]);
-        }
-        if (array_key_exists($keys[6], $arr)) {
-            $this->setFinished($arr[$keys[6]]);
+            $this->setFinished($arr[$keys[5]]);
         }
     }
 
@@ -1391,9 +1298,6 @@ abstract class Order implements ActiveRecordInterface
         if ($this->isColumnModified(OrderTableMap::COL_ORDERID)) {
             $criteria->add(OrderTableMap::COL_ORDERID, $this->orderid);
         }
-        if ($this->isColumnModified(OrderTableMap::COL_EVENTID)) {
-            $criteria->add(OrderTableMap::COL_EVENTID, $this->eventid);
-        }
         if ($this->isColumnModified(OrderTableMap::COL_EVENT_TABLEID)) {
             $criteria->add(OrderTableMap::COL_EVENT_TABLEID, $this->event_tableid);
         }
@@ -1427,7 +1331,6 @@ abstract class Order implements ActiveRecordInterface
     {
         $criteria = ChildOrderQuery::create();
         $criteria->add(OrderTableMap::COL_ORDERID, $this->orderid);
-        $criteria->add(OrderTableMap::COL_EVENTID, $this->eventid);
         $criteria->add(OrderTableMap::COL_EVENT_TABLEID, $this->event_tableid);
         $criteria->add(OrderTableMap::COL_USERID, $this->userid);
 
@@ -1443,19 +1346,11 @@ abstract class Order implements ActiveRecordInterface
     public function hashCode()
     {
         $validPk = null !== $this->getOrderid() &&
-            null !== $this->getEventid() &&
             null !== $this->getEventTableid() &&
             null !== $this->getUserid();
 
-        $validPrimaryKeyFKs = 3;
+        $validPrimaryKeyFKs = 2;
         $primaryKeyFKs = [];
-
-        //relation fk_orders_events1 to table event
-        if ($this->aEvent && $hash = spl_object_hash($this->aEvent)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         //relation fk_orders_tables to table event_table
         if ($this->aEventTable && $hash = spl_object_hash($this->aEventTable)) {
@@ -1489,9 +1384,8 @@ abstract class Order implements ActiveRecordInterface
     {
         $pks = array();
         $pks[0] = $this->getOrderid();
-        $pks[1] = $this->getEventid();
-        $pks[2] = $this->getEventTableid();
-        $pks[3] = $this->getUserid();
+        $pks[1] = $this->getEventTableid();
+        $pks[2] = $this->getUserid();
 
         return $pks;
     }
@@ -1505,9 +1399,8 @@ abstract class Order implements ActiveRecordInterface
     public function setPrimaryKey($keys)
     {
         $this->setOrderid($keys[0]);
-        $this->setEventid($keys[1]);
-        $this->setEventTableid($keys[2]);
-        $this->setUserid($keys[3]);
+        $this->setEventTableid($keys[1]);
+        $this->setUserid($keys[2]);
     }
 
     /**
@@ -1516,7 +1409,7 @@ abstract class Order implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getOrderid()) && (null === $this->getEventid()) && (null === $this->getEventTableid()) && (null === $this->getUserid());
+        return (null === $this->getOrderid()) && (null === $this->getEventTableid()) && (null === $this->getUserid());
     }
 
     /**
@@ -1532,7 +1425,6 @@ abstract class Order implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setEventid($this->getEventid());
         $copyObj->setEventTableid($this->getEventTableid());
         $copyObj->setUserid($this->getUserid());
         $copyObj->setOrdertime($this->getOrdertime());
@@ -1584,57 +1476,6 @@ abstract class Order implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
-    }
-
-    /**
-     * Declares an association between this object and a Event object.
-     *
-     * @param  Event $v
-     * @return $this|\API\Models\Ordering\Order The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setEvent(Event $v = null)
-    {
-        if ($v === null) {
-            $this->setEventid(NULL);
-        } else {
-            $this->setEventid($v->getEventid());
-        }
-
-        $this->aEvent = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Event object, it will not be re-added.
-        if ($v !== null) {
-            $v->addOrder($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated Event object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return Event The associated Event object.
-     * @throws PropelException
-     */
-    public function getEvent(ConnectionInterface $con = null)
-    {
-        if ($this->aEvent === null && ($this->eventid !== null)) {
-            $this->aEvent = EventQuery::create()->findPk($this->eventid, $con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aEvent->addOrders($this);
-             */
-        }
-
-        return $this->aEvent;
     }
 
     /**
@@ -2398,9 +2239,6 @@ abstract class Order implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aEvent) {
-            $this->aEvent->removeOrder($this);
-        }
         if (null !== $this->aEventTable) {
             $this->aEventTable->removeOrder($this);
         }
@@ -2408,7 +2246,6 @@ abstract class Order implements ActiveRecordInterface
             $this->aUser->removeOrder($this);
         }
         $this->orderid = null;
-        $this->eventid = null;
         $this->event_tableid = null;
         $this->userid = null;
         $this->ordertime = null;
@@ -2446,7 +2283,6 @@ abstract class Order implements ActiveRecordInterface
 
         $this->collOrderDetails = null;
         $this->collOrderInProgresses = null;
-        $this->aEvent = null;
         $this->aEventTable = null;
         $this->aUser = null;
     }

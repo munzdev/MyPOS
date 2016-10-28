@@ -33,10 +33,6 @@ use API\Models\Menu\Base\MenuType as BaseMenuType;
 use API\Models\Menu\Map\MenuExtraTableMap;
 use API\Models\Menu\Map\MenuSizeTableMap;
 use API\Models\Menu\Map\MenuTypeTableMap;
-use API\Models\Ordering\Order;
-use API\Models\Ordering\OrderQuery;
-use API\Models\Ordering\Base\Order as BaseOrder;
-use API\Models\Ordering\Map\OrderTableMap;
 use API\Models\Payment\Coupon;
 use API\Models\Payment\CouponQuery;
 use API\Models\Payment\Base\Coupon as BaseCoupon;
@@ -173,12 +169,6 @@ abstract class Event implements ActiveRecordInterface
     protected $collMenuTypesPartial;
 
     /**
-     * @var        ObjectCollection|Order[] Collection to store aggregation of Order objects.
-     */
-    protected $collOrders;
-    protected $collOrdersPartial;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -233,12 +223,6 @@ abstract class Event implements ActiveRecordInterface
      * @var ObjectCollection|MenuType[]
      */
     protected $menuTypesScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|Order[]
-     */
-    protected $ordersScheduledForDeletion = null;
 
     /**
      * Initializes internal state of API\Models\Event\Base\Event object.
@@ -748,8 +732,6 @@ abstract class Event implements ActiveRecordInterface
 
             $this->collMenuTypes = null;
 
-            $this->collOrders = null;
-
         } // if (deep)
     }
 
@@ -990,23 +972,6 @@ abstract class Event implements ActiveRecordInterface
 
             if ($this->collMenuTypes !== null) {
                 foreach ($this->collMenuTypes as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->ordersScheduledForDeletion !== null) {
-                if (!$this->ordersScheduledForDeletion->isEmpty()) {
-                    \API\Models\Ordering\OrderQuery::create()
-                        ->filterByPrimaryKeys($this->ordersScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->ordersScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collOrders !== null) {
-                foreach ($this->collOrders as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1313,21 +1278,6 @@ abstract class Event implements ActiveRecordInterface
 
                 $result[$key] = $this->collMenuTypes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collOrders) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'orders';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'orders';
-                        break;
-                    default:
-                        $key = 'Orders';
-                }
-
-                $result[$key] = $this->collOrders->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
         }
 
         return $result;
@@ -1608,12 +1558,6 @@ abstract class Event implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getOrders() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addOrder($relObj->copy($deepCopy));
-                }
-            }
-
         } // if ($deepCopy)
 
         if ($makeNew) {
@@ -1678,9 +1622,6 @@ abstract class Event implements ActiveRecordInterface
         }
         if ('MenuType' == $relationName) {
             return $this->initMenuTypes();
-        }
-        if ('Order' == $relationName) {
-            return $this->initOrders();
         }
     }
 
@@ -3584,284 +3525,6 @@ abstract class Event implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collOrders collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addOrders()
-     */
-    public function clearOrders()
-    {
-        $this->collOrders = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collOrders collection loaded partially.
-     */
-    public function resetPartialOrders($v = true)
-    {
-        $this->collOrdersPartial = $v;
-    }
-
-    /**
-     * Initializes the collOrders collection.
-     *
-     * By default this just sets the collOrders collection to an empty array (like clearcollOrders());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initOrders($overrideExisting = true)
-    {
-        if (null !== $this->collOrders && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = OrderTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collOrders = new $collectionClassName;
-        $this->collOrders->setModel('\API\Models\Ordering\Order');
-    }
-
-    /**
-     * Gets an array of Order objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildEvent is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|Order[] List of Order objects
-     * @throws PropelException
-     */
-    public function getOrders(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collOrdersPartial && !$this->isNew();
-        if (null === $this->collOrders || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collOrders) {
-                // return empty collection
-                $this->initOrders();
-            } else {
-                $collOrders = OrderQuery::create(null, $criteria)
-                    ->filterByEvent($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collOrdersPartial && count($collOrders)) {
-                        $this->initOrders(false);
-
-                        foreach ($collOrders as $obj) {
-                            if (false == $this->collOrders->contains($obj)) {
-                                $this->collOrders->append($obj);
-                            }
-                        }
-
-                        $this->collOrdersPartial = true;
-                    }
-
-                    return $collOrders;
-                }
-
-                if ($partial && $this->collOrders) {
-                    foreach ($this->collOrders as $obj) {
-                        if ($obj->isNew()) {
-                            $collOrders[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collOrders = $collOrders;
-                $this->collOrdersPartial = false;
-            }
-        }
-
-        return $this->collOrders;
-    }
-
-    /**
-     * Sets a collection of Order objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $orders A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildEvent The current object (for fluent API support)
-     */
-    public function setOrders(Collection $orders, ConnectionInterface $con = null)
-    {
-        /** @var Order[] $ordersToDelete */
-        $ordersToDelete = $this->getOrders(new Criteria(), $con)->diff($orders);
-
-
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->ordersScheduledForDeletion = clone $ordersToDelete;
-
-        foreach ($ordersToDelete as $orderRemoved) {
-            $orderRemoved->setEvent(null);
-        }
-
-        $this->collOrders = null;
-        foreach ($orders as $order) {
-            $this->addOrder($order);
-        }
-
-        $this->collOrders = $orders;
-        $this->collOrdersPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related BaseOrder objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related BaseOrder objects.
-     * @throws PropelException
-     */
-    public function countOrders(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collOrdersPartial && !$this->isNew();
-        if (null === $this->collOrders || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collOrders) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getOrders());
-            }
-
-            $query = OrderQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByEvent($this)
-                ->count($con);
-        }
-
-        return count($this->collOrders);
-    }
-
-    /**
-     * Method called to associate a Order object to this object
-     * through the Order foreign key attribute.
-     *
-     * @param  Order $l Order
-     * @return $this|\API\Models\Event\Event The current object (for fluent API support)
-     */
-    public function addOrder(Order $l)
-    {
-        if ($this->collOrders === null) {
-            $this->initOrders();
-            $this->collOrdersPartial = true;
-        }
-
-        if (!$this->collOrders->contains($l)) {
-            $this->doAddOrder($l);
-
-            if ($this->ordersScheduledForDeletion and $this->ordersScheduledForDeletion->contains($l)) {
-                $this->ordersScheduledForDeletion->remove($this->ordersScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Order $order The Order object to add.
-     */
-    protected function doAddOrder(Order $order)
-    {
-        $this->collOrders[]= $order;
-        $order->setEvent($this);
-    }
-
-    /**
-     * @param  Order $order The Order object to remove.
-     * @return $this|ChildEvent The current object (for fluent API support)
-     */
-    public function removeOrder(Order $order)
-    {
-        if ($this->getOrders()->contains($order)) {
-            $pos = $this->collOrders->search($order);
-            $this->collOrders->remove($pos);
-            if (null === $this->ordersScheduledForDeletion) {
-                $this->ordersScheduledForDeletion = clone $this->collOrders;
-                $this->ordersScheduledForDeletion->clear();
-            }
-            $this->ordersScheduledForDeletion[]= clone $order;
-            $order->setEvent(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Event is new, it will return
-     * an empty collection; or if this Event has previously
-     * been saved, it will retrieve related Orders from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Event.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|Order[] List of Order objects
-     */
-    public function getOrdersJoinEventTable(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = OrderQuery::create(null, $criteria);
-        $query->joinWith('EventTable', $joinBehavior);
-
-        return $this->getOrders($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Event is new, it will return
-     * an empty collection; or if this Event has previously
-     * been saved, it will retrieve related Orders from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Event.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|Order[] List of Order objects
-     */
-    public function getOrdersJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = OrderQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
-
-        return $this->getOrders($query, $con);
-    }
-
-    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -3930,11 +3593,6 @@ abstract class Event implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collOrders) {
-                foreach ($this->collOrders as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
         } // if ($deep)
 
         $this->collCoupons = null;
@@ -3945,7 +3603,6 @@ abstract class Event implements ActiveRecordInterface
         $this->collMenuExtras = null;
         $this->collMenuSizes = null;
         $this->collMenuTypes = null;
-        $this->collOrders = null;
     }
 
     /**
