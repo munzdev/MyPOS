@@ -1,18 +1,15 @@
 <?php
 namespace API\Lib;
 
-use Model;
-use API\Models\User\UsersQuery;
-use API\Models\User\Base\Users;
-use API\Lib\RememberMe;
+use API\Models\User\Base\User;
 
 class Auth
 {
-    private $o_usersQuery;
+    private $str_queryClass;
 
-    public function __construct(string $str_usersQuery)
+    public function __construct(string $str_queryClass)
     {
-        $this->o_usersQuery = $str_usersQuery::create();
+        $this->str_queryClass = $str_queryClass;
     }
 
     public function DoLogin(string $str_username) : bool
@@ -52,42 +49,42 @@ class Auth
     /**
      * 
      * @param string $str_username
-     * @return Users|null
+     * @return User|null
      */
-    private function FindUserObject(string $str_username) // : ?Base\Users
+    private function FindUserObject(string $str_username) // : ?User
     {
-        $o_user = $this->o_usersQuery->joinEventsUser()
-                                     ->useEventsUserQuery()
-                                        ->joinEvents()
-                                        ->useEventsQuery()
-                                            ->filterByActive(true)
-                                        ->endUse()
-                                     ->endUse()                                        
-                                     ->filterByUsername($str_username)
-                                     ->filterByActive(true)
-                                     ->findOne();
+        $o_user = $this->str_queryClass::create()->joinEventUser()
+                                                 ->useEventUserQuery()
+                                                    ->joinEvent()
+                                                    ->useEventQuery()
+                                                        ->filterByActive(true)
+                                                    ->endUse()
+                                                 ->endUse()                                        
+                                                 ->filterByUsername($str_username)
+                                                 ->filterByActive(true)
+                                                 ->findOne();
         
         if(!$o_user)
         {
-            $o_user = $this->o_usersQuery->filterByUsername($str_username)
-                                         ->filterByIsAdmin(true)
-                                         ->filterByActive(true)
-                                         ->findOne();
+            $o_user = $this->str_queryClass::create()->filterByUsername($str_username)
+                                                     ->filterByIsAdmin(true)
+                                                     ->filterByActive(true)
+                                                     ->findOne();
         }
         
         return $o_user;
     }
 
-    public function SetLogin(Users $o_user) : void
+    public function SetLogin(User $o_user) : void
     {
         $_SESSION['Auth'] = serialize($o_user);
     }    
 
     /**
      * 
-     * @return Users|null
+     * @return User|null
      */
-    public static function GetCurrentUser() // : ?Users
+    public static function GetCurrentUser() // : ?User
     {
         if(isset($_SESSION['Auth']))
         {
