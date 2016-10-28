@@ -79,7 +79,6 @@ DROP TABLE IF EXISTS `order` ;
 
 CREATE TABLE IF NOT EXISTS `order` (
   `orderid` INT(11) NOT NULL AUTO_INCREMENT,
-  `eventid` INT(11) NOT NULL,
   `event_tableid` INT(11) NOT NULL,
   `userid` INT(11) NOT NULL,
   `ordertime` DATETIME NOT NULL,
@@ -90,7 +89,6 @@ CREATE TABLE IF NOT EXISTS `order` (
   INDEX `ordertime` (`ordertime` ASC),
   INDEX `fk_orders_users1_idx` (`userid` ASC),
   INDEX `fk_orders_tables_idx` (`event_tableid` ASC),
-  INDEX `fk_orders_events1_idx` (`eventid` ASC),
   INDEX `priority` (`priority` ASC),
   INDEX `finished` (`finished` ASC),
   CONSTRAINT `fk_orders_tables`
@@ -101,11 +99,6 @@ CREATE TABLE IF NOT EXISTS `order` (
   CONSTRAINT `fk_orders_users1`
     FOREIGN KEY (`userid`)
     REFERENCES `user` (`userid`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_orders_events1`
-    FOREIGN KEY (`eventid`)
-    REFERENCES `event` (`eventid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

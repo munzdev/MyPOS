@@ -39,10 +39,10 @@ COMMIT;
 -- Data for table `order`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `order` (`orderid`, `eventid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished`) VALUES (DEFAULT, 1, 1, 1, NOW(), 1, NULL);
-INSERT INTO `order` (`orderid`, `eventid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished`) VALUES (DEFAULT, 1, 3, 1, NOW(), 2, NULL);
-INSERT INTO `order` (`orderid`, `eventid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished`) VALUES (DEFAULT, 1, 2, 1, NOW(), 3, NULL);
-INSERT INTO `order` (`orderid`, `eventid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished`) VALUES (DEFAULT, 1, 1, 1, NOW(), 4, NULL);
+INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished`) VALUES (DEFAULT, 1, 1, NOW(), 1, NULL);
+INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished`) VALUES (DEFAULT, 3, 1, NOW(), 2, NULL);
+INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished`) VALUES (DEFAULT, 2, 1, NOW(), 3, NULL);
+INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished`) VALUES (DEFAULT, 1, 1, NOW(), 4, NULL);
 
 COMMIT;
 
