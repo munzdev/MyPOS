@@ -44,9 +44,9 @@ class Login extends Controller
             $o_rememberMe = new RememberMe($this->str_privateKey);            
             $str_hash = $o_rememberMe->remember($i_userid);                
             
-            UsersQuery::create()->findPk($i_userid)
-                                ->setAutologinHash($str_hash)
-                                ->save();
+            UserQuery::create()->findPk($i_userid)
+                               ->setAutologinHash($str_hash)
+                               ->save();
         }
         
         $this->o_response->withJson(true);
@@ -65,7 +65,7 @@ class Login extends Controller
         
         if($i_userid !== false)
         {
-            $o_user = UsersQuery::create()->findPk($i_userid);
+            $o_user = UserQuery::create()->findPk($i_userid);
             $str_newHash = $o_rememberMe->validateHash($o_user->getAutologinHash());
             $o_user->setAutologinHash($str_newHash)->save();
             
@@ -83,9 +83,9 @@ class Login extends Controller
     protected function DELETE() : void {
         $i_userid = $this->o_auth->GetCurrentUser()->getUserid();
             
-        UsersQuery::create()->findPk($i_userid)
-                            ->setAutologinHash(null)
-                            ->save();
+        UserQuery::create()->findPk($i_userid)
+                           ->setAutologinHash(null)
+                           ->save();
             
         $this->o_auth->Logout();
         RememberMe::Destroy();        
