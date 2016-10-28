@@ -10,6 +10,6 @@ INSERT INTO `user_role` (`user_roleid`, `name`) VALUES (16, 'Bestellung hinzufü
 
 COMMIT;
 
-INSERT INTO `menu_sizes` (`menu_sizeid`, `eventid`, `name`, `factor`) VALUES (DEFAULT, 1, 'Normal', 1);
+INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`) VALUES (DEFAULT, 1, 'Normal', 1);
 
 COMMIT;

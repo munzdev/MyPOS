@@ -9,11 +9,11 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Table `users`
+-- Table `user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `users` ;
+DROP TABLE IF EXISTS `user` ;
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE IF NOT EXISTS `user` (
   `userid` INT(11) NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(64) NOT NULL,
   `password` VARCHAR(64) NOT NULL,
@@ -33,11 +33,11 @@ COMMENT = 'Enthält alle Benutzer, die Zugriff auf die App haben';
 
 
 -- -----------------------------------------------------
--- Table `events`
+-- Table `event`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `events` ;
+DROP TABLE IF EXISTS `event` ;
 
-CREATE TABLE IF NOT EXISTS `events` (
+CREATE TABLE IF NOT EXISTS `event` (
   `eventid` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `date` DATETIME NOT NULL,
@@ -50,22 +50,22 @@ COMMENT = 'Enthält die verschiedene Events, bei dem das POS System verwendet wi
 
 
 -- -----------------------------------------------------
--- Table `events_tables`
+-- Table `event_table`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `events_tables` ;
+DROP TABLE IF EXISTS `event_table` ;
 
-CREATE TABLE IF NOT EXISTS `events_tables` (
-  `events_tableid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `event_table` (
+  `event_tableid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(32) NOT NULL,
   `data` VARCHAR(255) NULL,
-  UNIQUE INDEX `tableid_UNIQUE` (`events_tableid` ASC),
+  UNIQUE INDEX `tableid_UNIQUE` (`event_tableid` ASC),
   INDEX `tables_name` (`name` ASC),
-  PRIMARY KEY (`events_tableid`, `eventid`),
+  PRIMARY KEY (`event_tableid`, `eventid`),
   INDEX `fk_tables_events1_idx` (`eventid` ASC),
   CONSTRAINT `fk_tables_events1`
     FOREIGN KEY (`eventid`)
-    REFERENCES `events` (`eventid`)
+    REFERENCES `event` (`eventid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -73,39 +73,39 @@ COMMENT = 'Enthält Tischnummer, die es gibt';
 
 
 -- -----------------------------------------------------
--- Table `orders`
+-- Table `order`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `orders` ;
+DROP TABLE IF EXISTS `order` ;
 
-CREATE TABLE IF NOT EXISTS `orders` (
+CREATE TABLE IF NOT EXISTS `order` (
   `orderid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
-  `tableid` INT(11) NOT NULL,
+  `event_tableid` INT(11) NOT NULL,
   `userid` INT(11) NOT NULL,
   `ordertime` DATETIME NOT NULL,
   `priority` INT NOT NULL,
   `finished` DATETIME NULL,
-  PRIMARY KEY (`orderid`, `eventid`, `tableid`, `userid`),
+  PRIMARY KEY (`orderid`, `eventid`, `event_tableid`, `userid`),
   UNIQUE INDEX `oder_id_UNIQUE` (`orderid` ASC),
   INDEX `ordertime` (`ordertime` ASC),
   INDEX `fk_orders_users1_idx` (`userid` ASC),
-  INDEX `fk_orders_tables_idx` (`tableid` ASC),
+  INDEX `fk_orders_tables_idx` (`event_tableid` ASC),
   INDEX `fk_orders_events1_idx` (`eventid` ASC),
   INDEX `priority` (`priority` ASC),
   INDEX `finished` (`finished` ASC),
   CONSTRAINT `fk_orders_tables`
-    FOREIGN KEY (`tableid`)
-    REFERENCES `events_tables` (`events_tableid`)
+    FOREIGN KEY (`event_tableid`)
+    REFERENCES `event_table` (`event_tableid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_users1`
     FOREIGN KEY (`userid`)
-    REFERENCES `users` (`userid`)
+    REFERENCES `user` (`userid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_events1`
     FOREIGN KEY (`eventid`)
-    REFERENCES `events` (`eventid`)
+    REFERENCES `event` (`eventid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -113,11 +113,11 @@ COMMENT = 'Enthält die Bestellungen die von einem Tisch gemacht wurden durch ei
 
 
 -- -----------------------------------------------------
--- Table `menu_types`
+-- Table `menu_type`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `menu_types` ;
+DROP TABLE IF EXISTS `menu_type` ;
 
-CREATE TABLE IF NOT EXISTS `menu_types` (
+CREATE TABLE IF NOT EXISTS `menu_type` (
   `menu_typeid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `menu_types` (
   INDEX `fk_menu_types_events1_idx` (`eventid` ASC),
   CONSTRAINT `fk_menu_types_events1`
     FOREIGN KEY (`eventid`)
-    REFERENCES `events` (`eventid`)
+    REFERENCES `event` (`eventid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -136,11 +136,11 @@ COMMENT = 'Enthält die grundlegende Nahrungstypen ( Essen, Trinken, ...) und di
 
 
 -- -----------------------------------------------------
--- Table `menu_groupes`
+-- Table `menu_group`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `menu_groupes` ;
+DROP TABLE IF EXISTS `menu_group` ;
 
-CREATE TABLE IF NOT EXISTS `menu_groupes` (
+CREATE TABLE IF NOT EXISTS `menu_group` (
   `menu_groupid` INT(11) NOT NULL AUTO_INCREMENT,
   `menu_typeid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `menu_groupes` (
   INDEX `fk_menu_groupes_menu_types1_idx` (`menu_typeid` ASC),
   CONSTRAINT `fk_menu_groupes_menu_types1`
     FOREIGN KEY (`menu_typeid`)
-    REFERENCES `menu_types` (`menu_typeid`)
+    REFERENCES `menu_type` (`menu_typeid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -157,11 +157,11 @@ COMMENT = 'Enhält die Untergruppen der Menükarte (Hauptspeise, Beilagen, Antig
 
 
 -- -----------------------------------------------------
--- Table `availabilitys`
+-- Table `availability`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `availabilitys` ;
+DROP TABLE IF EXISTS `availability` ;
 
-CREATE TABLE IF NOT EXISTS `availabilitys` (
+CREATE TABLE IF NOT EXISTS `availability` (
   `availabilityid` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(24) NOT NULL,
   PRIMARY KEY (`availabilityid`),
@@ -170,11 +170,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `menues`
+-- Table `menu`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `menues` ;
+DROP TABLE IF EXISTS `menu` ;
 
-CREATE TABLE IF NOT EXISTS `menues` (
+CREATE TABLE IF NOT EXISTS `menu` (
   `menuid` INT(11) NOT NULL AUTO_INCREMENT,
   `menu_groupid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
@@ -187,12 +187,12 @@ CREATE TABLE IF NOT EXISTS `menues` (
   INDEX `fk_menues_availabilitys1_idx` (`availabilityid` ASC),
   CONSTRAINT `fk_menues_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
-    REFERENCES `menu_groupes` (`menu_groupid`)
+    REFERENCES `menu_group` (`menu_groupid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_menues_availabilitys1`
     FOREIGN KEY (`availabilityid`)
-    REFERENCES `availabilitys` (`availabilityid`)
+    REFERENCES `availability` (`availabilityid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -200,11 +200,11 @@ COMMENT = 'Enhält das Menü das Angeboten werden kann (Schnitzel, Schweinsbarat
 
 
 -- -----------------------------------------------------
--- Table `menu_sizes`
+-- Table `menu_size`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `menu_sizes` ;
+DROP TABLE IF EXISTS `menu_size` ;
 
-CREATE TABLE IF NOT EXISTS `menu_sizes` (
+CREATE TABLE IF NOT EXISTS `menu_size` (
   `menu_sizeid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(32) NOT NULL,
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `menu_sizes` (
   INDEX `fk_menu_sizes_events1_idx` (`eventid` ASC),
   CONSTRAINT `fk_menu_sizes_events1`
     FOREIGN KEY (`eventid`)
-    REFERENCES `events` (`eventid`)
+    REFERENCES `event` (`eventid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -222,12 +222,12 @@ COMMENT = 'Enhält die verschiedene Einheitsgröße, die es für eine Speise/Get
 
 
 -- -----------------------------------------------------
--- Table `orders_details`
+-- Table `order_detail`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `orders_details` ;
+DROP TABLE IF EXISTS `order_detail` ;
 
-CREATE TABLE IF NOT EXISTS `orders_details` (
-  `orders_detailid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `order_detail` (
+  `order_detailid` INT(11) NOT NULL AUTO_INCREMENT,
   `orderid` INT(11) NOT NULL,
   `menuid` INT(11) NULL,
   `menu_sizeid` INT(11) NULL,
@@ -240,8 +240,8 @@ CREATE TABLE IF NOT EXISTS `orders_details` (
   `availabilityid` INT NULL,
   `availability_amount` SMALLINT NULL,
   `verified` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`orders_detailid`, `orderid`),
-  UNIQUE INDEX `orders_detailid_UNIQUE` (`orders_detailid` ASC),
+  PRIMARY KEY (`order_detailid`, `orderid`),
+  UNIQUE INDEX `orders_detailid_UNIQUE` (`order_detailid` ASC),
   INDEX `fk_orders_details_menues1_idx` (`menuid` ASC),
   INDEX `fk_orders_details_orders1_idx` (`orderid` ASC),
   INDEX `fk_orders_details_users1_idx` (`single_price_modified_by_userid` ASC),
@@ -251,32 +251,32 @@ CREATE TABLE IF NOT EXISTS `orders_details` (
   INDEX `fk_orders_details_availabilitys1_idx` (`availabilityid` ASC),
   CONSTRAINT `fk_orders_details_menues1`
     FOREIGN KEY (`menuid`)
-    REFERENCES `menues` (`menuid`)
+    REFERENCES `menu` (`menuid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_orders1`
     FOREIGN KEY (`orderid`)
-    REFERENCES `orders` (`orderid`)
+    REFERENCES `order` (`orderid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_users1`
     FOREIGN KEY (`single_price_modified_by_userid`)
-    REFERENCES `users` (`userid`)
+    REFERENCES `user` (`userid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_menu_sizes1`
     FOREIGN KEY (`menu_sizeid`)
-    REFERENCES `menu_sizes` (`menu_sizeid`)
+    REFERENCES `menu_size` (`menu_sizeid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
-    REFERENCES `menu_groupes` (`menu_groupid`)
+    REFERENCES `menu_group` (`menu_groupid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_availabilitys1`
     FOREIGN KEY (`availabilityid`)
-    REFERENCES `availabilitys` (`availabilityid`)
+    REFERENCES `availability` (`availabilityid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -284,11 +284,11 @@ COMMENT = 'Enthält die genauen Bestell-Positionen einner Bestellung, die getät
 
 
 -- -----------------------------------------------------
--- Table `menu_extras`
+-- Table `menu_extra`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `menu_extras` ;
+DROP TABLE IF EXISTS `menu_extra` ;
 
-CREATE TABLE IF NOT EXISTS `menu_extras` (
+CREATE TABLE IF NOT EXISTS `menu_extra` (
   `menu_extraid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
@@ -300,12 +300,12 @@ CREATE TABLE IF NOT EXISTS `menu_extras` (
   INDEX `fk_menu_extras_availabilitys1_idx` (`availabilityid` ASC),
   CONSTRAINT `fk_menu_extras_events1`
     FOREIGN KEY (`eventid`)
-    REFERENCES `events` (`eventid`)
+    REFERENCES `event` (`eventid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_menu_extras_availabilitys1`
     FOREIGN KEY (`availabilityid`)
-    REFERENCES `availabilitys` (`availabilityid`)
+    REFERENCES `availability` (`availabilityid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -313,26 +313,26 @@ COMMENT = 'Definiert alle möglichen Extras die zu einer Speise bestellt werden 
 
 
 -- -----------------------------------------------------
--- Table `menues_possible_sizes`
+-- Table `menu_possible_size`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `menues_possible_sizes` ;
+DROP TABLE IF EXISTS `menu_possible_size` ;
 
-CREATE TABLE IF NOT EXISTS `menues_possible_sizes` (
-  `menues_possible_sizeid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `menu_possible_size` (
+  `menu_possible_sizeid` INT(11) NOT NULL AUTO_INCREMENT,
   `menu_sizeid` INT(11) NOT NULL,
   `menuid` INT(11) NOT NULL,
   `price` DECIMAL(7,2) NULL,
-  PRIMARY KEY (`menues_possible_sizeid`, `menu_sizeid`, `menuid`),
+  PRIMARY KEY (`menu_possible_sizeid`, `menu_sizeid`, `menuid`),
   INDEX `fk_menues_possible_sizes_menues1_idx` (`menuid` ASC),
-  UNIQUE INDEX `menues_possible_sizeid_UNIQUE` (`menues_possible_sizeid` ASC),
+  UNIQUE INDEX `menues_possible_sizeid_UNIQUE` (`menu_possible_sizeid` ASC),
   CONSTRAINT `fk_menues_possible_sizes_menu_sizes1`
     FOREIGN KEY (`menu_sizeid`)
-    REFERENCES `menu_sizes` (`menu_sizeid`)
+    REFERENCES `menu_size` (`menu_sizeid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_menues_possible_sizes_menues1`
     FOREIGN KEY (`menuid`)
-    REFERENCES `menues` (`menuid`)
+    REFERENCES `menu` (`menuid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -340,26 +340,26 @@ COMMENT = 'Definiert, welche Größen für die verschiedene Speisen verfügbar i
 
 
 -- -----------------------------------------------------
--- Table `menues_possible_extras`
+-- Table `menu_possible_extra`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `menues_possible_extras` ;
+DROP TABLE IF EXISTS `menu_possible_extra` ;
 
-CREATE TABLE IF NOT EXISTS `menues_possible_extras` (
-  `menues_possible_extraid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `menu_possible_extra` (
+  `menu_possible_extraid` INT(11) NOT NULL AUTO_INCREMENT,
   `menu_extraid` INT(11) NOT NULL,
   `menuid` INT(11) NOT NULL,
   `price` DECIMAL(7,2) NOT NULL,
-  PRIMARY KEY (`menues_possible_extraid`, `menu_extraid`, `menuid`),
+  PRIMARY KEY (`menu_possible_extraid`, `menu_extraid`, `menuid`),
   INDEX `fk_menues_possible_extras_menues1_idx` (`menuid` ASC),
-  UNIQUE INDEX `menues_possible_extraid_UNIQUE` (`menues_possible_extraid` ASC),
+  UNIQUE INDEX `menues_possible_extraid_UNIQUE` (`menu_possible_extraid` ASC),
   CONSTRAINT `fk_menues_possible_extras_menu_extras1`
     FOREIGN KEY (`menu_extraid`)
-    REFERENCES `menu_extras` (`menu_extraid`)
+    REFERENCES `menu_extra` (`menu_extraid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_menues_possible_extras_menues1`
     FOREIGN KEY (`menuid`)
-    REFERENCES `menues` (`menuid`)
+    REFERENCES `menu` (`menuid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -367,24 +367,24 @@ COMMENT = 'Definiert, welche extras für die verschiedene Speisen/Getränke verf
 
 
 -- -----------------------------------------------------
--- Table `orders_detail_extras`
+-- Table `order_detail_extra`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `orders_detail_extras` ;
+DROP TABLE IF EXISTS `order_detail_extra` ;
 
-CREATE TABLE IF NOT EXISTS `orders_detail_extras` (
-  `orders_detailid` INT(11) NOT NULL,
-  `menues_possible_extraid` INT(11) NOT NULL,
-  PRIMARY KEY (`orders_detailid`, `menues_possible_extraid`),
-  INDEX `fk_orders_detail_sizes_menues_possible_extras1_idx` (`menues_possible_extraid` ASC),
-  UNIQUE INDEX `UNIQUE` (`orders_detailid` ASC, `menues_possible_extraid` ASC),
+CREATE TABLE IF NOT EXISTS `order_detail_extra` (
+  `order_detailid` INT(11) NOT NULL,
+  `menu_possible_extraid` INT(11) NOT NULL,
+  PRIMARY KEY (`order_detailid`, `menu_possible_extraid`),
+  INDEX `fk_orders_detail_sizes_menues_possible_extras1_idx` (`menu_possible_extraid` ASC),
+  UNIQUE INDEX `UNIQUE` (`order_detailid` ASC, `menu_possible_extraid` ASC),
   CONSTRAINT `fk_orders_detail_sizes_orders_details1`
-    FOREIGN KEY (`orders_detailid`)
-    REFERENCES `orders_details` (`orders_detailid`)
+    FOREIGN KEY (`order_detailid`)
+    REFERENCES `order_detail` (`order_detailid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_detail_sizes_menues_possible_extras1`
-    FOREIGN KEY (`menues_possible_extraid`)
-    REFERENCES `menues_possible_extras` (`menues_possible_extraid`)
+    FOREIGN KEY (`menu_possible_extraid`)
+    REFERENCES `menu_possible_extra` (`menu_possible_extraid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -392,23 +392,23 @@ COMMENT = 'Gibt an welches Extra einer Speise/eines Getränkens bestellt worden 
 
 
 -- -----------------------------------------------------
--- Table `orders_details_mixed_with`
+-- Table `order_detail_mixed_with`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `orders_details_mixed_with` ;
+DROP TABLE IF EXISTS `order_detail_mixed_with` ;
 
-CREATE TABLE IF NOT EXISTS `orders_details_mixed_with` (
-  `orders_detailid` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `order_detail_mixed_with` (
+  `order_detailid` INT(11) NOT NULL,
   `menuid` INT(11) NOT NULL,
-  PRIMARY KEY (`orders_detailid`, `menuid`),
+  PRIMARY KEY (`order_detailid`, `menuid`),
   INDEX `fk_orders_details_mixed_with_menues1_idx` (`menuid` ASC),
   CONSTRAINT `fk_orders_details_mixed_with_orders_details1`
-    FOREIGN KEY (`orders_detailid`)
-    REFERENCES `orders_details` (`orders_detailid`)
+    FOREIGN KEY (`order_detailid`)
+    REFERENCES `order_detail` (`order_detailid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_mixed_with_menues1`
     FOREIGN KEY (`menuid`)
-    REFERENCES `menues` (`menuid`)
+    REFERENCES `menu` (`menuid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -431,35 +431,35 @@ COMMENT = 'Enthält die Zugriffsrechte, die Benutzer haben können';
 
 
 -- -----------------------------------------------------
--- Table `orders_in_progress`
+-- Table `order_in_progress`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `orders_in_progress` ;
+DROP TABLE IF EXISTS `order_in_progress` ;
 
-CREATE TABLE IF NOT EXISTS `orders_in_progress` (
-  `orders_in_progressid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `order_in_progress` (
+  `order_in_progressid` INT(11) NOT NULL,
   `orderid` INT(11) NOT NULL,
   `userid` INT(11) NOT NULL,
   `menu_groupid` INT(11) NOT NULL,
   `begin` DATETIME NOT NULL,
   `done` DATETIME NULL,
-  PRIMARY KEY (`orders_in_progressid`, `orderid`, `userid`, `menu_groupid`),
-  UNIQUE INDEX `orders_in_progressid_UNIQUE` (`orders_in_progressid` ASC),
+  PRIMARY KEY (`order_in_progressid`, `orderid`, `userid`, `menu_groupid`),
+  UNIQUE INDEX `orders_in_progressid_UNIQUE` (`order_in_progressid` ASC),
   INDEX `fk_orders_in_progress_orders1_idx` (`orderid` ASC),
   INDEX `fk_orders_in_progress_users1_idx` (`userid` ASC),
   INDEX `fk_orders_in_progress_menu_groupes1_idx` (`menu_groupid` ASC),
   CONSTRAINT `fk_orders_in_progress_orders1`
     FOREIGN KEY (`orderid`)
-    REFERENCES `orders` (`orderid`)
+    REFERENCES `order` (`orderid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_in_progress_users1`
     FOREIGN KEY (`userid`)
-    REFERENCES `users` (`userid`)
+    REFERENCES `user` (`userid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_in_progress_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
-    REFERENCES `menu_groupes` (`menu_groupid`)
+    REFERENCES `menu_group` (`menu_groupid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -467,29 +467,29 @@ COMMENT = 'Beschreibt, welche Teile aus einer Bestellung zurzeit in Arbeit ist (
 
 
 -- -----------------------------------------------------
--- Table `events_user`
+-- Table `event_user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `events_user` ;
+DROP TABLE IF EXISTS `event_user` ;
 
-CREATE TABLE IF NOT EXISTS `events_user` (
-  `events_userid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `event_user` (
+  `event_userid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `userid` INT(11) NOT NULL,
   `user_roles` TINYINT NOT NULL,
   `begin_money` DECIMAL NOT NULL,
-  PRIMARY KEY (`events_userid`, `eventid`, `userid`),
+  PRIMARY KEY (`event_userid`, `eventid`, `userid`),
   INDEX `fk_events_has_users_users1_idx` (`userid` ASC),
   INDEX `fk_events_has_users_events1_idx` (`eventid` ASC),
   UNIQUE INDEX `UNIQUE` (`eventid` ASC, `userid` ASC),
-  UNIQUE INDEX `events_userid_UNIQUE` (`events_userid` ASC),
+  UNIQUE INDEX `events_userid_UNIQUE` (`event_userid` ASC),
   CONSTRAINT `fk_events_has_users_events1`
     FOREIGN KEY (`eventid`)
-    REFERENCES `events` (`eventid`)
+    REFERENCES `event` (`eventid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_events_has_users_users1`
     FOREIGN KEY (`userid`)
-    REFERENCES `users` (`userid`)
+    REFERENCES `user` (`userid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -497,20 +497,20 @@ COMMENT = 'Beschreibt welche Benutzer bei welchem Event, welche Rechte haben. Be
 
 
 -- -----------------------------------------------------
--- Table `distributions_places`
+-- Table `distribution_place`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `distributions_places` ;
+DROP TABLE IF EXISTS `distribution_place` ;
 
-CREATE TABLE IF NOT EXISTS `distributions_places` (
-  `distributions_placeid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `distribution_place` (
+  `distribution_placeid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
-  PRIMARY KEY (`distributions_placeid`, `eventid`),
-  UNIQUE INDEX `events_distribution_placeid_UNIQUE` (`distributions_placeid` ASC),
+  PRIMARY KEY (`distribution_placeid`, `eventid`),
+  UNIQUE INDEX `events_distribution_placeid_UNIQUE` (`distribution_placeid` ASC),
   INDEX `fk_events_distribution_places_events1_idx` (`eventid` ASC),
   CONSTRAINT `fk_events_distribution_places_events1`
     FOREIGN KEY (`eventid`)
-    REFERENCES `events` (`eventid`)
+    REFERENCES `event` (`eventid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -518,24 +518,24 @@ COMMENT = 'Beinhaltelt die Ausgabestellen, die es auf einem Event gibt. n';
 
 
 -- -----------------------------------------------------
--- Table `events_printers`
+-- Table `event_printer`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `events_printers` ;
+DROP TABLE IF EXISTS `event_printer` ;
 
-CREATE TABLE IF NOT EXISTS `events_printers` (
-  `events_printerid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `event_printer` (
+  `event_printerid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
   `ip` VARCHAR(15) NOT NULL,
   `port` SMALLINT UNSIGNED NOT NULL,
   `default` TINYINT(1) NOT NULL,
   `characters_per_row` TINYINT NOT NULL,
-  PRIMARY KEY (`events_printerid`, `eventid`),
-  UNIQUE INDEX `printerid_UNIQUE` (`events_printerid` ASC),
+  PRIMARY KEY (`event_printerid`, `eventid`),
+  UNIQUE INDEX `printerid_UNIQUE` (`event_printerid` ASC),
   INDEX `fk_printers_events1_idx` (`eventid` ASC),
   CONSTRAINT `fk_printers_events1`
     FOREIGN KEY (`eventid`)
-    REFERENCES `events` (`eventid`)
+    REFERENCES `event` (`eventid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -543,24 +543,24 @@ COMMENT = 'Enthält die IP:Port der Drucker, die bei einem Event zur verfügung 
 
 
 -- -----------------------------------------------------
--- Table `distributions_places_groupes`
+-- Table `distribution_place_groupe`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `distributions_places_groupes` ;
+DROP TABLE IF EXISTS `distribution_place_groupe` ;
 
-CREATE TABLE IF NOT EXISTS `distributions_places_groupes` (
-  `distributions_placeid` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `distribution_place_groupe` (
+  `distribution_placeid` INT(11) NOT NULL,
   `menu_groupid` INT(11) NOT NULL,
-  PRIMARY KEY (`distributions_placeid`, `menu_groupid`),
+  PRIMARY KEY (`distribution_placeid`, `menu_groupid`),
   INDEX `fk_distributions_places_has_menu_groupes_menu_groupes1_idx` (`menu_groupid` ASC),
-  INDEX `fk_distributions_places_has_menu_groupes_distributions_plac_idx` (`distributions_placeid` ASC),
+  INDEX `fk_distributions_places_has_menu_groupes_distributions_plac_idx` (`distribution_placeid` ASC),
   CONSTRAINT `fk_distributions_places_has_menu_groupes_distributions_places1`
-    FOREIGN KEY (`distributions_placeid`)
-    REFERENCES `distributions_places` (`distributions_placeid`)
+    FOREIGN KEY (`distribution_placeid`)
+    REFERENCES `distribution_place` (`distribution_placeid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_distributions_places_has_menu_groupes_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
-    REFERENCES `menu_groupes` (`menu_groupid`)
+    REFERENCES `menu_group` (`menu_groupid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -568,31 +568,31 @@ COMMENT = 'Definiert, welche Ausgaben bei einer Ausgabestelle gemacht werden (Es
 
 
 -- -----------------------------------------------------
--- Table `distributions_places_users`
+-- Table `distribution_place_user`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `distributions_places_users` ;
+DROP TABLE IF EXISTS `distribution_place_user` ;
 
-CREATE TABLE IF NOT EXISTS `distributions_places_users` (
-  `distributions_placeid` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `distribution_place_user` (
+  `distribution_placeid` INT(11) NOT NULL,
   `userid` INT(11) NOT NULL,
-  `events_printerid` INT(11) NOT NULL,
-  PRIMARY KEY (`distributions_placeid`, `userid`, `events_printerid`),
+  `event_printerid` INT(11) NOT NULL,
+  PRIMARY KEY (`distribution_placeid`, `userid`, `event_printerid`),
   INDEX `fk_distributions_places_has_users_users1_idx` (`userid` ASC),
-  INDEX `fk_distributions_places_has_users_distributions_places1_idx` (`distributions_placeid` ASC),
-  INDEX `fk_distributions_places_users_events_printers1_idx` (`events_printerid` ASC),
+  INDEX `fk_distributions_places_has_users_distributions_places1_idx` (`distribution_placeid` ASC),
+  INDEX `fk_distributions_places_users_events_printers1_idx` (`event_printerid` ASC),
   CONSTRAINT `fk_distributions_places_has_users_distributions_places1`
-    FOREIGN KEY (`distributions_placeid`)
-    REFERENCES `distributions_places` (`distributions_placeid`)
+    FOREIGN KEY (`distribution_placeid`)
+    REFERENCES `distribution_place` (`distribution_placeid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_distributions_places_has_users_users1`
     FOREIGN KEY (`userid`)
-    REFERENCES `users` (`userid`)
+    REFERENCES `user` (`userid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_distributions_places_users_events_printers1`
-    FOREIGN KEY (`events_printerid`)
-    REFERENCES `events_printers` (`events_printerid`)
+    FOREIGN KEY (`event_printerid`)
+    REFERENCES `event_printer` (`event_printerid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -600,31 +600,31 @@ COMMENT = 'Definiert, welcher Benutzer zugriff auf die Ausgabestelle hat bzw. si
 
 
 -- -----------------------------------------------------
--- Table `distributions_places_tables`
+-- Table `distribution_place_table`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `distributions_places_tables` ;
+DROP TABLE IF EXISTS `distribution_place_table` ;
 
-CREATE TABLE IF NOT EXISTS `distributions_places_tables` (
-  `tableid` INT(11) NOT NULL,
-  `distributions_placeid` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `distribution_place_table` (
+  `event_tableid` INT(11) NOT NULL,
+  `distribution_placeid` INT(11) NOT NULL,
   `menu_groupid` INT(11) NOT NULL,
-  PRIMARY KEY (`tableid`, `distributions_placeid`, `menu_groupid`),
-  INDEX `fk_tables_has_distributions_places_distributions_places1_idx` (`distributions_placeid` ASC),
-  INDEX `fk_tables_has_distributions_places_tables1_idx` (`tableid` ASC),
+  PRIMARY KEY (`event_tableid`, `distribution_placeid`, `menu_groupid`),
+  INDEX `fk_tables_has_distributions_places_distributions_places1_idx` (`distribution_placeid` ASC),
+  INDEX `fk_tables_has_distributions_places_tables1_idx` (`event_tableid` ASC),
   INDEX `fk_distributions_places_tables_menu_groupes1_idx` (`menu_groupid` ASC),
   CONSTRAINT `fk_tables_has_distributions_places_tables1`
-    FOREIGN KEY (`tableid`)
-    REFERENCES `events_tables` (`events_tableid`)
+    FOREIGN KEY (`event_tableid`)
+    REFERENCES `event_table` (`event_tableid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tables_has_distributions_places_distributions_places1`
-    FOREIGN KEY (`distributions_placeid`)
-    REFERENCES `distributions_places` (`distributions_placeid`)
+    FOREIGN KEY (`distribution_placeid`)
+    REFERENCES `distribution_place` (`distribution_placeid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_distributions_places_tables_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
-    REFERENCES `menu_groupes` (`menu_groupid`)
+    REFERENCES `menu_group` (`menu_groupid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -632,11 +632,11 @@ COMMENT = 'Definiert welche tische standartmäßg von wo ihre Menüs erhalten. J
 
 
 -- -----------------------------------------------------
--- Table `invoices`
+-- Table `invoice`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `invoices` ;
+DROP TABLE IF EXISTS `invoice` ;
 
-CREATE TABLE IF NOT EXISTS `invoices` (
+CREATE TABLE IF NOT EXISTS `invoice` (
   `invoiceid` INT(11) NOT NULL AUTO_INCREMENT,
   `cashier_userid` INT(11) NOT NULL,
   `date` DATETIME NOT NULL,
@@ -646,7 +646,7 @@ CREATE TABLE IF NOT EXISTS `invoices` (
   INDEX `fk_invoices_users1_idx` (`cashier_userid` ASC),
   CONSTRAINT `fk_invoices_users1`
     FOREIGN KEY (`cashier_userid`)
-    REFERENCES `users` (`userid`)
+    REFERENCES `user` (`userid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -654,31 +654,31 @@ COMMENT = 'Beinhaltet die Rechnungsnummer mit dem Aussstellungsdatum, die es gib
 
 
 -- -----------------------------------------------------
--- Table `invoices_items`
+-- Table `invoice_item`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `invoices_items` ;
+DROP TABLE IF EXISTS `invoice_item` ;
 
-CREATE TABLE IF NOT EXISTS `invoices_items` (
-  `invoices_itemid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `invoice_item` (
+  `invoice_itemid` INT(11) NOT NULL AUTO_INCREMENT,
   `invoiceid` INT(11) NOT NULL,
-  `orders_detailid` INT(11) NOT NULL,
+  `order_detailid` INT(11) NOT NULL,
   `amount` TINYINT NOT NULL,
   `price` DECIMAL(7,2) NOT NULL,
   `description` VARCHAR(255) NOT NULL,
   `tax` SMALLINT NOT NULL,
-  PRIMARY KEY (`invoices_itemid`, `invoiceid`, `orders_detailid`),
-  INDEX `fk_invoices_has_orders_details_orders_details1_idx` (`orders_detailid` ASC),
+  PRIMARY KEY (`invoice_itemid`, `invoiceid`, `order_detailid`),
+  INDEX `fk_invoices_has_orders_details_orders_details1_idx` (`order_detailid` ASC),
   INDEX `fk_invoices_has_orders_details_invoices1_idx` (`invoiceid` ASC),
   INDEX `idx_amount` (`amount` ASC),
-  UNIQUE INDEX `invoices_orders_detailsid_UNIQUE` (`invoices_itemid` ASC),
+  UNIQUE INDEX `invoices_orders_detailsid_UNIQUE` (`invoice_itemid` ASC),
   CONSTRAINT `fk_invoices_has_orders_details_invoices1`
     FOREIGN KEY (`invoiceid`)
-    REFERENCES `invoices` (`invoiceid`)
+    REFERENCES `invoice` (`invoiceid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_invoices_has_orders_details_orders_details1`
-    FOREIGN KEY (`orders_detailid`)
-    REFERENCES `orders_details` (`orders_detailid`)
+    FOREIGN KEY (`order_detailid`)
+    REFERENCES `order_detail` (`order_detailid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -686,47 +686,47 @@ COMMENT = 'Beinhaltet die Zeilen einer Rechnung. Gibt an wieviel, von einer Best
 
 
 -- -----------------------------------------------------
--- Table `distributions_giving_outs`
+-- Table `distribution_giving_out`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `distributions_giving_outs` ;
+DROP TABLE IF EXISTS `distribution_giving_out` ;
 
-CREATE TABLE IF NOT EXISTS `distributions_giving_outs` (
-  `distributions_giving_outid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `distribution_giving_out` (
+  `distribution_giving_outid` INT(11) NOT NULL AUTO_INCREMENT,
   `date` DATETIME NOT NULL,
-  PRIMARY KEY (`distributions_giving_outid`),
-  UNIQUE INDEX `distribution_givin_outid_UNIQUE` (`distributions_giving_outid` ASC))
+  PRIMARY KEY (`distribution_giving_outid`),
+  UNIQUE INDEX `distribution_givin_outid_UNIQUE` (`distribution_giving_outid` ASC))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `orders_in_progress_recieved`
+-- Table `order_in_progress_recieved`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `orders_in_progress_recieved` ;
+DROP TABLE IF EXISTS `order_in_progress_recieved` ;
 
-CREATE TABLE IF NOT EXISTS `orders_in_progress_recieved` (
-  `orders_in_progress_recievedid` INT(11) NOT NULL AUTO_INCREMENT,
-  `orders_detailid` INT(11) NOT NULL,
-  `orders_in_progressid` INT(11) NOT NULL,
-  `distributions_giving_outid` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `order_in_progress_recieved` (
+  `order_in_progress_recievedid` INT(11) NOT NULL AUTO_INCREMENT,
+  `order_detailid` INT(11) NOT NULL,
+  `order_in_progressid` INT(11) NOT NULL,
+  `distribution_giving_outid` INT(11) NOT NULL,
   `amount` TINYINT NOT NULL,
-  PRIMARY KEY (`orders_in_progress_recievedid`, `orders_detailid`, `orders_in_progressid`, `distributions_giving_outid`),
-  INDEX `fk_orders_details_has_orders_in_progress_orders_in_progress_idx` (`orders_in_progressid` ASC),
-  INDEX `fk_orders_details_has_orders_in_progress_orders_details1_idx` (`orders_detailid` ASC),
-  UNIQUE INDEX `orders_in_progress_recievedid_UNIQUE` (`orders_in_progress_recievedid` ASC),
-  INDEX `fk_orders_in_progress_recieved_distribution_givin_out1_idx` (`distributions_giving_outid` ASC),
+  PRIMARY KEY (`order_in_progress_recievedid`, `order_detailid`, `order_in_progressid`, `distribution_giving_outid`),
+  INDEX `fk_orders_details_has_orders_in_progress_orders_in_progress_idx` (`order_in_progressid` ASC),
+  INDEX `fk_orders_details_has_orders_in_progress_orders_details1_idx` (`order_detailid` ASC),
+  UNIQUE INDEX `orders_in_progress_recievedid_UNIQUE` (`order_in_progress_recievedid` ASC),
+  INDEX `fk_orders_in_progress_recieved_distribution_givin_out1_idx` (`distribution_giving_outid` ASC),
   CONSTRAINT `fk_orders_details_has_orders_in_progress_orders_details1`
-    FOREIGN KEY (`orders_detailid`)
-    REFERENCES `orders_details` (`orders_detailid`)
+    FOREIGN KEY (`order_detailid`)
+    REFERENCES `order_detail` (`order_detailid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_details_has_orders_in_progress_orders_in_progress1`
-    FOREIGN KEY (`orders_in_progressid`)
-    REFERENCES `orders_in_progress` (`orders_in_progressid`)
+    FOREIGN KEY (`order_in_progressid`)
+    REFERENCES `order_in_progress` (`order_in_progressid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_in_progress_recieved_distribution_givin_out1`
-    FOREIGN KEY (`distributions_giving_outid`)
-    REFERENCES `distributions_giving_outs` (`distributions_giving_outid`)
+    FOREIGN KEY (`distribution_giving_outid`)
+    REFERENCES `distribution_giving_out` (`distribution_giving_outid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -734,30 +734,30 @@ COMMENT = 'Gibt an, wann und wieviel ein Kunde bereits von seiner Bestellung erh
 
 
 -- -----------------------------------------------------
--- Table `users_messages`
+-- Table `user_message`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `users_messages` ;
+DROP TABLE IF EXISTS `user_message` ;
 
-CREATE TABLE IF NOT EXISTS `users_messages` (
-  `users_messageid` INT(11) NOT NULL AUTO_INCREMENT,
-  `from_events_userid` INT(11) NULL,
-  `to_events_userid` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `user_message` (
+  `user_messageid` INT(11) NOT NULL,
+  `from_event_userid` INT(11) NULL,
+  `to_event_userid` INT(11) NOT NULL,
   `message` TEXT NOT NULL,
   `date` DATETIME NOT NULL,
   `readed` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`users_messageid`, `to_events_userid`),
-  UNIQUE INDEX `users_chatid_UNIQUE` (`users_messageid` ASC),
-  INDEX `fk_users_chat_events_user1_idx` (`from_events_userid` ASC),
-  INDEX `fk_users_chat_events_user2_idx` (`to_events_userid` ASC),
+  PRIMARY KEY (`user_messageid`, `to_event_userid`),
+  UNIQUE INDEX `users_chatid_UNIQUE` (`user_messageid` ASC),
+  INDEX `fk_users_chat_events_user1_idx` (`from_event_userid` ASC),
+  INDEX `fk_users_chat_events_user2_idx` (`to_event_userid` ASC),
   INDEX `index5` (`date` ASC),
   CONSTRAINT `fk_users_chat_events_user1`
-    FOREIGN KEY (`from_events_userid`)
-    REFERENCES `events_user` (`events_userid`)
+    FOREIGN KEY (`from_event_userid`)
+    REFERENCES `event_user` (`event_userid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_users_chat_events_user2`
-    FOREIGN KEY (`to_events_userid`)
-    REFERENCES `events_user` (`events_userid`)
+    FOREIGN KEY (`to_event_userid`)
+    REFERENCES `event_user` (`event_userid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -765,24 +765,24 @@ COMMENT = 'Beinhaltet die Kommunikationsnachrichten zwischen den Benutzern für 
 
 
 -- -----------------------------------------------------
--- Table `payment_types`
+-- Table `payment_type`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `payment_types` ;
+DROP TABLE IF EXISTS `payment_type` ;
 
-CREATE TABLE IF NOT EXISTS `payment_types` (
-  `idpayment_typeid` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `payment_type` (
+  `payment_typeid` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(24) NOT NULL,
-  PRIMARY KEY (`idpayment_typeid`),
-  UNIQUE INDEX `idpayment_typeid_UNIQUE` (`idpayment_typeid` ASC))
+  PRIMARY KEY (`payment_typeid`),
+  UNIQUE INDEX `idpayment_typeid_UNIQUE` (`payment_typeid` ASC))
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `payments`
+-- Table `payment`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `payments` ;
+DROP TABLE IF EXISTS `payment` ;
 
-CREATE TABLE IF NOT EXISTS `payments` (
+CREATE TABLE IF NOT EXISTS `payment` (
   `paymentid` INT UNSIGNED NOT NULL,
   `payment_typeid` INT NOT NULL,
   `invoiceid` INT(11) NOT NULL,
@@ -794,23 +794,23 @@ CREATE TABLE IF NOT EXISTS `payments` (
   INDEX `fk_payment_types_has_invoices_payment_types1_idx` (`payment_typeid` ASC),
   CONSTRAINT `fk_payment_types_has_invoices_payment_types1`
     FOREIGN KEY (`payment_typeid`)
-    REFERENCES `payment_types` (`idpayment_typeid`)
+    REFERENCES `payment_type` (`payment_typeid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_payment_types_has_invoices_invoices1`
     FOREIGN KEY (`invoiceid`)
-    REFERENCES `invoices` (`invoiceid`)
+    REFERENCES `invoice` (`invoiceid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Coupons`
+-- Table `Coupon`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `Coupons` ;
+DROP TABLE IF EXISTS `Coupon` ;
 
-CREATE TABLE IF NOT EXISTS `Coupons` (
+CREATE TABLE IF NOT EXISTS `Coupon` (
   `couponid` INT NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `created_by` INT(11) NOT NULL,
@@ -822,23 +822,23 @@ CREATE TABLE IF NOT EXISTS `Coupons` (
   INDEX `fk_Coupons_users1_idx` (`created_by` ASC),
   CONSTRAINT `fk_Coupons_events1`
     FOREIGN KEY (`eventid`)
-    REFERENCES `events` (`eventid`)
+    REFERENCES `event` (`eventid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Coupons_users1`
     FOREIGN KEY (`created_by`)
-    REFERENCES `users` (`userid`)
+    REFERENCES `user` (`userid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `payments_coupons`
+-- Table `payment_coupon`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `payments_coupons` ;
+DROP TABLE IF EXISTS `payment_coupon` ;
 
-CREATE TABLE IF NOT EXISTS `payments_coupons` (
+CREATE TABLE IF NOT EXISTS `payment_coupon` (
   `couponid` INT NOT NULL,
   `paymentid` INT UNSIGNED NOT NULL,
   `value_used` DECIMAL(7,2) NOT NULL,
@@ -847,44 +847,44 @@ CREATE TABLE IF NOT EXISTS `payments_coupons` (
   INDEX `fk_Coupons_has_payments_Coupons1_idx` (`couponid` ASC),
   CONSTRAINT `fk_Coupons_has_payments_Coupons1`
     FOREIGN KEY (`couponid`)
-    REFERENCES `Coupons` (`couponid`)
+    REFERENCES `Coupon` (`couponid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Coupons_has_payments_payments1`
     FOREIGN KEY (`paymentid`)
-    REFERENCES `payments` (`paymentid`)
+    REFERENCES `payment` (`paymentid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Placeholder table for view `orders_details_open`
+-- Placeholder table for view `order_detail_open`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `orders_details_open` (`orderid` INT, `orders_detailid` INT, `menuid` INT, `amount` INT, `single_price` INT, `extra_detail` INT, `amount_payed` INT);
+CREATE TABLE IF NOT EXISTS `order_detail_open` (`orderid` INT, `order_detailid` INT, `menuid` INT, `amount` INT, `single_price` INT, `extra_detail` INT, `amount_payed` INT);
 
 -- -----------------------------------------------------
--- procedure open_orders_priority
+-- procedure open_order_priority
 -- -----------------------------------------------------
-DROP procedure IF EXISTS `open_orders_priority`;
+DROP procedure IF EXISTS `open_order_priority`;
 
 DELIMITER $$
-CREATE PROCEDURE `open_orders_priority` ()
+CREATE PROCEDURE `open_order_priority` ()
 BEGIN
 SET @rank:=0, @last_menu_groupid:=0, @last_orderid:=0;
-DROP TABLE IF EXISTS tmp_open_orders_priority;
-CREATE TEMPORARY TABLE tmp_open_orders_priority AS (
-SELECT t.orders_detailid, t.menu_groupid, t.orderid,
+DROP TABLE IF EXISTS tmp_open_order_priority;
+CREATE TEMPORARY TABLE tmp_open_order_priority AS (
+SELECT t.order_detailid, t.menu_groupid, t.orderid,
 		IF(@last_menu_groupid != t.menu_groupid, @rank:=0, null) AS tmp1,
         IF(@last_orderid != t.orderid, @rank:=@rank+1, null) AS tmp2,
 		IF(@last_menu_groupid != t.menu_groupid, @last_menu_groupid := t.menu_groupid, null) AS tmp3,
         IF(@last_orderid != t.orderid, @last_orderid := t.orderid, null) AS tmp4,
         @rank AS rank
-FROM (SELECT orders_detailid, menu_groupid, priority, orderid
-FROM (SELECT od.orders_detailid, m.menu_groupid, o.priority, o.orderid
-			 FROM orders o
-			 INNER JOIN orders_details od ON od.orderid = o.orderid AND od.finished IS NULL
-			 INNER JOIN menues m ON m.menuid = od.menuid
+FROM (SELECT order_detailid, menu_groupid, priority, orderid
+FROM (SELECT od.order_detailid, m.menu_groupid, o.priority, o.orderid
+			 FROM `order` o
+			 INNER JOIN order_details od ON od.orderid = o.orderid AND od.finished IS NULL
+			 INNER JOIN menu m ON m.menuid = od.menuid
 			 WHERE o.finished IS NULL) f
 	  ORDER BY  menu_groupid ASC, priority ASC
       LIMIT 18446744073709551615) t);
@@ -893,24 +893,24 @@ END$$
 DELIMITER ;
 
 -- -----------------------------------------------------
--- View `orders_details_open`
+-- View `order_detail_open`
 -- -----------------------------------------------------
-DROP VIEW IF EXISTS `orders_details_open` ;
-DROP TABLE IF EXISTS `orders_details_open`;
-CREATE  OR REPLACE VIEW `orders_details_open` AS
+DROP VIEW IF EXISTS `order_detail_open` ;
+DROP TABLE IF EXISTS `order_detail_open`;
+CREATE  OR REPLACE VIEW `order_detail_open` AS
 SELECT od.orderid, 
-		od.orders_detailid,
+		od.order_detailid,
 		od.menuid,
 		od.amount,
 		od.single_price,
 		od.extra_detail,
 		(SELECT COALESCE(SUM(iod.amount), 0)
-		 FROM invoices_items iod
-		 WHERE iod.orders_detailid = od.orders_detailid) AS amount_payed
- FROM orders_details od
+		 FROM invoice_item iod
+		 WHERE iod.order_detailid = od.order_detailid) AS amount_payed
+ FROM order_detail od
  WHERE od.amount <> (SELECT COALESCE(SUM(iod2.amount), 0)
-						 FROM invoices_items iod2
-						 WHERE iod2.orders_detailid = od.orders_detailid);
+						 FROM invoice_item iod2
+						 WHERE iod2.order_detailid = od.order_detailid);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

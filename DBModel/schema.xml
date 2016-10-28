@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database name="default" defaultIdMethod="native" defaultPhpNamingMethod="underscore">
-  <table name="availabilitys" idMethod="native" phpName="Availabilitys" namespace="API\Models\Menues">
+  <table name="availability" idMethod="native" phpName="Availability" namespace="API\Models\Menu">
     <column name="availabilityid" phpName="Availabilityid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="24" required="true"/>
     <unique name="availabilityid_UNIQUE">
@@ -10,17 +10,17 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="coupons" idMethod="native" phpName="Coupons" namespace="API\Models\Payment">
+  <table name="coupon" idMethod="native" phpName="Coupon" namespace="API\Models\Payment">
     <column name="couponid" phpName="Couponid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="created_by" phpName="CreatedBy" type="INTEGER" primaryKey="true" required="true"/>
     <column name="code" phpName="Code" type="VARCHAR" size="24" required="true"/>
     <column name="created" phpName="Created" type="TIMESTAMP" required="true"/>
     <column name="value" phpName="Value" type="DECIMAL" size="7" scale="2" required="true"/>
-    <foreign-key foreignTable="events" name="fk_Coupons_events1">
+    <foreign-key foreignTable="event" name="fk_Coupons_events1">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
-    <foreign-key foreignTable="users" name="fk_Coupons_users1">
+    <foreign-key foreignTable="user" name="fk_Coupons_users1">
       <reference local="created_by" foreign="userid"/>
     </foreign-key>
     <index name="fk_Coupons_events1_idx">
@@ -33,70 +33,70 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distributions_giving_outs" idMethod="native" phpName="DistributionsGivingOuts" namespace="API\Models\OIP">
-    <column name="distributions_giving_outid" phpName="DistributionsGivingOutid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+  <table name="distribution_giving_out" idMethod="native" phpName="DistributionGivingOut" namespace="API\Models\OIP">
+    <column name="distribution_giving_outid" phpName="DistributionGivingOutid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <unique name="distribution_givin_outid_UNIQUE">
-      <unique-column name="distributions_giving_outid"/>
+      <unique-column name="distribution_giving_outid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distributions_places" idMethod="native" phpName="DistributionsPlaces" namespace="API\Models\DistributionPlace">
-    <column name="distributions_placeid" phpName="DistributionsPlaceid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+  <table name="distribution_place" idMethod="native" phpName="DistributionPlace" namespace="API\Models\DistributionPlace">
+    <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
-    <foreign-key foreignTable="events" name="fk_events_distribution_places_events1" onDelete="CASCADE">
+    <foreign-key foreignTable="event" name="fk_events_distribution_places_events1" onDelete="CASCADE">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
     <index name="fk_events_distribution_places_events1_idx">
       <index-column name="eventid"/>
     </index>
     <unique name="events_distribution_placeid_UNIQUE">
-      <unique-column name="distributions_placeid"/>
+      <unique-column name="distribution_placeid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distributions_places_groupes" idMethod="native" phpName="DistributionsPlacesGroupes" namespace="API\Models\DistributionPlace">
-    <column name="distributions_placeid" phpName="DistributionsPlaceid" type="INTEGER" primaryKey="true" required="true"/>
+  <table name="distribution_place_groupe" idMethod="native" phpName="DistributionPlaceGroupe" namespace="API\Models\DistributionPlace">
+    <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
-    <foreign-key foreignTable="distributions_places" name="fk_distributions_places_has_menu_groupes_distributions_places1" onDelete="CASCADE">
-      <reference local="distributions_placeid" foreign="distributions_placeid"/>
+    <foreign-key foreignTable="distribution_place" name="fk_distributions_places_has_menu_groupes_distributions_places1" onDelete="CASCADE">
+      <reference local="distribution_placeid" foreign="distribution_placeid"/>
     </foreign-key>
-    <foreign-key foreignTable="menu_groupes" name="fk_distributions_places_has_menu_groupes_menu_groupes1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_group" name="fk_distributions_places_has_menu_groupes_menu_groupes1" onDelete="CASCADE">
       <reference local="menu_groupid" foreign="menu_groupid"/>
     </foreign-key>
     <index name="fk_distributions_places_has_menu_groupes_menu_groupes1_idx">
       <index-column name="menu_groupid"/>
     </index>
     <index name="fk_distributions_places_has_menu_groupes_distributions_plac_idx">
-      <index-column name="distributions_placeid"/>
+      <index-column name="distribution_placeid"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distributions_places_tables" idMethod="native" phpName="DistributionsPlacesTables" namespace="API\Models\DistributionPlace">
-    <column name="tableid" phpName="Tableid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="distributions_placeid" phpName="DistributionsPlaceid" type="INTEGER" primaryKey="true" required="true"/>
+  <table name="distribution_place_table" idMethod="native" phpName="DistributionPlaceTable" namespace="API\Models\DistributionPlace">
+    <column name="event_tableid" phpName="EventTableid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
-    <foreign-key foreignTable="menu_groupes" name="fk_distributions_places_tables_menu_groupes1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_group" name="fk_distributions_places_tables_menu_groupes1" onDelete="CASCADE">
       <reference local="menu_groupid" foreign="menu_groupid"/>
     </foreign-key>
-    <foreign-key foreignTable="distributions_places" name="fk_tables_has_distributions_places_distributions_places1" onDelete="CASCADE">
-      <reference local="distributions_placeid" foreign="distributions_placeid"/>
+    <foreign-key foreignTable="distribution_place" name="fk_tables_has_distributions_places_distributions_places1" onDelete="CASCADE">
+      <reference local="distribution_placeid" foreign="distribution_placeid"/>
     </foreign-key>
-    <foreign-key foreignTable="events_tables" name="fk_tables_has_distributions_places_tables1" onDelete="CASCADE">
-      <reference local="tableid" foreign="events_tableid"/>
+    <foreign-key foreignTable="event_table" name="fk_tables_has_distributions_places_tables1" onDelete="CASCADE">
+      <reference local="event_tableid" foreign="event_tableid"/>
     </foreign-key>
     <index name="fk_tables_has_distributions_places_distributions_places1_idx">
-      <index-column name="distributions_placeid"/>
+      <index-column name="distribution_placeid"/>
     </index>
     <index name="fk_tables_has_distributions_places_tables1_idx">
-      <index-column name="tableid"/>
+      <index-column name="event_tableid"/>
     </index>
     <index name="fk_distributions_places_tables_menu_groupes1_idx">
       <index-column name="menu_groupid"/>
@@ -105,33 +105,33 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distributions_places_users" idMethod="native" phpName="DistributionsPlacesUsers" namespace="API\Models\DistributionPlace">
-    <column name="distributions_placeid" phpName="DistributionsPlaceid" type="INTEGER" primaryKey="true" required="true"/>
+  <table name="distribution_place_user" idMethod="native" phpName="DistributionPlaceUser" namespace="API\Models\DistributionPlace">
+    <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="events_printerid" phpName="EventsPrinterid" type="INTEGER" primaryKey="true" required="true"/>
-    <foreign-key foreignTable="distributions_places" name="fk_distributions_places_has_users_distributions_places1" onDelete="CASCADE">
-      <reference local="distributions_placeid" foreign="distributions_placeid"/>
+    <column name="event_printerid" phpName="EventPrinterid" type="INTEGER" primaryKey="true" required="true"/>
+    <foreign-key foreignTable="distribution_place" name="fk_distributions_places_has_users_distributions_places1" onDelete="CASCADE">
+      <reference local="distribution_placeid" foreign="distribution_placeid"/>
     </foreign-key>
-    <foreign-key foreignTable="users" name="fk_distributions_places_has_users_users1" onDelete="CASCADE">
+    <foreign-key foreignTable="user" name="fk_distributions_places_has_users_users1" onDelete="CASCADE">
       <reference local="userid" foreign="userid"/>
     </foreign-key>
-    <foreign-key foreignTable="events_printers" name="fk_distributions_places_users_events_printers1" onDelete="CASCADE">
-      <reference local="events_printerid" foreign="events_printerid"/>
+    <foreign-key foreignTable="event_printer" name="fk_distributions_places_users_events_printers1" onDelete="CASCADE">
+      <reference local="event_printerid" foreign="event_printerid"/>
     </foreign-key>
     <index name="fk_distributions_places_has_users_users1_idx">
       <index-column name="userid"/>
     </index>
     <index name="fk_distributions_places_has_users_distributions_places1_idx">
-      <index-column name="distributions_placeid"/>
+      <index-column name="distribution_placeid"/>
     </index>
     <index name="fk_distributions_places_users_events_printers1_idx">
-      <index-column name="events_printerid"/>
+      <index-column name="event_printerid"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="events" idMethod="native" phpName="Events" namespace="API\Models\Event">
+  <table name="event" idMethod="native" phpName="Event" namespace="API\Models\Event">
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="45" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
@@ -146,33 +146,33 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="events_printers" idMethod="native" phpName="EventsPrinters" namespace="API\Models\Event">
-    <column name="events_printerid" phpName="EventsPrinterid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+  <table name="event_printer" idMethod="native" phpName="EventPrinter" namespace="API\Models\Event">
+    <column name="event_printerid" phpName="EventPrinterid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
     <column name="ip" phpName="Ip" type="VARCHAR" size="15" required="true"/>
     <column name="port" phpName="Port" type="SMALLINT" size="5" sqlType="smallint(5) unsigned" required="true"/>
     <column name="default" phpName="Default" type="BOOLEAN" size="1" required="true"/>
     <column name="characters_per_row" phpName="CharactersPerRow" type="TINYINT" required="true"/>
-    <foreign-key foreignTable="events" name="fk_printers_events1" onDelete="CASCADE">
+    <foreign-key foreignTable="event" name="fk_printers_events1" onDelete="CASCADE">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
     <index name="fk_printers_events1_idx">
       <index-column name="eventid"/>
     </index>
     <unique name="printerid_UNIQUE">
-      <unique-column name="events_printerid"/>
+      <unique-column name="event_printerid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="events_tables" idMethod="native" phpName="EventsTables" namespace="API\Models\Event">
-    <column name="events_tableid" phpName="EventsTableid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+  <table name="event_table" idMethod="native" phpName="EventTable" namespace="API\Models\Event">
+    <column name="event_tableid" phpName="EventTableid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="32" required="true"/>
     <column name="data" phpName="Data" type="VARCHAR" size="255"/>
-    <foreign-key foreignTable="events" name="fk_tables_events1">
+    <foreign-key foreignTable="event" name="fk_tables_events1">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
     <index name="tables_name">
@@ -182,22 +182,22 @@
       <index-column name="eventid"/>
     </index>
     <unique name="tableid_UNIQUE">
-      <unique-column name="events_tableid"/>
+      <unique-column name="event_tableid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="events_user" idMethod="native" phpName="EventsUser" namespace="API\Models\Event">
-    <column name="events_userid" phpName="EventsUserid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+  <table name="event_user" idMethod="native" phpName="EventUser" namespace="API\Models\Event">
+    <column name="event_userid" phpName="EventUserid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="user_roles" phpName="UserRoles" type="TINYINT" required="true"/>
     <column name="begin_money" phpName="BeginMoney" type="DECIMAL" scale="0" required="true"/>
-    <foreign-key foreignTable="events" name="fk_events_has_users_events1" onDelete="CASCADE">
+    <foreign-key foreignTable="event" name="fk_events_has_users_events1" onDelete="CASCADE">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
-    <foreign-key foreignTable="users" name="fk_events_has_users_users1" onDelete="CASCADE">
+    <foreign-key foreignTable="user" name="fk_events_has_users_users1" onDelete="CASCADE">
       <reference local="userid" foreign="userid"/>
     </foreign-key>
     <index name="fk_events_has_users_users1_idx">
@@ -211,18 +211,18 @@
       <unique-column name="userid"/>
     </unique>
     <unique name="events_userid_UNIQUE">
-      <unique-column name="events_userid"/>
+      <unique-column name="event_userid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="invoices" idMethod="native" phpName="Invoices" namespace="API\Models\Invoice">
+  <table name="invoice" idMethod="native" phpName="Invoice" namespace="API\Models\Invoice">
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="cashier_userid" phpName="CashierUserid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <column name="canceled" phpName="Canceled" type="TIMESTAMP"/>
-    <foreign-key foreignTable="users" name="fk_invoices_users1">
+    <foreign-key foreignTable="user" name="fk_invoices_users1">
       <reference local="cashier_userid" foreign="userid"/>
     </foreign-key>
     <index name="fk_invoices_users1_idx">
@@ -235,22 +235,22 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="invoices_items" idMethod="native" phpName="InvoicesItems" namespace="API\Models\Invoice">
-    <column name="invoices_itemid" phpName="InvoicesItemid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+  <table name="invoice_item" idMethod="native" phpName="InvoiceItem" namespace="API\Models\Invoice">
+    <column name="invoice_itemid" phpName="InvoiceItemid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="orders_detailid" phpName="OrdersDetailid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="amount" phpName="Amount" type="TINYINT" required="true"/>
     <column name="price" phpName="Price" type="DECIMAL" size="7" scale="2" required="true"/>
     <column name="description" phpName="Description" type="VARCHAR" size="255" required="true"/>
     <column name="tax" phpName="Tax" type="SMALLINT" required="true"/>
-    <foreign-key foreignTable="invoices" name="fk_invoices_has_orders_details_invoices1" onDelete="CASCADE">
+    <foreign-key foreignTable="invoice" name="fk_invoices_has_orders_details_invoices1" onDelete="CASCADE">
       <reference local="invoiceid" foreign="invoiceid"/>
     </foreign-key>
-    <foreign-key foreignTable="orders_details" name="fk_invoices_has_orders_details_orders_details1">
-      <reference local="orders_detailid" foreign="orders_detailid"/>
+    <foreign-key foreignTable="order_detail" name="fk_invoices_has_orders_details_orders_details1">
+      <reference local="order_detailid" foreign="order_detailid"/>
     </foreign-key>
     <index name="fk_invoices_has_orders_details_orders_details1_idx">
-      <index-column name="orders_detailid"/>
+      <index-column name="order_detailid"/>
     </index>
     <index name="fk_invoices_has_orders_details_invoices1_idx">
       <index-column name="invoiceid"/>
@@ -259,102 +259,23 @@
       <index-column name="amount"/>
     </index>
     <unique name="invoices_orders_detailsid_UNIQUE">
-      <unique-column name="invoices_itemid"/>
+      <unique-column name="invoice_itemid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="menu_extras" idMethod="native" phpName="MenuExtras" namespace="API\Models\Menues">
-    <column name="menu_extraid" phpName="MenuExtraid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
-    <column name="availabilityid" phpName="Availabilityid" type="INTEGER" required="true"/>
-    <column name="availability_amount" phpName="AvailabilityAmount" type="SMALLINT" size="5" sqlType="smallint(5) unsigned"/>
-    <foreign-key foreignTable="availabilitys" name="fk_menu_extras_availabilitys1">
-      <reference local="availabilityid" foreign="availabilityid"/>
-    </foreign-key>
-    <foreign-key foreignTable="events" name="fk_menu_extras_events1" onDelete="CASCADE">
-      <reference local="eventid" foreign="eventid"/>
-    </foreign-key>
-    <index name="fk_menu_extras_events1_idx">
-      <index-column name="eventid"/>
-    </index>
-    <index name="fk_menu_extras_availabilitys1_idx">
-      <index-column name="availabilityid"/>
-    </index>
-    <unique name="menu_extraid_UNIQUE">
-      <unique-column name="menu_extraid"/>
-    </unique>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
-  <table name="menu_groupes" idMethod="native" phpName="MenuGroupes" namespace="API\Models\Menues">
-    <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="menu_typeid" phpName="MenuTypeid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
-    <foreign-key foreignTable="menu_types" name="fk_menu_groupes_menu_types1" onDelete="CASCADE">
-      <reference local="menu_typeid" foreign="menu_typeid"/>
-    </foreign-key>
-    <index name="fk_menu_groupes_menu_types1_idx">
-      <index-column name="menu_typeid"/>
-    </index>
-    <unique name="menu_groupid_UNIQUE">
-      <unique-column name="menu_groupid"/>
-    </unique>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
-  <table name="menu_sizes" idMethod="native" phpName="MenuSizes" namespace="API\Models\Menues">
-    <column name="menu_sizeid" phpName="MenuSizeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="name" phpName="Name" type="VARCHAR" size="32" required="true"/>
-    <column name="factor" phpName="Factor" type="DECIMAL" size="3" scale="2" required="true"/>
-    <foreign-key foreignTable="events" name="fk_menu_sizes_events1">
-      <reference local="eventid" foreign="eventid"/>
-    </foreign-key>
-    <index name="fk_menu_sizes_events1_idx">
-      <index-column name="eventid"/>
-    </index>
-    <unique name="menu_sizeid_UNIQUE">
-      <unique-column name="menu_sizeid"/>
-    </unique>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
-  <table name="menu_types" idMethod="native" phpName="MenuTypes" namespace="API\Models\Menues">
-    <column name="menu_typeid" phpName="MenuTypeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
-    <column name="tax" phpName="Tax" type="SMALLINT" required="true"/>
-    <column name="allowMixing" phpName="Allowmixing" type="BOOLEAN" size="1" required="true"/>
-    <foreign-key foreignTable="events" name="fk_menu_types_events1">
-      <reference local="eventid" foreign="eventid"/>
-    </foreign-key>
-    <index name="fk_menu_types_events1_idx">
-      <index-column name="eventid"/>
-    </index>
-    <unique name="menu_typeid_UNIQUE">
-      <unique-column name="menu_typeid"/>
-    </unique>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
-  <table name="menues" idMethod="native" phpName="Menues" namespace="API\Models\Menues">
+  <table name="menu" idMethod="native" phpName="Menu" namespace="API\Models\Menu">
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
     <column name="price" phpName="Price" type="DECIMAL" size="7" scale="2" required="true"/>
     <column name="availabilityid" phpName="Availabilityid" type="INTEGER" required="true"/>
     <column name="availability_amount" phpName="AvailabilityAmount" type="SMALLINT" size="5" sqlType="smallint(5) unsigned"/>
-    <foreign-key foreignTable="availabilitys" name="fk_menues_availabilitys1">
+    <foreign-key foreignTable="availability" name="fk_menues_availabilitys1">
       <reference local="availabilityid" foreign="availabilityid"/>
     </foreign-key>
-    <foreign-key foreignTable="menu_groupes" name="fk_menues_menu_groupes1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_group" name="fk_menues_menu_groupes1" onDelete="CASCADE">
       <reference local="menu_groupid" foreign="menu_groupid"/>
     </foreign-key>
     <index name="fk_menues_menu_groupes1_idx">
@@ -370,15 +291,57 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="menues_possible_extras" idMethod="native" phpName="MenuesPossibleExtras" namespace="API\Models\Menues">
-    <column name="menues_possible_extraid" phpName="MenuesPossibleExtraid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+  <table name="menu_extra" idMethod="native" phpName="MenuExtra" namespace="API\Models\Menu">
+    <column name="menu_extraid" phpName="MenuExtraid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
+    <column name="availabilityid" phpName="Availabilityid" type="INTEGER" required="true"/>
+    <column name="availability_amount" phpName="AvailabilityAmount" type="SMALLINT" size="5" sqlType="smallint(5) unsigned"/>
+    <foreign-key foreignTable="availability" name="fk_menu_extras_availabilitys1">
+      <reference local="availabilityid" foreign="availabilityid"/>
+    </foreign-key>
+    <foreign-key foreignTable="event" name="fk_menu_extras_events1" onDelete="CASCADE">
+      <reference local="eventid" foreign="eventid"/>
+    </foreign-key>
+    <index name="fk_menu_extras_events1_idx">
+      <index-column name="eventid"/>
+    </index>
+    <index name="fk_menu_extras_availabilitys1_idx">
+      <index-column name="availabilityid"/>
+    </index>
+    <unique name="menu_extraid_UNIQUE">
+      <unique-column name="menu_extraid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="menu_group" idMethod="native" phpName="MenuGroup" namespace="API\Models\Menu">
+    <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="menu_typeid" phpName="MenuTypeid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
+    <foreign-key foreignTable="menu_type" name="fk_menu_groupes_menu_types1" onDelete="CASCADE">
+      <reference local="menu_typeid" foreign="menu_typeid"/>
+    </foreign-key>
+    <index name="fk_menu_groupes_menu_types1_idx">
+      <index-column name="menu_typeid"/>
+    </index>
+    <unique name="menu_groupid_UNIQUE">
+      <unique-column name="menu_groupid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="menu_possible_extra" idMethod="native" phpName="MenuPossibleExtra" namespace="API\Models\Menu">
+    <column name="menu_possible_extraid" phpName="MenuPossibleExtraid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="menu_extraid" phpName="MenuExtraid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="price" phpName="Price" type="DECIMAL" size="7" scale="2" required="true"/>
-    <foreign-key foreignTable="menu_extras" name="fk_menues_possible_extras_menu_extras1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_extra" name="fk_menues_possible_extras_menu_extras1" onDelete="CASCADE">
       <reference local="menu_extraid" foreign="menu_extraid"/>
     </foreign-key>
-    <foreign-key foreignTable="menues" name="fk_menues_possible_extras_menues1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu" name="fk_menues_possible_extras_menues1" onDelete="CASCADE">
       <reference local="menuid" foreign="menuid"/>
     </foreign-key>
     <index name="fk_menues_possible_extras_menues1_idx">
@@ -388,21 +351,21 @@
       <index-column name="menu_extraid"/>
     </index>
     <unique name="menues_possible_extraid_UNIQUE">
-      <unique-column name="menues_possible_extraid"/>
+      <unique-column name="menu_possible_extraid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="menues_possible_sizes" idMethod="native" phpName="MenuesPossibleSizes" namespace="API\Models\Menues">
-    <column name="menues_possible_sizeid" phpName="MenuesPossibleSizeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+  <table name="menu_possible_size" idMethod="native" phpName="MenuPossibleSize" namespace="API\Models\Menu">
+    <column name="menu_possible_sizeid" phpName="MenuPossibleSizeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="menu_sizeid" phpName="MenuSizeid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="price" phpName="Price" type="DECIMAL" size="7" scale="2"/>
-    <foreign-key foreignTable="menu_sizes" name="fk_menues_possible_sizes_menu_sizes1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_size" name="fk_menues_possible_sizes_menu_sizes1" onDelete="CASCADE">
       <reference local="menu_sizeid" foreign="menu_sizeid"/>
     </foreign-key>
-    <foreign-key foreignTable="menues" name="fk_menues_possible_sizes_menues1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu" name="fk_menues_possible_sizes_menues1" onDelete="CASCADE">
       <reference local="menuid" foreign="menuid"/>
     </foreign-key>
     <index name="fk_menues_possible_sizes_menues1_idx">
@@ -412,27 +375,64 @@
       <index-column name="menu_sizeid"/>
     </index>
     <unique name="menues_possible_sizeid_UNIQUE">
-      <unique-column name="menues_possible_sizeid"/>
+      <unique-column name="menu_possible_sizeid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="orders" idMethod="native" phpName="Orders" namespace="API\Models\Ordering">
+  <table name="menu_size" idMethod="native" phpName="MenuSize" namespace="API\Models\Menu">
+    <column name="menu_sizeid" phpName="MenuSizeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="32" required="true"/>
+    <column name="factor" phpName="Factor" type="DECIMAL" size="3" scale="2" required="true"/>
+    <foreign-key foreignTable="event" name="fk_menu_sizes_events1">
+      <reference local="eventid" foreign="eventid"/>
+    </foreign-key>
+    <index name="fk_menu_sizes_events1_idx">
+      <index-column name="eventid"/>
+    </index>
+    <unique name="menu_sizeid_UNIQUE">
+      <unique-column name="menu_sizeid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="menu_type" idMethod="native" phpName="MenuType" namespace="API\Models\Menu">
+    <column name="menu_typeid" phpName="MenuTypeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
+    <column name="tax" phpName="Tax" type="SMALLINT" required="true"/>
+    <column name="allowMixing" phpName="Allowmixing" type="BOOLEAN" size="1" required="true"/>
+    <foreign-key foreignTable="event" name="fk_menu_types_events1">
+      <reference local="eventid" foreign="eventid"/>
+    </foreign-key>
+    <index name="fk_menu_types_events1_idx">
+      <index-column name="eventid"/>
+    </index>
+    <unique name="menu_typeid_UNIQUE">
+      <unique-column name="menu_typeid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="order" idMethod="native" phpName="Order" namespace="API\Models\Ordering">
     <column name="orderid" phpName="Orderid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="tableid" phpName="Tableid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="event_tableid" phpName="EventTableid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="ordertime" phpName="Ordertime" type="TIMESTAMP" required="true"/>
     <column name="priority" phpName="Priority" type="INTEGER" required="true"/>
     <column name="finished" phpName="Finished" type="TIMESTAMP"/>
-    <foreign-key foreignTable="events" name="fk_orders_events1" onDelete="CASCADE">
+    <foreign-key foreignTable="event" name="fk_orders_events1" onDelete="CASCADE">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
-    <foreign-key foreignTable="events_tables" name="fk_orders_tables" onDelete="CASCADE">
-      <reference local="tableid" foreign="events_tableid"/>
+    <foreign-key foreignTable="event_table" name="fk_orders_tables" onDelete="CASCADE">
+      <reference local="event_tableid" foreign="event_tableid"/>
     </foreign-key>
-    <foreign-key foreignTable="users" name="fk_orders_users1" onDelete="CASCADE">
+    <foreign-key foreignTable="user" name="fk_orders_users1" onDelete="CASCADE">
       <reference local="userid" foreign="userid"/>
     </foreign-key>
     <index name="ordertime">
@@ -442,7 +442,7 @@
       <index-column name="userid"/>
     </index>
     <index name="fk_orders_tables_idx">
-      <index-column name="tableid"/>
+      <index-column name="event_tableid"/>
     </index>
     <index name="fk_orders_events1_idx">
       <index-column name="eventid"/>
@@ -460,28 +460,8 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="orders_detail_extras" idMethod="native" phpName="OrdersDetailExtras" namespace="API\Models\Ordering">
-    <column name="orders_detailid" phpName="OrdersDetailid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="menues_possible_extraid" phpName="MenuesPossibleExtraid" type="INTEGER" primaryKey="true" required="true"/>
-    <foreign-key foreignTable="menues_possible_extras" name="fk_orders_detail_sizes_menues_possible_extras1" onDelete="CASCADE">
-      <reference local="menues_possible_extraid" foreign="menues_possible_extraid"/>
-    </foreign-key>
-    <foreign-key foreignTable="orders_details" name="fk_orders_detail_sizes_orders_details1" onDelete="CASCADE">
-      <reference local="orders_detailid" foreign="orders_detailid"/>
-    </foreign-key>
-    <index name="fk_orders_detail_sizes_menues_possible_extras1_idx">
-      <index-column name="menues_possible_extraid"/>
-    </index>
-    <unique name="UNIQUE">
-      <unique-column name="orders_detailid"/>
-      <unique-column name="menues_possible_extraid"/>
-    </unique>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
-  <table name="orders_details" idMethod="native" phpName="OrdersDetails" namespace="API\Models\Ordering">
-    <column name="orders_detailid" phpName="OrdersDetailid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+  <table name="order_detail" idMethod="native" phpName="OrderDetail" namespace="API\Models\Ordering">
+    <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="orderid" phpName="Orderid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER"/>
     <column name="menu_sizeid" phpName="MenuSizeid" type="INTEGER"/>
@@ -494,22 +474,22 @@
     <column name="availabilityid" phpName="Availabilityid" type="INTEGER"/>
     <column name="availability_amount" phpName="AvailabilityAmount" type="SMALLINT"/>
     <column name="verified" phpName="Verified" type="BOOLEAN" size="1" required="true"/>
-    <foreign-key foreignTable="availabilitys" name="fk_orders_details_availabilitys1">
+    <foreign-key foreignTable="availability" name="fk_orders_details_availabilitys1">
       <reference local="availabilityid" foreign="availabilityid"/>
     </foreign-key>
-    <foreign-key foreignTable="menu_groupes" name="fk_orders_details_menu_groupes1">
+    <foreign-key foreignTable="menu_group" name="fk_orders_details_menu_groupes1">
       <reference local="menu_groupid" foreign="menu_groupid"/>
     </foreign-key>
-    <foreign-key foreignTable="menu_sizes" name="fk_orders_details_menu_sizes1">
+    <foreign-key foreignTable="menu_size" name="fk_orders_details_menu_sizes1">
       <reference local="menu_sizeid" foreign="menu_sizeid"/>
     </foreign-key>
-    <foreign-key foreignTable="menues" name="fk_orders_details_menues1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu" name="fk_orders_details_menues1" onDelete="CASCADE">
       <reference local="menuid" foreign="menuid"/>
     </foreign-key>
-    <foreign-key foreignTable="orders" name="fk_orders_details_orders1" onDelete="CASCADE">
+    <foreign-key foreignTable="order" name="fk_orders_details_orders1" onDelete="CASCADE">
       <reference local="orderid" foreign="orderid"/>
     </foreign-key>
-    <foreign-key foreignTable="users" name="fk_orders_details_users1" onDelete="CASCADE">
+    <foreign-key foreignTable="user" name="fk_orders_details_users1" onDelete="CASCADE">
       <reference local="single_price_modified_by_userid" foreign="userid"/>
     </foreign-key>
     <index name="fk_orders_details_menues1_idx">
@@ -534,20 +514,40 @@
       <index-column name="availabilityid"/>
     </index>
     <unique name="orders_detailid_UNIQUE">
-      <unique-column name="orders_detailid"/>
+      <unique-column name="order_detailid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="orders_details_mixed_with" idMethod="native" phpName="OrdersDetailsMixedWith" namespace="API\Models\Ordering">
-    <column name="orders_detailid" phpName="OrdersDetailid" type="INTEGER" primaryKey="true" required="true"/>
+  <table name="order_detail_extra" idMethod="native" phpName="OrderDetailExtra" namespace="API\Models\Ordering">
+    <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="menu_possible_extraid" phpName="MenuPossibleExtraid" type="INTEGER" primaryKey="true" required="true"/>
+    <foreign-key foreignTable="menu_possible_extra" name="fk_orders_detail_sizes_menues_possible_extras1" onDelete="CASCADE">
+      <reference local="menu_possible_extraid" foreign="menu_possible_extraid"/>
+    </foreign-key>
+    <foreign-key foreignTable="order_detail" name="fk_orders_detail_sizes_orders_details1" onDelete="CASCADE">
+      <reference local="order_detailid" foreign="order_detailid"/>
+    </foreign-key>
+    <index name="fk_orders_detail_sizes_menues_possible_extras1_idx">
+      <index-column name="menu_possible_extraid"/>
+    </index>
+    <unique name="UNIQUE">
+      <unique-column name="order_detailid"/>
+      <unique-column name="menu_possible_extraid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="order_detail_mixed_with" idMethod="native" phpName="OrderDetailMixedWith" namespace="API\Models\Ordering">
+    <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
-    <foreign-key foreignTable="menues" name="fk_orders_details_mixed_with_menues1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu" name="fk_orders_details_mixed_with_menues1" onDelete="CASCADE">
       <reference local="menuid" foreign="menuid"/>
     </foreign-key>
-    <foreign-key foreignTable="orders_details" name="fk_orders_details_mixed_with_orders_details1" onDelete="CASCADE">
-      <reference local="orders_detailid" foreign="orders_detailid"/>
+    <foreign-key foreignTable="order_detail" name="fk_orders_details_mixed_with_orders_details1" onDelete="CASCADE">
+      <reference local="order_detailid" foreign="order_detailid"/>
     </foreign-key>
     <index name="fk_orders_details_mixed_with_menues1_idx">
       <index-column name="menuid"/>
@@ -556,20 +556,20 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="orders_in_progress" idMethod="native" phpName="OrdersInProgress" namespace="API\Models\OIP">
-    <column name="orders_in_progressid" phpName="OrdersInProgressid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+  <table name="order_in_progress" idMethod="native" phpName="OrderInProgress" namespace="API\Models\OIP">
+    <column name="order_in_progressid" phpName="OrderInProgressid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="orderid" phpName="Orderid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="begin" phpName="Begin" type="TIMESTAMP" required="true"/>
     <column name="done" phpName="Done" type="TIMESTAMP"/>
-    <foreign-key foreignTable="menu_groupes" name="fk_orders_in_progress_menu_groupes1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_group" name="fk_orders_in_progress_menu_groupes1" onDelete="CASCADE">
       <reference local="menu_groupid" foreign="menu_groupid"/>
     </foreign-key>
-    <foreign-key foreignTable="orders" name="fk_orders_in_progress_orders1" onDelete="CASCADE">
+    <foreign-key foreignTable="order" name="fk_orders_in_progress_orders1" onDelete="CASCADE">
       <reference local="orderid" foreign="orderid"/>
     </foreign-key>
-    <foreign-key foreignTable="users" name="fk_orders_in_progress_users1" onDelete="CASCADE">
+    <foreign-key foreignTable="user" name="fk_orders_in_progress_users1" onDelete="CASCADE">
       <reference local="userid" foreign="userid"/>
     </foreign-key>
     <index name="fk_orders_in_progress_orders1_idx">
@@ -582,65 +582,55 @@
       <index-column name="menu_groupid"/>
     </index>
     <unique name="orders_in_progressid_UNIQUE">
-      <unique-column name="orders_in_progressid"/>
+      <unique-column name="order_in_progressid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="orders_in_progress_recieved" idMethod="native" phpName="OrdersInProgressRecieved" namespace="API\Models\OIP">
-    <column name="orders_in_progress_recievedid" phpName="OrdersInProgressRecievedid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="orders_detailid" phpName="OrdersDetailid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="orders_in_progressid" phpName="OrdersInProgressid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="distributions_giving_outid" phpName="DistributionsGivingOutid" type="INTEGER" primaryKey="true" required="true"/>
+  <table name="order_in_progress_recieved" idMethod="native" phpName="OrderInProgressRecieved" namespace="API\Models\OIP">
+    <column name="order_in_progress_recievedid" phpName="OrderInProgressRecievedid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="order_in_progressid" phpName="OrderInProgressid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="distribution_giving_outid" phpName="DistributionGivingOutid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="amount" phpName="Amount" type="TINYINT" required="true"/>
-    <foreign-key foreignTable="orders_details" name="fk_orders_details_has_orders_in_progress_orders_details1" onDelete="CASCADE">
-      <reference local="orders_detailid" foreign="orders_detailid"/>
+    <foreign-key foreignTable="order_detail" name="fk_orders_details_has_orders_in_progress_orders_details1" onDelete="CASCADE">
+      <reference local="order_detailid" foreign="order_detailid"/>
     </foreign-key>
-    <foreign-key foreignTable="orders_in_progress" name="fk_orders_details_has_orders_in_progress_orders_in_progress1" onDelete="CASCADE">
-      <reference local="orders_in_progressid" foreign="orders_in_progressid"/>
+    <foreign-key foreignTable="order_in_progress" name="fk_orders_details_has_orders_in_progress_orders_in_progress1" onDelete="CASCADE">
+      <reference local="order_in_progressid" foreign="order_in_progressid"/>
     </foreign-key>
-    <foreign-key foreignTable="distributions_giving_outs" name="fk_orders_in_progress_recieved_distribution_givin_out1" onDelete="CASCADE">
-      <reference local="distributions_giving_outid" foreign="distributions_giving_outid"/>
+    <foreign-key foreignTable="distribution_giving_out" name="fk_orders_in_progress_recieved_distribution_givin_out1" onDelete="CASCADE">
+      <reference local="distribution_giving_outid" foreign="distribution_giving_outid"/>
     </foreign-key>
     <index name="fk_orders_details_has_orders_in_progress_orders_in_progress_idx">
-      <index-column name="orders_in_progressid"/>
+      <index-column name="order_in_progressid"/>
     </index>
     <index name="fk_orders_details_has_orders_in_progress_orders_details1_idx">
-      <index-column name="orders_detailid"/>
+      <index-column name="order_detailid"/>
     </index>
     <index name="fk_orders_in_progress_recieved_distribution_givin_out1_idx">
-      <index-column name="distributions_giving_outid"/>
+      <index-column name="distribution_giving_outid"/>
     </index>
     <unique name="orders_in_progress_recievedid_UNIQUE">
-      <unique-column name="orders_in_progress_recievedid"/>
+      <unique-column name="order_in_progress_recievedid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="payment_types" idMethod="native" phpName="PaymentTypes" namespace="API\Models\Payment">
-    <column name="idpayment_typeid" phpName="IdpaymentTypeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="name" phpName="Name" type="VARCHAR" size="24" required="true"/>
-    <unique name="idpayment_typeid_UNIQUE">
-      <unique-column name="idpayment_typeid"/>
-    </unique>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
-  <table name="payments" idMethod="native" phpName="Payments" namespace="API\Models\Payment">
+  <table name="payment" idMethod="native" phpName="Payment" namespace="API\Models\Payment">
     <column name="paymentid" phpName="Paymentid" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
     <column name="payment_typeid" phpName="PaymentTypeid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <column name="amount" phpName="Amount" type="DECIMAL" size="7" scale="2" required="true"/>
     <column name="canceled" phpName="Canceled" type="TIMESTAMP"/>
-    <foreign-key foreignTable="invoices" name="fk_payment_types_has_invoices_invoices1">
+    <foreign-key foreignTable="invoice" name="fk_payment_types_has_invoices_invoices1">
       <reference local="invoiceid" foreign="invoiceid"/>
     </foreign-key>
-    <foreign-key foreignTable="payment_types" name="fk_payment_types_has_invoices_payment_types1">
-      <reference local="payment_typeid" foreign="idpayment_typeid"/>
+    <foreign-key foreignTable="payment_type" name="fk_payment_types_has_invoices_payment_types1">
+      <reference local="payment_typeid" foreign="payment_typeid"/>
     </foreign-key>
     <index name="fk_payment_types_has_invoices_invoices1_idx">
       <index-column name="invoiceid"/>
@@ -652,14 +642,14 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="payments_coupons" idMethod="native" phpName="PaymentsCoupons" namespace="API\Models\Payment">
+  <table name="payment_coupon" idMethod="native" phpName="PaymentCoupon" namespace="API\Models\Payment">
     <column name="couponid" phpName="Couponid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="paymentid" phpName="Paymentid" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
     <column name="value_used" phpName="ValueUsed" type="DECIMAL" size="7" scale="2" required="true"/>
-    <foreign-key foreignTable="coupons" name="fk_Coupons_has_payments_Coupons1">
+    <foreign-key foreignTable="coupon" name="fk_Coupons_has_payments_Coupons1">
       <reference local="couponid" foreign="couponid"/>
     </foreign-key>
-    <foreign-key foreignTable="payments" name="fk_Coupons_has_payments_payments1">
+    <foreign-key foreignTable="payment" name="fk_Coupons_has_payments_payments1">
       <reference local="paymentid" foreign="paymentid"/>
     </foreign-key>
     <index name="fk_Coupons_has_payments_payments1_idx">
@@ -672,20 +662,17 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="user_role" idMethod="native" phpName="UserRole" namespace="API\Models\User">
-    <column name="user_roleid" phpName="UserRoleid" type="TINYINT" primaryKey="true" required="true"/>
-    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
-    <unique name="user_roleid_UNIQUE">
-      <unique-column name="user_roleid"/>
-    </unique>
-    <unique name="name_UNIQUE">
-      <unique-column name="name"/>
+  <table name="payment_type" idMethod="native" phpName="PaymentType" namespace="API\Models\Payment">
+    <column name="payment_typeid" phpName="PaymentTypeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="24" required="true"/>
+    <unique name="idpayment_typeid_UNIQUE">
+      <unique-column name="payment_typeid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="users" idMethod="native" phpName="Users" namespace="API\Models\User">
+  <table name="user" idMethod="native" phpName="User" namespace="API\Models\User">
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="username" phpName="Username" type="VARCHAR" size="64" required="true"/>
     <column name="password" phpName="Password" type="VARCHAR" size="64" required="true"/>
@@ -709,30 +696,43 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="users_messages" idMethod="native" phpName="UsersMessages" namespace="API\Models\User\Messages">
-    <column name="users_messageid" phpName="UsersMessageid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="from_events_userid" phpName="FromEventsUserid" type="INTEGER"/>
-    <column name="to_events_userid" phpName="ToEventsUserid" type="INTEGER" primaryKey="true" required="true"/>
+  <table name="user_message" idMethod="native" phpName="UserMessage" namespace="API\Models\User\Messages">
+    <column name="user_messageid" phpName="UserMessageid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="from_event_userid" phpName="FromEventUserid" type="INTEGER"/>
+    <column name="to_event_userid" phpName="ToEventUserid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="message" phpName="Message" type="LONGVARCHAR" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <column name="readed" phpName="Readed" type="BOOLEAN" size="1" required="true"/>
-    <foreign-key foreignTable="events_user" name="fk_users_chat_events_user1" onDelete="CASCADE">
-      <reference local="from_events_userid" foreign="events_userid"/>
+    <foreign-key foreignTable="event_user" name="fk_users_chat_events_user1" onDelete="CASCADE">
+      <reference local="from_event_userid" foreign="event_userid"/>
     </foreign-key>
-    <foreign-key foreignTable="events_user" name="fk_users_chat_events_user2" onDelete="CASCADE">
-      <reference local="to_events_userid" foreign="events_userid"/>
+    <foreign-key foreignTable="event_user" name="fk_users_chat_events_user2" onDelete="CASCADE">
+      <reference local="to_event_userid" foreign="event_userid"/>
     </foreign-key>
     <index name="fk_users_chat_events_user1_idx">
-      <index-column name="from_events_userid"/>
+      <index-column name="from_event_userid"/>
     </index>
     <index name="fk_users_chat_events_user2_idx">
-      <index-column name="to_events_userid"/>
+      <index-column name="to_event_userid"/>
     </index>
     <index name="index5">
       <index-column name="date"/>
     </index>
     <unique name="users_chatid_UNIQUE">
-      <unique-column name="users_messageid"/>
+      <unique-column name="user_messageid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="user_role" idMethod="native" phpName="UserRole" namespace="API\Models\User">
+    <column name="user_roleid" phpName="UserRoleid" type="TINYINT" primaryKey="true" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
+    <unique name="user_roleid_UNIQUE">
+      <unique-column name="user_roleid"/>
+    </unique>
+    <unique name="name_UNIQUE">
+      <unique-column name="name"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
