@@ -4,7 +4,7 @@ namespace API\Controllers\Login;
 
 use API\Lib\{Auth, Controller, RememberMe};
 use API\Lib\Exceptions\GeneralException;
-use API\Models\User\UsersQuery;
+use API\Models\User\UserQuery;
 use Respect\Validation\Validator;
 use Slim\App;
 
@@ -18,7 +18,7 @@ class Login extends Controller
         
         $o_app->getContainer()['db'];
         
-        $this->o_auth = new Auth(UsersQuery::class);
+        $this->o_auth = new Auth(UserQuery::class);
         $this->str_privateKey = $this->o_app->getContainer()['settings']['Auth']['RememberMe_PrivateKey'];
     }
     
