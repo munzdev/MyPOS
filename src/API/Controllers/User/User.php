@@ -1,6 +1,6 @@
 <?php
 
-namespace API\Controllers\Users;
+namespace API\Controllers\User;
 
 use Slim\App;
 use API\Lib\SecurityController;
