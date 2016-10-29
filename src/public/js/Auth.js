@@ -3,8 +3,8 @@
  */
 define([
     "app",
-    "models/Auth/LoginModel",
-    "models/Auth/AuthUserModel"
+    "models/auth/LoginModel",
+    "models/auth/AuthUserModel"
 ], function(app,
             LoginModel,
             AuthUserModel){
