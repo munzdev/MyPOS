@@ -10,33 +10,30 @@ function(app,
          Template )
 {
     "use strict";
-
-    // Extends Backbone.View
-    var OptionsDialogView = Backbone.View.extend( {
-
-    	title: 'options-dialog',
-    	el: 'body',
-        events: {
-            "click #admin-link": 'admin_link',
-            "click #request-call": 'request_call',
-            "click #logout-link": "logout_link"
-        },
+    
+    return class OptionsDialogView extends app.PopupView
+    {
+        events() {
+            return {"click #admin-link": 'admin_link',
+                    "click #request-call": 'request_call',
+                    "click #logout-link": "logout_link"};
+        }
 
         // The View Constructor
-        initialize: function(options)
+        initialize(options)
         {
             _.bindAll(this, "request_call");
 
-            this.is_admin = options.is_admin;
+            this.IsAdmin = options.IsAdmin;
             this.render();
-        },
+        }
 
-        admin_link: function()
+        admin_link()
         {
-            MyPOS.ChangePage("#admin");
-        },
+            this.ChangePage("#admin");
+        }
 
-        request_call: function()
+        request_call()
         {
             var self = this;
 
@@ -53,24 +50,18 @@ function(app,
                 }
             };
             webservice.call();
-        },
-
-        logout_link: function()
+        }
+        
+        logout_link()
         {
-            app.session.logout();
-        },
+            app.auth.logout();
+        }
 
         // Renders all of the Category models on the UI
-        render: function() {
-            MyPOS.RenderPopupTemplate(this, this.title, Template, {is_admin: this.is_admin}, 'data-theme="b"');
-
-            $('#' + this.title).enhanceWithin().popup();
+        render() {
+            this.renderTemplate(Template, {IsAdmin: this.IsAdmin});            
 
             return this;
         }
-    });
-
-    // Returns the View class
-    return OptionsDialogView;
-
+    }
 } );

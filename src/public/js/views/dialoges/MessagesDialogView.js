@@ -11,24 +11,21 @@ function(app,
          Template )
 {
     "use strict";
-
-    // Extends Backbone.View
-    var OptionsDialogView = Backbone.View.extend( {
-
-    	title: 'messages-dialog',
-    	el: 'body',
-        events: {
-            'click #messages-dialog-send': 'sendMessage',
-            'click #messages-dialog-select-add': 'clickAddChat',
-            'change #messages-dialog-select-add': 'clickAddChatOption',
-            'popupafteropen': 'popupafteropen',
-            'popupafterclose': 'popupafterclose',
-            'change #messages-dialog-open-chats': 'switchChanel',
-            'keyup #messages-dialog-message': 'onMessageInputKeyup'
-        },
+    
+    return class MessagesDialogView extends app.PopupView
+    {
+        events() {
+            return {'click #messages-dialog-send': 'sendMessage',
+                    'click #messages-dialog-select-add': 'clickAddChat',
+                    'change #messages-dialog-select-add': 'clickAddChatOption',
+                    'popupafteropen': 'popupafteropen',
+                    'popupafterclose': 'popupafterclose',
+                    'change #messages-dialog-open-chats': 'switchChanel',
+                    'keyup #messages-dialog-message': 'onMessageInputKeyup'}
+        }
 
         // The View Constructor
-        initialize: function()
+        initialize()
         {
             _.bindAll(this, "sendMessage",
                             "createOldMessages",
@@ -50,18 +47,18 @@ function(app,
             $('body').pagecontainer({change: self.checkMessagesStatus});
 
             this.render();
-        },
+        }
 
-        onMessageInputKeyup: function(event)
+        onMessageInputKeyup(event)
         {
             if(event.key == 'Enter'){
                 event.preventDefault();
                 this.sendMessage();
                 return false;
             }
-        },
+        }
 
-        fetchOldMessages: function()
+        fetchOldMessages()
         {
             var self = this;
 
@@ -71,9 +68,9 @@ function(app,
                 success: self.createOldMessages
             };
             webservice.call();
-        },
+        }
 
-        createOldMessages: function(result)
+        createOldMessages(result)
         {
             var self = this;
 
@@ -99,9 +96,9 @@ function(app,
 
                 self.addMessage(channel, message.message, message.readed, isMe, message.date);
             });
-        },
+        }
 
-        popupafteropen: function()
+        popupafteropen()
         {
             if(!this.userListInited)
             {
@@ -113,14 +110,14 @@ function(app,
 
             this.isOpen = true;
             this._updateChatText();
-        },
+        }
 
-        popupafterclose: function()
+        popupafterclose()
         {
             this.isOpen = false;
-        },
+        }
 
-        sendMessage: function()
+        sendMessage()
         {
             var message = $('#messages-dialog-message').val().trim();
             $('#messages-dialog-message').val('');
@@ -137,14 +134,14 @@ function(app,
             app.ws.chat.Send(this.currentChatChannel, message);
 
             this.addMessage(this.currentChatChannel, message, true, true);
-        },
+        }
 
-        clickAddChat: function(event)
+        clickAddChat(event)
         {
             $(event.currentTarget).find("option[value='']").hide();
-        },
+        }
 
-        clickAddChatOption: function(event)
+        clickAddChatOption(event)
         {
             var target = $(event.currentTarget);
             var openChats = $('#messages-dialog-open-chats');
@@ -156,18 +153,18 @@ function(app,
 
             target.find("option[value='']").show();
             target.val('').selectmenu('refresh');
-        },
+        }
 
-        switchChanel: function(event)
+        switchChanel(event)
         {
             var openChats = $(event.currentTarget);
 
             this.currentChatChannel = openChats.val();
 
             this._updateChatText();
-        },
+        }
 
-        _verifyChanelExists: function(events_userid)
+        _verifyChanelExists(events_userid)
         {
             var openChats = $('#messages-dialog-open-chats');
 
@@ -179,9 +176,9 @@ function(app,
 
                 this.messages[events_userid] = "";
             }
-        },
+        }
 
-        _setChanelUnreaded: function(channel, amount)
+        _setChanelUnreaded(channel, amount)
         {
             this._verifyChanelExists(channel);
 
@@ -203,9 +200,9 @@ function(app,
 
                 option.html(amount + " - " + option.attr('data-orginaltext'));
             }
-        },
+        }
 
-        _updateChatText: function()
+        _updateChatText()
         {
             if(!this.isOpen)
                 return;
@@ -235,9 +232,9 @@ function(app,
 
             if(textarea.length)
                 textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
-        },
+        }
 
-        checkMessagesStatus: function()
+        checkMessagesStatus()
         {
             var self = this;
 
@@ -255,19 +252,18 @@ function(app,
                     $(this).removeAttr('data-blinkingid');
                 }
             });
-        },
+        }
 
-        _blinking: function (elm) {
+        _blinking(elm) {
             function blink() {
                 elm.fadeOut(500, function() {
                     elm.fadeIn(500);
                 });
             }
             return setInterval(blink, 1500);
-        },
+        }
 
-
-        addMessage: function(channel, message, readed, self, sendedDate)
+        addMessage(channel, message, readed, self, sendedDate)
         {
             if(message == '')
                 return;
@@ -327,21 +323,16 @@ function(app,
 
             if(this.currentChatChannel == channel)
                 this._updateChatText();
-        },
+        }
 
         // Renders all of the Category models on the UI
-        render: function() {
-            MyPOS.RenderPopupTemplate(this, this.title, Template, {}, 'data-theme="b"');
-
-            $('#' + this.title).enhanceWithin().popup();
+        render() {
+            this.renderTemplate(Template);            
 
             this.checkMessagesStatus();
 
             return this;
         }
-    });
-
-    // Returns the View class
-    return OptionsDialogView;
+    }
 
 } );
