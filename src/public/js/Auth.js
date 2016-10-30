@@ -1,10 +1,10 @@
-/** https://github.com/alexanderscott/backbone-login/blob/master/public/models/SessionModel.js
+/** 
  * @desc		stores the POST state and response state of authentication for user
  */
 define([
     "app",
-    "models/auth/LoginModel",
-    "models/auth/AuthUserModel"
+    "models/custom/auth/LoginModel",
+    "models/custom/auth/AuthUserModel"
 ], function(app,
             LoginModel,
             AuthUserModel){
