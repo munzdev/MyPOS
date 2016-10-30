@@ -4,7 +4,7 @@
 // Includes file dependencies
 define([ "app",
          "routers/BaseRouter",
-         "views/admin/AdminView",
+         /*"views/admin/AdminView",
          "views/admin/AdminEventView",
          "views/admin/AdminEventCopyView",
          "views/admin/AdminEventModifyDetailView",
@@ -24,7 +24,7 @@ define([ "app",
          "views/admin/AdminTableView",
          "views/admin/AdminTableModifyView",
          "views/admin/AdminSizeView",
-         "views/admin/AdminSizeModifyView",
+         "views/admin/AdminSizeModifyView",*/
 ], function(app,
             BaseRouter,
             AdminView,
