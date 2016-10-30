@@ -4,7 +4,7 @@
 // Includes file dependencies
 define([ "app",
          "Webservice",
-         'collections/OrderOverviewCollection',
+         'collections/custom/OrderOverviewCollection',
          'views/headers/HeaderView',
          'text!templates/pages/order-overview.phtml'],
  function(  app,
