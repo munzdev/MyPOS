@@ -1,8 +1,8 @@
 {
     "name" : "MyPOS",
     "require" : {
-        "php": ">=7.0",
-        "mike42/escpos-php" : "v1.2.1",
+        "php": ">=7.1",
+        "mike42/escpos-php" : "^v1.4",
         "cboden/ratchet": "0.3.*",
         "slim/slim": "^3.0",
         "monolog/monolog": "^1.13",
@@ -17,7 +17,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "API\\": "src/API"
+            "API\\": "src/API",
+            "Websocket\\": "src/websocket"
         }
     },
     "config": {
