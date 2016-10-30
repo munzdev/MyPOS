@@ -60,7 +60,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distribution_place_groupe" idMethod="native" phpName="DistributionPlaceGroupe" namespace="API\Models\DistributionPlace">
+  <table name="distribution_place_group" idMethod="native" phpName="DistributionPlaceGroup" namespace="API\Models\DistributionPlace">
     <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
     <foreign-key foreignTable="distribution_place" name="fk_distributions_places_has_menu_groupes_distributions_places1" onDelete="CASCADE">

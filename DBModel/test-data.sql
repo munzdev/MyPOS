@@ -274,16 +274,16 @@ COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `distribution_place_groupe`
+-- Data for table `distribution_place_group`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `distribution_place_groupe` (`distribution_placeid`, `menu_groupid`) VALUES (3, 1);
-INSERT INTO `distribution_place_groupe` (`distribution_placeid`, `menu_groupid`) VALUES (3, 2);
-INSERT INTO `distribution_place_groupe` (`distribution_placeid`, `menu_groupid`) VALUES (1, 3);
-INSERT INTO `distribution_place_groupe` (`distribution_placeid`, `menu_groupid`) VALUES (1, 4);
-INSERT INTO `distribution_place_groupe` (`distribution_placeid`, `menu_groupid`) VALUES (1, 5);
-INSERT INTO `distribution_place_groupe` (`distribution_placeid`, `menu_groupid`) VALUES (2, 3);
-INSERT INTO `distribution_place_groupe` (`distribution_placeid`, `menu_groupid`) VALUES (2, 4);
+INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (3, 1);
+INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (3, 2);
+INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (1, 3);
+INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (1, 4);
+INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (1, 5);
+INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (2, 3);
+INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (2, 4);
 
 COMMIT;
 

@@ -536,11 +536,11 @@ COMMENT = 'Enthält die IP:Port der Drucker, die bei einem Event zur verfügung 
 
 
 -- -----------------------------------------------------
--- Table `distribution_place_groupe`
+-- Table `distribution_place_group`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `distribution_place_groupe` ;
+DROP TABLE IF EXISTS `distribution_place_group` ;
 
-CREATE TABLE IF NOT EXISTS `distribution_place_groupe` (
+CREATE TABLE IF NOT EXISTS `distribution_place_group` (
   `distribution_placeid` INT(11) NOT NULL,
   `menu_groupid` INT(11) NOT NULL,
   PRIMARY KEY (`distribution_placeid`, `menu_groupid`),

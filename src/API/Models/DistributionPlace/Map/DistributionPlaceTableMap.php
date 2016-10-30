@@ -153,13 +153,13 @@ class DistributionPlaceTableMap extends TableMap
     1 => ':eventid',
   ),
 ), 'CASCADE', null, null, false);
-        $this->addRelation('DistributionPlaceGroupe', '\\API\\Models\\DistributionPlace\\DistributionPlaceGroupe', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('DistributionPlaceGroup', '\\API\\Models\\DistributionPlace\\DistributionPlaceGroup', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':distribution_placeid',
     1 => ':distribution_placeid',
   ),
-), 'CASCADE', null, 'DistributionPlaceGroupes', false);
+), 'CASCADE', null, 'DistributionPlaceGroups', false);
         $this->addRelation('DistributionPlaceTable', '\\API\\Models\\DistributionPlace\\DistributionPlaceTable', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -235,7 +235,7 @@ class DistributionPlaceTableMap extends TableMap
     {
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        DistributionPlaceGroupeTableMap::clearInstancePool();
+        DistributionPlaceGroupTableMap::clearInstancePool();
         DistributionPlaceTableTableMap::clearInstancePool();
         DistributionPlaceUserTableMap::clearInstancePool();
     }

@@ -2,7 +2,7 @@
 
 namespace API\Models\Menu\Map;
 
-use API\Models\DistributionPlace\Map\DistributionPlaceGroupeTableMap;
+use API\Models\DistributionPlace\Map\DistributionPlaceGroupTableMap;
 use API\Models\DistributionPlace\Map\DistributionPlaceTableTableMap;
 use API\Models\Menu\MenuGroup;
 use API\Models\Menu\MenuGroupQuery;
@@ -156,13 +156,13 @@ class MenuGroupTableMap extends TableMap
     1 => ':menu_typeid',
   ),
 ), 'CASCADE', null, null, false);
-        $this->addRelation('DistributionPlaceGroupe', '\\API\\Models\\DistributionPlace\\DistributionPlaceGroupe', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('DistributionPlaceGroup', '\\API\\Models\\DistributionPlace\\DistributionPlaceGroup', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':menu_groupid',
     1 => ':menu_groupid',
   ),
-), 'CASCADE', null, 'DistributionPlaceGroupes', false);
+), 'CASCADE', null, 'DistributionPlaceGroups', false);
         $this->addRelation('DistributionPlaceTable', '\\API\\Models\\DistributionPlace\\DistributionPlaceTable', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -252,7 +252,7 @@ class MenuGroupTableMap extends TableMap
     {
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        DistributionPlaceGroupeTableMap::clearInstancePool();
+        DistributionPlaceGroupTableMap::clearInstancePool();
         DistributionPlaceTableTableMap::clearInstancePool();
         MenuTableMap::clearInstancePool();
         OrderInProgressTableMap::clearInstancePool();

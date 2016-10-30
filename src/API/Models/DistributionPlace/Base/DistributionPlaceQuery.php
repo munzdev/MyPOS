@@ -47,15 +47,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDistributionPlaceQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
  * @method     ChildDistributionPlaceQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
  *
- * @method     ChildDistributionPlaceQuery leftJoinDistributionPlaceGroupe($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceGroupe relation
- * @method     ChildDistributionPlaceQuery rightJoinDistributionPlaceGroupe($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceGroupe relation
- * @method     ChildDistributionPlaceQuery innerJoinDistributionPlaceGroupe($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlaceGroupe relation
+ * @method     ChildDistributionPlaceQuery leftJoinDistributionPlaceGroup($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceGroup relation
+ * @method     ChildDistributionPlaceQuery rightJoinDistributionPlaceGroup($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceGroup relation
+ * @method     ChildDistributionPlaceQuery innerJoinDistributionPlaceGroup($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlaceGroup relation
  *
- * @method     ChildDistributionPlaceQuery joinWithDistributionPlaceGroupe($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlaceGroupe relation
+ * @method     ChildDistributionPlaceQuery joinWithDistributionPlaceGroup($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlaceGroup relation
  *
- * @method     ChildDistributionPlaceQuery leftJoinWithDistributionPlaceGroupe() Adds a LEFT JOIN clause and with to the query using the DistributionPlaceGroupe relation
- * @method     ChildDistributionPlaceQuery rightJoinWithDistributionPlaceGroupe() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceGroupe relation
- * @method     ChildDistributionPlaceQuery innerJoinWithDistributionPlaceGroupe() Adds a INNER JOIN clause and with to the query using the DistributionPlaceGroupe relation
+ * @method     ChildDistributionPlaceQuery leftJoinWithDistributionPlaceGroup() Adds a LEFT JOIN clause and with to the query using the DistributionPlaceGroup relation
+ * @method     ChildDistributionPlaceQuery rightJoinWithDistributionPlaceGroup() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceGroup relation
+ * @method     ChildDistributionPlaceQuery innerJoinWithDistributionPlaceGroup() Adds a INNER JOIN clause and with to the query using the DistributionPlaceGroup relation
  *
  * @method     ChildDistributionPlaceQuery leftJoinDistributionPlaceTable($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceTable relation
  * @method     ChildDistributionPlaceQuery rightJoinDistributionPlaceTable($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceTable relation
@@ -77,7 +77,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDistributionPlaceQuery rightJoinWithDistributionPlaceUser() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceUser relation
  * @method     ChildDistributionPlaceQuery innerJoinWithDistributionPlaceUser() Adds a INNER JOIN clause and with to the query using the DistributionPlaceUser relation
  *
- * @method     \API\Models\Event\EventQuery|\API\Models\DistributionPlace\DistributionPlaceGroupeQuery|\API\Models\DistributionPlace\DistributionPlaceTableQuery|\API\Models\DistributionPlace\DistributionPlaceUserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\Event\EventQuery|\API\Models\DistributionPlace\DistributionPlaceGroupQuery|\API\Models\DistributionPlace\DistributionPlaceTableQuery|\API\Models\DistributionPlace\DistributionPlaceUserQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildDistributionPlace findOne(ConnectionInterface $con = null) Return the first ChildDistributionPlace matching the query
  * @method     ChildDistributionPlace findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDistributionPlace matching the query, or a new ChildDistributionPlace object populated from the query conditions when no match is found
@@ -484,40 +484,40 @@ abstract class DistributionPlaceQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \API\Models\DistributionPlace\DistributionPlaceGroupe object
+     * Filter the query by a related \API\Models\DistributionPlace\DistributionPlaceGroup object
      *
-     * @param \API\Models\DistributionPlace\DistributionPlaceGroupe|ObjectCollection $distributionPlaceGroupe the related object to use as filter
+     * @param \API\Models\DistributionPlace\DistributionPlaceGroup|ObjectCollection $distributionPlaceGroup the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildDistributionPlaceQuery The current query, for fluid interface
      */
-    public function filterByDistributionPlaceGroupe($distributionPlaceGroupe, $comparison = null)
+    public function filterByDistributionPlaceGroup($distributionPlaceGroup, $comparison = null)
     {
-        if ($distributionPlaceGroupe instanceof \API\Models\DistributionPlace\DistributionPlaceGroupe) {
+        if ($distributionPlaceGroup instanceof \API\Models\DistributionPlace\DistributionPlaceGroup) {
             return $this
-                ->addUsingAlias(DistributionPlaceTableMap::COL_DISTRIBUTION_PLACEID, $distributionPlaceGroupe->getDistributionPlaceid(), $comparison);
-        } elseif ($distributionPlaceGroupe instanceof ObjectCollection) {
+                ->addUsingAlias(DistributionPlaceTableMap::COL_DISTRIBUTION_PLACEID, $distributionPlaceGroup->getDistributionPlaceid(), $comparison);
+        } elseif ($distributionPlaceGroup instanceof ObjectCollection) {
             return $this
-                ->useDistributionPlaceGroupeQuery()
-                ->filterByPrimaryKeys($distributionPlaceGroupe->getPrimaryKeys())
+                ->useDistributionPlaceGroupQuery()
+                ->filterByPrimaryKeys($distributionPlaceGroup->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByDistributionPlaceGroupe() only accepts arguments of type \API\Models\DistributionPlace\DistributionPlaceGroupe or Collection');
+            throw new PropelException('filterByDistributionPlaceGroup() only accepts arguments of type \API\Models\DistributionPlace\DistributionPlaceGroup or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the DistributionPlaceGroupe relation
+     * Adds a JOIN clause to the query using the DistributionPlaceGroup relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildDistributionPlaceQuery The current query, for fluid interface
      */
-    public function joinDistributionPlaceGroupe($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinDistributionPlaceGroup($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('DistributionPlaceGroupe');
+        $relationMap = $tableMap->getRelation('DistributionPlaceGroup');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -532,14 +532,14 @@ abstract class DistributionPlaceQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'DistributionPlaceGroupe');
+            $this->addJoinObject($join, 'DistributionPlaceGroup');
         }
 
         return $this;
     }
 
     /**
-     * Use the DistributionPlaceGroupe relation DistributionPlaceGroupe object
+     * Use the DistributionPlaceGroup relation DistributionPlaceGroup object
      *
      * @see useQuery()
      *
@@ -547,13 +547,13 @@ abstract class DistributionPlaceQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \API\Models\DistributionPlace\DistributionPlaceGroupeQuery A secondary query class using the current class as primary query
+     * @return \API\Models\DistributionPlace\DistributionPlaceGroupQuery A secondary query class using the current class as primary query
      */
-    public function useDistributionPlaceGroupeQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useDistributionPlaceGroupQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinDistributionPlaceGroupe($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'DistributionPlaceGroupe', '\API\Models\DistributionPlace\DistributionPlaceGroupeQuery');
+            ->joinDistributionPlaceGroup($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DistributionPlaceGroup', '\API\Models\DistributionPlace\DistributionPlaceGroupQuery');
     }
 
     /**

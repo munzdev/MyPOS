@@ -2,10 +2,10 @@
 
 namespace API\Models\DistributionPlace;
 
-use API\Models\DistributionPlace\Base\DistributionPlaceGroupe as BaseDistributionPlaceGroupe;
+use API\Models\DistributionPlace\Base\DistributionPlaceGroup as BaseDistributionPlaceGroup;
 
 /**
- * Skeleton subclass for representing a row from the 'distribution_place_groupe' table.
+ * Skeleton subclass for representing a row from the 'distribution_place_group' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use API\Models\DistributionPlace\Base\DistributionPlaceGroupe as BaseDistributio
  * long as it does not already exist in the output directory.
  *
  */
-class DistributionPlaceGroupe extends BaseDistributionPlaceGroupe
+class DistributionPlaceGroup extends BaseDistributionPlaceGroup
 {
 
 }

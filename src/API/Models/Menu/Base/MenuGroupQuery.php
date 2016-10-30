@@ -4,7 +4,7 @@ namespace API\Models\Menu\Base;
 
 use \Exception;
 use \PDO;
-use API\Models\DistributionPlace\DistributionPlaceGroupe;
+use API\Models\DistributionPlace\DistributionPlaceGroup;
 use API\Models\DistributionPlace\DistributionPlaceTable;
 use API\Models\Menu\MenuGroup as ChildMenuGroup;
 use API\Models\Menu\MenuGroupQuery as ChildMenuGroupQuery;
@@ -50,15 +50,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuGroupQuery rightJoinWithMenuType() Adds a RIGHT JOIN clause and with to the query using the MenuType relation
  * @method     ChildMenuGroupQuery innerJoinWithMenuType() Adds a INNER JOIN clause and with to the query using the MenuType relation
  *
- * @method     ChildMenuGroupQuery leftJoinDistributionPlaceGroupe($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceGroupe relation
- * @method     ChildMenuGroupQuery rightJoinDistributionPlaceGroupe($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceGroupe relation
- * @method     ChildMenuGroupQuery innerJoinDistributionPlaceGroupe($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlaceGroupe relation
+ * @method     ChildMenuGroupQuery leftJoinDistributionPlaceGroup($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceGroup relation
+ * @method     ChildMenuGroupQuery rightJoinDistributionPlaceGroup($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceGroup relation
+ * @method     ChildMenuGroupQuery innerJoinDistributionPlaceGroup($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlaceGroup relation
  *
- * @method     ChildMenuGroupQuery joinWithDistributionPlaceGroupe($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlaceGroupe relation
+ * @method     ChildMenuGroupQuery joinWithDistributionPlaceGroup($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlaceGroup relation
  *
- * @method     ChildMenuGroupQuery leftJoinWithDistributionPlaceGroupe() Adds a LEFT JOIN clause and with to the query using the DistributionPlaceGroupe relation
- * @method     ChildMenuGroupQuery rightJoinWithDistributionPlaceGroupe() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceGroupe relation
- * @method     ChildMenuGroupQuery innerJoinWithDistributionPlaceGroupe() Adds a INNER JOIN clause and with to the query using the DistributionPlaceGroupe relation
+ * @method     ChildMenuGroupQuery leftJoinWithDistributionPlaceGroup() Adds a LEFT JOIN clause and with to the query using the DistributionPlaceGroup relation
+ * @method     ChildMenuGroupQuery rightJoinWithDistributionPlaceGroup() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceGroup relation
+ * @method     ChildMenuGroupQuery innerJoinWithDistributionPlaceGroup() Adds a INNER JOIN clause and with to the query using the DistributionPlaceGroup relation
  *
  * @method     ChildMenuGroupQuery leftJoinDistributionPlaceTable($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceTable relation
  * @method     ChildMenuGroupQuery rightJoinDistributionPlaceTable($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceTable relation
@@ -100,7 +100,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuGroupQuery rightJoinWithOrderInProgress() Adds a RIGHT JOIN clause and with to the query using the OrderInProgress relation
  * @method     ChildMenuGroupQuery innerJoinWithOrderInProgress() Adds a INNER JOIN clause and with to the query using the OrderInProgress relation
  *
- * @method     \API\Models\Menu\MenuTypeQuery|\API\Models\DistributionPlace\DistributionPlaceGroupeQuery|\API\Models\DistributionPlace\DistributionPlaceTableQuery|\API\Models\Menu\MenuQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\Menu\MenuTypeQuery|\API\Models\DistributionPlace\DistributionPlaceGroupQuery|\API\Models\DistributionPlace\DistributionPlaceTableQuery|\API\Models\Menu\MenuQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildMenuGroup findOne(ConnectionInterface $con = null) Return the first ChildMenuGroup matching the query
  * @method     ChildMenuGroup findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMenuGroup matching the query, or a new ChildMenuGroup object populated from the query conditions when no match is found
@@ -507,40 +507,40 @@ abstract class MenuGroupQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \API\Models\DistributionPlace\DistributionPlaceGroupe object
+     * Filter the query by a related \API\Models\DistributionPlace\DistributionPlaceGroup object
      *
-     * @param \API\Models\DistributionPlace\DistributionPlaceGroupe|ObjectCollection $distributionPlaceGroupe the related object to use as filter
+     * @param \API\Models\DistributionPlace\DistributionPlaceGroup|ObjectCollection $distributionPlaceGroup the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildMenuGroupQuery The current query, for fluid interface
      */
-    public function filterByDistributionPlaceGroupe($distributionPlaceGroupe, $comparison = null)
+    public function filterByDistributionPlaceGroup($distributionPlaceGroup, $comparison = null)
     {
-        if ($distributionPlaceGroupe instanceof \API\Models\DistributionPlace\DistributionPlaceGroupe) {
+        if ($distributionPlaceGroup instanceof \API\Models\DistributionPlace\DistributionPlaceGroup) {
             return $this
-                ->addUsingAlias(MenuGroupTableMap::COL_MENU_GROUPID, $distributionPlaceGroupe->getMenuGroupid(), $comparison);
-        } elseif ($distributionPlaceGroupe instanceof ObjectCollection) {
+                ->addUsingAlias(MenuGroupTableMap::COL_MENU_GROUPID, $distributionPlaceGroup->getMenuGroupid(), $comparison);
+        } elseif ($distributionPlaceGroup instanceof ObjectCollection) {
             return $this
-                ->useDistributionPlaceGroupeQuery()
-                ->filterByPrimaryKeys($distributionPlaceGroupe->getPrimaryKeys())
+                ->useDistributionPlaceGroupQuery()
+                ->filterByPrimaryKeys($distributionPlaceGroup->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByDistributionPlaceGroupe() only accepts arguments of type \API\Models\DistributionPlace\DistributionPlaceGroupe or Collection');
+            throw new PropelException('filterByDistributionPlaceGroup() only accepts arguments of type \API\Models\DistributionPlace\DistributionPlaceGroup or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the DistributionPlaceGroupe relation
+     * Adds a JOIN clause to the query using the DistributionPlaceGroup relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildMenuGroupQuery The current query, for fluid interface
      */
-    public function joinDistributionPlaceGroupe($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinDistributionPlaceGroup($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('DistributionPlaceGroupe');
+        $relationMap = $tableMap->getRelation('DistributionPlaceGroup');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -555,14 +555,14 @@ abstract class MenuGroupQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'DistributionPlaceGroupe');
+            $this->addJoinObject($join, 'DistributionPlaceGroup');
         }
 
         return $this;
     }
 
     /**
-     * Use the DistributionPlaceGroupe relation DistributionPlaceGroupe object
+     * Use the DistributionPlaceGroup relation DistributionPlaceGroup object
      *
      * @see useQuery()
      *
@@ -570,13 +570,13 @@ abstract class MenuGroupQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \API\Models\DistributionPlace\DistributionPlaceGroupeQuery A secondary query class using the current class as primary query
+     * @return \API\Models\DistributionPlace\DistributionPlaceGroupQuery A secondary query class using the current class as primary query
      */
-    public function useDistributionPlaceGroupeQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useDistributionPlaceGroupQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinDistributionPlaceGroupe($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'DistributionPlaceGroupe', '\API\Models\DistributionPlace\DistributionPlaceGroupeQuery');
+            ->joinDistributionPlaceGroup($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DistributionPlaceGroup', '\API\Models\DistributionPlace\DistributionPlaceGroupQuery');
     }
 
     /**
