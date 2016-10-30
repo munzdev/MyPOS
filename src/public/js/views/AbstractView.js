@@ -3,7 +3,7 @@
 
 // Includes file dependencies
 define([ "app"],
- function( app ) {
+ function() {
     "use strict";
         
     return class AbstractView extends Backbone.View {
@@ -26,5 +26,9 @@ define([ "app"],
         jqmAttributes() {
             return {};
         }                
+        
+        ChangePage(View) {
+            Backbone.history.navigate(View, true);
+        }
     }
 } );
