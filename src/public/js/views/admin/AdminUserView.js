@@ -5,7 +5,7 @@
 define([ "app",
          'Webservice',
          'views/headers/AdminHeaderView',
-         'collections/UserCollection',
+         'collections/user/UserCollection',
          'text!templates/pages/admin/admin-user.phtml'],
 function( app,
           Webservice,
