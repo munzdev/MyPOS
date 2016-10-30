@@ -1,7 +1,7 @@
 <?php
 /* Call this file 'hello-world.php' */
 require __DIR__ . '/../../src/vendor/autoload.php';
-require __DIR__ . '/../../src/api/constants.php';
+require __DIR__ . '/../../src/API/constants.php';
 
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Mike42\Escpos\Printer;
