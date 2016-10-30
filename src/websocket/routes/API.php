@@ -1,6 +1,6 @@
 <?php
 
-namespace Websocket;
+namespace Websocket\Routes;
 
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\WampServerInterface;
