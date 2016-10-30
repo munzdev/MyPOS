@@ -46,8 +46,8 @@ require([ "app",
           "websocket/API",
           "routers/GlobalRouter",
           "routers/AdminRouter",          
-          "collections/ProductCollection",
-          "collections/UserCollection",
+          "collections/custom/product/TypeCollection",
+          "collections/custom/user/UserCollection",
           "views/dialoges/ErrorDialogView",          
           "views/dialoges/OptionsDialogView",
           "views/dialoges/MessagesDialogView",
@@ -60,7 +60,7 @@ require([ "app",
             WsAPI,
             GlobalRouter,
             AdminRouter,
-            ProductCollection,
+            TypeCollection,
             UserCollection,
             ErrorDialogView,
             OptionsDialogView,
@@ -98,7 +98,7 @@ require([ "app",
             app.auth = new Auth();
             
             // create a products collection/model for later to fetch
-            app.products = new ProductCollection();
+            app.products = new TypeCollection();
             app.userList = new UserCollection();
 
             // Init websocket services
@@ -111,7 +111,7 @@ require([ "app",
                 app.products.fetch();
                 app.userList.fetch();
 
-                app.optionsDialog = new OptionsDialogView({is_admin: app.auth.authUser.get('IsAdmin')});
+                app.optionsDialog = new OptionsDialogView({IsAdmin: app.auth.authUser.get('IsAdmin')});
                 app.messagesDialog = new MessagesDialogView();
 
                 app.ws.api.Connect();
