@@ -25,3 +25,26 @@ function mb_str_pad($str, $pad_len, $pad_str = ' ', $dir = STR_PAD_RIGHT, $encod
     $after = $padAfter ? mb_substr($repeatedString, 0, ceil($targetLen), $encoding) : '';
     return $before . $str . $after;
 }
+
+function registerPropelConnection($a_db)
+{
+    $o_serviceContainer = \Propel\Runtime\Propel::getServiceContainer();
+    $o_serviceContainer->checkVersion('2.0.0-dev');
+    $o_serviceContainer->setAdapterClass('default', $a_db['adapter']);
+    $o_manager = new \Propel\Runtime\Connection\ConnectionManagerSingle();
+    $o_manager->setConfiguration(array (
+        'dsn' => $a_db['dsn'],
+        'user' => $a_db['user'],
+        'password' => $a_db['password'],
+        'settings' => $a_db['settings'],
+        'classname' => '\\Propel\\Runtime\\Connection\\ConnectionWrapper',
+        'model_paths' =>
+        array (
+            0 => 'src',
+            1 => 'vendor',
+        ),
+    ));
+    $o_manager->setName('default');
+    $o_serviceContainer->setConnectionManager('default', $o_manager);
+    $o_serviceContainer->setDefaultDatasource('default');
+}
