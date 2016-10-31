@@ -18,7 +18,7 @@ class Login extends Controller
         
         $o_app->getContainer()['db'];
         
-        $this->o_auth = new Auth(UserQuery::class);
+        $this->o_auth = new Auth(new UserQuery());
         $this->str_privateKey = $this->o_app->getContainer()['settings']['Auth']['RememberMe_PrivateKey'];
     }
     

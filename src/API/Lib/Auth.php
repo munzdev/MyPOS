@@ -1,16 +1,15 @@
 <?php
 namespace API\Lib;
 
-use API\Models\Event\Map\EventUserTableMap;
-use API\Models\User\User;
+use API\Models\User\{User, UserQuery};
 
 class Auth
 {
-    private $str_queryClass;
+    private $o_queryClass;
 
-    public function __construct(string $str_queryClass)
+    public function __construct(UserQuery $o_queryClass)
     {
-        $this->str_queryClass = $str_queryClass;
+        $this->o_queryClass = $o_queryClass;
     }
 
     public function DoLogin(string $str_username) : bool
@@ -54,30 +53,24 @@ class Auth
      */
     private function FindUserObject(string $str_username) // : ?User
     {            
-        $str_userRoleFieldName = $this->str_queryClass::getUserRoleFieldName();
+        $o_user = $this->o_queryClass->create()->joinEventUser()
+                                               ->useEventUserQuery()
+                                                  ->joinEvent()
+                                                  ->useEventQuery()
+                                                      ->filterByActive(true)
+                                                  ->endUse()
+                                               ->endUse()         
+                                               ->filterByUsername($str_username)
+                                               ->filterByActive(true)
+                                               ->findOne();
         
-        $o_user = $this->str_queryClass::create()->withColumn(EventUserTableMap::COL_USER_ROLES, $str_userRoleFieldName)
-                                                 ->joinEventUser()
-                                                 ->useEventUserQuery()
-                                                    ->joinEvent()
-                                                    ->useEventQuery()
-                                                        ->filterByActive(true)
-                                                    ->endUse()
-                                                 ->endUse()                                        
-                                                 ->filterByUsername($str_username)
-                                                 ->filterByActive(true)
-                                                 ->findOne();
-        
-        if(!$o_user)
-        {
-            $o_user = $this->str_queryClass::create()->withColumn("'0'", $str_userRoleFieldName)
-                                                     ->filterByUsername($str_username)
-                                                     ->filterByIsAdmin(true)
-                                                     ->filterByActive(true)
-                                                     ->findOne();
-        }
-        
-        return $o_user;
+        if($o_user)
+            return $o_user;
+                        
+        return $this->o_queryClass->create()->filterByUsername($str_username)
+                                            ->filterByIsAdmin(true)
+                                            ->filterByActive(true)
+                                            ->findOne();        
     }
 
     public function SetLogin(User $o_user) : void

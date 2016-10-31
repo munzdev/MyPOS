@@ -4,7 +4,7 @@ namespace API\Controllers\Login;
 
 use Slim\App;
 use API\Lib\{Controller, Auth};
-use API\Models\User\UsersQuery;
+use API\Models\User\UserQuery;
 
 class User extends Controller
 {    
@@ -15,12 +15,15 @@ class User extends Controller
         
         $o_app->getContainer()['db'];
         
-        $this->o_auth = new Auth(UsersQuery::class);
+        $this->o_auth = new Auth(new UserQuery());
     }
     
     protected function GET() : void {
         $o_user = $this->o_auth->GetCurrentUser();        
-
-        $this->o_response->withJson($o_user->toArray());
+        
+        $a_return = $o_user->toArray();
+        $a_return['EventUser'] = $o_user->getEventUsers()->getFirst()->toArray();
+        
+        $this->o_response->withJson($a_return);
     }
 }
