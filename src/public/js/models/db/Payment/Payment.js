@@ -31,7 +31,7 @@ define([
                 response.Invoice = new Invoice(response.Invoice, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
     }
 });

@@ -29,7 +29,7 @@ define([
                 response.ToEventUser = new User(response.ToEventUser, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
     }
 });

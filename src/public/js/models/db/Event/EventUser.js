@@ -30,7 +30,7 @@ define([
                 response.User = new User(response.User, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
 
     }

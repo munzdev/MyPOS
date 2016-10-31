@@ -32,7 +32,7 @@ define([
                 response.OrderDetail = new OrderDetail(response.OrderDetail, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
     }
 });

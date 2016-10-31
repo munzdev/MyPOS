@@ -25,7 +25,7 @@ define([
                 response.MenuPossibleExtra = new MenuPossibleExtra(response.MenuPossibleExtra, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
     }
 });

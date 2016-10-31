@@ -22,7 +22,7 @@ define([
                 response.CashierUser = new User(response.CashierUser, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
 
     }

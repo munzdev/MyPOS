@@ -31,7 +31,7 @@ define([
                 response.CreatedByUser = new User(response.CreatedByUser, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
 
     }

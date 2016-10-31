@@ -21,7 +21,7 @@ define([
                 response.MenuType = new MenuType(response.MenuType, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
 
     }

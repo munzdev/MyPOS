@@ -38,7 +38,7 @@ define([
                 response.MenuGroup = new MenuGroup(response.MenuGroup, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
     }
 });

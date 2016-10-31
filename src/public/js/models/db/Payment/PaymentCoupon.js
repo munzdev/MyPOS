@@ -26,7 +26,7 @@ define([
                 response.Payment = new Payment(response.Payment, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
     }
 });

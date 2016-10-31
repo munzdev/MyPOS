@@ -29,7 +29,7 @@ define([
                 response.Menu = new Menu(response.Menu, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
     }
 });

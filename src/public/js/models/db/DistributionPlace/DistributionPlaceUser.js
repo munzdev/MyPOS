@@ -33,7 +33,7 @@ define([
                 response.EventPrinter = new EventPrinter(response.EventPrinter, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
 
     }

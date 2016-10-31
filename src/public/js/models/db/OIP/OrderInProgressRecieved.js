@@ -37,7 +37,7 @@ define([
                 response.DistributionGivingOut = new DistributionGivingOut(response.DistributionGivingOut, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
 
     }

@@ -25,7 +25,7 @@ define([
                 response.Event = new Event(response.Event, {parse: true});
             }
             
-            return super.response(response);
+            return super.parse(response);
         }
 
     }

@@ -66,7 +66,7 @@ define([
                 response.Availability = new Availability(response.Availability, {parse: true});
             }
                                     
-            return super.response(response);
+            return super.parse(response);
         }
 
     }
