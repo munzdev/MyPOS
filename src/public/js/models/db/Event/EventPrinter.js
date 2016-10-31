@@ -1,6 +1,7 @@
 define([
+    "models/db/Event/Event",
     "app"
-], function(app){
+], function(Event){
     "use strict";
 
     return class EventPrinter extends Backbone.Model {
@@ -15,6 +16,16 @@ define([
                     Port: 0,
                     Default: false,
                     CharactersPerRow: 0};
+        }
+        
+        parse(response)
+        {
+            if('Event' in response)
+            {
+                response.Event = new Event(response.Event, {parse: true});
+            }
+            
+            return super.response(response);
         }
 
     }

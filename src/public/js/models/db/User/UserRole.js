@@ -1,6 +1,6 @@
 define([
     "app"
-], function(app){
+], function(){
     "use strict";
 
     return class UserRole extends Backbone.Model {

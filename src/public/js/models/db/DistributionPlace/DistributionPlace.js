@@ -1,6 +1,7 @@
 define([
-    "app"
-], function(app){
+    "models/db/Event/Event",
+    "app"    
+], function(Event){
     "use strict";
 
     return class DistributionPlaceGroup extends Backbone.Model {
@@ -13,5 +14,14 @@ define([
                     Name: ''};
         }
 
+        parse(response)
+        {
+            if('Event' in response)
+            {
+                response.Event = new Event(response.Event, {parse: true});
+            }
+            
+            return super.response(response);
+        }
     }
 });

@@ -1,6 +1,7 @@
 define([
+    "models/db/Menu/MenuType",
     "app"
-], function(app){
+], function(MenuType){
     "use strict";
 
     return class MenuGroup extends Backbone.Model {
@@ -11,6 +12,16 @@ define([
             return {MenuGroupid: 0,
                     MenuTypeid: 0,
                     Name: ''};
+        }
+        
+        parse(response)
+        {
+            if('MenuType' in response)
+            {
+                response.MenuType = new MenuType(response.MenuType, {parse: true});
+            }
+            
+            return super.response(response);
         }
 
     }

@@ -1,6 +1,9 @@
 define([
+    "models/db/Menu/Menu",
+    "models/db/Menu/MenuSize",
     "app"
-], function(app){
+], function(Menu,
+            MenuSize){
     "use strict";
 
     return class MenuPossibleSize extends Backbone.Model {
@@ -14,5 +17,19 @@ define([
                     Price: 0};
         }
 
+        parse(response)
+        {
+            if('MenuSize' in response)
+            {
+                response.MenuSize = new MenuSize(response.MenuSize, {parse: true});
+            }
+            
+            if('Menu' in response)
+            {
+                response.Menu = new Menu(response.Menu, {parse: true});
+            }
+            
+            return super.response(response);
+        }
     }
 });

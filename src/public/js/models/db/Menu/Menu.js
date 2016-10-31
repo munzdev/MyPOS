@@ -1,6 +1,9 @@
 define([
+    "models/db/Menu/MenuGroup",
+    "models/db/Menu/Availability",
     "app"
-], function(app){
+], function(MenuGroup,
+            Availability){
     "use strict";
 
     return class Menu extends Backbone.Model {
@@ -16,5 +19,19 @@ define([
                     AvailabilityAmount: 0};
         }
 
+        parse(response)
+        {
+            if('MenuGroup' in response)
+            {
+                response.MenuGroup = new MenuGroup(response.MenuGroup, {parse: true});
+            }
+            
+            if('Availability' in response)
+            {
+                response.Availability = new Availability(response.Availability, {parse: true});
+            }
+            
+            return super.response(response);
+        }
     }
 });

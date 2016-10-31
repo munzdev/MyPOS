@@ -1,6 +1,6 @@
 define([
     "app"
-], function(app){
+], function(){
     "use strict";
 
     return class User extends Backbone.Model {

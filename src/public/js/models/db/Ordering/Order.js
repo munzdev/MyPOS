@@ -1,6 +1,9 @@
 define([
+    "models/db/Event/EventTable",
+    "models/db/User/User",
     "app"
-], function(app){
+], function(EventTable,
+            User){
     "use strict";
 
     return class Order extends Backbone.Model {
@@ -14,6 +17,21 @@ define([
                     Ordertime: null,
                     Priority: 0,
                     Finished: null};
+        }
+        
+        parse(response)
+        {
+            if('EventTable' in response)
+            {
+                response.EventTable = new EventTable(response.EventTable, {parse: true});
+            }
+            
+            if('User' in response)
+            {
+                response.User = new User(response.User, {parse: true});
+            }
+            
+            return super.response(response);
         }
 
     }

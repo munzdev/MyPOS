@@ -1,6 +1,9 @@
 define([
+    "models/db/Event/Event",
+    "models/db/Menu/Availability",
     "app"
-], function(app){
+], function(Event,
+            Availability){
     "use strict";
 
     return class MenuExtra extends Backbone.Model {
@@ -15,5 +18,19 @@ define([
                     AvailabilityAmount: 0};
         }
 
+        parse(response)
+        {
+            if('Event' in response)
+            {
+                response.Event = new Event(response.Event, {parse: true});
+            }
+            
+            if('Availability' in response)
+            {
+                response.Availability = new Availability(response.Availability, {parse: true});
+            }
+            
+            return super.response(response);
+        }
     }
 });

@@ -1,6 +1,9 @@
 define([
+    "models/db/Menu/Menu",
+    "models/db/Menu/MenuExtra",
     "app"
-], function(app){
+], function(Menu,
+            MenuExtra){
     "use strict";
 
     return class MenuPossibleExtra extends Backbone.Model {
@@ -14,5 +17,19 @@ define([
                     Price: 0};
         }
 
+        parse(response)
+        {
+            if('MenuExtra' in response)
+            {
+                response.MenuExtra = new MenuExtra(response.MenuExtra, {parse: true});
+            }
+            
+            if('Menu' in response)
+            {
+                response.Menu = new Menu(response.Menu, {parse: true});
+            }
+            
+            return super.response(response);
+        }
     }
 });

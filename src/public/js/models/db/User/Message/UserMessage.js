@@ -1,6 +1,7 @@
 define([
+    "models/db/User/User",
     "app"
-], function(app){
+], function(User){
     "use strict";
 
     return class UserMessage extends Backbone.Model {
@@ -16,5 +17,19 @@ define([
                     Readed: false};
         }
 
+        parse(response)
+        {
+            if('FromEventUser' in response)
+            {
+                response.FromEventUser = new User(response.FromEventUser, {parse: true});
+            }
+            
+            if('ToEventUser' in response)
+            {
+                response.ToEventUser = new User(response.ToEventUser, {parse: true});
+            }
+            
+            return super.response(response);
+        }
     }
 });

@@ -1,6 +1,9 @@
 define([
+    "models/db/Invoice/Invoice",
+    "models/db/Ordering/OrderDetail",
     "app"
-], function(app){
+], function(Invoice,
+            OrderDetail){
     "use strict";
 
     return class InvoiceItem extends Backbone.Model {
@@ -17,5 +20,19 @@ define([
                     Tax: 0};
         }
 
+        parse(response)
+        {                       
+            if('Invoice' in response)
+            {
+                response.Invoice = new Invoice(response.Invoice, {parse: true});
+            }
+            
+            if('OrderDetail' in response)
+            {
+                response.OrderDetail = new OrderDetail(response.OrderDetail, {parse: true});
+            }
+            
+            return super.response(response);
+        }
     }
 });
