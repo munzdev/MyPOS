@@ -689,7 +689,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="user_message" idMethod="native" phpName="UserMessage" namespace="API\Models\User\Messages">
+  <table name="user_message" idMethod="native" phpName="UserMessage" namespace="API\Models\User\Message">
     <column name="user_messageid" phpName="UserMessageid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="from_event_userid" phpName="FromEventUserid" type="INTEGER"/>
     <column name="to_event_userid" phpName="ToEventUserid" type="INTEGER" primaryKey="true" required="true"/>
