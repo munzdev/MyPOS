@@ -21,13 +21,13 @@
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
     <foreign-key foreignTable="user" name="fk_Coupons_users1">
-      <reference local="created_by" foreign="userid"/>
+      <reference local="created_by_userid" foreign="userid"/>
     </foreign-key>
     <index name="fk_Coupons_events1_idx">
       <index-column name="eventid"/>
     </index>
     <index name="fk_Coupons_users1_idx">
-      <index-column name="created_by"/>
+      <index-column name="created_by_userid"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>

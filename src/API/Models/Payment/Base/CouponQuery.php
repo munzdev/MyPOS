@@ -24,14 +24,14 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCouponQuery orderByCouponid($order = Criteria::ASC) Order by the couponid column
  * @method     ChildCouponQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
- * @method     ChildCouponQuery orderByCreatedBy($order = Criteria::ASC) Order by the created_by column
+ * @method     ChildCouponQuery orderByCreatedByUserid($order = Criteria::ASC) Order by the created_by_userid column
  * @method     ChildCouponQuery orderByCode($order = Criteria::ASC) Order by the code column
  * @method     ChildCouponQuery orderByCreated($order = Criteria::ASC) Order by the created column
  * @method     ChildCouponQuery orderByValue($order = Criteria::ASC) Order by the value column
  *
  * @method     ChildCouponQuery groupByCouponid() Group by the couponid column
  * @method     ChildCouponQuery groupByEventid() Group by the eventid column
- * @method     ChildCouponQuery groupByCreatedBy() Group by the created_by column
+ * @method     ChildCouponQuery groupByCreatedByUserid() Group by the created_by_userid column
  * @method     ChildCouponQuery groupByCode() Group by the code column
  * @method     ChildCouponQuery groupByCreated() Group by the created column
  * @method     ChildCouponQuery groupByValue() Group by the value column
@@ -81,7 +81,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCoupon findOneByCouponid(int $couponid) Return the first ChildCoupon filtered by the couponid column
  * @method     ChildCoupon findOneByEventid(int $eventid) Return the first ChildCoupon filtered by the eventid column
- * @method     ChildCoupon findOneByCreatedBy(int $created_by) Return the first ChildCoupon filtered by the created_by column
+ * @method     ChildCoupon findOneByCreatedByUserid(int $created_by_userid) Return the first ChildCoupon filtered by the created_by_userid column
  * @method     ChildCoupon findOneByCode(string $code) Return the first ChildCoupon filtered by the code column
  * @method     ChildCoupon findOneByCreated(string $created) Return the first ChildCoupon filtered by the created column
  * @method     ChildCoupon findOneByValue(string $value) Return the first ChildCoupon filtered by the value column *
@@ -91,7 +91,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildCoupon requireOneByCouponid(int $couponid) Return the first ChildCoupon filtered by the couponid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOneByEventid(int $eventid) Return the first ChildCoupon filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCoupon requireOneByCreatedBy(int $created_by) Return the first ChildCoupon filtered by the created_by column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCoupon requireOneByCreatedByUserid(int $created_by_userid) Return the first ChildCoupon filtered by the created_by_userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOneByCode(string $code) Return the first ChildCoupon filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOneByCreated(string $created) Return the first ChildCoupon filtered by the created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOneByValue(string $value) Return the first ChildCoupon filtered by the value column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -99,7 +99,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCoupon[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCoupon objects based on current ModelCriteria
  * @method     ChildCoupon[]|ObjectCollection findByCouponid(int $couponid) Return ChildCoupon objects filtered by the couponid column
  * @method     ChildCoupon[]|ObjectCollection findByEventid(int $eventid) Return ChildCoupon objects filtered by the eventid column
- * @method     ChildCoupon[]|ObjectCollection findByCreatedBy(int $created_by) Return ChildCoupon objects filtered by the created_by column
+ * @method     ChildCoupon[]|ObjectCollection findByCreatedByUserid(int $created_by_userid) Return ChildCoupon objects filtered by the created_by_userid column
  * @method     ChildCoupon[]|ObjectCollection findByCode(string $code) Return ChildCoupon objects filtered by the code column
  * @method     ChildCoupon[]|ObjectCollection findByCreated(string $created) Return ChildCoupon objects filtered by the created column
  * @method     ChildCoupon[]|ObjectCollection findByValue(string $value) Return ChildCoupon objects filtered by the value column
@@ -155,7 +155,7 @@ abstract class CouponQuery extends ModelCriteria
      * $obj = $c->findPk(array(12, 34, 56), $con);
      * </code>
      *
-     * @param array[$couponid, $eventid, $created_by] $key Primary key to use for the query
+     * @param array[$couponid, $eventid, $created_by_userid] $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildCoupon|array|mixed the result, formatted by the current formatter
@@ -201,7 +201,7 @@ abstract class CouponQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT couponid, eventid, created_by, code, created, value FROM coupon WHERE couponid = :p0 AND eventid = :p1 AND created_by = :p2';
+        $sql = 'SELECT couponid, eventid, created_by_userid, code, created, value FROM coupon WHERE couponid = :p0 AND eventid = :p1 AND created_by_userid = :p2';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
@@ -278,7 +278,7 @@ abstract class CouponQuery extends ModelCriteria
     {
         $this->addUsingAlias(CouponTableMap::COL_COUPONID, $key[0], Criteria::EQUAL);
         $this->addUsingAlias(CouponTableMap::COL_EVENTID, $key[1], Criteria::EQUAL);
-        $this->addUsingAlias(CouponTableMap::COL_CREATED_BY, $key[2], Criteria::EQUAL);
+        $this->addUsingAlias(CouponTableMap::COL_CREATED_BY_USERID, $key[2], Criteria::EQUAL);
 
         return $this;
     }
@@ -299,7 +299,7 @@ abstract class CouponQuery extends ModelCriteria
             $cton0 = $this->getNewCriterion(CouponTableMap::COL_COUPONID, $key[0], Criteria::EQUAL);
             $cton1 = $this->getNewCriterion(CouponTableMap::COL_EVENTID, $key[1], Criteria::EQUAL);
             $cton0->addAnd($cton1);
-            $cton2 = $this->getNewCriterion(CouponTableMap::COL_CREATED_BY, $key[2], Criteria::EQUAL);
+            $cton2 = $this->getNewCriterion(CouponTableMap::COL_CREATED_BY_USERID, $key[2], Criteria::EQUAL);
             $cton0->addAnd($cton2);
             $this->addOr($cton0);
         }
@@ -392,18 +392,18 @@ abstract class CouponQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the created_by column
+     * Filter the query on the created_by_userid column
      *
      * Example usage:
      * <code>
-     * $query->filterByCreatedBy(1234); // WHERE created_by = 1234
-     * $query->filterByCreatedBy(array(12, 34)); // WHERE created_by IN (12, 34)
-     * $query->filterByCreatedBy(array('min' => 12)); // WHERE created_by > 12
+     * $query->filterByCreatedByUserid(1234); // WHERE created_by_userid = 1234
+     * $query->filterByCreatedByUserid(array(12, 34)); // WHERE created_by_userid IN (12, 34)
+     * $query->filterByCreatedByUserid(array('min' => 12)); // WHERE created_by_userid > 12
      * </code>
      *
      * @see       filterByUser()
      *
-     * @param     mixed $createdBy The value to use as filter.
+     * @param     mixed $createdByUserid The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -411,16 +411,16 @@ abstract class CouponQuery extends ModelCriteria
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
-    public function filterByCreatedBy($createdBy = null, $comparison = null)
+    public function filterByCreatedByUserid($createdByUserid = null, $comparison = null)
     {
-        if (is_array($createdBy)) {
+        if (is_array($createdByUserid)) {
             $useMinMax = false;
-            if (isset($createdBy['min'])) {
-                $this->addUsingAlias(CouponTableMap::COL_CREATED_BY, $createdBy['min'], Criteria::GREATER_EQUAL);
+            if (isset($createdByUserid['min'])) {
+                $this->addUsingAlias(CouponTableMap::COL_CREATED_BY_USERID, $createdByUserid['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($createdBy['max'])) {
-                $this->addUsingAlias(CouponTableMap::COL_CREATED_BY, $createdBy['max'], Criteria::LESS_EQUAL);
+            if (isset($createdByUserid['max'])) {
+                $this->addUsingAlias(CouponTableMap::COL_CREATED_BY_USERID, $createdByUserid['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -431,7 +431,7 @@ abstract class CouponQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(CouponTableMap::COL_CREATED_BY, $createdBy, $comparison);
+        return $this->addUsingAlias(CouponTableMap::COL_CREATED_BY_USERID, $createdByUserid, $comparison);
     }
 
     /**
@@ -634,14 +634,14 @@ abstract class CouponQuery extends ModelCriteria
     {
         if ($user instanceof \API\Models\User\User) {
             return $this
-                ->addUsingAlias(CouponTableMap::COL_CREATED_BY, $user->getUserid(), $comparison);
+                ->addUsingAlias(CouponTableMap::COL_CREATED_BY_USERID, $user->getUserid(), $comparison);
         } elseif ($user instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(CouponTableMap::COL_CREATED_BY, $user->toKeyValue('PrimaryKey', 'Userid'), $comparison);
+                ->addUsingAlias(CouponTableMap::COL_CREATED_BY_USERID, $user->toKeyValue('PrimaryKey', 'Userid'), $comparison);
         } else {
             throw new PropelException('filterByUser() only accepts arguments of type \API\Models\User\User or Collection');
         }
@@ -782,7 +782,7 @@ abstract class CouponQuery extends ModelCriteria
         if ($coupon) {
             $this->addCond('pruneCond0', $this->getAliasedColName(CouponTableMap::COL_COUPONID), $coupon->getCouponid(), Criteria::NOT_EQUAL);
             $this->addCond('pruneCond1', $this->getAliasedColName(CouponTableMap::COL_EVENTID), $coupon->getEventid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond2', $this->getAliasedColName(CouponTableMap::COL_CREATED_BY), $coupon->getCreatedBy(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond2', $this->getAliasedColName(CouponTableMap::COL_CREATED_BY_USERID), $coupon->getCreatedByUserid(), Criteria::NOT_EQUAL);
             $this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2'), Criteria::LOGICAL_OR);
         }
 

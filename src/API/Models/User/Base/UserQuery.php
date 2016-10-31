@@ -670,7 +670,7 @@ abstract class UserQuery extends ModelCriteria
     {
         if ($coupon instanceof \API\Models\Payment\Coupon) {
             return $this
-                ->addUsingAlias(UserTableMap::COL_USERID, $coupon->getCreatedBy(), $comparison);
+                ->addUsingAlias(UserTableMap::COL_USERID, $coupon->getCreatedByUserid(), $comparison);
         } elseif ($coupon instanceof ObjectCollection) {
             return $this
                 ->useCouponQuery()

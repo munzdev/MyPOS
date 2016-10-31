@@ -82,9 +82,9 @@ class CouponTableMap extends TableMap
     const COL_EVENTID = 'coupon.eventid';
 
     /**
-     * the column name for the created_by field
+     * the column name for the created_by_userid field
      */
-    const COL_CREATED_BY = 'coupon.created_by';
+    const COL_CREATED_BY_USERID = 'coupon.created_by_userid';
 
     /**
      * the column name for the code field
@@ -113,10 +113,10 @@ class CouponTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Couponid', 'Eventid', 'CreatedBy', 'Code', 'Created', 'Value', ),
-        self::TYPE_CAMELNAME     => array('couponid', 'eventid', 'createdBy', 'code', 'created', 'value', ),
-        self::TYPE_COLNAME       => array(CouponTableMap::COL_COUPONID, CouponTableMap::COL_EVENTID, CouponTableMap::COL_CREATED_BY, CouponTableMap::COL_CODE, CouponTableMap::COL_CREATED, CouponTableMap::COL_VALUE, ),
-        self::TYPE_FIELDNAME     => array('couponid', 'eventid', 'created_by', 'code', 'created', 'value', ),
+        self::TYPE_PHPNAME       => array('Couponid', 'Eventid', 'CreatedByUserid', 'Code', 'Created', 'Value', ),
+        self::TYPE_CAMELNAME     => array('couponid', 'eventid', 'createdByUserid', 'code', 'created', 'value', ),
+        self::TYPE_COLNAME       => array(CouponTableMap::COL_COUPONID, CouponTableMap::COL_EVENTID, CouponTableMap::COL_CREATED_BY_USERID, CouponTableMap::COL_CODE, CouponTableMap::COL_CREATED, CouponTableMap::COL_VALUE, ),
+        self::TYPE_FIELDNAME     => array('couponid', 'eventid', 'created_by_userid', 'code', 'created', 'value', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
@@ -127,10 +127,10 @@ class CouponTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Couponid' => 0, 'Eventid' => 1, 'CreatedBy' => 2, 'Code' => 3, 'Created' => 4, 'Value' => 5, ),
-        self::TYPE_CAMELNAME     => array('couponid' => 0, 'eventid' => 1, 'createdBy' => 2, 'code' => 3, 'created' => 4, 'value' => 5, ),
-        self::TYPE_COLNAME       => array(CouponTableMap::COL_COUPONID => 0, CouponTableMap::COL_EVENTID => 1, CouponTableMap::COL_CREATED_BY => 2, CouponTableMap::COL_CODE => 3, CouponTableMap::COL_CREATED => 4, CouponTableMap::COL_VALUE => 5, ),
-        self::TYPE_FIELDNAME     => array('couponid' => 0, 'eventid' => 1, 'created_by' => 2, 'code' => 3, 'created' => 4, 'value' => 5, ),
+        self::TYPE_PHPNAME       => array('Couponid' => 0, 'Eventid' => 1, 'CreatedByUserid' => 2, 'Code' => 3, 'Created' => 4, 'Value' => 5, ),
+        self::TYPE_CAMELNAME     => array('couponid' => 0, 'eventid' => 1, 'createdByUserid' => 2, 'code' => 3, 'created' => 4, 'value' => 5, ),
+        self::TYPE_COLNAME       => array(CouponTableMap::COL_COUPONID => 0, CouponTableMap::COL_EVENTID => 1, CouponTableMap::COL_CREATED_BY_USERID => 2, CouponTableMap::COL_CODE => 3, CouponTableMap::COL_CREATED => 4, CouponTableMap::COL_VALUE => 5, ),
+        self::TYPE_FIELDNAME     => array('couponid' => 0, 'eventid' => 1, 'created_by_userid' => 2, 'code' => 3, 'created' => 4, 'value' => 5, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
@@ -153,7 +153,7 @@ class CouponTableMap extends TableMap
         // columns
         $this->addPrimaryKey('couponid', 'Couponid', 'INTEGER', true, null, null);
         $this->addForeignPrimaryKey('eventid', 'Eventid', 'INTEGER' , 'event', 'eventid', true, null, null);
-        $this->addForeignPrimaryKey('created_by', 'CreatedBy', 'INTEGER' , 'user', 'userid', true, null, null);
+        $this->addForeignPrimaryKey('created_by_userid', 'CreatedByUserid', 'INTEGER' , 'user', 'userid', true, null, null);
         $this->addColumn('code', 'Code', 'VARCHAR', true, 24, null);
         $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
         $this->addColumn('value', 'Value', 'DECIMAL', true, 7, null);
@@ -174,7 +174,7 @@ class CouponTableMap extends TableMap
         $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':created_by',
+    0 => ':created_by_userid',
     1 => ':userid',
   ),
 ), null, null, null, false);
@@ -202,7 +202,7 @@ class CouponTableMap extends TableMap
     {
         if (Propel::isInstancePoolingEnabled()) {
             if (null === $key) {
-                $key = serialize([(null === $obj->getCouponid() || is_scalar($obj->getCouponid()) || is_callable([$obj->getCouponid(), '__toString']) ? (string) $obj->getCouponid() : $obj->getCouponid()), (null === $obj->getEventid() || is_scalar($obj->getEventid()) || is_callable([$obj->getEventid(), '__toString']) ? (string) $obj->getEventid() : $obj->getEventid()), (null === $obj->getCreatedBy() || is_scalar($obj->getCreatedBy()) || is_callable([$obj->getCreatedBy(), '__toString']) ? (string) $obj->getCreatedBy() : $obj->getCreatedBy())]);
+                $key = serialize([(null === $obj->getCouponid() || is_scalar($obj->getCouponid()) || is_callable([$obj->getCouponid(), '__toString']) ? (string) $obj->getCouponid() : $obj->getCouponid()), (null === $obj->getEventid() || is_scalar($obj->getEventid()) || is_callable([$obj->getEventid(), '__toString']) ? (string) $obj->getEventid() : $obj->getEventid()), (null === $obj->getCreatedByUserid() || is_scalar($obj->getCreatedByUserid()) || is_callable([$obj->getCreatedByUserid(), '__toString']) ? (string) $obj->getCreatedByUserid() : $obj->getCreatedByUserid())]);
             } // if key === null
             self::$instances[$key] = $obj;
         }
@@ -222,7 +222,7 @@ class CouponTableMap extends TableMap
     {
         if (Propel::isInstancePoolingEnabled() && null !== $value) {
             if (is_object($value) && $value instanceof \API\Models\Payment\Coupon) {
-                $key = serialize([(null === $value->getCouponid() || is_scalar($value->getCouponid()) || is_callable([$value->getCouponid(), '__toString']) ? (string) $value->getCouponid() : $value->getCouponid()), (null === $value->getEventid() || is_scalar($value->getEventid()) || is_callable([$value->getEventid(), '__toString']) ? (string) $value->getEventid() : $value->getEventid()), (null === $value->getCreatedBy() || is_scalar($value->getCreatedBy()) || is_callable([$value->getCreatedBy(), '__toString']) ? (string) $value->getCreatedBy() : $value->getCreatedBy())]);
+                $key = serialize([(null === $value->getCouponid() || is_scalar($value->getCouponid()) || is_callable([$value->getCouponid(), '__toString']) ? (string) $value->getCouponid() : $value->getCouponid()), (null === $value->getEventid() || is_scalar($value->getEventid()) || is_callable([$value->getEventid(), '__toString']) ? (string) $value->getEventid() : $value->getEventid()), (null === $value->getCreatedByUserid() || is_scalar($value->getCreatedByUserid()) || is_callable([$value->getCreatedByUserid(), '__toString']) ? (string) $value->getCreatedByUserid() : $value->getCreatedByUserid())]);
 
             } elseif (is_array($value) && count($value) === 3) {
                 // assume we've been passed a primary key";
@@ -256,11 +256,11 @@ class CouponTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('CreatedBy', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('CreatedByUserid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('CreatedBy', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('CreatedBy', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('CreatedBy', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('CreatedBy', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('CreatedBy', TableMap::TYPE_PHPNAME, $indexType)])]);
+        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('CreatedByUserid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('CreatedByUserid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('CreatedByUserid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('CreatedByUserid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('CreatedByUserid', TableMap::TYPE_PHPNAME, $indexType)])]);
     }
 
     /**
@@ -292,7 +292,7 @@ class CouponTableMap extends TableMap
         $pks[] = (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 2 + $offset
-                : self::translateFieldName('CreatedBy', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('CreatedByUserid', TableMap::TYPE_PHPNAME, $indexType)
         ];
 
         return $pks;
@@ -397,14 +397,14 @@ class CouponTableMap extends TableMap
         if (null === $alias) {
             $criteria->addSelectColumn(CouponTableMap::COL_COUPONID);
             $criteria->addSelectColumn(CouponTableMap::COL_EVENTID);
-            $criteria->addSelectColumn(CouponTableMap::COL_CREATED_BY);
+            $criteria->addSelectColumn(CouponTableMap::COL_CREATED_BY_USERID);
             $criteria->addSelectColumn(CouponTableMap::COL_CODE);
             $criteria->addSelectColumn(CouponTableMap::COL_CREATED);
             $criteria->addSelectColumn(CouponTableMap::COL_VALUE);
         } else {
             $criteria->addSelectColumn($alias . '.couponid');
             $criteria->addSelectColumn($alias . '.eventid');
-            $criteria->addSelectColumn($alias . '.created_by');
+            $criteria->addSelectColumn($alias . '.created_by_userid');
             $criteria->addSelectColumn($alias . '.code');
             $criteria->addSelectColumn($alias . '.created');
             $criteria->addSelectColumn($alias . '.value');
@@ -468,7 +468,7 @@ class CouponTableMap extends TableMap
             foreach ($values as $value) {
                 $criterion = $criteria->getNewCriterion(CouponTableMap::COL_COUPONID, $value[0]);
                 $criterion->addAnd($criteria->getNewCriterion(CouponTableMap::COL_EVENTID, $value[1]));
-                $criterion->addAnd($criteria->getNewCriterion(CouponTableMap::COL_CREATED_BY, $value[2]));
+                $criterion->addAnd($criteria->getNewCriterion(CouponTableMap::COL_CREATED_BY_USERID, $value[2]));
                 $criteria->addOr($criterion);
             }
         }

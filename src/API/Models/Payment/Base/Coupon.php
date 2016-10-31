@@ -85,11 +85,11 @@ abstract class Coupon implements ActiveRecordInterface
     protected $eventid;
 
     /**
-     * The value for the created_by field.
+     * The value for the created_by_userid field.
      *
      * @var        int
      */
-    protected $created_by;
+    protected $created_by_userid;
 
     /**
      * The value for the code field.
@@ -388,13 +388,13 @@ abstract class Coupon implements ActiveRecordInterface
     }
 
     /**
-     * Get the [created_by] column value.
+     * Get the [created_by_userid] column value.
      *
      * @return int
      */
-    public function getCreatedBy()
+    public function getCreatedByUserid()
     {
-        return $this->created_by;
+        return $this->created_by_userid;
     }
 
     /**
@@ -482,20 +482,20 @@ abstract class Coupon implements ActiveRecordInterface
     } // setEventid()
 
     /**
-     * Set the value of [created_by] column.
+     * Set the value of [created_by_userid] column.
      *
      * @param int $v new value
      * @return $this|\API\Models\Payment\Coupon The current object (for fluent API support)
      */
-    public function setCreatedBy($v)
+    public function setCreatedByUserid($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->created_by !== $v) {
-            $this->created_by = $v;
-            $this->modifiedColumns[CouponTableMap::COL_CREATED_BY] = true;
+        if ($this->created_by_userid !== $v) {
+            $this->created_by_userid = $v;
+            $this->modifiedColumns[CouponTableMap::COL_CREATED_BY_USERID] = true;
         }
 
         if ($this->aUser !== null && $this->aUser->getUserid() !== $v) {
@@ -503,7 +503,7 @@ abstract class Coupon implements ActiveRecordInterface
         }
 
         return $this;
-    } // setCreatedBy()
+    } // setCreatedByUserid()
 
     /**
      * Set the value of [code] column.
@@ -607,8 +607,8 @@ abstract class Coupon implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : CouponTableMap::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->eventid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : CouponTableMap::translateFieldName('CreatedBy', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->created_by = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : CouponTableMap::translateFieldName('CreatedByUserid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->created_by_userid = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CouponTableMap::translateFieldName('Code', TableMap::TYPE_PHPNAME, $indexType)];
             $this->code = (null !== $col) ? (string) $col : null;
@@ -654,7 +654,7 @@ abstract class Coupon implements ActiveRecordInterface
         if ($this->aEvent !== null && $this->eventid !== $this->aEvent->getEventid()) {
             $this->aEvent = null;
         }
-        if ($this->aUser !== null && $this->created_by !== $this->aUser->getUserid()) {
+        if ($this->aUser !== null && $this->created_by_userid !== $this->aUser->getUserid()) {
             $this->aUser = null;
         }
     } // ensureConsistency
@@ -878,8 +878,8 @@ abstract class Coupon implements ActiveRecordInterface
         if ($this->isColumnModified(CouponTableMap::COL_EVENTID)) {
             $modifiedColumns[':p' . $index++]  = 'eventid';
         }
-        if ($this->isColumnModified(CouponTableMap::COL_CREATED_BY)) {
-            $modifiedColumns[':p' . $index++]  = 'created_by';
+        if ($this->isColumnModified(CouponTableMap::COL_CREATED_BY_USERID)) {
+            $modifiedColumns[':p' . $index++]  = 'created_by_userid';
         }
         if ($this->isColumnModified(CouponTableMap::COL_CODE)) {
             $modifiedColumns[':p' . $index++]  = 'code';
@@ -907,8 +907,8 @@ abstract class Coupon implements ActiveRecordInterface
                     case 'eventid':
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'created_by':
-                        $stmt->bindValue($identifier, $this->created_by, PDO::PARAM_INT);
+                    case 'created_by_userid':
+                        $stmt->bindValue($identifier, $this->created_by_userid, PDO::PARAM_INT);
                         break;
                     case 'code':
                         $stmt->bindValue($identifier, $this->code, PDO::PARAM_STR);
@@ -988,7 +988,7 @@ abstract class Coupon implements ActiveRecordInterface
                 return $this->getEventid();
                 break;
             case 2:
-                return $this->getCreatedBy();
+                return $this->getCreatedByUserid();
                 break;
             case 3:
                 return $this->getCode();
@@ -1031,7 +1031,7 @@ abstract class Coupon implements ActiveRecordInterface
         $result = array(
             $keys[0] => $this->getCouponid(),
             $keys[1] => $this->getEventid(),
-            $keys[2] => $this->getCreatedBy(),
+            $keys[2] => $this->getCreatedByUserid(),
             $keys[3] => $this->getCode(),
             $keys[4] => $this->getCreated(),
             $keys[5] => $this->getValue(),
@@ -1132,7 +1132,7 @@ abstract class Coupon implements ActiveRecordInterface
                 $this->setEventid($value);
                 break;
             case 2:
-                $this->setCreatedBy($value);
+                $this->setCreatedByUserid($value);
                 break;
             case 3:
                 $this->setCode($value);
@@ -1176,7 +1176,7 @@ abstract class Coupon implements ActiveRecordInterface
             $this->setEventid($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setCreatedBy($arr[$keys[2]]);
+            $this->setCreatedByUserid($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setCode($arr[$keys[3]]);
@@ -1234,8 +1234,8 @@ abstract class Coupon implements ActiveRecordInterface
         if ($this->isColumnModified(CouponTableMap::COL_EVENTID)) {
             $criteria->add(CouponTableMap::COL_EVENTID, $this->eventid);
         }
-        if ($this->isColumnModified(CouponTableMap::COL_CREATED_BY)) {
-            $criteria->add(CouponTableMap::COL_CREATED_BY, $this->created_by);
+        if ($this->isColumnModified(CouponTableMap::COL_CREATED_BY_USERID)) {
+            $criteria->add(CouponTableMap::COL_CREATED_BY_USERID, $this->created_by_userid);
         }
         if ($this->isColumnModified(CouponTableMap::COL_CODE)) {
             $criteria->add(CouponTableMap::COL_CODE, $this->code);
@@ -1265,7 +1265,7 @@ abstract class Coupon implements ActiveRecordInterface
         $criteria = ChildCouponQuery::create();
         $criteria->add(CouponTableMap::COL_COUPONID, $this->couponid);
         $criteria->add(CouponTableMap::COL_EVENTID, $this->eventid);
-        $criteria->add(CouponTableMap::COL_CREATED_BY, $this->created_by);
+        $criteria->add(CouponTableMap::COL_CREATED_BY_USERID, $this->created_by_userid);
 
         return $criteria;
     }
@@ -1280,7 +1280,7 @@ abstract class Coupon implements ActiveRecordInterface
     {
         $validPk = null !== $this->getCouponid() &&
             null !== $this->getEventid() &&
-            null !== $this->getCreatedBy();
+            null !== $this->getCreatedByUserid();
 
         $validPrimaryKeyFKs = 2;
         $primaryKeyFKs = [];
@@ -1318,7 +1318,7 @@ abstract class Coupon implements ActiveRecordInterface
         $pks = array();
         $pks[0] = $this->getCouponid();
         $pks[1] = $this->getEventid();
-        $pks[2] = $this->getCreatedBy();
+        $pks[2] = $this->getCreatedByUserid();
 
         return $pks;
     }
@@ -1333,7 +1333,7 @@ abstract class Coupon implements ActiveRecordInterface
     {
         $this->setCouponid($keys[0]);
         $this->setEventid($keys[1]);
-        $this->setCreatedBy($keys[2]);
+        $this->setCreatedByUserid($keys[2]);
     }
 
     /**
@@ -1342,7 +1342,7 @@ abstract class Coupon implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getCouponid()) && (null === $this->getEventid()) && (null === $this->getCreatedBy());
+        return (null === $this->getCouponid()) && (null === $this->getEventid()) && (null === $this->getCreatedByUserid());
     }
 
     /**
@@ -1359,7 +1359,7 @@ abstract class Coupon implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setEventid($this->getEventid());
-        $copyObj->setCreatedBy($this->getCreatedBy());
+        $copyObj->setCreatedByUserid($this->getCreatedByUserid());
         $copyObj->setCode($this->getCode());
         $copyObj->setCreated($this->getCreated());
         $copyObj->setValue($this->getValue());
@@ -1466,9 +1466,9 @@ abstract class Coupon implements ActiveRecordInterface
     public function setUser(User $v = null)
     {
         if ($v === null) {
-            $this->setCreatedBy(NULL);
+            $this->setCreatedByUserid(NULL);
         } else {
-            $this->setCreatedBy($v->getUserid());
+            $this->setCreatedByUserid($v->getUserid());
         }
 
         $this->aUser = $v;
@@ -1493,8 +1493,8 @@ abstract class Coupon implements ActiveRecordInterface
      */
     public function getUser(ConnectionInterface $con = null)
     {
-        if ($this->aUser === null && ($this->created_by !== null)) {
-            $this->aUser = UserQuery::create()->findPk($this->created_by, $con);
+        if ($this->aUser === null && ($this->created_by_userid !== null)) {
+            $this->aUser = UserQuery::create()->findPk($this->created_by_userid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1791,7 +1791,7 @@ abstract class Coupon implements ActiveRecordInterface
         }
         $this->couponid = null;
         $this->eventid = null;
-        $this->created_by = null;
+        $this->created_by_userid = null;
         $this->code = null;
         $this->created = null;
         $this->value = null;

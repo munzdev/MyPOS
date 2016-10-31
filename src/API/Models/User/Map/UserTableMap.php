@@ -196,7 +196,7 @@ class UserTableMap extends TableMap
         $this->addRelation('Coupon', '\\API\\Models\\Payment\\Coupon', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':created_by',
+    0 => ':created_by_userid',
     1 => ':userid',
   ),
 ), null, null, 'Coupons', false);
