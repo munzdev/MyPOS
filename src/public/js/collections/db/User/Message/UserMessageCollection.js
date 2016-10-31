@@ -1,12 +1,12 @@
 define([
     "app",
-    "models/db/User/Messages/UserMessage"
+    "models/db/User/Message/UserMessage"
 ], function(app, UserMessage){
     "use strict";
     
     return class UserMessageCollection extends Backbone.Collection
     {
         model() { return UserMessage; }
-        url() {return app.API + "DB/User/Messages/UserMessage";}
+        url() {return app.API + "DB/User/Message/UserMessage";}
     }
 });
