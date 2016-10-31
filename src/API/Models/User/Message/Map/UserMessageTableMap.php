@@ -1,9 +1,9 @@
 <?php
 
-namespace API\Models\User\Messages\Map;
+namespace API\Models\User\Message\Map;
 
-use API\Models\User\Messages\UserMessage;
-use API\Models\User\Messages\UserMessageQuery;
+use API\Models\User\Message\UserMessage;
+use API\Models\User\Message\UserMessageQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -34,7 +34,7 @@ class UserMessageTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'API.Models.User.Messages.Map.UserMessageTableMap';
+    const CLASS_NAME = 'API.Models.User.Message.Map.UserMessageTableMap';
 
     /**
      * The default database name for this class
@@ -49,12 +49,12 @@ class UserMessageTableMap extends TableMap
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\API\\Models\\User\\Messages\\UserMessage';
+    const OM_CLASS = '\\API\\Models\\User\\Message\\UserMessage';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'API.Models.User.Messages.UserMessage';
+    const CLASS_DEFAULT = 'API.Models.User.Message.UserMessage';
 
     /**
      * The total number of columns
@@ -147,8 +147,8 @@ class UserMessageTableMap extends TableMap
         $this->setName('user_message');
         $this->setPhpName('UserMessage');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\API\\Models\\User\\Messages\\UserMessage');
-        $this->setPackage('API.Models.User.Messages');
+        $this->setClassName('\\API\\Models\\User\\Message\\UserMessage');
+        $this->setPackage('API.Models.User.Message');
         $this->setUseIdGenerator(false);
         // columns
         $this->addPrimaryKey('user_messageid', 'UserMessageid', 'INTEGER', true, null, null);
@@ -188,7 +188,7 @@ class UserMessageTableMap extends TableMap
      * to the cache in order to ensure that the same objects are always returned by find*()
      * and findPk*() calls.
      *
-     * @param \API\Models\User\Messages\UserMessage $obj A \API\Models\User\Messages\UserMessage object.
+     * @param \API\Models\User\Message\UserMessage $obj A \API\Models\User\Message\UserMessage object.
      * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
@@ -209,12 +209,12 @@ class UserMessageTableMap extends TableMap
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param mixed $value A \API\Models\User\Messages\UserMessage object or a primary key value.
+     * @param mixed $value A \API\Models\User\Message\UserMessage object or a primary key value.
      */
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && null !== $value) {
-            if (is_object($value) && $value instanceof \API\Models\User\Messages\UserMessage) {
+            if (is_object($value) && $value instanceof \API\Models\User\Message\UserMessage) {
                 $key = serialize([(null === $value->getUserMessageid() || is_scalar($value->getUserMessageid()) || is_callable([$value->getUserMessageid(), '__toString']) ? (string) $value->getUserMessageid() : $value->getUserMessageid()), (null === $value->getToEventUserid() || is_scalar($value->getToEventUserid()) || is_callable([$value->getToEventUserid(), '__toString']) ? (string) $value->getToEventUserid() : $value->getToEventUserid())]);
 
             } elseif (is_array($value) && count($value) === 2) {
@@ -225,7 +225,7 @@ class UserMessageTableMap extends TableMap
 
                 return;
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \API\Models\User\Messages\UserMessage object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \API\Models\User\Message\UserMessage object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
                 throw $e;
             }
 
@@ -442,7 +442,7 @@ class UserMessageTableMap extends TableMap
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \API\Models\User\Messages\UserMessage) { // it's a model object
+        } elseif ($values instanceof \API\Models\User\Message\UserMessage) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks

@@ -1,14 +1,14 @@
 <?php
 
-namespace API\Models\User\Messages\Base;
+namespace API\Models\User\Message\Base;
 
 use \DateTime;
 use \Exception;
 use \PDO;
 use API\Models\Event\EventUser;
 use API\Models\Event\EventUserQuery;
-use API\Models\User\Messages\UserMessageQuery as ChildUserMessageQuery;
-use API\Models\User\Messages\Map\UserMessageTableMap;
+use API\Models\User\Message\UserMessageQuery as ChildUserMessageQuery;
+use API\Models\User\Message\Map\UserMessageTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -27,14 +27,14 @@ use Propel\Runtime\Util\PropelDateTime;
  *
  *
  *
- * @package    propel.generator.API.Models.User.Messages.Base
+ * @package    propel.generator.API.Models.User.Message.Base
  */
 abstract class UserMessage implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\API\\Models\\User\\Messages\\Map\\UserMessageTableMap';
+    const TABLE_MAP = '\\API\\Models\\User\\Message\\Map\\UserMessageTableMap';
 
 
     /**
@@ -124,7 +124,7 @@ abstract class UserMessage implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * Initializes internal state of API\Models\User\Messages\Base\UserMessage object.
+     * Initializes internal state of API\Models\User\Message\Base\UserMessage object.
      */
     public function __construct()
     {
@@ -432,7 +432,7 @@ abstract class UserMessage implements ActiveRecordInterface
      * Set the value of [user_messageid] column.
      *
      * @param int $v new value
-     * @return $this|\API\Models\User\Messages\UserMessage The current object (for fluent API support)
+     * @return $this|\API\Models\User\Message\UserMessage The current object (for fluent API support)
      */
     public function setUserMessageid($v)
     {
@@ -452,7 +452,7 @@ abstract class UserMessage implements ActiveRecordInterface
      * Set the value of [from_event_userid] column.
      *
      * @param int $v new value
-     * @return $this|\API\Models\User\Messages\UserMessage The current object (for fluent API support)
+     * @return $this|\API\Models\User\Message\UserMessage The current object (for fluent API support)
      */
     public function setFromEventUserid($v)
     {
@@ -476,7 +476,7 @@ abstract class UserMessage implements ActiveRecordInterface
      * Set the value of [to_event_userid] column.
      *
      * @param int $v new value
-     * @return $this|\API\Models\User\Messages\UserMessage The current object (for fluent API support)
+     * @return $this|\API\Models\User\Message\UserMessage The current object (for fluent API support)
      */
     public function setToEventUserid($v)
     {
@@ -500,7 +500,7 @@ abstract class UserMessage implements ActiveRecordInterface
      * Set the value of [message] column.
      *
      * @param string $v new value
-     * @return $this|\API\Models\User\Messages\UserMessage The current object (for fluent API support)
+     * @return $this|\API\Models\User\Message\UserMessage The current object (for fluent API support)
      */
     public function setMessage($v)
     {
@@ -521,7 +521,7 @@ abstract class UserMessage implements ActiveRecordInterface
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
-     * @return $this|\API\Models\User\Messages\UserMessage The current object (for fluent API support)
+     * @return $this|\API\Models\User\Message\UserMessage The current object (for fluent API support)
      */
     public function setDate($v)
     {
@@ -544,7 +544,7 @@ abstract class UserMessage implements ActiveRecordInterface
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
      *
      * @param  boolean|integer|string $v The new value
-     * @return $this|\API\Models\User\Messages\UserMessage The current object (for fluent API support)
+     * @return $this|\API\Models\User\Message\UserMessage The current object (for fluent API support)
      */
     public function setReaded($v)
     {
@@ -631,7 +631,7 @@ abstract class UserMessage implements ActiveRecordInterface
             return $startcol + 6; // 6 = UserMessageTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\User\\Messages\\UserMessage'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\User\\Message\\UserMessage'), 0, $e);
         }
     }
 
@@ -1059,7 +1059,7 @@ abstract class UserMessage implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\API\Models\User\Messages\UserMessage
+     * @return $this|\API\Models\User\Message\UserMessage
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
@@ -1074,7 +1074,7 @@ abstract class UserMessage implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\API\Models\User\Messages\UserMessage
+     * @return $this|\API\Models\User\Message\UserMessage
      */
     public function setByPosition($pos, $value)
     {
@@ -1160,7 +1160,7 @@ abstract class UserMessage implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\API\Models\User\Messages\UserMessage The current object, for fluid interface
+     * @return $this|\API\Models\User\Message\UserMessage The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1294,7 +1294,7 @@ abstract class UserMessage implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \API\Models\User\Messages\UserMessage (or compatible) type.
+     * @param      object $copyObj An object of \API\Models\User\Message\UserMessage (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
@@ -1321,7 +1321,7 @@ abstract class UserMessage implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \API\Models\User\Messages\UserMessage Clone of current object.
+     * @return \API\Models\User\Message\UserMessage Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1338,7 +1338,7 @@ abstract class UserMessage implements ActiveRecordInterface
      * Declares an association between this object and a EventUser object.
      *
      * @param  EventUser $v
-     * @return $this|\API\Models\User\Messages\UserMessage The current object (for fluent API support)
+     * @return $this|\API\Models\User\Message\UserMessage The current object (for fluent API support)
      * @throws PropelException
      */
     public function setEventUserRelatedByFromEventUserid(EventUser $v = null)
@@ -1391,7 +1391,7 @@ abstract class UserMessage implements ActiveRecordInterface
      * Declares an association between this object and a EventUser object.
      *
      * @param  EventUser $v
-     * @return $this|\API\Models\User\Messages\UserMessage The current object (for fluent API support)
+     * @return $this|\API\Models\User\Message\UserMessage The current object (for fluent API support)
      * @throws PropelException
      */
     public function setEventUserRelatedByToEventUserid(EventUser $v = null)

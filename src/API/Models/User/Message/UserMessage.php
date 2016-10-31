@@ -1,8 +1,8 @@
 <?php
 
-namespace API\Models\User\Messages;
+namespace API\Models\User\Message;
 
-use API\Models\User\Messages\Base\UserMessage as BaseUserMessage;
+use API\Models\User\Message\Base\UserMessage as BaseUserMessage;
 
 /**
  * Skeleton subclass for representing a row from the 'user_message' table.

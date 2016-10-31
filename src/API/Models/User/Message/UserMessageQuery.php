@@ -1,8 +1,8 @@
 <?php
 
-namespace API\Models\User\Messages;
+namespace API\Models\User\Message;
 
-use API\Models\User\Messages\Base\UserMessageQuery as BaseUserMessageQuery;
+use API\Models\User\Message\Base\UserMessageQuery as BaseUserMessageQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'user_message' table.

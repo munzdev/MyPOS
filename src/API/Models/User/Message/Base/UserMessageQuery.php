@@ -1,13 +1,13 @@
 <?php
 
-namespace API\Models\User\Messages\Base;
+namespace API\Models\User\Message\Base;
 
 use \Exception;
 use \PDO;
 use API\Models\Event\EventUser;
-use API\Models\User\Messages\UserMessage as ChildUserMessage;
-use API\Models\User\Messages\UserMessageQuery as ChildUserMessageQuery;
-use API\Models\User\Messages\Map\UserMessageTableMap;
+use API\Models\User\Message\UserMessage as ChildUserMessage;
+use API\Models\User\Message\UserMessageQuery as ChildUserMessageQuery;
+use API\Models\User\Message\Map\UserMessageTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -100,13 +100,13 @@ abstract class UserMessageQuery extends ModelCriteria
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \API\Models\User\Messages\Base\UserMessageQuery object.
+     * Initializes internal state of \API\Models\User\Message\Base\UserMessageQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\API\\Models\\User\\Messages\\UserMessage', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\API\\Models\\User\\Message\\UserMessage', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
