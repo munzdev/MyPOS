@@ -1,27 +1,22 @@
 define([
-    "app",
-    "collections/custom/product/MenuCollection"
-], function(app, MenuCollection){
+    "models/db/Menu/MenuGroup",
+    "collections/custom/product/MenuCollection",
+    "app"
+], function(MenuGroup,
+            MenuCollection){
     "use strict";
-
-    var GroupModel = Backbone.Model.extend({
-
-        defaults: function() {
-            return {
-                menu_groupid: 0,
-                menu_typeid: 0,
-                name: '',
-                menues: new MenuCollection
-            };
-        },
-
-        parse: function(response)
+    
+    return class GroupModel extends MenuGroup
+    {
+        defaults()
+        {
+            return _.extend(super.defaults(), {menues: new MenuCollection});
+        }
+        
+        parse(response)
         {
             response.menues = new MenuCollection(response.menues, {parse: true});
-            return response;
+            return super.response(response);
         }
-
-    });
-
-    return GroupModel;
+    }
 });

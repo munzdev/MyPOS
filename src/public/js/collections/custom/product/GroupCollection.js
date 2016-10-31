@@ -1,12 +1,11 @@
 define([
-    "app",
-    "models/custom/product/GroupModel"
-], function(app, GroupModel){
+    "models/custom/product/GroupModel",
+    "app"
+], function(GroupModel){
     "use strict";
-
-    var GroupCollection = Backbone.Collection.extend({
-        model: GroupModel
-    });
-
-    return GroupCollection;
+    
+    return class GroupCollection extends Backbone.Collection
+    {
+        model() { return GroupModel; }
+    }
 });

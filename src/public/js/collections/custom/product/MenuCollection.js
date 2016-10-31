@@ -1,12 +1,11 @@
 define([
-    "app",
-    "models/custom/product/MenuModel"
-], function(app, MenuModel){
+    "models/custom/product/MenuModel",
+    "app"
+], function(MenuModel){
     "use strict";
-
-    var MenuCollection = Backbone.Collection.extend({
-        model: MenuModel
-    });
-
-    return MenuCollection;
+    
+    return class MenuCollection extends Backbone.Collection
+    {
+        model() { return MenuModel; }
+    }
 });

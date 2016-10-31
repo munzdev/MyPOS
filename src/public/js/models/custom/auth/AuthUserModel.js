@@ -1,20 +1,25 @@
 define([
-    "app"
-], function(app){
+    "app",
+    "models/db/User/User",
+    "models/db/Event/EventUser"
+], function(app,
+            User,
+            EventUser){
     "use strict";
     
-    return class AuthUserModel extends Backbone.Model
+    return class AuthUserModel extends User
     {
         urlRoot() { return app.API + "Login/User"; }
-        defaults() {
-            return {
-                Userid: 0,
-                Username: '',
-                Firstname: '',
-                Lastname: '',
-                IsAdmin: 0,
-                UserRoles: 0
-            }
+        
+        defaults()
+        {
+            return _.extend(super.defaults(), {EventUser: new EventUser});
+        }
+        
+        parse(response)
+        {
+            response.EventUser = new EventUser(response.EventUser, {parse: true});
+            return super.parse(response);
         }
     }
 });
