@@ -8,7 +8,7 @@ use API\Models\Event\EventUser as ChildEventUser;
 use API\Models\Event\EventUserQuery as ChildEventUserQuery;
 use API\Models\Event\Map\EventUserTableMap;
 use API\Models\User\User;
-use API\Models\User\Messages\UserMessage;
+use API\Models\User\Message\UserMessage;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -82,7 +82,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventUserQuery rightJoinWithUserMessageRelatedByToEventUserid() Adds a RIGHT JOIN clause and with to the query using the UserMessageRelatedByToEventUserid relation
  * @method     ChildEventUserQuery innerJoinWithUserMessageRelatedByToEventUserid() Adds a INNER JOIN clause and with to the query using the UserMessageRelatedByToEventUserid relation
  *
- * @method     \API\Models\Event\EventQuery|\API\Models\User\UserQuery|\API\Models\User\Messages\UserMessageQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\Event\EventQuery|\API\Models\User\UserQuery|\API\Models\User\Message\UserMessageQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildEventUser findOne(ConnectionInterface $con = null) Return the first ChildEventUser matching the query
  * @method     ChildEventUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEventUser matching the query, or a new ChildEventUser object populated from the query conditions when no match is found
@@ -676,16 +676,16 @@ abstract class EventUserQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \API\Models\User\Messages\UserMessage object
+     * Filter the query by a related \API\Models\User\Message\UserMessage object
      *
-     * @param \API\Models\User\Messages\UserMessage|ObjectCollection $userMessage the related object to use as filter
+     * @param \API\Models\User\Message\UserMessage|ObjectCollection $userMessage the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildEventUserQuery The current query, for fluid interface
      */
     public function filterByUserMessageRelatedByFromEventUserid($userMessage, $comparison = null)
     {
-        if ($userMessage instanceof \API\Models\User\Messages\UserMessage) {
+        if ($userMessage instanceof \API\Models\User\Message\UserMessage) {
             return $this
                 ->addUsingAlias(EventUserTableMap::COL_EVENT_USERID, $userMessage->getFromEventUserid(), $comparison);
         } elseif ($userMessage instanceof ObjectCollection) {
@@ -694,7 +694,7 @@ abstract class EventUserQuery extends ModelCriteria
                 ->filterByPrimaryKeys($userMessage->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByUserMessageRelatedByFromEventUserid() only accepts arguments of type \API\Models\User\Messages\UserMessage or Collection');
+            throw new PropelException('filterByUserMessageRelatedByFromEventUserid() only accepts arguments of type \API\Models\User\Message\UserMessage or Collection');
         }
     }
 
@@ -739,26 +739,26 @@ abstract class EventUserQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \API\Models\User\Messages\UserMessageQuery A secondary query class using the current class as primary query
+     * @return \API\Models\User\Message\UserMessageQuery A secondary query class using the current class as primary query
      */
     public function useUserMessageRelatedByFromEventUseridQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinUserMessageRelatedByFromEventUserid($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'UserMessageRelatedByFromEventUserid', '\API\Models\User\Messages\UserMessageQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'UserMessageRelatedByFromEventUserid', '\API\Models\User\Message\UserMessageQuery');
     }
 
     /**
-     * Filter the query by a related \API\Models\User\Messages\UserMessage object
+     * Filter the query by a related \API\Models\User\Message\UserMessage object
      *
-     * @param \API\Models\User\Messages\UserMessage|ObjectCollection $userMessage the related object to use as filter
+     * @param \API\Models\User\Message\UserMessage|ObjectCollection $userMessage the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildEventUserQuery The current query, for fluid interface
      */
     public function filterByUserMessageRelatedByToEventUserid($userMessage, $comparison = null)
     {
-        if ($userMessage instanceof \API\Models\User\Messages\UserMessage) {
+        if ($userMessage instanceof \API\Models\User\Message\UserMessage) {
             return $this
                 ->addUsingAlias(EventUserTableMap::COL_EVENT_USERID, $userMessage->getToEventUserid(), $comparison);
         } elseif ($userMessage instanceof ObjectCollection) {
@@ -767,7 +767,7 @@ abstract class EventUserQuery extends ModelCriteria
                 ->filterByPrimaryKeys($userMessage->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByUserMessageRelatedByToEventUserid() only accepts arguments of type \API\Models\User\Messages\UserMessage or Collection');
+            throw new PropelException('filterByUserMessageRelatedByToEventUserid() only accepts arguments of type \API\Models\User\Message\UserMessage or Collection');
         }
     }
 
@@ -812,13 +812,13 @@ abstract class EventUserQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \API\Models\User\Messages\UserMessageQuery A secondary query class using the current class as primary query
+     * @return \API\Models\User\Message\UserMessageQuery A secondary query class using the current class as primary query
      */
     public function useUserMessageRelatedByToEventUseridQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinUserMessageRelatedByToEventUserid($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'UserMessageRelatedByToEventUserid', '\API\Models\User\Messages\UserMessageQuery');
+            ->useQuery($relationAlias ? $relationAlias : 'UserMessageRelatedByToEventUserid', '\API\Models\User\Message\UserMessageQuery');
     }
 
     /**

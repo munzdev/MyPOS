@@ -4,7 +4,7 @@ namespace API\Models\Event\Map;
 
 use API\Models\Event\EventUser;
 use API\Models\Event\EventUserQuery;
-use API\Models\User\Messages\Map\UserMessageTableMap;
+use API\Models\User\Message\Map\UserMessageTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -173,14 +173,14 @@ class EventUserTableMap extends TableMap
     1 => ':userid',
   ),
 ), 'CASCADE', null, null, false);
-        $this->addRelation('UserMessageRelatedByFromEventUserid', '\\API\\Models\\User\\Messages\\UserMessage', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('UserMessageRelatedByFromEventUserid', '\\API\\Models\\User\\Message\\UserMessage', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':from_event_userid',
     1 => ':event_userid',
   ),
 ), 'CASCADE', null, 'UserMessagesRelatedByFromEventUserid', false);
-        $this->addRelation('UserMessageRelatedByToEventUserid', '\\API\\Models\\User\\Messages\\UserMessage', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('UserMessageRelatedByToEventUserid', '\\API\\Models\\User\\Message\\UserMessage', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':to_event_userid',

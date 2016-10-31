@@ -11,10 +11,10 @@ use API\Models\Event\EventUserQuery as ChildEventUserQuery;
 use API\Models\Event\Map\EventUserTableMap;
 use API\Models\User\User;
 use API\Models\User\UserQuery;
-use API\Models\User\Messages\UserMessage;
-use API\Models\User\Messages\UserMessageQuery;
-use API\Models\User\Messages\Base\UserMessage as BaseUserMessage;
-use API\Models\User\Messages\Map\UserMessageTableMap;
+use API\Models\User\Message\UserMessage;
+use API\Models\User\Message\UserMessageQuery;
+use API\Models\User\Message\Base\UserMessage as BaseUserMessage;
+use API\Models\User\Message\Map\UserMessageTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -791,7 +791,7 @@ abstract class EventUser implements ActiveRecordInterface
 
             if ($this->userMessagesRelatedByFromEventUseridScheduledForDeletion !== null) {
                 if (!$this->userMessagesRelatedByFromEventUseridScheduledForDeletion->isEmpty()) {
-                    \API\Models\User\Messages\UserMessageQuery::create()
+                    \API\Models\User\Message\UserMessageQuery::create()
                         ->filterByPrimaryKeys($this->userMessagesRelatedByFromEventUseridScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
                     $this->userMessagesRelatedByFromEventUseridScheduledForDeletion = null;
@@ -808,7 +808,7 @@ abstract class EventUser implements ActiveRecordInterface
 
             if ($this->userMessagesRelatedByToEventUseridScheduledForDeletion !== null) {
                 if (!$this->userMessagesRelatedByToEventUseridScheduledForDeletion->isEmpty()) {
-                    \API\Models\User\Messages\UserMessageQuery::create()
+                    \API\Models\User\Message\UserMessageQuery::create()
                         ->filterByPrimaryKeys($this->userMessagesRelatedByToEventUseridScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
                     $this->userMessagesRelatedByToEventUseridScheduledForDeletion = null;
@@ -1543,7 +1543,7 @@ abstract class EventUser implements ActiveRecordInterface
         $collectionClassName = UserMessageTableMap::getTableMap()->getCollectionClassName();
 
         $this->collUserMessagesRelatedByFromEventUserid = new $collectionClassName;
-        $this->collUserMessagesRelatedByFromEventUserid->setModel('\API\Models\User\Messages\UserMessage');
+        $this->collUserMessagesRelatedByFromEventUserid->setModel('\API\Models\User\Message\UserMessage');
     }
 
     /**
@@ -1768,7 +1768,7 @@ abstract class EventUser implements ActiveRecordInterface
         $collectionClassName = UserMessageTableMap::getTableMap()->getCollectionClassName();
 
         $this->collUserMessagesRelatedByToEventUserid = new $collectionClassName;
-        $this->collUserMessagesRelatedByToEventUserid->setModel('\API\Models\User\Messages\UserMessage');
+        $this->collUserMessagesRelatedByToEventUserid->setModel('\API\Models\User\Message\UserMessage');
     }
 
     /**
