@@ -13,7 +13,7 @@
   <table name="coupon" idMethod="native" phpName="Coupon" namespace="API\Models\Payment">
     <column name="couponid" phpName="Couponid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="created_by" phpName="CreatedBy" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="created_by_userid" phpName="CreatedByUserid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="code" phpName="Code" type="VARCHAR" size="24" required="true"/>
     <column name="created" phpName="Created" type="TIMESTAMP" required="true"/>
     <column name="value" phpName="Value" type="DECIMAL" size="7" scale="2" required="true"/>

@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   `ordertime` DATETIME NOT NULL,
   `priority` INT NOT NULL,
   `finished` DATETIME NULL,
-  PRIMARY KEY (`orderid`, `eventid`, `event_tableid`, `userid`),
+  PRIMARY KEY (`orderid`, `event_tableid`, `userid`),
   UNIQUE INDEX `oder_id_UNIQUE` (`orderid` ASC),
   INDEX `ordertime` (`ordertime` ASC),
   INDEX `fk_orders_users1_idx` (`userid` ASC),
@@ -643,7 +643,7 @@ CREATE TABLE IF NOT EXISTS `invoice` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet die Rechnungsnummer mit dem Aussstellungsdatum, die es gibt';
+COMMENT = 'Beinhaltet die Rechnungsnummer mit dem Aussstellungsdatum, die es gibt. Auserdem ob Rechnung storniert wurde';
 
 
 -- -----------------------------------------------------
@@ -767,7 +767,8 @@ CREATE TABLE IF NOT EXISTS `payment_type` (
   `name` VARCHAR(24) NOT NULL,
   PRIMARY KEY (`payment_typeid`),
   UNIQUE INDEX `idpayment_typeid_UNIQUE` (`payment_typeid` ASC))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Beinhaltet bezahlarten';
 
 
 -- -----------------------------------------------------
@@ -795,7 +796,8 @@ CREATE TABLE IF NOT EXISTS `payment` (
     REFERENCES `invoice` (`invoiceid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Beinhaltet die Zahlung für eine Rechnung';
 
 
 -- -----------------------------------------------------
@@ -806,24 +808,25 @@ DROP TABLE IF EXISTS `Coupon` ;
 CREATE TABLE IF NOT EXISTS `Coupon` (
   `couponid` INT NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
-  `created_by` INT(11) NOT NULL,
+  `created_by_userid` INT(11) NOT NULL,
   `code` VARCHAR(24) NOT NULL,
   `created` DATETIME NOT NULL,
   `value` DECIMAL(7,2) NOT NULL,
-  PRIMARY KEY (`couponid`, `eventid`, `created_by`),
+  PRIMARY KEY (`couponid`, `eventid`, `created_by_userid`),
   INDEX `fk_Coupons_events1_idx` (`eventid` ASC),
-  INDEX `fk_Coupons_users1_idx` (`created_by` ASC),
+  INDEX `fk_Coupons_users1_idx` (`created_by_userid` ASC),
   CONSTRAINT `fk_Coupons_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `event` (`eventid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Coupons_users1`
-    FOREIGN KEY (`created_by`)
+    FOREIGN KEY (`created_by_userid`)
     REFERENCES `user` (`userid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Beinhaltet ausgegebene Gutscheine';
 
 
 -- -----------------------------------------------------
@@ -848,7 +851,8 @@ CREATE TABLE IF NOT EXISTS `payment_coupon` (
     REFERENCES `payment` (`paymentid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Beinhaltet Gutscheine die für eine Bezahlung verwendet wurden';
 
 
 -- -----------------------------------------------------
