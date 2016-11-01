@@ -2,9 +2,11 @@
 
 namespace API\Controllers\Login;
 
-use Slim\App;
-use API\Lib\{Controller, Auth};
+use API\Lib\Auth;
+use API\Lib\Controller;
+use API\Models\Event\Map\EventUserTableMap;
 use API\Models\User\UserQuery;
+use Slim\App;
 
 class User extends Controller
 {    
@@ -22,7 +24,7 @@ class User extends Controller
         $o_user = $this->o_auth->GetCurrentUser();        
         
         $a_return = $o_user->toArray();
-        $a_return['EventUser'] = $o_user->getEventUsers()->getFirst()->toArray();
+        $a_return[EventUserTableMap::getTableMap()->getPhpName()] = $o_user->getEventUser()->toArray();
         
         $this->o_response->withJson($a_return);
     }

@@ -1,7 +1,11 @@
 <?php
 namespace API\Lib;
 
-use API\Models\User\{User, UserQuery};
+use API\Models\Event\Map\EventUserTableMap;
+use API\Models\User\Map\UserTableMap;
+use API\Models\User\User;
+use API\Models\User\UserQuery;
+use Propel\Runtime\Collection\Collection;
 
 class Auth
 {
@@ -52,20 +56,19 @@ class Auth
      * @return User|null
      */
     private function FindUserObject(string $str_username) // : ?User
-    {            
-        $o_user = $this->o_queryClass->create()->joinEventUser()
-                                               ->useEventUserQuery()
-                                                  ->joinEvent()
+    {                                    
+        $o_user = $this->o_queryClass->create()->useEventUserQuery()
                                                   ->useEventQuery()
                                                       ->filterByActive(true)
                                                   ->endUse()
                                                ->endUse()         
                                                ->filterByUsername($str_username)
                                                ->filterByActive(true)
-                                               ->findOne();
+                                               ->with(EventUserTableMap::getTableMap()->getPhpName())
+                                               ->find();
         
-        if($o_user)
-            return $o_user;
+        if(!$o_user->isEmpty())
+            return $o_user->getFirst();
                         
         return $this->o_queryClass->create()->filterByUsername($str_username)
                                             ->filterByIsAdmin(true)
@@ -75,7 +78,8 @@ class Auth
 
     public function SetLogin(User $o_user) : void
     {
-        $_SESSION['Auth'] = serialize($o_user);
+        $_SESSION['Auth'][UserTableMap::getTableMap()->getPhpName()] = serialize($o_user);
+        $_SESSION['Auth'][EventUserTableMap::getTableMap()->getPhpName()] = serialize($o_user->getEventUser());
     }    
 
     /**
@@ -86,8 +90,15 @@ class Auth
     {
         if(isset($_SESSION['Auth']))
         {
-            return unserialize($_SESSION['Auth']);
-        }
+            $o_user = unserialize($_SESSION['Auth'][UserTableMap::getTableMap()->getPhpName()]);
+            $o_eventUser = unserialize($_SESSION['Auth'][EventUserTableMap::getTableMap()->getPhpName()]);
+            
+            $o_collection = new Collection([$o_eventUser]);
+            
+            $o_user->setEventUsers($o_collection);
+            
+            return $o_user;
+       }
         
         return null;
     }
