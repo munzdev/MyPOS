@@ -2,6 +2,7 @@
 
 namespace API\Models\User;
 
+use API\Models\Event\EventUser;
 use API\Models\User\Base\User as BaseUser;
 
 /**
@@ -16,36 +17,12 @@ use API\Models\User\Base\User as BaseUser;
  */
 class User extends BaseUser
 {
-    use UserTrait;
-    
     /**
      * 
-     * Only for Auth Lib!
-     * 
-     * @return int|null
+     * @return EventUser
      */
-    public function getUserRoles()
+    public function getEventUser() : EventUser
     {
-        $str_userRoleFieldName = $this->getUserRoleFieldName();
-        
-        if($this->hasVirtualColumn($str_userRoleFieldName))        
-        {
-            return $this->getVirtualColumn($str_userRoleFieldName);
-        }
-        
-        return null;
+        return $this->getEventUsers()->getFirst();
     }
-    
-    /**
-     * 
-     * Only for Auth Lib!
-     * 
-     * @return $this
-     */
-    public function setUserRoles(int $v)
-    {                
-        $this->setVirtualColumn($this->getUserRoleFieldName(), $v);
-
-        return $this;
-    }    
 }

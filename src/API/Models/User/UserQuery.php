@@ -16,5 +16,5 @@ use API\Models\User\Base\UserQuery as BaseUserQuery;
  */
 class UserQuery extends BaseUserQuery
 {
-    use UserTrait;
+
 }
