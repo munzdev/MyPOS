@@ -135,6 +135,7 @@ class DistributionPlaceTableTableMap extends TableMap
         $this->setClassName('\\API\\Models\\DistributionPlace\\DistributionPlaceTable');
         $this->setPackage('API.Models.DistributionPlace');
         $this->setUseIdGenerator(false);
+        $this->setIsCrossRef(true);
         // columns
         $this->addForeignPrimaryKey('event_tableid', 'EventTableid', 'INTEGER' , 'event_table', 'event_tableid', true, null, null);
         $this->addForeignPrimaryKey('distribution_placeid', 'DistributionPlaceid', 'INTEGER' , 'distribution_place', 'distribution_placeid', true, null, null);

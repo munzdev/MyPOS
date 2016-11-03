@@ -651,6 +651,40 @@ abstract class EventTableQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related MenuGroup object
+     * using the distribution_place_table table as cross reference
+     *
+     * @param MenuGroup $menuGroup the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildEventTableQuery The current query, for fluid interface
+     */
+    public function filterByMenuGroup($menuGroup, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useDistributionPlaceTableQuery()
+            ->filterByMenuGroup($menuGroup, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related DistributionPlace object
+     * using the distribution_place_table table as cross reference
+     *
+     * @param DistributionPlace $distributionPlace the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildEventTableQuery The current query, for fluid interface
+     */
+    public function filterByDistributionPlace($distributionPlace, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useDistributionPlaceTableQuery()
+            ->filterByDistributionPlace($distributionPlace, $comparison)
+            ->endUse();
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   ChildEventTable $eventTable Object to remove from the list of results

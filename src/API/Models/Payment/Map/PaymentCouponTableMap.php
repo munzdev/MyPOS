@@ -135,6 +135,7 @@ class PaymentCouponTableMap extends TableMap
         $this->setClassName('\\API\\Models\\Payment\\PaymentCoupon');
         $this->setPackage('API.Models.Payment');
         $this->setUseIdGenerator(false);
+        $this->setIsCrossRef(true);
         // columns
         $this->addForeignPrimaryKey('couponid', 'Couponid', 'INTEGER' , 'coupon', 'couponid', true, null, null);
         $this->addForeignPrimaryKey('paymentid', 'Paymentid', 'INTEGER' , 'payment', 'paymentid', true, 10, null);

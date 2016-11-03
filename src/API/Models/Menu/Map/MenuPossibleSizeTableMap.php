@@ -140,6 +140,7 @@ class MenuPossibleSizeTableMap extends TableMap
         $this->setClassName('\\API\\Models\\Menu\\MenuPossibleSize');
         $this->setPackage('API.Models.Menu');
         $this->setUseIdGenerator(true);
+        $this->setIsCrossRef(true);
         // columns
         $this->addPrimaryKey('menu_possible_sizeid', 'MenuPossibleSizeid', 'INTEGER', true, null, null);
         $this->addForeignPrimaryKey('menu_sizeid', 'MenuSizeid', 'INTEGER' , 'menu_size', 'menu_sizeid', true, null, null);

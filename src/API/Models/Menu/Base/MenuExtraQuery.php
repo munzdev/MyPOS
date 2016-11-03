@@ -718,6 +718,23 @@ abstract class MenuExtraQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Menu object
+     * using the menu_possible_extra table as cross reference
+     *
+     * @param Menu $menu the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildMenuExtraQuery The current query, for fluid interface
+     */
+    public function filterByMenu($menu, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useMenuPossibleExtraQuery()
+            ->filterByMenu($menu, $comparison)
+            ->endUse();
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   ChildMenuExtra $menuExtra Object to remove from the list of results

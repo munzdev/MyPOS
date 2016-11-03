@@ -60,7 +60,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distribution_place_group" idMethod="native" phpName="DistributionPlaceGroup" namespace="API\Models\DistributionPlace">
+  <table name="distribution_place_group" idMethod="native" phpName="DistributionPlaceGroup" namespace="API\Models\DistributionPlace" isCrossRef="true">
     <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
     <foreign-key foreignTable="distribution_place" name="fk_distributions_places_has_menu_groupes_distributions_places1" onDelete="CASCADE">
@@ -79,7 +79,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distribution_place_table" idMethod="native" phpName="DistributionPlaceTable" namespace="API\Models\DistributionPlace">
+  <table name="distribution_place_table" idMethod="native" phpName="DistributionPlaceTable" namespace="API\Models\DistributionPlace" isCrossRef="true">
     <column name="event_tableid" phpName="EventTableid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
@@ -105,7 +105,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distribution_place_user" idMethod="native" phpName="DistributionPlaceUser" namespace="API\Models\DistributionPlace">
+  <table name="distribution_place_user" idMethod="native" phpName="DistributionPlaceUser" namespace="API\Models\DistributionPlace" isCrossRef="true">
     <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="event_printerid" phpName="EventPrinterid" type="INTEGER" primaryKey="true" required="true"/>
@@ -333,7 +333,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="menu_possible_extra" idMethod="native" phpName="MenuPossibleExtra" namespace="API\Models\Menu">
+  <table name="menu_possible_extra" idMethod="native" phpName="MenuPossibleExtra" namespace="API\Models\Menu" isCrossRef="true">
     <column name="menu_possible_extraid" phpName="MenuPossibleExtraid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="menu_extraid" phpName="MenuExtraid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
@@ -357,7 +357,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="menu_possible_size" idMethod="native" phpName="MenuPossibleSize" namespace="API\Models\Menu">
+  <table name="menu_possible_size" idMethod="native" phpName="MenuPossibleSize" namespace="API\Models\Menu" isCrossRef="true">
     <column name="menu_possible_sizeid" phpName="MenuPossibleSizeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="menu_sizeid" phpName="MenuSizeid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
@@ -513,7 +513,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="order_detail_extra" idMethod="native" phpName="OrderDetailExtra" namespace="API\Models\Ordering">
+  <table name="order_detail_extra" idMethod="native" phpName="OrderDetailExtra" namespace="API\Models\Ordering" isCrossRef="true">
     <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menu_possible_extraid" phpName="MenuPossibleExtraid" type="INTEGER" primaryKey="true" required="true"/>
     <foreign-key foreignTable="menu_possible_extra" name="fk_orders_detail_sizes_menues_possible_extras1" onDelete="CASCADE">
@@ -533,7 +533,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="order_detail_mixed_with" idMethod="native" phpName="OrderDetailMixedWith" namespace="API\Models\Ordering">
+  <table name="order_detail_mixed_with" idMethod="native" phpName="OrderDetailMixedWith" namespace="API\Models\Ordering" isCrossRef="true">
     <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
     <foreign-key foreignTable="menu" name="fk_orders_details_mixed_with_menues1" onDelete="CASCADE">
@@ -635,7 +635,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="payment_coupon" idMethod="native" phpName="PaymentCoupon" namespace="API\Models\Payment">
+  <table name="payment_coupon" idMethod="native" phpName="PaymentCoupon" namespace="API\Models\Payment" isCrossRef="true">
     <column name="couponid" phpName="Couponid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="paymentid" phpName="Paymentid" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
     <column name="value_used" phpName="ValueUsed" type="DECIMAL" size="7" scale="2" required="true"/>

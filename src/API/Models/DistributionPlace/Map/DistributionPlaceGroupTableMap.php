@@ -130,6 +130,7 @@ class DistributionPlaceGroupTableMap extends TableMap
         $this->setClassName('\\API\\Models\\DistributionPlace\\DistributionPlaceGroup');
         $this->setPackage('API.Models.DistributionPlace');
         $this->setUseIdGenerator(false);
+        $this->setIsCrossRef(true);
         // columns
         $this->addForeignPrimaryKey('distribution_placeid', 'DistributionPlaceid', 'INTEGER' , 'distribution_place', 'distribution_placeid', true, null, null);
         $this->addForeignPrimaryKey('menu_groupid', 'MenuGroupid', 'INTEGER' , 'menu_group', 'menu_groupid', true, null, null);

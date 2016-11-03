@@ -872,6 +872,57 @@ abstract class MenuGroupQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related DistributionPlace object
+     * using the distribution_place_group table as cross reference
+     *
+     * @param DistributionPlace $distributionPlace the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildMenuGroupQuery The current query, for fluid interface
+     */
+    public function filterByDistributionPlace($distributionPlace, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useDistributionPlaceGroupQuery()
+            ->filterByDistributionPlace($distributionPlace, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related DistributionPlace object
+     * using the distribution_place_table table as cross reference
+     *
+     * @param DistributionPlace $distributionPlace the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildMenuGroupQuery The current query, for fluid interface
+     */
+    public function filterByDistributionPlace($distributionPlace, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useDistributionPlaceTableQuery()
+            ->filterByDistributionPlace($distributionPlace, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related EventTable object
+     * using the distribution_place_table table as cross reference
+     *
+     * @param EventTable $eventTable the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildMenuGroupQuery The current query, for fluid interface
+     */
+    public function filterByEventTable($eventTable, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useDistributionPlaceTableQuery()
+            ->filterByEventTable($eventTable, $comparison)
+            ->endUse();
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   ChildMenuGroup $menuGroup Object to remove from the list of results

@@ -703,6 +703,91 @@ abstract class DistributionPlaceQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related MenuGroup object
+     * using the distribution_place_group table as cross reference
+     *
+     * @param MenuGroup $menuGroup the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildDistributionPlaceQuery The current query, for fluid interface
+     */
+    public function filterByMenuGroup($menuGroup, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useDistributionPlaceGroupQuery()
+            ->filterByMenuGroup($menuGroup, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related MenuGroup object
+     * using the distribution_place_table table as cross reference
+     *
+     * @param MenuGroup $menuGroup the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildDistributionPlaceQuery The current query, for fluid interface
+     */
+    public function filterByMenuGroup($menuGroup, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useDistributionPlaceTableQuery()
+            ->filterByMenuGroup($menuGroup, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related EventTable object
+     * using the distribution_place_table table as cross reference
+     *
+     * @param EventTable $eventTable the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildDistributionPlaceQuery The current query, for fluid interface
+     */
+    public function filterByEventTable($eventTable, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useDistributionPlaceTableQuery()
+            ->filterByEventTable($eventTable, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related User object
+     * using the distribution_place_user table as cross reference
+     *
+     * @param User $user the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildDistributionPlaceQuery The current query, for fluid interface
+     */
+    public function filterByUser($user, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useDistributionPlaceUserQuery()
+            ->filterByUser($user, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related EventPrinter object
+     * using the distribution_place_user table as cross reference
+     *
+     * @param EventPrinter $eventPrinter the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildDistributionPlaceQuery The current query, for fluid interface
+     */
+    public function filterByEventPrinter($eventPrinter, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useDistributionPlaceUserQuery()
+            ->filterByEventPrinter($eventPrinter, $comparison)
+            ->endUse();
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   ChildDistributionPlace $distributionPlace Object to remove from the list of results

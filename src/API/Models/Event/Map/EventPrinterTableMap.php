@@ -185,6 +185,8 @@ class EventPrinterTableMap extends TableMap
     1 => ':event_printerid',
   ),
 ), 'CASCADE', null, 'DistributionPlaceUsers', false);
+        $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'DistributionPlaces');
+        $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Users');
     } // buildRelations()
 
     /**

@@ -4,6 +4,7 @@ namespace API\Models\Event\Base;
 
 use \Exception;
 use \PDO;
+use API\Models\DistributionPlace\DistributionPlace;
 use API\Models\DistributionPlace\DistributionPlaceUser;
 use API\Models\DistributionPlace\DistributionPlaceUserQuery;
 use API\Models\DistributionPlace\Base\DistributionPlaceUser as BaseDistributionPlaceUser;
@@ -13,12 +14,14 @@ use API\Models\Event\EventPrinter as ChildEventPrinter;
 use API\Models\Event\EventPrinterQuery as ChildEventPrinterQuery;
 use API\Models\Event\EventQuery as ChildEventQuery;
 use API\Models\Event\Map\EventPrinterTableMap;
+use API\Models\User\User;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\ObjectCombinationCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -128,12 +131,47 @@ abstract class EventPrinter implements ActiveRecordInterface
     protected $collDistributionPlaceUsersPartial;
 
     /**
+     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildDistributionPlace, ChildUser combination combinations.
+     */
+    protected $combinationCollDistributionPlaceUsers;
+
+    /**
+     * @var bool
+     */
+    protected $combinationCollDistributionPlaceUsersPartial;
+
+    /**
+     * @var        ObjectCollection|DistributionPlace[] Cross Collection to store aggregation of DistributionPlace objects.
+     */
+    protected $collDistributionPlaces;
+
+    /**
+     * @var bool
+     */
+    protected $collDistributionPlacesPartial;
+
+    /**
+     * @var        ObjectCollection|User[] Cross Collection to store aggregation of User objects.
+     */
+    protected $collUsers;
+
+    /**
+     * @var bool
+     */
+    protected $collUsersPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildDistributionPlace, ChildUser combination combinations.
+     */
+    protected $combinationCollDistributionPlaceUsersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -729,6 +767,7 @@ abstract class EventPrinter implements ActiveRecordInterface
             $this->aEvent = null;
             $this->collDistributionPlaceUsers = null;
 
+            $this->collDistributionPlaceUsers = null;
         } // if (deep)
     }
 
@@ -850,6 +889,45 @@ abstract class EventPrinter implements ActiveRecordInterface
                 }
                 $this->resetModified();
             }
+
+            if ($this->combinationCollDistributionPlaceUsersScheduledForDeletion !== null) {
+                if (!$this->combinationCollDistributionPlaceUsersScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    foreach ($this->combinationCollDistributionPlaceUsersScheduledForDeletion as $combination) {
+                        $entryPk = [];
+
+                        $entryPk[2] = $this->getEventPrinterid();
+                        $entryPk[0] = $combination[0]->getDistributionPlaceid();
+                        $entryPk[1] = $combination[1]->getUserid();
+
+                        $pks[] = $entryPk;
+                    }
+
+                    \API\Models\DistributionPlace\DistributionPlaceUserQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+
+                    $this->combinationCollDistributionPlaceUsersScheduledForDeletion = null;
+                }
+
+            }
+
+            if (null !== $this->combinationCollDistributionPlaceUsers) {
+                foreach ($this->combinationCollDistributionPlaceUsers as $combination) {
+
+                    //$combination[0] = DistributionPlace (fk_distributions_places_has_users_distributions_places1)
+                    if (!$combination[0]->isDeleted() && ($combination[0]->isNew() || $combination[0]->isModified())) {
+                        $combination[0]->save($con);
+                    }
+
+                    //$combination[1] = User (fk_distributions_places_has_users_users1)
+                    if (!$combination[1]->isDeleted() && ($combination[1]->isNew() || $combination[1]->isModified())) {
+                        $combination[1]->save($con);
+                    }
+
+                }
+            }
+
 
             if ($this->distributionPlaceUsersScheduledForDeletion !== null) {
                 if (!$this->distributionPlaceUsersScheduledForDeletion->isEmpty()) {
@@ -1763,6 +1841,333 @@ abstract class EventPrinter implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collDistributionPlaceUsers collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addDistributionPlaceUsers()
+     */
+    public function clearDistributionPlaceUsers()
+    {
+        $this->collDistributionPlaceUsers = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Initializes the combinationCollDistributionPlaceUsers crossRef collection.
+     *
+     * By default this just sets the combinationCollDistributionPlaceUsers collection to an empty collection (like clearDistributionPlaceUsers());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initDistributionPlaceUsers()
+    {
+        $this->combinationCollDistributionPlaceUsers = new ObjectCombinationCollection;
+        $this->combinationCollDistributionPlaceUsersPartial = true;
+    }
+
+    /**
+     * Checks if the combinationCollDistributionPlaceUsers collection is loaded.
+     *
+     * @return bool
+     */
+    public function isDistributionPlaceUsersLoaded()
+    {
+        return null !== $this->combinationCollDistributionPlaceUsers;
+    }
+
+    /**
+     * Gets a combined collection of DistributionPlace, User objects related by a many-to-many relationship
+     * to the current object by way of the distribution_place_user cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildEventPrinter is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return ObjectCombinationCollection Combination list of DistributionPlace, User objects
+     */
+    public function getDistributionPlaceUsers($criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->combinationCollDistributionPlaceUsersPartial && !$this->isNew();
+        if (null === $this->combinationCollDistributionPlaceUsers || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->combinationCollDistributionPlaceUsers) {
+                    $this->initDistributionPlaceUsers();
+                }
+            } else {
+
+                $query = DistributionPlaceUserQuery::create(null, $criteria)
+                    ->filterByEventPrinter($this)
+                    ->joinDistributionPlace()
+                    ->joinUser()
+                ;
+
+                $items = $query->find($con);
+                $combinationCollDistributionPlaceUsers = new ObjectCombinationCollection();
+                foreach ($items as $item) {
+                    $combination = [];
+
+                    $combination[] = $item->getDistributionPlace();
+                    $combination[] = $item->getUser();
+                    $combinationCollDistributionPlaceUsers[] = $combination;
+                }
+
+                if (null !== $criteria) {
+                    return $combinationCollDistributionPlaceUsers;
+                }
+
+                if ($partial && $this->combinationCollDistributionPlaceUsers) {
+                    //make sure that already added objects gets added to the list of the database.
+                    foreach ($this->combinationCollDistributionPlaceUsers as $obj) {
+                        if (!call_user_func_array([$combinationCollDistributionPlaceUsers, 'contains'], $obj)) {
+                            $combinationCollDistributionPlaceUsers[] = $obj;
+                        }
+                    }
+                }
+
+                $this->combinationCollDistributionPlaceUsers = $combinationCollDistributionPlaceUsers;
+                $this->combinationCollDistributionPlaceUsersPartial = false;
+            }
+        }
+
+        return $this->combinationCollDistributionPlaceUsers;
+    }
+
+    /**
+     * Returns a not cached ObjectCollection of DistributionPlace objects. This will hit always the databases.
+     * If you have attached new DistributionPlace object to this object you need to call `save` first to get
+     * the correct return value. Use getDistributionPlaceUsers() to get the current internal state.
+     *
+     * @param User $user
+     * @param Criteria $criteria
+     * @param ConnectionInterface $con
+     *
+     * @return DistributionPlace[]|ObjectCollection
+     */
+    public function getDistributionPlaces(User $user = null, Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        return $this->createDistributionPlacesQuery($user, $criteria)->find($con);
+    }
+
+    /**
+     * Sets a collection of ChildDistributionPlace, ChildUser combination objects related by a many-to-many relationship
+     * to the current object by way of the distribution_place_user cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param  Collection $distributionPlaceUsers A Propel collection.
+     * @param  ConnectionInterface $con Optional connection object
+     * @return $this|ChildEventPrinter The current object (for fluent API support)
+     */
+    public function setDistributionPlaceUsers(Collection $distributionPlaceUsers, ConnectionInterface $con = null)
+    {
+        $this->clearDistributionPlaceUsers();
+        $currentDistributionPlaceUsers = $this->getDistributionPlaceUsers();
+
+        $combinationCollDistributionPlaceUsersScheduledForDeletion = $currentDistributionPlaceUsers->diff($distributionPlaceUsers);
+
+        foreach ($combinationCollDistributionPlaceUsersScheduledForDeletion as $toDelete) {
+            call_user_func_array([$this, 'removeDistributionPlaceUser'], $toDelete);
+        }
+
+        foreach ($distributionPlaceUsers as $distributionPlaceUser) {
+            if (!call_user_func_array([$currentDistributionPlaceUsers, 'contains'], $distributionPlaceUser)) {
+                call_user_func_array([$this, 'doAddDistributionPlaceUser'], $distributionPlaceUser);
+            }
+        }
+
+        $this->combinationCollDistributionPlaceUsersPartial = false;
+        $this->combinationCollDistributionPlaceUsers = $distributionPlaceUsers;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of ChildDistributionPlace, ChildUser combination objects related by a many-to-many relationship
+     * to the current object by way of the distribution_place_user cross-reference table.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      boolean $distinct Set to true to force count distinct
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return int the number of related ChildDistributionPlace, ChildUser combination objects
+     */
+    public function countDistributionPlaceUsers(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->combinationCollDistributionPlaceUsersPartial && !$this->isNew();
+        if (null === $this->combinationCollDistributionPlaceUsers || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->combinationCollDistributionPlaceUsers) {
+                return 0;
+            } else {
+
+                if ($partial && !$criteria) {
+                    return count($this->getDistributionPlaceUsers());
+                }
+
+                $query = DistributionPlaceUserQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByEventPrinter($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->combinationCollDistributionPlaceUsers);
+        }
+    }
+
+    /**
+     * Returns the not cached count of DistributionPlace objects. This will hit always the databases.
+     * If you have attached new DistributionPlace object to this object you need to call `save` first to get
+     * the correct return value. Use getDistributionPlaceUsers() to get the current internal state.
+     *
+     * @param User $user
+     * @param Criteria $criteria
+     * @param ConnectionInterface $con
+     *
+     * @return integer
+     */
+    public function countDistributionPlaces(User $user = null, Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        return $this->createDistributionPlacesQuery($user, $criteria)->count($con);
+    }
+
+    /**
+     * Associate a DistributionPlace to this object
+     * through the distribution_place_user cross reference table.
+     *
+     * @param DistributionPlace $distributionPlace,
+     * @param User $user
+     * @return ChildEventPrinter The current object (for fluent API support)
+     */
+    public function addDistributionPlace(DistributionPlace $distributionPlace, User $user)
+    {
+        if ($this->combinationCollDistributionPlaceUsers === null) {
+            $this->initDistributionPlaceUsers();
+        }
+
+        if (!$this->getDistributionPlaceUsers()->contains($distributionPlace, $user)) {
+            // only add it if the **same** object is not already associated
+            $this->combinationCollDistributionPlaceUsers->push($distributionPlace, $user);
+            $this->doAddDistributionPlaceUser($distributionPlace, $user);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Associate a User to this object
+     * through the distribution_place_user cross reference table.
+     *
+     * @param User $user,
+     * @param DistributionPlace $distributionPlace
+     * @return ChildEventPrinter The current object (for fluent API support)
+     */
+    public function addUser(User $user, DistributionPlace $distributionPlace)
+    {
+        if ($this->combinationCollDistributionPlaceUsers === null) {
+            $this->initDistributionPlaceUsers();
+        }
+
+        if (!$this->getDistributionPlaceUsers()->contains($user, $distributionPlace)) {
+            // only add it if the **same** object is not already associated
+            $this->combinationCollDistributionPlaceUsers->push($user, $distributionPlace);
+            $this->doAddDistributionPlaceUser($user, $distributionPlace);
+        }
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param DistributionPlace $distributionPlace,
+     * @param User $user
+     */
+    protected function doAddDistributionPlaceUser(DistributionPlace $distributionPlace, User $user)
+    {
+        $distributionPlaceUser = new DistributionPlaceUser();
+
+        $distributionPlaceUser->setDistributionPlace($distributionPlace);
+        $distributionPlaceUser->setUser($user);
+
+        $distributionPlaceUser->setEventPrinter($this);
+
+        $this->addDistributionPlaceUser($distributionPlaceUser);
+
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if ($distributionPlace->isUserEventPrintersLoaded()) {
+            $distributionPlace->initUserEventPrinters();
+            $distributionPlace->getUserEventPrinters()->push($user, $this);
+        } elseif (!$distributionPlace->getUserEventPrinters()->contains($user, $this)) {
+            $distributionPlace->getUserEventPrinters()->push($user, $this);
+        }
+
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if ($user->isDistributionPlaceEventPrintersLoaded()) {
+            $user->initDistributionPlaceEventPrinters();
+            $user->getDistributionPlaceEventPrinters()->push($distributionPlace, $this);
+        } elseif (!$user->getDistributionPlaceEventPrinters()->contains($distributionPlace, $this)) {
+            $user->getDistributionPlaceEventPrinters()->push($distributionPlace, $this);
+        }
+
+    }
+
+    /**
+     * Remove distributionPlace, user of this object
+     * through the distribution_place_user cross reference table.
+     *
+     * @param DistributionPlace $distributionPlace,
+     * @param User $user
+     * @return ChildEventPrinter The current object (for fluent API support)
+     */
+    public function removeDistributionPlaceUser(DistributionPlace $distributionPlace, User $user)
+    {
+        if ($this->getDistributionPlaceUsers()->contains($distributionPlace, $user)) { $distributionPlaceUser = new DistributionPlaceUser();
+
+            $distributionPlaceUser->setDistributionPlace($distributionPlace);
+            if ($distributionPlace->isUserEventPrintersLoaded()) {
+                //remove the back reference if available
+                $distributionPlace->getUserEventPrinters()->removeObject($user, $this);
+            }
+
+            $distributionPlaceUser->setUser($user);
+            if ($user->isDistributionPlaceEventPrintersLoaded()) {
+                //remove the back reference if available
+                $user->getDistributionPlaceEventPrinters()->removeObject($distributionPlace, $this);
+            }
+
+            $distributionPlaceUser->setEventPrinter($this);
+            $this->removeDistributionPlaceUser(clone $distributionPlaceUser);
+            $distributionPlaceUser->clear();
+
+            $this->combinationCollDistributionPlaceUsers->remove($this->combinationCollDistributionPlaceUsers->search($distributionPlace, $user));
+
+            if (null === $this->combinationCollDistributionPlaceUsersScheduledForDeletion) {
+                $this->combinationCollDistributionPlaceUsersScheduledForDeletion = clone $this->combinationCollDistributionPlaceUsers;
+                $this->combinationCollDistributionPlaceUsersScheduledForDeletion->clear();
+            }
+
+            $this->combinationCollDistributionPlaceUsersScheduledForDeletion->push($distributionPlace, $user);
+        }
+
+
+        return $this;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1802,9 +2207,15 @@ abstract class EventPrinter implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->combinationCollDistributionPlaceUsers) {
+                foreach ($this->combinationCollDistributionPlaceUsers as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collDistributionPlaceUsers = null;
+        $this->combinationCollDistributionPlaceUsers = null;
         $this->aEvent = null;
     }
 

@@ -173,6 +173,7 @@ class MenuSizeTableMap extends TableMap
     1 => ':menu_sizeid',
   ),
 ), null, null, 'OrderDetails', false);
+        $this->addRelation('Menu', '\\API\\Models\\Menu\\Menu', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Menus');
     } // buildRelations()
 
     /**

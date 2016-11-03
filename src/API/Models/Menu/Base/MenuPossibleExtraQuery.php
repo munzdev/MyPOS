@@ -692,6 +692,23 @@ abstract class MenuPossibleExtraQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related OrderDetail object
+     * using the order_detail_extra table as cross reference
+     *
+     * @param OrderDetail $orderDetail the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildMenuPossibleExtraQuery The current query, for fluid interface
+     */
+    public function filterByOrderDetail($orderDetail, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useOrderDetailExtraQuery()
+            ->filterByOrderDetail($orderDetail, $comparison)
+            ->endUse();
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   ChildMenuPossibleExtra $menuPossibleExtra Object to remove from the list of results

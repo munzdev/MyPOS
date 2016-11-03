@@ -141,6 +141,7 @@ class MenuPossibleExtraTableMap extends TableMap
         $this->setClassName('\\API\\Models\\Menu\\MenuPossibleExtra');
         $this->setPackage('API.Models.Menu');
         $this->setUseIdGenerator(true);
+        $this->setIsCrossRef(true);
         // columns
         $this->addPrimaryKey('menu_possible_extraid', 'MenuPossibleExtraid', 'INTEGER', true, null, null);
         $this->addForeignPrimaryKey('menu_extraid', 'MenuExtraid', 'INTEGER' , 'menu_extra', 'menu_extraid', true, null, null);
@@ -174,6 +175,7 @@ class MenuPossibleExtraTableMap extends TableMap
     1 => ':menu_possible_extraid',
   ),
 ), 'CASCADE', null, 'OrderDetailExtras', false);
+        $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'OrderDetails');
     } // buildRelations()
 
     /**

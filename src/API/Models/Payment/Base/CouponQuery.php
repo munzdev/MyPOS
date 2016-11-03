@@ -771,6 +771,23 @@ abstract class CouponQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related Payment object
+     * using the payment_coupon table as cross reference
+     *
+     * @param Payment $payment the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildCouponQuery The current query, for fluid interface
+     */
+    public function filterByPayment($payment, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->usePaymentCouponQuery()
+            ->filterByPayment($payment, $comparison)
+            ->endUse();
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   ChildCoupon $coupon Object to remove from the list of results

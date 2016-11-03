@@ -191,6 +191,9 @@ class MenuGroupTableMap extends TableMap
     1 => ':menu_groupid',
   ),
 ), 'CASCADE', null, 'OrderInProgresses', false);
+        $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'DistributionPlaces');
+        $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'DistributionPlaces');
+        $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'EventTables');
     } // buildRelations()
 
     /**

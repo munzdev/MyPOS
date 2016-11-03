@@ -130,6 +130,7 @@ class OrderDetailMixedWithTableMap extends TableMap
         $this->setClassName('\\API\\Models\\Ordering\\OrderDetailMixedWith');
         $this->setPackage('API.Models.Ordering');
         $this->setUseIdGenerator(false);
+        $this->setIsCrossRef(true);
         // columns
         $this->addForeignPrimaryKey('order_detailid', 'OrderDetailid', 'INTEGER' , 'order_detail', 'order_detailid', true, null, null);
         $this->addForeignPrimaryKey('menuid', 'Menuid', 'INTEGER' , 'menu', 'menuid', true, null, null);

@@ -130,6 +130,7 @@ class OrderDetailExtraTableMap extends TableMap
         $this->setClassName('\\API\\Models\\Ordering\\OrderDetailExtra');
         $this->setPackage('API.Models.Ordering');
         $this->setUseIdGenerator(false);
+        $this->setIsCrossRef(true);
         // columns
         $this->addForeignPrimaryKey('order_detailid', 'OrderDetailid', 'INTEGER' , 'order_detail', 'order_detailid', true, null, null);
         $this->addForeignPrimaryKey('menu_possible_extraid', 'MenuPossibleExtraid', 'INTEGER' , 'menu_possible_extra', 'menu_possible_extraid', true, null, null);

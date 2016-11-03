@@ -174,6 +174,11 @@ class DistributionPlaceTableMap extends TableMap
     1 => ':distribution_placeid',
   ),
 ), 'CASCADE', null, 'DistributionPlaceUsers', false);
+        $this->addRelation('MenuGroup', '\\API\\Models\\Menu\\MenuGroup', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'MenuGroups');
+        $this->addRelation('MenuGroup', '\\API\\Models\\Menu\\MenuGroup', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'MenuGroups');
+        $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'EventTables');
+        $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Users');
+        $this->addRelation('EventPrinter', '\\API\\Models\\Event\\EventPrinter', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'EventPrinters');
     } // buildRelations()
 
     /**

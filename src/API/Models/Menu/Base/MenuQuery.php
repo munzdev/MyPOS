@@ -1014,6 +1014,57 @@ abstract class MenuQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related MenuExtra object
+     * using the menu_possible_extra table as cross reference
+     *
+     * @param MenuExtra $menuExtra the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildMenuQuery The current query, for fluid interface
+     */
+    public function filterByMenuExtra($menuExtra, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useMenuPossibleExtraQuery()
+            ->filterByMenuExtra($menuExtra, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related MenuSize object
+     * using the menu_possible_size table as cross reference
+     *
+     * @param MenuSize $menuSize the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildMenuQuery The current query, for fluid interface
+     */
+    public function filterByMenuSize($menuSize, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useMenuPossibleSizeQuery()
+            ->filterByMenuSize($menuSize, $comparison)
+            ->endUse();
+    }
+
+    /**
+     * Filter the query by a related OrderDetail object
+     * using the order_detail_mixed_with table as cross reference
+     *
+     * @param OrderDetail $orderDetail the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildMenuQuery The current query, for fluid interface
+     */
+    public function filterByOrderDetail($orderDetail, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useOrderDetailMixedWithQuery()
+            ->filterByOrderDetail($orderDetail, $comparison)
+            ->endUse();
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   ChildMenu $menu Object to remove from the list of results

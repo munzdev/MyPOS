@@ -179,6 +179,7 @@ class MenuExtraTableMap extends TableMap
     1 => ':menu_extraid',
   ),
 ), 'CASCADE', null, 'MenuPossibleExtras', false);
+        $this->addRelation('Menu', '\\API\\Models\\Menu\\Menu', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Menus');
     } // buildRelations()
 
     /**

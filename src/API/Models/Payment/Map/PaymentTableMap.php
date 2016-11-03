@@ -185,6 +185,7 @@ class PaymentTableMap extends TableMap
     1 => ':paymentid',
   ),
 ), null, null, 'PaymentCoupons', false);
+        $this->addRelation('Coupon', '\\API\\Models\\Payment\\Coupon', RelationMap::MANY_TO_MANY, array(), null, null, 'Coupons');
     } // buildRelations()
 
     /**

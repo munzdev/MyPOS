@@ -17,13 +17,19 @@ use API\Models\DistributionPlace\Map\DistributionPlaceTableMap;
 use API\Models\DistributionPlace\Map\DistributionPlaceTableTableMap;
 use API\Models\DistributionPlace\Map\DistributionPlaceUserTableMap;
 use API\Models\Event\Event;
+use API\Models\Event\EventPrinter;
 use API\Models\Event\EventQuery;
+use API\Models\Event\EventTable;
+use API\Models\Menu\MenuGroup;
+use API\Models\Menu\MenuGroupQuery;
+use API\Models\User\User;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
+use Propel\Runtime\Collection\ObjectCombinationCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -117,12 +123,98 @@ abstract class DistributionPlace implements ActiveRecordInterface
     protected $collDistributionPlaceUsersPartial;
 
     /**
+     * @var        ObjectCollection|MenuGroup[] Cross Collection to store aggregation of MenuGroup objects.
+     */
+    protected $collMenuGroups;
+
+    /**
+     * @var bool
+     */
+    protected $collMenuGroupsPartial;
+
+    /**
+     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildMenuGroup, ChildEventTable combination combinations.
+     */
+    protected $combinationCollMenuGroupEventTables;
+
+    /**
+     * @var bool
+     */
+    protected $combinationCollMenuGroupEventTablesPartial;
+
+    /**
+     * @var        ObjectCollection|MenuGroup[] Cross Collection to store aggregation of MenuGroup objects.
+     */
+    protected $collMenuGroups;
+
+    /**
+     * @var bool
+     */
+    protected $collMenuGroupsPartial;
+
+    /**
+     * @var        ObjectCollection|EventTable[] Cross Collection to store aggregation of EventTable objects.
+     */
+    protected $collEventTables;
+
+    /**
+     * @var bool
+     */
+    protected $collEventTablesPartial;
+
+    /**
+     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildUser, ChildEventPrinter combination combinations.
+     */
+    protected $combinationCollUserEventPrinters;
+
+    /**
+     * @var bool
+     */
+    protected $combinationCollUserEventPrintersPartial;
+
+    /**
+     * @var        ObjectCollection|User[] Cross Collection to store aggregation of User objects.
+     */
+    protected $collUsers;
+
+    /**
+     * @var bool
+     */
+    protected $collUsersPartial;
+
+    /**
+     * @var        ObjectCollection|EventPrinter[] Cross Collection to store aggregation of EventPrinter objects.
+     */
+    protected $collEventPrinters;
+
+    /**
+     * @var bool
+     */
+    protected $collEventPrintersPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|MenuGroup[]
+     */
+    protected $menuGroupsScheduledForDeletion = null;
+
+    /**
+     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildMenuGroup, ChildEventTable combination combinations.
+     */
+    protected $combinationCollMenuGroupEventTablesScheduledForDeletion = null;
+
+    /**
+     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildUser, ChildEventPrinter combination combinations.
+     */
+    protected $combinationCollUserEventPrintersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -584,6 +676,9 @@ abstract class DistributionPlace implements ActiveRecordInterface
 
             $this->collDistributionPlaceUsers = null;
 
+            $this->collMenuGroups = null;
+            $this->collMenuGroupEventTables = null;
+            $this->collUserEventPrinters = null;
         } // if (deep)
     }
 
@@ -705,6 +800,113 @@ abstract class DistributionPlace implements ActiveRecordInterface
                 }
                 $this->resetModified();
             }
+
+            if ($this->menuGroupsScheduledForDeletion !== null) {
+                if (!$this->menuGroupsScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    foreach ($this->menuGroupsScheduledForDeletion as $entry) {
+                        $entryPk = [];
+
+                        $entryPk[0] = $this->getDistributionPlaceid();
+                        $entryPk[1] = $entry->getMenuGroupid();
+                        $pks[] = $entryPk;
+                    }
+
+                    \API\Models\DistributionPlace\DistributionPlaceGroupQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+
+                    $this->menuGroupsScheduledForDeletion = null;
+                }
+
+            }
+
+            if ($this->collMenuGroups) {
+                foreach ($this->collMenuGroups as $menuGroup) {
+                    if (!$menuGroup->isDeleted() && ($menuGroup->isNew() || $menuGroup->isModified())) {
+                        $menuGroup->save($con);
+                    }
+                }
+            }
+
+
+            if ($this->combinationCollMenuGroupEventTablesScheduledForDeletion !== null) {
+                if (!$this->combinationCollMenuGroupEventTablesScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    foreach ($this->combinationCollMenuGroupEventTablesScheduledForDeletion as $combination) {
+                        $entryPk = [];
+
+                        $entryPk[1] = $this->getDistributionPlaceid();
+                        $entryPk[2] = $combination[0]->getMenuGroupid();
+                        $entryPk[0] = $combination[1]->getEventTableid();
+
+                        $pks[] = $entryPk;
+                    }
+
+                    \API\Models\DistributionPlace\DistributionPlaceTableQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+
+                    $this->combinationCollMenuGroupEventTablesScheduledForDeletion = null;
+                }
+
+            }
+
+            if (null !== $this->combinationCollMenuGroupEventTables) {
+                foreach ($this->combinationCollMenuGroupEventTables as $combination) {
+
+                    //$combination[0] = MenuGroup (fk_distributions_places_tables_menu_groupes1)
+                    if (!$combination[0]->isDeleted() && ($combination[0]->isNew() || $combination[0]->isModified())) {
+                        $combination[0]->save($con);
+                    }
+
+                    //$combination[1] = EventTable (fk_tables_has_distributions_places_tables1)
+                    if (!$combination[1]->isDeleted() && ($combination[1]->isNew() || $combination[1]->isModified())) {
+                        $combination[1]->save($con);
+                    }
+
+                }
+            }
+
+
+            if ($this->combinationCollUserEventPrintersScheduledForDeletion !== null) {
+                if (!$this->combinationCollUserEventPrintersScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    foreach ($this->combinationCollUserEventPrintersScheduledForDeletion as $combination) {
+                        $entryPk = [];
+
+                        $entryPk[0] = $this->getDistributionPlaceid();
+                        $entryPk[1] = $combination[0]->getUserid();
+                        $entryPk[2] = $combination[1]->getEventPrinterid();
+
+                        $pks[] = $entryPk;
+                    }
+
+                    \API\Models\DistributionPlace\DistributionPlaceUserQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+
+                    $this->combinationCollUserEventPrintersScheduledForDeletion = null;
+                }
+
+            }
+
+            if (null !== $this->combinationCollUserEventPrinters) {
+                foreach ($this->combinationCollUserEventPrinters as $combination) {
+
+                    //$combination[0] = User (fk_distributions_places_has_users_users1)
+                    if (!$combination[0]->isDeleted() && ($combination[0]->isNew() || $combination[0]->isModified())) {
+                        $combination[0]->save($con);
+                    }
+
+                    //$combination[1] = EventPrinter (fk_distributions_places_users_events_printers1)
+                    if (!$combination[1]->isDeleted() && ($combination[1]->isNew() || $combination[1]->isModified())) {
+                        $combination[1]->save($con);
+                    }
+
+                }
+            }
+
 
             if ($this->distributionPlaceGroupsScheduledForDeletion !== null) {
                 if (!$this->distributionPlaceGroupsScheduledForDeletion->isEmpty()) {
@@ -2151,6 +2353,903 @@ abstract class DistributionPlace implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collMenuGroups collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addMenuGroups()
+     */
+    public function clearMenuGroups()
+    {
+        $this->collMenuGroups = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Initializes the collMenuGroups crossRef collection.
+     *
+     * By default this just sets the collMenuGroups collection to an empty collection (like clearMenuGroups());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initMenuGroups()
+    {
+        $collectionClassName = DistributionPlaceGroupTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collMenuGroups = new $collectionClassName;
+        $this->collMenuGroupsPartial = true;
+        $this->collMenuGroups->setModel('\API\Models\Menu\MenuGroup');
+    }
+
+    /**
+     * Checks if the collMenuGroups collection is loaded.
+     *
+     * @return bool
+     */
+    public function isMenuGroupsLoaded()
+    {
+        return null !== $this->collMenuGroups;
+    }
+
+    /**
+     * Gets a collection of MenuGroup objects related by a many-to-many relationship
+     * to the current object by way of the distribution_place_group cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildDistributionPlace is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return ObjectCollection|MenuGroup[] List of MenuGroup objects
+     */
+    public function getMenuGroups(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collMenuGroupsPartial && !$this->isNew();
+        if (null === $this->collMenuGroups || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collMenuGroups) {
+                    $this->initMenuGroups();
+                }
+            } else {
+
+                $query = MenuGroupQuery::create(null, $criteria)
+                    ->filterByDistributionPlace($this);
+                $collMenuGroups = $query->find($con);
+                if (null !== $criteria) {
+                    return $collMenuGroups;
+                }
+
+                if ($partial && $this->collMenuGroups) {
+                    //make sure that already added objects gets added to the list of the database.
+                    foreach ($this->collMenuGroups as $obj) {
+                        if (!$collMenuGroups->contains($obj)) {
+                            $collMenuGroups[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collMenuGroups = $collMenuGroups;
+                $this->collMenuGroupsPartial = false;
+            }
+        }
+
+        return $this->collMenuGroups;
+    }
+
+    /**
+     * Sets a collection of MenuGroup objects related by a many-to-many relationship
+     * to the current object by way of the distribution_place_group cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param  Collection $menuGroups A Propel collection.
+     * @param  ConnectionInterface $con Optional connection object
+     * @return $this|ChildDistributionPlace The current object (for fluent API support)
+     */
+    public function setMenuGroups(Collection $menuGroups, ConnectionInterface $con = null)
+    {
+        $this->clearMenuGroups();
+        $currentMenuGroups = $this->getMenuGroups();
+
+        $menuGroupsScheduledForDeletion = $currentMenuGroups->diff($menuGroups);
+
+        foreach ($menuGroupsScheduledForDeletion as $toDelete) {
+            $this->removeMenuGroup($toDelete);
+        }
+
+        foreach ($menuGroups as $menuGroup) {
+            if (!$currentMenuGroups->contains($menuGroup)) {
+                $this->doAddMenuGroup($menuGroup);
+            }
+        }
+
+        $this->collMenuGroupsPartial = false;
+        $this->collMenuGroups = $menuGroups;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of MenuGroup objects related by a many-to-many relationship
+     * to the current object by way of the distribution_place_group cross-reference table.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      boolean $distinct Set to true to force count distinct
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return int the number of related MenuGroup objects
+     */
+    public function countMenuGroups(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collMenuGroupsPartial && !$this->isNew();
+        if (null === $this->collMenuGroups || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collMenuGroups) {
+                return 0;
+            } else {
+
+                if ($partial && !$criteria) {
+                    return count($this->getMenuGroups());
+                }
+
+                $query = MenuGroupQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByDistributionPlace($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collMenuGroups);
+        }
+    }
+
+    /**
+     * Associate a MenuGroup to this object
+     * through the distribution_place_group cross reference table.
+     *
+     * @param MenuGroup $menuGroup
+     * @return ChildDistributionPlace The current object (for fluent API support)
+     */
+    public function addMenuGroup(MenuGroup $menuGroup)
+    {
+        if ($this->collMenuGroups === null) {
+            $this->initMenuGroups();
+        }
+
+        if (!$this->getMenuGroups()->contains($menuGroup)) {
+            // only add it if the **same** object is not already associated
+            $this->collMenuGroups->push($menuGroup);
+            $this->doAddMenuGroup($menuGroup);
+        }
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param MenuGroup $menuGroup
+     */
+    protected function doAddMenuGroup(MenuGroup $menuGroup)
+    {
+        $distributionPlaceGroup = new ChildDistributionPlaceGroup();
+
+        $distributionPlaceGroup->setMenuGroup($menuGroup);
+
+        $distributionPlaceGroup->setDistributionPlace($this);
+
+        $this->addDistributionPlaceGroup($distributionPlaceGroup);
+
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$menuGroup->isDistributionPlacesLoaded()) {
+            $menuGroup->initDistributionPlaces();
+            $menuGroup->getDistributionPlaces()->push($this);
+        } elseif (!$menuGroup->getDistributionPlaces()->contains($this)) {
+            $menuGroup->getDistributionPlaces()->push($this);
+        }
+
+    }
+
+    /**
+     * Remove menuGroup of this object
+     * through the distribution_place_group cross reference table.
+     *
+     * @param MenuGroup $menuGroup
+     * @return ChildDistributionPlace The current object (for fluent API support)
+     */
+    public function removeMenuGroup(MenuGroup $menuGroup)
+    {
+        if ($this->getMenuGroups()->contains($menuGroup)) { $distributionPlaceGroup = new ChildDistributionPlaceGroup();
+
+            $distributionPlaceGroup->setMenuGroup($menuGroup);
+            if ($menuGroup->isDistributionPlacesLoaded()) {
+                //remove the back reference if available
+                $menuGroup->getDistributionPlaces()->removeObject($this);
+            }
+
+            $distributionPlaceGroup->setDistributionPlace($this);
+            $this->removeDistributionPlaceGroup(clone $distributionPlaceGroup);
+            $distributionPlaceGroup->clear();
+
+            $this->collMenuGroups->remove($this->collMenuGroups->search($menuGroup));
+
+            if (null === $this->menuGroupsScheduledForDeletion) {
+                $this->menuGroupsScheduledForDeletion = clone $this->collMenuGroups;
+                $this->menuGroupsScheduledForDeletion->clear();
+            }
+
+            $this->menuGroupsScheduledForDeletion->push($menuGroup);
+        }
+
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collMenuGroupEventTables collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addMenuGroupEventTables()
+     */
+    public function clearMenuGroupEventTables()
+    {
+        $this->collMenuGroupEventTables = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Initializes the combinationCollMenuGroupEventTables crossRef collection.
+     *
+     * By default this just sets the combinationCollMenuGroupEventTables collection to an empty collection (like clearMenuGroupEventTables());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initMenuGroupEventTables()
+    {
+        $this->combinationCollMenuGroupEventTables = new ObjectCombinationCollection;
+        $this->combinationCollMenuGroupEventTablesPartial = true;
+    }
+
+    /**
+     * Checks if the combinationCollMenuGroupEventTables collection is loaded.
+     *
+     * @return bool
+     */
+    public function isMenuGroupEventTablesLoaded()
+    {
+        return null !== $this->combinationCollMenuGroupEventTables;
+    }
+
+    /**
+     * Gets a combined collection of MenuGroup, EventTable objects related by a many-to-many relationship
+     * to the current object by way of the distribution_place_table cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildDistributionPlace is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return ObjectCombinationCollection Combination list of MenuGroup, EventTable objects
+     */
+    public function getMenuGroupEventTables($criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->combinationCollMenuGroupEventTablesPartial && !$this->isNew();
+        if (null === $this->combinationCollMenuGroupEventTables || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->combinationCollMenuGroupEventTables) {
+                    $this->initMenuGroupEventTables();
+                }
+            } else {
+
+                $query = ChildDistributionPlaceTableQuery::create(null, $criteria)
+                    ->filterByDistributionPlace($this)
+                    ->joinMenuGroup()
+                    ->joinEventTable()
+                ;
+
+                $items = $query->find($con);
+                $combinationCollMenuGroupEventTables = new ObjectCombinationCollection();
+                foreach ($items as $item) {
+                    $combination = [];
+
+                    $combination[] = $item->getMenuGroup();
+                    $combination[] = $item->getEventTable();
+                    $combinationCollMenuGroupEventTables[] = $combination;
+                }
+
+                if (null !== $criteria) {
+                    return $combinationCollMenuGroupEventTables;
+                }
+
+                if ($partial && $this->combinationCollMenuGroupEventTables) {
+                    //make sure that already added objects gets added to the list of the database.
+                    foreach ($this->combinationCollMenuGroupEventTables as $obj) {
+                        if (!call_user_func_array([$combinationCollMenuGroupEventTables, 'contains'], $obj)) {
+                            $combinationCollMenuGroupEventTables[] = $obj;
+                        }
+                    }
+                }
+
+                $this->combinationCollMenuGroupEventTables = $combinationCollMenuGroupEventTables;
+                $this->combinationCollMenuGroupEventTablesPartial = false;
+            }
+        }
+
+        return $this->combinationCollMenuGroupEventTables;
+    }
+
+    /**
+     * Returns a not cached ObjectCollection of MenuGroup objects. This will hit always the databases.
+     * If you have attached new MenuGroup object to this object you need to call `save` first to get
+     * the correct return value. Use getMenuGroupEventTables() to get the current internal state.
+     *
+     * @param EventTable $eventTable
+     * @param Criteria $criteria
+     * @param ConnectionInterface $con
+     *
+     * @return MenuGroup[]|ObjectCollection
+     */
+    public function getMenuGroups(EventTable $eventTable = null, Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        return $this->createMenuGroupsQuery($eventTable, $criteria)->find($con);
+    }
+
+    /**
+     * Sets a collection of ChildMenuGroup, ChildEventTable combination objects related by a many-to-many relationship
+     * to the current object by way of the distribution_place_table cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param  Collection $menuGroupEventTables A Propel collection.
+     * @param  ConnectionInterface $con Optional connection object
+     * @return $this|ChildDistributionPlace The current object (for fluent API support)
+     */
+    public function setMenuGroupEventTables(Collection $menuGroupEventTables, ConnectionInterface $con = null)
+    {
+        $this->clearMenuGroupEventTables();
+        $currentMenuGroupEventTables = $this->getMenuGroupEventTables();
+
+        $combinationCollMenuGroupEventTablesScheduledForDeletion = $currentMenuGroupEventTables->diff($menuGroupEventTables);
+
+        foreach ($combinationCollMenuGroupEventTablesScheduledForDeletion as $toDelete) {
+            call_user_func_array([$this, 'removeMenuGroupEventTable'], $toDelete);
+        }
+
+        foreach ($menuGroupEventTables as $menuGroupEventTable) {
+            if (!call_user_func_array([$currentMenuGroupEventTables, 'contains'], $menuGroupEventTable)) {
+                call_user_func_array([$this, 'doAddMenuGroupEventTable'], $menuGroupEventTable);
+            }
+        }
+
+        $this->combinationCollMenuGroupEventTablesPartial = false;
+        $this->combinationCollMenuGroupEventTables = $menuGroupEventTables;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of ChildMenuGroup, ChildEventTable combination objects related by a many-to-many relationship
+     * to the current object by way of the distribution_place_table cross-reference table.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      boolean $distinct Set to true to force count distinct
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return int the number of related ChildMenuGroup, ChildEventTable combination objects
+     */
+    public function countMenuGroupEventTables(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->combinationCollMenuGroupEventTablesPartial && !$this->isNew();
+        if (null === $this->combinationCollMenuGroupEventTables || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->combinationCollMenuGroupEventTables) {
+                return 0;
+            } else {
+
+                if ($partial && !$criteria) {
+                    return count($this->getMenuGroupEventTables());
+                }
+
+                $query = ChildDistributionPlaceTableQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByDistributionPlace($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->combinationCollMenuGroupEventTables);
+        }
+    }
+
+    /**
+     * Returns the not cached count of MenuGroup objects. This will hit always the databases.
+     * If you have attached new MenuGroup object to this object you need to call `save` first to get
+     * the correct return value. Use getMenuGroupEventTables() to get the current internal state.
+     *
+     * @param EventTable $eventTable
+     * @param Criteria $criteria
+     * @param ConnectionInterface $con
+     *
+     * @return integer
+     */
+    public function countMenuGroups(EventTable $eventTable = null, Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        return $this->createMenuGroupsQuery($eventTable, $criteria)->count($con);
+    }
+
+    /**
+     * Associate a MenuGroup to this object
+     * through the distribution_place_table cross reference table.
+     *
+     * @param MenuGroup $menuGroup,
+     * @param EventTable $eventTable
+     * @return ChildDistributionPlace The current object (for fluent API support)
+     */
+    public function addMenuGroup(MenuGroup $menuGroup, EventTable $eventTable)
+    {
+        if ($this->combinationCollMenuGroupEventTables === null) {
+            $this->initMenuGroupEventTables();
+        }
+
+        if (!$this->getMenuGroupEventTables()->contains($menuGroup, $eventTable)) {
+            // only add it if the **same** object is not already associated
+            $this->combinationCollMenuGroupEventTables->push($menuGroup, $eventTable);
+            $this->doAddMenuGroupEventTable($menuGroup, $eventTable);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Associate a EventTable to this object
+     * through the distribution_place_table cross reference table.
+     *
+     * @param EventTable $eventTable,
+     * @param MenuGroup $menuGroup
+     * @return ChildDistributionPlace The current object (for fluent API support)
+     */
+    public function addEventTable(EventTable $eventTable, MenuGroup $menuGroup)
+    {
+        if ($this->combinationCollMenuGroupEventTables === null) {
+            $this->initMenuGroupEventTables();
+        }
+
+        if (!$this->getMenuGroupEventTables()->contains($eventTable, $menuGroup)) {
+            // only add it if the **same** object is not already associated
+            $this->combinationCollMenuGroupEventTables->push($eventTable, $menuGroup);
+            $this->doAddMenuGroupEventTable($eventTable, $menuGroup);
+        }
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param MenuGroup $menuGroup,
+     * @param EventTable $eventTable
+     */
+    protected function doAddMenuGroupEventTable(MenuGroup $menuGroup, EventTable $eventTable)
+    {
+        $distributionPlaceTable = new ChildDistributionPlaceTable();
+
+        $distributionPlaceTable->setMenuGroup($menuGroup);
+        $distributionPlaceTable->setEventTable($eventTable);
+
+        $distributionPlaceTable->setDistributionPlace($this);
+
+        $this->addDistributionPlaceTable($distributionPlaceTable);
+
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if ($menuGroup->isDistributionPlaceEventTablesLoaded()) {
+            $menuGroup->initDistributionPlaceEventTables();
+            $menuGroup->getDistributionPlaceEventTables()->push($this, $eventTable);
+        } elseif (!$menuGroup->getDistributionPlaceEventTables()->contains($this, $eventTable)) {
+            $menuGroup->getDistributionPlaceEventTables()->push($this, $eventTable);
+        }
+
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if ($eventTable->isMenuGroupDistributionPlacesLoaded()) {
+            $eventTable->initMenuGroupDistributionPlaces();
+            $eventTable->getMenuGroupDistributionPlaces()->push($menuGroup, $this);
+        } elseif (!$eventTable->getMenuGroupDistributionPlaces()->contains($menuGroup, $this)) {
+            $eventTable->getMenuGroupDistributionPlaces()->push($menuGroup, $this);
+        }
+
+    }
+
+    /**
+     * Remove menuGroup, eventTable of this object
+     * through the distribution_place_table cross reference table.
+     *
+     * @param MenuGroup $menuGroup,
+     * @param EventTable $eventTable
+     * @return ChildDistributionPlace The current object (for fluent API support)
+     */
+    public function removeMenuGroupEventTable(MenuGroup $menuGroup, EventTable $eventTable)
+    {
+        if ($this->getMenuGroupEventTables()->contains($menuGroup, $eventTable)) { $distributionPlaceTable = new ChildDistributionPlaceTable();
+
+            $distributionPlaceTable->setMenuGroup($menuGroup);
+            if ($menuGroup->isDistributionPlaceEventTablesLoaded()) {
+                //remove the back reference if available
+                $menuGroup->getDistributionPlaceEventTables()->removeObject($this, $eventTable);
+            }
+
+            $distributionPlaceTable->setEventTable($eventTable);
+            if ($eventTable->isMenuGroupDistributionPlacesLoaded()) {
+                //remove the back reference if available
+                $eventTable->getMenuGroupDistributionPlaces()->removeObject($menuGroup, $this);
+            }
+
+            $distributionPlaceTable->setDistributionPlace($this);
+            $this->removeDistributionPlaceTable(clone $distributionPlaceTable);
+            $distributionPlaceTable->clear();
+
+            $this->combinationCollMenuGroupEventTables->remove($this->combinationCollMenuGroupEventTables->search($menuGroup, $eventTable));
+
+            if (null === $this->combinationCollMenuGroupEventTablesScheduledForDeletion) {
+                $this->combinationCollMenuGroupEventTablesScheduledForDeletion = clone $this->combinationCollMenuGroupEventTables;
+                $this->combinationCollMenuGroupEventTablesScheduledForDeletion->clear();
+            }
+
+            $this->combinationCollMenuGroupEventTablesScheduledForDeletion->push($menuGroup, $eventTable);
+        }
+
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collUserEventPrinters collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addUserEventPrinters()
+     */
+    public function clearUserEventPrinters()
+    {
+        $this->collUserEventPrinters = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Initializes the combinationCollUserEventPrinters crossRef collection.
+     *
+     * By default this just sets the combinationCollUserEventPrinters collection to an empty collection (like clearUserEventPrinters());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initUserEventPrinters()
+    {
+        $this->combinationCollUserEventPrinters = new ObjectCombinationCollection;
+        $this->combinationCollUserEventPrintersPartial = true;
+    }
+
+    /**
+     * Checks if the combinationCollUserEventPrinters collection is loaded.
+     *
+     * @return bool
+     */
+    public function isUserEventPrintersLoaded()
+    {
+        return null !== $this->combinationCollUserEventPrinters;
+    }
+
+    /**
+     * Gets a combined collection of User, EventPrinter objects related by a many-to-many relationship
+     * to the current object by way of the distribution_place_user cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildDistributionPlace is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return ObjectCombinationCollection Combination list of User, EventPrinter objects
+     */
+    public function getUserEventPrinters($criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->combinationCollUserEventPrintersPartial && !$this->isNew();
+        if (null === $this->combinationCollUserEventPrinters || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->combinationCollUserEventPrinters) {
+                    $this->initUserEventPrinters();
+                }
+            } else {
+
+                $query = ChildDistributionPlaceUserQuery::create(null, $criteria)
+                    ->filterByDistributionPlace($this)
+                    ->joinUser()
+                    ->joinEventPrinter()
+                ;
+
+                $items = $query->find($con);
+                $combinationCollUserEventPrinters = new ObjectCombinationCollection();
+                foreach ($items as $item) {
+                    $combination = [];
+
+                    $combination[] = $item->getUser();
+                    $combination[] = $item->getEventPrinter();
+                    $combinationCollUserEventPrinters[] = $combination;
+                }
+
+                if (null !== $criteria) {
+                    return $combinationCollUserEventPrinters;
+                }
+
+                if ($partial && $this->combinationCollUserEventPrinters) {
+                    //make sure that already added objects gets added to the list of the database.
+                    foreach ($this->combinationCollUserEventPrinters as $obj) {
+                        if (!call_user_func_array([$combinationCollUserEventPrinters, 'contains'], $obj)) {
+                            $combinationCollUserEventPrinters[] = $obj;
+                        }
+                    }
+                }
+
+                $this->combinationCollUserEventPrinters = $combinationCollUserEventPrinters;
+                $this->combinationCollUserEventPrintersPartial = false;
+            }
+        }
+
+        return $this->combinationCollUserEventPrinters;
+    }
+
+    /**
+     * Returns a not cached ObjectCollection of User objects. This will hit always the databases.
+     * If you have attached new User object to this object you need to call `save` first to get
+     * the correct return value. Use getUserEventPrinters() to get the current internal state.
+     *
+     * @param EventPrinter $eventPrinter
+     * @param Criteria $criteria
+     * @param ConnectionInterface $con
+     *
+     * @return User[]|ObjectCollection
+     */
+    public function getUsers(EventPrinter $eventPrinter = null, Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        return $this->createUsersQuery($eventPrinter, $criteria)->find($con);
+    }
+
+    /**
+     * Sets a collection of ChildUser, ChildEventPrinter combination objects related by a many-to-many relationship
+     * to the current object by way of the distribution_place_user cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param  Collection $userEventPrinters A Propel collection.
+     * @param  ConnectionInterface $con Optional connection object
+     * @return $this|ChildDistributionPlace The current object (for fluent API support)
+     */
+    public function setUserEventPrinters(Collection $userEventPrinters, ConnectionInterface $con = null)
+    {
+        $this->clearUserEventPrinters();
+        $currentUserEventPrinters = $this->getUserEventPrinters();
+
+        $combinationCollUserEventPrintersScheduledForDeletion = $currentUserEventPrinters->diff($userEventPrinters);
+
+        foreach ($combinationCollUserEventPrintersScheduledForDeletion as $toDelete) {
+            call_user_func_array([$this, 'removeUserEventPrinter'], $toDelete);
+        }
+
+        foreach ($userEventPrinters as $userEventPrinter) {
+            if (!call_user_func_array([$currentUserEventPrinters, 'contains'], $userEventPrinter)) {
+                call_user_func_array([$this, 'doAddUserEventPrinter'], $userEventPrinter);
+            }
+        }
+
+        $this->combinationCollUserEventPrintersPartial = false;
+        $this->combinationCollUserEventPrinters = $userEventPrinters;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of ChildUser, ChildEventPrinter combination objects related by a many-to-many relationship
+     * to the current object by way of the distribution_place_user cross-reference table.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      boolean $distinct Set to true to force count distinct
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return int the number of related ChildUser, ChildEventPrinter combination objects
+     */
+    public function countUserEventPrinters(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->combinationCollUserEventPrintersPartial && !$this->isNew();
+        if (null === $this->combinationCollUserEventPrinters || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->combinationCollUserEventPrinters) {
+                return 0;
+            } else {
+
+                if ($partial && !$criteria) {
+                    return count($this->getUserEventPrinters());
+                }
+
+                $query = ChildDistributionPlaceUserQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByDistributionPlace($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->combinationCollUserEventPrinters);
+        }
+    }
+
+    /**
+     * Returns the not cached count of User objects. This will hit always the databases.
+     * If you have attached new User object to this object you need to call `save` first to get
+     * the correct return value. Use getUserEventPrinters() to get the current internal state.
+     *
+     * @param EventPrinter $eventPrinter
+     * @param Criteria $criteria
+     * @param ConnectionInterface $con
+     *
+     * @return integer
+     */
+    public function countUsers(EventPrinter $eventPrinter = null, Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        return $this->createUsersQuery($eventPrinter, $criteria)->count($con);
+    }
+
+    /**
+     * Associate a User to this object
+     * through the distribution_place_user cross reference table.
+     *
+     * @param User $user,
+     * @param EventPrinter $eventPrinter
+     * @return ChildDistributionPlace The current object (for fluent API support)
+     */
+    public function addUser(User $user, EventPrinter $eventPrinter)
+    {
+        if ($this->combinationCollUserEventPrinters === null) {
+            $this->initUserEventPrinters();
+        }
+
+        if (!$this->getUserEventPrinters()->contains($user, $eventPrinter)) {
+            // only add it if the **same** object is not already associated
+            $this->combinationCollUserEventPrinters->push($user, $eventPrinter);
+            $this->doAddUserEventPrinter($user, $eventPrinter);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Associate a EventPrinter to this object
+     * through the distribution_place_user cross reference table.
+     *
+     * @param EventPrinter $eventPrinter,
+     * @param User $user
+     * @return ChildDistributionPlace The current object (for fluent API support)
+     */
+    public function addEventPrinter(EventPrinter $eventPrinter, User $user)
+    {
+        if ($this->combinationCollUserEventPrinters === null) {
+            $this->initUserEventPrinters();
+        }
+
+        if (!$this->getUserEventPrinters()->contains($eventPrinter, $user)) {
+            // only add it if the **same** object is not already associated
+            $this->combinationCollUserEventPrinters->push($eventPrinter, $user);
+            $this->doAddUserEventPrinter($eventPrinter, $user);
+        }
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param User $user,
+     * @param EventPrinter $eventPrinter
+     */
+    protected function doAddUserEventPrinter(User $user, EventPrinter $eventPrinter)
+    {
+        $distributionPlaceUser = new ChildDistributionPlaceUser();
+
+        $distributionPlaceUser->setUser($user);
+        $distributionPlaceUser->setEventPrinter($eventPrinter);
+
+        $distributionPlaceUser->setDistributionPlace($this);
+
+        $this->addDistributionPlaceUser($distributionPlaceUser);
+
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if ($user->isDistributionPlaceEventPrintersLoaded()) {
+            $user->initDistributionPlaceEventPrinters();
+            $user->getDistributionPlaceEventPrinters()->push($this, $eventPrinter);
+        } elseif (!$user->getDistributionPlaceEventPrinters()->contains($this, $eventPrinter)) {
+            $user->getDistributionPlaceEventPrinters()->push($this, $eventPrinter);
+        }
+
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if ($eventPrinter->isDistributionPlaceUsersLoaded()) {
+            $eventPrinter->initDistributionPlaceUsers();
+            $eventPrinter->getDistributionPlaceUsers()->push($this, $user);
+        } elseif (!$eventPrinter->getDistributionPlaceUsers()->contains($this, $user)) {
+            $eventPrinter->getDistributionPlaceUsers()->push($this, $user);
+        }
+
+    }
+
+    /**
+     * Remove user, eventPrinter of this object
+     * through the distribution_place_user cross reference table.
+     *
+     * @param User $user,
+     * @param EventPrinter $eventPrinter
+     * @return ChildDistributionPlace The current object (for fluent API support)
+     */
+    public function removeUserEventPrinter(User $user, EventPrinter $eventPrinter)
+    {
+        if ($this->getUserEventPrinters()->contains($user, $eventPrinter)) { $distributionPlaceUser = new ChildDistributionPlaceUser();
+
+            $distributionPlaceUser->setUser($user);
+            if ($user->isDistributionPlaceEventPrintersLoaded()) {
+                //remove the back reference if available
+                $user->getDistributionPlaceEventPrinters()->removeObject($this, $eventPrinter);
+            }
+
+            $distributionPlaceUser->setEventPrinter($eventPrinter);
+            if ($eventPrinter->isDistributionPlaceUsersLoaded()) {
+                //remove the back reference if available
+                $eventPrinter->getDistributionPlaceUsers()->removeObject($this, $user);
+            }
+
+            $distributionPlaceUser->setDistributionPlace($this);
+            $this->removeDistributionPlaceUser(clone $distributionPlaceUser);
+            $distributionPlaceUser->clear();
+
+            $this->combinationCollUserEventPrinters->remove($this->combinationCollUserEventPrinters->search($user, $eventPrinter));
+
+            if (null === $this->combinationCollUserEventPrintersScheduledForDeletion) {
+                $this->combinationCollUserEventPrintersScheduledForDeletion = clone $this->combinationCollUserEventPrinters;
+                $this->combinationCollUserEventPrintersScheduledForDeletion->clear();
+            }
+
+            $this->combinationCollUserEventPrintersScheduledForDeletion->push($user, $eventPrinter);
+        }
+
+
+        return $this;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -2196,11 +3295,29 @@ abstract class DistributionPlace implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collMenuGroups) {
+                foreach ($this->collMenuGroups as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->combinationCollMenuGroupEventTables) {
+                foreach ($this->combinationCollMenuGroupEventTables as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->combinationCollUserEventPrinters) {
+                foreach ($this->combinationCollUserEventPrinters as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collDistributionPlaceGroups = null;
         $this->collDistributionPlaceTables = null;
         $this->collDistributionPlaceUsers = null;
+        $this->collMenuGroups = null;
+        $this->combinationCollMenuGroupEventTables = null;
+        $this->combinationCollUserEventPrinters = null;
         $this->aEvent = null;
     }
 

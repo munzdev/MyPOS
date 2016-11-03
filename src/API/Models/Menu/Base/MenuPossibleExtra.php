@@ -11,8 +11,10 @@ use API\Models\Menu\MenuPossibleExtra as ChildMenuPossibleExtra;
 use API\Models\Menu\MenuPossibleExtraQuery as ChildMenuPossibleExtraQuery;
 use API\Models\Menu\MenuQuery as ChildMenuQuery;
 use API\Models\Menu\Map\MenuPossibleExtraTableMap;
+use API\Models\Ordering\OrderDetail;
 use API\Models\Ordering\OrderDetailExtra;
 use API\Models\Ordering\OrderDetailExtraQuery;
+use API\Models\Ordering\OrderDetailQuery;
 use API\Models\Ordering\Base\OrderDetailExtra as BaseOrderDetailExtra;
 use API\Models\Ordering\Map\OrderDetailExtraTableMap;
 use Propel\Runtime\Propel;
@@ -114,12 +116,28 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
     protected $collOrderDetailExtrasPartial;
 
     /**
+     * @var        ObjectCollection|OrderDetail[] Cross Collection to store aggregation of OrderDetail objects.
+     */
+    protected $collOrderDetails;
+
+    /**
+     * @var bool
+     */
+    protected $collOrderDetailsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var boolean
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|OrderDetail[]
+     */
+    protected $orderDetailsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -606,6 +624,7 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
             $this->aMenu = null;
             $this->collOrderDetailExtras = null;
 
+            $this->collOrderDetails = null;
         } // if (deep)
     }
 
@@ -734,6 +753,35 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
                 }
                 $this->resetModified();
             }
+
+            if ($this->orderDetailsScheduledForDeletion !== null) {
+                if (!$this->orderDetailsScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    foreach ($this->orderDetailsScheduledForDeletion as $entry) {
+                        $entryPk = [];
+
+                        $entryPk[1] = $this->getMenuPossibleExtraid();
+                        $entryPk[0] = $entry->getOrderDetailid();
+                        $pks[] = $entryPk;
+                    }
+
+                    \API\Models\Ordering\OrderDetailExtraQuery::create()
+                        ->filterByPrimaryKeys($pks)
+                        ->delete($con);
+
+                    $this->orderDetailsScheduledForDeletion = null;
+                }
+
+            }
+
+            if ($this->collOrderDetails) {
+                foreach ($this->collOrderDetails as $orderDetail) {
+                    if (!$orderDetail->isDeleted() && ($orderDetail->isNew() || $orderDetail->isModified())) {
+                        $orderDetail->save($con);
+                    }
+                }
+            }
+
 
             if ($this->orderDetailExtrasScheduledForDeletion !== null) {
                 if (!$this->orderDetailExtrasScheduledForDeletion->isEmpty()) {
@@ -1643,6 +1691,249 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collOrderDetails collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addOrderDetails()
+     */
+    public function clearOrderDetails()
+    {
+        $this->collOrderDetails = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Initializes the collOrderDetails crossRef collection.
+     *
+     * By default this just sets the collOrderDetails collection to an empty collection (like clearOrderDetails());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initOrderDetails()
+    {
+        $collectionClassName = OrderDetailExtraTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collOrderDetails = new $collectionClassName;
+        $this->collOrderDetailsPartial = true;
+        $this->collOrderDetails->setModel('\API\Models\Ordering\OrderDetail');
+    }
+
+    /**
+     * Checks if the collOrderDetails collection is loaded.
+     *
+     * @return bool
+     */
+    public function isOrderDetailsLoaded()
+    {
+        return null !== $this->collOrderDetails;
+    }
+
+    /**
+     * Gets a collection of OrderDetail objects related by a many-to-many relationship
+     * to the current object by way of the order_detail_extra cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildMenuPossibleExtra is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
+     */
+    public function getOrderDetails(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collOrderDetailsPartial && !$this->isNew();
+        if (null === $this->collOrderDetails || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collOrderDetails) {
+                    $this->initOrderDetails();
+                }
+            } else {
+
+                $query = OrderDetailQuery::create(null, $criteria)
+                    ->filterByMenuPossibleExtra($this);
+                $collOrderDetails = $query->find($con);
+                if (null !== $criteria) {
+                    return $collOrderDetails;
+                }
+
+                if ($partial && $this->collOrderDetails) {
+                    //make sure that already added objects gets added to the list of the database.
+                    foreach ($this->collOrderDetails as $obj) {
+                        if (!$collOrderDetails->contains($obj)) {
+                            $collOrderDetails[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrderDetails = $collOrderDetails;
+                $this->collOrderDetailsPartial = false;
+            }
+        }
+
+        return $this->collOrderDetails;
+    }
+
+    /**
+     * Sets a collection of OrderDetail objects related by a many-to-many relationship
+     * to the current object by way of the order_detail_extra cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param  Collection $orderDetails A Propel collection.
+     * @param  ConnectionInterface $con Optional connection object
+     * @return $this|ChildMenuPossibleExtra The current object (for fluent API support)
+     */
+    public function setOrderDetails(Collection $orderDetails, ConnectionInterface $con = null)
+    {
+        $this->clearOrderDetails();
+        $currentOrderDetails = $this->getOrderDetails();
+
+        $orderDetailsScheduledForDeletion = $currentOrderDetails->diff($orderDetails);
+
+        foreach ($orderDetailsScheduledForDeletion as $toDelete) {
+            $this->removeOrderDetail($toDelete);
+        }
+
+        foreach ($orderDetails as $orderDetail) {
+            if (!$currentOrderDetails->contains($orderDetail)) {
+                $this->doAddOrderDetail($orderDetail);
+            }
+        }
+
+        $this->collOrderDetailsPartial = false;
+        $this->collOrderDetails = $orderDetails;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of OrderDetail objects related by a many-to-many relationship
+     * to the current object by way of the order_detail_extra cross-reference table.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      boolean $distinct Set to true to force count distinct
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return int the number of related OrderDetail objects
+     */
+    public function countOrderDetails(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collOrderDetailsPartial && !$this->isNew();
+        if (null === $this->collOrderDetails || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrderDetails) {
+                return 0;
+            } else {
+
+                if ($partial && !$criteria) {
+                    return count($this->getOrderDetails());
+                }
+
+                $query = OrderDetailQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByMenuPossibleExtra($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collOrderDetails);
+        }
+    }
+
+    /**
+     * Associate a OrderDetail to this object
+     * through the order_detail_extra cross reference table.
+     *
+     * @param OrderDetail $orderDetail
+     * @return ChildMenuPossibleExtra The current object (for fluent API support)
+     */
+    public function addOrderDetail(OrderDetail $orderDetail)
+    {
+        if ($this->collOrderDetails === null) {
+            $this->initOrderDetails();
+        }
+
+        if (!$this->getOrderDetails()->contains($orderDetail)) {
+            // only add it if the **same** object is not already associated
+            $this->collOrderDetails->push($orderDetail);
+            $this->doAddOrderDetail($orderDetail);
+        }
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param OrderDetail $orderDetail
+     */
+    protected function doAddOrderDetail(OrderDetail $orderDetail)
+    {
+        $orderDetailExtra = new OrderDetailExtra();
+
+        $orderDetailExtra->setOrderDetail($orderDetail);
+
+        $orderDetailExtra->setMenuPossibleExtra($this);
+
+        $this->addOrderDetailExtra($orderDetailExtra);
+
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$orderDetail->isMenuPossibleExtrasLoaded()) {
+            $orderDetail->initMenuPossibleExtras();
+            $orderDetail->getMenuPossibleExtras()->push($this);
+        } elseif (!$orderDetail->getMenuPossibleExtras()->contains($this)) {
+            $orderDetail->getMenuPossibleExtras()->push($this);
+        }
+
+    }
+
+    /**
+     * Remove orderDetail of this object
+     * through the order_detail_extra cross reference table.
+     *
+     * @param OrderDetail $orderDetail
+     * @return ChildMenuPossibleExtra The current object (for fluent API support)
+     */
+    public function removeOrderDetail(OrderDetail $orderDetail)
+    {
+        if ($this->getOrderDetails()->contains($orderDetail)) { $orderDetailExtra = new OrderDetailExtra();
+
+            $orderDetailExtra->setOrderDetail($orderDetail);
+            if ($orderDetail->isMenuPossibleExtrasLoaded()) {
+                //remove the back reference if available
+                $orderDetail->getMenuPossibleExtras()->removeObject($this);
+            }
+
+            $orderDetailExtra->setMenuPossibleExtra($this);
+            $this->removeOrderDetailExtra(clone $orderDetailExtra);
+            $orderDetailExtra->clear();
+
+            $this->collOrderDetails->remove($this->collOrderDetails->search($orderDetail));
+
+            if (null === $this->orderDetailsScheduledForDeletion) {
+                $this->orderDetailsScheduledForDeletion = clone $this->collOrderDetails;
+                $this->orderDetailsScheduledForDeletion->clear();
+            }
+
+            $this->orderDetailsScheduledForDeletion->push($orderDetail);
+        }
+
+
+        return $this;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1682,9 +1973,15 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collOrderDetails) {
+                foreach ($this->collOrderDetails as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collOrderDetailExtras = null;
+        $this->collOrderDetails = null;
         $this->aMenuExtra = null;
         $this->aMenu = null;
     }
