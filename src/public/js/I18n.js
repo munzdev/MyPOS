@@ -2,7 +2,7 @@
 // ----------
 
 //Includes file dependencies
-define(['module'], function(module) {
+define(function() {
     "use strict";
     
     return class I18n {
