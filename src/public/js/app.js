@@ -7,7 +7,7 @@ define(["Webservice",
         "websocket/API",
         "routers/GlobalRouter",
         "routers/AdminRouter",          
-        "collections/custom/product/TypeCollection",
+        "collections/custom/product/ProductCollection",
         "collections/custom/user/UserCollection",
         "views/dialoges/ErrorDialogView",          
         "views/dialoges/OptionsDialogView",
@@ -19,7 +19,7 @@ function( Webservice,
           WsAPI,
           GlobalRouter,
           AdminRouter,
-          TypeCollection,
+          ProductCollection,
           UserCollection,
           ErrorDialogView,
           OptionsDialogView,
@@ -54,7 +54,7 @@ function( Webservice,
             app.auth = new Auth();
             
             // create a products collection/model for later to fetch
-            app.products = new TypeCollection();
+            app.products = new ProductCollection();
             app.userList = new UserCollection();
 
             // Init websocket services

@@ -60,6 +60,6 @@ function(I18n) {
     
     // Enable Multi Language module
     app.i18n = new I18n(() => {
-        require(["views"]);
+        require(["loadBaseClasses"]);
     });
 } );
