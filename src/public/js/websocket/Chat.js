@@ -15,7 +15,7 @@ define(["wampy"], function()
 
         this.websericeUrl = ((location.protocol === "https:") ? "wss://" : "ws://") +
                             location.hostname +
-                            ":8080/chat";
+                            ":8080/Chat";
 
         this.ws = new Wampy({ maxRetries: 1000,
                               autoReconnect: true,
@@ -33,17 +33,17 @@ define(["wampy"], function()
 
     Chat.prototype._registerChanel = function()
     {
-        if(DEBUG) console.log("REGISTERED TO CHANEL: " + app.session.user.get('events_userid'));
+        if(DEBUG) console.log("REGISTERED TO CHANEL: " + app.auth.authUser.get('EventUser').get('EventUserid'));
 
-        this.ws.subscribe(app.session.user.get('events_userid'),
+        this.ws.subscribe(app.auth.authUser.get('EventUser').get('EventUserid'),
                           this._messageRecieved);
     }
 
     Chat.prototype._unregisterChanel = function()
     {
-        if(DEBUG) console.log("UNREGISTERED TO CHANEL: " + app.session.user.get('userid'));
+        if(DEBUG) console.log("UNREGISTERED TO CHANEL: " + app.auth.authUser.get('Userid'));
 
-        this.ws.unsubscribe(app.session.user.get('events_userid'));
+        this.ws.unsubscribe(app.auth.authUser.get('EventUser').get('EventUserid'));
     }
 
     Chat.prototype._messageRecieved = function(data)
@@ -52,7 +52,7 @@ define(["wampy"], function()
 
         var message_data = JSON.parse(data);
 
-        app.session.messagesDialog.addMessage(message_data.sender, message_data.message, false, false);
+        app.messagesDialog.addMessage(message_data.sender, message_data.message, false, false);
     }
 
     Chat.prototype.Send = function(userid, message)

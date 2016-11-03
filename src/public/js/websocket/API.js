@@ -17,7 +17,7 @@ define(["Webservice", "wampy"], function(Webservice)
 
         this.websericeUrl = ((location.protocol === "https:") ? "wss://" : "ws://") +
                             location.hostname +
-                            ":8080/api";
+                            ":8080/API";
 
         this.ws = new Wampy({ maxRetries: 1000,
                               autoReconnect: true,
