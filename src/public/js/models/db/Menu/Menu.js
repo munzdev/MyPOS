@@ -1,9 +1,12 @@
 define([
     "models/db/Menu/MenuGroup",
     "models/db/Menu/Availability",
-    
+    "collections/db/Menu/MenuPossibleExtraCollection",
+    "collections/db/Menu/MenuPossibleSizeCollection"
 ], function(MenuGroup,
-            Availability){
+            Availability,
+            MenuPossibleExtraCollection,
+            MenuPossibleSizeCollection){
     "use strict";
 
     return class Menu extends Backbone.Model {
@@ -31,6 +34,16 @@ define([
                 response.Availability = new Availability(response.Availability, {parse: true});
             }
             
+            if('MenuPossibleExtra' in response)
+            {
+                response.MenuPossibleExtra = new MenuPossibleExtraCollection(response.MenuPossibleExtra, {parse: true});
+            }
+            
+            if('MenuPossibleSize' in response)
+            {
+                response.MenuPossibleSize = new MenuPossibleSizeCollection(response.MenuPossibleSize, {parse: true});
+            }
+           
             return super.parse(response);
         }
     }

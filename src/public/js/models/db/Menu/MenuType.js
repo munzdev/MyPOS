@@ -1,7 +1,8 @@
 define([
     "models/db/Event/Event",
-    
-], function(Event){
+    "collections/db/Menu/MenuGroupCollection"
+], function(Event,
+            MenuGroupCollection){
     "use strict";
 
     return class MenuType extends Backbone.Model {
@@ -21,6 +22,11 @@ define([
             if('Event' in response)
             {
                 response.Event = new Event(response.Event, {parse: true});
+            }
+            
+            if('MenuGroup' in response)
+            {
+                response.MenuGroup = new MenuGroupCollection(response.MenuGroup, {parse: true});
             }
             
             return super.parse(response);
