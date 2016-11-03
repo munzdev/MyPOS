@@ -1,7 +1,7 @@
 define([
     "models/db/Event/Event",
     "models/db/Menu/Availability",
-    "app"
+    
 ], function(Event,
             Availability){
     "use strict";

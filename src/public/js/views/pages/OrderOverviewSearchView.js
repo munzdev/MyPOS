@@ -2,12 +2,10 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'views/headers/HeaderView',
+define([ 'views/headers/HeaderView',
          'text!templates/pages/order-overview-search.phtml',
          'jquerymobile-datebox'],
- function(  app,
-            HeaderView,
+ function(  HeaderView,
             Template ) {
     "use strict";
 

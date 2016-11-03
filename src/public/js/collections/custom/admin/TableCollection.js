@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/admin/TableModel"
-], function(app, TableModel){
+], function( TableModel){
     "use strict";
 
     var TableCollection = Backbone.Collection.extend({

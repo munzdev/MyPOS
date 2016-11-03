@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/Menu/Menu"
-], function(app, Menu){
+], function(Menu){
     "use strict";
     
     return class MenuCollection extends Backbone.Collection

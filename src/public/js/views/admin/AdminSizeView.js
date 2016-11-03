@@ -2,13 +2,11 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'Webservice',
+define([ 'Webservice',
          'views/headers/AdminHeaderView',
          'collections/admin/SizeCollection',
          'text!templates/pages/admin/admin-size.phtml'],
-function( app,
-          Webservice,
+function( Webservice,
           AdminHeaderView,
           SizeCollection,
           Template ) {

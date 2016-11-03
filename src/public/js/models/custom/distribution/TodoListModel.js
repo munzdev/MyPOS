@@ -1,6 +1,4 @@
-define([
-    "app"
-], function(){
+define( function(){
     "use strict";
 
     var TodoListModel = Backbone.Model.extend({

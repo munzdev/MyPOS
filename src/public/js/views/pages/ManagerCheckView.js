@@ -2,15 +2,13 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'Webservice',
+define([ 'Webservice',
          'collections/manager/CheckCollection',
          'views/headers/HeaderView',
          'views/footers/ManagerFooterView',
          'text!templates/pages/manager-check.phtml',
          'jquery-dateFormat'],
-function( app,
-          Webservice,
+function( Webservice,
           CheckCollection,
           HeaderView,
           ManagerFooterView,

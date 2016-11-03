@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/Event/EventUser"
-], function(app, EventUser){
+], function(EventUser){
     "use strict";
     
     return class EventUserCollection extends Backbone.Collection

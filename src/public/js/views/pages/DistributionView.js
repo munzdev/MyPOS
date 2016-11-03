@@ -2,8 +2,7 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'Webservice',
+define([ 'Webservice',
          'views/headers/HeaderView',
          'collections/distribution/TodoListCollection',
          'models/distribution/DistributionOrderSetModel',
@@ -11,8 +10,7 @@ define([ "app",
          'models/distribution/ProductsAvailabilitySetModel',
          'text!templates/pages/distribution.phtml',
          "jquery-dateFormat"],
-function( app,
-          Webservice,
+function( Webservice,
           HeaderView,
           TodoListCollection,
           DistributionOrderSetModel,

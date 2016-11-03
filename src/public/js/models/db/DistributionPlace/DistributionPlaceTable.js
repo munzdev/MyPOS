@@ -2,7 +2,7 @@ define([
     "models/db/DistributionPlace/DistributionPlace",
     "models/db/Menu/MenuGroup",
     "models/db/Event/EventTable",
-    "app"
+    
 ], function(DistributionPlace,
             MenuGroup,
             EventTable){

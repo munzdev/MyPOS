@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/admin/EventModel"
-], function(app, EventModel){
+], function(EventModel){
     "use strict";
 
     var EventsCollection = Backbone.Collection.extend({

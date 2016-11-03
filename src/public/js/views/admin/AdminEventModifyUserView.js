@@ -2,14 +2,12 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'Webservice',
+define([ 'Webservice',
          'views/headers/AdminHeaderView',
          'views/footers/AdminFooterView',
          'collections/admin/EventUserCollection',
          'text!templates/pages/admin/admin-event-modify-user.phtml'],
-function( app,
-          Webservice,
+function( Webservice,
           AdminHeaderView,
           AdminFooterView,
           EventUserCollection,

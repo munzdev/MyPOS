@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/Event/EventTable"
-], function(app, EventTable){
+], function(EventTable){
     "use strict";
     
     return class EventTableCollection extends Backbone.Collection

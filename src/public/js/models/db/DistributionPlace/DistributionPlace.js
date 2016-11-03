@@ -1,6 +1,6 @@
 define([
     "models/db/Event/Event",
-    "app"    
+        
 ], function(Event){
     "use strict";
 

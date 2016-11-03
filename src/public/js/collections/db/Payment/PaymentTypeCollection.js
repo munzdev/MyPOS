@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/Payment/PaymentType"
-], function(app, PaymentType){
+], function(PaymentType){
     "use strict";
     
     return class PaymentTypeCollection extends Backbone.Collection

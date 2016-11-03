@@ -1,6 +1,4 @@
-define([
-    "app"
-], function(app){
+define(function(){
     "use strict";
     
     return class UserModel extends Backbone.Model

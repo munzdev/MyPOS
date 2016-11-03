@@ -1,0 +1,8 @@
+{
+    "LoginView": {
+        "username": "Benutzername",
+        "password": "Passwort",
+        "rememberMe": "Login merken",
+        "submit": "Login"
+    }
+}

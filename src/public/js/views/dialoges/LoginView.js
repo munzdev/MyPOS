@@ -2,10 +2,8 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'text!templates/dialoges/login.phtml'],
-function( app,
-          Template ) {              
+define([ 'text!templates/dialoges/login.phtml'],
+function( Template ) {              
     "use strict";
     
     return class LoginView extends app.DialogView
@@ -92,7 +90,7 @@ function( app,
                     this.sendToDefaultPage();
                 })
                 .fail((result) => {
-                    if(DEBUG) console.log("Login fehlgeschlagen!", result);
+                    if(DEBUG) console.log("Login fehlgeschlagen!");
                     app.error.showAlert('Login fehler!', 'Login ist fehlgeschlagen!');
                 });
             }

@@ -4,8 +4,7 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         "Webservice",
+define([ "Webservice",
          "collections/OrderCollection",
          "models/order/TypeModel",
          "models/order/MenuModel",
@@ -14,8 +13,7 @@ define([ "app",
          'views/headers/HeaderView',
          'text!templates/pages/order-modify.phtml',
          'text!templates/pages/order-item.phtml'],
-function(  app,
-            Webservice,
+function(   Webservice,
             OrderCollection,
             TypeModel,
             MenuModel,

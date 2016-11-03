@@ -2,10 +2,8 @@
 // =============
 
 // Includes file dependencies
-define(["app",
-        'text!templates/footers/manager-footer.phtml'],
- function(app,
-          Template ) {
+define(['text!templates/footers/manager-footer.phtml'],
+ function(Template ) {
     "use strict";
 
     // Extends Backbone.View

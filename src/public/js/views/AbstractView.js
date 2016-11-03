@@ -2,8 +2,7 @@
 // =============
 
 // Includes file dependencies
-define([ "app"],
- function() {
+define(function() {
     "use strict";
         
     return class AbstractView extends Backbone.View {
@@ -12,6 +11,15 @@ define([ "app"],
         
         renderTemplate(Template, Datas) {
             var template = _.template(Template);
+            
+            var i18n = {};
+            var i18nNamespace = this.id();
+            
+            if(i18nNamespace in app.i18n.template)
+                i18n = app.i18n.template[i18nNamespace];
+            
+            Datas = _.extend({}, Datas, {t: i18n,
+                                         i18n: app.i18n.template});
             
             var div = $("<div/>").attr(_.extend({id: this.id()}, this.jqmAttributes()));
             div.html(template(Datas));

@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/User/UserRole"
-], function(app, UserRole){
+], function(UserRole){
     "use strict";
     
     return class UserRoleCollection extends Backbone.Collection

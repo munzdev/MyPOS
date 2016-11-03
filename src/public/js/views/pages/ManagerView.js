@@ -2,13 +2,11 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'Webservice',
+define([ 'Webservice',
          'views/headers/HeaderView',
          'views/footers/ManagerFooterView',
          'text!templates/pages/manager.phtml'],
-function( app,
-          Webservice,
+function( Webservice,
           HeaderView,
           ManagerFooterView,
           Template ) {

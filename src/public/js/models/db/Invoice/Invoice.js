@@ -1,6 +1,6 @@
 define([
     "models/db/User/User",
-    "app"
+    
 ], function(User){
     "use strict";
 

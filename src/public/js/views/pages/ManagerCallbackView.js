@@ -2,15 +2,13 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'Webservice',
+define([ 'Webservice',
          'collections/manager/CallbackCollection',
          'views/headers/HeaderView',
          'views/footers/ManagerFooterView',
          'text!templates/pages/manager-callback.phtml',
          "jquery-dateFormat"],
-function( app,
-          Webservice,
+function( Webservice,
           CallbackCollection,
           HeaderView,
           ManagerFooterView,

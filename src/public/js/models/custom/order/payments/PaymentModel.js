@@ -1,7 +1,6 @@
-define(["app",
-        "collections/order/payments/ExtraCollection",
+define(["collections/order/payments/ExtraCollection",
         "collections/order/payments/OrderCollection"],
-function(app, ExtraCollection, OrderCollection) {
+function(ExtraCollection, OrderCollection) {
     "use strict";
 
     var PaymentModel = Backbone.Model.extend({

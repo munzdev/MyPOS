@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/OIP/OrderInProgress"
-], function(app, OrderInProgress){
+], function(OrderInProgress){
     "use strict";
     
     return class OrderInProgressCollection extends Backbone.Collection

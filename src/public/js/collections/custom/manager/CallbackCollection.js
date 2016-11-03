@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/Auth/AuthUserModel"
-], function(app, UserModel){
+], function(UserModel){
     "use strict";
 
     var CallbackCollection = Backbone.Collection.extend({

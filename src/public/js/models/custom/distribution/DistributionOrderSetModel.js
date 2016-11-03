@@ -1,9 +1,7 @@
 define([
-    "app",
     "collections/distribution/DistributionOrdersDetailsCollection",
     "collections/distribution/DistributionSpecialExtraCollection"
-], function(app,
-            DistributionOrdersDetailsCollection,
+], function(DistributionOrdersDetailsCollection,
             DistributionSpecialExtraCollection){
     "use strict";
 

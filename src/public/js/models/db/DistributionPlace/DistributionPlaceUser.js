@@ -2,7 +2,7 @@ define([
     "models/db/DistributionPlace/DistributionPlace",
     "models/db/User/User",
     "models/db/Event/EventPrinter",
-    "app"
+    
 ], function(DistributionPlace,
             User,
             EventPrinter){

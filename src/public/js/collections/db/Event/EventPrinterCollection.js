@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/Event/EventPrinter"
-], function(app, EventPrinter){
+], function(EventPrinter){
     "use strict";
     
     return class EventPrinterCollection extends Backbone.Collection

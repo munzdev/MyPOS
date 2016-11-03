@@ -2,7 +2,7 @@
 // ----------
 
 //Includes file dependencies
-define([ "app", "wampy"], function(app)
+define(["wampy"], function()
 {
     "use strict";
 

@@ -2,11 +2,9 @@
  * @desc		stores the POST state and response state of authentication for user
  */
 define([
-    "app",
     "models/custom/auth/LoginModel",
     "models/custom/auth/AuthUserModel"
-], function(app,
-            LoginModel,
+], function(LoginModel,
             AuthUserModel){
     "use strict";
     

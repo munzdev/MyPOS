@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/order/MenuModel"
-], function(app, MenuModel){
+], function(MenuModel){
     "use strict";
 
     var OrderCollection = Backbone.Collection.extend({

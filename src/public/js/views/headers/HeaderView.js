@@ -2,10 +2,8 @@
 // =============
 
 // Includes file dependencies
-define(["app",
-        'text!templates/headers/navbar.phtml'],
- function(app,
-          Template ) {
+define(['text!templates/headers/navbar.phtml'],
+ function(Template ) {
     "use strict";
 
     // Extends Backbone.View

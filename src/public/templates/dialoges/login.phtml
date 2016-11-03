@@ -5,18 +5,18 @@
     <form id='loginForm' action="#">
     	<fieldset>
             <div data-role="fieldcontain">
-                <label for="usrnm" class="ui-hidden-accessible">Benutzername:</label>
-                <input type="text" name="username" id="username" placeholder="Benutzername">
+                <label for="username" class="ui-hidden-accessible"></label>
+                <input type="text" name="username" id="username" placeholder="<%= t.username %>">
             </div>
             <div data-role="fieldcontain">
-                <label for="pswd" class="ui-hidden-accessible">Passwort:</label>
-                <input type="password" name="password" id="password" placeholder="Passwort">
+                <label for="password" class="ui-hidden-accessible"></label>
+                <input type="password" name="password" id="password" placeholder="<%= t.password %>">
             </div>
             <div data-role="fieldcontain">
-                <label for="rememberMe">Login merken</label>
+                <label for="rememberMe"><%= t.rememberMe %></label>
                 <input type="checkbox" name="rememberMe" id="rememberMe" data-mini="true">
             </div>
-            <input type="button" id="submit" data-inline="true" value="Log in">
+            <input type="button" id="submit" data-inline="true" value="<%= t.submit %>">
         </fieldset>
     </form>
 </div> 

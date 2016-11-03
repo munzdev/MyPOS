@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/Menu/MenuPossibleExtra"
-], function(app, MenuPossibleExtra){
+], function(MenuPossibleExtra){
     "use strict";
     
     return class MenuPossibleExtraCollection extends Backbone.Collection

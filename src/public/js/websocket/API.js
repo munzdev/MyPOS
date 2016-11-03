@@ -2,7 +2,7 @@
 // ----------
 
 //Includes file dependencies
-define([ "app", "Webservice", "wampy"], function(app, Webservice)
+define(["Webservice", "wampy"], function(Webservice)
 {
     "use strict";
 

@@ -1,8 +1,7 @@
 define([
     "models/db/Menu/Menu",
     "collections/db/Menu/MenuSizeCollection",
-    "collections/db/Menu/MenuExtraCollection",
-    "app"
+    "collections/db/Menu/MenuExtraCollection"
 ], function(Menu, 
             MenuSizeCollection, 
             MenuExtraCollection){

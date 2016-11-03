@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/distribution/DistributionOrdersDetailSpecialExtraModel"
-], function(app, DistributionOrdersDetailSpecialExtraModel){
+], function(DistributionOrdersDetailSpecialExtraModel){
     "use strict";
 
     var DistributionSpecialExtraCollection = Backbone.Collection.extend({

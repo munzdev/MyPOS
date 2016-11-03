@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/Menu/MenuSize"
-], function(app, MenuSize){
+], function(MenuSize){
     "use strict";
     
     return class MenuSizeCollection extends Backbone.Collection

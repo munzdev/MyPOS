@@ -1,7 +1,6 @@
 define([
-    "app",
     "collections/OrderCollection"
-], function(app, OrderCollection){
+], function(OrderCollection){
     "use strict";
 
     var InfoModel = Backbone.Model.extend({

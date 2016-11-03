@@ -2,12 +2,10 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'collections/OrderOverviewCollection',
+define([ 'collections/OrderOverviewCollection',
          'views/headers/HeaderView',
          'text!templates/pages/order-new.phtml'],
- function( app,
-           OrderOverviewCollection,
+ function( OrderOverviewCollection,
            HeaderView,
            Template ) {
     "use strict";

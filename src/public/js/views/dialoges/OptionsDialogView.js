@@ -2,11 +2,9 @@
 // =============
 
 // Includes file dependencies
-define(["app",
-        "Webservice",
+define(["Webservice",
         'text!templates/dialoges/options-dialog.phtml'],
-function(app,
-         Webservice,
+function(Webservice,
          Template )
 {
     "use strict";

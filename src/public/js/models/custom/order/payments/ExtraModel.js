@@ -1,5 +1,4 @@
-define(["app"],
-function(){
+define(function(){
     "use strict";
 
     var ExtraModel = Backbone.Model.extend({

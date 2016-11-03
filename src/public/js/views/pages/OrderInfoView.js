@@ -2,14 +2,12 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         "models/order/info/InfoModel",
+define([ "models/order/info/InfoModel",
          'views/headers/HeaderView',
          'text!templates/pages/order-info.phtml',
          'text!templates/pages/order-item.phtml',
          "jquery-dateFormat"],
- function(  app,
-            InfoModel,
+ function(  InfoModel,
             HeaderView,
             Template,
             TemplateItem) {

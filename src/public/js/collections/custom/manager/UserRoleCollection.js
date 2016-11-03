@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/manager/UserRoleModel"
-], function(app, UserRoleModel){
+], function(UserRoleModel){
     "use strict";
 
     var UserRoleCollection = Backbone.Collection.extend({

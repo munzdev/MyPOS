@@ -2,14 +2,12 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'Webservice',
+define([ 'Webservice',
          'collections/manager/UserRoleCollection',
          'views/headers/HeaderView',
          'views/footers/ManagerFooterView',
          'text!templates/pages/manager-groupmessage.phtml'],
-function( app,
-          Webservice,
+function( Webservice,
           UserRoleCollection,
           HeaderView,
           ManagerFooterView,

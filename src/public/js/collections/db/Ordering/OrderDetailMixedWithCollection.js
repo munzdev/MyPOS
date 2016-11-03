@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/Ordering/OrderDetailMixedWith"
-], function(app, OrderDetailMixedWith){
+], function(OrderDetailMixedWith){
     "use strict";
     
     return class OrderDetailMixedWithCollection extends Backbone.Collection

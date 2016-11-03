@@ -1,7 +1,7 @@
 define([
     "models/db/Payment/Payment",
     "models/db/Payment/Coupon",
-    "app"
+    
 ], function(Payment,
             Coupon){
     "use strict";

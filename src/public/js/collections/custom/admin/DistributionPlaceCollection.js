@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/admin/DistributionPlaceModel"
-], function(app, DistributionPlaceModel){
+], function(DistributionPlaceModel){
     "use strict";
 
     var DistributionPlaceCollection = Backbone.Collection.extend({

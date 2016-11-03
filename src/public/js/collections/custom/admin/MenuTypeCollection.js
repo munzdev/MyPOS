@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/product/TypeModel"
-], function(app, TypeModel){
+], function(TypeModel){
     "use strict";
 
     var MenuTypeCollection = Backbone.Collection.extend({

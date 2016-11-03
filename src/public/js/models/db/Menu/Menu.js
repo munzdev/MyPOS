@@ -1,7 +1,7 @@
 define([
     "models/db/Menu/MenuGroup",
     "models/db/Menu/Availability",
-    "app"
+    
 ], function(MenuGroup,
             Availability){
     "use strict";

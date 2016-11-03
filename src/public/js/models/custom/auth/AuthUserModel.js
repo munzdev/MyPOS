@@ -1,9 +1,7 @@
 define([
-    "app",
     "models/db/User/User",
     "models/db/Event/EventUser"
-], function(app,
-            User,
+], function(User,
             EventUser){
     "use strict";
     

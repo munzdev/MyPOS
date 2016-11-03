@@ -2,8 +2,7 @@
 // =============
 
 // Includes file dependencies
-define([ "app"
-], function(app) {
+define(function() {
     "use strict";
 
     // Extends Backbone.Router

@@ -1,6 +1,5 @@
 define([
-    "models/custom/product/GroupModel",
-    "app"
+    "models/custom/product/GroupModel"
 ], function(GroupModel){
     "use strict";
     

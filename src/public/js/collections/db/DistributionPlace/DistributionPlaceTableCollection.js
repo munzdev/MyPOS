@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/DistributionPlace/DistributionPlaceTable"
-], function(app, DistributionPlaceTable){
+], function(DistributionPlaceTable){
     "use strict";
     
     return class DistributionPlaceTableCollection extends Backbone.Collection

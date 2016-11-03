@@ -1,7 +1,6 @@
 define([
     "models/db/Menu/MenuType",
-    "collections/custom/product/GroupCollection",
-    "app"
+    "collections/custom/product/GroupCollection"
 ], function(MenuType, 
             GroupCollection){
     "use strict";

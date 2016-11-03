@@ -3,8 +3,7 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         "routers/BaseRouter",
+define([ "routers/BaseRouter",
          "views/dialoges/LoginView",
          "views/pages/OrderOverviewView",
          /*"views/pages/OrderOverviewSearchView",
@@ -19,8 +18,7 @@ define([ "app",
          "views/pages/ManagerCheckView",
          "views/pages/ManagerGroupmessageView",
          "views/pages/ManagerStatisticView"*/
-], function(app,
-            BaseRouter,
+], function(BaseRouter,
             LoginView,
             OrderOverviewView,
             OrderOverviewSearchView,

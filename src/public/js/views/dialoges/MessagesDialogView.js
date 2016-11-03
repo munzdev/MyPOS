@@ -2,12 +2,10 @@
 // =============
 
 // Includes file dependencies
-define(["app",
-        "Webservice",
+define(["Webservice",
         'text!templates/dialoges/messages-dialog.phtml',
         "jquery-dateFormat"],
-function(app,
-         Webservice,
+function(Webservice,
          Template )
 {
     "use strict";

@@ -2,13 +2,11 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'Webservice',
+define([ 'Webservice',
          'views/headers/AdminHeaderView',
          'views/footers/AdminFooterView',
          'text!templates/pages/admin/admin-event-modify-printer-modify.phtml'],
-function( app,
-          Webservice,
+function( Webservice,
           AdminHeaderView,
           AdminFooterView,
           Template ) {

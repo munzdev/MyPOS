@@ -5,7 +5,7 @@ define([
     "models/db/menu/MenuGroup",
     "models/db/menu/Availability",
     "models/db/User/User",
-    "app"
+    
 ], function(Order,
             Menu,
             MenuSize,

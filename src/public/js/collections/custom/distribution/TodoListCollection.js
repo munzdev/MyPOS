@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/distribution/TodoListModel"
-], function(app, TodoListModel){
+], function(TodoListModel){
     "use strict";
 
     var TodoListCollection = Backbone.Collection.extend({

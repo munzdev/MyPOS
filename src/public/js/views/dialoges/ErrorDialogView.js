@@ -2,10 +2,8 @@
 // =============
 
 // Includes file dependencies
-define(["app",
-        'text!templates/dialoges/error.phtml'],
-function(app,
-         Template ) {
+define(['text!templates/dialoges/error.phtml'],
+function(Template ) {
     "use strict";
 
     return class ErrorDialogView extends app.DialogView

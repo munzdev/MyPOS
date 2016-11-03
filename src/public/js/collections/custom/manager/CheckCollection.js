@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/manager/CheckModel"
-], function(app, CheckModel){
+], function(CheckModel){
     "use strict";
 
     var CheckCollection = Backbone.Collection.extend({

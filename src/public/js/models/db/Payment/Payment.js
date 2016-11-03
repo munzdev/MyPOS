@@ -1,7 +1,7 @@
 define([
     "models/db/Payment/PaymentType",
     "models/db/Invoice/Invoice",
-    "app"
+    
 ], function(PaymentType,
             Invoice){
     "use strict";

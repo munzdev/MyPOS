@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/product/ExtraModel"
-], function(app, ExtraModel){
+], function(ExtraModel){
     "use strict";
 
     var ExtraCollection = Backbone.Collection.extend({

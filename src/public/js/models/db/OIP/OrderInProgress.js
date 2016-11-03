@@ -2,7 +2,7 @@ define([
     "models/db/Ordering/Order",
     "models/db/User/User",
     "models/db/Menu/MenuGroup",
-    "app"
+    
 ], function(Order,
             User,
             MenuGroup){

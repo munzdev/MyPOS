@@ -1,7 +1,7 @@
 define([
     "models/db/Menu/Menu",
     "models/db/Menu/MenuSize",
-    "app"
+    
 ], function(Menu,
             MenuSize){
     "use strict";

@@ -1,6 +1,5 @@
 define([
-    "models/custom/product/MenuModel",
-    "app"
+    "models/custom/product/MenuModel"
 ], function(MenuModel){
     "use strict";
     

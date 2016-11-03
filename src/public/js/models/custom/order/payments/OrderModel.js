@@ -1,5 +1,4 @@
-define(["app"],
-function(){
+define(function(){
     "use strict";
 
     var OrderModel = Backbone.Model.extend({

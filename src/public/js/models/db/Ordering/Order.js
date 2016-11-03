@@ -1,7 +1,7 @@
 define([
     "models/db/Event/EventTable",
     "models/db/User/User",
-    "app"
+    
 ], function(EventTable,
             User){
     "use strict";

@@ -4,8 +4,7 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         "Webservice",
+define([ "Webservice",
          'models/order/payments/PaymentModel',
          'collections/order/payments/OrderCollection',
          'collections/order/payments/ExtraCollection',
@@ -13,8 +12,7 @@ define([ "app",
          'views/headers/HeaderView',
          'text!templates/pages/order-pay.phtml',
          'text!templates/pages/order-item.phtml'],
-function(app,
-         Webservice,
+function(Webservice,
          PaymentModel,
          OrderCollection,
          ExtraCollection,

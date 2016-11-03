@@ -1,7 +1,6 @@
 define([
-    "app",
-    "models/db/Menu/Availability"
-], function(app, Availability){
+   "models/db/Menu/Availability"
+], function(Availability){
     "use strict";
     
     return class AvailabilityCollection extends Backbone.Collection

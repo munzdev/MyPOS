@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/User/User"
-], function(app, User){
+], function(User){
     "use strict";
     
     return class UserCollection extends Backbone.Collection

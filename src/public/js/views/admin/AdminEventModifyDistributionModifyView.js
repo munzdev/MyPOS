@@ -2,8 +2,7 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'Webservice',
+define([ 'Webservice',
          'views/headers/AdminHeaderView',
          'views/footers/AdminFooterView',
          'collections/admin/MenuTypeCollection',
@@ -11,8 +10,7 @@ define([ "app",
          'collections/admin/TableCollection',
          'collections/PrinterCollection',
          'text!templates/pages/admin/admin-event-modify-distribution-modify.phtml'],
-function( app,
-          Webservice,
+function( Webservice,
           AdminHeaderView,
           AdminFooterView,
           MenuTypeCollection,

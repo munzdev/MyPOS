@@ -2,13 +2,11 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         "Webservice",
+define([ "Webservice",
          'collections/custom/OrderOverviewCollection',
          'views/headers/HeaderView',
          'text!templates/pages/order-overview.phtml'],
- function(  app,
-            Webservice,
+ function(  Webservice,
             OrderOverviewCollection,
             HeaderView,
             Template ) {

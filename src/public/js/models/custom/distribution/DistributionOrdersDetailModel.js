@@ -1,6 +1,4 @@
-define([
-    "app"
-], function(){
+define(function(){
     "use strict";
 
     var DistributionOrdersDetailModel = Backbone.Model.extend({

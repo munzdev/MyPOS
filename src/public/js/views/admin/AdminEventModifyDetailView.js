@@ -2,14 +2,12 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'Webservice',
+define([ 'Webservice',
          'views/headers/AdminHeaderView',
          'views/footers/AdminFooterView',
          'text!templates/pages/admin/admin-event-modify-detail.phtml',
          'jquerymobile-datebox'],
-function( app,
-          Webservice,
+function( Webservice,
           AdminHeaderView,
           AdminFooterView,
           Template ) {

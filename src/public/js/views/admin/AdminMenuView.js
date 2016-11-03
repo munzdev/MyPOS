@@ -2,13 +2,11 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'Webservice',
+define([ 'Webservice',
          'views/headers/AdminHeaderView',
          'collections/admin/MenuTypeCollection',
          'text!templates/pages/admin/admin-menu.phtml'],
-function( app,
-          Webservice,
+function( Webservice,
           AdminHeaderView,
           MenuTypeCollection,
           Template ) {

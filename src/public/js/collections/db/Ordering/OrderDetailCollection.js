@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/Ordering/OrderDetail"
-], function(app, OrderDetail){
+], function(OrderDetail){
     "use strict";
     
     return class OrderDetailCollection extends Backbone.Collection

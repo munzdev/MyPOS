@@ -1,6 +1,6 @@
 define([
     "models/db/Menu/MenuType",
-    "app"
+    
 ], function(MenuType){
     "use strict";
 

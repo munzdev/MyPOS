@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/product/SizeModel"
-], function(app, SizeModel){
+], function(SizeModel){
     "use strict";
 
     var SizeCollection = Backbone.Collection.extend({

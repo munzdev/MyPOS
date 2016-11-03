@@ -1,7 +1,7 @@
 define([
     "models/db/Invoice/Invoice",
     "models/db/Ordering/OrderDetail",
-    "app"
+    
 ], function(Invoice,
             OrderDetail){
     "use strict";

@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/Payment/Coupon"
-], function(app, Coupon){
+], function(Coupon){
     "use strict";
     
     return class CouponCollection extends Backbone.Collection

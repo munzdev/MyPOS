@@ -1,9 +1,8 @@
 define([
-    "app",
     "collections/product/MenuCollection",
     "collections/product/ExtraCollection",
     "collections/distribution/ProductsAvailabilitySpecialExtrasCollection"
-], function(app, MenuCollection, ExtraCollection, ProductsAvailabilitySpecialExtrasCollection){
+], function(MenuCollection, ExtraCollection, ProductsAvailabilitySpecialExtrasCollection){
     "use strict";
 
     var ProductsAvailabilitySetModel = Backbone.Model.extend({

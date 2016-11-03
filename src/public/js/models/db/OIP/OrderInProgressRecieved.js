@@ -2,7 +2,7 @@ define([
     "models/db/Ordering/OrderDetail",
     "models/db/OIP/OrderInProgress",
     "models/db/OIP/DistributionGivingOut",
-    "app"
+    
 ], function(OrderDetail,
             OrderInProgress,
             DistributionGivingOut){

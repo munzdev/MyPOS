@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/custom/product/TypeModel"
-], function(app, TypeModel){
+], function(TypeModel){
     "use strict";
     
     return class TypeCollection extends Backbone.Collection

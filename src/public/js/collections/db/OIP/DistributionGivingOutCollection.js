@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/OIP/DistributionGivingOut"
-], function(app, DistributionGivingOut){
+], function(DistributionGivingOut){
     "use strict";
     
     return class DistributionGivingOutCollection extends Backbone.Collection

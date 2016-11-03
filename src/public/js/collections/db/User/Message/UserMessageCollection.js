@@ -1,7 +1,6 @@
 define([
-    "app",
     "models/db/User/Message/UserMessage"
-], function(app, UserMessage){
+], function(UserMessage){
     "use strict";
     
     return class UserMessageCollection extends Backbone.Collection

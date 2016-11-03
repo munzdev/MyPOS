@@ -2,12 +2,10 @@
 // =============
 
 // Includes file dependencies
-define([ "app",
-         'Webservice',
+define([ 'Webservice',
          'views/headers/AdminHeaderView',
          'text!templates/pages/admin/admin-menu-modify-type.phtml'],
-function( app,
-          Webservice,
+function( Webservice,
           AdminHeaderView,
           Template ) {
     "use strict";

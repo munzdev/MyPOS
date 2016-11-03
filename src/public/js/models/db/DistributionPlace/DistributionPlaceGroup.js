@@ -1,7 +1,7 @@
 define([
     "models/db/DistributionPlace/DistributionPlace",
     "models/db/Menu/MenuGroup",
-    "app"
+    
 ], function(DistributionPlace,
             MenuGroup){
     "use strict";

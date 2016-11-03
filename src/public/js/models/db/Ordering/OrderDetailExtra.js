@@ -1,7 +1,7 @@
 define([
     "models/db/Ordering/OrderDetail",
     "models/db/Menu/MenuPossibleExtra",
-    "app"
+    
 ], function(OrderDetail,
             MenuPossibleExtra){
     "use strict";
