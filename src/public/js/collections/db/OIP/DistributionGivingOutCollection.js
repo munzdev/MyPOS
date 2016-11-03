@@ -3,9 +3,9 @@ define([
 ], function(DistributionGivingOut){
     "use strict";
     
-    return class DistributionGivingOutCollection extends Backbone.Collection
+    return class DistributionGivingOutCollection extends app.BaseCollection
     {
-        model() { return DistributionGivingOut; }
+        getModel() { return DistributionGivingOut; }
         url() {return app.API + "DB/OIP/DistributionGivingOut";}
     }
 });

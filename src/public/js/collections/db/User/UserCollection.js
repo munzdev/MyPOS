@@ -3,9 +3,9 @@ define([
 ], function(User){
     "use strict";
     
-    return class UserCollection extends Backbone.Collection
+    return class UserCollection extends app.BaseCollection
     {
-        model() { return User; }
+        getModel() { return User; }
         url() {return app.API + "DB/User";}
     }
 });

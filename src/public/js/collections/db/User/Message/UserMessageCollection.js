@@ -3,9 +3,9 @@ define([
 ], function(UserMessage){
     "use strict";
     
-    return class UserMessageCollection extends Backbone.Collection
+    return class UserMessageCollection extends app.BaseCollection
     {
-        model() { return UserMessage; }
+        getModel() { return UserMessage; }
         url() {return app.API + "DB/User/Message/UserMessage";}
     }
 });

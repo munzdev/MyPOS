@@ -3,9 +3,9 @@ define([
 ], function(MenuPossibleExtra){
     "use strict";
     
-    return class MenuPossibleExtraCollection extends Backbone.Collection
+    return class MenuPossibleExtraCollection extends app.BaseCollection
     {
-        model() { return MenuPossibleExtra; }
+        getModel() { return MenuPossibleExtra; }
         url() {return app.API + "DB/Menu/MenuPossibleExtra"}
     }
 });

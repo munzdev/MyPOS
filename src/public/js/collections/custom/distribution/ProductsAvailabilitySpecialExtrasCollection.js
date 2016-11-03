@@ -3,7 +3,7 @@ define([
 ], function(ProductsAvailabilitySpecialExtraModel){
     "use strict";
 
-    var ProductsAvailabilitySpecialExtrasCollection = Backbone.Collection.extend({
+    var ProductsAvailabilitySpecialExtrasCollection = app.BaseCollection.extend({
         model: ProductsAvailabilitySpecialExtraModel
     });
 

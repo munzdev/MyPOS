@@ -3,9 +3,9 @@ define([
 ], function(Availability){
     "use strict";
     
-    return class AvailabilityCollection extends Backbone.Collection
+    return class AvailabilityCollection extends app.BaseCollection
     {
-        model() { return Availability; }
+        getModel() { return Availability; }
         url() {return app.API + "DB/Menu/Availability"}
     }
 });

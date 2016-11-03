@@ -3,7 +3,7 @@ define([
 ], function(EventUserModel){
     "use strict";
 
-    var EventUserCollection = Backbone.Collection.extend({
+    var EventUserCollection = app.BaseCollection.extend({
     	model: EventUserModel,
     	url: app.API + "Admin/GetEventUserList/",
         parse: function (response) {

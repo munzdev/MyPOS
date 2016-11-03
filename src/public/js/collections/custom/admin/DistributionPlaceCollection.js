@@ -3,7 +3,7 @@ define([
 ], function(DistributionPlaceModel){
     "use strict";
 
-    var DistributionPlaceCollection = Backbone.Collection.extend({
+    var DistributionPlaceCollection = app.BaseCollection.extend({
     	model: DistributionPlaceModel,
     	url: app.API + "Admin/GetEventDistributionList/",
         parse: function (response) {

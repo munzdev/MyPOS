@@ -3,7 +3,7 @@ define([
 ], function(OrderModel){
     "use strict";
 
-    var OrderCollection = Backbone.Collection.extend({
+    var OrderCollection = app.BaseCollection.extend({
         model: OrderModel
     });
 

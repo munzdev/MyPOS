@@ -3,9 +3,9 @@ define([
 ], function(MenuPossibleSize){
     "use strict";
     
-    return class MenuPossibleSizeCollection extends Backbone.Collection
+    return class MenuPossibleSizeCollection extends app.BaseCollection
     {
-        model() { return MenuPossibleSize; }
+        getModel() { return MenuPossibleSize; }
         url() {return app.API + "DB/Menu/MenuPossibleSize"}
     }
 });

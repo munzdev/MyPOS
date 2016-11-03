@@ -3,7 +3,7 @@ define([
 ], function(TypeModel){
     "use strict";
 
-    var OrderCollection = Backbone.Collection.extend({
+    var OrderCollection = app.BaseCollection.extend({
     	model: TypeModel,
     	url: app.API + "Orders/GetOrder/",
         parse: function (response) {

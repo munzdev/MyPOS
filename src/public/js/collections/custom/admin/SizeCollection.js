@@ -3,7 +3,7 @@ define([
 ], function(SizeModel){
     "use strict";
 
-    var SizeCollection = Backbone.Collection.extend({
+    var SizeCollection = app.BaseCollection.extend({
         model: SizeModel,
         parse: function (response) {
             if(response.error)

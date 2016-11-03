@@ -3,9 +3,9 @@ define([
 ], function(EventPrinter){
     "use strict";
     
-    return class EventPrinterCollection extends Backbone.Collection
+    return class EventPrinterCollection extends app.BaseCollection
     {
-        model() { return EventPrinter; }
+        getModel() { return EventPrinter; }
         url() {return app.API + "DB/Event/EventPrinter"}
     }
 });

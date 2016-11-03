@@ -3,7 +3,7 @@ define([
 ], function(DistributionOrdersDetailModel){
     "use strict";
 
-    var DistributionOrdersDetailsCollection = Backbone.Collection.extend({
+    var DistributionOrdersDetailsCollection = app.BaseCollection.extend({
         model: DistributionOrdersDetailModel
     });
 

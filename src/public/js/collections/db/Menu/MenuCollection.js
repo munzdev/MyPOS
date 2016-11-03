@@ -3,9 +3,9 @@ define([
 ], function(Menu){
     "use strict";
     
-    return class MenuCollection extends Backbone.Collection
+    return class MenuCollection extends app.BaseCollection
     {
-        model() { return Menu; }
+        getModel() { return Menu; }
         url() {return app.API + "DB/Menu";}
     }
 });

@@ -3,9 +3,9 @@ define([
 ], function(EventTable){
     "use strict";
     
-    return class EventTableCollection extends Backbone.Collection
+    return class EventTableCollection extends app.BaseCollection
     {
-        model() { return EventTable; }
+        getModel() { return EventTable; }
         url() {return app.API + "DB/Event/EventTable"}
     }
 });

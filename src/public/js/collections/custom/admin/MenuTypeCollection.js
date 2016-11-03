@@ -3,7 +3,7 @@ define([
 ], function(TypeModel){
     "use strict";
 
-    var MenuTypeCollection = Backbone.Collection.extend({
+    var MenuTypeCollection = app.BaseCollection.extend({
         model: TypeModel,
         url: app.API + "Admin/GetMenuList/",
         parse: function (response) {

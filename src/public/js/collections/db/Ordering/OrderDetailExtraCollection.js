@@ -3,9 +3,9 @@ define([
 ], function(OrderDetailExtra){
     "use strict";
     
-    return class OrderDetailExtraCollection extends Backbone.Collection
+    return class OrderDetailExtraCollection extends app.BaseCollection
     {
-        model() { return OrderDetailExtra; }
+        getModel() { return OrderDetailExtra; }
         url() {return app.API + "DB/Ordering/OrderDetailExtra";}
     }
 });

@@ -3,7 +3,7 @@ define([
 ], function(OrdersOverviewModel){
     "use strict";
 
-    var OrdersOverviewCollection = Backbone.Collection.extend({
+    var OrdersOverviewCollection = app.BaseCollection.extend({
 
         model: OrdersOverviewModel,
         url: app.API + "Orders/GetOpenList/",

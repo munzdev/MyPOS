@@ -3,7 +3,7 @@ define([
 ], function(PrinterModel){
     "use strict";
 
-    var PrinterCollection = Backbone.Collection.extend({
+    var PrinterCollection = app.BaseCollection.extend({
 
         model: PrinterModel,
         url: app.API + "Events/GetPrinters/",

@@ -3,7 +3,7 @@ define([
 ], function(TodoListModel){
     "use strict";
 
-    var TodoListCollection = Backbone.Collection.extend({
+    var TodoListCollection = app.BaseCollection.extend({
         model: TodoListModel
     });
 

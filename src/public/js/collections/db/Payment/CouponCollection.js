@@ -3,9 +3,9 @@ define([
 ], function(Coupon){
     "use strict";
     
-    return class CouponCollection extends Backbone.Collection
+    return class CouponCollection extends app.BaseCollection
     {
-        model() { return Coupon; }
+        getModel() { return Coupon; }
         url() {return app.API + "DB/Payment/Coupon";}
     }
 });

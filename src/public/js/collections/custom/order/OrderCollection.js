@@ -3,7 +3,7 @@ define([
 ], function(MenuModel){
     "use strict";
 
-    var OrderCollection = Backbone.Collection.extend({
+    var OrderCollection = app.BaseCollection.extend({
         model: MenuModel,
         addOnce: function(newOrder)
         {

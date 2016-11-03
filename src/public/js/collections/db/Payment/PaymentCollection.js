@@ -3,9 +3,9 @@ define([
 ], function(Payment){
     "use strict";
     
-    return class PaymentCollection extends Backbone.Collection
+    return class PaymentCollection extends app.BaseCollection
     {
-        model() { return Payment; }
+        getModel() { return Payment; }
         url() {return app.API + "DB/Payment";}
     }
 });

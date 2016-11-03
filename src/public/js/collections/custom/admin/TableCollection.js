@@ -3,7 +3,7 @@ define([
 ], function( TableModel){
     "use strict";
 
-    var TableCollection = Backbone.Collection.extend({
+    var TableCollection = app.BaseCollection.extend({
     	model: TableModel,
     	url: app.API + "Admin/GetTableList/",
         parse: function (response) {

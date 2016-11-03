@@ -3,7 +3,7 @@ define([
 ], function(ExtraModel){
     "use strict";
 
-    var ExtraCollection = Backbone.Collection.extend({
+    var ExtraCollection = app.BaseCollection.extend({
         model: ExtraModel
     });
 

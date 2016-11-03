@@ -3,9 +3,9 @@ define([
 ], function(EventUser){
     "use strict";
     
-    return class EventUserCollection extends Backbone.Collection
+    return class EventUserCollection extends app.BaseCollection
     {
-        model() { return EventUser; }
+        getModel() { return EventUser; }
         url() {return app.API + "DB/Event/EventUser"}
     }
 });

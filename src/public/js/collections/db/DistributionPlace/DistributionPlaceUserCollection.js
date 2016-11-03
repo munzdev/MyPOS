@@ -3,9 +3,9 @@ define([
 ], function(DistributionPlaceUser){
     "use strict";
     
-    return class DistributionPlaceUserCollection extends Backbone.Collection
+    return class DistributionPlaceUserCollection extends app.BaseCollection
     {
-        model() { return DistributionPlaceUser; }
+        getModel() { return DistributionPlaceUser; }
         url() {return app.API + "DB/DistributionPlace/DistributionPlaceUser"}
     }
 });

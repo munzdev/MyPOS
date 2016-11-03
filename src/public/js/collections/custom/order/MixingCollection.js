@@ -3,7 +3,7 @@ define([
 ], function(MixingModel){
     "use strict";
 
-    var MixingCollection = Backbone.Collection.extend({
+    var MixingCollection = app.BaseCollection.extend({
         model: MixingModel
     });
 

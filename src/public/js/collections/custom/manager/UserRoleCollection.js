@@ -3,7 +3,7 @@ define([
 ], function(UserRoleModel){
     "use strict";
 
-    var UserRoleCollection = Backbone.Collection.extend({
+    var UserRoleCollection = app.BaseCollection.extend({
 
         model: UserRoleModel,
         url: app.API + "Events/GetRoles/",

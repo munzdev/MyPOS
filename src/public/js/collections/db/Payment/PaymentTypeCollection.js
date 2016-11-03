@@ -3,9 +3,9 @@ define([
 ], function(PaymentType){
     "use strict";
     
-    return class PaymentTypeCollection extends Backbone.Collection
+    return class PaymentTypeCollection extends app.BaseCollection
     {
-        model() { return PaymentType; }
+        getModel() { return PaymentType; }
         url() {return app.API + "DB/Payment/PaymentType";}
     }
 });

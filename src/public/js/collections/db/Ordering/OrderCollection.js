@@ -3,9 +3,9 @@ define([
 ], function(Order){
     "use strict";
     
-    return class OrderCollection extends Backbone.Collection
+    return class OrderCollection extends app.BaseCollection
     {
-        model() { return Order; }
+        getModel() { return Order; }
         url() {return app.API + "DB/Ordering/Order";}
     }
 });

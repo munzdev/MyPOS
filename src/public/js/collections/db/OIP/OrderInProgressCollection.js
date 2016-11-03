@@ -3,9 +3,9 @@ define([
 ], function(OrderInProgress){
     "use strict";
     
-    return class OrderInProgressCollection extends Backbone.Collection
+    return class OrderInProgressCollection extends app.BaseCollection
     {
-        model() { return OrderInProgress; }
+        getModel() { return OrderInProgress; }
         url() {return app.API + "DB/OIP/OrderInProgress";}
     }
 });

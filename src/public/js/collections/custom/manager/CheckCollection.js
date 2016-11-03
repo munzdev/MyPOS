@@ -3,7 +3,7 @@ define([
 ], function(CheckModel){
     "use strict";
 
-    var CheckCollection = Backbone.Collection.extend({
+    var CheckCollection = app.BaseCollection.extend({
 
         model: CheckModel,
         url: app.API + "Manager/GetCheckList/",

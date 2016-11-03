@@ -3,9 +3,9 @@ define([
 ], function(OrderDetailMixedWith){
     "use strict";
     
-    return class OrderDetailMixedWithCollection extends Backbone.Collection
+    return class OrderDetailMixedWithCollection extends app.BaseCollection
     {
-        model() { return OrderDetailMixedWith; }
+        getModel() { return OrderDetailMixedWith; }
         url() {return app.API + "DB/Ordering/OrderDetailMixedWith";}
     }
 });

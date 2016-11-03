@@ -3,9 +3,9 @@ define([
 ], function(Invoice){
     "use strict";
     
-    return class InvoiceCollection extends Backbone.Collection
+    return class InvoiceCollection extends app.BaseCollection
     {
-        model() { return Invoice; }
+        getModel() { return Invoice; }
         url() {return app.API + "DB/Invoice"}
     }
 });

@@ -3,9 +3,9 @@ define([
 ], function(Event){
     "use strict";
     
-    return class EventCollection extends Backbone.Collection
+    return class EventCollection extends app.BaseCollection
     {
-        model() { return Event; }
+        getModel() { return Event; }
         url() {return app.API + "DB/Event"}
     }
 });

@@ -3,7 +3,7 @@ define([
 ], function(UserModel){
     "use strict";
 
-    var CallbackCollection = Backbone.Collection.extend({
+    var CallbackCollection = app.BaseCollection.extend({
 
         model: UserModel,
         url: app.API + "Manager/GetCallbackList/",

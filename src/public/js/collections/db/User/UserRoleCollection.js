@@ -3,9 +3,9 @@ define([
 ], function(UserRole){
     "use strict";
     
-    return class UserRoleCollection extends Backbone.Collection
+    return class UserRoleCollection extends app.BaseCollection
     {
-        model() { return UserRole; }
+        getModel() { return UserRole; }
         url() {return app.API + "DB/User/UserRole";}
     }
 });

@@ -3,9 +3,9 @@ define([
 ], function(MenuGroup){
     "use strict";
     
-    return class MenuGroupCollection extends Backbone.Collection
+    return class MenuGroupCollection extends app.BaseCollection
     {
-        model() { return MenuGroup; }
+        getModel() { return MenuGroup; }
         url() {return app.API + "DB/Menu/MenuGroup"}
     }
 });
