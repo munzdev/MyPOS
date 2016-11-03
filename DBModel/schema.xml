@@ -530,7 +530,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="order_detail_mixed_with" idMethod="native" phpName="OrderDetailMixedWith" namespace="API\Models\Ordering" isCrossRef="true">
+  <table name="order_detail_mixed_with" idMethod="native" phpName="OrderDetailMixedWith" namespace="API\Models\Ordering">
     <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
     <foreign-key foreignTable="menu" name="fk_orders_details_mixed_with_menues1" onDelete="CASCADE">

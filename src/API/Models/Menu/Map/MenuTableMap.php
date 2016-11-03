@@ -210,7 +210,6 @@ class MenuTableMap extends TableMap
 ), 'CASCADE', null, 'OrderDetailMixedWiths', false);
         $this->addRelation('MenuExtra', '\\API\\Models\\Menu\\MenuExtra', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'MenuExtras');
         $this->addRelation('MenuSize', '\\API\\Models\\Menu\\MenuSize', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'MenuSizes');
-        $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'OrderDetails');
     } // buildRelations()
 
     /**

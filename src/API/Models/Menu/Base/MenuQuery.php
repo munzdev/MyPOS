@@ -1048,23 +1048,6 @@ abstract class MenuQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related OrderDetail object
-     * using the order_detail_mixed_with table as cross reference
-     *
-     * @param OrderDetail $orderDetail the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildMenuQuery The current query, for fluid interface
-     */
-    public function filterByOrderDetail($orderDetail, $comparison = Criteria::EQUAL)
-    {
-        return $this
-            ->useOrderDetailMixedWithQuery()
-            ->filterByOrderDetail($orderDetail, $comparison)
-            ->endUse();
-    }
-
-    /**
      * Exclude object from result
      *
      * @param   ChildMenu $menu Object to remove from the list of results

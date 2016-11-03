@@ -278,7 +278,6 @@ class OrderDetailTableMap extends TableMap
   ),
 ), 'CASCADE', null, 'OrderInProgressRecieveds', false);
         $this->addRelation('MenuPossibleExtra', '\\API\\Models\\Menu\\MenuPossibleExtra', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'MenuPossibleExtras');
-        $this->addRelation('Menu', '\\API\\Models\\Menu\\Menu', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Menus');
     } // buildRelations()
 
     /**
