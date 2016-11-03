@@ -277,13 +277,13 @@ COMMIT;
 -- Data for table `distribution_place_group`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (3, 1);
-INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (3, 2);
-INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (1, 3);
-INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (1, 4);
-INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (1, 5);
-INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (2, 3);
-INSERT INTO `distribution_place_group` (`distribution_placeid`, `menu_groupid`) VALUES (2, 4);
+INSERT INTO `distribution_place_group` (`distribution_place_groupid`, `distribution_placeid`, `menu_groupid`) VALUES (DEFAULT, 3, 1);
+INSERT INTO `distribution_place_group` (`distribution_place_groupid`, `distribution_placeid`, `menu_groupid`) VALUES (DEFAULT, 3, 2);
+INSERT INTO `distribution_place_group` (`distribution_place_groupid`, `distribution_placeid`, `menu_groupid`) VALUES (DEFAULT, 1, 3);
+INSERT INTO `distribution_place_group` (`distribution_place_groupid`, `distribution_placeid`, `menu_groupid`) VALUES (DEFAULT, 1, 4);
+INSERT INTO `distribution_place_group` (`distribution_place_groupid`, `distribution_placeid`, `menu_groupid`) VALUES (DEFAULT, 1, 5);
+INSERT INTO `distribution_place_group` (`distribution_place_groupid`, `distribution_placeid`, `menu_groupid`) VALUES (DEFAULT, 2, 3);
+INSERT INTO `distribution_place_group` (`distribution_place_groupid`, `distribution_placeid`, `menu_groupid`) VALUES (DEFAULT, 2, 4);
 
 COMMIT;
 
@@ -304,26 +304,26 @@ COMMIT;
 -- Data for table `distribution_place_table`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (1, 3, 1);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (2, 3, 1);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (3, 3, 1);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (4, 3, 1);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (1, 3, 2);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (2, 3, 2);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (3, 3, 2);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (4, 3, 2);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (1, 1, 5);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (2, 1, 5);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (3, 1, 5);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (4, 1, 5);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (1, 1, 3);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (2, 1, 3);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (1, 1, 4);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (2, 1, 4);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (3, 2, 3);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (4, 2, 3);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (3, 2, 4);
-INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_placeid`, `menu_groupid`) VALUES (4, 2, 4);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (1, 1);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (2, 1);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (3, 1);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (4, 1);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (1, 2);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (2, 2);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (3, 2);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (4, 2);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (1, 5);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (2, 5);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (3, 5);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (4, 5);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (1, 3);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (2, 3);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (1, 4);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (2, 4);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (3, 6);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (4, 6);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (3, 7);
+INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (4, 7);
 
 COMMIT;
 

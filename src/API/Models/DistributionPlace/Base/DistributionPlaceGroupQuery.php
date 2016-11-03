@@ -21,9 +21,11 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  *
+ * @method     ChildDistributionPlaceGroupQuery orderByDistributionPlaceGroupid($order = Criteria::ASC) Order by the distribution_place_groupid column
  * @method     ChildDistributionPlaceGroupQuery orderByDistributionPlaceid($order = Criteria::ASC) Order by the distribution_placeid column
  * @method     ChildDistributionPlaceGroupQuery orderByMenuGroupid($order = Criteria::ASC) Order by the menu_groupid column
  *
+ * @method     ChildDistributionPlaceGroupQuery groupByDistributionPlaceGroupid() Group by the distribution_place_groupid column
  * @method     ChildDistributionPlaceGroupQuery groupByDistributionPlaceid() Group by the distribution_placeid column
  * @method     ChildDistributionPlaceGroupQuery groupByMenuGroupid() Group by the menu_groupid column
  *
@@ -55,21 +57,34 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildDistributionPlaceGroupQuery rightJoinWithMenuGroup() Adds a RIGHT JOIN clause and with to the query using the MenuGroup relation
  * @method     ChildDistributionPlaceGroupQuery innerJoinWithMenuGroup() Adds a INNER JOIN clause and with to the query using the MenuGroup relation
  *
- * @method     \API\Models\DistributionPlace\DistributionPlaceQuery|\API\Models\Menu\MenuGroupQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildDistributionPlaceGroupQuery leftJoinDistributionPlaceTable($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceTable relation
+ * @method     ChildDistributionPlaceGroupQuery rightJoinDistributionPlaceTable($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceTable relation
+ * @method     ChildDistributionPlaceGroupQuery innerJoinDistributionPlaceTable($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlaceTable relation
+ *
+ * @method     ChildDistributionPlaceGroupQuery joinWithDistributionPlaceTable($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlaceTable relation
+ *
+ * @method     ChildDistributionPlaceGroupQuery leftJoinWithDistributionPlaceTable() Adds a LEFT JOIN clause and with to the query using the DistributionPlaceTable relation
+ * @method     ChildDistributionPlaceGroupQuery rightJoinWithDistributionPlaceTable() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceTable relation
+ * @method     ChildDistributionPlaceGroupQuery innerJoinWithDistributionPlaceTable() Adds a INNER JOIN clause and with to the query using the DistributionPlaceTable relation
+ *
+ * @method     \API\Models\DistributionPlace\DistributionPlaceQuery|\API\Models\Menu\MenuGroupQuery|\API\Models\DistributionPlace\DistributionPlaceTableQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildDistributionPlaceGroup findOne(ConnectionInterface $con = null) Return the first ChildDistributionPlaceGroup matching the query
  * @method     ChildDistributionPlaceGroup findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDistributionPlaceGroup matching the query, or a new ChildDistributionPlaceGroup object populated from the query conditions when no match is found
  *
+ * @method     ChildDistributionPlaceGroup findOneByDistributionPlaceGroupid(int $distribution_place_groupid) Return the first ChildDistributionPlaceGroup filtered by the distribution_place_groupid column
  * @method     ChildDistributionPlaceGroup findOneByDistributionPlaceid(int $distribution_placeid) Return the first ChildDistributionPlaceGroup filtered by the distribution_placeid column
  * @method     ChildDistributionPlaceGroup findOneByMenuGroupid(int $menu_groupid) Return the first ChildDistributionPlaceGroup filtered by the menu_groupid column *
 
  * @method     ChildDistributionPlaceGroup requirePk($key, ConnectionInterface $con = null) Return the ChildDistributionPlaceGroup by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDistributionPlaceGroup requireOne(ConnectionInterface $con = null) Return the first ChildDistributionPlaceGroup matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
+ * @method     ChildDistributionPlaceGroup requireOneByDistributionPlaceGroupid(int $distribution_place_groupid) Return the first ChildDistributionPlaceGroup filtered by the distribution_place_groupid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDistributionPlaceGroup requireOneByDistributionPlaceid(int $distribution_placeid) Return the first ChildDistributionPlaceGroup filtered by the distribution_placeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildDistributionPlaceGroup requireOneByMenuGroupid(int $menu_groupid) Return the first ChildDistributionPlaceGroup filtered by the menu_groupid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildDistributionPlaceGroup[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildDistributionPlaceGroup objects based on current ModelCriteria
+ * @method     ChildDistributionPlaceGroup[]|ObjectCollection findByDistributionPlaceGroupid(int $distribution_place_groupid) Return ChildDistributionPlaceGroup objects filtered by the distribution_place_groupid column
  * @method     ChildDistributionPlaceGroup[]|ObjectCollection findByDistributionPlaceid(int $distribution_placeid) Return ChildDistributionPlaceGroup objects filtered by the distribution_placeid column
  * @method     ChildDistributionPlaceGroup[]|ObjectCollection findByMenuGroupid(int $menu_groupid) Return ChildDistributionPlaceGroup objects filtered by the menu_groupid column
  * @method     ChildDistributionPlaceGroup[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -121,10 +136,10 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34), $con);
+     * $obj = $c->findPk(array(12, 34, 56), $con);
      * </code>
      *
-     * @param array[$distribution_placeid, $menu_groupid] $key Primary key to use for the query
+     * @param array[$distribution_place_groupid, $distribution_placeid, $menu_groupid] $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildDistributionPlaceGroup|array|mixed the result, formatted by the current formatter
@@ -149,7 +164,7 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = DistributionPlaceGroupTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]))))) {
+        if ((null !== ($obj = DistributionPlaceGroupTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]))))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -170,11 +185,12 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT distribution_placeid, menu_groupid FROM distribution_place_group WHERE distribution_placeid = :p0 AND menu_groupid = :p1';
+        $sql = 'SELECT distribution_place_groupid, distribution_placeid, menu_groupid FROM distribution_place_group WHERE distribution_place_groupid = :p0 AND distribution_placeid = :p1 AND menu_groupid = :p2';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
             $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
+            $stmt->bindValue(':p2', $key[2], PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -185,7 +201,7 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
             /** @var ChildDistributionPlaceGroup $obj */
             $obj = new ChildDistributionPlaceGroup();
             $obj->hydrate($row);
-            DistributionPlaceGroupTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]));
+            DistributionPlaceGroupTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]));
         }
         $stmt->closeCursor();
 
@@ -244,8 +260,9 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_MENU_GROUPID, $key[1], Criteria::EQUAL);
+        $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $key[0], Criteria::EQUAL);
+        $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID, $key[1], Criteria::EQUAL);
+        $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_MENU_GROUPID, $key[2], Criteria::EQUAL);
 
         return $this;
     }
@@ -263,13 +280,56 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
             return $this->add(null, '1<>1', Criteria::CUSTOM);
         }
         foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(DistributionPlaceGroupTableMap::COL_MENU_GROUPID, $key[1], Criteria::EQUAL);
+            $cton0 = $this->getNewCriterion(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $key[0], Criteria::EQUAL);
+            $cton1 = $this->getNewCriterion(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID, $key[1], Criteria::EQUAL);
             $cton0->addAnd($cton1);
+            $cton2 = $this->getNewCriterion(DistributionPlaceGroupTableMap::COL_MENU_GROUPID, $key[2], Criteria::EQUAL);
+            $cton0->addAnd($cton2);
             $this->addOr($cton0);
         }
 
         return $this;
+    }
+
+    /**
+     * Filter the query on the distribution_place_groupid column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByDistributionPlaceGroupid(1234); // WHERE distribution_place_groupid = 1234
+     * $query->filterByDistributionPlaceGroupid(array(12, 34)); // WHERE distribution_place_groupid IN (12, 34)
+     * $query->filterByDistributionPlaceGroupid(array('min' => 12)); // WHERE distribution_place_groupid > 12
+     * </code>
+     *
+     * @param     mixed $distributionPlaceGroupid The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildDistributionPlaceGroupQuery The current query, for fluid interface
+     */
+    public function filterByDistributionPlaceGroupid($distributionPlaceGroupid = null, $comparison = null)
+    {
+        if (is_array($distributionPlaceGroupid)) {
+            $useMinMax = false;
+            if (isset($distributionPlaceGroupid['min'])) {
+                $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $distributionPlaceGroupid['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($distributionPlaceGroupid['max'])) {
+                $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $distributionPlaceGroupid['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $distributionPlaceGroupid, $comparison);
     }
 
     /**
@@ -513,6 +573,96 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related \API\Models\DistributionPlace\DistributionPlaceTable object
+     *
+     * @param \API\Models\DistributionPlace\DistributionPlaceTable|ObjectCollection $distributionPlaceTable the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildDistributionPlaceGroupQuery The current query, for fluid interface
+     */
+    public function filterByDistributionPlaceTable($distributionPlaceTable, $comparison = null)
+    {
+        if ($distributionPlaceTable instanceof \API\Models\DistributionPlace\DistributionPlaceTable) {
+            return $this
+                ->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $distributionPlaceTable->getDistributionPlaceGroupid(), $comparison);
+        } elseif ($distributionPlaceTable instanceof ObjectCollection) {
+            return $this
+                ->useDistributionPlaceTableQuery()
+                ->filterByPrimaryKeys($distributionPlaceTable->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDistributionPlaceTable() only accepts arguments of type \API\Models\DistributionPlace\DistributionPlaceTable or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the DistributionPlaceTable relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildDistributionPlaceGroupQuery The current query, for fluid interface
+     */
+    public function joinDistributionPlaceTable($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('DistributionPlaceTable');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'DistributionPlaceTable');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the DistributionPlaceTable relation DistributionPlaceTable object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\DistributionPlace\DistributionPlaceTableQuery A secondary query class using the current class as primary query
+     */
+    public function useDistributionPlaceTableQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinDistributionPlaceTable($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DistributionPlaceTable', '\API\Models\DistributionPlace\DistributionPlaceTableQuery');
+    }
+
+    /**
+     * Filter the query by a related EventTable object
+     * using the distribution_place_table table as cross reference
+     *
+     * @param EventTable $eventTable the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildDistributionPlaceGroupQuery The current query, for fluid interface
+     */
+    public function filterByEventTable($eventTable, $comparison = Criteria::EQUAL)
+    {
+        return $this
+            ->useDistributionPlaceTableQuery()
+            ->filterByEventTable($eventTable, $comparison)
+            ->endUse();
+    }
+
+    /**
      * Exclude object from result
      *
      * @param   ChildDistributionPlaceGroup $distributionPlaceGroup Object to remove from the list of results
@@ -522,9 +672,10 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
     public function prune($distributionPlaceGroup = null)
     {
         if ($distributionPlaceGroup) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID), $distributionPlaceGroup->getDistributionPlaceid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(DistributionPlaceGroupTableMap::COL_MENU_GROUPID), $distributionPlaceGroup->getMenuGroupid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
+            $this->addCond('pruneCond0', $this->getAliasedColName(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID), $distributionPlaceGroup->getDistributionPlaceGroupid(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond1', $this->getAliasedColName(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID), $distributionPlaceGroup->getDistributionPlaceid(), Criteria::NOT_EQUAL);
+            $this->addCond('pruneCond2', $this->getAliasedColName(DistributionPlaceGroupTableMap::COL_MENU_GROUPID), $distributionPlaceGroup->getMenuGroupid(), Criteria::NOT_EQUAL);
+            $this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2'), Criteria::LOGICAL_OR);
         }
 
         return $this;

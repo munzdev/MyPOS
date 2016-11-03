@@ -59,7 +59,7 @@ class DistributionPlaceTableTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 2;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class DistributionPlaceTableTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 2;
 
     /**
      * the column name for the event_tableid field
@@ -77,14 +77,9 @@ class DistributionPlaceTableTableMap extends TableMap
     const COL_EVENT_TABLEID = 'distribution_place_table.event_tableid';
 
     /**
-     * the column name for the distribution_placeid field
+     * the column name for the distribution_place_groupid field
      */
-    const COL_DISTRIBUTION_PLACEID = 'distribution_place_table.distribution_placeid';
-
-    /**
-     * the column name for the menu_groupid field
-     */
-    const COL_MENU_GROUPID = 'distribution_place_table.menu_groupid';
+    const COL_DISTRIBUTION_PLACE_GROUPID = 'distribution_place_table.distribution_place_groupid';
 
     /**
      * The default string format for model objects of the related table
@@ -98,11 +93,11 @@ class DistributionPlaceTableTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('EventTableid', 'DistributionPlaceid', 'MenuGroupid', ),
-        self::TYPE_CAMELNAME     => array('eventTableid', 'distributionPlaceid', 'menuGroupid', ),
-        self::TYPE_COLNAME       => array(DistributionPlaceTableTableMap::COL_EVENT_TABLEID, DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACEID, DistributionPlaceTableTableMap::COL_MENU_GROUPID, ),
-        self::TYPE_FIELDNAME     => array('event_tableid', 'distribution_placeid', 'menu_groupid', ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('EventTableid', 'DistributionPlaceGroupid', ),
+        self::TYPE_CAMELNAME     => array('eventTableid', 'distributionPlaceGroupid', ),
+        self::TYPE_COLNAME       => array(DistributionPlaceTableTableMap::COL_EVENT_TABLEID, DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACE_GROUPID, ),
+        self::TYPE_FIELDNAME     => array('event_tableid', 'distribution_place_groupid', ),
+        self::TYPE_NUM           => array(0, 1, )
     );
 
     /**
@@ -112,11 +107,11 @@ class DistributionPlaceTableTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('EventTableid' => 0, 'DistributionPlaceid' => 1, 'MenuGroupid' => 2, ),
-        self::TYPE_CAMELNAME     => array('eventTableid' => 0, 'distributionPlaceid' => 1, 'menuGroupid' => 2, ),
-        self::TYPE_COLNAME       => array(DistributionPlaceTableTableMap::COL_EVENT_TABLEID => 0, DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACEID => 1, DistributionPlaceTableTableMap::COL_MENU_GROUPID => 2, ),
-        self::TYPE_FIELDNAME     => array('event_tableid' => 0, 'distribution_placeid' => 1, 'menu_groupid' => 2, ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('EventTableid' => 0, 'DistributionPlaceGroupid' => 1, ),
+        self::TYPE_CAMELNAME     => array('eventTableid' => 0, 'distributionPlaceGroupid' => 1, ),
+        self::TYPE_COLNAME       => array(DistributionPlaceTableTableMap::COL_EVENT_TABLEID => 0, DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACE_GROUPID => 1, ),
+        self::TYPE_FIELDNAME     => array('event_tableid' => 0, 'distribution_place_groupid' => 1, ),
+        self::TYPE_NUM           => array(0, 1, )
     );
 
     /**
@@ -138,8 +133,7 @@ class DistributionPlaceTableTableMap extends TableMap
         $this->setIsCrossRef(true);
         // columns
         $this->addForeignPrimaryKey('event_tableid', 'EventTableid', 'INTEGER' , 'event_table', 'event_tableid', true, null, null);
-        $this->addForeignPrimaryKey('distribution_placeid', 'DistributionPlaceid', 'INTEGER' , 'distribution_place', 'distribution_placeid', true, null, null);
-        $this->addForeignPrimaryKey('menu_groupid', 'MenuGroupid', 'INTEGER' , 'menu_group', 'menu_groupid', true, null, null);
+        $this->addForeignPrimaryKey('distribution_place_groupid', 'DistributionPlaceGroupid', 'INTEGER' , 'distribution_place_group', 'distribution_place_groupid', true, null, null);
     } // initialize()
 
     /**
@@ -147,20 +141,13 @@ class DistributionPlaceTableTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('MenuGroup', '\\API\\Models\\Menu\\MenuGroup', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('DistributionPlaceGroup', '\\API\\Models\\DistributionPlace\\DistributionPlaceGroup', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':menu_groupid',
-    1 => ':menu_groupid',
+    0 => ':distribution_place_groupid',
+    1 => ':distribution_place_groupid',
   ),
-), 'CASCADE', null, null, false);
-        $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':distribution_placeid',
-    1 => ':distribution_placeid',
-  ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
@@ -185,7 +172,7 @@ class DistributionPlaceTableTableMap extends TableMap
     {
         if (Propel::isInstancePoolingEnabled()) {
             if (null === $key) {
-                $key = serialize([(null === $obj->getEventTableid() || is_scalar($obj->getEventTableid()) || is_callable([$obj->getEventTableid(), '__toString']) ? (string) $obj->getEventTableid() : $obj->getEventTableid()), (null === $obj->getDistributionPlaceid() || is_scalar($obj->getDistributionPlaceid()) || is_callable([$obj->getDistributionPlaceid(), '__toString']) ? (string) $obj->getDistributionPlaceid() : $obj->getDistributionPlaceid()), (null === $obj->getMenuGroupid() || is_scalar($obj->getMenuGroupid()) || is_callable([$obj->getMenuGroupid(), '__toString']) ? (string) $obj->getMenuGroupid() : $obj->getMenuGroupid())]);
+                $key = serialize([(null === $obj->getEventTableid() || is_scalar($obj->getEventTableid()) || is_callable([$obj->getEventTableid(), '__toString']) ? (string) $obj->getEventTableid() : $obj->getEventTableid()), (null === $obj->getDistributionPlaceGroupid() || is_scalar($obj->getDistributionPlaceGroupid()) || is_callable([$obj->getDistributionPlaceGroupid(), '__toString']) ? (string) $obj->getDistributionPlaceGroupid() : $obj->getDistributionPlaceGroupid())]);
             } // if key === null
             self::$instances[$key] = $obj;
         }
@@ -205,11 +192,11 @@ class DistributionPlaceTableTableMap extends TableMap
     {
         if (Propel::isInstancePoolingEnabled() && null !== $value) {
             if (is_object($value) && $value instanceof \API\Models\DistributionPlace\DistributionPlaceTable) {
-                $key = serialize([(null === $value->getEventTableid() || is_scalar($value->getEventTableid()) || is_callable([$value->getEventTableid(), '__toString']) ? (string) $value->getEventTableid() : $value->getEventTableid()), (null === $value->getDistributionPlaceid() || is_scalar($value->getDistributionPlaceid()) || is_callable([$value->getDistributionPlaceid(), '__toString']) ? (string) $value->getDistributionPlaceid() : $value->getDistributionPlaceid()), (null === $value->getMenuGroupid() || is_scalar($value->getMenuGroupid()) || is_callable([$value->getMenuGroupid(), '__toString']) ? (string) $value->getMenuGroupid() : $value->getMenuGroupid())]);
+                $key = serialize([(null === $value->getEventTableid() || is_scalar($value->getEventTableid()) || is_callable([$value->getEventTableid(), '__toString']) ? (string) $value->getEventTableid() : $value->getEventTableid()), (null === $value->getDistributionPlaceGroupid() || is_scalar($value->getDistributionPlaceGroupid()) || is_callable([$value->getDistributionPlaceGroupid(), '__toString']) ? (string) $value->getDistributionPlaceGroupid() : $value->getDistributionPlaceGroupid())]);
 
-            } elseif (is_array($value) && count($value) === 3) {
+            } elseif (is_array($value) && count($value) === 2) {
                 // assume we've been passed a primary key";
-                $key = serialize([(null === $value[0] || is_scalar($value[0]) || is_callable([$value[0], '__toString']) ? (string) $value[0] : $value[0]), (null === $value[1] || is_scalar($value[1]) || is_callable([$value[1], '__toString']) ? (string) $value[1] : $value[1]), (null === $value[2] || is_scalar($value[2]) || is_callable([$value[2], '__toString']) ? (string) $value[2] : $value[2])]);
+                $key = serialize([(null === $value[0] || is_scalar($value[0]) || is_callable([$value[0], '__toString']) ? (string) $value[0] : $value[0]), (null === $value[1] || is_scalar($value[1]) || is_callable([$value[1], '__toString']) ? (string) $value[1] : $value[1])]);
             } elseif ($value instanceof Criteria) {
                 self::$instances = [];
 
@@ -239,11 +226,11 @@ class DistributionPlaceTableTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)])]);
+        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)])]);
     }
 
     /**
@@ -270,12 +257,7 @@ class DistributionPlaceTableTableMap extends TableMap
         $pks[] = (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 1 + $offset
-                : self::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)
-        ];
-        $pks[] = (int) $row[
-            $indexType == TableMap::TYPE_NUM
-                ? 2 + $offset
-                : self::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)
         ];
 
         return $pks;
@@ -379,12 +361,10 @@ class DistributionPlaceTableTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(DistributionPlaceTableTableMap::COL_EVENT_TABLEID);
-            $criteria->addSelectColumn(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACEID);
-            $criteria->addSelectColumn(DistributionPlaceTableTableMap::COL_MENU_GROUPID);
+            $criteria->addSelectColumn(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACE_GROUPID);
         } else {
             $criteria->addSelectColumn($alias . '.event_tableid');
-            $criteria->addSelectColumn($alias . '.distribution_placeid');
-            $criteria->addSelectColumn($alias . '.menu_groupid');
+            $criteria->addSelectColumn($alias . '.distribution_place_groupid');
         }
     }
 
@@ -444,8 +424,7 @@ class DistributionPlaceTableTableMap extends TableMap
             }
             foreach ($values as $value) {
                 $criterion = $criteria->getNewCriterion(DistributionPlaceTableTableMap::COL_EVENT_TABLEID, $value[0]);
-                $criterion->addAnd($criteria->getNewCriterion(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACEID, $value[1]));
-                $criterion->addAnd($criteria->getNewCriterion(DistributionPlaceTableTableMap::COL_MENU_GROUPID, $value[2]));
+                $criterion->addAnd($criteria->getNewCriterion(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $value[1]));
                 $criteria->addOr($criterion);
             }
         }

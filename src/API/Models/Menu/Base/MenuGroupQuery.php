@@ -5,7 +5,6 @@ namespace API\Models\Menu\Base;
 use \Exception;
 use \PDO;
 use API\Models\DistributionPlace\DistributionPlaceGroup;
-use API\Models\DistributionPlace\DistributionPlaceTable;
 use API\Models\Menu\MenuGroup as ChildMenuGroup;
 use API\Models\Menu\MenuGroupQuery as ChildMenuGroupQuery;
 use API\Models\Menu\Map\MenuGroupTableMap;
@@ -60,16 +59,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuGroupQuery rightJoinWithDistributionPlaceGroup() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceGroup relation
  * @method     ChildMenuGroupQuery innerJoinWithDistributionPlaceGroup() Adds a INNER JOIN clause and with to the query using the DistributionPlaceGroup relation
  *
- * @method     ChildMenuGroupQuery leftJoinDistributionPlaceTable($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceTable relation
- * @method     ChildMenuGroupQuery rightJoinDistributionPlaceTable($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceTable relation
- * @method     ChildMenuGroupQuery innerJoinDistributionPlaceTable($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlaceTable relation
- *
- * @method     ChildMenuGroupQuery joinWithDistributionPlaceTable($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlaceTable relation
- *
- * @method     ChildMenuGroupQuery leftJoinWithDistributionPlaceTable() Adds a LEFT JOIN clause and with to the query using the DistributionPlaceTable relation
- * @method     ChildMenuGroupQuery rightJoinWithDistributionPlaceTable() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceTable relation
- * @method     ChildMenuGroupQuery innerJoinWithDistributionPlaceTable() Adds a INNER JOIN clause and with to the query using the DistributionPlaceTable relation
- *
  * @method     ChildMenuGroupQuery leftJoinMenu($relationAlias = null) Adds a LEFT JOIN clause to the query using the Menu relation
  * @method     ChildMenuGroupQuery rightJoinMenu($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Menu relation
  * @method     ChildMenuGroupQuery innerJoinMenu($relationAlias = null) Adds a INNER JOIN clause to the query using the Menu relation
@@ -100,7 +89,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuGroupQuery rightJoinWithOrderInProgress() Adds a RIGHT JOIN clause and with to the query using the OrderInProgress relation
  * @method     ChildMenuGroupQuery innerJoinWithOrderInProgress() Adds a INNER JOIN clause and with to the query using the OrderInProgress relation
  *
- * @method     \API\Models\Menu\MenuTypeQuery|\API\Models\DistributionPlace\DistributionPlaceGroupQuery|\API\Models\DistributionPlace\DistributionPlaceTableQuery|\API\Models\Menu\MenuQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\Menu\MenuTypeQuery|\API\Models\DistributionPlace\DistributionPlaceGroupQuery|\API\Models\Menu\MenuQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildMenuGroup findOne(ConnectionInterface $con = null) Return the first ChildMenuGroup matching the query
  * @method     ChildMenuGroup findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMenuGroup matching the query, or a new ChildMenuGroup object populated from the query conditions when no match is found
@@ -580,79 +569,6 @@ abstract class MenuGroupQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \API\Models\DistributionPlace\DistributionPlaceTable object
-     *
-     * @param \API\Models\DistributionPlace\DistributionPlaceTable|ObjectCollection $distributionPlaceTable the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildMenuGroupQuery The current query, for fluid interface
-     */
-    public function filterByDistributionPlaceTable($distributionPlaceTable, $comparison = null)
-    {
-        if ($distributionPlaceTable instanceof \API\Models\DistributionPlace\DistributionPlaceTable) {
-            return $this
-                ->addUsingAlias(MenuGroupTableMap::COL_MENU_GROUPID, $distributionPlaceTable->getMenuGroupid(), $comparison);
-        } elseif ($distributionPlaceTable instanceof ObjectCollection) {
-            return $this
-                ->useDistributionPlaceTableQuery()
-                ->filterByPrimaryKeys($distributionPlaceTable->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByDistributionPlaceTable() only accepts arguments of type \API\Models\DistributionPlace\DistributionPlaceTable or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the DistributionPlaceTable relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildMenuGroupQuery The current query, for fluid interface
-     */
-    public function joinDistributionPlaceTable($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('DistributionPlaceTable');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'DistributionPlaceTable');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the DistributionPlaceTable relation DistributionPlaceTable object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \API\Models\DistributionPlace\DistributionPlaceTableQuery A secondary query class using the current class as primary query
-     */
-    public function useDistributionPlaceTableQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinDistributionPlaceTable($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'DistributionPlaceTable', '\API\Models\DistributionPlace\DistributionPlaceTableQuery');
-    }
-
-    /**
      * Filter the query by a related \API\Models\Menu\Menu object
      *
      * @param \API\Models\Menu\Menu|ObjectCollection $menu the related object to use as filter
@@ -885,40 +801,6 @@ abstract class MenuGroupQuery extends ModelCriteria
         return $this
             ->useDistributionPlaceGroupQuery()
             ->filterByDistributionPlace($distributionPlace, $comparison)
-            ->endUse();
-    }
-
-    /**
-     * Filter the query by a related DistributionPlace object
-     * using the distribution_place_table table as cross reference
-     *
-     * @param DistributionPlace $distributionPlace the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildMenuGroupQuery The current query, for fluid interface
-     */
-    public function filterByDistributionPlace($distributionPlace, $comparison = Criteria::EQUAL)
-    {
-        return $this
-            ->useDistributionPlaceTableQuery()
-            ->filterByDistributionPlace($distributionPlace, $comparison)
-            ->endUse();
-    }
-
-    /**
-     * Filter the query by a related EventTable object
-     * using the distribution_place_table table as cross reference
-     *
-     * @param EventTable $eventTable the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildMenuGroupQuery The current query, for fluid interface
-     */
-    public function filterByEventTable($eventTable, $comparison = Criteria::EQUAL)
-    {
-        return $this
-            ->useDistributionPlaceTableQuery()
-            ->filterByEventTable($eventTable, $comparison)
             ->endUse();
     }
 

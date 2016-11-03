@@ -3,7 +3,6 @@
 namespace API\Models\Menu\Map;
 
 use API\Models\DistributionPlace\Map\DistributionPlaceGroupTableMap;
-use API\Models\DistributionPlace\Map\DistributionPlaceTableTableMap;
 use API\Models\Menu\MenuGroup;
 use API\Models\Menu\MenuGroupQuery;
 use API\Models\OIP\Map\OrderInProgressTableMap;
@@ -163,13 +162,6 @@ class MenuGroupTableMap extends TableMap
     1 => ':menu_groupid',
   ),
 ), 'CASCADE', null, 'DistributionPlaceGroups', false);
-        $this->addRelation('DistributionPlaceTable', '\\API\\Models\\DistributionPlace\\DistributionPlaceTable', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':menu_groupid',
-    1 => ':menu_groupid',
-  ),
-), 'CASCADE', null, 'DistributionPlaceTables', false);
         $this->addRelation('Menu', '\\API\\Models\\Menu\\Menu', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -192,8 +184,6 @@ class MenuGroupTableMap extends TableMap
   ),
 ), 'CASCADE', null, 'OrderInProgresses', false);
         $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'DistributionPlaces');
-        $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'DistributionPlaces');
-        $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'EventTables');
     } // buildRelations()
 
     /**
@@ -256,7 +246,6 @@ class MenuGroupTableMap extends TableMap
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DistributionPlaceGroupTableMap::clearInstancePool();
-        DistributionPlaceTableTableMap::clearInstancePool();
         MenuTableMap::clearInstancePool();
         OrderInProgressTableMap::clearInstancePool();
     }

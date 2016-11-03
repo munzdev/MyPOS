@@ -61,6 +61,7 @@
     </vendor>
   </table>
   <table name="distribution_place_group" idMethod="native" phpName="DistributionPlaceGroup" namespace="API\Models\DistributionPlace" isCrossRef="true">
+    <column name="distribution_place_groupid" phpName="DistributionPlaceGroupid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
     <foreign-key foreignTable="distribution_place" name="fk_distributions_places_has_menu_groupes_distributions_places1" onDelete="CASCADE">
@@ -75,31 +76,27 @@
     <index name="fk_distributions_places_has_menu_groupes_distributions_plac_idx">
       <index-column name="distribution_placeid"/>
     </index>
+    <unique name="distribution_place_groupid_UNIQUE">
+      <unique-column name="distribution_place_groupid"/>
+    </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
   <table name="distribution_place_table" idMethod="native" phpName="DistributionPlaceTable" namespace="API\Models\DistributionPlace" isCrossRef="true">
     <column name="event_tableid" phpName="EventTableid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
-    <foreign-key foreignTable="menu_group" name="fk_distributions_places_tables_menu_groupes1" onDelete="CASCADE">
-      <reference local="menu_groupid" foreign="menu_groupid"/>
-    </foreign-key>
-    <foreign-key foreignTable="distribution_place" name="fk_tables_has_distributions_places_distributions_places1" onDelete="CASCADE">
-      <reference local="distribution_placeid" foreign="distribution_placeid"/>
+    <column name="distribution_place_groupid" phpName="DistributionPlaceGroupid" type="INTEGER" primaryKey="true" required="true"/>
+    <foreign-key foreignTable="distribution_place_group" name="fk_distribution_place_table_distribution_place_group1">
+      <reference local="distribution_place_groupid" foreign="distribution_place_groupid"/>
     </foreign-key>
     <foreign-key foreignTable="event_table" name="fk_tables_has_distributions_places_tables1" onDelete="CASCADE">
       <reference local="event_tableid" foreign="event_tableid"/>
     </foreign-key>
-    <index name="fk_tables_has_distributions_places_distributions_places1_idx">
-      <index-column name="distribution_placeid"/>
-    </index>
     <index name="fk_tables_has_distributions_places_tables1_idx">
       <index-column name="event_tableid"/>
     </index>
-    <index name="fk_distributions_places_tables_menu_groupes1_idx">
-      <index-column name="menu_groupid"/>
+    <index name="fk_distribution_place_table_distribution_place_group1_idx">
+      <index-column name="distribution_place_groupid"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>

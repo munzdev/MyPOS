@@ -175,8 +175,7 @@ class EventTableTableMap extends TableMap
     1 => ':event_tableid',
   ),
 ), 'CASCADE', null, 'Orders', false);
-        $this->addRelation('MenuGroup', '\\API\\Models\\Menu\\MenuGroup', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'MenuGroups');
-        $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'DistributionPlaces');
+        $this->addRelation('DistributionPlaceGroup', '\\API\\Models\\DistributionPlace\\DistributionPlaceGroup', RelationMap::MANY_TO_MANY, array(), null, null, 'DistributionPlaceGroups');
     } // buildRelations()
 
     /**

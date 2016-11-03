@@ -541,11 +541,13 @@ COMMENT = 'Enthält die IP:Port der Drucker, die bei einem Event zur verfügung 
 DROP TABLE IF EXISTS `distribution_place_group` ;
 
 CREATE TABLE IF NOT EXISTS `distribution_place_group` (
+  `distribution_place_groupid` INT(11) NOT NULL AUTO_INCREMENT,
   `distribution_placeid` INT(11) NOT NULL,
   `menu_groupid` INT(11) NOT NULL,
-  PRIMARY KEY (`distribution_placeid`, `menu_groupid`),
+  PRIMARY KEY (`distribution_place_groupid`, `distribution_placeid`, `menu_groupid`),
   INDEX `fk_distributions_places_has_menu_groupes_menu_groupes1_idx` (`menu_groupid` ASC),
   INDEX `fk_distributions_places_has_menu_groupes_distributions_plac_idx` (`distribution_placeid` ASC),
+  UNIQUE INDEX `distribution_place_groupid_UNIQUE` (`distribution_place_groupid` ASC),
   CONSTRAINT `fk_distributions_places_has_menu_groupes_distributions_places1`
     FOREIGN KEY (`distribution_placeid`)
     REFERENCES `distribution_place` (`distribution_placeid`)
@@ -599,26 +601,19 @@ DROP TABLE IF EXISTS `distribution_place_table` ;
 
 CREATE TABLE IF NOT EXISTS `distribution_place_table` (
   `event_tableid` INT(11) NOT NULL,
-  `distribution_placeid` INT(11) NOT NULL,
-  `menu_groupid` INT(11) NOT NULL,
-  PRIMARY KEY (`event_tableid`, `distribution_placeid`, `menu_groupid`),
-  INDEX `fk_tables_has_distributions_places_distributions_places1_idx` (`distribution_placeid` ASC),
+  `distribution_place_groupid` INT(11) NOT NULL,
+  PRIMARY KEY (`event_tableid`, `distribution_place_groupid`),
   INDEX `fk_tables_has_distributions_places_tables1_idx` (`event_tableid` ASC),
-  INDEX `fk_distributions_places_tables_menu_groupes1_idx` (`menu_groupid` ASC),
+  INDEX `fk_distribution_place_table_distribution_place_group1_idx` (`distribution_place_groupid` ASC),
   CONSTRAINT `fk_tables_has_distributions_places_tables1`
     FOREIGN KEY (`event_tableid`)
     REFERENCES `event_table` (`event_tableid`)
     ON DELETE CASCADE
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_tables_has_distributions_places_distributions_places1`
-    FOREIGN KEY (`distribution_placeid`)
-    REFERENCES `distribution_place` (`distribution_placeid`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_distributions_places_tables_menu_groupes1`
-    FOREIGN KEY (`menu_groupid`)
-    REFERENCES `menu_group` (`menu_groupid`)
-    ON DELETE CASCADE
+  CONSTRAINT `fk_distribution_place_table_distribution_place_group1`
+    FOREIGN KEY (`distribution_place_groupid`)
+    REFERENCES `distribution_place_group` (`distribution_place_groupid`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Definiert welche tische standartmäßg von wo ihre Menüs erhalten. Jeder\nMenü Gruppe kann einem eigenem Ausgabeort zugeteilt werden';

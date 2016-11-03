@@ -8,18 +8,14 @@ use API\Models\DistributionPlace\DistributionPlace as ChildDistributionPlace;
 use API\Models\DistributionPlace\DistributionPlaceGroup as ChildDistributionPlaceGroup;
 use API\Models\DistributionPlace\DistributionPlaceGroupQuery as ChildDistributionPlaceGroupQuery;
 use API\Models\DistributionPlace\DistributionPlaceQuery as ChildDistributionPlaceQuery;
-use API\Models\DistributionPlace\DistributionPlaceTable as ChildDistributionPlaceTable;
-use API\Models\DistributionPlace\DistributionPlaceTableQuery as ChildDistributionPlaceTableQuery;
 use API\Models\DistributionPlace\DistributionPlaceUser as ChildDistributionPlaceUser;
 use API\Models\DistributionPlace\DistributionPlaceUserQuery as ChildDistributionPlaceUserQuery;
 use API\Models\DistributionPlace\Map\DistributionPlaceGroupTableMap;
 use API\Models\DistributionPlace\Map\DistributionPlaceTableMap;
-use API\Models\DistributionPlace\Map\DistributionPlaceTableTableMap;
 use API\Models\DistributionPlace\Map\DistributionPlaceUserTableMap;
 use API\Models\Event\Event;
 use API\Models\Event\EventPrinter;
 use API\Models\Event\EventQuery;
-use API\Models\Event\EventTable;
 use API\Models\Menu\MenuGroup;
 use API\Models\Menu\MenuGroupQuery;
 use API\Models\User\User;
@@ -111,36 +107,20 @@ abstract class DistributionPlace implements ActiveRecordInterface
     protected $collDistributionPlaceGroupsPartial;
 
     /**
-     * @var        ObjectCollection|ChildDistributionPlaceTable[] Collection to store aggregation of ChildDistributionPlaceTable objects.
-     */
-    protected $collDistributionPlaceTables;
-    protected $collDistributionPlaceTablesPartial;
-
-    /**
      * @var        ObjectCollection|ChildDistributionPlaceUser[] Collection to store aggregation of ChildDistributionPlaceUser objects.
      */
     protected $collDistributionPlaceUsers;
     protected $collDistributionPlaceUsersPartial;
 
     /**
-     * @var        ObjectCollection|MenuGroup[] Cross Collection to store aggregation of MenuGroup objects.
+     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildMenuGroup combinations.
      */
-    protected $collMenuGroups;
+    protected $combinationCollMenuGroupDistributionPlaceGroupids;
 
     /**
      * @var bool
      */
-    protected $collMenuGroupsPartial;
-
-    /**
-     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildMenuGroup, ChildEventTable combination combinations.
-     */
-    protected $combinationCollMenuGroupEventTables;
-
-    /**
-     * @var bool
-     */
-    protected $combinationCollMenuGroupEventTablesPartial;
+    protected $combinationCollMenuGroupDistributionPlaceGroupidsPartial;
 
     /**
      * @var        ObjectCollection|MenuGroup[] Cross Collection to store aggregation of MenuGroup objects.
@@ -151,16 +131,6 @@ abstract class DistributionPlace implements ActiveRecordInterface
      * @var bool
      */
     protected $collMenuGroupsPartial;
-
-    /**
-     * @var        ObjectCollection|EventTable[] Cross Collection to store aggregation of EventTable objects.
-     */
-    protected $collEventTables;
-
-    /**
-     * @var bool
-     */
-    protected $collEventTablesPartial;
 
     /**
      * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildUser, ChildEventPrinter combination combinations.
@@ -201,15 +171,9 @@ abstract class DistributionPlace implements ActiveRecordInterface
     protected $alreadyInSave = false;
 
     /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|MenuGroup[]
+     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildMenuGroup combinations.
      */
-    protected $menuGroupsScheduledForDeletion = null;
-
-    /**
-     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildMenuGroup, ChildEventTable combination combinations.
-     */
-    protected $combinationCollMenuGroupEventTablesScheduledForDeletion = null;
+    protected $combinationCollMenuGroupDistributionPlaceGroupidsScheduledForDeletion = null;
 
     /**
      * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildUser, ChildEventPrinter combination combinations.
@@ -221,12 +185,6 @@ abstract class DistributionPlace implements ActiveRecordInterface
      * @var ObjectCollection|ChildDistributionPlaceGroup[]
      */
     protected $distributionPlaceGroupsScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildDistributionPlaceTable[]
-     */
-    protected $distributionPlaceTablesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -672,12 +630,9 @@ abstract class DistributionPlace implements ActiveRecordInterface
             $this->aEvent = null;
             $this->collDistributionPlaceGroups = null;
 
-            $this->collDistributionPlaceTables = null;
-
             $this->collDistributionPlaceUsers = null;
 
-            $this->collMenuGroups = null;
-            $this->collMenuGroupEventTables = null;
+            $this->collMenuGroupDistributionPlaceGroupids = null;
             $this->collUserEventPrinters = null;
         } // if (deep)
     }
@@ -801,14 +756,17 @@ abstract class DistributionPlace implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->menuGroupsScheduledForDeletion !== null) {
-                if (!$this->menuGroupsScheduledForDeletion->isEmpty()) {
+            if ($this->combinationCollMenuGroupDistributionPlaceGroupidsScheduledForDeletion !== null) {
+                if (!$this->combinationCollMenuGroupDistributionPlaceGroupidsScheduledForDeletion->isEmpty()) {
                     $pks = array();
-                    foreach ($this->menuGroupsScheduledForDeletion as $entry) {
+                    foreach ($this->combinationCollMenuGroupDistributionPlaceGroupidsScheduledForDeletion as $combination) {
                         $entryPk = [];
 
-                        $entryPk[0] = $this->getDistributionPlaceid();
-                        $entryPk[1] = $entry->getMenuGroupid();
+                        $entryPk[1] = $this->getDistributionPlaceid();
+                        $entryPk[2] = $combination[0]->getMenuGroupid();
+                        //$combination[1] = DistributionPlaceGroupid;
+                        $entryPk[0] = $combination[1];
+
                         $pks[] = $entryPk;
                     }
 
@@ -816,55 +774,20 @@ abstract class DistributionPlace implements ActiveRecordInterface
                         ->filterByPrimaryKeys($pks)
                         ->delete($con);
 
-                    $this->menuGroupsScheduledForDeletion = null;
+                    $this->combinationCollMenuGroupDistributionPlaceGroupidsScheduledForDeletion = null;
                 }
 
             }
 
-            if ($this->collMenuGroups) {
-                foreach ($this->collMenuGroups as $menuGroup) {
-                    if (!$menuGroup->isDeleted() && ($menuGroup->isNew() || $menuGroup->isModified())) {
-                        $menuGroup->save($con);
-                    }
-                }
-            }
+            if (null !== $this->combinationCollMenuGroupDistributionPlaceGroupids) {
+                foreach ($this->combinationCollMenuGroupDistributionPlaceGroupids as $combination) {
 
-
-            if ($this->combinationCollMenuGroupEventTablesScheduledForDeletion !== null) {
-                if (!$this->combinationCollMenuGroupEventTablesScheduledForDeletion->isEmpty()) {
-                    $pks = array();
-                    foreach ($this->combinationCollMenuGroupEventTablesScheduledForDeletion as $combination) {
-                        $entryPk = [];
-
-                        $entryPk[1] = $this->getDistributionPlaceid();
-                        $entryPk[2] = $combination[0]->getMenuGroupid();
-                        $entryPk[0] = $combination[1]->getEventTableid();
-
-                        $pks[] = $entryPk;
-                    }
-
-                    \API\Models\DistributionPlace\DistributionPlaceTableQuery::create()
-                        ->filterByPrimaryKeys($pks)
-                        ->delete($con);
-
-                    $this->combinationCollMenuGroupEventTablesScheduledForDeletion = null;
-                }
-
-            }
-
-            if (null !== $this->combinationCollMenuGroupEventTables) {
-                foreach ($this->combinationCollMenuGroupEventTables as $combination) {
-
-                    //$combination[0] = MenuGroup (fk_distributions_places_tables_menu_groupes1)
+                    //$combination[0] = MenuGroup (fk_distributions_places_has_menu_groupes_menu_groupes1)
                     if (!$combination[0]->isDeleted() && ($combination[0]->isNew() || $combination[0]->isModified())) {
                         $combination[0]->save($con);
                     }
 
-                    //$combination[1] = EventTable (fk_tables_has_distributions_places_tables1)
-                    if (!$combination[1]->isDeleted() && ($combination[1]->isNew() || $combination[1]->isModified())) {
-                        $combination[1]->save($con);
-                    }
-
+                    //$combination[1] = DistributionPlaceGroupid; Nothing to save.
                 }
             }
 
@@ -919,23 +842,6 @@ abstract class DistributionPlace implements ActiveRecordInterface
 
             if ($this->collDistributionPlaceGroups !== null) {
                 foreach ($this->collDistributionPlaceGroups as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->distributionPlaceTablesScheduledForDeletion !== null) {
-                if (!$this->distributionPlaceTablesScheduledForDeletion->isEmpty()) {
-                    \API\Models\DistributionPlace\DistributionPlaceTableQuery::create()
-                        ->filterByPrimaryKeys($this->distributionPlaceTablesScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->distributionPlaceTablesScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collDistributionPlaceTables !== null) {
-                foreach ($this->collDistributionPlaceTables as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1154,21 +1060,6 @@ abstract class DistributionPlace implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->collDistributionPlaceGroups->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collDistributionPlaceTables) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'distributionPlaceTables';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'distribution_place_tables';
-                        break;
-                    default:
-                        $key = 'DistributionPlaceTables';
-                }
-
-                $result[$key] = $this->collDistributionPlaceTables->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collDistributionPlaceUsers) {
 
@@ -1428,12 +1319,6 @@ abstract class DistributionPlace implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getDistributionPlaceTables() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addDistributionPlaceTable($relObj->copy($deepCopy));
-                }
-            }
-
             foreach ($this->getDistributionPlaceUsers() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addDistributionPlaceUser($relObj->copy($deepCopy));
@@ -1534,9 +1419,6 @@ abstract class DistributionPlace implements ActiveRecordInterface
     {
         if ('DistributionPlaceGroup' == $relationName) {
             return $this->initDistributionPlaceGroups();
-        }
-        if ('DistributionPlaceTable' == $relationName) {
-            return $this->initDistributionPlaceTables();
         }
         if ('DistributionPlaceUser' == $relationName) {
             return $this->initDistributionPlaceUsers();
@@ -1794,284 +1676,6 @@ abstract class DistributionPlace implements ActiveRecordInterface
         $query->joinWith('MenuGroup', $joinBehavior);
 
         return $this->getDistributionPlaceGroups($query, $con);
-    }
-
-    /**
-     * Clears out the collDistributionPlaceTables collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addDistributionPlaceTables()
-     */
-    public function clearDistributionPlaceTables()
-    {
-        $this->collDistributionPlaceTables = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collDistributionPlaceTables collection loaded partially.
-     */
-    public function resetPartialDistributionPlaceTables($v = true)
-    {
-        $this->collDistributionPlaceTablesPartial = $v;
-    }
-
-    /**
-     * Initializes the collDistributionPlaceTables collection.
-     *
-     * By default this just sets the collDistributionPlaceTables collection to an empty array (like clearcollDistributionPlaceTables());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initDistributionPlaceTables($overrideExisting = true)
-    {
-        if (null !== $this->collDistributionPlaceTables && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = DistributionPlaceTableTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collDistributionPlaceTables = new $collectionClassName;
-        $this->collDistributionPlaceTables->setModel('\API\Models\DistributionPlace\DistributionPlaceTable');
-    }
-
-    /**
-     * Gets an array of ChildDistributionPlaceTable objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildDistributionPlace is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildDistributionPlaceTable[] List of ChildDistributionPlaceTable objects
-     * @throws PropelException
-     */
-    public function getDistributionPlaceTables(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collDistributionPlaceTablesPartial && !$this->isNew();
-        if (null === $this->collDistributionPlaceTables || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collDistributionPlaceTables) {
-                // return empty collection
-                $this->initDistributionPlaceTables();
-            } else {
-                $collDistributionPlaceTables = ChildDistributionPlaceTableQuery::create(null, $criteria)
-                    ->filterByDistributionPlace($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collDistributionPlaceTablesPartial && count($collDistributionPlaceTables)) {
-                        $this->initDistributionPlaceTables(false);
-
-                        foreach ($collDistributionPlaceTables as $obj) {
-                            if (false == $this->collDistributionPlaceTables->contains($obj)) {
-                                $this->collDistributionPlaceTables->append($obj);
-                            }
-                        }
-
-                        $this->collDistributionPlaceTablesPartial = true;
-                    }
-
-                    return $collDistributionPlaceTables;
-                }
-
-                if ($partial && $this->collDistributionPlaceTables) {
-                    foreach ($this->collDistributionPlaceTables as $obj) {
-                        if ($obj->isNew()) {
-                            $collDistributionPlaceTables[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collDistributionPlaceTables = $collDistributionPlaceTables;
-                $this->collDistributionPlaceTablesPartial = false;
-            }
-        }
-
-        return $this->collDistributionPlaceTables;
-    }
-
-    /**
-     * Sets a collection of ChildDistributionPlaceTable objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $distributionPlaceTables A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildDistributionPlace The current object (for fluent API support)
-     */
-    public function setDistributionPlaceTables(Collection $distributionPlaceTables, ConnectionInterface $con = null)
-    {
-        /** @var ChildDistributionPlaceTable[] $distributionPlaceTablesToDelete */
-        $distributionPlaceTablesToDelete = $this->getDistributionPlaceTables(new Criteria(), $con)->diff($distributionPlaceTables);
-
-
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->distributionPlaceTablesScheduledForDeletion = clone $distributionPlaceTablesToDelete;
-
-        foreach ($distributionPlaceTablesToDelete as $distributionPlaceTableRemoved) {
-            $distributionPlaceTableRemoved->setDistributionPlace(null);
-        }
-
-        $this->collDistributionPlaceTables = null;
-        foreach ($distributionPlaceTables as $distributionPlaceTable) {
-            $this->addDistributionPlaceTable($distributionPlaceTable);
-        }
-
-        $this->collDistributionPlaceTables = $distributionPlaceTables;
-        $this->collDistributionPlaceTablesPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related DistributionPlaceTable objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related DistributionPlaceTable objects.
-     * @throws PropelException
-     */
-    public function countDistributionPlaceTables(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collDistributionPlaceTablesPartial && !$this->isNew();
-        if (null === $this->collDistributionPlaceTables || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collDistributionPlaceTables) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getDistributionPlaceTables());
-            }
-
-            $query = ChildDistributionPlaceTableQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByDistributionPlace($this)
-                ->count($con);
-        }
-
-        return count($this->collDistributionPlaceTables);
-    }
-
-    /**
-     * Method called to associate a ChildDistributionPlaceTable object to this object
-     * through the ChildDistributionPlaceTable foreign key attribute.
-     *
-     * @param  ChildDistributionPlaceTable $l ChildDistributionPlaceTable
-     * @return $this|\API\Models\DistributionPlace\DistributionPlace The current object (for fluent API support)
-     */
-    public function addDistributionPlaceTable(ChildDistributionPlaceTable $l)
-    {
-        if ($this->collDistributionPlaceTables === null) {
-            $this->initDistributionPlaceTables();
-            $this->collDistributionPlaceTablesPartial = true;
-        }
-
-        if (!$this->collDistributionPlaceTables->contains($l)) {
-            $this->doAddDistributionPlaceTable($l);
-
-            if ($this->distributionPlaceTablesScheduledForDeletion and $this->distributionPlaceTablesScheduledForDeletion->contains($l)) {
-                $this->distributionPlaceTablesScheduledForDeletion->remove($this->distributionPlaceTablesScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ChildDistributionPlaceTable $distributionPlaceTable The ChildDistributionPlaceTable object to add.
-     */
-    protected function doAddDistributionPlaceTable(ChildDistributionPlaceTable $distributionPlaceTable)
-    {
-        $this->collDistributionPlaceTables[]= $distributionPlaceTable;
-        $distributionPlaceTable->setDistributionPlace($this);
-    }
-
-    /**
-     * @param  ChildDistributionPlaceTable $distributionPlaceTable The ChildDistributionPlaceTable object to remove.
-     * @return $this|ChildDistributionPlace The current object (for fluent API support)
-     */
-    public function removeDistributionPlaceTable(ChildDistributionPlaceTable $distributionPlaceTable)
-    {
-        if ($this->getDistributionPlaceTables()->contains($distributionPlaceTable)) {
-            $pos = $this->collDistributionPlaceTables->search($distributionPlaceTable);
-            $this->collDistributionPlaceTables->remove($pos);
-            if (null === $this->distributionPlaceTablesScheduledForDeletion) {
-                $this->distributionPlaceTablesScheduledForDeletion = clone $this->collDistributionPlaceTables;
-                $this->distributionPlaceTablesScheduledForDeletion->clear();
-            }
-            $this->distributionPlaceTablesScheduledForDeletion[]= clone $distributionPlaceTable;
-            $distributionPlaceTable->setDistributionPlace(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this DistributionPlace is new, it will return
-     * an empty collection; or if this DistributionPlace has previously
-     * been saved, it will retrieve related DistributionPlaceTables from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in DistributionPlace.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildDistributionPlaceTable[] List of ChildDistributionPlaceTable objects
-     */
-    public function getDistributionPlaceTablesJoinMenuGroup(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildDistributionPlaceTableQuery::create(null, $criteria);
-        $query->joinWith('MenuGroup', $joinBehavior);
-
-        return $this->getDistributionPlaceTables($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this DistributionPlace is new, it will return
-     * an empty collection; or if this DistributionPlace has previously
-     * been saved, it will retrieve related DistributionPlaceTables from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in DistributionPlace.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildDistributionPlaceTable[] List of ChildDistributionPlaceTable objects
-     */
-    public function getDistributionPlaceTablesJoinEventTable(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildDistributionPlaceTableQuery::create(null, $criteria);
-        $query->joinWith('EventTable', $joinBehavior);
-
-        return $this->getDistributionPlaceTables($query, $con);
     }
 
     /**
@@ -2353,49 +1957,70 @@ abstract class DistributionPlace implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collMenuGroups collection
+     * Clears out the collMenuGroupDistributionPlaceGroupids collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addMenuGroups()
+     * @see        addMenuGroupDistributionPlaceGroupids()
      */
-    public function clearMenuGroups()
+    public function clearMenuGroupDistributionPlaceGroupids()
     {
-        $this->collMenuGroups = null; // important to set this to NULL since that means it is uninitialized
+        $this->collMenuGroupDistributionPlaceGroupids = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Initializes the collMenuGroups crossRef collection.
+     * Initializes the combinationCollMenuGroupDistributionPlaceGroupids crossRef collection.
      *
-     * By default this just sets the collMenuGroups collection to an empty collection (like clearMenuGroups());
+     * By default this just sets the combinationCollMenuGroupDistributionPlaceGroupids collection to an empty collection (like clearMenuGroupDistributionPlaceGroupids());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
      * @return void
      */
-    public function initMenuGroups()
+    public function initMenuGroupDistributionPlaceGroupids()
     {
-        $collectionClassName = DistributionPlaceGroupTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collMenuGroups = new $collectionClassName;
-        $this->collMenuGroupsPartial = true;
-        $this->collMenuGroups->setModel('\API\Models\Menu\MenuGroup');
+        $this->combinationCollMenuGroupDistributionPlaceGroupids = new ObjectCombinationCollection;
+        $this->combinationCollMenuGroupDistributionPlaceGroupidsPartial = true;
     }
 
     /**
-     * Checks if the collMenuGroups collection is loaded.
+     * Checks if the combinationCollMenuGroupDistributionPlaceGroupids collection is loaded.
      *
      * @return bool
      */
-    public function isMenuGroupsLoaded()
+    public function isMenuGroupDistributionPlaceGroupidsLoaded()
     {
-        return null !== $this->collMenuGroups;
+        return null !== $this->combinationCollMenuGroupDistributionPlaceGroupids;
     }
 
     /**
-     * Gets a collection of MenuGroup objects related by a many-to-many relationship
+     * Returns a new query object pre configured with filters from current object and given arguments to query the database.
+     *
+     * @param int $distributionPlaceGroupid
+     * @param Criteria $criteria
+     *
+     * @return MenuGroupQuery
+     */
+    public function createMenuGroupsQuery($distributionPlaceGroupid = null, Criteria $criteria = null)
+    {
+        $criteria = MenuGroupQuery::create($criteria)
+            ->filterByDistributionPlace($this);
+
+        $distributionPlaceGroupQuery = $criteria->useDistributionPlaceGroupQuery();
+
+        if (null !== $distributionPlaceGroupid) {
+            $distributionPlaceGroupQuery->filterByDistributionPlaceGroupid($distributionPlaceGroupid);
+        }
+
+        $distributionPlaceGroupQuery->endUse();
+
+        return $criteria;
+    }
+
+    /**
+     * Gets a combined collection of MenuGroup objects related by a many-to-many relationship
      * to the current object by way of the distribution_place_group cross-reference table.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
@@ -2407,99 +2032,127 @@ abstract class DistributionPlace implements ActiveRecordInterface
      * @param      Criteria $criteria Optional query object to filter the query
      * @param      ConnectionInterface $con Optional connection object
      *
-     * @return ObjectCollection|MenuGroup[] List of MenuGroup objects
+     * @return ObjectCombinationCollection Combination list of MenuGroup objects
      */
-    public function getMenuGroups(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getMenuGroupDistributionPlaceGroupids($criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collMenuGroupsPartial && !$this->isNew();
-        if (null === $this->collMenuGroups || null !== $criteria || $partial) {
+        $partial = $this->combinationCollMenuGroupDistributionPlaceGroupidsPartial && !$this->isNew();
+        if (null === $this->combinationCollMenuGroupDistributionPlaceGroupids || null !== $criteria || $partial) {
             if ($this->isNew()) {
                 // return empty collection
-                if (null === $this->collMenuGroups) {
-                    $this->initMenuGroups();
+                if (null === $this->combinationCollMenuGroupDistributionPlaceGroupids) {
+                    $this->initMenuGroupDistributionPlaceGroupids();
                 }
             } else {
 
-                $query = MenuGroupQuery::create(null, $criteria)
-                    ->filterByDistributionPlace($this);
-                $collMenuGroups = $query->find($con);
-                if (null !== $criteria) {
-                    return $collMenuGroups;
+                $query = ChildDistributionPlaceGroupQuery::create(null, $criteria)
+                    ->filterByDistributionPlace($this)
+                    ->joinMenuGroup()
+                ;
+
+                $items = $query->find($con);
+                $combinationCollMenuGroupDistributionPlaceGroupids = new ObjectCombinationCollection();
+                foreach ($items as $item) {
+                    $combination = [];
+
+                    $combination[] = $item->getMenuGroup();
+                    $combination[] = $item->getDistributionPlaceGroupid();
+                    $combinationCollMenuGroupDistributionPlaceGroupids[] = $combination;
                 }
 
-                if ($partial && $this->collMenuGroups) {
+                if (null !== $criteria) {
+                    return $combinationCollMenuGroupDistributionPlaceGroupids;
+                }
+
+                if ($partial && $this->combinationCollMenuGroupDistributionPlaceGroupids) {
                     //make sure that already added objects gets added to the list of the database.
-                    foreach ($this->collMenuGroups as $obj) {
-                        if (!$collMenuGroups->contains($obj)) {
-                            $collMenuGroups[] = $obj;
+                    foreach ($this->combinationCollMenuGroupDistributionPlaceGroupids as $obj) {
+                        if (!call_user_func_array([$combinationCollMenuGroupDistributionPlaceGroupids, 'contains'], $obj)) {
+                            $combinationCollMenuGroupDistributionPlaceGroupids[] = $obj;
                         }
                     }
                 }
 
-                $this->collMenuGroups = $collMenuGroups;
-                $this->collMenuGroupsPartial = false;
+                $this->combinationCollMenuGroupDistributionPlaceGroupids = $combinationCollMenuGroupDistributionPlaceGroupids;
+                $this->combinationCollMenuGroupDistributionPlaceGroupidsPartial = false;
             }
         }
 
-        return $this->collMenuGroups;
+        return $this->combinationCollMenuGroupDistributionPlaceGroupids;
     }
 
     /**
-     * Sets a collection of MenuGroup objects related by a many-to-many relationship
+     * Returns a not cached ObjectCollection of MenuGroup objects. This will hit always the databases.
+     * If you have attached new MenuGroup object to this object you need to call `save` first to get
+     * the correct return value. Use getMenuGroupDistributionPlaceGroupids() to get the current internal state.
+     *
+     * @param int $distributionPlaceGroupid
+     * @param Criteria $criteria
+     * @param ConnectionInterface $con
+     *
+     * @return MenuGroup[]|ObjectCollection
+     */
+    public function getMenuGroups($distributionPlaceGroupid = null, Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        return $this->createMenuGroupsQuery($distributionPlaceGroupid, $criteria)->find($con);
+    }
+
+    /**
+     * Sets a collection of ChildMenuGroup objects related by a many-to-many relationship
      * to the current object by way of the distribution_place_group cross-reference table.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param  Collection $menuGroups A Propel collection.
+     * @param  Collection $menuGroupDistributionPlaceGroupids A Propel collection.
      * @param  ConnectionInterface $con Optional connection object
      * @return $this|ChildDistributionPlace The current object (for fluent API support)
      */
-    public function setMenuGroups(Collection $menuGroups, ConnectionInterface $con = null)
+    public function setMenuGroupDistributionPlaceGroupids(Collection $menuGroupDistributionPlaceGroupids, ConnectionInterface $con = null)
     {
-        $this->clearMenuGroups();
-        $currentMenuGroups = $this->getMenuGroups();
+        $this->clearMenuGroupDistributionPlaceGroupids();
+        $currentMenuGroupDistributionPlaceGroupids = $this->getMenuGroupDistributionPlaceGroupids();
 
-        $menuGroupsScheduledForDeletion = $currentMenuGroups->diff($menuGroups);
+        $combinationCollMenuGroupDistributionPlaceGroupidsScheduledForDeletion = $currentMenuGroupDistributionPlaceGroupids->diff($menuGroupDistributionPlaceGroupids);
 
-        foreach ($menuGroupsScheduledForDeletion as $toDelete) {
-            $this->removeMenuGroup($toDelete);
+        foreach ($combinationCollMenuGroupDistributionPlaceGroupidsScheduledForDeletion as $toDelete) {
+            call_user_func_array([$this, 'removeMenuGroupDistributionPlaceGroupid'], $toDelete);
         }
 
-        foreach ($menuGroups as $menuGroup) {
-            if (!$currentMenuGroups->contains($menuGroup)) {
-                $this->doAddMenuGroup($menuGroup);
+        foreach ($menuGroupDistributionPlaceGroupids as $menuGroupDistributionPlaceGroupid) {
+            if (!call_user_func_array([$currentMenuGroupDistributionPlaceGroupids, 'contains'], $menuGroupDistributionPlaceGroupid)) {
+                call_user_func_array([$this, 'doAddMenuGroupDistributionPlaceGroupid'], $menuGroupDistributionPlaceGroupid);
             }
         }
 
-        $this->collMenuGroupsPartial = false;
-        $this->collMenuGroups = $menuGroups;
+        $this->combinationCollMenuGroupDistributionPlaceGroupidsPartial = false;
+        $this->combinationCollMenuGroupDistributionPlaceGroupids = $menuGroupDistributionPlaceGroupids;
 
         return $this;
     }
 
     /**
-     * Gets the number of MenuGroup objects related by a many-to-many relationship
+     * Gets the number of ChildMenuGroup objects related by a many-to-many relationship
      * to the current object by way of the distribution_place_group cross-reference table.
      *
      * @param      Criteria $criteria Optional query object to filter the query
      * @param      boolean $distinct Set to true to force count distinct
      * @param      ConnectionInterface $con Optional connection object
      *
-     * @return int the number of related MenuGroup objects
+     * @return int the number of related ChildMenuGroup objects
      */
-    public function countMenuGroups(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countMenuGroupDistributionPlaceGroupids(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collMenuGroupsPartial && !$this->isNew();
-        if (null === $this->collMenuGroups || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collMenuGroups) {
+        $partial = $this->combinationCollMenuGroupDistributionPlaceGroupidsPartial && !$this->isNew();
+        if (null === $this->combinationCollMenuGroupDistributionPlaceGroupids || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->combinationCollMenuGroupDistributionPlaceGroupids) {
                 return 0;
             } else {
 
                 if ($partial && !$criteria) {
-                    return count($this->getMenuGroups());
+                    return count($this->getMenuGroupDistributionPlaceGroupids());
                 }
 
-                $query = MenuGroupQuery::create(null, $criteria);
+                $query = ChildDistributionPlaceGroupQuery::create(null, $criteria);
                 if ($distinct) {
                     $query->distinct();
                 }
@@ -2509,27 +2162,44 @@ abstract class DistributionPlace implements ActiveRecordInterface
                     ->count($con);
             }
         } else {
-            return count($this->collMenuGroups);
+            return count($this->combinationCollMenuGroupDistributionPlaceGroupids);
         }
+    }
+
+    /**
+     * Returns the not cached count of MenuGroup objects. This will hit always the databases.
+     * If you have attached new MenuGroup object to this object you need to call `save` first to get
+     * the correct return value. Use getMenuGroupDistributionPlaceGroupids() to get the current internal state.
+     *
+     * @param int $distributionPlaceGroupid
+     * @param Criteria $criteria
+     * @param ConnectionInterface $con
+     *
+     * @return integer
+     */
+    public function countMenuGroups($distributionPlaceGroupid = null, Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        return $this->createMenuGroupsQuery($distributionPlaceGroupid, $criteria)->count($con);
     }
 
     /**
      * Associate a MenuGroup to this object
      * through the distribution_place_group cross reference table.
      *
-     * @param MenuGroup $menuGroup
+     * @param MenuGroup $menuGroup,
+     * @param int $distributionPlaceGroupid
      * @return ChildDistributionPlace The current object (for fluent API support)
      */
-    public function addMenuGroup(MenuGroup $menuGroup)
+    public function addMenuGroup(MenuGroup $menuGroup, $distributionPlaceGroupid)
     {
-        if ($this->collMenuGroups === null) {
-            $this->initMenuGroups();
+        if ($this->combinationCollMenuGroupDistributionPlaceGroupids === null) {
+            $this->initMenuGroupDistributionPlaceGroupids();
         }
 
-        if (!$this->getMenuGroups()->contains($menuGroup)) {
+        if (!$this->getMenuGroupDistributionPlaceGroupids()->contains($menuGroup, $distributionPlaceGroupid)) {
             // only add it if the **same** object is not already associated
-            $this->collMenuGroups->push($menuGroup);
-            $this->doAddMenuGroup($menuGroup);
+            $this->combinationCollMenuGroupDistributionPlaceGroupids->push($menuGroup, $distributionPlaceGroupid);
+            $this->doAddMenuGroupDistributionPlaceGroupid($menuGroup, $distributionPlaceGroupid);
         }
 
         return $this;
@@ -2537,13 +2207,16 @@ abstract class DistributionPlace implements ActiveRecordInterface
 
     /**
      *
-     * @param MenuGroup $menuGroup
+     * @param MenuGroup $menuGroup,
+     * @param int $distributionPlaceGroupid
      */
-    protected function doAddMenuGroup(MenuGroup $menuGroup)
+    protected function doAddMenuGroupDistributionPlaceGroupid(MenuGroup $menuGroup, $distributionPlaceGroupid)
     {
         $distributionPlaceGroup = new ChildDistributionPlaceGroup();
 
         $distributionPlaceGroup->setMenuGroup($menuGroup);
+        $distributionPlaceGroup->setDistributionPlaceGroupid($distributionPlaceGroupid);
+
 
         $distributionPlaceGroup->setDistributionPlace($this);
 
@@ -2551,371 +2224,46 @@ abstract class DistributionPlace implements ActiveRecordInterface
 
         // set the back reference to this object directly as using provided method either results
         // in endless loop or in multiple relations
-        if (!$menuGroup->isDistributionPlacesLoaded()) {
-            $menuGroup->initDistributionPlaces();
-            $menuGroup->getDistributionPlaces()->push($this);
-        } elseif (!$menuGroup->getDistributionPlaces()->contains($this)) {
-            $menuGroup->getDistributionPlaces()->push($this);
+        if ($menuGroup->isDistributionPlaceDistributionPlaceGroupidsLoaded()) {
+            $menuGroup->initDistributionPlaceDistributionPlaceGroupids();
+            $menuGroup->getDistributionPlaceDistributionPlaceGroupids()->push($this, $distributionPlaceGroupid);
+        } elseif (!$menuGroup->getDistributionPlaceDistributionPlaceGroupids()->contains($this, $distributionPlaceGroupid)) {
+            $menuGroup->getDistributionPlaceDistributionPlaceGroupids()->push($this, $distributionPlaceGroupid);
         }
 
     }
 
     /**
-     * Remove menuGroup of this object
+     * Remove menuGroup, distributionPlaceGroupid of this object
      * through the distribution_place_group cross reference table.
      *
-     * @param MenuGroup $menuGroup
+     * @param MenuGroup $menuGroup,
+     * @param int $distributionPlaceGroupid
      * @return ChildDistributionPlace The current object (for fluent API support)
      */
-    public function removeMenuGroup(MenuGroup $menuGroup)
+    public function removeMenuGroupDistributionPlaceGroupid(MenuGroup $menuGroup, $distributionPlaceGroupid)
     {
-        if ($this->getMenuGroups()->contains($menuGroup)) { $distributionPlaceGroup = new ChildDistributionPlaceGroup();
+        if ($this->getMenuGroupDistributionPlaceGroupids()->contains($menuGroup, $distributionPlaceGroupid)) { $distributionPlaceGroup = new ChildDistributionPlaceGroup();
 
             $distributionPlaceGroup->setMenuGroup($menuGroup);
-            if ($menuGroup->isDistributionPlacesLoaded()) {
+            if ($menuGroup->isDistributionPlaceDistributionPlaceGroupidsLoaded()) {
                 //remove the back reference if available
-                $menuGroup->getDistributionPlaces()->removeObject($this);
+                $menuGroup->getDistributionPlaceDistributionPlaceGroupids()->removeObject($this, $distributionPlaceGroupid);
             }
 
+            $distributionPlaceGroup->setDistributionPlaceGroupid($distributionPlaceGroupid);
             $distributionPlaceGroup->setDistributionPlace($this);
             $this->removeDistributionPlaceGroup(clone $distributionPlaceGroup);
             $distributionPlaceGroup->clear();
 
-            $this->collMenuGroups->remove($this->collMenuGroups->search($menuGroup));
+            $this->combinationCollMenuGroupDistributionPlaceGroupids->remove($this->combinationCollMenuGroupDistributionPlaceGroupids->search($menuGroup, $distributionPlaceGroupid));
 
-            if (null === $this->menuGroupsScheduledForDeletion) {
-                $this->menuGroupsScheduledForDeletion = clone $this->collMenuGroups;
-                $this->menuGroupsScheduledForDeletion->clear();
+            if (null === $this->combinationCollMenuGroupDistributionPlaceGroupidsScheduledForDeletion) {
+                $this->combinationCollMenuGroupDistributionPlaceGroupidsScheduledForDeletion = clone $this->combinationCollMenuGroupDistributionPlaceGroupids;
+                $this->combinationCollMenuGroupDistributionPlaceGroupidsScheduledForDeletion->clear();
             }
 
-            $this->menuGroupsScheduledForDeletion->push($menuGroup);
-        }
-
-
-        return $this;
-    }
-
-    /**
-     * Clears out the collMenuGroupEventTables collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addMenuGroupEventTables()
-     */
-    public function clearMenuGroupEventTables()
-    {
-        $this->collMenuGroupEventTables = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Initializes the combinationCollMenuGroupEventTables crossRef collection.
-     *
-     * By default this just sets the combinationCollMenuGroupEventTables collection to an empty collection (like clearMenuGroupEventTables());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @return void
-     */
-    public function initMenuGroupEventTables()
-    {
-        $this->combinationCollMenuGroupEventTables = new ObjectCombinationCollection;
-        $this->combinationCollMenuGroupEventTablesPartial = true;
-    }
-
-    /**
-     * Checks if the combinationCollMenuGroupEventTables collection is loaded.
-     *
-     * @return bool
-     */
-    public function isMenuGroupEventTablesLoaded()
-    {
-        return null !== $this->combinationCollMenuGroupEventTables;
-    }
-
-    /**
-     * Gets a combined collection of MenuGroup, EventTable objects related by a many-to-many relationship
-     * to the current object by way of the distribution_place_table cross-reference table.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildDistributionPlace is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria Optional query object to filter the query
-     * @param      ConnectionInterface $con Optional connection object
-     *
-     * @return ObjectCombinationCollection Combination list of MenuGroup, EventTable objects
-     */
-    public function getMenuGroupEventTables($criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->combinationCollMenuGroupEventTablesPartial && !$this->isNew();
-        if (null === $this->combinationCollMenuGroupEventTables || null !== $criteria || $partial) {
-            if ($this->isNew()) {
-                // return empty collection
-                if (null === $this->combinationCollMenuGroupEventTables) {
-                    $this->initMenuGroupEventTables();
-                }
-            } else {
-
-                $query = ChildDistributionPlaceTableQuery::create(null, $criteria)
-                    ->filterByDistributionPlace($this)
-                    ->joinMenuGroup()
-                    ->joinEventTable()
-                ;
-
-                $items = $query->find($con);
-                $combinationCollMenuGroupEventTables = new ObjectCombinationCollection();
-                foreach ($items as $item) {
-                    $combination = [];
-
-                    $combination[] = $item->getMenuGroup();
-                    $combination[] = $item->getEventTable();
-                    $combinationCollMenuGroupEventTables[] = $combination;
-                }
-
-                if (null !== $criteria) {
-                    return $combinationCollMenuGroupEventTables;
-                }
-
-                if ($partial && $this->combinationCollMenuGroupEventTables) {
-                    //make sure that already added objects gets added to the list of the database.
-                    foreach ($this->combinationCollMenuGroupEventTables as $obj) {
-                        if (!call_user_func_array([$combinationCollMenuGroupEventTables, 'contains'], $obj)) {
-                            $combinationCollMenuGroupEventTables[] = $obj;
-                        }
-                    }
-                }
-
-                $this->combinationCollMenuGroupEventTables = $combinationCollMenuGroupEventTables;
-                $this->combinationCollMenuGroupEventTablesPartial = false;
-            }
-        }
-
-        return $this->combinationCollMenuGroupEventTables;
-    }
-
-    /**
-     * Returns a not cached ObjectCollection of MenuGroup objects. This will hit always the databases.
-     * If you have attached new MenuGroup object to this object you need to call `save` first to get
-     * the correct return value. Use getMenuGroupEventTables() to get the current internal state.
-     *
-     * @param EventTable $eventTable
-     * @param Criteria $criteria
-     * @param ConnectionInterface $con
-     *
-     * @return MenuGroup[]|ObjectCollection
-     */
-    public function getMenuGroups(EventTable $eventTable = null, Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        return $this->createMenuGroupsQuery($eventTable, $criteria)->find($con);
-    }
-
-    /**
-     * Sets a collection of ChildMenuGroup, ChildEventTable combination objects related by a many-to-many relationship
-     * to the current object by way of the distribution_place_table cross-reference table.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param  Collection $menuGroupEventTables A Propel collection.
-     * @param  ConnectionInterface $con Optional connection object
-     * @return $this|ChildDistributionPlace The current object (for fluent API support)
-     */
-    public function setMenuGroupEventTables(Collection $menuGroupEventTables, ConnectionInterface $con = null)
-    {
-        $this->clearMenuGroupEventTables();
-        $currentMenuGroupEventTables = $this->getMenuGroupEventTables();
-
-        $combinationCollMenuGroupEventTablesScheduledForDeletion = $currentMenuGroupEventTables->diff($menuGroupEventTables);
-
-        foreach ($combinationCollMenuGroupEventTablesScheduledForDeletion as $toDelete) {
-            call_user_func_array([$this, 'removeMenuGroupEventTable'], $toDelete);
-        }
-
-        foreach ($menuGroupEventTables as $menuGroupEventTable) {
-            if (!call_user_func_array([$currentMenuGroupEventTables, 'contains'], $menuGroupEventTable)) {
-                call_user_func_array([$this, 'doAddMenuGroupEventTable'], $menuGroupEventTable);
-            }
-        }
-
-        $this->combinationCollMenuGroupEventTablesPartial = false;
-        $this->combinationCollMenuGroupEventTables = $menuGroupEventTables;
-
-        return $this;
-    }
-
-    /**
-     * Gets the number of ChildMenuGroup, ChildEventTable combination objects related by a many-to-many relationship
-     * to the current object by way of the distribution_place_table cross-reference table.
-     *
-     * @param      Criteria $criteria Optional query object to filter the query
-     * @param      boolean $distinct Set to true to force count distinct
-     * @param      ConnectionInterface $con Optional connection object
-     *
-     * @return int the number of related ChildMenuGroup, ChildEventTable combination objects
-     */
-    public function countMenuGroupEventTables(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->combinationCollMenuGroupEventTablesPartial && !$this->isNew();
-        if (null === $this->combinationCollMenuGroupEventTables || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->combinationCollMenuGroupEventTables) {
-                return 0;
-            } else {
-
-                if ($partial && !$criteria) {
-                    return count($this->getMenuGroupEventTables());
-                }
-
-                $query = ChildDistributionPlaceTableQuery::create(null, $criteria);
-                if ($distinct) {
-                    $query->distinct();
-                }
-
-                return $query
-                    ->filterByDistributionPlace($this)
-                    ->count($con);
-            }
-        } else {
-            return count($this->combinationCollMenuGroupEventTables);
-        }
-    }
-
-    /**
-     * Returns the not cached count of MenuGroup objects. This will hit always the databases.
-     * If you have attached new MenuGroup object to this object you need to call `save` first to get
-     * the correct return value. Use getMenuGroupEventTables() to get the current internal state.
-     *
-     * @param EventTable $eventTable
-     * @param Criteria $criteria
-     * @param ConnectionInterface $con
-     *
-     * @return integer
-     */
-    public function countMenuGroups(EventTable $eventTable = null, Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        return $this->createMenuGroupsQuery($eventTable, $criteria)->count($con);
-    }
-
-    /**
-     * Associate a MenuGroup to this object
-     * through the distribution_place_table cross reference table.
-     *
-     * @param MenuGroup $menuGroup,
-     * @param EventTable $eventTable
-     * @return ChildDistributionPlace The current object (for fluent API support)
-     */
-    public function addMenuGroup(MenuGroup $menuGroup, EventTable $eventTable)
-    {
-        if ($this->combinationCollMenuGroupEventTables === null) {
-            $this->initMenuGroupEventTables();
-        }
-
-        if (!$this->getMenuGroupEventTables()->contains($menuGroup, $eventTable)) {
-            // only add it if the **same** object is not already associated
-            $this->combinationCollMenuGroupEventTables->push($menuGroup, $eventTable);
-            $this->doAddMenuGroupEventTable($menuGroup, $eventTable);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Associate a EventTable to this object
-     * through the distribution_place_table cross reference table.
-     *
-     * @param EventTable $eventTable,
-     * @param MenuGroup $menuGroup
-     * @return ChildDistributionPlace The current object (for fluent API support)
-     */
-    public function addEventTable(EventTable $eventTable, MenuGroup $menuGroup)
-    {
-        if ($this->combinationCollMenuGroupEventTables === null) {
-            $this->initMenuGroupEventTables();
-        }
-
-        if (!$this->getMenuGroupEventTables()->contains($eventTable, $menuGroup)) {
-            // only add it if the **same** object is not already associated
-            $this->combinationCollMenuGroupEventTables->push($eventTable, $menuGroup);
-            $this->doAddMenuGroupEventTable($eventTable, $menuGroup);
-        }
-
-        return $this;
-    }
-
-    /**
-     *
-     * @param MenuGroup $menuGroup,
-     * @param EventTable $eventTable
-     */
-    protected function doAddMenuGroupEventTable(MenuGroup $menuGroup, EventTable $eventTable)
-    {
-        $distributionPlaceTable = new ChildDistributionPlaceTable();
-
-        $distributionPlaceTable->setMenuGroup($menuGroup);
-        $distributionPlaceTable->setEventTable($eventTable);
-
-        $distributionPlaceTable->setDistributionPlace($this);
-
-        $this->addDistributionPlaceTable($distributionPlaceTable);
-
-        // set the back reference to this object directly as using provided method either results
-        // in endless loop or in multiple relations
-        if ($menuGroup->isDistributionPlaceEventTablesLoaded()) {
-            $menuGroup->initDistributionPlaceEventTables();
-            $menuGroup->getDistributionPlaceEventTables()->push($this, $eventTable);
-        } elseif (!$menuGroup->getDistributionPlaceEventTables()->contains($this, $eventTable)) {
-            $menuGroup->getDistributionPlaceEventTables()->push($this, $eventTable);
-        }
-
-        // set the back reference to this object directly as using provided method either results
-        // in endless loop or in multiple relations
-        if ($eventTable->isMenuGroupDistributionPlacesLoaded()) {
-            $eventTable->initMenuGroupDistributionPlaces();
-            $eventTable->getMenuGroupDistributionPlaces()->push($menuGroup, $this);
-        } elseif (!$eventTable->getMenuGroupDistributionPlaces()->contains($menuGroup, $this)) {
-            $eventTable->getMenuGroupDistributionPlaces()->push($menuGroup, $this);
-        }
-
-    }
-
-    /**
-     * Remove menuGroup, eventTable of this object
-     * through the distribution_place_table cross reference table.
-     *
-     * @param MenuGroup $menuGroup,
-     * @param EventTable $eventTable
-     * @return ChildDistributionPlace The current object (for fluent API support)
-     */
-    public function removeMenuGroupEventTable(MenuGroup $menuGroup, EventTable $eventTable)
-    {
-        if ($this->getMenuGroupEventTables()->contains($menuGroup, $eventTable)) { $distributionPlaceTable = new ChildDistributionPlaceTable();
-
-            $distributionPlaceTable->setMenuGroup($menuGroup);
-            if ($menuGroup->isDistributionPlaceEventTablesLoaded()) {
-                //remove the back reference if available
-                $menuGroup->getDistributionPlaceEventTables()->removeObject($this, $eventTable);
-            }
-
-            $distributionPlaceTable->setEventTable($eventTable);
-            if ($eventTable->isMenuGroupDistributionPlacesLoaded()) {
-                //remove the back reference if available
-                $eventTable->getMenuGroupDistributionPlaces()->removeObject($menuGroup, $this);
-            }
-
-            $distributionPlaceTable->setDistributionPlace($this);
-            $this->removeDistributionPlaceTable(clone $distributionPlaceTable);
-            $distributionPlaceTable->clear();
-
-            $this->combinationCollMenuGroupEventTables->remove($this->combinationCollMenuGroupEventTables->search($menuGroup, $eventTable));
-
-            if (null === $this->combinationCollMenuGroupEventTablesScheduledForDeletion) {
-                $this->combinationCollMenuGroupEventTablesScheduledForDeletion = clone $this->combinationCollMenuGroupEventTables;
-                $this->combinationCollMenuGroupEventTablesScheduledForDeletion->clear();
-            }
-
-            $this->combinationCollMenuGroupEventTablesScheduledForDeletion->push($menuGroup, $eventTable);
+            $this->combinationCollMenuGroupDistributionPlaceGroupidsScheduledForDeletion->push($menuGroup, $distributionPlaceGroupid);
         }
 
 
@@ -3285,23 +2633,13 @@ abstract class DistributionPlace implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collDistributionPlaceTables) {
-                foreach ($this->collDistributionPlaceTables as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
             if ($this->collDistributionPlaceUsers) {
                 foreach ($this->collDistributionPlaceUsers as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collMenuGroups) {
-                foreach ($this->collMenuGroups as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
-            if ($this->combinationCollMenuGroupEventTables) {
-                foreach ($this->combinationCollMenuGroupEventTables as $o) {
+            if ($this->combinationCollMenuGroupDistributionPlaceGroupids) {
+                foreach ($this->combinationCollMenuGroupDistributionPlaceGroupids as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -3313,10 +2651,8 @@ abstract class DistributionPlace implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collDistributionPlaceGroups = null;
-        $this->collDistributionPlaceTables = null;
         $this->collDistributionPlaceUsers = null;
-        $this->collMenuGroups = null;
-        $this->combinationCollMenuGroupEventTables = null;
+        $this->combinationCollMenuGroupDistributionPlaceGroupids = null;
         $this->combinationCollUserEventPrinters = null;
         $this->aEvent = null;
     }

@@ -160,13 +160,6 @@ class DistributionPlaceTableMap extends TableMap
     1 => ':distribution_placeid',
   ),
 ), 'CASCADE', null, 'DistributionPlaceGroups', false);
-        $this->addRelation('DistributionPlaceTable', '\\API\\Models\\DistributionPlace\\DistributionPlaceTable', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':distribution_placeid',
-    1 => ':distribution_placeid',
-  ),
-), 'CASCADE', null, 'DistributionPlaceTables', false);
         $this->addRelation('DistributionPlaceUser', '\\API\\Models\\DistributionPlace\\DistributionPlaceUser', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -175,8 +168,6 @@ class DistributionPlaceTableMap extends TableMap
   ),
 ), 'CASCADE', null, 'DistributionPlaceUsers', false);
         $this->addRelation('MenuGroup', '\\API\\Models\\Menu\\MenuGroup', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'MenuGroups');
-        $this->addRelation('MenuGroup', '\\API\\Models\\Menu\\MenuGroup', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'MenuGroups');
-        $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'EventTables');
         $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'Users');
         $this->addRelation('EventPrinter', '\\API\\Models\\Event\\EventPrinter', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'EventPrinters');
     } // buildRelations()
@@ -241,7 +232,6 @@ class DistributionPlaceTableMap extends TableMap
         // Invalidate objects in related instance pools,
         // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
         DistributionPlaceGroupTableMap::clearInstancePool();
-        DistributionPlaceTableTableMap::clearInstancePool();
         DistributionPlaceUserTableMap::clearInstancePool();
     }
 

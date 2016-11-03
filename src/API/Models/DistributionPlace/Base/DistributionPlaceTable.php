@@ -4,14 +4,12 @@ namespace API\Models\DistributionPlace\Base;
 
 use \Exception;
 use \PDO;
-use API\Models\DistributionPlace\DistributionPlace as ChildDistributionPlace;
-use API\Models\DistributionPlace\DistributionPlaceQuery as ChildDistributionPlaceQuery;
+use API\Models\DistributionPlace\DistributionPlaceGroup as ChildDistributionPlaceGroup;
+use API\Models\DistributionPlace\DistributionPlaceGroupQuery as ChildDistributionPlaceGroupQuery;
 use API\Models\DistributionPlace\DistributionPlaceTableQuery as ChildDistributionPlaceTableQuery;
 use API\Models\DistributionPlace\Map\DistributionPlaceTableTableMap;
 use API\Models\Event\EventTable;
 use API\Models\Event\EventTableQuery;
-use API\Models\Menu\MenuGroup;
-use API\Models\Menu\MenuGroupQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -73,28 +71,16 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
     protected $event_tableid;
 
     /**
-     * The value for the distribution_placeid field.
+     * The value for the distribution_place_groupid field.
      *
      * @var        int
      */
-    protected $distribution_placeid;
+    protected $distribution_place_groupid;
 
     /**
-     * The value for the menu_groupid field.
-     *
-     * @var        int
+     * @var        ChildDistributionPlaceGroup
      */
-    protected $menu_groupid;
-
-    /**
-     * @var        MenuGroup
-     */
-    protected $aMenuGroup;
-
-    /**
-     * @var        ChildDistributionPlace
-     */
-    protected $aDistributionPlace;
+    protected $aDistributionPlaceGroup;
 
     /**
      * @var        EventTable
@@ -345,23 +331,13 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
     }
 
     /**
-     * Get the [distribution_placeid] column value.
+     * Get the [distribution_place_groupid] column value.
      *
      * @return int
      */
-    public function getDistributionPlaceid()
+    public function getDistributionPlaceGroupid()
     {
-        return $this->distribution_placeid;
-    }
-
-    /**
-     * Get the [menu_groupid] column value.
-     *
-     * @return int
-     */
-    public function getMenuGroupid()
-    {
-        return $this->menu_groupid;
+        return $this->distribution_place_groupid;
     }
 
     /**
@@ -389,52 +365,28 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
     } // setEventTableid()
 
     /**
-     * Set the value of [distribution_placeid] column.
+     * Set the value of [distribution_place_groupid] column.
      *
      * @param int $v new value
      * @return $this|\API\Models\DistributionPlace\DistributionPlaceTable The current object (for fluent API support)
      */
-    public function setDistributionPlaceid($v)
+    public function setDistributionPlaceGroupid($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->distribution_placeid !== $v) {
-            $this->distribution_placeid = $v;
-            $this->modifiedColumns[DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACEID] = true;
+        if ($this->distribution_place_groupid !== $v) {
+            $this->distribution_place_groupid = $v;
+            $this->modifiedColumns[DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACE_GROUPID] = true;
         }
 
-        if ($this->aDistributionPlace !== null && $this->aDistributionPlace->getDistributionPlaceid() !== $v) {
-            $this->aDistributionPlace = null;
-        }
-
-        return $this;
-    } // setDistributionPlaceid()
-
-    /**
-     * Set the value of [menu_groupid] column.
-     *
-     * @param int $v new value
-     * @return $this|\API\Models\DistributionPlace\DistributionPlaceTable The current object (for fluent API support)
-     */
-    public function setMenuGroupid($v)
-    {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->menu_groupid !== $v) {
-            $this->menu_groupid = $v;
-            $this->modifiedColumns[DistributionPlaceTableTableMap::COL_MENU_GROUPID] = true;
-        }
-
-        if ($this->aMenuGroup !== null && $this->aMenuGroup->getMenuGroupid() !== $v) {
-            $this->aMenuGroup = null;
+        if ($this->aDistributionPlaceGroup !== null && $this->aDistributionPlaceGroup->getDistributionPlaceGroupid() !== $v) {
+            $this->aDistributionPlaceGroup = null;
         }
 
         return $this;
-    } // setMenuGroupid()
+    } // setDistributionPlaceGroupid()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -475,11 +427,8 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : DistributionPlaceTableTableMap::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_tableid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : DistributionPlaceTableTableMap::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->distribution_placeid = (null !== $col) ? (int) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : DistributionPlaceTableTableMap::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->menu_groupid = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : DistributionPlaceTableTableMap::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->distribution_place_groupid = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -488,7 +437,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = DistributionPlaceTableTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 2; // 2 = DistributionPlaceTableTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\DistributionPlace\\DistributionPlaceTable'), 0, $e);
@@ -513,11 +462,8 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
         if ($this->aEventTable !== null && $this->event_tableid !== $this->aEventTable->getEventTableid()) {
             $this->aEventTable = null;
         }
-        if ($this->aDistributionPlace !== null && $this->distribution_placeid !== $this->aDistributionPlace->getDistributionPlaceid()) {
-            $this->aDistributionPlace = null;
-        }
-        if ($this->aMenuGroup !== null && $this->menu_groupid !== $this->aMenuGroup->getMenuGroupid()) {
-            $this->aMenuGroup = null;
+        if ($this->aDistributionPlaceGroup !== null && $this->distribution_place_groupid !== $this->aDistributionPlaceGroup->getDistributionPlaceGroupid()) {
+            $this->aDistributionPlaceGroup = null;
         }
     } // ensureConsistency
 
@@ -558,8 +504,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aMenuGroup = null;
-            $this->aDistributionPlace = null;
+            $this->aDistributionPlaceGroup = null;
             $this->aEventTable = null;
         } // if (deep)
     }
@@ -665,18 +610,11 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aMenuGroup !== null) {
-                if ($this->aMenuGroup->isModified() || $this->aMenuGroup->isNew()) {
-                    $affectedRows += $this->aMenuGroup->save($con);
+            if ($this->aDistributionPlaceGroup !== null) {
+                if ($this->aDistributionPlaceGroup->isModified() || $this->aDistributionPlaceGroup->isNew()) {
+                    $affectedRows += $this->aDistributionPlaceGroup->save($con);
                 }
-                $this->setMenuGroup($this->aMenuGroup);
-            }
-
-            if ($this->aDistributionPlace !== null) {
-                if ($this->aDistributionPlace->isModified() || $this->aDistributionPlace->isNew()) {
-                    $affectedRows += $this->aDistributionPlace->save($con);
-                }
-                $this->setDistributionPlace($this->aDistributionPlace);
+                $this->setDistributionPlaceGroup($this->aDistributionPlaceGroup);
             }
 
             if ($this->aEventTable !== null) {
@@ -722,11 +660,8 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
         if ($this->isColumnModified(DistributionPlaceTableTableMap::COL_EVENT_TABLEID)) {
             $modifiedColumns[':p' . $index++]  = 'event_tableid';
         }
-        if ($this->isColumnModified(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACEID)) {
-            $modifiedColumns[':p' . $index++]  = 'distribution_placeid';
-        }
-        if ($this->isColumnModified(DistributionPlaceTableTableMap::COL_MENU_GROUPID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_groupid';
+        if ($this->isColumnModified(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACE_GROUPID)) {
+            $modifiedColumns[':p' . $index++]  = 'distribution_place_groupid';
         }
 
         $sql = sprintf(
@@ -742,11 +677,8 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
                     case 'event_tableid':
                         $stmt->bindValue($identifier, $this->event_tableid, PDO::PARAM_INT);
                         break;
-                    case 'distribution_placeid':
-                        $stmt->bindValue($identifier, $this->distribution_placeid, PDO::PARAM_INT);
-                        break;
-                    case 'menu_groupid':
-                        $stmt->bindValue($identifier, $this->menu_groupid, PDO::PARAM_INT);
+                    case 'distribution_place_groupid':
+                        $stmt->bindValue($identifier, $this->distribution_place_groupid, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -807,10 +739,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
                 return $this->getEventTableid();
                 break;
             case 1:
-                return $this->getDistributionPlaceid();
-                break;
-            case 2:
-                return $this->getMenuGroupid();
+                return $this->getDistributionPlaceGroupid();
                 break;
             default:
                 return null;
@@ -843,8 +772,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
         $keys = DistributionPlaceTableTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getEventTableid(),
-            $keys[1] => $this->getDistributionPlaceid(),
-            $keys[2] => $this->getMenuGroupid(),
+            $keys[1] => $this->getDistributionPlaceGroupid(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -852,35 +780,20 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aMenuGroup) {
+            if (null !== $this->aDistributionPlaceGroup) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'menuGroup';
+                        $key = 'distributionPlaceGroup';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'menu_group';
+                        $key = 'distribution_place_group';
                         break;
                     default:
-                        $key = 'MenuGroup';
+                        $key = 'DistributionPlaceGroup';
                 }
 
-                $result[$key] = $this->aMenuGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
-            }
-            if (null !== $this->aDistributionPlace) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'distributionPlace';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'distribution_place';
-                        break;
-                    default:
-                        $key = 'DistributionPlace';
-                }
-
-                $result[$key] = $this->aDistributionPlace->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aDistributionPlaceGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aEventTable) {
 
@@ -935,10 +848,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
                 $this->setEventTableid($value);
                 break;
             case 1:
-                $this->setDistributionPlaceid($value);
-                break;
-            case 2:
-                $this->setMenuGroupid($value);
+                $this->setDistributionPlaceGroupid($value);
                 break;
         } // switch()
 
@@ -970,10 +880,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
             $this->setEventTableid($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setDistributionPlaceid($arr[$keys[1]]);
-        }
-        if (array_key_exists($keys[2], $arr)) {
-            $this->setMenuGroupid($arr[$keys[2]]);
+            $this->setDistributionPlaceGroupid($arr[$keys[1]]);
         }
     }
 
@@ -1019,11 +926,8 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
         if ($this->isColumnModified(DistributionPlaceTableTableMap::COL_EVENT_TABLEID)) {
             $criteria->add(DistributionPlaceTableTableMap::COL_EVENT_TABLEID, $this->event_tableid);
         }
-        if ($this->isColumnModified(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACEID)) {
-            $criteria->add(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACEID, $this->distribution_placeid);
-        }
-        if ($this->isColumnModified(DistributionPlaceTableTableMap::COL_MENU_GROUPID)) {
-            $criteria->add(DistributionPlaceTableTableMap::COL_MENU_GROUPID, $this->menu_groupid);
+        if ($this->isColumnModified(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACE_GROUPID)) {
+            $criteria->add(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $this->distribution_place_groupid);
         }
 
         return $criteria;
@@ -1043,8 +947,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
     {
         $criteria = ChildDistributionPlaceTableQuery::create();
         $criteria->add(DistributionPlaceTableTableMap::COL_EVENT_TABLEID, $this->event_tableid);
-        $criteria->add(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACEID, $this->distribution_placeid);
-        $criteria->add(DistributionPlaceTableTableMap::COL_MENU_GROUPID, $this->menu_groupid);
+        $criteria->add(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $this->distribution_place_groupid);
 
         return $criteria;
     }
@@ -1058,21 +961,13 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
     public function hashCode()
     {
         $validPk = null !== $this->getEventTableid() &&
-            null !== $this->getDistributionPlaceid() &&
-            null !== $this->getMenuGroupid();
+            null !== $this->getDistributionPlaceGroupid();
 
-        $validPrimaryKeyFKs = 3;
+        $validPrimaryKeyFKs = 2;
         $primaryKeyFKs = [];
 
-        //relation fk_distributions_places_tables_menu_groupes1 to table menu_group
-        if ($this->aMenuGroup && $hash = spl_object_hash($this->aMenuGroup)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_tables_has_distributions_places_distributions_places1 to table distribution_place
-        if ($this->aDistributionPlace && $hash = spl_object_hash($this->aDistributionPlace)) {
+        //relation fk_distribution_place_table_distribution_place_group1 to table distribution_place_group
+        if ($this->aDistributionPlaceGroup && $hash = spl_object_hash($this->aDistributionPlaceGroup)) {
             $primaryKeyFKs[] = $hash;
         } else {
             $validPrimaryKeyFKs = false;
@@ -1103,8 +998,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
     {
         $pks = array();
         $pks[0] = $this->getEventTableid();
-        $pks[1] = $this->getDistributionPlaceid();
-        $pks[2] = $this->getMenuGroupid();
+        $pks[1] = $this->getDistributionPlaceGroupid();
 
         return $pks;
     }
@@ -1118,8 +1012,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
     public function setPrimaryKey($keys)
     {
         $this->setEventTableid($keys[0]);
-        $this->setDistributionPlaceid($keys[1]);
-        $this->setMenuGroupid($keys[2]);
+        $this->setDistributionPlaceGroupid($keys[1]);
     }
 
     /**
@@ -1128,7 +1021,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getEventTableid()) && (null === $this->getDistributionPlaceid()) && (null === $this->getMenuGroupid());
+        return (null === $this->getEventTableid()) && (null === $this->getDistributionPlaceGroupid());
     }
 
     /**
@@ -1145,8 +1038,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setEventTableid($this->getEventTableid());
-        $copyObj->setDistributionPlaceid($this->getDistributionPlaceid());
-        $copyObj->setMenuGroupid($this->getMenuGroupid());
+        $copyObj->setDistributionPlaceGroupid($this->getDistributionPlaceGroupid());
         if ($makeNew) {
             $copyObj->setNew(true);
         }
@@ -1175,24 +1067,24 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a MenuGroup object.
+     * Declares an association between this object and a ChildDistributionPlaceGroup object.
      *
-     * @param  MenuGroup $v
+     * @param  ChildDistributionPlaceGroup $v
      * @return $this|\API\Models\DistributionPlace\DistributionPlaceTable The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setMenuGroup(MenuGroup $v = null)
+    public function setDistributionPlaceGroup(ChildDistributionPlaceGroup $v = null)
     {
         if ($v === null) {
-            $this->setMenuGroupid(NULL);
+            $this->setDistributionPlaceGroupid(NULL);
         } else {
-            $this->setMenuGroupid($v->getMenuGroupid());
+            $this->setDistributionPlaceGroupid($v->getDistributionPlaceGroupid());
         }
 
-        $this->aMenuGroup = $v;
+        $this->aDistributionPlaceGroup = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the MenuGroup object, it will not be re-added.
+        // If this object has already been added to the ChildDistributionPlaceGroup object, it will not be re-added.
         if ($v !== null) {
             $v->addDistributionPlaceTable($this);
         }
@@ -1203,16 +1095,16 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
 
 
     /**
-     * Get the associated MenuGroup object
+     * Get the associated ChildDistributionPlaceGroup object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return MenuGroup The associated MenuGroup object.
+     * @return ChildDistributionPlaceGroup The associated ChildDistributionPlaceGroup object.
      * @throws PropelException
      */
-    public function getMenuGroup(ConnectionInterface $con = null)
+    public function getDistributionPlaceGroup(ConnectionInterface $con = null)
     {
-        if ($this->aMenuGroup === null && ($this->menu_groupid !== null)) {
-            $this->aMenuGroup = MenuGroupQuery::create()
+        if ($this->aDistributionPlaceGroup === null && ($this->distribution_place_groupid !== null)) {
+            $this->aDistributionPlaceGroup = ChildDistributionPlaceGroupQuery::create()
                 ->filterByDistributionPlaceTable($this) // here
                 ->findOne($con);
             /* The following can be used additionally to
@@ -1220,64 +1112,11 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aMenuGroup->addDistributionPlaceTables($this);
+                $this->aDistributionPlaceGroup->addDistributionPlaceTables($this);
              */
         }
 
-        return $this->aMenuGroup;
-    }
-
-    /**
-     * Declares an association between this object and a ChildDistributionPlace object.
-     *
-     * @param  ChildDistributionPlace $v
-     * @return $this|\API\Models\DistributionPlace\DistributionPlaceTable The current object (for fluent API support)
-     * @throws PropelException
-     */
-    public function setDistributionPlace(ChildDistributionPlace $v = null)
-    {
-        if ($v === null) {
-            $this->setDistributionPlaceid(NULL);
-        } else {
-            $this->setDistributionPlaceid($v->getDistributionPlaceid());
-        }
-
-        $this->aDistributionPlace = $v;
-
-        // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildDistributionPlace object, it will not be re-added.
-        if ($v !== null) {
-            $v->addDistributionPlaceTable($this);
-        }
-
-
-        return $this;
-    }
-
-
-    /**
-     * Get the associated ChildDistributionPlace object
-     *
-     * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildDistributionPlace The associated ChildDistributionPlace object.
-     * @throws PropelException
-     */
-    public function getDistributionPlace(ConnectionInterface $con = null)
-    {
-        if ($this->aDistributionPlace === null && ($this->distribution_placeid !== null)) {
-            $this->aDistributionPlace = ChildDistributionPlaceQuery::create()
-                ->filterByDistributionPlaceTable($this) // here
-                ->findOne($con);
-            /* The following can be used additionally to
-                guarantee the related object contains a reference
-                to this object.  This level of coupling may, however, be
-                undesirable since it could result in an only partially populated collection
-                in the referenced object.
-                $this->aDistributionPlace->addDistributionPlaceTables($this);
-             */
-        }
-
-        return $this->aDistributionPlace;
+        return $this->aDistributionPlaceGroup;
     }
 
     /**
@@ -1340,18 +1179,14 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aMenuGroup) {
-            $this->aMenuGroup->removeDistributionPlaceTable($this);
-        }
-        if (null !== $this->aDistributionPlace) {
-            $this->aDistributionPlace->removeDistributionPlaceTable($this);
+        if (null !== $this->aDistributionPlaceGroup) {
+            $this->aDistributionPlaceGroup->removeDistributionPlaceTable($this);
         }
         if (null !== $this->aEventTable) {
             $this->aEventTable->removeDistributionPlaceTable($this);
         }
         $this->event_tableid = null;
-        $this->distribution_placeid = null;
-        $this->menu_groupid = null;
+        $this->distribution_place_groupid = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1372,8 +1207,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
         if ($deep) {
         } // if ($deep)
 
-        $this->aMenuGroup = null;
-        $this->aDistributionPlace = null;
+        $this->aDistributionPlaceGroup = null;
         $this->aEventTable = null;
     }
 
