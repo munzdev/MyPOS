@@ -47,7 +47,7 @@ define([
         updateSession() {                 
             return this.authUser.fetch()
                 .done((user) => {
-                    if(DEBUG)  console.log("SESSION UPDATE SUCCESS", user);
+                    if(DEBUG)  console.log("SESSION UPDATE SUCCESS", this.authUser);
             
                     this.updateSessionUser( user );
                     this.logged_in = true;
