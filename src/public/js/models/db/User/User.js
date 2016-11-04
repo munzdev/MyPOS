@@ -1,6 +1,6 @@
 define([
-    
-], function(){
+    "models/db/Event/EventUser"
+], function(EventUser){
     "use strict";
 
     return class User extends Backbone.Model {
@@ -20,5 +20,12 @@ define([
                     IsAdmin: false};
         }
 
+        parse(response)
+        {
+            if('EventUser' in response)
+                response.EventUser = new EventUser(response.EventUser, {parse: true});
+            
+            return super.parse(response);
+        }
     }
 });
