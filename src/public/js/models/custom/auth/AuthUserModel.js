@@ -12,12 +12,6 @@ define([
         defaults()
         {
             return _.extend(super.defaults(), {EventUser: new EventUser});
-        }
-        
-        parse(response)
-        {
-            response.EventUser = new EventUser(response.EventUser, {parse: true});
-            return super.parse(response);
-        }
+        }               
     }
 });
