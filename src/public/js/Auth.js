@@ -6,11 +6,11 @@ define([
     "models/custom/auth/AuthUserModel"
 ], function(LoginModel,
             AuthUserModel){
-    "use strict";
     
-    return class Auth 
+    return class Auth
     {
         constructor() {
+            _.extend(this, Backbone.Events);
             _.bindAll(this, "updateSession");
             
             this.logged_in = false;
@@ -51,6 +51,7 @@ define([
             
                     this.updateSessionUser( user );
                     this.logged_in = true;
+                    this.trigger("login");
                 })
                 .fail((result) => {
                     if(DEBUG) console.log("SESSION UPDATE FAILED", result);
@@ -60,7 +61,9 @@ define([
         logout() {
             return this.loginData.destroy()
                 .done(() => {
-                     this.$(location).attr('href', app.URL);
+                    this.logged_in = false;
+                    this.trigger("logout");
+                    this.$(location).attr('href', app.URL);
                 });
         }
     }

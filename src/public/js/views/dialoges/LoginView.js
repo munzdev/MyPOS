@@ -16,41 +16,7 @@ function( Template ) {
         initialize() {
             _.bindAll(this, "render");
 
-            // Listen for session logged_in state changes and re-render
-            //app.auth.on("change:logged_in", this.render);
-
-            if(app.auth.logged_in)
-            {
-                this.sendToDefaultPage();
-                return;
-            }
-
             this.render();
-        }
-        
-        sendToDefaultPage() {
-            var rights = app.session.user.get('user_roles');
-
-            if(rights & USER_ROLE_ORDER_OVERVIEW)
-            {
-                MyPOS.ChangePage("#order-overview");
-            }
-            else if(rights & USER_ROLE_ORDER_ADD)
-            {
-                MyPOS.ChangePage("#order-new");
-            }
-            else if(rights & USER_ROLE_DISTRIBUTION)
-            {
-                MyPOS.ChangePage("#distribution");
-            }
-            else if(rights & USER_ROLE_MANAGER)
-            {
-                MyPOS.ChangePage("#manager");
-            }
-            else if(app.session.user.get('is_admin'))
-            {
-                MyPOS.ChangePage("#admin");
-            }
         }
         
         render() {
@@ -83,11 +49,7 @@ function( Template ) {
                     this.$("#rememberMe").is(":checked")
                 )
                 .done(() => {
-                    if(DEBUG) console.log("Login erfolgreich");
-            
-                    app.init();
-                    
-                    this.sendToDefaultPage();
+                    if(DEBUG) console.log("Login erfolgreich");                                
                 })
                 .fail((result) => {
                     if(DEBUG) console.log("Login fehlgeschlagen!");

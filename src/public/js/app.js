@@ -52,6 +52,42 @@ function( Webservice,
 
             // Create Authentication instance
             app.auth = new Auth();
+            app.auth.on("login", () => {
+                app.ws.api.Connect();
+                app.ws.chat.Connect();
+                
+                app.optionsDialog = new OptionsDialogView({IsAdmin: app.auth.authUser.get('IsAdmin')});
+                app.messagesDialog = new MessagesDialogView();                
+                
+                $.when(app.products.fetch(),
+                       app.userList.fetch()).then(() => {
+                            var rights = app.auth.authUser.get('EventUser').get('UserRoles');
+                            var view = null;
+
+                            if(rights & USER_ROLE_ORDER_OVERVIEW)
+                            {
+                                view = "#order-overview";
+                            }
+                            else if(rights & USER_ROLE_ORDER_ADD)
+                            {
+                                view = "#order-new";
+                            }
+                            else if(rights & USER_ROLE_DISTRIBUTION)
+                            {
+                                view = "#distribution";
+                            }
+                            else if(rights & USER_ROLE_MANAGER)
+                            {
+                                view = "#manager";
+                            }
+                            else if(app.session.user.get('is_admin'))
+                            {
+                                view = "#admin";
+                            }
+
+                            Backbone.history.navigate(view, true);
+                       });                
+            });
             
             // create a products collection/model for later to fetch
             app.products = new ProductCollection();
@@ -60,26 +96,11 @@ function( Webservice,
             // Init websocket services
             app.ws = {};
             app.ws.chat = new WsChat();
-            app.ws.api = new WsAPI();
-            
-            // Function that inits connections and datas after login
-            app.init = () => {
-                app.products.fetch();
-                app.userList.fetch();
-
-                app.optionsDialog = new OptionsDialogView({IsAdmin: app.auth.authUser.get('IsAdmin')});
-                app.messagesDialog = new MessagesDialogView();
-
-                app.ws.api.Connect();
-                app.ws.chat.Connect();
-            }
+            app.ws.api = new WsAPI();            
 
             // Check the auth status upon initialization,
             // before rendering anything or matching routes
-            app.auth.checkAuth()
-                .done(() => {             
-                    app.init();
-                })
+            app.auth.checkAuth();
         })
 
         .fail(() => {
