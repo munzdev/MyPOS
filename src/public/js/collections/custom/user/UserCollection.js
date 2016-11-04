@@ -1,11 +1,10 @@
 define([
-    "models/custom/user/UserModel"
-], function(UserModel){
+    "collections/db/User/UserCollection"
+], function(DBUserCollection){
     "use strict";
     
-    return class UserCollection extends app.BaseCollection
+    return class UserCollection extends DBUserCollection
     {
-        getModel() {return UserModel}
         url() {return app.API + "User"; }
     }
 });
