@@ -80,9 +80,14 @@ function( Webservice,
                             {
                                 view = "#manager";
                             }
-                            else if(app.session.user.get('is_admin'))
+                            else if(app.auth.authUser.get('IsAdmin'))
                             {
                                 view = "#admin";
+                            }
+                            else
+                            {
+                                app.error.showAlert("Error Loading App", "There was no initial route found! Do you have any permission set?");
+                                return;
                             }
 
                             Backbone.history.navigate(view, true);
