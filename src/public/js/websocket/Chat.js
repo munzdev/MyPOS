@@ -1,89 +1,49 @@
-// Login Model
-// ----------
-
-//Includes file dependencies
-define(["wampy"], function()
-{
+define(["websocket/WebsocketClient"
+], function(WebsocketClient) {
     "use strict";
-
-    function Chat()
+    
+    return class Chat extends WebsocketClient
     {
-        _.bindAll(this, "onConnect",
-                        "_unregisterChanel");
+        constructor()
+        {
+            super("Chat");
+        }
+        
+        _registerChanel()
+        {
+            var eventUserid = app.auth.authUser.get('EventUser').get('EventUserid').toString();
+            
+            if(DEBUG) console.log("REGISTERED TO CHANEL: " + eventUserid);
 
-        var location = window.location;
+            this.ws.subscribe(eventUserid,
+                              this._messageRecieved);
+        }
+        
+        _unregisterChanel()
+        {
+            if(DEBUG) console.log("UNREGISTERED TO CHANEL: " + app.auth.authUser.get('Userid'));
 
-        this.websericeUrl = ((location.protocol === "https:") ? "wss://" : "ws://") +
-                            location.hostname +
-                            ":8080/Chat";
+            this.ws.unsubscribe(app.auth.authUser.get('EventUser').get('EventUserid'));
+        }
+        
+        _messageRecieved(data)
+        {
+            console.log("DATA RECIEVED: " + data);
 
-        this.ws = new Wampy({ maxRetries: 1000,
-                              autoReconnect: true,
-                              reconnectInterval: 2000,
-                              onConnect: this.onConnect,
-                              onClose: this.onClose,
-                              onReconnect: function () { console.log('Reconnecting...'); },
-                              onError: this._unregisterChanel});
+            var message_data = JSON.parse(data);
+
+            app.messagesDialog.addMessage(message_data.sender, message_data.message, false, false);
+        }
+        
+        Send(userid, message)
+        {
+            this.ws.publish(userid, message);
+        }
+        
+        SystemMessage(userid, message)
+        {
+            this.ws.call("systemMessage", {}, userid, message);
+        }        
     }
-
-    Chat.prototype.Connect = function()
-    {
-        this.ws.connect(this.websericeUrl);
-    }
-
-    Chat.prototype._registerChanel = function()
-    {
-        if(DEBUG) console.log("REGISTERED TO CHANEL: " + app.auth.authUser.get('EventUser').get('EventUserid'));
-
-        this.ws.subscribe(app.auth.authUser.get('EventUser').get('EventUserid'),
-                          this._messageRecieved);
-    }
-
-    Chat.prototype._unregisterChanel = function()
-    {
-        if(DEBUG) console.log("UNREGISTERED TO CHANEL: " + app.auth.authUser.get('Userid'));
-
-        this.ws.unsubscribe(app.auth.authUser.get('EventUser').get('EventUserid'));
-    }
-
-    Chat.prototype._messageRecieved = function(data)
-    {
-        console.log("DATA RECIEVED: " + data);
-
-        var message_data = JSON.parse(data);
-
-        app.messagesDialog.addMessage(message_data.sender, message_data.message, false, false);
-    }
-
-    Chat.prototype.Send = function(userid, message)
-    {
-        this.ws.publish(userid, message);
-    }
-
-    Chat.prototype.SystemMessage = function(userid, message)
-    {
-        this.ws.call("systemMessage", {}, userid, message);
-    }
-
-    Chat.prototype.Disconnect = function()
-    {
-        this._unregisterChanel();
-        this.ws.disconnect();
-    }
-
-    Chat.prototype.onConnect = function ()
-    {
-        // WAMP session established here ..
-        if(DEBUG) console.log("Chat-Verbindung hergestellt!");
-
-        this._registerChanel();
-    }
-
-    Chat.prototype.onClose = function ()
-    {
-        if(DEBUG) console.log("Chat-Verbindung getrennt!");
-    }
-
-    return Chat;
 
 } );

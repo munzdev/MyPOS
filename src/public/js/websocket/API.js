@@ -1,132 +1,81 @@
-// Login Model
-// ----------
-
-//Includes file dependencies
-define(["Webservice", "wampy"], function(Webservice)
-{
+define(["websocket/WebsocketClient", 
+        "collections/db/User/UserRoleCollection"
+], function(WebsocketClient, 
+            UserRoleCollection) {
     "use strict";
-
-    function API()
+    
+    return class API extends WebsocketClient
     {
-        _.bindAll(this, "onConnect",
-                        "_unregisterChanel");
+        constructor()
+        {
+            super("API");
+            this.rolesSubscribed = [];
+        }
+        
+        _registerChanel()
+        {
+            var userRolesCollection = new UserRoleCollection();
+            userRolesCollection.fetch()
+                    .done(() => {
+                        var userRoles = app.auth.authUser.get('EventUser').get('UserRoles');
+                        var userid = app.auth.authUser.get('Userid');
 
-        var location = window.location;
+                        userRolesCollection.each((role) => {
+                            if(userRoles & role.get('UserRoleid'))
+                            {
+                                if(DEBUG) console.log("REGISTERED TO API ROLE: " + role.get('Name'));
 
-        this.rolesSubscribed = [];
+                                var chanelName = userid + "-" + role.get('UserRoleid');
 
-        this.websericeUrl = ((location.protocol === "https:") ? "wss://" : "ws://") +
-                            location.hostname +
-                            ":8080/API";
+                                this.rolesSubscribed.push(chanelName);
 
-        this.ws = new Wampy({ maxRetries: 1000,
-                              autoReconnect: true,
-                              reconnectInterval: 2000,
-                              onConnect: this.onConnect,
-                              onClose: this.onClose,
-                              onReconnect: function () { console.log('Reconnecting...'); },
-                              onError: function () { console.log('Breakdown happened'); }});
-    }
+                                this.ws.subscribe(chanelName,
+                                                  this._commandRecieved);
+                            }
+                        });
+                    });
+        }
+        
+        _unregisterChanel()
+        {
+            _.each(this.rolesSubscribed, (chanelName) => {
+                if(DEBUG) console.log("UNREGISTERED TO API ROLE: " + chanelName);
 
-    API.prototype._registerChanel = function()
-    {
-        var self = this;
+                this.ws.unsubscribe(chanelName);
+            }); 
+        }
+        
+        _commandRecieved(data)
+        {
+            if(DEBUG) console.log("API DATA RECIEVED: " + data);
 
-        var webservice = new Webservice();
+            var commandData = JSON.parse(data);
 
-        webservice.action = "Events/GetRoles";
-        webservice.callback = {
-            success: function(roles)
+            if('apiCommandReciever' in app.router.currentView)
             {
-                var user_roles = app.session.user.get('user_roles');
-                var userid = app.session.user.get('userid');
-
-                _.each(roles, function(role) {
-                    if(user_roles & role.events_user_roleid)
-                    {
-                        if(DEBUG) console.log("REGISTERED TO API ROLE: " + role.name);
-
-                        var chanelName = userid + "-" + role.events_user_roleid;
-
-                        self.rolesSubscribed.push(chanelName);
-
-                        self.ws.subscribe(chanelName,
-                                          self._commandRecieved);
-                    }
-                });
+                app.router.currentView.apiCommandReciever(commandData.command, commandData.options);
             }
-        };
-        webservice.call();
-    }
 
-    API.prototype._unregisterChanel = function()
-    {
-        var self = this;
-
-        _.each(self.rolesSubscribed, function(chanelName) {
-            if(DEBUG) console.log("UNREGISTERED TO API ROLE: " + chanelName);
-
-            self.ws.unsubscribe(chanelName);
-        });
-
-    }
-
-    API.prototype._commandRecieved = function(data)
-    {
-        if(DEBUG) console.log("API DATA RECIEVED: " + data);
-
-        var commandData = JSON.parse(data);
-
-        if('apiCommandReciever' in app.router.currentView)
-        {
-            app.router.currentView.apiCommandReciever(commandData.command, commandData.options);
-        }
-
-        if(typeof commandData.options !== 'undefined' && commandData.options.systemMessage)
-        {
-            app.ws.chat.SystemMessage(app.session.user.get('userid'), commandData.options.systemMessage);
-        }
-
-        if(commandData.command.substring(0, 7) == 'global:')
-        {
-            var command = commandData.command.substring(7);
-
-            if(command == 'product-update')
+            if(typeof commandData.options !== 'undefined' && commandData.options.systemMessage)
             {
-                app.session.products.fetch({});
+                app.ws.chat.SystemMessage(app.auth.authUser.get('Userid'), commandData.options.systemMessage);
+            }
+
+            if(commandData.command.substring(0, 7) == 'global:')
+            {
+                var command = commandData.command.substring(7);
+
+                if(command == 'product-update')
+                {
+                    app.products.fetch({});
+                }
             }
         }
+        
+        Trigger(command, callback)
+        {
+            this.ws.call.apply(this.ws, arguments);
+        }        
     }
-
-    API.prototype.Trigger = function(command, callback)
-    {
-        this.ws.call.apply(this.ws, arguments);
-    }
-
-    API.prototype.Connect = function()
-    {
-        this.ws.connect(this.websericeUrl);
-    }
-
-    API.prototype.Disconnect = function()
-    {
-        this._unregisterChanel();
-        this.ws.disconnect();
-    }
-
-    API.prototype.onConnect = function ()
-    {
-        // WAMP session established here ..
-        if(DEBUG) console.log("API-Verbindung hergestellt!");
-
-        this._registerChanel();
-    }
-
-    API.prototype.onClose = function ()
-    {
-        if(DEBUG) console.log("API-Verbindung getrennt!");
-    }
-
-    return API;
 
 } );
