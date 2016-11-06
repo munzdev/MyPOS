@@ -47,11 +47,12 @@ require([ "I18n",
 function(I18n) {
              
     // Disabling this will prevent jQuery Mobile from handling hash changes
-    $.mobile.hashListeningEnabled = false;
-    $.mobile.ajaxEnabled = false;
-    $.mobile.pushStateEnabled = false;
-    $.mobile.changePage.defaults.changeHash = false;        
-    $.ajaxSetup({ cache: false });      // force ajax call on all browsers
+    $.mobile.hashListeningEnabled = false; // Disable hash listing as Backbone will handle changes
+    $.mobile.ajaxEnabled = false; // Dont use Ajax calls
+    $.mobile.pushStateEnabled = false; // Dont use Push State listening as this also gets handled by Backbone
+    $.mobile.changePage.defaults.changeHash = false;  // Don't change the URLS hash on link clicking. Will be done manuly by code events
+    $.mobile.autoInitializePage = false; // As no Page is in the DOM by default, don't try to init them
+    $.ajaxSetup({ cache: false });      // force ajax call on all browsers, no caching
              
     var app = window.app = {
         URL : "/",                      // Base application URL
