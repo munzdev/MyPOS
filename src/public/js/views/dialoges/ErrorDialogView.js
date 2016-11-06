@@ -13,18 +13,17 @@ function(Template ) {
         }
         
         events() {
-            return { 'click #close': 'close' }
+            return { 'click #close': 'closeDialog' }
     	}
         
-        close(evt)
+        closeDialog(evt)
         {
             evt.preventDefault();
-            $.mobile.changePage( this.$("#close").attr('href'), { transition: "flip" });
+            this.changePage( this.$("#close").attr('data-activePage'), { transition: "flip" });
         }
         
         render() {
             this.renderTemplate(Template);            
-
             return this;
         }
 
@@ -32,8 +31,8 @@ function(Template ) {
         showAlert(title, text) {
             this.$("#header").html(title);
             this.$("#content").html(text);
-            this.$("#close").attr("href", '#' + $.mobile.activePage.attr('id'));
-            $.mobile.changePage( "#" + this.id(), { transition: "flip" });
+            this.$("#close").attr("data-activePage", $.mobile.activePage.attr('id'));
+            this.changePage(this, { transition: "flip" });
         }
     }
 } );

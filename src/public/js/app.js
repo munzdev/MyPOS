@@ -15,8 +15,8 @@ define(["Webservice",
         ],
 function( Webservice,
           Auth,
-          WsChat,
-          WsAPI,
+          Chat,
+          API,
           GlobalRouter,
           AdminRouter,
           ProductCollection,
@@ -24,9 +24,6 @@ function( Webservice,
           ErrorDialogView,
           OptionsDialogView,
           MessagesDialogView) {        
-
-    // Global event aggregator
-    app.eventAggregator = _.extend({}, Backbone.Events);
             
     // Error Displaying
     app.error = new ErrorDialogView();
@@ -59,30 +56,30 @@ function( Webservice,
                 app.optionsDialog = new OptionsDialogView({IsAdmin: app.auth.authUser.get('IsAdmin')});
                 app.messagesDialog = new MessagesDialogView();                
                 
-                $.when(app.products.fetch(),
+                $.when(app.productList.fetch(),
                        app.userList.fetch()).then(() => {
                             var rights = app.auth.authUser.get('EventUser').get('UserRoles');
-                            var view = null;
+                            var hash = null;
 
                             if(rights & USER_ROLE_ORDER_OVERVIEW)
                             {
-                                view = "#order-overview";
+                                hash = "order-overview";
                             }
                             else if(rights & USER_ROLE_ORDER_ADD)
                             {
-                                view = "#order-new";
+                                hash = "order-new";
                             }
                             else if(rights & USER_ROLE_DISTRIBUTION)
                             {
-                                view = "#distribution";
+                                hash = "distribution";
                             }
                             else if(rights & USER_ROLE_MANAGER)
                             {
-                                view = "#manager";
+                                hash = "manager";
                             }
                             else if(app.auth.authUser.get('IsAdmin'))
                             {
-                                view = "#admin";
+                                hash = "admin";
                             }
                             else
                             {
@@ -90,18 +87,21 @@ function( Webservice,
                                 return;
                             }
 
-                            Backbone.history.navigate(view, true);
+                            app.AbstractView.changeHash(hash);
                        });                
+            });
+            app.auth.on("logout", () => {
+               Backbone.history.navigate(app.URL, { replace: true });
             });
             
             // create a products collection/model for later to fetch
-            app.products = new ProductCollection();
+            app.productList = new ProductCollection();
             app.userList = new UserCollection();
 
             // Init websocket services
             app.ws = {};
-            app.ws.chat = new WsChat();
-            app.ws.api = new WsAPI();            
+            app.ws.chat = new Chat();
+            app.ws.api = new API();            
 
             // Check the auth status upon initialization,
             // before rendering anything or matching routes
@@ -115,7 +115,7 @@ function( Webservice,
         .always(() => {
             // HTML5 pushState for URLs without hashbangs
             var hasPushstate = !!(window.history && history.pushState);
-            if(hasPushstate) Backbone.history.start({ pushState: true, root: '/' });
+            if(hasPushstate) Backbone.history.start({ pushState: true, root: app.URL });
             else Backbone.history.start();
         });
 } );

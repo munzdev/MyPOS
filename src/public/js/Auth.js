@@ -62,8 +62,7 @@ define([
             return this.loginData.destroy()
                 .done(() => {
                     this.logged_in = false;
-                    this.trigger("logout");
-                    this.$(location).attr('href', app.URL);
+                    this.trigger("logout");                    
                 });
         }
     }
