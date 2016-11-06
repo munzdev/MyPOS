@@ -6,7 +6,6 @@ define(function() {
     "use strict";
         
     return class AbstractView extends Backbone.View {
-        el() {return 'body';}
         id(){ return this.constructor.name; }
         
         renderTemplate(Template, Datas) {
@@ -20,13 +19,13 @@ define(function() {
             
             Datas = _.extend({}, Datas, {t: i18n,
                                          i18n: app.i18n.template});
-            
-            var div = $("<div/>").attr(_.extend({id: this.id()}, this.jqmAttributes()));
-            div.html(template(Datas));
+             
+            this.$el.attr(this.jqmAttributes());
+            this.$el.html(template(Datas));
                         
-            //append the new page onto the end of the body
-            this.$el.append(div);
-
+            //append the new page onto the end of the body                        
+            $('body').append(this.$el);
+                 
             //initialize the new page
             $.mobile.initializePage();
         }
@@ -35,8 +34,35 @@ define(function() {
             return {};
         }                
         
-        ChangePage(View) {
-            Backbone.history.navigate(View, true);
+        static changePage(Page, options) {
+            if(Page instanceof AbstractView)
+                Page = Page.id();
+            
+            $.mobile.changePage( "#" + Page, options);
         }
+        
+        changePage(Page, options) {
+            AbstractView.changePage(Page, options);
+        }
+        
+        static changeHash(Hash, options) {
+            options = _.extend({trigger: true}, options);
+            Backbone.history.navigate("#" + Hash, options);
+        }
+        
+        changeHash(Hash, options) {
+            AbstractView.changeHash(Hash, options);
+        }
+        
+        close() {
+            if(this.keepMeInDom)
+                return;
+            
+            this.remove();
+            this.unbind();
+            if (this.onClose) {
+                this.onClose();
+            }
+        };
     }
 } );
