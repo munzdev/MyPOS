@@ -921,26 +921,26 @@ abstract class Order implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(OrderTableMap::COL_ORDERID)) {
-            $modifiedColumns[':p' . $index++]  = 'orderid';
+            $modifiedColumns[':p' . $index++]  = '`orderid`';
         }
         if ($this->isColumnModified(OrderTableMap::COL_EVENT_TABLEID)) {
-            $modifiedColumns[':p' . $index++]  = 'event_tableid';
+            $modifiedColumns[':p' . $index++]  = '`event_tableid`';
         }
         if ($this->isColumnModified(OrderTableMap::COL_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'userid';
+            $modifiedColumns[':p' . $index++]  = '`userid`';
         }
         if ($this->isColumnModified(OrderTableMap::COL_ORDERTIME)) {
-            $modifiedColumns[':p' . $index++]  = 'ordertime';
+            $modifiedColumns[':p' . $index++]  = '`ordertime`';
         }
         if ($this->isColumnModified(OrderTableMap::COL_PRIORITY)) {
-            $modifiedColumns[':p' . $index++]  = 'priority';
+            $modifiedColumns[':p' . $index++]  = '`priority`';
         }
         if ($this->isColumnModified(OrderTableMap::COL_FINISHED)) {
-            $modifiedColumns[':p' . $index++]  = 'finished';
+            $modifiedColumns[':p' . $index++]  = '`finished`';
         }
 
         $sql = sprintf(
-            'INSERT INTO order (%s) VALUES (%s)',
+            'INSERT INTO `order` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -949,22 +949,22 @@ abstract class Order implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'orderid':
+                    case '`orderid`':
                         $stmt->bindValue($identifier, $this->orderid, PDO::PARAM_INT);
                         break;
-                    case 'event_tableid':
+                    case '`event_tableid`':
                         $stmt->bindValue($identifier, $this->event_tableid, PDO::PARAM_INT);
                         break;
-                    case 'userid':
+                    case '`userid`':
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'ordertime':
+                    case '`ordertime`':
                         $stmt->bindValue($identifier, $this->ordertime ? $this->ordertime->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'priority':
+                    case '`priority`':
                         $stmt->bindValue($identifier, $this->priority, PDO::PARAM_INT);
                         break;
-                    case 'finished':
+                    case '`finished`':
                         $stmt->bindValue($identifier, $this->finished ? $this->finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }

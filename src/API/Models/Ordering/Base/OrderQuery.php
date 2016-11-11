@@ -212,7 +212,7 @@ abstract class OrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT orderid, event_tableid, userid, ordertime, priority, finished FROM order WHERE orderid = :p0 AND event_tableid = :p1 AND userid = :p2';
+        $sql = 'SELECT `orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished` FROM `order` WHERE `orderid` = :p0 AND `event_tableid` = :p1 AND `userid` = :p2';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);

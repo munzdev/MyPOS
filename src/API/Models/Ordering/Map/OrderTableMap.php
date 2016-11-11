@@ -147,7 +147,7 @@ class OrderTableMap extends TableMap
         // attributes
         $this->setName('order');
         $this->setPhpName('Order');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\Ordering\\Order');
         $this->setPackage('API.Models.Ordering');
         $this->setUseIdGenerator(true);
