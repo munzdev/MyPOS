@@ -14,11 +14,15 @@
             </tr>
         </thead>
         <tbody>
+            <% console.log(orders) %>
             <% orders.each(function(order){ %>
                 <tr>
-                    <th><%- order.get('table_name') %></th>
+                    <th><%- order.get('EventTable').get('Name') %></th>
                     <td><%-  parseFloat(order.get('price')).toFixed(2) %> €</td>
                     <td>
+                        <%
+                            
+                        %>
                         <% switch(parseInt(order.get('status'))) {
                             case ORDER_STATUS_WAITING: %>
                                 in Warteschlange
@@ -32,29 +36,29 @@
                         } %>
                         -
                         <% if(order.get('open') == 0) { %>
-                            <span style="color: green;">Bezahlt</span>
+                            <span style="color: green;">Verrechnet</span>
                         <% } else { %>
-                            <span style="color: red;">Unbezahlt</span>
+                            <span style="color: red;">Unverrechnet</span>
                         <% } %>
                     </td>
                     <td>
                         <% if (order.get('button_info') ) { %>
-                           <a data-order-id="<%- order.get('orderid') %>" class="info-btn ui-btn ui-icon-info ui-mini ui-btn-icon-left">Info</a>
+                           <a data-order-id="<%- order.get('Orderid') %>" class="info-btn ui-btn ui-icon-info ui-mini ui-btn-icon-left">Info</a>
                         <% } %>
                         <% if (order.get('button_pay') ) { %>
-                           <a data-order-id="<%- order.get('orderid') %>" data-table-nr="<%- order.get('table_name') %>" class="pay-btn ui-btn ui-icon-shop ui-mini ui-btn-icon-left">Bezahlen</a>
+                           <a data-order-id="<%- order.get('Orderid') %>" data-table-nr="<%- order.get('EventTable').get('Name') %>" class="pay-btn ui-btn ui-icon-shop ui-mini ui-btn-icon-left">Bezahlen</a>
                         <% } %>
                         <% if (order.get('button_edit') ) { %>
-                           <a data-order-id="<%- order.get('orderid') %>" data-table-nr="<%- order.get('table_name') %>"  class="modify-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
+                           <a data-order-id="<%- order.get('Orderid') %>" data-table-nr="<%- order.get('EventTable').get('Name') %>"  class="modify-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
                         <% } %>
                         <% if (order.get('button_cancel') ) { %>
-                           <a data-order-id="<%- order.get('orderid') %>" class="cancel-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">Storno</a>
+                           <a data-order-id="<%- order.get('Orderid') %>" class="cancel-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">Storno</a>
                         <% } %>
                         <% if (order.get('manage') && parseInt(order.get('status')) == ORDER_STATUS_WAITING) { %>
-                            <a data-order-id="<%- order.get('orderid') %>" class="manage-priority-btn ui-btn ui-icon-alert ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">An erste stelle reihen</a>
+                            <a data-order-id="<%- order.get('Orderid') %>" class="manage-priority-btn ui-btn ui-icon-alert ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">An erste stelle reihen</a>
                         <% } %>
                         <% if (order.get('manage') ) { %>
-                           <a data-order-id="<%- order.get('orderid') %>" class="manage-price-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">Preise ändern</a>
+                           <a data-order-id="<%- order.get('Orderid') %>" class="manage-price-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window">Preise ändern</a>
                         <% } %>
                     </td>
                 </tr>

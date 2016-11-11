@@ -3,11 +3,13 @@
 // Includes File Dependencies
 define(["views/AbstractView",
         "views/PageView",
+        "views/HeaderView",
         "views/DialogView",
         "views/PopupView",
         "collections/BaseCollection"],
 function(AbstractView,
          PageView,
+         HeaderView,
          DialogView,
          PopupView,
          BaseCollection) {
@@ -15,6 +17,7 @@ function(AbstractView,
     // Define views
     app.AbstractView = AbstractView;
     app.PageView = PageView;
+    app.HeaderView = HeaderView;
     app.DialogView = DialogView;
     app.PopupView = PopupView;
     

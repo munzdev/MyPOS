@@ -3,7 +3,7 @@
 
 // Includes file dependencies
 define([ "Webservice",
-         'collections/custom/OrderOverviewCollection',
+         'collections/custom/order/OrderOverviewCollection',
          'views/headers/HeaderView',
          'text!templates/pages/order-overview.phtml'],
  function(  Webservice,
@@ -31,7 +31,9 @@ define([ "Webservice",
                 this.ordersList.fetch({data: {search: search},
                                        success: this.render});
             else
-                this.ordersList.fetch({success: this.render});
+            {
+                this.ordersList.fetch().done(this.render);
+            }
         }
         
         events() {
@@ -140,9 +142,10 @@ define([ "Webservice",
             header.activeButton = 'order-overview';
             
             this.renderTemplate(Template, {orders: this.ordersList,
-                                           header: header.render()});            
+                                           header: $("<div />").append(header.render().$el.clone()).html()});            
                                        
-            header.setElement("#" + this.title + " .nav-header");
+            header.setElement(this.$(".nav-header"));
+            this.changePage(this);
 
             return this;
         }

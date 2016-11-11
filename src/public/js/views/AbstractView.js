@@ -9,6 +9,19 @@ define(function() {
         id(){ return this.constructor.name; }
         
         renderTemplate(Template, Datas) {
+            this.renderTemplateToEl(Template, Datas);
+                        
+            //append the new page onto the end of the body                        
+            $('body').append(this.$el);
+                 
+            //initialize the new page
+            $.mobile.initializePage();
+            
+            return this;
+        }
+        
+        renderTemplateToEl(Template, Datas)
+        {
             var template = _.template(Template);
             
             var i18n = {};
@@ -22,12 +35,8 @@ define(function() {
              
             this.$el.attr(this.jqmAttributes());
             this.$el.html(template(Datas));
-                        
-            //append the new page onto the end of the body                        
-            $('body').append(this.$el);
-                 
-            //initialize the new page
-            $.mobile.initializePage();
+            
+            return this;
         }
         
         jqmAttributes() {

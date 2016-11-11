@@ -1,9 +1,10 @@
 define([
     "models/db/Event/EventTable",
     "models/db/User/User",
-    
+    //"collections/db/OIP/OrderInProgressCollection"
 ], function(EventTable,
-            User){
+            User,
+            OrderInProgressCollection){
     "use strict";
 
     return class Order extends Backbone.Model {
@@ -29,6 +30,11 @@ define([
             if('User' in response)
             {
                 response.User = new User(response.User, {parse: true});
+            }
+            
+            if('OrderInProgresses' in response)
+            {
+                //response.OrderInProgresses = new OrderInProgressCollection(response.OrderInProgresses, {parse: true});
             }
             
             return super.parse(response);

@@ -5,53 +5,49 @@
 define(['text!templates/headers/navbar.phtml'],
  function(Template ) {
     "use strict";
+    
+    return class HeaderView extends app.HeaderView
+    {
+        defaults() {
+            return {activeButton: ''}
+    	}
+        
+        events() {
+            return {"click .header-link": "clicked",
+                    "click #options": "popupOpen",
+                    "click #messages": "popupOpen"}
+        }
 
-    // Extends Backbone.View
-    var HeaderView = Backbone.View.extend( {
+        clicked(event) {
+            event.preventDefault();
 
-    	defaults: {
-            activeButton: ''
-    	},
-        events: {
-            "click .header-link": "clicked",
-            "click #navbar-header-options": "popupOpen",
-            "click #navbar-header-messages": "popupOpen"
-        },
+            var href = $(event.currentTarget).attr('href');
 
-        clicked: function(e) {
-            e.preventDefault();
+            this.ChangePage(href);
+        }
 
-            var href = $(e.currentTarget).attr('href');
-
-            MyPOS.ChangePage(href);
-        },
-
-        popupOpen: function(event)
+        popupOpen(event)
         {
             event.preventDefault();
             var href = $(event.currentTarget).attr('href');
 
             $(href).popup( "open", { positionTo: $(event.currentTarget)} );
-        },
+        }
 
         // Renders all of the Category models on the UI
-        render: function() {
-            var template =  _.template(Template)({name: app.session.user.get('firstname') + " " + app.session.user.get('lastname'),
-                                                  rights: app.session.user.get('user_roles'),
-                                                  activeButton: this.activeButton,
-                                                  unreadedMessages: app.session.messagesDialog.unreadedMessages,
-                                                  is_admin: app.session.user.get('is_admin')});
+        render() {
+            this.renderTemplate(Template, {name: app.auth.authUser.get('Firstname') + " " + app.auth.authUser.get('Lastname'),
+                                           rights: app.auth.authUser.get('EventUser').get('UserRoles'),
+                                           activeButton: this.activeButton,
+                                           unreadedMessages: app.messagesDialog.unreadedMessages,
+                                           is_admin: app.auth.authUser.get('IsAdmin')});
 
-            if($('#main-header-navbar ul li', template).length <= 1)
+            if(this.$('#navbar ul li', this.$el).length <= 1)
             {
-                template = $("<div/>").append($('#main-header-navbar', template).remove().end()).html();
+                //template = this.$("<div/>").append(this.$('#navbar', template).remove().end()).html();
             }
 
-            return template;
+            return this;
         }
-    } );
-
-    // Returns the View class
-    return HeaderView;
-
+    }
 } );
