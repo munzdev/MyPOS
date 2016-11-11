@@ -31,8 +31,8 @@ abstract class SecurityController extends Controller
         if(!isset($this->a_security[$str_method]))
             return true;        
 
-        $o_user = Auth::GetCurrentUser();
-        $i_userRoles = $o_user->getUserRoles();
+        $o_user = Auth::GetCurrentUser();        
+        $i_userRoles = $o_user->getEventUser()->getUserRoles();
         
         if($i_userRoles & $this->a_security[$str_method])
         {
