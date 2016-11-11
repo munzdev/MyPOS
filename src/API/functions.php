@@ -1,5 +1,11 @@
 <?php
 
+use Propel\Runtime\Connection\ConnectionManagerSingle;
+use Propel\Runtime\Connection\ConnectionWrapper;
+use Propel\Runtime\Connection\DebugPDO;
+use Propel\Runtime\Propel;
+use const API\DEBUG;
+
 /**
  * Original function from User comment on http://php.net/manual/de/function.str-pad.php
  * User: wes@nospamplsexample.org
@@ -28,22 +34,24 @@ function mb_str_pad($str, $pad_len, $pad_str = ' ', $dir = STR_PAD_RIGHT, $encod
 
 function registerPropelConnection($a_db)
 {
-    $o_serviceContainer = \Propel\Runtime\Propel::getServiceContainer();
+    $o_serviceContainer = Propel::getServiceContainer();
     $o_serviceContainer->checkVersion('2.0.0-dev');
     $o_serviceContainer->setAdapterClass('default', $a_db['adapter']);
-    $o_manager = new \Propel\Runtime\Connection\ConnectionManagerSingle();
-    $o_manager->setConfiguration(array (
-        'dsn' => $a_db['dsn'],
-        'user' => $a_db['user'],
-        'password' => $a_db['password'],
-        'settings' => $a_db['settings'],
-        'classname' => '\\Propel\\Runtime\\Connection\\ConnectionWrapper',
-        'model_paths' =>
-        array (
-            0 => 'src',
-            1 => 'vendor',
-        ),
-    ));
+    $o_manager = new ConnectionManagerSingle();
+    
+    $a_config = array ( 'dsn' => $a_db['dsn'],
+                        'user' => $a_db['user'],
+                        'password' => $a_db['password'],
+                        'settings' => $a_db['settings'],
+                        'classname' => (DEBUG) ? DebugPDO::class : ConnectionWrapper::class,
+                        'model_paths' =>
+                        array (
+                            0 => 'src',
+                            1 => 'vendor',
+                        ),
+                    );
+    
+    $o_manager->setConfiguration($a_config);
     $o_manager->setName('default');
     $o_serviceContainer->setConnectionManager('default', $o_manager);
     $o_serviceContainer->setDefaultDatasource('default');
