@@ -8,7 +8,7 @@ use Ratchet\Wamp\Topic;
 use Ratchet\Wamp\WampServerInterface;
 use const API\DEBUG;
 
-class WebsocketServer implements WampServerInterface {
+abstract class WebsocketServer implements WampServerInterface {
 
     /**
      * 
