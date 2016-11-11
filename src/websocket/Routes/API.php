@@ -3,15 +3,15 @@
 namespace Websocket\Routes;
 
 use Ratchet\ConnectionInterface;
-use Ratchet\Wamp\WampServerInterface;
-use MyPOS;
+use const API\USER_ROLE_DISTRIBUTION;
+use const API\USER_ROLE_MANAGER;
 
-class API implements WampServerInterface {
+class API extends WebsocketServer {
 
     private $a_subscribers = array();
-
-    public function onPublish(ConnectionInterface $o_connection, $topic, $event, array $exclude, array $eligible) {
-        $o_connection->callError($o_connection->getId(), $topic, 'Publish not supported');
+    
+    public function onPublish(ConnectionInterface $o_connection, $o_topic, $str_event, array $a_exclude, array $a_eligible) {
+        $o_connection->callError($o_connection->getId(), $o_topic, 'Publish not supported');
     }
 
     public function onCall(ConnectionInterface $o_connection, $id, $o_topic, array $params) {
@@ -20,9 +20,9 @@ class API implements WampServerInterface {
         switch($o_topic->getId())
         {
             case 'manager-callback':
-                if(isset($this->a_subscribers[MyPOS\USER_ROLE_MANAGER]))
+                if(isset($this->a_subscribers[USER_ROLE_MANAGER]))
                 {
-                    $o_target_topic = $this->a_subscribers[MyPOS\USER_ROLE_MANAGER]['topic'];
+                    $o_target_topic = $this->a_subscribers[USER_ROLE_MANAGER]['topic'];
 
                     $a_message = array('command' => $o_topic->getId(),
                                        'options' => array('systemMessage' => 'Eine Rückrufanforderung wurde hinzugefügt!'));
@@ -32,9 +32,9 @@ class API implements WampServerInterface {
                 break;
 
             case 'manager-check':
-                if(isset($this->a_subscribers[MyPOS\USER_ROLE_MANAGER]))
+                if(isset($this->a_subscribers[USER_ROLE_MANAGER]))
                 {
-                    $o_target_topic = $this->a_subscribers[MyPOS\USER_ROLE_MANAGER]['topic'];
+                    $o_target_topic = $this->a_subscribers[USER_ROLE_MANAGER]['topic'];
 
                     $a_message = array('command' => $o_topic->getId(),
                                        'options' => array('systemMessage' => 'Ein Sonderwunsch wurde hinzugefügt!'));
@@ -57,9 +57,9 @@ class API implements WampServerInterface {
                 break;
 
             case 'distribution-update':
-                if(isset($this->a_subscribers[MyPOS\USER_ROLE_DISTRIBUTION]))
+                if(isset($this->a_subscribers[USER_ROLE_DISTRIBUTION]))
                 {
-                    $o_target_topic = $this->a_subscribers[MyPOS\USER_ROLE_DISTRIBUTION]['topic'];
+                    $o_target_topic = $this->a_subscribers[USER_ROLE_DISTRIBUTION]['topic'];
 
                     $a_message = array('command' => $o_topic->getId());
 
@@ -133,20 +133,5 @@ class API implements WampServerInterface {
             if(count($this->a_subscribers[$i_user_roleid]['users']) == 0)
                 unset($this->a_subscribers[$i_user_roleid]);
         }
-    }
-
-    public function onOpen(ConnectionInterface $o_connection)
-    {
-        echo "API Connection open: $o_connection->resourceId\n";
-    }
-
-    public function onClose(ConnectionInterface $o_connection)
-    {
-        echo "API Connection closed: $o_connection->resourceId\n";
-    }
-
-    public function onError(ConnectionInterface $o_connection, \Exception $o_exception)
-    {
-        echo "API Connection error: $o_connection->resourceId -> $o_exception\n";
     }
 }

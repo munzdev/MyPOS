@@ -2,11 +2,10 @@
 
 namespace Websocket\Routes;
 
-use Ratchet\ConnectionInterface;
-use Ratchet\Wamp\WampServerInterface;
 use API\Models\User\Messages\UserMessage;
+use Ratchet\ConnectionInterface;
 
-class Chat implements WampServerInterface {
+class Chat extends WebsocketServer {
 
     private $a_subscribers = array();
 
@@ -84,20 +83,5 @@ class Chat implements WampServerInterface {
             if($this->a_subscribers[$o_topic->getId()]['amount'] == 0)
                 unset($this->a_subscribers[$o_topic->getId()]);
         }
-    }
-
-    public function onOpen(ConnectionInterface $o_connection)
-    {
-        echo "Chat Connection open: $o_connection->resourceId\n";
-    }
-
-    public function onClose(ConnectionInterface $o_connection)
-    {
-        echo "Chat Connection closed: $o_connection->resourceId\n";
-    }
-
-    public function onError(ConnectionInterface $o_connection, \Exception $o_exception)
-    {
-        echo "Chat Connection error: $o_connection->resourceId -> $o_exception\n";
     }
 }
