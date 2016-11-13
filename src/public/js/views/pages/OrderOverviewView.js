@@ -133,7 +133,7 @@ define([ "Webservice",
         }
 
         success_popup_close() {
-            Backbone.history.loadUrl();
+            this.reload();
         }
 
         // Renders all of the Category models on the UI
@@ -141,10 +141,10 @@ define([ "Webservice",
             var header = new HeaderView();
             header.activeButton = 'order-overview';
             
-            this.renderTemplate(Template, {orders: this.ordersList,
-                                           header: $("<div />").append(header.render().$el.clone()).html()});            
-                                       
-            header.setElement(this.$(".nav-header"));
+            this.registerSubview(".nav-header", header);
+            
+            this.renderTemplate(Template, {orders: this.ordersList});
+
             this.changePage(this);
 
             return this;

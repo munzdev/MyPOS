@@ -6,6 +6,13 @@ define(function() {
     "use strict";
         
     return class AbstractView extends Backbone.View {
+        constructor(options)
+        {
+            super(options);
+            
+            this.subViews = new Map();
+        }
+        
         id(){ return this.constructor.name; }
         
         renderTemplate(Template, Datas) {
@@ -20,28 +27,52 @@ define(function() {
             return this;
         }
         
+        registerSubview(target, view)
+        {
+            this.subViews.set(target, view);                   
+        }
+
         renderTemplateToEl(Template, Datas)
         {
             var template = _.template(Template);
-            
+
             var i18n = {};
             var i18nNamespace = this.id();
-            
+
             if(i18nNamespace in app.i18n.template)
                 i18n = app.i18n.template[i18nNamespace];
-            
+
             Datas = _.extend({}, Datas, {t: i18n,
                                          i18n: app.i18n.template});
-             
+
             this.$el.attr(this.jqmAttributes());
             this.$el.html(template(Datas));
-            
+
+            if(this.subViews) {
+                for (let [ target, view ] of this.subViews.entries()) {
+                    let targetContent = $("<div />").append(view.render().$el.clone()).html();
+                    let targetObject = this.$(target);
+                    targetObject.html(targetContent);
+                    view.setElement(targetObject);
+                }
+            }
+
             return this;
         }
         
         jqmAttributes() {
             return {};
         }                
+        
+        static reload()
+        {
+            Backbone.history.loadUrl();
+        }
+        
+        reload()
+        {
+            AbstractView.reload();
+        }
         
         static changePage(Page, options) {
             if(Page instanceof AbstractView)

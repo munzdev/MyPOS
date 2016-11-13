@@ -1,5 +1,5 @@
  <div data-role="content">
-    <div class="nav-header"><%= header %></div>
+    <div class="nav-header"></div>
     <div data-role="controlgroup" data-type="horizontal" data-mini="true">
         <input type="text" id="filterTable-input" data-type="search" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important">
         <button id='search-btn'>Erweiterte Suche</button>
@@ -14,7 +14,6 @@
             </tr>
         </thead>
         <tbody>
-            <% console.log(orders) %>
             <% orders.each(function(order){ %>
                 <tr>
                     <th><%- order.get('EventTable').get('Name') %></th>
