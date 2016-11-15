@@ -5,10 +5,12 @@
 define([ "Webservice",
          'collections/custom/order/OrderOverviewCollection',
          'views/headers/HeaderView',
+         'views/headers/SideMenuView',
          'text!templates/pages/order-overview.phtml'],
  function(  Webservice,
             OrderOverviewCollection,
             HeaderView,
+            SideMenuView,
             Template ) {
     "use strict";
     
@@ -139,9 +141,12 @@ define([ "Webservice",
         // Renders all of the Category models on the UI
         render() {
             var header = new HeaderView();
+            var sideMenu = new SideMenuView();
+            
             header.activeButton = 'order-overview';
             
             this.registerSubview(".nav-header", header);
+            this.registerAppendview(sideMenu);
             
             this.renderTemplate(Template, {orders: this.ordersList});
 

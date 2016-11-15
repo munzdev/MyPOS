@@ -11,6 +11,7 @@ define(function() {
             super(options);
             
             this.subViews = new Map();
+            this.appendViews = new Map();
         }
         
         id(){ return this.constructor.name; }
@@ -31,6 +32,11 @@ define(function() {
         {
             this.subViews.set(target, view);                   
         }
+        
+        registerAppendview(view, type = "begin")
+        {
+            this.appendViews.set(view, type);                   
+        }
 
         renderTemplateToEl(Template, Datas)
         {
@@ -47,13 +53,26 @@ define(function() {
 
             this.$el.attr(this.jqmAttributes());
             this.$el.html(template(Datas));
-
+            
             if(this.subViews) {
                 for (let [ target, view ] of this.subViews.entries()) {
                     let targetContent = view.render().el.outerHTML;
                     let targetObject = this.$(target);
                     targetObject.html(targetContent);
                     view.setElement(targetObject);
+                }
+            }
+
+            if(this.appendViews) {
+                for (let [ view, type ] of this.appendViews.entries()) {
+                    let targetContent = view.render().$el.html();
+                    
+                    if(type == "end")
+                        this.$el.append(targetContent)
+                    else
+                        this.$el.prepend(targetContent)
+                                        
+                    view.setElement(this.$el);
                 }
             }
 

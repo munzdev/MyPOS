@@ -1,21 +1,8 @@
+<div class="ui-btn-left">
+    <a href="#" data-role="button" id='menu' data-icon="bullets" data-iconpos="notext" class="side-menu-open" style="margin-top: .2em;"></a>
+</div>
 <h1 data-user="fullname"><%- name %></h1>
 <div class="ui-btn-right">
     <a href="#messages-dialog" data-role="button" id='messages' data-icon="comment" class='navbar-header-messages-counter'><%- unreadedMessages %></a>
     <a href="#options-dialog" data-role="button" id='options' data-icon="gear" data-iconpos="notext"></a>
-</div>
-<div data-role="navbar" id="navbar">
-    <ul>
-        <% if(rights & USER_ROLE_ORDER_ADD) { %>
-            <li><a href="#order-new" class="header-link<% if(activeButton == 'order-new') { %> ui-btn-active<% } %>" data-icon="plus" data-transition="none">Neu</a></li>
-        <% } %>
-        <% if(rights & USER_ROLE_ORDER_OVERVIEW) { %>
-            <li><a href="#order-overview" class="header-link<% if(activeButton == 'order-overview') { %> ui-btn-active<% } %>"  data-icon="grid" data-transition="none">Bestellungen</a></li>
-        <% } %>
-        <% if(rights & USER_ROLE_DISTRIBUTION) { %>
-            <li><a href="#distribution" class="header-link <% if(activeButton == 'distribution') { %> ui-btn-active<% } %>"  data-icon="star" data-transition="none">Ausgabe</a></li>
-        <% } %>
-        <% if(rights & USER_ROLE_MANAGER) { %>
-            <li><a href="#manager" class="header-link <% if(activeButton == 'manager') { %> ui-btn-active<% } %>"  data-icon="eye" data-transition="none">Manager</a></li>
-        <% } %>
-    </ul>
 </div>
