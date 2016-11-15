@@ -2,18 +2,53 @@
 // =============
 
 // Includes file dependencies
-define(['text!templates/headers/side-menu.phtml'],
- function(Template ) {
+define(['text!templates/headers/side-menu.phtml',
+        'Webservice'],
+ function(Template,
+          Webservice) {
     "use strict";
     
     return class SideMenuView extends app.HeaderView
     {
         initialize(options) {
-            _.bindAll(this, "swiperight");
+            _.bindAll(this, "swiperight",
+                            "clicked");
         }
         
+        defaults() {
+            return {activeButton: ''}
+    	}
+        
         events() {
-            return {"swiperight": "swiperight"}
+            return {"swiperight": "swiperight",
+                    "click #callRequest": "callRequest",
+                    "click #logout": "logout",
+                    "click .header-link": "clicked"}
+        }
+        
+        clicked(event) {
+            event.preventDefault();
+
+            var href = $(event.currentTarget).attr('href');
+
+            this.ChangePage(href);
+        }
+        
+        
+        callRequest()
+        {
+            var webservice = new Webservice();
+            webservice.action = "Users/CallRequest";
+            webservice.call().done(() => {
+                $( "#side-menu" ).panel( "close")
+                app.ws.api.Trigger("manager-callback");
+                app.error.showAlert("Rückruf wurde erfolgreich angefordert!");
+            });
+        }
+        
+        logout()
+        {
+            app.auth.logout();
         }
         
         setElement(element) {            
@@ -28,7 +63,10 @@ define(['text!templates/headers/side-menu.phtml'],
 
         // Renders all of the Category models on the UI
         render() {
-            this.renderTemplate(Template);
+            this.renderTemplate(Template, {activeButton: this.activeButton,
+                                           rights: app.auth.authUser.get('EventUser').get('UserRoles'),
+                                           unreadedMessages: app.messagesDialog.unreadedMessages,
+                                           isAdmin: app.auth.authUser.get('IsAdmin')});
             return this;
         }
     }

@@ -1,10 +1,25 @@
 <div data-role="panel" data-display="overlay" id="side-menu" data-position="left">
-        <ul data-role="listview" data-icon="false">
-            <li data-role="list-divider">Menü</li>
-            <li><a id="new">Neu</a></li>
-            <li><a>Bestellungen</a></li>
-            <li><a>Rechnungen</a></li>
-            <li><a>Ausgabe</a></li>
-            <li><a>Manager</a></li>
-        </ul>
+    <ul data-role="listview">
+        <li data-role="list-divider">Menü</li>
+        <% if(rights & USER_ROLE_ORDER_ADD) { %>
+            <li><a href="#order-new" class="header-link ui-btn ui-btn-icon-left ui-icon-plus">Neu</a></li>
+        <% } %>
+        <% if(rights & USER_ROLE_ORDER_OVERVIEW) { %>
+            <li><a href="#order-overview" class="header-link ui-btn ui-btn-icon-left ui-icon-grid">Bestellungen</a></li>
+        <% } %>
+        <% if(rights & USER_ROLE_INVOICE) { %>
+            <li><a href="#invoice" class="header-link ui-btn ui-btn-icon-left ui-icon-money">Rechnungen</a></li>
+        <% } %>
+        <% if(rights & USER_ROLE_DISTRIBUTION) { %>
+            <li><a href="#distribution" class="header-link ui-btn ui-btn-icon-left ui-icon-star">Ausgabe</a></li>
+        <% } %>
+        <% if(rights & USER_ROLE_MANAGER) { %>
+            <li><a href="#manager" class="header-link ui-btn ui-btn-icon-left ui-icon-eye">Manager</a></li>
+        <% } %>
+        <% if(isAdmin) { %>
+            <li><a href="#admin" class="header-link ui-btn ui-btn-icon-left ui-icon-cloud">Admin</a></li>    
+        <% } %>
+        <li><a id="callRequest" class="ui-btn ui-btn-icon-left ui-icon-phone">Rückruf anfordern</a></li>
+        <li><a id="logout" class="ui-btn ui-btn-icon-left ui-icon-power">Logout</a></li>
+    </div> 
 </div>

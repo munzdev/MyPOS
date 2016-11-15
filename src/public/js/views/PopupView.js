@@ -15,6 +15,7 @@ function( AbstractView ) {
         renderTemplate(Template, Datas) {
             $( "body" ).one( "pagecontainershow", ( event, ui ) => {
                 this.$el.removeAttr('style');
+                this.$el.popup().enhanceWithin();
             } );
 
             super.renderTemplate(Template, Datas);            

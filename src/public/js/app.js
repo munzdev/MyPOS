@@ -9,8 +9,7 @@ define(["Webservice",
         "routers/AdminRouter",          
         "collections/custom/product/ProductCollection",
         "collections/custom/user/UserCollection",
-        "views/dialoges/ErrorDialogView",          
-        "views/dialoges/OptionsDialogView",
+        "views/dialoges/ErrorDialogView",      
         "views/dialoges/MessagesDialogView"
         ],
 function( Webservice,
@@ -22,7 +21,6 @@ function( Webservice,
           ProductCollection,
           UserCollection,
           ErrorDialogView,
-          OptionsDialogView,
           MessagesDialogView) {        
               
     function initApp()
@@ -67,7 +65,6 @@ function( Webservice,
                 app.ws.api.Connect();
                 app.ws.chat.Connect();
                 
-                app.optionsDialog = new OptionsDialogView({IsAdmin: app.auth.authUser.get('IsAdmin')});
                 app.messagesDialog = new MessagesDialogView();                
                 
                 $.when(app.productList.fetch(),
