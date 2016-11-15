@@ -24,6 +24,20 @@ function( Webservice,
           ErrorDialogView,
           OptionsDialogView,
           MessagesDialogView) {        
+              
+    function initApp()
+    {
+        let success;
+        
+        // HTML5 pushState for URLs without hashbangs        
+        var hasPushstate = !!(window.history && history.pushState);
+        if(hasPushstate) success = Backbone.history.start({ pushState: true, root: app.URL });
+        else success = Backbone.history.start();
+        
+        // if given url was not matched to a route, forward to base page
+        if(!success)
+            window.location.href = app.URL;
+    }
             
     // Error Displaying
     app.error = new ErrorDialogView();
@@ -58,6 +72,10 @@ function( Webservice,
                 
                 $.when(app.productList.fetch(),
                        app.userList.fetch()).then(() => {
+                            var fragment = Backbone.history.getFragment();
+                            
+                            if(fragment != "") return;
+                           
                             var rights = app.auth.authUser.get('EventUser').get('UserRoles');
                             var hash = null;
 
@@ -86,8 +104,8 @@ function( Webservice,
                                 app.error.showAlert("Error Loading App", "There was no initial route found! Do you have any permission set?");
                                 return;
                             }
-
-                            app.AbstractView.changeHash(hash);
+                            
+                            window.location.href = app.URL + hash;
                        });                
             });
             app.auth.on("logout", () => {
@@ -105,17 +123,18 @@ function( Webservice,
 
             // Check the auth status upon initialization,
             // before rendering anything or matching routes
-            app.auth.checkAuth();
+            app.auth.checkAuth()
+                    .fail(() => {
+                        initApp();
+                        var fragment = Backbone.history.getFragment();
+                        if(fragment != "")
+                            window.location.href = app.URL;
+                    })
+                    .done(initApp);
         })
 
         .fail(() => {
             app.error.showAlert("Error Loading App", "Please reload the App!");
+            initApp();
         })
-        
-        .always(() => {
-            // HTML5 pushState for URLs without hashbangs
-            var hasPushstate = !!(window.history && history.pushState);
-            if(hasPushstate) Backbone.history.start({ pushState: true, root: app.URL });
-            else Backbone.history.start();
-        });
 } );
