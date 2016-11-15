@@ -8,7 +8,17 @@ function( AbstractView ) {
     
     return class PopupView extends AbstractView {        
         jqmAttributes() {
-            return {'data-role': 'popup'};
+            return {'data-role': 'popup',
+                    'style': 'visibility: hidden'};
         }       
+        
+        renderTemplate(Template, Datas) {
+            $( "body" ).one( "pagecontainershow", ( event, ui ) => {
+                this.$el.removeAttr('style');
+            } );
+
+            super.renderTemplate(Template, Datas);            
+        }
+        
     }
 } );
