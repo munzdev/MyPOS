@@ -50,7 +50,7 @@ define(function() {
 
             if(this.subViews) {
                 for (let [ target, view ] of this.subViews.entries()) {
-                    let targetContent = $("<div />").append(view.render().$el.clone()).html();
+                    let targetContent = view.render().el.outerHTML;
                     let targetObject = this.$(target);
                     targetObject.html(targetContent);
                     view.setElement(targetObject);
