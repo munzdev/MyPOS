@@ -7,6 +7,7 @@ INSERT INTO `user_role` (`user_roleid`, `name`) VALUES (2, 'Bestellung Übersich
 INSERT INTO `user_role` (`user_roleid`, `name`) VALUES (4, 'Ausgabe');
 INSERT INTO `user_role` (`user_roleid`, `name`) VALUES (8, 'Ausgabe Vorschau');
 INSERT INTO `user_role` (`user_roleid`, `name`) VALUES (16, 'Bestellung hinzufügen');
+INSERT INTO `user_role` (`user_roleid`, `name`) VALUES (32, 'Rechnung');
 
 COMMIT;
 
