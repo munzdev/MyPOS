@@ -5,23 +5,23 @@ define(["Webservice",
         "Auth",
         "websocket/Chat",
         "websocket/API",
-        "routers/GlobalRouter",
-        "routers/AdminRouter",          
+        "routers/Router",
         "collections/custom/product/ProductCollection",
         "collections/custom/user/UserCollection",
         "views/dialoges/ErrorDialogView",      
-        "views/dialoges/MessagesDialogView"
+        "views/dialoges/MessagesDialogView",
+        "views/helpers/SideMenuView"
         ],
 function( Webservice,
           Auth,
           Chat,
           API,
-          GlobalRouter,
-          AdminRouter,
+          Router,
           ProductCollection,
           UserCollection,
           ErrorDialogView,
-          MessagesDialogView) {        
+          MessagesDialogView,
+          SideMenuView) {        
               
     function initApp()
     {
@@ -55,9 +55,7 @@ function( Webservice,
             });  
 
             // Instantiates a new Backbone.js Mobile Router
-            app.routers = {};
-            app.routers.global = new GlobalRouter();
-            app.routers.admin = new AdminRouter();           
+            app.router = new Router();          
 
             // Create Authentication instance
             app.auth = new Auth();
@@ -66,12 +64,13 @@ function( Webservice,
                 app.ws.chat.Connect();
                 
                 app.messagesDialog = new MessagesDialogView();                
+                app.sideMenu = new SideMenuView();
                 
                 $.when(app.productList.fetch(),
                        app.userList.fetch()).then(() => {
                             var fragment = Backbone.history.getFragment();
                             
-                            if(fragment != "") return;
+                            if(fragment != "") return;                            
                            
                             var rights = app.auth.authUser.get('EventUser').get('UserRoles');
                             var hash = null;
@@ -91,6 +90,10 @@ function( Webservice,
                             else if(rights & USER_ROLE_MANAGER)
                             {
                                 hash = "manager";
+                            }
+                            else if(rights & USER_ROLE_INVOICE)
+                            {
+                                hash = "invoice";
                             }
                             else if(app.auth.authUser.get('IsAdmin'))
                             {

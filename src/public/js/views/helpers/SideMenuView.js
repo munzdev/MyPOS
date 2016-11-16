@@ -2,17 +2,19 @@
 // =============
 
 // Includes file dependencies
-define(['text!templates/headers/side-menu.phtml',
+define(['text!templates/helpers/side-menu.phtml',
         'Webservice'],
  function(Template,
           Webservice) {
     "use strict";
     
-    return class SideMenuView extends app.HeaderView
+    return class SideMenuView extends app.PanelView
     {
         initialize(options) {
-            _.bindAll(this, "swiperight",
+            _.bindAll(this, "open",
                             "clicked");
+                            
+            this.render();
         }
         
         defaults() {
@@ -20,8 +22,7 @@ define(['text!templates/headers/side-menu.phtml',
     	}
         
         events() {
-            return {"swiperight": "swiperight",
-                    "click #callRequest": "callRequest",
+            return {"click #callRequest": "callRequest",
                     "click #logout": "logout",
                     "click .header-link": "clicked"}
         }
@@ -31,16 +32,15 @@ define(['text!templates/headers/side-menu.phtml',
 
             var href = $(event.currentTarget).attr('href');
 
-            this.ChangePage(href);
-        }
-        
+            this.changeHash(href);
+        }        
         
         callRequest()
         {
             var webservice = new Webservice();
             webservice.action = "Users/CallRequest";
             webservice.call().done(() => {
-                $( "#side-menu" ).panel( "close")
+                this.$el.panel("close");
                 app.ws.api.Trigger("manager-callback");
                 app.error.showAlert("Rückruf wurde erfolgreich angefordert!");
             });
@@ -50,15 +50,9 @@ define(['text!templates/headers/side-menu.phtml',
         {
             app.auth.logout();
         }
-        
-        setElement(element) {            
-            super.setElement(element);           
-            if(element instanceof $ == false) return;            
-            element.find('.side-menu-open').click(this.swiperight);
-        }
 
-        swiperight() {
-            this.$( "#side-menu" ).panel( "open");
+        open() {
+            this.$el.panel( "open");
         }
 
         // Renders all of the Category models on the UI

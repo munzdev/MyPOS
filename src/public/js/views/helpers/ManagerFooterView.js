@@ -2,7 +2,7 @@
 // =============
 
 // Includes file dependencies
-define(['text!templates/footers/manager-footer.phtml'],
+define(['text!templates/helpers/manager-footer.phtml'],
  function(Template ) {
     "use strict";
 

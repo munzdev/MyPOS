@@ -6,12 +6,14 @@ define(["views/AbstractView",
         "views/HeaderView",
         "views/DialogView",
         "views/PopupView",
+        "views/PanelView",
         "collections/BaseCollection"],
 function(AbstractView,
          PageView,
          HeaderView,
          DialogView,
          PopupView,
+         PanelView,
          BaseCollection) {
 
     // Define views
@@ -20,6 +22,7 @@ function(AbstractView,
     app.HeaderView = HeaderView;
     app.DialogView = DialogView;
     app.PopupView = PopupView;
+    app.PanelView = PanelView;
     
     // Define collections
     app.BaseCollection = BaseCollection;

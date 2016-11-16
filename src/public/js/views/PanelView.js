@@ -6,15 +6,16 @@ define([ "views/AbstractView"],
 function( AbstractView ) {
     "use strict";
     
-    return class PopupView extends AbstractView {        
+    return class PanelView extends AbstractView {        
         jqmAttributes() {
-            return {'data-role': 'popup',
+            return {'data-role': 'panel',
+                    'data-display': 'overlay',
                     'data-theme': 'a'};
         }       
         
         renderTemplate(Template, Datas) {
             super.renderTemplate(Template, Datas);            
-            this.$el.popup().enhanceWithin();
+            this.$el.panel().enhanceWithin();
         }
         
     }

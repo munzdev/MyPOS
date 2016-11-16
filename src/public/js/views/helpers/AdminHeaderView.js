@@ -2,7 +2,7 @@
 // =============
 
 // Includes file dependencies
-define(['text!templates/headers/admin.navbar.phtml'],
+define(['text!templates/helpers/admin.navbar.phtml'],
  function(Template ) {
     "use strict";
 

@@ -106,7 +106,8 @@ define(function() {
         
         static changeHash(Hash, options) {
             options = _.extend({trigger: true}, options);
-            Backbone.history.navigate("#" + Hash, options);
+            if(Hash[0] != '#') Hash = '#' + Hash;            
+            Backbone.history.navigate(Hash, options);
         }
         
         changeHash(Hash, options) {
