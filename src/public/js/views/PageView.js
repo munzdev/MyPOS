@@ -16,7 +16,7 @@ function( AbstractView ) {
             
             // Verify global menu swipe is available on page
             this.$el.on("swiperight", app.sideMenu.open);
-            this.$el.on('click .side-menu-open', app.sideMenu.open);
+            this.$('.side-menu-open').click(app.sideMenu.open);
         }
         
         close() {
