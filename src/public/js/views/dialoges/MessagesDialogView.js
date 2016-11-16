@@ -13,18 +13,17 @@ function(Webservice,
     return class MessagesDialogView extends app.PopupView
     {
         events() {
-            return {'click #messages-dialog-send': 'sendMessage',
-                    'click #messages-dialog-select-add': 'clickAddChat',
-                    'change #messages-dialog-select-add': 'clickAddChatOption',
+            return {'click #send': 'sendMessage',
+                    'click #select-add': 'clickAddChat',
+                    'change #select-add': 'clickAddChatOption',
                     'popupafteropen': 'popupafteropen',
                     'popupafterclose': 'popupafterclose',
-                    'change #messages-dialog-open-chats': 'switchChanel',
-                    'keyup #messages-dialog-message': 'onMessageInputKeyup'}
+                    'change #open-chats': 'switchChanel',
+                    'keyup #message': 'onMessageInputKeyup'}
         }
 
         // The View Constructor
-        initialize()
-        {
+        initialize() {
             _.bindAll(this, "sendMessage",
                             "createOldMessages",
                             "checkMessagesStatus");
@@ -40,15 +39,12 @@ function(Webservice,
 
             this.unreadedMessages = 0;
 
-            var self = this;
-
-            $('body').pagecontainer({change: self.checkMessagesStatus});
+            $('body').pagecontainer({change: this.checkMessagesStatus});
 
             this.render();
         }
 
-        onMessageInputKeyup(event)
-        {
+        onMessageInputKeyup(event) {
             if(event.key == 'Enter'){
                 event.preventDefault();
                 this.sendMessage();
@@ -56,25 +52,16 @@ function(Webservice,
             }
         }
 
-        fetchOldMessages()
-        {
-            var self = this;
-
+        fetchOldMessages() {
             var webservice = new Webservice();
             webservice.action = "Users_Messages/GetUsersMessages";
-            webservice.callback = {
-                success: self.createOldMessages
-            };
-            webservice.call();
+            webservice.call().done(this.createOldMessages);
         }
 
-        createOldMessages(result)
-        {
-            var self = this;
+        createOldMessages(result) {
+            var myId = app.auth.authUser.get('EventUser').get('EventUserid');
 
-            var myId = app.session.user.get('events_userid');
-
-            _.each(result, function(message) {
+            _.each(result, (message) => {
                 var isMe = message.from_events_userid == myId;
 
                 var channel;
@@ -92,16 +79,15 @@ function(Webservice,
                     channel = message.from_events_userid;
                 }
 
-                self.addMessage(channel, message.message, message.readed, isMe, message.date);
+                this.addMessage(channel, message.message, message.readed, isMe, message.date);
             });
         }
 
-        popupafteropen()
-        {
+        popupafteropen() {
             if(!this.userListInited)
             {
-                app.session.userList.each(function(user) {
-                    $('#messages-dialog-select-add').append("<option value='" + user.get('events_userid') + "'>" + user.get('firstname') + " " + user.get('lastname')  + "</option>");
+                app.userList.each((user) => {
+                    this.$('#select-add').append("<option value='" + user.get('EventUser').get('EventUserid') + "'>" + user.get('Firstname') + " " + user.get('Lastname')  + "</option>");
                 })
                 this.userListInited = true;
             }
@@ -110,22 +96,20 @@ function(Webservice,
             this._updateChatText();
         }
 
-        popupafterclose()
-        {
+        popupafterclose() {
             this.isOpen = false;
         }
 
-        sendMessage()
-        {
-            var message = $('#messages-dialog-message').val().trim();
-            $('#messages-dialog-message').val('');
+        sendMessage() {
+            var message = this.$('#message').val().trim();
+            this.$('#message').val('');
 
             if(message == '')
                 return;
 
             if(this.currentChatChannel == '')
             {
-                MyPOS.DisplayError("Es kann keine Nachricht an den Systembenutzer gesendet werden!");
+                app.error.showAlert("Es kann keine Nachricht an den Systembenutzer gesendet werden!");
                 return;
             }
 
@@ -134,15 +118,13 @@ function(Webservice,
             this.addMessage(this.currentChatChannel, message, true, true);
         }
 
-        clickAddChat(event)
-        {
-            $(event.currentTarget).find("option[value='']").hide();
+        clickAddChat(event) {
+            this.$(event.currentTarget).find("option[value='']").hide();
         }
 
-        clickAddChatOption(event)
-        {
-            var target = $(event.currentTarget);
-            var openChats = $('#messages-dialog-open-chats');
+        clickAddChatOption(event) {
+            var target = this.$(event.currentTarget);
+            var openChats = this.$('#open-chats');
 
             this._verifyChanelExists(target.val());
 
@@ -153,34 +135,31 @@ function(Webservice,
             target.val('').selectmenu('refresh');
         }
 
-        switchChanel(event)
-        {
-            var openChats = $(event.currentTarget);
+        switchChanel(event) {
+            var openChats = this.$(event.currentTarget);
 
             this.currentChatChannel = openChats.val();
 
             this._updateChatText();
         }
 
-        _verifyChanelExists(events_userid)
-        {
-            var openChats = $('#messages-dialog-open-chats');
+        _verifyChanelExists(eventUserid) {
+            var openChats = this.$('#open-chats');
 
-            if(openChats.find("option[value='" + events_userid + "']").length == 0)
+            if(openChats.find("option[value='" + eventUserid + "']").length == 0)
             {
-                var user = app.session.userList.findWhere({events_userid: events_userid});
+                var user = app.userList.find((user) => {return user.get('EventUser').get('EventUserid') == eventUserid});
 
-                openChats.append("<option value='" + events_userid + "'>" + user.get('firstname') + " " + user.get('lastname')  + "</option>");
+                openChats.append("<option value='" + eventUserid + "'>" + user.get('Firstname') + " " + user.get('Lastname')  + "</option>");
 
-                this.messages[events_userid] = "";
+                this.messages[eventUserid] = "";
             }
         }
 
-        _setChanelUnreaded(channel, amount)
-        {
+        _setChanelUnreaded(channel, amount) {
             this._verifyChanelExists(channel);
 
-            var option = $("#messages-dialog-open-chats option[value='" +  channel + "']");
+            var option = this.$("#open-chats option[value='" +  channel + "']");
             if(amount == 0)
             {
                 option.html(option.attr('data-orginaltext'));
@@ -200,12 +179,11 @@ function(Webservice,
             }
         }
 
-        _updateChatText()
-        {
+        _updateChatText() {
             if(!this.isOpen)
                 return;
 
-            var textarea = $('#messages-dialog-textarea');
+            var textarea = this.$('#textarea');
             textarea.html(this.messages[this.currentChatChannel]);
 
             var webservice = new Webservice();
@@ -232,8 +210,7 @@ function(Webservice,
                 textarea.scrollTop(textarea[0].scrollHeight - textarea.height());
         }
 
-        checkMessagesStatus()
-        {
+        checkMessagesStatus() {
             var self = this;
 
             $('.navbar-header-messages-counter').each(function() {
@@ -261,8 +238,7 @@ function(Webservice,
             return setInterval(blink, 1500);
         }
 
-        addMessage(channel, message, readed, self, sendedDate)
-        {
+        addMessage(channel, message, readed, self, sendedDate) {
             if(message == '')
                 return;
 
@@ -278,12 +254,12 @@ function(Webservice,
             }
             else if(self)
             {
-                user = app.session.user;
+                user = app.auth.authUser;
                 color = 'green';
             }
             else
             {
-                user = app.session.userList.findWhere({events_userid: channel});
+                user = app.userList.find((user) => {return user.get('EventUser').get('EventUserid') == channel});
                 color = 'red';
             }
 
@@ -308,7 +284,7 @@ function(Webservice,
             if(sendedDate) date = sendedDate;
 
             if(user)
-                username = user.get('firstname') + " " + user.get('lastname');
+                username = user.get('Firstname') + " " + user.get('Lastname');
 
             var time = $.format.date(date, "HH:mm:ss");
 
