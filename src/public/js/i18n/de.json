@@ -1,8 +1,34 @@
 {
+    "currency": "€",
     "LoginView": {
         "username": "Benutzername",
         "password": "Passwort",
         "rememberMe": "Login merken",
         "submit": "Login"
+    },
+    "OrderOverviewView": {
+        "waiting": "in Warteschlange",
+        "inProgress": "in Bearbeitung",
+        "finished": "Fertig",
+        "billed": "Verrechnet",
+        "unbilled": "Unverrechnet",
+        "table": "Tisch",
+        "sum": "Summe",
+        "status": "Status",
+        "options": "Optionen",
+        "advancedSearch": "Erweiterte Suche",
+        "info": "Info",
+        "createInvoice": "Rechnung erstellen",
+        "edit": "Bearbeiten",
+        "cancel": "Storno",
+        "priority": "An erste Stelle reihen",
+        "editPrice": "Preise ändern",
+        "abort": "Abbrechen",
+        "continue": "Fortfahren",
+        "cancellationSuccessful": "Storno erfolgreich",
+        "changePriority": "Priorität ändern",
+        "changePriorityText": "Sind sie sicher das die Bestellung vorgereit werden soll",
+        "cancelOrder": "Bestellung stornieren",
+        "cancelOrderText": "Sind sie sicher das die Bestellung storniert werden soll"
     }
 }

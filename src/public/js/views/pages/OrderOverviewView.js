@@ -53,9 +53,11 @@ define([ "Webservice",
         cancel_order_popup(event) {
             this.cancelOrderId = $(event.currentTarget).attr('data-order-id');
             this.dialogMode = 'cancel';
+            
+            let i18n = this.i18n();
 
-            $('#dialog-title').text("Bestellung stornieren?");
-            $('#dialog-text').text("Sind sie sicher das die Bestellung storniert werden soll?");
+            $('#dialog-title').text(i18n.cancelOrder + '?');
+            $('#dialog-text').text(i18n.cancelOrderText + '?');
             $('#dialog').popup('open');
         }
         
@@ -85,51 +87,48 @@ define([ "Webservice",
             var orderid = $(event.currentTarget).attr('data-order-id');
             var tableNr = $(event.currentTarget).attr('data-table-nr');
 
-            this.ChangePage("#order-pay/id/" + orderid + "/tableNr/" + tableNr);
+            this.changeHash("order-pay/id/" + orderid + "/tableNr/" + tableNr);
         }
 
         click_btn_modify(event) {
             var orderid = $(event.currentTarget).attr('data-order-id');
             var tableNr = $(event.currentTarget).attr('data-table-nr');
 
-            this.ChangePage("#order-modify/id/" + orderid + "/tableNr/" + tableNr);
+            this.changeHash("order-modify/id/" + orderid + "/tableNr/" + tableNr);
         }
 
         click_btn_info(event) {
             var orderid = $(event.currentTarget).attr('data-order-id');
 
-            this.ChangePage("#order-info/id/" + orderid);
+            this.changeHash("order-info/id/" + orderid);
         }
 
         click_btn_priority(event) {
             this.priorityOrderId = $(event.currentTarget).attr('data-order-id');
             this.dialogMode = 'priority';
+            
+            let i18n = this.i18n();
 
-            $('#dialog-title').text("Priorität ändern?");
-            $('#dialog-text').text("Sind sie sicher das die Bestellung vorgereit werden soll?");
+            $('#dialog-title').text(i18n.changePriority + "?");
+            $('#dialog-text').text(i18n.changePriorityText + "?");
             $('#dialog').popup('open');
         }
 
         click_btn_price(event) {
             var orderid = $(event.currentTarget).attr('data-order-id');
 
-            this.ChangePage("#order-modify-price/orderid/" + orderid );
+            this.changeHash("order-modify-price/orderid/" + orderid);
         }
 
         set_priority() {
             var webservice = new Webservice();
             webservice.action = "Manager/SetPriority";
             webservice.formData = {orderid: this.priorityOrderId};
-            webservice.callback = {
-                success: function() {
-                    MyPOS.ReloadPage();
-                }
-            };
-            webservice.call();
+            webservice.call().done(this.reload);
         }
 
         click_btn_search() {
-            this.ChangePage("#" + this.title + "/search/");
+            this.changeHash(Backbone.history.getFragment() + "/search/");
         }
 
         success_popup_close() {
@@ -141,7 +140,8 @@ define([ "Webservice",
             var header = new HeaderView();
             this.registerSubview(".nav-header", header);
             
-            this.renderTemplate(Template, {orders: this.ordersList});
+            this.renderTemplate(Template, {orders: this.ordersList,
+                                           userRoles: app.auth.authUser.get('EventUser').get('UserRoles')});
 
             this.changePage(this);
 

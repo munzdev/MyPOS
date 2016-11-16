@@ -78,7 +78,6 @@ class Order extends SecurityController
                 ->condition("oip", OrderInProgressTableMap::COL_DONE . ModelCriteria::ISNULL)
                 ->having(array("open", "oip"), ModelCriteria::LOGICAL_OR )
                 ->orderByPriority()                    
-                ->setFormatter(ModelCriteria::FORMAT_ARRAY)
                 ->find();
         
         $this->o_response->withJson($o_order->toArray());

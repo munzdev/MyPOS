@@ -1,8 +1,34 @@
 {
+    "currency": "$",
     "LoginView": {
         "username": "Username",
         "password": "Password",
         "rememberMe": "Remember me",
         "submit": "Login"
+    },
+    "OrderOverviewView": {
+        "waiting": "Waiting",
+        "inProgress": "in Progress",
+        "finished": "Finished",
+        "billed": "Billed",
+        "unbilled": "Unbilled",
+        "table": "Table",
+        "sum": "Sum",
+        "status": "Status",
+        "options": "Options",
+        "advancedSearch": "Advanced Search",
+        "info": "Info",
+        "createInvoice": "Create Invoice",
+        "edit": "Edit",
+        "cancel": "Cancel",
+        "priority": "Set Priority 1",
+        "editPrice": "Edit Price",
+        "abort": "Abort",
+        "continue": "Continue",
+        "cancellationSuccessful": "Cancellation successful",
+        "changePriority": "Change Priority",
+        "changePriorityText": "Are you sure to move this Order to Prioritys first place",
+        "cancelOrder": "Cancel Order",
+        "cancelOrderText": "Are you sure to cancel the selected order"
     }
 }

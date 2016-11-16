@@ -37,18 +37,23 @@ define(function() {
         {
             this.appendViews.set(view, type);                   
         }
-
-        renderTemplateToEl(Template, Datas)
+        
+        i18n()
         {
-            var template = _.template(Template);
-
             var i18n = {};
             var i18nNamespace = this.id();
 
             if(i18nNamespace in app.i18n.template)
                 i18n = app.i18n.template[i18nNamespace];
+            
+            return i18n;
+        }
 
-            Datas = _.extend({}, Datas, {t: i18n,
+        renderTemplateToEl(Template, Datas)
+        {
+            var template = _.template(Template);
+
+            Datas = _.extend({}, Datas, {t: this.i18n(),
                                          i18n: app.i18n.template});
 
             this.$el.attr(this.jqmAttributes());
