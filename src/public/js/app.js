@@ -107,7 +107,7 @@ function( Webservice,
                             }
                             else
                             {
-                                app.error.showAlert("Error Loading App", "There was no initial route found! Do you have any permission set?");
+                                app.error.showAlert(app.i18n.template.errorLoadingApp, app.i18n.template.errorLoadingAppRouteText);
                                 return;
                             }
                             
@@ -139,7 +139,7 @@ function( Webservice,
         })
 
         .fail(() => {
-            app.error.showAlert("Error Loading App", "Please reload the App!");
+            app.error.showAlert(app.i18n.template.errorLoadingApp, app.i18n.template.errorLoadingAppText);
             initApp();
         })
 } );
