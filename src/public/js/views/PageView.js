@@ -19,7 +19,7 @@ function( AbstractView ) {
             this.$('.side-menu-open').click(app.sideMenu.open);
         }
         
-        close() {
+        onClose() {
             this.$el.off();
         }
     }
