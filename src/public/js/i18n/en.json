@@ -1,4 +1,7 @@
 {
+    "errorLoadingApp": "Error Loading App",
+    "errorLoadingAppRouteText": "There was no initial route found! Do you have any permission set?",
+    "errorLoadingAppText": "Please reload the App",
     "currency": "$",
     "LoginView": {
         "username": "Username",
@@ -30,5 +33,11 @@
         "changePriorityText": "Are you sure to move this Order to Prioritys first place",
         "cancelOrder": "Cancel Order",
         "cancelOrderText": "Are you sure to cancel the selected order"
+    },
+    "OrderNewView": {
+        "error": "Error!",
+        "errorText": "Please enter a Table number!",
+        "delete": "Clear",
+        "next": "Next"
     }
 }

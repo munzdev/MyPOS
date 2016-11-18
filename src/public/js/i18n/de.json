@@ -1,4 +1,7 @@
 {
+    "errorLoadingApp": "App Ladefehler",
+    "errorLoadingAppRouteText": "Es wurde keine Startseite gefunden. Haben Sie irgendeine Berechtigung bekommen?",
+    "errorLoadingAppText": "Bitte laden Sie die App neu",
     "currency": "€",
     "LoginView": {
         "username": "Benutzername",
@@ -30,5 +33,11 @@
         "changePriorityText": "Sind sie sicher das die Bestellung vorgereit werden soll",
         "cancelOrder": "Bestellung stornieren",
         "cancelOrderText": "Sind sie sicher das die Bestellung storniert werden soll"
+    },
+    "OrderNewView": {
+        "error": "Fehler!",
+        "errorText": "Bitte gib eine Tischnummer an!",
+        "delete": "Löschen",
+        "next": "Weiter"
     }
 }

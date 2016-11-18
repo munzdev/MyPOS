@@ -1,79 +1,59 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'collections/OrderOverviewCollection',
-         'views/headers/HeaderView',
-         'text!templates/pages/order-new.phtml'],
- function( OrderOverviewCollection,
-           HeaderView,
-           Template ) {
+define(['views/helpers/HeaderView',
+        'text!templates/pages/order-new.phtml'
+], function(HeaderView,
+            Template) {
     "use strict";
-
-    // Extends Backbone.View
-    var OrderNewView = Backbone.View.extend( {
-
-    	title: 'order-new',
-    	el: 'body',
-
-        // The View Constructor
-        initialize: function() {
-            _.bindAll(this, "render");
-
+    
+    return class OrderNewView extends app.PageView
+    {
+        initialize() {
             this.render();
-        },
-
-        events: {
-            "click .order-new-table-nr": 'tableNrClicked',
-            "click #tableNrClear": "tableNrReset",
-            "click #order-new-next": "orderNext"
-        },
-
-        tableNrClicked: function(event)
-        {
+        }
+        
+        events() {
+            return {"click .table-nr": 'tableNrClicked',
+                    "click #tableNrClear": "tableNrReset",
+                    "click #next": "orderNext"}
+        }
+        
+        tableNrClicked(event) {
             event.preventDefault();
 
-            $('#tableNr').append($(event.currentTarget).html());
-        },
+            this.$('#tableNr').append($(event.currentTarget).html());
+        }
 
-        tableNrReset: function(event)
-        {
+        tableNrReset(event) {
             event.preventDefault();
 
-            $('#tableNr').empty();
-        },
+            this.$('#tableNr').empty();
+        }
 
-        orderNext: function(event)
-        {
+        orderNext(event) {
             event.preventDefault();
 
-            var tableNr = $('#tableNr').text();
+            var tableNr = this.$('#tableNr').text();
 
             if(tableNr == '')
             {
-                app.error.showAlert('Fehler!', 'Bitte gib eine Tischnummer an!');
+                let i18n = this.i18n();
+                
+                app.error.showAlert(i18n.error, i18n.errorText);
                 return;
             }
 
-            MyPOS.ChangePage("#order-modify/id/new/tableNr/" + tableNr);
-        },
+            this.changeHash("order-modify/id/new/tableNr/" + tableNr);
+        }
 
         // Renders all of the Category models on the UI
-        render: function() {
+        render() {
             var header = new HeaderView();
+            this.registerSubview(".nav-header", header);
+            
+            this.renderTemplate(Template);
 
-            header.activeButton = 'order-new';
-
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render()});
-
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
+            this.changePage(this);
 
             return this;
-        },
-    } );
-
-    // Returns the View class
-    return OrderNewView;
-
+        }
+    }
 } );

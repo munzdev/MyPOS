@@ -4,8 +4,8 @@
 // Includes file dependencies
 define(["views/dialoges/LoginView",
         "views/pages/OrderOverviewView",
-        /*"views/pages/OrderOverviewSearchView",
         "views/pages/OrderNewView",
+        /*"views/pages/OrderOverviewSearchView",        
         "views/pages/OrderModifyView",
         "views/pages/OrderPayView",
         "views/pages/OrderModifyPriceView",
@@ -41,8 +41,8 @@ define(["views/dialoges/LoginView",
             //<editor-fold defaultstate="collapsed" desc="Class Definitions">
             LoginView,
             OrderOverviewView,
-            OrderOverviewSearchView,
             OrderNewView,
+            OrderOverviewSearchView,            
             OrderModifyView,
             OrderPayView,
             OrderModifyPriceView,
@@ -99,14 +99,13 @@ define(["views/dialoges/LoginView",
             }                       
         }
         
-        changeView(view, options)
-        {
+        changeView(view, options) {
             if(DEBUG) console.log("Change View to " + view.id(), options);
             
             // At this time the current view and the new view are in DOM. 
             // Change the page to make transitions correctly if required
             // and afterwards drop old view from DOM content
-            view.changePage(view, options);
+            view.changePage(view, options);          
             
             // Close and unbind any existing page view
             if(this.currentView && _.isFunction(this.currentView.close) && !options.keepOldView) 
