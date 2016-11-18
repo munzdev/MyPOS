@@ -27,6 +27,10 @@ function( Webservice,
     {
         let success;
         
+        if(app.inited) return;
+        
+        app.inited = true;
+        
         // HTML5 pushState for URLs without hashbangs        
         var hasPushstate = !!(window.history && history.pushState);
         if(hasPushstate) success = Backbone.history.start({ pushState: true, root: app.URL });
@@ -68,7 +72,9 @@ function( Webservice,
                 
                 $.when(app.productList.fetch(),
                        app.userList.fetch()).then(() => {
-                            var fragment = Backbone.history.getFragment();
+                            initApp();
+                           
+                            var fragment = Backbone.history.getFragment();                                                        
                             
                             if(fragment != "") return;                            
                            
@@ -107,10 +113,11 @@ function( Webservice,
                             
                             window.location.href = app.URL + hash;
                        });                
-            });
+            });            
             app.auth.on("logout", () => {
                Backbone.history.navigate(app.URL, { replace: true });
             });
+            app.auth.on("noAutologin", initApp);
             
             // create a products collection/model for later to fetch
             app.productList = new ProductCollection();
@@ -125,12 +132,10 @@ function( Webservice,
             // before rendering anything or matching routes
             app.auth.checkAuth()
                     .fail(() => {
-                        initApp();
                         var fragment = Backbone.history.getFragment();
                         if(fragment != "")
                             window.location.href = app.URL;
                     })
-                    .done(initApp);
         })
 
         .fail(() => {

@@ -28,7 +28,7 @@ define([
                 .done(this.updateSession)
                 .fail(() => {
                     if(DEBUG) console.log("Autologin failed");
-            
+                    this.trigger("noAutologin");
                     this.logged_in = false;                
                 });
         }
