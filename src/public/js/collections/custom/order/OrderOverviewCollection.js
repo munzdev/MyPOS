@@ -3,7 +3,7 @@ define([
 ], function(Order){
     "use strict";
     
-    return class OrdersOverviewCollection extends app.BaseCollection
+    return class OrderOverviewCollection extends app.BaseCollection
     {
         getModel() { return Order; }
         url() {return app.API + "Order";}

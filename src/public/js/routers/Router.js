@@ -5,8 +5,8 @@
 define(["views/dialoges/LoginView",
         "views/pages/OrderOverviewView",
         "views/pages/OrderNewView",
-        /*"views/pages/OrderOverviewSearchView",        
         "views/pages/OrderModifyView",
+        /*"views/pages/OrderOverviewSearchView",                
         "views/pages/OrderPayView",
         "views/pages/OrderModifyPriceView",
         "views/pages/OrderInfoView",
@@ -42,8 +42,8 @@ define(["views/dialoges/LoginView",
             LoginView,
             OrderOverviewView,
             OrderNewView,
-            OrderOverviewSearchView,            
             OrderModifyView,
+            OrderOverviewSearchView,                        
             OrderPayView,
             OrderModifyPriceView,
             OrderInfoView,
@@ -126,7 +126,7 @@ define(["views/dialoges/LoginView",
                     "order-overview": "order_overview",
                     "order-overview/status/:status(/orderid/:orderid)(/tableNr/:tableNr)(/from/:from)(/to/:to)(/userid/:userid)": "order_overview",
                     "order-overview/search/": "order_search_overview",
-                    "order-modify(/id/:id)(/tableNr/:tableNr)": "order_modify",
+                    "order-modify(/id/:orderid)(/tableNr/:tableNr)": "order_modify",
                     "order-pay/id/:id/tableNr/:tableNr": "order_pay",
                     "order-info/id/:id": "order_info",
                     "distribution": "distribution",
@@ -200,9 +200,9 @@ define(["views/dialoges/LoginView",
             this.show(new OrderNewView());
         }
         
-        order_modify(id, tableNr) {
-            this.show(new OrderModifyView({id: id,
-                tableNr: tableNr}));
+        order_modify(orderid, tableNr) {
+            this.show(new OrderModifyView({ orderid: orderid,
+                                            tableNr: tableNr}));
         }
         
         order_pay(id, tableNr) {

@@ -1,8 +1,10 @@
 define([
     "models/db/Event/EventTable",
-    "models/db/User/User"
+    "models/db/User/User",
+    "collections/db/OIP/OrderInProgressCollection"
 ], function(EventTable,
-            User){
+            User,
+            OrderInProgressCollection){
     "use strict";
 
     return class Order extends Backbone.Model {
@@ -31,11 +33,8 @@ define([
             }
             
             if('OrderInProgresses' in response)
-            {
-                //-- use require for later module usage as on page load the dependencies are not correctly loaded
-                require(["collections/db/OIP/OrderInProgressCollection"], (OrderInProgressCollection) => {
-                    response.OrderInProgresses = new OrderInProgressCollection(response.OrderInProgresses, {parse: true});
-                });                
+            {                
+                response.OrderInProgresses = new OrderInProgressCollection(response.OrderInProgresses, {parse: true});
             }
             
             return super.parse(response);

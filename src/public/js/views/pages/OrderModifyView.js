@@ -1,51 +1,43 @@
-/* global _, Backbone, parseFloat */
-
-// Login View
-// =============
-
 // Includes file dependencies
-define([ "Webservice",
-         "collections/OrderCollection",
-         "models/order/TypeModel",
-         "models/order/MenuModel",
-         "models/order/MixingModel",
-         "models/order/SizeModel",
-         'views/headers/HeaderView',
-         'text!templates/pages/order-modify.phtml',
-         'text!templates/pages/order-item.phtml'],
-function(   Webservice,
-            OrderCollection,
-            TypeModel,
-            MenuModel,
-            MixingModel,
+define(["Webservice",
+        "collections/custom/order/OrderModifyCollection",
+        "models/db/Menu/MenuType",
+        "models/db/Menu/Menu",
+        "models/db/Menu/MenuSize",
+        "models/db/Ordering/OrderDetailMixedWith",        
+        'views/helpers/HeaderView',
+        'text!templates/pages/order-modify.phtml',
+        'text!templates/pages/order-item.phtml'
+], function(Webservice,
+            OrderModifyCollection,
+            MenuType,
+            Menu,
             SizeModel,
+            OrderDetailMixedWith,            
             HeaderView,
             Template,
             TemplateItem) {
     "use strict";
 
     // Extends Backbone.View
-    var OrderModifyView = Backbone.View.extend( {
+    return class OrderModifyView extends app.PageView
+    {
+        events() {
+            return {'panelbeforeclose .panel': 'order_close',
+                    'panelbeforeclose #panel-special': 'order_special_close',
 
-    	title: 'order-modify',
-    	el: 'body',
-
-    	events: {
-            'panelbeforeclose .order-modify-panel': 'order_close',
-            'panelbeforeclose #order-modify-panel-special': 'order_special_close',
-
-            // Manually handle events. Ensures that the close event is called after the task
-            'click .order-modify-add': 'order_add',
-            'click .order-modify-mixing': 'order_mixing',
-            'click .order-modify-menu-item': 'menu_item',
-            'click #order-modify-panel-special-add': 'order_special_add',
-            'click #order-modify-footer-back': 'footer_back',
-            'click #order-modify-footer-finish': 'footer_finish',
-            'click #order-modify-finished': 'finished'
-    	},
+                    // Manually handle events. Ensures that the close event is called after the task
+                    'click .add': 'order_add',
+                    'click .mixing': 'order_mixing',
+                    'click .menu-item': 'menu_item',
+                    'click #panel-special-add': 'order_special_add',
+                    'click #footer-back': 'footer_back',
+                    'click #footer-finish': 'footer_finish',
+                    'click #finished': 'finished'}
+    	}
 
         // The View Constructor
-        initialize: function(options) {
+        initialize(options) {
             _.bindAll(this, "renderOrder",
                             "order_count_up",
                             "order_count_down",
@@ -56,56 +48,40 @@ function(   Webservice,
                             "order_special_close",
                             "order_special_add");
 
-            var self = this;
-
             this.options = options;
             this.isMixing = null;
 
-            this.order = new OrderCollection();
+            this.order = new OrderModifyCollection();
 
-            // Broken Tabs widget with Backbone pushstate enabled  - manual fix it
-            $(document).on('pagecreate', '#' + this.title, function(createEvent) {
-                self.hideTabs();
-
-                $("#order-modify-tabs a[data-role='tab']").click(function(event) {
-                    self.hideTabs();
-                    $($(event.currentTarget).attr('href')).show();
-                });
-            });
-
-            if(options.id === 'new')
+            if(options.orderid === 'new')
             {
                 this.mode = 'new';
-                this.order.id = 0;
-                this.order.tableNr = options.tableNr;
+                this.orderid = 0;
+                this.tableNr = options.tableNr;
             }
             else
             {
                 this.mode = 'edit';
-                this.order.id = options.id;
-                this.order.tableNr = options.tableNr;
-                this.order.fetch({
-                    data: {orderid: options.id},
-                    success: function() {
-                        self.renderOrder();
-                        self.showOverview();
-                    }
-                });
+                this.orderid = options.orderid;
+                this.tableNr = options.tableNr;
+                this.order.fetch({data: {orderid: options.orderid}})
+                            .done(() => {
+                                this.renderOrder();
+                                this.showOverview();
+                            });
             }
 
             this.render();
-        },
+        }
 
-        hideTabs: function()
-        {
-            app.session.products.each(function(category){
-                $('#order-modify-' + category.get('menu_typeid')).hide();
+        hideTabs() {
+            app.productList.each((type) => {
+                this.$('#' + type.get('MenuTypeid')).hide();
             });
-            $('#order-modify-overview').hide();
-        },
+            this.$('#overview').hide();
+        }
 
-        order_add: function(event)
-        {
+        order_add(event) {
             var id = $(event.currentTarget).attr('id');
 
             var idRegex = /[(0-9)]+/igm;
@@ -113,35 +89,35 @@ function(   Webservice,
 
             console.log("add " + menuid);
 
-            var menuSearch = _.find(app.session.products.searchHelper, function(obj) { return obj.menuid === menuid; });
+            var menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.menuid === menuid; });
             var menu_typeid = menuSearch.menu_typeid;
 
             var group = this.order.findWhere({menu_typeid: menu_typeid});
 
             if(!group)
             {
-                group = new TypeModel({menu_typeid: menu_typeid,
+                group = new MenuType({menu_typeid: menu_typeid,
                                        name: menuSearch.name});
 
                 this.order.add(group);
             }
 
-            var menu = new MenuModel(menuSearch.menu.attributes);
+            var menu = new Menu(menuSearch.menu.attributes);
 
             var extras = menu.get('extras').clone();
             extras.reset();
 
-            var extrasSelected = $('input[name=extra-' + menuid + ']:checked', '#' + this.title);
+            var extrasSelected = this.$('input[name=extra-' + menuid + ']:checked');
 
             extrasSelected.each(function(index, extra){
 
-                var extraModel = app.session.products.findWhere({menu_typeid: menuSearch.menu_typeid})
-                                                    .get('groupes')
-                                                    .findWhere({menu_groupid: menuSearch.menu_groupid})
-                                                    .get('menues')
-                                                    .findWhere({menuid: menuid})
-                                                    .get('extras')
-                                                    .findWhere({menu_extraid: $(extra).val()});
+                var extraModel = app.productList.findWhere({menu_typeid: menuSearch.menu_typeid})
+                                                .get('groupes')
+                                                .findWhere({menu_groupid: menuSearch.menu_groupid})
+                                                .get('menues')
+                                                .findWhere({menuid: menuid})
+                                                .get('extras')
+                                                .findWhere({menu_extraid: $(extra).val()});
 
                 extras.add(extraModel);
             });
@@ -153,7 +129,7 @@ function(   Webservice,
             {
                 sizes.reset();
 
-                var sizeSelected = $('input[name=size-' + menuid + ']:checked', '#' + this.title);
+                var sizeSelected = this.$('input[name=size-' + menuid + ']:checked');
 
                 if(sizeSelected.length === 0)
                 {
@@ -161,13 +137,13 @@ function(   Webservice,
                     return;
                 }
 
-                var sizeModel = app.session.products.findWhere({menu_typeid: menuSearch.menu_typeid})
-                                                    .get('groupes')
-                                                    .findWhere({menu_groupid: menuSearch.menu_groupid})
-                                                    .get('menues')
-                                                    .findWhere({menuid: menuid})
-                                                    .get('sizes')
-                                                    .findWhere({menu_sizeid: $(sizeSelected[0]).val()});
+                var sizeModel = app.productList.findWhere({menu_typeid: menuSearch.menu_typeid})
+                                                .get('groupes')
+                                                .findWhere({menu_groupid: menuSearch.menu_groupid})
+                                                .get('menues')
+                                                .findWhere({menuid: menuid})
+                                                .get('sizes')
+                                                .findWhere({menu_sizeid: $(sizeSelected[0]).val()});
 
                 sizes.add(sizeModel);
             }
@@ -175,12 +151,12 @@ function(   Webservice,
             menu.set('amount', 1);
             menu.set('extras', extras);
             menu.set('sizes', sizes);
-            menu.set('extra', $('#extras-text-' + menuid).val());
+            menu.set('extra', this.$('#extras-text-' + menuid).val());
 
-            $('#order-modify-panel-mixing-text-' + menuid + ' div').each(function(index, mixing){
-                var mixingReference = _.find(app.session.products.searchHelper, function(obj) { return obj.menuid == $(mixing).attr('data-menuid'); });
+            this.$('#panel-mixing-text-' + menuid + ' div').each(function(index, mixing){
+                var mixingReference = _.find(app.productList.searchHelper, function(obj) { return obj.menuid == $(mixing).attr('data-menuid'); });
 
-                var mixingModel = new MixingModel(mixingReference.menu.attributes);
+                var mixingModel = new OrderDetailMixedWith(mixingReference.menu.attributes);
 
                 menu.get('mixing').add(mixingModel);
             });
@@ -189,20 +165,18 @@ function(   Webservice,
 
             this.showOverview();
             this.renderOrder();
-            $('#order-modify-panel-' + menuid).panel("close");
-        },
+            this.$('#panel-' + menuid).panel("close");
+        }
 
-        showOverview: function()
-        {
+        showOverview() {
             // Fix jQm Tabs handling as its broken by pushstate (normale simple .tabs(active: last) should work...
             this.hideTabs();
-            $('#order-modify-overview').show();
-            $('#order-modify-tabs-navbar a.ui-btn-active').removeClass('ui-btn-active');
-            $('#order-modify-tabs-navbar-overview').addClass('ui-btn-active');
-        },
+            this.$('#overview').show();
+            this.$('#tabs-navbar a.ui-btn-active').removeClass('ui-btn-active');
+            this.$('#tabs-navbar-overview').addClass('ui-btn-active');
+        }
 
-        order_close: function(event)
-        {
+        order_close(event) {
             console.log("close");
 
             if(this.isMixing !== null)
@@ -213,21 +187,20 @@ function(   Webservice,
             var priceRegex = /[(0-9)]+/igm;
             var menuid = id.match(priceRegex)[0];
 
-            $('input[name=size-' + menuid + ']:checked', '#' + this.title).each(function(){
+            this.$('input[name=size-' + menuid + ']:checked').each(function(){
                 $(this).attr('checked', false).checkboxradio("refresh");
             });
-            $('input[name=extra-' + menuid + ']:checked', '#' + this.title).each(function(){
+            this.$('input[name=extra-' + menuid + ']:checked').each(function(){
                 $(this).attr('checked', false).checkboxradio("refresh");
             });
-            $('#extras-text-' + menuid, '#' + this.title).val("");
-            $('#order-modify-panel-mixing-text-' + menuid).html('');
-        },
+            this.$('#extras-text-' + menuid).val("");
+            this.$('#panel-mixing-text-' + menuid).html('');
+        }
 
-        order_special_add: function(event)
-        {
+        order_special_add(event) {
             console.log("add special");
 
-            var specialOrderText = $('#order-modify-panel-special-extra').val();
+            var specialOrderText = this.$('#panel-special-extra').val();
             specialOrderText = $.trim(specialOrderText);
 
             if(specialOrderText == '')
@@ -240,13 +213,13 @@ function(   Webservice,
 
             if(!group)
             {
-                group = new TypeModel({menu_typeid: "0",
+                group = new MenuType({menu_typeid: "0",
                                        name: "Sonderwünsche"});
 
                 this.order.add(group);
             }
 
-            var menu = new MenuModel();
+            var menu = new Menu();
             menu.set('name', 'Sonderwunsch');
             menu.set('amount', 1);
             menu.set('extra', specialOrderText);
@@ -256,18 +229,16 @@ function(   Webservice,
             group.get('orders').addOnce(menu);
 
             this.renderOrder();
-            $('#order-modify-panel-special').panel("close");
-        },
+            this.$('#panel-special').panel("close");
+        }
 
-        order_special_close: function(event)
-        {
+        order_special_close(event) {
             console.log("close special");
 
-            $('#order-modify-panel-special-extra').val("");
-        },
+            this.$('#panel-special-extra').val("");
+        }
 
-        order_mixing: function(event)
-        {
+        order_mixing(event) {
             console.log("mix");
 
             var id = $(event.currentTarget).attr('id');
@@ -276,11 +247,10 @@ function(   Webservice,
             var menuid = id.match(priceRegex)[0];
 
             this.isMixing = menuid;
-            $('#order-modify-panel-' + menuid).panel("close");
-        },
+            this.$('#panel-' + menuid).panel("close");
+        }
 
-        menu_item: function(event)
-        {
+        menu_item(event) {
             console.log("open");
 
             if(this.isMixing !== null)
@@ -291,10 +261,10 @@ function(   Webservice,
                 var priceRegex = /[(0-9)]+/igm;
                 var menuid = href.match(priceRegex)[0];
 
-                var menuSearch = _.find(app.session.products.searchHelper, function(obj) { return obj.menuid == menuid; });
+                var menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.menuid == menuid; });
 
-                var canMix = app.session.products.findWhere({menu_typeid: menuSearch.menu_typeid})
-                                                 .get("allowMixing");
+                var canMix = app.productList.findWhere({menu_typeid: menuSearch.menu_typeid})
+                                            .get("allowMixing");
 
                 event.preventDefault();
                 event.stopPropagation();
@@ -313,21 +283,20 @@ function(   Webservice,
 
                 this.isMixing = null;
 
-                var currentMixing = $('#order-modify-panel-mixing-text-' + mixing_menuid).html();
+                var currentMixing = this.$('#panel-mixing-text-' + mixing_menuid).html();
 
                 if($.trim(currentMixing) == '')
                     currentMixing = '<b>Gemixt mit:</b>';
 
                 currentMixing += '<div data-menuid="' + menuid + '">' + menuSearch.menu.get('name') + '</div>';
 
-                $('#order-modify-panel-mixing-text-' + mixing_menuid).html(currentMixing);
+                this.$('#panel-mixing-text-' + mixing_menuid).html(currentMixing);
 
-                $('#order-modify-panel-' + mixing_menuid).panel("open");
+                this.$('#panel-' + mixing_menuid).panel("open");
             }
-        },
+        }
 
-        order_count_up: function(event)
-        {
+        order_count_up(event) {
             console.log("Up");
 
             var menu_typeid = $(event.currentTarget).attr('data-menu-typeid');
@@ -346,10 +315,9 @@ function(   Webservice,
                         .set('amount', current_amount);
 
             this.renderOrder();
-        },
+        }
 
-        order_count_down: function(event)
-        {
+        order_count_down(event) {
             console.log("Down");
 
             var menu_typeid = $(event.currentTarget).attr('data-menu-typeid');
@@ -371,25 +339,22 @@ function(   Webservice,
                         .set('amount', current_amount);
 
             this.renderOrder();
-        },
+        }
 
-        footer_back: function(event)
-        {
+        footer_back(event) {
             console.log("back");
 
             event.preventDefault();
             window.history.back();
-        },
+        }
 
-        footer_finish: function(event)
-        {
+        footer_finish(event) {
             console.log("order verify");
 
-            $('#order-modify-verify-dialog').popup('open');
-        },
+            this.$('#verify-dialog').popup('open');
+        }
 
-        finished: function(event)
-        {
+        finished(event) {
             console.log("order finish");
 
             var self = this;
@@ -420,29 +385,27 @@ function(   Webservice,
 
                     app.ws.api.Trigger("distribution-update");
 
-                    MyPOS.ChangePage("#order-pay/id/" + result + "/tableNr/" + self.options.tableNr);
+                    this.changeHash("order-pay/id/" + result + "/tableNr/" + self.options.tableNr);
                 }
             };
             webservice.call();
-        },
+        }
 
-        renderOrder: function()
-        {
+        renderOrder() {
             var itemTemplate = _.template(TemplateItem);
-            var self = this;
 
-            $('#order-modify-selected').empty();
+            this.$('#selected').empty();
 
             var counter = 0;
             var totalSumPrice = 0;
 
-            this.order.each(function(category){
-                $('#order-modify-selected').append("<li data-role='list-divider'>" + category.get('name') + "</li>");
+            this.order.each((category) => {
+                this.$('#selected').append("<li data-role='list-divider'>" + category.get('name') + "</li>");
                 counter = 0;
                 var isSpecialOrder = category.get('menu_typeid') == "0";
 
-                category.get('orders').each(function(originalMenu){
-                    var menuSearch = _.find(app.session.products.searchHelper, function(obj) { return obj.menuid == originalMenu.get('menuid'); });
+                category.get('orders').each((originalMenu) => {
+                    var menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.menuid == originalMenu.get('menuid'); });
                     var extras = '';
                     var price = parseFloat(originalMenu.get('price'));
                     var priceFromDB = originalMenu.get('backendID') > 0;
@@ -460,17 +423,17 @@ function(   Webservice,
                     {
                         extras += "Gemischt mit: ";
 
-                        originalMenu.get('mixing').each(function(menuToMixWith){
+                        originalMenu.get('mixing').each((menuToMixWith) => {
                             extras += menuToMixWith.get('name') + " - ";
 
-                            var menuToMixWithSearch = _.find(app.session.products.searchHelper, function(obj) { return obj.menuid == menuToMixWith.get('menuid'); });
+                            var menuToMixWithSearch = _.find(app.productList.searchHelper, function(obj) { return obj.menuid == menuToMixWith.get('menuid'); });
 
-                            var sizesOfMenuToMixWith = app.session.products.findWhere({menu_typeid: menuToMixWithSearch.menu_typeid})
-                                                                            .get('groupes')
-                                                                            .findWhere({menu_groupid: menuToMixWithSearch.menu_groupid})
-                                                                            .get('menues')
-                                                                            .findWhere({menuid: menuToMixWithSearch.menuid})
-                                                                            .get('sizes');
+                            var sizesOfMenuToMixWith = app.productList.findWhere({menu_typeid: menuToMixWithSearch.menu_typeid})
+                                                                        .get('groupes')
+                                                                        .findWhere({menu_groupid: menuToMixWithSearch.menu_groupid})
+                                                                        .get('menues')
+                                                                        .findWhere({menuid: menuToMixWithSearch.menuid})
+                                                                        .get('sizes');
 
                             // -- Price calculation --
                             // First: try to find the same size for the mixing product and get this price
@@ -535,7 +498,7 @@ function(   Webservice,
                                 isSpecialOrder: isSpecialOrder,
                                 skipCounts: false};
 
-                    $('#order-modify-selected').append("<li>" + itemTemplate(datas) + "</li>");
+                    this.$('#selected').append("<li>" + itemTemplate(datas) + "</li>");
                     counter++;
                 });
             });
@@ -543,46 +506,44 @@ function(   Webservice,
             if(this.mode == 'edit' && this.oldPrice === undefined)
             {
                 this.oldPrice = parseFloat(totalSumPrice);
-                $('#order-modify-total-old').text(this.oldPrice.toFixed(2) + ' €');
+                this.$('#total-old').text(this.oldPrice.toFixed(2) + ' €');
             }
 
             if(this.mode == 'new')
             {
-                $('#order-modify-total').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
+                this.$('#total').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
             }
             else
             {
-                $('#order-modify-total-new').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
-                $('#order-modify-total-difference').text(parseFloat(totalSumPrice - this.oldPrice).toFixed(2) + ' €');
+                this.$('#total-new').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
+                this.$('#total-difference').text(parseFloat(totalSumPrice - this.oldPrice).toFixed(2) + ' €');
             }
 
-            $('.order-item-up').click(this.order_count_up);
-            $('.order-item-down').click(this.order_count_down);
-            $('#order-modify-selected').listview('refresh');
-        },
+            this.$('.order-item-up').click(this.order_count_up);
+            this.$('.order-item-down').click(this.order_count_down);
+            this.$('#selected').listview('refresh');
+        }
 
         // Renders all of the Category models on the UI
-        render: function()
-        {
+        render() {
             var header = new HeaderView();
+            this.registerSubview(".nav-header", header);
+            
+            this.renderTemplate(Template, { header: header.render(),
+                                            mode: this.mode,
+                                            order: this.order,
+                                            products: app.productList});
+                                        
+            // Broken Tabs widget with Backbone pushstate enabled  - manual fix it
+            this.hideTabs();            
+            this.$("#tabs a[data-role='tab']").click((event) => {
+                this.hideTabs();
+                this.$($(event.currentTarget).attr('href')).show();
+            });
 
-            if(this.mode == 'new')
-                header.activeButton = 'order-new';
-            else
-                header.activeButton = 'order-overview';
+            this.changePage(this);
 
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  mode: this.mode,
-                                                                  order: this.order,
-                                                                  products: app.session.products});
-
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-
-            $.mobile.changePage( "#" + this.title);
             return this;
         }
-    });
-
-    return OrderModifyView;
+    }    
 } );
