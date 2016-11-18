@@ -6,14 +6,6 @@ define(function() {
     "use strict";
         
     return class AbstractView extends Backbone.View {
-        constructor(options)
-        {
-            super(options);
-            
-            this.subViews = new Map();
-            this.appendViews = new Map();
-        }
-        
         id(){ return this.constructor.name; }
         
         renderTemplate(Template, Datas) {
@@ -30,11 +22,17 @@ define(function() {
         
         registerSubview(target, view)
         {
+            if(!this.subViews)
+                this.subViews = new Map();
+            
             this.subViews.set(target, view);                   
         }
         
         registerAppendview(view, type = "begin")
         {
+            if(!this.appendViews)
+                this.appendViews = new Map();
+            
             this.appendViews.set(view, type);                   
         }
         
