@@ -26,6 +26,7 @@ function(AbstractView,
     
     // Define collections
     app.BaseCollection = BaseCollection;
-    
-    require(["app"]);
+       
+    require(["collections/db/Menu/MenuTypeCollection", // Verify that the Menu model/collection structures and depencies are loaded correctly by loading it first
+             "app"]);
 } );
