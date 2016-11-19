@@ -5,13 +5,16 @@ define([
     "models/db/menu/MenuGroup",
     "models/db/menu/Availability",
     "models/db/User/User",
-    
+    "collections/db/Ordering/OrderDetailExtraCollection",
+    "collections/db/Ordering/OrderDetailMixedWithCollection"
 ], function(Order,
             Menu,
             MenuSize,
             MenuGroup,
             Availability,
-            User){
+            User,
+            OrderDetailExtraCollection,
+            OrderDetailMixedWithCollection){
     "use strict";
 
     return class OrderDetail extends Backbone.Model {
@@ -64,6 +67,16 @@ define([
             if('Availability' in response)
             {
                 response.Availability = new Availability(response.Availability, {parse: true});
+            }
+            
+            if('OrderDetailExtra' in response)
+            {
+                response.OrderDetailExtra = new OrderDetailExtraCollection(response.OrderDetailExtra, {parse: true});
+            }
+            
+            if('OrderDetailMixedWith' in response)
+            {
+                response.OrderDetailMixedWith = new OrderDetailMixedWithCollection(response.OrderDetailMixedWith, {parse: true});
             }
                                     
             return super.parse(response);

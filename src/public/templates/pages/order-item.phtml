@@ -23,12 +23,12 @@
         <% } %>
         <% if(typeof edit !== "undefined") { %>
             <br/>
-            <a data-menu-typeid="<%- menu_typeid %>" data-index="<%- index %>" class="order-item-edit ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-left ui-mini">Bearbeiten</a>
+            <a data-menu-typeid="<%- menuTypeid %>" data-index="<%- index %>" class="order-item-edit ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-left ui-mini">Bearbeiten</a>
         <% } %>
         <% if(!skipCounts) { %>
             <br/>
-            <a data-menu-typeid="<%- menu_typeid %>" data-index="<%- index %>" class="order-item-up ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-notext">+</a>
-            <a data-menu-typeid="<%- menu_typeid %>" data-index="<%- index %>" class="order-item-down ui-btn ui-btn-inline ui-icon-minus ui-btn-icon-notext">-</a>
+            <a data-menu-typeid="<%- menuTypeid %>" data-index="<%- index %>" class="order-item-up ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-notext">+</a>
+            <a data-menu-typeid="<%- menuTypeid %>" data-index="<%- index %>" class="order-item-down ui-btn ui-btn-inline ui-icon-minus ui-btn-icon-notext">-</a>
         <% } %>
     </div>
 </div>

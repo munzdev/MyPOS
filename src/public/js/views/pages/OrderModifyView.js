@@ -1,19 +1,19 @@
 // Includes file dependencies
-define(["Webservice",
-        "collections/custom/order/OrderModifyCollection",
+define(["collections/db/Ordering/OrderDetailExtraCollection",
+        "collections/db/Ordering/OrderDetailMixedWithCollection",
+        "models/custom/order/OrderModify",        
         "models/db/Menu/MenuType",
-        "models/db/Menu/Menu",
-        "models/db/Menu/MenuSize",
-        "models/db/Ordering/OrderDetailMixedWith",        
+        "models/db/Ordering/OrderDetail",
+        "models/db/Menu/MenuSize",      
         'views/helpers/HeaderView',
         'text!templates/pages/order-modify.phtml',
         'text!templates/pages/order-item.phtml'
-], function(Webservice,
-            OrderModifyCollection,
+], function(OrderDetailExtraCollection,
+            OrderDetailMixedWithCollection,
+            OrderModify,
             MenuType,
-            Menu,
-            SizeModel,
-            OrderDetailMixedWith,            
+            OrderDetail,
+            SizeModel,           
             HeaderView,
             Template,
             TemplateItem) {
@@ -51,7 +51,7 @@ define(["Webservice",
             this.options = options;
             this.isMixing = null;
 
-            this.order = new OrderModifyCollection();
+            this.orderModify = new OrderModify();
 
             if(options.orderid === 'new')
             {
@@ -64,11 +64,11 @@ define(["Webservice",
                 this.mode = 'edit';
                 this.orderid = options.orderid;
                 this.tableNr = options.tableNr;
-                this.order.fetch({data: {orderid: options.orderid}})
-                            .done(() => {
-                                this.renderOrder();
-                                this.showOverview();
-                            });
+                this.orderModify.fetch({data: {id: options.orderid}})
+                                            .done(() => {
+                                                this.renderOrder();
+                                                this.showOverview();
+                                            });
             }
 
             this.render();
@@ -82,54 +82,39 @@ define(["Webservice",
         }
 
         order_add(event) {
-            var id = $(event.currentTarget).attr('id');
+            let id = $(event.currentTarget).attr('id');
 
-            var idRegex = /[(0-9)]+/igm;
-            var menuid = id.match(idRegex)[0];
+            let idRegex = /[(0-9)]+/igm;
+            let menuid = parseInt(id.match(idRegex)[0]);
 
             console.log("add " + menuid);
 
-            var menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.menuid === menuid; });
-            var menu_typeid = menuSearch.menu_typeid;
+            let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});
 
-            var group = this.order.findWhere({menu_typeid: menu_typeid});
+            let orderDetail = new OrderDetail();
+            orderDetail.set("OrderDetailExtra", new OrderDetailExtraCollection());
+            orderDetail.set("OrderDetailMixedWith", new OrderDetailMixedWithCollection());
 
-            if(!group)
-            {
-                group = new MenuType({menu_typeid: menu_typeid,
-                                       name: menuSearch.name});
-
-                this.order.add(group);
-            }
-
-            var menu = new Menu(menuSearch.menu.attributes);
-
-            var extras = menu.get('extras').clone();
-            extras.reset();
-
-            var extrasSelected = this.$('input[name=extra-' + menuid + ']:checked');
+            let extrasSelected = this.$('input[name=extra-' + menuid + ']:checked');
 
             extrasSelected.each(function(index, extra){
 
-                var extraModel = app.productList.findWhere({menu_typeid: menuSearch.menu_typeid})
-                                                .get('groupes')
-                                                .findWhere({menu_groupid: menuSearch.menu_groupid})
-                                                .get('menues')
-                                                .findWhere({menuid: menuid})
-                                                .get('extras')
-                                                .findWhere({menu_extraid: $(extra).val()});
+                let menuPossibleExtra = app.productList.findWhere({MenuTypeid: menuSearch.MenuTypeid})
+                                                .get('MenuGroup')
+                                                .findWhere({MenuGroupid: menuSearch.MenuGroupid})
+                                                .get('Menu')
+                                                .findWhere({Menuid: menuid})
+                                                .get('MenuPossibleExtra')
+                                                .findWhere({MenuExtraid: parseInt($(extra).val())});
 
-                extras.add(extraModel);
+                let extraModel = new (orderDetail.get("OrderDetailExtra").model);
+                extraModel.set("MenuPossibleExtraid", menuPossibleExtra.get("MenuPossibleExtraid"));
+                orderDetail.get("OrderDetailExtra").add(extraModel);
             });
 
-
-            var sizes = menu.get('sizes').clone();
-
-            if(sizes.length > 1)
+            if(menuSearch.Menu.get('MenuPossibleSize').length > 1)
             {
-                sizes.reset();
-
-                var sizeSelected = this.$('input[name=size-' + menuid + ']:checked');
+                let sizeSelected = this.$('input[name=size-' + menuid + ']:checked');
 
                 if(sizeSelected.length === 0)
                 {
@@ -137,31 +122,36 @@ define(["Webservice",
                     return;
                 }
 
-                var sizeModel = app.productList.findWhere({menu_typeid: menuSearch.menu_typeid})
-                                                .get('groupes')
-                                                .findWhere({menu_groupid: menuSearch.menu_groupid})
-                                                .get('menues')
-                                                .findWhere({menuid: menuid})
-                                                .get('sizes')
-                                                .findWhere({menu_sizeid: $(sizeSelected[0]).val()});
+                let sizeModel = app.productList.findWhere({MenuTypeid: menuSearch.MenuTypeid})
+                                                .get('MenuGroup')
+                                                .findWhere({MenuGroupid: menuSearch.MenuGroupid})
+                                                .get('Menu')
+                                                .findWhere({Menuid: menuid})
+                                                .get('MenuPossibleSize')
+                                                .findWhere({MenuSizeid: parseInt($(sizeSelected[0]).val())})
+                                                .get('MenuSize');
 
-                sizes.add(sizeModel);
+                orderDetail.set('MenuSize', sizeModel);
+            }
+            else 
+            {
+                orderDetail.set('MenuSize', menuSearch.Menu.get('MenuPossibleSize').at(0));
             }
 
-            menu.set('amount', 1);
-            menu.set('extras', extras);
-            menu.set('sizes', sizes);
-            menu.set('extra', this.$('#extras-text-' + menuid).val());
+            orderDetail.set('Menuid', menuid);
+            orderDetail.set('Amount', 1);
+            orderDetail.set('SinglePrice', menuSearch.Menu.get('Price'));
+            orderDetail.set('ExtraDetail', this.$('#extras-text-' + menuid).val());
 
             this.$('#panel-mixing-text-' + menuid + ' div').each(function(index, mixing){
-                var mixingReference = _.find(app.productList.searchHelper, function(obj) { return obj.menuid == $(mixing).attr('data-menuid'); });
+                let menuidToMixWith = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == $(mixing).attr('data-menuid'); });
 
-                var mixingModel = new OrderDetailMixedWith(mixingReference.menu.attributes);
-
-                menu.get('mixing').add(mixingModel);
+                let mixingModel = new (orderDetail.get("OrderDetailMixedWith").model);
+                mixingModel.set('Menuid', menuidToMixWith.Menu.get('Menuid'));
+                orderDetail.get("OrderDetailMixedWith").add(mixingModel);
             });
 
-            group.get('orders').addOnce(menu);
+            this.orderModify.get('OrderDetail').addOnce(orderDetail);
 
             this.showOverview();
             this.renderOrder();
@@ -182,10 +172,10 @@ define(["Webservice",
             if(this.isMixing !== null)
                 return;
 
-            var id = $(event.currentTarget).attr('id');
+            let id = $(event.currentTarget).attr('id');
 
-            var priceRegex = /[(0-9)]+/igm;
-            var menuid = id.match(priceRegex)[0];
+            let priceRegex = /[(0-9)]+/igm;
+            let menuid = id.match(priceRegex)[0];
 
             this.$('input[name=size-' + menuid + ']:checked').each(function(){
                 $(this).attr('checked', false).checkboxradio("refresh");
@@ -200,7 +190,7 @@ define(["Webservice",
         order_special_add(event) {
             console.log("add special");
 
-            var specialOrderText = this.$('#panel-special-extra').val();
+            let specialOrderText = this.$('#panel-special-extra').val();
             specialOrderText = $.trim(specialOrderText);
 
             if(specialOrderText == '')
@@ -209,24 +199,13 @@ define(["Webservice",
                 return;
             }
 
-            var group = this.order.findWhere({menu_typeid: "0"});
+            let orderDetail = new OrderDetail();
+            orderDetail.set("OrderDetailExtra", new OrderDetailExtraCollection());
+            orderDetail.set("OrderDetailMixedWith", new OrderDetailMixedWithCollection());
+            orderDetail.set('Amount', 1);
+            orderDetail.set('ExtraDetail', specialOrderText);
 
-            if(!group)
-            {
-                group = new MenuType({menu_typeid: "0",
-                                       name: "Sonderwünsche"});
-
-                this.order.add(group);
-            }
-
-            var menu = new Menu();
-            menu.set('name', 'Sonderwunsch');
-            menu.set('amount', 1);
-            menu.set('extra', specialOrderText);
-
-            menu.get('sizes').add(new SizeModel);
-
-            group.get('orders').addOnce(menu);
+            this.orderModify.get('OrderDetail').addOnce(orderDetail);
 
             this.renderOrder();
             this.$('#panel-special').panel("close");
@@ -241,10 +220,10 @@ define(["Webservice",
         order_mixing(event) {
             console.log("mix");
 
-            var id = $(event.currentTarget).attr('id');
+            let id = $(event.currentTarget).attr('id');
 
-            var priceRegex = /[(0-9)]+/igm;
-            var menuid = id.match(priceRegex)[0];
+            let priceRegex = /[(0-9)]+/igm;
+            let menuid = id.match(priceRegex)[0];
 
             this.isMixing = menuid;
             this.$('#panel-' + menuid).panel("close");
@@ -255,16 +234,16 @@ define(["Webservice",
 
             if(this.isMixing !== null)
             {
-                var mixing_menuid = this.isMixing;
-                var href = $(event.currentTarget).attr('href');
+                let mixing_menuid = this.isMixing;
+                let href = $(event.currentTarget).attr('href');
 
-                var priceRegex = /[(0-9)]+/igm;
-                var menuid = href.match(priceRegex)[0];
+                let priceRegex = /[(0-9)]+/igm;
+                let menuid = href.match(priceRegex)[0];
 
-                var menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.menuid == menuid; });
+                let menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == menuid; });
 
-                var canMix = app.productList.findWhere({menu_typeid: menuSearch.menu_typeid})
-                                            .get("allowMixing");
+                let canMix = app.productList.findWhere({MenuTypeid: menuSearch.MenuTypeid})
+                                            .get("Allowmixing");
 
                 event.preventDefault();
                 event.stopPropagation();
@@ -283,12 +262,12 @@ define(["Webservice",
 
                 this.isMixing = null;
 
-                var currentMixing = this.$('#panel-mixing-text-' + mixing_menuid).html();
+                let currentMixing = this.$('#panel-mixing-text-' + mixing_menuid).html();
 
                 if($.trim(currentMixing) == '')
                     currentMixing = '<b>Gemixt mit:</b>';
 
-                currentMixing += '<div data-menuid="' + menuid + '">' + menuSearch.menu.get('name') + '</div>';
+                currentMixing += '<div data-menuid="' + menuid + '">' + menuSearch.Menu.get('Name') + '</div>';
 
                 this.$('#panel-mixing-text-' + mixing_menuid).html(currentMixing);
 
@@ -299,20 +278,10 @@ define(["Webservice",
         order_count_up(event) {
             console.log("Up");
 
-            var menu_typeid = $(event.currentTarget).attr('data-menu-typeid');
-            var index = $(event.currentTarget).attr('data-index');
+            let index = $(event.currentTarget).attr('data-index');
 
-            var current_amount = this.order.findWhere({menu_typeid: menu_typeid})
-                                            .get('orders')
-                                            .at(index)
-                                            .get('amount');
-
-            current_amount++;
-
-            this.order.findWhere({menu_typeid: menu_typeid})
-                        .get('orders')
-                        .at(index)
-                        .set('amount', current_amount);
+            let orderDetail = this.orderModify.get('OrderDetail').get({cid: index});
+            orderDetail.set('Amount', orderDetail.get('Amount') + 1);
 
             this.renderOrder();
         }
@@ -320,23 +289,15 @@ define(["Webservice",
         order_count_down(event) {
             console.log("Down");
 
-            var menu_typeid = $(event.currentTarget).attr('data-menu-typeid');
-            var index = $(event.currentTarget).attr('data-index');
+            let index = $(event.currentTarget).attr('data-index');
+            
+            let orderDetail = this.orderModify.get('OrderDetail').get({cid: index});
+            let newAmount = orderDetail.get('Amount') - 1;
 
-            var current_amount = this.order.findWhere({menu_typeid: menu_typeid})
-                                            .get('orders')
-                                            .at(index)
-                                            .get('amount');
+            // If number is allready zero, nothing todo
+            if(newAmount == -1) return;
 
-            current_amount--;
-
-            if(current_amount < 0)
-                    current_amount = 0;
-
-            this.order.findWhere({menu_typeid: menu_typeid})
-                        .get('orders')
-                        .at(index)
-                        .set('amount', current_amount);
+            orderDetail.set('Amount', newAmount);
 
             this.renderOrder();
         }
@@ -357,25 +318,25 @@ define(["Webservice",
         finished(event) {
             console.log("order finish");
 
-            var self = this;
+            let self = this;
 
-            var webservice = new Webservice();
+            let webservice = new Webservice();
 
             if(this.mode == 'new')
                 webservice.action = "Orders/AddOrder";
             else
                 webservice.action = "Orders/ModifyOrder";
 
-            webservice.formData = {order: JSON.stringify(this.order.toJSON()),
+            webservice.formData = {order: JSON.stringify(this.orderModify.toJSON()),
                                    options: this.options};
             webservice.callback = {
                 success: function(result) {
-                    var hasSpecialOrders = false;
+                    let hasSpecialOrders = false;
 
                     self.order.each(function(category) {
                         if(!hasSpecialOrders)
                         {
-                            var isSpecialOrder = category.get('menu_typeid') == "0";
+                            let isSpecialOrder = category.get('menu_typeid') == "0";
                             hasSpecialOrders = isSpecialOrder;
                         }
                     });
@@ -392,116 +353,145 @@ define(["Webservice",
         }
 
         renderOrder() {
-            var itemTemplate = _.template(TemplateItem);
+            let itemTemplate = _.template(TemplateItem);
 
             this.$('#selected').empty();
 
-            var counter = 0;
-            var totalSumPrice = 0;
+            let counter = 0;
+            let totalSumPrice = 0;
+            let sortedCategorys = new Map();
+            
+            // Presort the list by categorys
+            this.orderModify.get('OrderDetail').each((orderDetail) => {
+                let menuid = orderDetail.get('Menuid');
+                let key = null;
+                
+                if(menuid == 0 && sortedCategorys.get(key) == null)
+                {
+                    sortedCategorys.set(key, {name: "Sonderwünsche",
+                                              orders: new Set()});
+                }
+                else if(menuid != 0)
+                {
+                    let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});                    
+                    key = menuSearch.MenuTypeid;
+                                        
+                    if(sortedCategorys.get(key) == null)
+                    {
+                        let menuType = app.productList.findWhere({MenuTypeid: key});
+                        sortedCategorys.set(key, {name: menuType.get('Name'),
+                                                  orders: new Set()});
+                    }                                                            
+                }
+                
+                sortedCategorys.get(key).orders.add(orderDetail);
+            });
 
-            this.order.each((category) => {
-                this.$('#selected').append("<li data-role='list-divider'>" + category.get('name') + "</li>");
+            for(let[menuTypeid, val] of sortedCategorys.entries())
+            {
+                this.$('#selected').append("<li data-role='list-divider'>" + val.name + "</li>");
                 counter = 0;
-                var isSpecialOrder = category.get('menu_typeid') == "0";
+                let isSpecialOrder = (menuTypeid == null);
 
-                category.get('orders').each((originalMenu) => {
-                    var menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.menuid == originalMenu.get('menuid'); });
-                    var extras = '';
-                    var price = parseFloat(originalMenu.get('price'));
-                    var priceFromDB = originalMenu.get('backendID') > 0;
+                for (let orderDetail of val.orders.values()) {
+                    let menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetail.get('Menuid'); });
+                    let extras = '';
+                    let price = parseFloat(orderDetail.get('SinglePrice'));
+                    let isNew = orderDetail.isNew();
 
-                    var sizeToMixWith = originalMenu.get('sizes').at(0);
+                    let menuSize = orderDetail.get('MenuSize');
 
                     // Add size text if multible sizes are avaible for the product
-                    if(!isSpecialOrder && menuSearch.menu.get('sizes').length > 1)
+                    if(!isSpecialOrder && menuSearch.Menu.get('MenuPossibleSize').length > 1)
                     {
-                        extras = sizeToMixWith.get('name') + ", ";
+                        extras = menuSize.get('Name') + ", ";
                     }
-                    if(!priceFromDB) price += parseFloat(sizeToMixWith.get('price'));
+                    if(isNew && !isSpecialOrder) price += parseFloat(menuSearch.Menu.get('MenuPossibleSize').findWhere({MenuSizeid: menuSize.get('MenuSizeid')}).get('Price'));
 
-                    if(originalMenu.get('mixing').length > 0)
+                    if(orderDetail.get('OrderDetailMixedWith').length > 0)
                     {
                         extras += "Gemischt mit: ";
 
-                        originalMenu.get('mixing').each((menuToMixWith) => {
-                            extras += menuToMixWith.get('name') + " - ";
+                        orderDetail.get('OrderDetailMixedWith').each((orderDetailMixedWith) => {
+                            let menuToMixWith = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetailMixedWith.get('Menuid'); });
+                            extras += menuToMixWith.Menu.get('Name') + " - ";
 
-                            var menuToMixWithSearch = _.find(app.productList.searchHelper, function(obj) { return obj.menuid == menuToMixWith.get('menuid'); });
-
-                            var sizesOfMenuToMixWith = app.productList.findWhere({menu_typeid: menuToMixWithSearch.menu_typeid})
-                                                                        .get('groupes')
-                                                                        .findWhere({menu_groupid: menuToMixWithSearch.menu_groupid})
-                                                                        .get('menues')
-                                                                        .findWhere({menuid: menuToMixWithSearch.menuid})
-                                                                        .get('sizes');
+                            let sizesOfMenuToMixWith = app.productList.findWhere({MenuTypeid: menuToMixWith.MenuTypeid})
+                                                                        .get('MenuGroup')
+                                                                        .findWhere({MenuGroupid: menuToMixWith.MenuGroupid})
+                                                                        .get('Menu')
+                                                                        .findWhere({Menuid: menuToMixWith.Menuid})
+                                                                        .get('MenuPossibleSize');
 
                             // -- Price calculation --
                             // First: try to find the same size for the mixing product and get this price
-                            var menuToMixWithHasSameSizeAsOriginal = sizesOfMenuToMixWith.findWhere({menu_sizeid: sizeToMixWith.get('menu_sizeid')});
-                            var menuToMixWithDefaultPrice = parseFloat(menuToMixWithSearch.menu.get('price'));
+                            let menuToMixWithHasSameSizeAsOriginal = sizesOfMenuToMixWith.findWhere({MenuSizeid: menuSize.get('MenuSizeid')});
+                            let menuToMixWithDefaultPrice = parseFloat(menuToMixWith.Menu.get('Price'));
 
                             if(menuToMixWithHasSameSizeAsOriginal)
                             {
-                                var priceToAdd = menuToMixWithDefaultPrice + parseFloat(menuToMixWithHasSameSizeAsOriginal.get('price'));
+                                let priceToAdd = menuToMixWithDefaultPrice + parseFloat(menuToMixWithHasSameSizeAsOriginal.get('Price'));
 
                                 if(DEBUG) console.log("Mixing same size found: " + priceToAdd);
 
-                                if(!priceFromDB) price += priceToAdd;
+                                if(isNew) price += priceToAdd;
                                 return;
                             }
 
                             // Second: Try to calculate the price based on factor value
-                            var menuToMixWithSize = menuToMixWithSearch.menu.get('sizes').at(0);
+                            let menuToMixWithSize = menuToMixWith.Menu.get('MenuPossibleSize').at(0);
 
-                            var factor = sizeToMixWith.get('factor') / menuToMixWithSize.get('factor');
+                            let factor = menuSize.get('Factor') / menuToMixWithSize.get('MenuSize').get('Factor');
 
-                            var priceToAdd = (menuToMixWithDefaultPrice + parseFloat(menuToMixWithSize.get('price')) ) * factor;
+                            let priceToAdd = (menuToMixWithDefaultPrice + parseFloat(menuToMixWithSize.get('Price')) ) * factor;
 
                             if(DEBUG) console.log("Mixing factor calculation: " + priceToAdd + " - " + priceToAdd.toFixed(1));
 
-                            if(!priceFromDB) price += priceToAdd;
+                            if(isNew) price += priceToAdd;
                             // -- End Price calculation --
                         });
 
-                        if(!priceFromDB)
+                        if(isNew)
                         {
-                            price = parseFloat( ( price / (originalMenu.get('mixing').length + 1) ) );
-                            price = Math.round(price * 10)/10;// avoid cents
+                            price = parseFloat( ( price / (orderDetail.get('OrderDetailMixedWith').length + 1) ) );
+                            price = Math.round(price * 10)/10;// avoid peanuts
                         }
 
                         extras = extras.slice(0, -3);
                         extras += ", ";
                     }
 
-                    originalMenu.get('extras').each(function(extra){
-                        extras += extra.get('name') + ", ";
-                        if(!priceFromDB) price += parseFloat(extra.get('price'));
+                    orderDetail.get('OrderDetailExtra').each(function(extra){
+                        let menuPossibleExtra = menuSearch.Menu.get('MenuPossibleExtra')
+                                                                .findWhere({MenuPossibleExtraid: extra.get('MenuPossibleExtraid')});
+                        extras += menuPossibleExtra.get('MenuExtra').get('Name') + ", ";
+                        if(isNew) price += parseFloat(menuPossibleExtra.get('Price'));
                     });
 
-                    if(originalMenu.get('extra') && originalMenu.get('extra').length > 0)
-                        extras += originalMenu.get('extra') + ", ";
+                    if(orderDetail.get('ExtraDetail') && orderDetail.get('ExtraDetail').length > 0)
+                        extras += orderDetail.get('ExtraDetail') + ", ";
 
                     if(extras.length > 0)
                         extras = extras.slice(0, -2);
 
-                    var totalPrice = price * originalMenu.get('amount');
+                    let totalPrice = price * orderDetail.get('Amount');
                     totalSumPrice += totalPrice;
 
-                    var datas = {name: originalMenu.get('name'),
+                    let datas = {name: isSpecialOrder ? "Sonderwunsch" : menuSearch.Menu.get('Name'),
                                 extras: extras,
                                 mode: 'modify',
-                                amount: originalMenu.get('amount'),
+                                amount: orderDetail.get('Amount'),
                                 price: price,
                                 totalPrice: totalPrice,
-                                menu_typeid: category.get('menu_typeid'),
-                                index: counter,
+                                menuTypeid: menuTypeid,
+                                index: orderDetail.cid,
                                 isSpecialOrder: isSpecialOrder,
                                 skipCounts: false};
 
                     this.$('#selected').append("<li>" + itemTemplate(datas) + "</li>");
                     counter++;
-                });
-            });
+                }             
+            }
 
             if(this.mode == 'edit' && this.oldPrice === undefined)
             {
@@ -526,12 +516,12 @@ define(["Webservice",
 
         // Renders all of the Category models on the UI
         render() {
-            var header = new HeaderView();
+            let header = new HeaderView();
             this.registerSubview(".nav-header", header);
             
             this.renderTemplate(Template, { header: header.render(),
                                             mode: this.mode,
-                                            order: this.order,
+                                            order: this.orderModify,
                                             products: app.productList});
                                         
             // Broken Tabs widget with Backbone pushstate enabled  - manual fix it

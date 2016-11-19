@@ -59,7 +59,7 @@
                             <legend>Größe:</legend>
                             <% menu.get('MenuPossibleSize').each(function(size){ %>
                                <input type="radio" name="size-<%- menu.get('Menuid') %>" id="checkbox-size-<%- menu.get('Menuid') %>-<%- size.get('MenuSizeid') %>" value="<%- size.get('MenuSizeid') %>">
-                               <label for="checkbox-size-<%- menu.get('Menuid') %>-<%- size.get('MenuSizeid') %>"><%- size.get('Name') %> <% if(size.get('Price') != 0) { %><span class="ui-li-count"><%- parseFloat(size.get('Price')).toFixed(2) %> €</span><% } %></label>
+                               <label for="checkbox-size-<%- menu.get('Menuid') %>-<%- size.get('MenuSizeid') %>"><%- size.get('MenuSize').get('Name') %> <% if(size.get('Price') != 0) { %><span class="ui-li-count"><%- parseFloat(size.get('Price')).toFixed(2) %> €</span><% } %></label>
                             <% }); %>
                         </fieldset>
                     <% } %>
@@ -70,10 +70,10 @@
                             <% menu.get('MenuPossibleExtra').each(function(extra){ %>
                                 <% if(extra.get('Availability') == ORDER_AVAILABILITY_OUT_OF_ORDER) { %>
                                     <input type="checkbox" id="extra-<%- menu.get('Menuid') %>-<%- extra.get('MenuExtraid') %>" value="<%- extra.get('MenuExtraid') %>" disabled="" >
-                                    <label for="extra-<%- menu.get('Menuid') %>-<%- extra.get('MenuExtraid') %>" style="color: red"><%- extra.get('Name') %><% if(extra.get('Price') != 0) { %><span class="ui-li-count"><%- parseFloat(extra.get('Price')).toFixed(2) %> €</span><% } %></label>
-                                <% } else {%>
+                                    <label for="extra-<%- menu.get('Menuid') %>-<%- extra.get('MenuExtraid') %>" style="color: red"><%- extra.get('MenuExtra').get('Name') %><% if(extra.get('Price') != 0) { %><span class="ui-li-count"><%- parseFloat(extra.get('Price')).toFixed(2) %> €</span><% } %></label>
+                                <% } else { %>
                                     <input type="checkbox" name="extra-<%- menu.get('Menuid') %>" id="extra-<%- menu.get('Menuid') %>-<%- extra.get('MenuExtraid') %>" value="<%- extra.get('MenuExtraid') %>">
-                                    <label for="extra-<%- menu.get('Menuid') %>-<%- extra.get('MenuExtraid') %>" <% if(extra.get('Availability') == ORDER_AVAILABILITY_DELAYED) { %> style="color: orange" <% } %>><%- extra.get('Name') %><% if(extra.get('Price') != 0) { %><span class="ui-li-count"><%- parseFloat(extra.get('Price')).toFixed(2) %> €</span><% } %></label>
+                                    <label for="extra-<%- menu.get('Menuid') %>-<%- extra.get('MenuExtraid') %>" <% if(extra.get('Availability') == ORDER_AVAILABILITY_DELAYED) { %> style="color: orange" <% } %>><%- extra.get('MenuExtra').get('Name') %><% if(extra.get('Price') != 0) { %><span class="ui-li-count"><%- parseFloat(extra.get('Price')).toFixed(2) %> €</span><% } %></label>
                                 <% } %>
                             <% }); %>
                         </fieldset>
@@ -87,7 +87,7 @@
                     <div id="panel-mixing-text-<%- menu.get('Menuid') %>">
                     </div>
 
-                    <% if(type.get('AllowMixing') == true) { %>
+                    <% if(type.get('Allowmixing') == true) { %>
                         <a id="panel-<%- menu.get('Menuid') %>-mixing" class="mixing ui-shadow ui-btn ui-mini ui-corner-all ui-icon-star ui-btn-icon-right">Spritzen mit</a>
                     <% } %>
                     <a id="panel-<%- menu.get('Menuid') %>-add" class="add ui-shadow ui-btn ui-mini ui-corner-all ui-icon-plus ui-btn-icon-right">Hinzufügen</a>
