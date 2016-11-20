@@ -60,6 +60,15 @@
         "details": "Details",
         "size": "Size",
         "particularities": "Particularities",
-        "mixWith": "Mix with"
+        "mixWith": "Mix with",
+        "errorSpecialOrderText": "Please enter a special order description!",
+        "error": "Error!",
+        "errorMixWithSelf": "Your selected Product can not be mixed with itself!",
+        "errorMixingNotAllowed": "You selected a Product where mixing is not possible!",
+        "errorOrder": "The order coudn't be successfuly send. Please retry it!",
+        "errorSize": "Please choose a size!",
+        "specialOrders": "Special Orders",
+        "specialOrder": "Special Order",
+        "mixedWith": "Mixed with"
     }
 }

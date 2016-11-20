@@ -60,6 +60,15 @@
         "details": "Details",
         "size": "Größe",
         "particularities": "Besonderheiten",
-        "mixWith": "Spritzen mit"
+        "mixWith": "Spritzen mit",
+        "errorSpecialOrderText": "Bitte einen Sonderwunsch eingeben!",
+        "error": "Fehler!",
+        "errorMixWithSelf": "Ausgewähltes Produkt kann nicht mit sich selbst gemixt werden!",
+        "errorMixingNotAllowed": "Ausgewähltes Produkt kann nicht gemixt werden!",
+        "errorOrder": "Die Bestellung konnte nicht erfolgreich aufgegeben werden. Bitte versuchen Sie es erneut!",
+        "errorSize": "Bitte eine größe Auswählen!",
+        "specialOrders": "Sonderwünsche",
+        "specialOrder": "Sonderwunsch",
+        "mixedWith": "Gemischt mit"
     }
 }

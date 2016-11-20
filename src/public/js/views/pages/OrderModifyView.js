@@ -104,7 +104,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
                 if(sizeSelected.length === 0)
                 {
-                    alert('Bitte eine größe Auswählen!');
+                    alert(this.i18n().errorSize);
                     return;
                 }
 
@@ -162,7 +162,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
             if(specialOrderText == '')
             {
-                alert('Bitte einen Sonderwunsch eingeben!');
+                alert(this.i18n().errorSpecialOrderText);
                 return;
             }
 
@@ -205,13 +205,15 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
                 if(mixing_menuid == menuid)
                 {
-                    app.error.showAlert("Fehler!", "Ausgewähltes Produkt kann nicht mit sich selbst gemixt werden!");
+                    let t = this.i18n();
+                    app.error.showAlert(t.error, t.errorMixWithSelf);
                     return;
                 }
 
                 if(canMix == false)
                 {
-                    app.error.showAlert("Fehler!", "Ausgewähltes Produkt kann nicht gemixt werden!");
+                    let t = this.i18n();
+                    app.error.showAlert(t.error, t.errorMixingNotAllowed);
                     return;
                 }
 
@@ -302,7 +304,8 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                                 this.changeHash("order-pay/id/" + result + "/tableNr/" + this.tableNr);
                             })
                             .fail(() => {
-                                app.error.showAlert("Fehler", "Die Bestellung konnte nicht erfolgreich aufgegeben werden. Bitte versuchen Sie es erneut!");
+                                let t = this.i18n();
+                                app.error.showAlert(t.error, t.errorOrder);
                             });
         }
 
@@ -314,6 +317,8 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             let counter = 0;
             let totalSumPrice = 0;
             let sortedCategorys = new Map();
+            let t = this.i18n();
+            let currency = app.i18n.template.currency;
             
             // Presort the list by categorys
             this.orderModify.get('OrderDetail').each((orderDetail) => {
@@ -322,7 +327,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                 
                 if(menuid == 0 && sortedCategorys.get(key) == null)
                 {
-                    sortedCategorys.set(key, {name: "Sonderwünsche",
+                    sortedCategorys.set(key, {name: t.specialOrders,
                                               orders: new Set()});
                 }
                 else if(menuid != 0)
@@ -365,7 +370,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
                     if(orderDetail.get('OrderDetailMixedWith').length > 0)
                     {
-                        extras += "Gemischt mit: ";
+                        extras += t.mixedWith + ": ";
 
                         orderDetail.get('OrderDetailMixedWith').each((orderDetailMixedWith) => {
                             let menuToMixWith = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetailMixedWith.get('Menuid'); });
@@ -432,7 +437,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                     let totalPrice = price * orderDetail.get('Amount');
                     totalSumPrice += totalPrice;
 
-                    let datas = {name: isSpecialOrder ? "Sonderwunsch" : menuSearch.Menu.get('Name'),
+                    let datas = {name: isSpecialOrder ? t.specialOrder : menuSearch.Menu.get('Name'),
                                 extras: extras,
                                 mode: 'modify',
                                 amount: orderDetail.get('Amount'),
@@ -451,17 +456,17 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             if(this.mode == 'edit' && this.oldPrice === undefined)
             {
                 this.oldPrice = parseFloat(totalSumPrice);
-                this.$('#total-old').text(this.oldPrice.toFixed(2) + ' €');
+                this.$('#total-old').text(this.oldPrice.toFixed(2) + ' ' + currency);
             }
 
             if(this.mode == 'new')
             {
-                this.$('#total').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
+                this.$('#total').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
             }
             else
             {
-                this.$('#total-new').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
-                this.$('#total-difference').text(parseFloat(totalSumPrice - this.oldPrice).toFixed(2) + ' €');
+                this.$('#total-new').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
+                this.$('#total-difference').text(parseFloat(totalSumPrice - this.oldPrice).toFixed(2) + ' ' + currency);
             }
 
             this.$('.order-item-up').click(this.order_count_up);
