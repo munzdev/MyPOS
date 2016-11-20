@@ -1,21 +1,19 @@
 // Includes file dependencies
 define(["collections/db/Ordering/OrderDetailExtraCollection",
         "collections/db/Ordering/OrderDetailMixedWithCollection",
-        "models/custom/order/OrderModify",        
-        "models/db/Menu/MenuType",
+        "models/custom/order/OrderModify", 
         "models/db/Ordering/OrderDetail",
-        "models/db/Menu/MenuSize",      
         'views/helpers/HeaderView',
         'text!templates/pages/order-modify.phtml',
+        'text!templates/pages/order-modify-panel.phtml',
         'text!templates/pages/order-item.phtml'
 ], function(OrderDetailExtraCollection,
             OrderDetailMixedWithCollection,
             OrderModify,
-            MenuType,
             OrderDetail,
-            SizeModel,           
             HeaderView,
             Template,
+            TemplatePanel,
             TemplateItem) {
     "use strict";
 
@@ -23,12 +21,12 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
     return class OrderModifyView extends app.PageView
     {
         events() {
-            return {'panelbeforeclose .panel': 'order_close',
-                    'panelbeforeclose #panel-special': 'order_special_close',
+            return {'panelbeforeclose #panel-special': 'order_special_close',
 
-                    // Manually handle events. Ensures that the close event is called after the task
-                    'click .add': 'order_add',
-                    'click .mixing': 'order_mixing',
+                    // Manually handle events. Ensures that the close event is called after the task                    
+                    'click #panel-close': 'order_close',
+                    'click #panel-add': 'order_add',
+                    'click #panel-mixing': 'order_mixing',
                     'click .menu-item': 'menu_item',
                     'click #panel-special-add': 'order_special_add',
                     'click #footer-back': 'footer_back',
@@ -38,15 +36,8 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
         // The View Constructor
         initialize(options) {
-            _.bindAll(this, "renderOrder",
-                            "order_count_up",
-                            "order_count_down",
-                            "menu_item",
-                            "order_mixing",
-                            "order_close",
-                            "order_add",
-                            "order_special_close",
-                            "order_special_add");
+            _.bindAll(this, "order_count_up",
+                            "order_count_down");
 
             this.options = options;
             this.isMixing = null;
@@ -82,12 +73,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
         }
 
         order_add(event) {
-            let id = $(event.currentTarget).attr('id');
-
-            let idRegex = /[(0-9)]+/igm;
-            let menuid = parseInt(id.match(idRegex)[0]);
-
-            console.log("add " + menuid);
+            let menuid = this.currentMenuid;
 
             let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});
 
@@ -141,13 +127,13 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             orderDetail.set('Menuid', menuid);
             orderDetail.set('Amount', 1);
             orderDetail.set('SinglePrice', menuSearch.Menu.get('Price'));
-            orderDetail.set('ExtraDetail', this.$('#extras-text-' + menuid).val());
+            orderDetail.set('ExtraDetail', this.$('#extras-text').val());
 
-            this.$('#panel-mixing-text-' + menuid + ' div').each(function(index, mixing){
-                let menuidToMixWith = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == $(mixing).attr('data-menuid'); });
+            this.$('#panel-mixing-text div').each(function(index, mixing){
+                let menuid = parseInt($(mixing).attr('data-menuid'));
 
                 let mixingModel = new (orderDetail.get("OrderDetailMixedWith").model);
-                mixingModel.set('Menuid', menuidToMixWith.Menu.get('Menuid'));
+                mixingModel.set('Menuid', menuid);
                 orderDetail.get("OrderDetailMixedWith").add(mixingModel);
             });
 
@@ -155,7 +141,11 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
             this.showOverview();
             this.renderOrder();
-            this.$('#panel-' + menuid).panel("close");
+            this.$('#panel-order').panel("close");
+        }
+        
+        order_close() {
+            this.$('#panel-order').panel("close");
         }
 
         showOverview() {
@@ -166,30 +156,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             this.$('#tabs-navbar-overview').addClass('ui-btn-active');
         }
 
-        order_close(event) {
-            console.log("close");
-
-            if(this.isMixing !== null)
-                return;
-
-            let id = $(event.currentTarget).attr('id');
-
-            let priceRegex = /[(0-9)]+/igm;
-            let menuid = id.match(priceRegex)[0];
-
-            this.$('input[name=size-' + menuid + ']:checked').each(function(){
-                $(this).attr('checked', false).checkboxradio("refresh");
-            });
-            this.$('input[name=extra-' + menuid + ']:checked').each(function(){
-                $(this).attr('checked', false).checkboxradio("refresh");
-            });
-            this.$('#extras-text-' + menuid).val("");
-            this.$('#panel-mixing-text-' + menuid).html('');
-        }
-
         order_special_add(event) {
-            console.log("add special");
-
             let specialOrderText = this.$('#panel-special-extra').val();
             specialOrderText = $.trim(specialOrderText);
 
@@ -212,33 +179,21 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
         }
 
         order_special_close(event) {
-            console.log("close special");
-
             this.$('#panel-special-extra').val("");
         }
 
         order_mixing(event) {
-            console.log("mix");
-
-            let id = $(event.currentTarget).attr('id');
-
-            let priceRegex = /[(0-9)]+/igm;
-            let menuid = id.match(priceRegex)[0];
-
-            this.isMixing = menuid;
-            this.$('#panel-' + menuid).panel("close");
+            this.isMixing = this.currentMenuid;
+            this.$('#panel-order').panel("close");
         }
 
-        menu_item(event) {
-            console.log("open");
-
+        menu_item(event) {            
+            let menuItem = $(event.currentTarget);
+            
             if(this.isMixing !== null)
             {
                 let mixing_menuid = this.isMixing;
-                let href = $(event.currentTarget).attr('href');
-
-                let priceRegex = /[(0-9)]+/igm;
-                let menuid = href.match(priceRegex)[0];
+                let menuid = parseInt(menuItem.attr('data-menuid'));
 
                 let menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == menuid; });
 
@@ -261,23 +216,41 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                 }
 
                 this.isMixing = null;
+                
+                let currentMixing = this.$('#panel-mixing-text');
+                
+                if($.trim(currentMixing.html()) == '')
+                    currentMixing.html($('<b/>').text('Gemixt mit:'));
+                
+                currentMixing.append($('<div/>').attr('data-menuid', menuid).text(menuSearch.Menu.get('Name')));
 
-                let currentMixing = this.$('#panel-mixing-text-' + mixing_menuid).html();
+                this.$('#panel-mixing-text').html(currentMixing.html());
 
-                if($.trim(currentMixing) == '')
-                    currentMixing = '<b>Gemixt mit:</b>';
+                this.$('#panel-order').panel("open");
+            }
+            else 
+            {
+                this.$('#panel-order').empty();
+                
+                let menuid = parseInt(menuItem.attr('data-menuid'));                
+                this.currentMenuid = menuid;
+                        
+                let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});
+                let type = app.productList.findWhere({MenuTypeid: menuSearch.MenuTypeid});
+                
+                let templatePanel = _.template(TemplatePanel);
+                this.$('#panel-order').html(templatePanel({menu: menuSearch.Menu,
+                                                           type: type,
+                                                           t: this.i18n(),
+                                                           i18n: app.i18n.template}));
 
-                currentMixing += '<div data-menuid="' + menuid + '">' + menuSearch.Menu.get('Name') + '</div>';
-
-                this.$('#panel-mixing-text-' + mixing_menuid).html(currentMixing);
-
-                this.$('#panel-' + mixing_menuid).panel("open");
+                this.$('#panel-order').enhanceWithin()
+                                      .trigger("updatelayout")
+                                      .panel("open");                
             }
         }
 
         order_count_up(event) {
-            console.log("Up");
-
             let index = $(event.currentTarget).attr('data-index');
 
             let orderDetail = this.orderModify.get('OrderDetail').get({cid: index});
@@ -287,8 +260,6 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
         }
 
         order_count_down(event) {
-            console.log("Down");
-
             let index = $(event.currentTarget).attr('data-index');
             
             let orderDetail = this.orderModify.get('OrderDetail').get({cid: index});
@@ -303,53 +274,36 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
         }
 
         footer_back(event) {
-            console.log("back");
-
             event.preventDefault();
             window.history.back();
         }
 
         footer_finish(event) {
-            console.log("order verify");
-
             this.$('#verify-dialog').popup('open');
         }
 
         finished(event) {
-            console.log("order finish");
+            this.orderModify.save()
+                            .done((result) => {
+                                let hasSpecialOrders = false;
 
-            let self = this;
+                                this.orderModify.get('OrderDetail').each((orderDetail) => {
+                                    if(!hasSpecialOrders)
+                                    {
+                                        hasSpecialOrders = (orderDetail.get('Menuid') == 0);
+                                    }
+                                });
 
-            let webservice = new Webservice();
+                                if(hasSpecialOrders)
+                                    app.ws.api.Trigger("manager-check");
 
-            if(this.mode == 'new')
-                webservice.action = "Orders/AddOrder";
-            else
-                webservice.action = "Orders/ModifyOrder";
+                                app.ws.api.Trigger("distribution-update");
 
-            webservice.formData = {order: JSON.stringify(this.orderModify.toJSON()),
-                                   options: this.options};
-            webservice.callback = {
-                success: function(result) {
-                    let hasSpecialOrders = false;
-
-                    self.order.each(function(category) {
-                        if(!hasSpecialOrders)
-                        {
-                            let isSpecialOrder = category.get('menu_typeid') == "0";
-                            hasSpecialOrders = isSpecialOrder;
-                        }
-                    });
-
-                    if(hasSpecialOrders)
-                        app.ws.api.Trigger("manager-check");
-
-                    app.ws.api.Trigger("distribution-update");
-
-                    this.changeHash("order-pay/id/" + result + "/tableNr/" + self.options.tableNr);
-                }
-            };
-            webservice.call();
+                                this.changeHash("order-pay/id/" + result + "/tableNr/" + this.tableNr);
+                            })
+                            .fail(() => {
+                                app.error.showAlert("Fehler", "Die Bestellung konnte nicht erfolgreich aufgegeben werden. Bitte versuchen Sie es erneut!");
+                            });
         }
 
         renderOrder() {
@@ -389,7 +343,8 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
             for(let[menuTypeid, val] of sortedCategorys.entries())
             {
-                this.$('#selected').append("<li data-role='list-divider'>" + val.name + "</li>");
+                let divider = $('<li/>').attr('data-role', 'list-divider').text(val.name);
+                this.$('#selected').append(divider);
                 counter = 0;
                 let isSpecialOrder = (menuTypeid == null);
 

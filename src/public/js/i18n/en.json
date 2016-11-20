@@ -39,5 +39,27 @@
         "errorText": "Please enter a Table number!",
         "delete": "Clear",
         "next": "Next"
+    },
+    "OrderModifyView": {
+        "overview": "Overview",
+        "addSpecialOrder": "Add special order",
+        "sum": "Sum",
+        "oldSum": "Old Summe",
+        "newSum": "New Summe",
+        "difference": "Difference",
+        "extras": "Extras",
+        "add": "Add",
+        "cancel": "Cancel",
+        "back": "Back",
+        "order": "Order",
+        "change": "Change",
+        "orderFinished": "Order finished?",
+        "changeFinished": "Change finished?",
+        "orderFinishedVerifyText": "Are you sure that the order is finished?",
+        "continue": "Continue",
+        "details": "Details",
+        "size": "Size",
+        "particularities": "Particularities",
+        "mixWith": "Mix with"
     }
 }

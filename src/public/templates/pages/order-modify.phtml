@@ -2,12 +2,12 @@
     <div class="nav-header"></div>
     <div data-role="tabs" id="tabs">
         <div data-role="navbar" data-iconpos="notext" id="tabs-navbar" >
-                <ul>
-                    <% products.each(function(type){ %>
-                        <li><a data-role="tab"  href="#<%- type.get('MenuTypeid') %>"><%- type.get('Name') %></a></li>
-                    <% }); %>
-                    <li><a data-role="tab" id="tabs-navbar-overview" href="#overview">Übersicht</a></li>
-                </ul>
+            <ul>
+                <% products.each(function(type){ %>
+                    <li><a data-role="tab"  href="#<%- type.get('MenuTypeid') %>"><%- type.get('Name') %></a></li>
+                <% }); %>
+                <li><a data-role="tab" id="tabs-navbar-overview" href="#overview"><%= t.overview %></a></li>
+            </ul>
         </div>
         <% products.each(function(type){ %>
             <div id="<%- type.get('MenuTypeid') %>" >
@@ -16,9 +16,9 @@
                         <li data-role="list-divider"><%- group.get('Name') %></li>
                         <% group.get('Menu').each(function(menu){ %>
                             <% if(menu.get('Availability') == ORDER_AVAILABILITY_OUT_OF_ORDER) { %>
-                                <li><a style="color: red"><%- menu.get('Name') %><span class="ui-li-count"><%- parseFloat(menu.get('Price')).toFixed(2) %> €</span></a></li>
+                                <li><a style="color: red"><%- menu.get('Name') %><span class="ui-li-count"><%- parseFloat(menu.get('Price')).toFixed(2) %> <%= i18n.currency %></span></a></li>
                             <% } else { %>
-                                <li><a href="#panel-<%- menu.get('Menuid') %>" class='menu-item' <% if(menu.get('Availability') == ORDER_AVAILABILITY_DELAYED) { %> style="color: orange" <% } %> ><%- menu.get('Name') %><span class="ui-li-count"><%- parseFloat(menu.get('Price')).toFixed(2) %> €</span></a></li>
+                                <li><a data-menuid="<%- menu.get('Menuid') %>" class='menu-item' <% if(menu.get('Availability') == ORDER_AVAILABILITY_DELAYED) { %> style="color: orange" <% } %> ><%- menu.get('Name') %><span class="ui-li-count"><%- parseFloat(menu.get('Price')).toFixed(2) %> <%= i18n.currency %></span></a></li>
                             <% } %>
                         <% }); %>
                     <% }); %>
@@ -26,110 +26,63 @@
             </div>
         <% }); %>
         <div id="overview">
-            <a href="#panel-special" data-role="button" data-icon="action" data-mini="true">Sonderwunsch hinzufügen</a>
+            <a href="#panel-special" data-role="button" data-icon="action" data-mini="true"><%= t.addSpecialOrder %></a>
             <ul data-role="listview" data-inset="true" id="selected">
             </ul>
             <% if(mode == 'new') { %>
-                <h3 class="ui-bar ui-bar-a ui-corner-all">Summe</h3>
+                <h3 class="ui-bar ui-bar-a ui-corner-all"><%= t.sum %></h3>
                 <div class="ui-body ui-body-a ui-corner-all">
-                        <h1 style="margin: 0; padding: 0" id='total'>0,00€</h1>
+                        <h1 style="margin: 0; padding: 0" id='total'>0,00<%= i18n.currency %></h1>
                 </div>
             <% } else if(mode == 'edit') { %>
-                <h3 class="ui-bar ui-bar-a ui-corner-all">Alte Summe</h3>
+                <h3 class="ui-bar ui-bar-a ui-corner-all"><%= t.oldSum %></h3>
                 <div class="ui-body ui-body-a ui-corner-all">
-                    <h1 style="margin: 0; padding: 0" id='total-old'>0,00€</h1>
+                    <h1 style="margin: 0; padding: 0" id='total-old'>0,00<%= i18n.currency %></h1>
                 </div>
-                <h3 class="ui-bar ui-bar-a ui-corner-all">Neue Summe</h3>
+                <h3 class="ui-bar ui-bar-a ui-corner-all"><%= t.newSum %></h3>
                 <div class="ui-body ui-body-a ui-corner-all">
-                    <h1 style="margin: 0; padding: 0" id='total-new'>0,00€</h1>
-                    Differenz: <span id="total-difference">0,00 €</span>
+                    <h1 style="margin: 0; padding: 0" id='total-new'>0,00<%= i18n.currency %></h1>
+                    <%= t.difference %>: <span id="total-difference">0,00 <%= i18n.currency %></span>
                 </div>
             <% } %>
         </div>
     </div>
 </div>
-<% products.each(function(type){ %>
-    <% type.get('MenuGroup').each(function(group){ %>
-        <% group.get('Menu').each(function(menu){ %>
-            <div data-role="panel" data-display="overlay" id="panel-<%- menu.get('Menuid') %>" class='panel'>
-                <h3 class="ui-bar ui-bar-a ui-corner-all" style="margin: 0;"><%- menu.get('Name') %> Details</h3>
-                <div class="ui-body ui-body-a ui-corner-all">
-                    <% if(menu.get('MenuPossibleSize').length > 1) { %>
-                        <fieldset data-role="controlgroup" data-mini="true">
-                            <legend>Größe:</legend>
-                            <% menu.get('MenuPossibleSize').each(function(size){ %>
-                               <input type="radio" name="size-<%- menu.get('Menuid') %>" id="checkbox-size-<%- menu.get('Menuid') %>-<%- size.get('MenuSizeid') %>" value="<%- size.get('MenuSizeid') %>">
-                               <label for="checkbox-size-<%- menu.get('Menuid') %>-<%- size.get('MenuSizeid') %>"><%- size.get('MenuSize').get('Name') %> <% if(size.get('Price') != 0) { %><span class="ui-li-count"><%- parseFloat(size.get('Price')).toFixed(2) %> €</span><% } %></label>
-                            <% }); %>
-                        </fieldset>
-                    <% } %>
-
-                    <% if(menu.get('MenuPossibleExtra')) { %>
-                        <fieldset data-role="controlgroup" data-mini="true">
-                            <legend>Besonderheiten:</legend>
-                            <% menu.get('MenuPossibleExtra').each(function(extra){ %>
-                                <% if(extra.get('Availability') == ORDER_AVAILABILITY_OUT_OF_ORDER) { %>
-                                    <input type="checkbox" id="extra-<%- menu.get('Menuid') %>-<%- extra.get('MenuExtraid') %>" value="<%- extra.get('MenuExtraid') %>" disabled="" >
-                                    <label for="extra-<%- menu.get('Menuid') %>-<%- extra.get('MenuExtraid') %>" style="color: red"><%- extra.get('MenuExtra').get('Name') %><% if(extra.get('Price') != 0) { %><span class="ui-li-count"><%- parseFloat(extra.get('Price')).toFixed(2) %> €</span><% } %></label>
-                                <% } else { %>
-                                    <input type="checkbox" name="extra-<%- menu.get('Menuid') %>" id="extra-<%- menu.get('Menuid') %>-<%- extra.get('MenuExtraid') %>" value="<%- extra.get('MenuExtraid') %>">
-                                    <label for="extra-<%- menu.get('Menuid') %>-<%- extra.get('MenuExtraid') %>" <% if(extra.get('Availability') == ORDER_AVAILABILITY_DELAYED) { %> style="color: orange" <% } %>><%- extra.get('MenuExtra').get('Name') %><% if(extra.get('Price') != 0) { %><span class="ui-li-count"><%- parseFloat(extra.get('Price')).toFixed(2) %> €</span><% } %></label>
-                                <% } %>
-                            <% }); %>
-                        </fieldset>
-                    <% } %>
-
-                    <fieldset data-role="controlgroup" data-mini="true">
-                        <legend>Extras:</legend>
-                        <textarea cols="40" rows="2" name="extras-text-<%- menu.get('Menuid') %>" id="extras-text-<%- menu.get('Menuid') %>"></textarea>
-                    </fieldset>
-
-                    <div id="panel-mixing-text-<%- menu.get('Menuid') %>">
-                    </div>
-
-                    <% if(type.get('Allowmixing') == true) { %>
-                        <a id="panel-<%- menu.get('Menuid') %>-mixing" class="mixing ui-shadow ui-btn ui-mini ui-corner-all ui-icon-star ui-btn-icon-right">Spritzen mit</a>
-                    <% } %>
-                    <a id="panel-<%- menu.get('Menuid') %>-add" class="add ui-shadow ui-btn ui-mini ui-corner-all ui-icon-plus ui-btn-icon-right">Hinzufügen</a>
-                    <a data-rel="close" id="panel-<%- menu.get('Menuid') %>-close" class="close ui-shadow ui-btn ui-mini ui-corner-all ui-icon-back ui-btn-icon-right">Abbrechen</a>
-                </div>
-            </div>
-        <% }); %>
-    <% }); %>
-<% }); %>
+<div data-role="panel" data-display="overlay" id="panel-order">
+</div>
 <div data-role="panel" data-display="overlay" id="panel-special">
-    <h3 class="ui-bar ui-bar-a ui-corner-all" style="margin: 0;">Sonderwunsch hinzufügen</h3>
+    <h3 class="ui-bar ui-bar-a ui-corner-all" style="margin: 0;"><%= t.addSpecialOrder %></h3>
     <div class="ui-body ui-body-a ui-corner-all">
         <fieldset data-role="controlgroup" data-mini="true">
-            <legend>Extras:</legend>
+            <legend><%= t.extras %>:</legend>
             <textarea cols="40" rows="2" name="panel-special-extra" id="panel-special-extra"></textarea>
         </fieldset>
 
-        <a id="panel-special-add" class="ui-shadow ui-btn ui-mini ui-corner-all ui-icon-plus ui-btn-icon-right">Hinzufügen</a>
-        <a data-rel="close" class="ui-shadow ui-btn ui-mini ui-corner-all ui-icon-back ui-btn-icon-right">Abbrechen</a>
+        <a id="panel-special-add" class="ui-shadow ui-btn ui-mini ui-corner-all ui-icon-plus ui-btn-icon-right"><%= t.add %></a>
+        <a data-rel="close" class="ui-shadow ui-btn ui-mini ui-corner-all ui-icon-back ui-btn-icon-right"><%= t.cancel %></a>
     </div>
 </div>
 <div data-role="footer" data-theme="b" data-position="fixed" >
-    <a id="footer-back" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-carat-l">Zurück</a>
+    <a id="footer-back" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-carat-l"><%= t.back %></a>
     <a id="footer-finish" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-check" style="float:right">
         <% if(mode == 'new') { %>
-            Bestellen
+            <%= t.order %>
         <% } else { %>
-            Ändern
+            <%= t.change %>
         <% } %>
     </a>
 </div>
 <div data-role="popup" id="verify-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
     <div data-role="header" data-theme="a">
         <% if(mode == 'new') { %>
-            <h1>Bestellung fertig?</h1>
+            <h1><%= t.orderFinished %></h1>
         <% } else { %>
-            <h1>Bestellung ändern?</h1>
+            <h1><%= t.changeFinished %></h1>
         <% } %>
     </div>
     <div role="main" class="ui-content">
-        <h3 class="ui-title">Sind sie sicher das die Bestellung fertig ist?</h3>
-        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Abbrechen</a>
-        <a id='finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
+        <h3 class="ui-title"><%= t.orderFinishedVerifyText %>/h3>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back"><%= t.cancel %></a>
+        <a id='finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.continue %></a>
     </div>
 </div>

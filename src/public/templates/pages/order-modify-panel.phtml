@@ -1,0 +1,41 @@
+<h3 class="ui-bar ui-bar-a ui-corner-all" style="margin: 0;"><%- menu.get('Name') %> <%= t.details %></h3>
+<div class="ui-body ui-body-a ui-corner-all">
+    <% if(menu.get('MenuPossibleSize').length > 1) { %>
+        <fieldset data-role="controlgroup" data-mini="true">
+            <legend><%= t.size %>:</legend>
+            <% menu.get('MenuPossibleSize').each(function(size){ %>
+               <input type="radio" name="size-<%- menu.get('Menuid') %>" id="checkbox-size-<%- size.get('MenuSizeid') %>" value="<%- size.get('MenuSizeid') %>">
+               <label for="checkbox-size-<%- size.get('MenuSizeid') %>"><%- size.get('MenuSize').get('Name') %> <% if(size.get('Price') != 0) { %><span class="ui-li-count"><%- parseFloat(size.get('Price')).toFixed(2) %> <%= i18n.currency %></span><% } %></label>
+            <% }); %>
+        </fieldset>
+    <% } %>
+
+    <% if(menu.get('MenuPossibleExtra')) { %>
+        <fieldset data-role="controlgroup" data-mini="true">
+            <legend><%= t.particularities %>:</legend>
+            <% menu.get('MenuPossibleExtra').each(function(extra){ %>
+                <% if(extra.get('Availability') == ORDER_AVAILABILITY_OUT_OF_ORDER) { %>
+                    <input type="checkbox" id="extra-<%- extra.get('MenuExtraid') %>" value="<%- extra.get('MenuExtraid') %>" disabled="" >
+                    <label for="extra-<%- extra.get('MenuExtraid') %>" style="color: red"><%- extra.get('MenuExtra').get('Name') %><% if(extra.get('Price') != 0) { %><span class="ui-li-count"><%- parseFloat(extra.get('Price')).toFixed(2) %> <%= i18n.currency %></span><% } %></label>
+                <% } else { %>
+                    <input type="checkbox" name="extra-<%- menu.get('Menuid') %>" id="extra-<%- extra.get('MenuExtraid') %>" value="<%- extra.get('MenuExtraid') %>">
+                    <label for="extra-<%- extra.get('MenuExtraid') %>" <% if(extra.get('Availability') == ORDER_AVAILABILITY_DELAYED) { %> style="color: orange" <% } %>><%- extra.get('MenuExtra').get('Name') %><% if(extra.get('Price') != 0) { %><span class="ui-li-count"><%- parseFloat(extra.get('Price')).toFixed(2) %> <%= i18n.currency %></span><% } %></label>
+                <% } %>
+            <% }); %>
+        </fieldset>
+    <% } %>
+
+    <fieldset data-role="controlgroup" data-mini="true">
+        <legend><%= t.extras %>:</legend>
+        <textarea cols="40" rows="2" name="extras-text" id="extras-text"></textarea>
+    </fieldset>
+
+    <div id="panel-mixing-text">
+    </div>
+
+    <% if(type.get('Allowmixing') == true) { %>
+        <a id="panel-mixing" class="ui-shadow ui-btn ui-mini ui-corner-all ui-icon-star ui-btn-icon-right"><%= t.mixWith %></a>
+    <% } %>
+    <a id="panel-add" class="ui-shadow ui-btn ui-mini ui-corner-all ui-icon-plus ui-btn-icon-right"><%= t.add %></a>
+    <a id="panel-close" class="close ui-shadow ui-btn ui-mini ui-corner-all ui-icon-back ui-btn-icon-right"><%= t.cancel %></a>
+</div>

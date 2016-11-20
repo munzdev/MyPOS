@@ -39,5 +39,27 @@
         "errorText": "Bitte gib eine Tischnummer an!",
         "delete": "Löschen",
         "next": "Weiter"
+    },
+    "OrderModifyView": {
+        "overview": "Übersicht",
+        "addSpecialOrder": "Sonderwunsch hinzufügen",
+        "sum": "Summe",
+        "oldSum": "Alte Summe",
+        "newSum": "Neue Summe",
+        "difference": "Differenz",
+        "extras": "Extras",
+        "add": "Hinzufügen",
+        "cancel": "Abbrechen",
+        "back": "Zurück",
+        "order": "Bestellen",
+        "change": "Ändern",
+        "orderFinished": "Bestellung fertig?",
+        "changeFinished": "Bestellung ändern?",
+        "orderFinishedVerifyText": "Sind sie sicher das die Bestellung fertig ist?",
+        "continue": "Fortfahren",
+        "details": "Details",
+        "size": "Größe",
+        "particularities": "Besonderheiten",
+        "mixWith": "Spritzen mit"
     }
 }
