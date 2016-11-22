@@ -11,6 +11,8 @@ define([
             return _.extend(super.defaults(), {OrderDetail: new OrderDetailCollection()});
         }
         
-        urlRoot() {return app.API + "Order/" + this.id;}
+        urlRoot() {
+            return app.API + "Order/" + this.get(this.idAttribute());
+        }
     }
 });
