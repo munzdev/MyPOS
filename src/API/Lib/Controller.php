@@ -3,6 +3,9 @@
 namespace API\Lib;
 
 use API\Lib\Exceptions\InvalidRequestException;
+use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
+use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Map\RelationMap;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Slim\App;
 use Slim\Http\Request;
@@ -57,9 +60,12 @@ abstract class Controller
         }
     }
     
-    protected function validate($a_validators) : void
+    protected function validate($a_validators, $a_array = null) : void
     {
-        $a_errors = $this->recursiveValidate($this->a_json, $a_validators);
+        if($a_array == null) 
+            $a_array = $this->a_json;
+        
+        $a_errors = $this->recursiveValidate($a_array, $a_validators);
         
         if($a_errors)
         {
@@ -72,6 +78,64 @@ abstract class Controller
             
             throw new InvalidRequestException(trim($str_error));
         }
+    }
+    
+    protected function jsonToPropel(array $a_json, $o_propel)
+    {
+        foreach($a_json as $str_key => $value) {
+            if(is_numeric($str_key) && is_array($value) && $o_propel instanceOf Collection)
+            {
+                $str_modelClassName = $o_propel->getFullyQualifiedModel();
+                $str_tableMapClassName = $str_modelClassName::TABLE_MAP;                                        
+                $o_modelTableMap = $str_tableMapClassName::getTableMap();     
+                $a_columns = $o_modelTableMap->getColumns();
+                $o_primaryKey = reset($a_columns);
+                $str_primaryKeyName = $o_primaryKey->getPhpName();
+                
+                $a_existingKeys = $o_propel->getPrimaryKeys(false);
+                
+                $o_model = null;
+                         
+                foreach($value as $a_model)
+                {                    
+                    if(isset($a_model[$str_primaryKeyName]) && $str_key = array_search($a_model[$str_primaryKeyName], $a_existingKeys))
+                    {
+                        $o_model = $o_propel[$str_key];
+                        break;
+                    }
+                }
+                
+                if($o_model === null)
+                {                    
+                    $o_model = new $str_modelClassName();
+                    $o_propel->append($o_model);
+                }
+                
+                $this->jsonToPropel($value, $o_model);                
+            } elseif(is_array($value) && $o_propel instanceOf ActiveRecordInterface) {
+                
+                $str_tableMapName = $o_propel::TABLE_MAP;                
+                $o_tableMap = $str_tableMapName::getTableMap();
+                $o_relation = $o_tableMap->getRelation($str_key);
+                
+                $str_name = $str_key;
+                if($o_relation->getPluralName() !== null)
+                    $str_name = $o_relation->getPluralName();
+                
+                $str_methodName = "get$str_name";
+                
+                if(method_exists($o_propel, $str_methodName)) {
+                    $this->jsonToPropel($value, $o_propel->$str_methodName());
+                }                                               
+            } elseif($value !== null && $value !== 0) {
+                $str_methodName = "set$str_key";
+                
+                if(method_exists($o_propel, $str_methodName))
+                    $o_propel->$str_methodName($value); 
+            }
+        }
+        
+        return $o_propel;
     }
     
     private function recursiveValidate($a_json = [], $a_validators = [], $a_actualKeys = []) : array
