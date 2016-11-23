@@ -1,9 +1,9 @@
 define([
     "models/db/Ordering/Order",
-    "models/db/menu/Menu",
-    "models/db/menu/MenuSize",
-    "models/db/menu/MenuGroup",
-    "models/db/menu/Availability",
+    "models/db/Menu/Menu",
+    "models/db/Menu/MenuSize",
+    "models/db/Menu/MenuGroup",
+    "models/db/Menu/Availability",
     "models/db/User/User",
     "collections/db/Ordering/OrderDetailExtraCollection",
     "collections/db/Ordering/OrderDetailMixedWithCollection"
