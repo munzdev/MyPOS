@@ -116,7 +116,14 @@ abstract class Controller
                 
                 $str_tableMapName = $o_propel::TABLE_MAP;                
                 $o_tableMap = $str_tableMapName::getTableMap();
-                $o_relation = $o_tableMap->getRelation($str_key);
+                
+                if(!$o_tableMap->hasRelation($str_key) && mb_substr($str_key, -1) == 's') {                   
+                    $str_key = mb_substr($str_key, 0, -1);                                            
+                } elseif(!$o_tableMap->hasRelation($str_key)) {
+                    throw new GeneralException('Invalid Array Format given');
+                }
+                
+                $o_relation = $o_tableMap->getRelation($str_key);                
                 
                 $str_name = $str_key;
                 if($o_relation->getPluralName() !== null)

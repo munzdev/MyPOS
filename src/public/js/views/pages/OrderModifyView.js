@@ -119,6 +119,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                 orderDetail.set('MenuSize', menuSearch.Menu.get('MenuPossibleSize').at(0));
             }
 
+            orderDetail.set('MenuSizeid', orderDetail.get('MenuSize').get('MenuSizeid'));
             orderDetail.set('Menuid', menuid);
             orderDetail.set('Amount', 1);
             orderDetail.set('SinglePrice', menuSearch.Menu.get('Price'));
@@ -276,7 +277,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
         finished(event) {
             this.orderModify.save()
-                            .done((orderid) => {
+                            .done(() => {
                                 let hasSpecialOrders = false;
 
                                 this.orderModify.get('OrderDetails').each((orderDetail) => {
@@ -289,7 +290,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
                                 app.ws.api.Trigger("distribution-update");
 
-                                this.changeHash("order-pay/id/" + orderid + "/tableNr/" + this.tableNr);
+                                this.changeHash("order-pay/id/" + this.orderModify.get('Orderid') + "/tableNr/" + this.tableNr);
                             })
                             .fail(() => {
                                 let t = this.i18n();
