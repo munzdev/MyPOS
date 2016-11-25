@@ -6,14 +6,14 @@ define([
             User){
     "use strict";
 
-    return class Coupon extends Backbone.Model {
+    return class Coupon extends app.BaseModel {
         
         idAttribute() { return 'Couponid'; }
 
         defaults() {
-            return {Couponid: 0,
-                    Eventid: 0,
-                    CreatedByUserid: 0,
+            return {Couponid: null,
+                    Eventid: null,
+                    CreatedByUserid: null,
                     Code: '',
                     Created: null,
                     Value: 0};

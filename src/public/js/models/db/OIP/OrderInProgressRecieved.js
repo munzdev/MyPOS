@@ -8,15 +8,15 @@ define([
             DistributionGivingOut){
     "use strict";
 
-    return class OrderInProgressRecieved extends Backbone.Model {
+    return class OrderInProgressRecieved extends app.BaseModel {
         
         idAttribute() { return 'OrderInProgressRecievedid'; }
 
         defaults() {
-            return {OrderInProgressRecievedid: 0,
-                    OrderDetailid: 0,
-                    OrderInProgressid: 0,
-                    DistributionGivingOutid: 0,
+            return {OrderInProgressRecievedid: null,
+                    OrderDetailid: null,
+                    OrderInProgressid: null,
+                    DistributionGivingOutid: null,
                     Amount: 0};
         }
         

@@ -3,12 +3,12 @@ define([
 ], function(EventUser){
     "use strict";
 
-    return class User extends Backbone.Model {
+    return class User extends app.BaseModel {
         
         idAttribute() { return 'Userid'; }
 
         defaults() {
-            return {Userid: 0,
+            return {Userid: null,
                     Username: '',
                     Password: '',
                     Firstname: '',

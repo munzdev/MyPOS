@@ -6,11 +6,11 @@ define([
             Coupon){
     "use strict";
 
-    return class PaymentCoupon extends Backbone.Model {
+    return class PaymentCoupon extends app.BaseModel {
 
         defaults() {
-            return {Couponid: 0,
-                    Paymentid: 0,
+            return {Couponid: null,
+                    Paymentid: null,
                     ValueUsed: 0};
         }
         

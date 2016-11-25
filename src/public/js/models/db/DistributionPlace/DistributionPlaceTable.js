@@ -8,14 +8,14 @@ define([
             EventTable){
     "use strict";
 
-    return class DistributionPlaceTable extends Backbone.Model {
+    return class DistributionPlaceTable extends app.BaseModel {
         
         idAttribute() { return 'EventTableid'; }
 
         defaults() {
-            return {EventTableid: 0,
-                    DistributionPlaceid: 0,
-                    MenuGroupid: 0};
+            return {EventTableid: null,
+                    DistributionPlaceid: null,
+                    MenuGroupid: null};
         }
         
         parse(response)

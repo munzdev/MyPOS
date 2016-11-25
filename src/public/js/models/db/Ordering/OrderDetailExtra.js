@@ -6,11 +6,11 @@ define([
             MenuPossibleExtra){
     "use strict";
 
-    return class OrderDetailExtra extends Backbone.Model {
+    return class OrderDetailExtra extends app.BaseModel {
 
         defaults() {
-            return {OrderDetailid: 0,
-                    MenuPossibleExtraid: 0};
+            return {OrderDetailid: null,
+                    MenuPossibleExtraid: null};
         }
 
         parse(response)

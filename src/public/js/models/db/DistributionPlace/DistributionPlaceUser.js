@@ -8,12 +8,12 @@ define([
             EventPrinter){
     "use strict";
 
-    return class DistributionPlaceUser extends Backbone.Model {
+    return class DistributionPlaceUser extends app.BaseModel {
         
         defaults() {
-            return {DistributionPlaceid: 0,
-                    Userid: 0,
-                    EventPrinterid: 0};
+            return {DistributionPlaceid: null,
+                    Userid: null,
+                    EventPrinterid: null};
         }
         
         parse(response)

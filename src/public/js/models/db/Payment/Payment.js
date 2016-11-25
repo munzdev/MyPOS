@@ -6,14 +6,14 @@ define([
             Invoice){
     "use strict";
 
-    return class Payment extends Backbone.Model {
+    return class Payment extends app.BaseModel {
         
         idAttribute() { return 'Paymentid'; }
 
         defaults() {
-            return {Paymentid: 0,
-                    PaymentTypeid: 0,
-                    Invoiceid: 0,
+            return {Paymentid: null,
+                    PaymentTypeid: null,
+                    Invoiceid: null,
                     Date: null,
                     Amount: 0,
                     Canceled: false};

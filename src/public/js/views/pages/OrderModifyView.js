@@ -75,8 +75,8 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});
 
             let orderDetail = new OrderDetail();
-            orderDetail.set("OrderDetailExtra", new OrderDetailExtraCollection());
-            orderDetail.set("OrderDetailMixedWith", new OrderDetailMixedWithCollection());
+            orderDetail.set("OrderDetailExtras", new OrderDetailExtraCollection());
+            orderDetail.set("OrderDetailMixedWiths", new OrderDetailMixedWithCollection());
 
             let extrasSelected = this.$('input[name=extra-' + menuid + ']:checked');
 
@@ -90,9 +90,9 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                                                 .get('MenuPossibleExtra')
                                                 .findWhere({MenuExtraid: parseInt($(extra).val())});
 
-                let extraModel = new (orderDetail.get("OrderDetailExtra").model);
+                let extraModel = new (orderDetail.get("OrderDetailExtras").model);
                 extraModel.set("MenuPossibleExtraid", menuPossibleExtra.get("MenuPossibleExtraid"));
-                orderDetail.get("OrderDetailExtra").add(extraModel);
+                orderDetail.get("OrderDetailExtras").add(extraModel);
             });
 
             if(menuSearch.Menu.get('MenuPossibleSize').length > 1) {
@@ -127,12 +127,12 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             this.$('#panel-mixing-text div').each(function(index, mixing){
                 let menuid = parseInt($(mixing).attr('data-menuid'));
 
-                let mixingModel = new (orderDetail.get("OrderDetailMixedWith").model);
+                let mixingModel = new (orderDetail.get("OrderDetailMixedWiths").model);
                 mixingModel.set('Menuid', menuid);
-                orderDetail.get("OrderDetailMixedWith").add(mixingModel);
+                orderDetail.get("OrderDetailMixedWiths").add(mixingModel);
             });
 
-            this.orderModify.get('OrderDetail').addOnce(orderDetail);
+            this.orderModify.get('OrderDetails').addOnce(orderDetail);
 
             this.showOverview();
             this.renderOrder();
@@ -162,12 +162,12 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             }
 
             let orderDetail = new OrderDetail();
-            orderDetail.set("OrderDetailExtra", new OrderDetailExtraCollection());
-            orderDetail.set("OrderDetailMixedWith", new OrderDetailMixedWithCollection());
+            orderDetail.set("OrderDetailExtras", new OrderDetailExtraCollection());
+            orderDetail.set("OrderDetailMixedWiths", new OrderDetailMixedWithCollection());
             orderDetail.set('Amount', 1);
             orderDetail.set('ExtraDetail', specialOrderText);
 
-            this.orderModify.get('OrderDetail').addOnce(orderDetail);
+            this.orderModify.get('OrderDetails').addOnce(orderDetail);
 
             this.renderOrder();
             this.$('#panel-special').panel("close");
@@ -245,7 +245,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
         order_count_up(event) {
             let index = $(event.currentTarget).attr('data-index');
 
-            let orderDetail = this.orderModify.get('OrderDetail').get({cid: index});
+            let orderDetail = this.orderModify.get('OrderDetails').get({cid: index});
             orderDetail.set('Amount', orderDetail.get('Amount') + 1);
 
             this.renderOrder();
@@ -254,7 +254,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
         order_count_down(event) {
             let index = $(event.currentTarget).attr('data-index');
             
-            let orderDetail = this.orderModify.get('OrderDetail').get({cid: index});
+            let orderDetail = this.orderModify.get('OrderDetails').get({cid: index});
             let newAmount = orderDetail.get('Amount') - 1;
 
             // If number is allready zero, nothing todo
@@ -279,7 +279,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                             .done((orderid) => {
                                 let hasSpecialOrders = false;
 
-                                this.orderModify.get('OrderDetail').each((orderDetail) => {
+                                this.orderModify.get('OrderDetails').each((orderDetail) => {
                                     if(!hasSpecialOrders)
                                         hasSpecialOrders = (orderDetail.get('Menuid') == 0);
                                 });
@@ -309,14 +309,14 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             let currency = app.i18n.template.currency;
             
             // Presort the list by categorys
-            this.orderModify.get('OrderDetail').each((orderDetail) => {
+            this.orderModify.get('OrderDetails').each((orderDetail) => {
                 let menuid = orderDetail.get('Menuid');
                 let key = null;
                 
-                if(menuid == 0 && sortedCategorys.get(key) == null) {
+                if(menuid === null && sortedCategorys.get(key) == null) {
                     sortedCategorys.set(key, {name: t.specialOrders,
                                               orders: new Set()});
-                } else if(menuid != 0) {
+                } else if(menuid !== null) {
                     let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});                    
                     key = menuSearch.MenuTypeid;
                                         
@@ -353,10 +353,10 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                                                             .findWhere({MenuSizeid: menuSize.get('MenuSizeid')})
                                                             .get('Price'));
 
-                    if(orderDetail.get('OrderDetailMixedWith').length > 0) {
+                    if(orderDetail.get('OrderDetailMixedWiths').length > 0) {
                         extras += t.mixedWith + ": ";
 
-                        orderDetail.get('OrderDetailMixedWith').each((orderDetailMixedWith) => {
+                        orderDetail.get('OrderDetailMixedWiths').each((orderDetailMixedWith) => {
                             let menuToMixWith = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetailMixedWith.get('Menuid'); });
                             extras += menuToMixWith.Menu.get('Name') + " - ";
 
@@ -395,7 +395,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                         });
 
                         if(isNew) {
-                            price = parseFloat( ( price / (orderDetail.get('OrderDetailMixedWith').length + 1) ) );
+                            price = parseFloat( ( price / (orderDetail.get('OrderDetailMixedWiths').length + 1) ) );
                             price = Math.round(price * 10)/10;// avoid peanuts
                         }
 
@@ -403,7 +403,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                         extras += ", ";
                     }
 
-                    orderDetail.get('OrderDetailExtra').each(function(extra) {
+                    orderDetail.get('OrderDetailExtras').each(function(extra) {
                         let menuPossibleExtra = menuSearch.Menu.get('MenuPossibleExtra')
                                                                 .findWhere({MenuPossibleExtraid: extra.get('MenuPossibleExtraid')});
                         extras += menuPossibleExtra.get('MenuExtra').get('Name') + ", ";

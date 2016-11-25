@@ -9,16 +9,16 @@ define([
             MenuPossibleSizeCollection){
     "use strict";
 
-    return class Menu extends Backbone.Model {
+    return class Menu extends app.BaseModel {
         
         idAttribute() { return 'Menuid'; }
 
         defaults() {
-            return {Menuid: 0,
-                    MenuGroupid: 0,
+            return {Menuid: null,
+                    MenuGroupid: null,
                     Name: '',
                     Price: 0,
-                    Availabilityid: 0,
+                    Availabilityid: null,
                     AvailabilityAmount: 0};
         }
 

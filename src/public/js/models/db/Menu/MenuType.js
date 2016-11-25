@@ -5,13 +5,13 @@ define([
             MenuGroupCollection){
     "use strict";
 
-    return class MenuType extends Backbone.Model {
+    return class MenuType extends app.BaseModel {
         
         idAttribute() { return 'MenuTypeid'; }
 
         defaults() {
-            return {MenuTypeid: 0,
-                    Eventid: 0,
+            return {MenuTypeid: null,
+                    Eventid: null,
                     Name: '',
                     Tax: 0,
                     Allowmixing: false};

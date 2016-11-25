@@ -6,11 +6,11 @@ define([
             Menu){
     "use strict";
 
-    return class OrderDetailMixedWith extends Backbone.Model {
+    return class OrderDetailMixedWith extends app.BaseModel {
 
         defaults() {
-            return {OrderDetailid: 0,
-                    Menuid: 0};
+            return {OrderDetailid: null,
+                    Menuid: null};
         }
 
         parse(response)

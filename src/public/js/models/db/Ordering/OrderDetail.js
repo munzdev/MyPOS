@@ -17,22 +17,22 @@ define([
             OrderDetailMixedWithCollection){
     "use strict";
 
-    return class OrderDetail extends Backbone.Model {
+    return class OrderDetail extends app.BaseModel {
         
         idAttribute() { return 'OrderDetailid'; }
 
         defaults() {
-            return {OrderDetailid: 0,
-                    Orderid: 0,
-                    Menuid: 0,
-                    MenuSizeid: 0,
-                    MenuGroupid: 0,
+            return {OrderDetailid: null,
+                    Orderid: null,
+                    Menuid: null,
+                    MenuSizeid: null,
+                    MenuGroupid: null,
                     Amount: 0,
                     SinglePrice: 0,
-                    SinglePriceModifiedByUserid: 0,
+                    SinglePriceModifiedByUserid: null,
                     ExtraDetail: '',
                     Finished: null,
-                    Availabilityid: 0,
+                    Availabilityid: null,
                     AvailabilityAmount: 0,
                     Verified: false};
         }
@@ -69,14 +69,20 @@ define([
                 response.Availability = new Availability(response.Availability, {parse: true});
             }
             
-            if('OrderDetailExtra' in response)
+            if('OrderDetailExtras' in response)
             {
-                response.OrderDetailExtra = new OrderDetailExtraCollection(response.OrderDetailExtra, {parse: true});
+                if(response.OrderDetailExtras.toString() == '')
+                    response.OrderDetailExtras = new OrderDetailExtraCollection();
+                else
+                    response.OrderDetailExtras = new OrderDetailExtraCollection(response.OrderDetailExtras, {parse: true});
             }
             
-            if('OrderDetailMixedWith' in response)
+            if('OrderDetailMixedWiths' in response )
             {
-                response.OrderDetailMixedWith = new OrderDetailMixedWithCollection(response.OrderDetailMixedWith, {parse: true});
+                if(response.OrderDetailMixedWiths.toString() == '')
+                    response.OrderDetailMixedWiths = new OrderDetailMixedWithCollection();
+                else
+                    response.OrderDetailMixedWiths = new OrderDetailMixedWithCollection(response.OrderDetailMixedWiths, {parse: true});
             }
                                     
             return super.parse(response);

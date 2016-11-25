@@ -8,15 +8,15 @@ define([
             MenuGroup){
     "use strict";
 
-    return class OrderInProgress extends Backbone.Model {
+    return class OrderInProgress extends app.BaseModel {
         
         idAttribute() { return 'OrderInProgressid'; }
 
         defaults() {
-            return {OrderInProgressid: 0,
-                    Orderid: 0,
-                    Userid: 0,
-                    MenuGroupid: 0,
+            return {OrderInProgressid: null,
+                    Orderid: null,
+                    Userid: null,
+                    MenuGroupid: null,
                     Begin: null,
                     Done: null};
         }

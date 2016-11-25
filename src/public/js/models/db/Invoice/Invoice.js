@@ -4,13 +4,13 @@ define([
 ], function(User){
     "use strict";
 
-    return class Invoice extends Backbone.Model {
+    return class Invoice extends app.BaseModel {
         
         idAttribute() { return 'Invoiceid'; }
 
         defaults() {
-            return {Invoiceid: 0,
-                    CashierUserid: 0,
+            return {Invoiceid: null,
+                    CashierUserid: null,
                     Date: null,
                     Canceled: null};
         }

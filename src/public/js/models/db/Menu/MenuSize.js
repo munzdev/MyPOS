@@ -4,13 +4,13 @@ define([
 ], function(Event){
     "use strict";
 
-    return class MenuSize extends Backbone.Model {
+    return class MenuSize extends app.BaseModel {
         
         idAttribute() { return 'MenuSizeid'; }
 
         defaults() {
-            return {MenuSizeid: 0,
-                    Eventid: 0,
+            return {MenuSizeid: null,
+                    Eventid: null,
                     Name: '',
                     Factor: 0};
         }

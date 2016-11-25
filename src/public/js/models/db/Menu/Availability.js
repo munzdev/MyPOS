@@ -3,12 +3,12 @@ define([
 ], function(){
     "use strict";
 
-    return class Availability extends Backbone.Model {
+    return class Availability extends app.BaseModel {
         
         idAttribute() { return 'Availabilityid'; }
 
         defaults() {
-            return {Availabilityid: 0,
+            return {Availabilityid: null,
                     Name: ''};
         }
 

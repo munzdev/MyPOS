@@ -1,7 +1,7 @@
 define(function(){
     "use strict";
     
-    return class LoginModel extends Backbone.Model
+    return class LoginModel extends app.BaseModel
     {
         urlRoot() { return app.API + "Login"; }
         

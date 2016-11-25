@@ -6,11 +6,11 @@ define([
             MenuGroup){
     "use strict";
 
-    return class DistributionPlaceGroup extends Backbone.Model {
+    return class DistributionPlaceGroup extends app.BaseModel {
         
         defaults() {
-            return {DistributionPlaceid: 0,
-                    MenuGroupid: 0};
+            return {DistributionPlaceid: null,
+                    MenuGroupid: null};
         }
         
         parse(response)

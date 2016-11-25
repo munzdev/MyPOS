@@ -9,14 +9,14 @@ define([
             OrderDetailCollection){
     "use strict";
 
-    return class Order extends Backbone.Model {
+    return class Order extends app.BaseModel {
         
         idAttribute() { return 'Orderid'; }
 
         defaults() {
-            return {Orderid: 0,
-                    EventTableid: 0,
-                    Userid: 0,
+            return {Orderid: null,
+                    EventTableid: null,
+                    Userid: null,
                     Ordertime: null,
                     Priority: 0,
                     Finished: null};
@@ -35,13 +35,19 @@ define([
             }
             
             if('OrderInProgresses' in response)
-            {                
-                response.OrderInProgresses = new OrderInProgressCollection(response.OrderInProgresses, {parse: true});
+            {   
+                if(response.OrderInProgresses.toString() == '')
+                    response.OrderInProgresses = new OrderInProgressCollection();
+                else
+                    response.OrderInProgresses = new OrderInProgressCollection(response.OrderInProgresses, {parse: true});
             }
             
-            if('OrderDetail' in response)
+            if('OrderDetails' in response)
             {                
-                response.OrderDetail = new OrderDetailCollection(response.OrderDetail, {parse: true});
+                if(response.OrderDetails.toString() == '')
+                    response.OrderDetails = new OrderDetailCollection();
+                else
+                    response.OrderDetails = new OrderDetailCollection(response.OrderDetails, {parse: true});
             }
             
             return super.parse(response);

@@ -6,7 +6,7 @@ define([
             OrderDetail){
     "use strict";
 
-    return class InvoiceItem extends Backbone.Model {
+    return class InvoiceItem extends app.BaseModel {
         
         idAttribute() { return 'InvoiceItemid'; }
     

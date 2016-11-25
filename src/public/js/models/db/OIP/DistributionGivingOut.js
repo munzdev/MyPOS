@@ -3,12 +3,12 @@ define([
 ], function(){
     "use strict";
 
-    return class DistributionGivingOut extends Backbone.Model {
+    return class DistributionGivingOut extends app.BaseModel {
         
         idAttribute() { return 'DistributionGivingOutid'; }
 
         defaults() {
-            return {DistributionGivingOutid: 0,
+            return {DistributionGivingOutid: null,
                     Date: null};
         }
 

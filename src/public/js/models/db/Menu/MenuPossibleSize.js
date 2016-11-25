@@ -6,14 +6,14 @@ define([
             MenuSize){
     "use strict";
 
-    return class MenuPossibleSize extends Backbone.Model {
+    return class MenuPossibleSize extends app.BaseModel {
         
         idAttribute() { return 'MenuPossibleSizeid'; }
 
         defaults() {
-            return {MenuPossibleSizeid: 0,
-                    MenuSizeid: 0,
-                    Menuid: 0,
+            return {MenuPossibleSizeid: null,
+                    MenuSizeid: null,
+                    Menuid: null,
                     Price: 0};
         }
 

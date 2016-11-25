@@ -6,14 +6,14 @@ define([
             MenuExtra){
     "use strict";
 
-    return class MenuPossibleExtra extends Backbone.Model {
+    return class MenuPossibleExtra extends app.BaseModel {
         
         idAttribute() { return 'MenuPossibleExtraid'; }
 
         defaults() {
-            return {MenuPossibleExtraid: 0,
-                    MenuExtraid: 0,
-                    Menuid: 0,
+            return {MenuPossibleExtraid: null,
+                    MenuExtraid: null,
+                    Menuid: null,
                     Price: 0};
         }
 

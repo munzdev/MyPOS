@@ -7,14 +7,16 @@ define(["views/AbstractView",
         "views/DialogView",
         "views/PopupView",
         "views/PanelView",
-        "collections/BaseCollection"],
+        "collections/BaseCollection",
+        "models/BaseModel"],
 function(AbstractView,
          PageView,
          HeaderView,
          DialogView,
          PopupView,
          PanelView,
-         BaseCollection) {
+         BaseCollection,
+         BaseModel) {
 
     // Define views
     app.AbstractView = AbstractView;
@@ -24,8 +26,9 @@ function(AbstractView,
     app.PopupView = PopupView;
     app.PanelView = PanelView;
     
-    // Define collections
+    // Define collections and models
     app.BaseCollection = BaseCollection;
+    app.BaseModel = BaseModel;
        
     require(["collections/db/Menu/MenuTypeCollection", // Verify that the Menu model/collection structures and depencies are loaded correctly by loading it first
              "app"]);

@@ -8,11 +8,11 @@ define([
     return class OrderModify extends Order
     {
         defaults() {
-            return _.extend(super.defaults(), {OrderDetail: new OrderDetailCollection()});
+            return _.extend(super.defaults(), {OrderDetails: new OrderDetailCollection()});
         }
         
         urlRoot() {
-            return app.API + "Order/" + this.get(this.idAttribute());
+            return app.API + "Order";
         }
     }
 });

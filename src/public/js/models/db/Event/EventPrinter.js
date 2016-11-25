@@ -4,13 +4,13 @@ define([
 ], function(Event){
     "use strict";
 
-    return class EventPrinter extends Backbone.Model {
+    return class EventPrinter extends app.BaseModel {
         
         idAttribute() { return 'EventPrinterid'; }
 
         defaults() {
-            return {EventPrinterid: 0,
-                    Eventid: 0,
+            return {EventPrinterid: null,
+                    Eventid: null,
                     Name: '',
                     Ip: '',
                     Port: 0,

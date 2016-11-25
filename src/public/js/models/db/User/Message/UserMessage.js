@@ -4,14 +4,14 @@ define([
 ], function(User){
     "use strict";
 
-    return class UserMessage extends Backbone.Model {
+    return class UserMessage extends app.BaseModel {
         
         idAttribute() { return 'UserMessageid'; }
 
         defaults() {
-            return {UserMessageid: 0,
-                    FromEventUserid: 0,
-                    ToEventUserid: 0,
+            return {UserMessageid: null,
+                    FromEventUserid: null,
+                    ToEventUserid: null,
                     Message: '',
                     Date: null,
                     Readed: false};

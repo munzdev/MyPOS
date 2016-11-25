@@ -4,13 +4,13 @@ define([
 ], function(Event){
     "use strict";
 
-    return class EventTable extends Backbone.Model {
+    return class EventTable extends app.BaseModel {
         
         idAttribute() { return 'EventTableid'; }
 
         defaults() {
-            return {EventTableid: 0,
-                    Eventid: 0,
+            return {EventTableid: null,
+                    Eventid: null,
                     Name: '',
                     Data: ''};
         }

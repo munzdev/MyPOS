@@ -4,13 +4,13 @@ define([
 ], function(Event){
     "use strict";
 
-    return class DistributionPlaceGroup extends Backbone.Model {
+    return class DistributionPlaceGroup extends app.BaseModel {
 
         idAttribute() { return 'DistributionPlaceid'; }
         
         defaults() {
-            return {DistributionPlaceid: 0,
-                    Eventid: 0,
+            return {DistributionPlaceid: null,
+                    Eventid: null,
                     Name: ''};
         }
 

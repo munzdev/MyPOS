@@ -6,14 +6,14 @@ define([
             User){
     "use strict";
 
-    return class EventUser extends Backbone.Model {
+    return class EventUser extends app.BaseModel {
         
         idAttribute() { return 'EventUserid'; }
 
         defaults() {
-            return {EventUserid: 0,
-                    Eventid: 0,
-                    Userid: 0,
+            return {EventUserid: null,
+                    Eventid: null,
+                    Userid: null,
                     UserRoles: 0,
                     BeginMoney: 0};
         }
