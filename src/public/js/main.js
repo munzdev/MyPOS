@@ -6,14 +6,13 @@ require.config( {
     // 3rd party script alias names (Easier to type "jquery" than "libs/jquery-1.8.3.min")
     paths: {
         // Core Libraries
-        "jquery": "libs/jquery/jquery-2.2.4.min",
-        "jquery-dateFormat": "libs/jquery/jquery-dateFormat.min",
-        "jquerymobile": "libs/jqueryMobile/jquery.mobile-1.4.5.min",
-        "jquerymobile-datebox": "libs/jqueryMobile/jtsage-datebox.min",
-        "underscore": "libs/underscore/underscore-min",
-        "backbone": "libs/backbone/backbone-min",
+        "jquery": "libs/jquery/jquery-2.2.4",
+        "jquery-dateFormat": "libs/jquery/jquery-dateFormat",
+        "jquerymobile": "libs/jqueryMobile/jquery.mobile-1.4.5",
+        "jquerymobile-datebox": "libs/jqueryMobile/jtsage-datebox",
+        "underscore": "libs/underscore/underscore",
+        "backbone": "libs/backbone/backbone",
         "text": "libs/require/text",
-        "localstorage": "libs/backbone/backbone.localStorage-min",
         "wampy": "libs/wampy/wampy",
 
         // Core Directorys
