@@ -5,30 +5,30 @@
     </div>
     <div class="ui-block-b" style="top: 1em; right: 0em; text-align: right; font-size: .75em; font-weight: 400; margin: .6em 0;">
         <% if(mode == 'pay') { %>
-	        in Rechnung: <strong><%- amount %></strong>
+	        <%= t.inInvoice %>: <strong><%- amount %></strong>
 	        <br/>
-	        Offen: <strong><%- open %></strong>
+	        <%= t.open %>: <strong><%- open %></strong>
 	        <br/>
         <% } else { %>
-	        Anzahl: <strong><%- amount %></strong>
+	        <%= t.amount %>: <strong><%- amount %></strong>
 	        <br/>
         <% } %>
 
         <% if(isSpecialOrder == true) { %>
-            <strong>Preis wird von<br/>Manager noch<br/>festgelegt</strong>
+            <strong><%= t.managerNeedsToSetPrice %></strong>
         <% } else { %>
-            Einzelpreis: <strong><%- parseFloat(price).toFixed(2) %>€</strong>
+            <%= t.singlePrice %>: <strong><%- parseFloat(price).toFixed(2) %><%= i18n.currency %></strong>
             <br/>
-            Gesamt: <strong><%- parseFloat(totalPrice).toFixed(2) %>€</strong>
+            <%= t.total %>: <strong><%- parseFloat(totalPrice).toFixed(2) %><%= i18n.currency %></strong>
         <% } %>
         <% if(typeof edit !== "undefined") { %>
             <br/>
-            <a data-menu-typeid="<%- menuTypeid %>" data-index="<%- index %>" class="order-item-edit ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-left ui-mini">Bearbeiten</a>
+            <a data-menu-typeid="<%- menuTypeid %>" data-index="<%- index %>" class="order-item-edit ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-left ui-mini"><%= t.edit %></a>
         <% } %>
         <% if(!skipCounts) { %>
             <br/>
-            <a data-menu-typeid="<%- menuTypeid %>" data-index="<%- index %>" class="order-item-up ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-notext">+</a>
-            <a data-menu-typeid="<%- menuTypeid %>" data-index="<%- index %>" class="order-item-down ui-btn ui-btn-inline ui-icon-minus ui-btn-icon-notext">-</a>
+            <a data-menu-typeid="<%- menuTypeid %>" data-index="<%- index %>" class="order-item-up ui-btn ui-btn-inline ui-icon-plus ui-btn-icon-notext"><%= t.up %></a>
+            <a data-menu-typeid="<%- menuTypeid %>" data-index="<%- index %>" class="order-item-down ui-btn ui-btn-inline ui-icon-minus ui-btn-icon-notext"><%= t.down %></a>
         <% } %>
     </div>
 </div>
@@ -36,16 +36,16 @@
     <div class="ui-grid-solo">
         <div class="ui-block-a">
             <% if(status == ORDER_STATUS_WAITING) { %>
-                <p>Warteschlange Pos <%- rank %></p>
+                <p><%= t.queuePosition %> <%- rank %></p>
             <% } else if(status == ORDER_STATUS_IN_PROGRESS) { %>
                 <p style="color:orange;">
-                    in Bearbeitung seit
+                    <%= t.inProgressSince %>
                     <%- $.format.date(MyPOS.DateFromMysql(in_progress_begin), DATE_JS_TIMEFORMAT) %>
-                    Pos <%- rank %>
+                    <%= t.position %> <%- rank %>
                 </p>
-                <p>Bearbeiter: <%- handled_by_name %></p>
-                <p>Erhalten: <%- amount_recieved_total %></p>
-                <p>Auslieferungen:</p>
+                <p><%= t.editor %>: <%- handled_by_name %></p>
+                <p><%= t.recieved %>: <%- amount_recieved_total %></p>
+                <p><%= t.deliveries %>:</p>
                 <ul class="ui-mini">
                     <% _.each(amount_recieved, function(current_amount, current_date){ %>
                         <li><%- $.format.date(MyPOS.DateFromMysql(current_date), DATE_JS_TIMEFORMAT) %>: <%- current_amount %></li>
@@ -53,14 +53,14 @@
                 </ul>
             <% } else if(status == ORDER_STATUS_FINISHED) { %>
                 <p style="color:green;">
-                        Fertig - Bearbeitet von
+                        <%= t.doneEditFrom %>
                         <%- $.format.date(MyPOS.DateFromMysql(in_progress_begin), DATE_JS_TIMEFORMAT) %>
-                        bis
+                        <%= t.doneEditTo %>
                         <%- $.format.date(MyPOS.DateFromMysql(in_progress_done), DATE_JS_TIMEFORMAT) %>
                 </p>
-                <p>Bearbeiter: <%- handled_by_name %></p>
-                <p>Erhalten: <%- amount_recieved_total %></p>
-                <p>Auslieferungen:</p>
+                <p><%= t.editor %>: <%- handled_by_name %></p>
+                <p><%= t.recieved %>: <%- amount_recieved_total %></p>
+                <p><%= t.deliveries %>:</p>
                 <ul class="ui-mini">
                     <% _.each(amount_recieved, function(current_amount, current_date){ %>
                         <li><%- $.format.date(MyPOS.DateFromMysql(current_date), DATE_JS_TIMEFORMAT) %>: <%- current_amount %></li>

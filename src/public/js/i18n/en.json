@@ -70,5 +70,25 @@
         "specialOrders": "Special Orders",
         "specialOrder": "Special Order",
         "mixedWith": "Mixed with"
+    },
+    "OrderItem": {
+        "inInvoice": "in Invoice",
+        "open": "Open",
+        "amount": "Amount",
+        "managerNeedsToSetPrice": "Preis wird von<br/>Manager noch<br/>festgelegt",
+        "managerNeedsToSetPrice": "Price needs to<br/>be set by the<br/>Manager",
+        "singlePrice": "Single price",
+        "total": "Total",
+        "edit": "Edit",
+        "up": "+",
+        "down": "-",
+        "queuePosition": "Queue Pos",
+        "inProgressSince": "in progress since",
+        "position": "Pos",
+        "editor": "Editor",
+        "recieved": "Recieved",
+        "deliveries": "Deliveries",
+        "doneEditFrom": "Done - Edited from",
+        "doneEditTo": "to"
     }
 }
