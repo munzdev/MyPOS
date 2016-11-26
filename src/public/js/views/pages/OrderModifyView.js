@@ -460,8 +460,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             let header = new HeaderView();
             this.registerSubview(".nav-header", header);
             
-            this.renderTemplate(Template, { header: header.render(),
-                                            mode: this.mode,
+            this.renderTemplate(Template, { mode: this.mode,
                                             order: this.orderModify,
                                             products: app.productList});
                                         
