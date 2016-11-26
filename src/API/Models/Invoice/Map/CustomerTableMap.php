@@ -2,8 +2,8 @@
 
 namespace API\Models\Invoice\Map;
 
-use API\Models\Invoice\Invoice;
-use API\Models\Invoice\InvoiceQuery;
+use API\Models\Invoice\Customer;
+use API\Models\Invoice\CustomerQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'invoice' table.
+ * This class defines the structure of the 'customer' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class InvoiceTableMap extends TableMap
+class CustomerTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class InvoiceTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'API.Models.Invoice.Map.InvoiceTableMap';
+    const CLASS_NAME = 'API.Models.Invoice.Map.CustomerTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class InvoiceTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'invoice';
+    const TABLE_NAME = 'customer';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\API\\Models\\Invoice\\Invoice';
+    const OM_CLASS = '\\API\\Models\\Invoice\\Customer';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'API.Models.Invoice.Invoice';
+    const CLASS_DEFAULT = 'API.Models.Invoice.Customer';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 10;
 
     /**
      * The number of lazy-loaded columns
@@ -69,32 +69,57 @@ class InvoiceTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
-
-    /**
-     * the column name for the invoiceid field
-     */
-    const COL_INVOICEID = 'invoice.invoiceid';
-
-    /**
-     * the column name for the cashier_userid field
-     */
-    const COL_CASHIER_USERID = 'invoice.cashier_userid';
+    const NUM_HYDRATE_COLUMNS = 10;
 
     /**
      * the column name for the customerid field
      */
-    const COL_CUSTOMERID = 'invoice.customerid';
+    const COL_CUSTOMERID = 'customer.customerid';
 
     /**
-     * the column name for the date field
+     * the column name for the eventid field
      */
-    const COL_DATE = 'invoice.date';
+    const COL_EVENTID = 'customer.eventid';
 
     /**
-     * the column name for the canceled field
+     * the column name for the title field
      */
-    const COL_CANCELED = 'invoice.canceled';
+    const COL_TITLE = 'customer.title';
+
+    /**
+     * the column name for the name field
+     */
+    const COL_NAME = 'customer.name';
+
+    /**
+     * the column name for the adress field
+     */
+    const COL_ADRESS = 'customer.adress';
+
+    /**
+     * the column name for the adress2 field
+     */
+    const COL_ADRESS2 = 'customer.adress2';
+
+    /**
+     * the column name for the city field
+     */
+    const COL_CITY = 'customer.city';
+
+    /**
+     * the column name for the zip field
+     */
+    const COL_ZIP = 'customer.zip';
+
+    /**
+     * the column name for the tax_identification_nr field
+     */
+    const COL_TAX_IDENTIFICATION_NR = 'customer.tax_identification_nr';
+
+    /**
+     * the column name for the active field
+     */
+    const COL_ACTIVE = 'customer.active';
 
     /**
      * The default string format for model objects of the related table
@@ -108,11 +133,11 @@ class InvoiceTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Invoiceid', 'CashierUserid', 'Customerid', 'Date', 'Canceled', ),
-        self::TYPE_CAMELNAME     => array('invoiceid', 'cashierUserid', 'customerid', 'date', 'canceled', ),
-        self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID, InvoiceTableMap::COL_CASHIER_USERID, InvoiceTableMap::COL_CUSTOMERID, InvoiceTableMap::COL_DATE, InvoiceTableMap::COL_CANCELED, ),
-        self::TYPE_FIELDNAME     => array('invoiceid', 'cashier_userid', 'customerid', 'date', 'canceled', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Customerid', 'Eventid', 'Title', 'Name', 'Adress', 'Adress2', 'City', 'Zip', 'TaxIdentificationNr', 'Active', ),
+        self::TYPE_CAMELNAME     => array('customerid', 'eventid', 'title', 'name', 'adress', 'adress2', 'city', 'zip', 'taxIdentificationNr', 'active', ),
+        self::TYPE_COLNAME       => array(CustomerTableMap::COL_CUSTOMERID, CustomerTableMap::COL_EVENTID, CustomerTableMap::COL_TITLE, CustomerTableMap::COL_NAME, CustomerTableMap::COL_ADRESS, CustomerTableMap::COL_ADRESS2, CustomerTableMap::COL_CITY, CustomerTableMap::COL_ZIP, CustomerTableMap::COL_TAX_IDENTIFICATION_NR, CustomerTableMap::COL_ACTIVE, ),
+        self::TYPE_FIELDNAME     => array('customerid', 'eventid', 'title', 'name', 'adress', 'adress2', 'city', 'zip', 'tax_identification_nr', 'active', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -122,11 +147,11 @@ class InvoiceTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Invoiceid' => 0, 'CashierUserid' => 1, 'Customerid' => 2, 'Date' => 3, 'Canceled' => 4, ),
-        self::TYPE_CAMELNAME     => array('invoiceid' => 0, 'cashierUserid' => 1, 'customerid' => 2, 'date' => 3, 'canceled' => 4, ),
-        self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID => 0, InvoiceTableMap::COL_CASHIER_USERID => 1, InvoiceTableMap::COL_CUSTOMERID => 2, InvoiceTableMap::COL_DATE => 3, InvoiceTableMap::COL_CANCELED => 4, ),
-        self::TYPE_FIELDNAME     => array('invoiceid' => 0, 'cashier_userid' => 1, 'customerid' => 2, 'date' => 3, 'canceled' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('Customerid' => 0, 'Eventid' => 1, 'Title' => 2, 'Name' => 3, 'Adress' => 4, 'Adress2' => 5, 'City' => 6, 'Zip' => 7, 'TaxIdentificationNr' => 8, 'Active' => 9, ),
+        self::TYPE_CAMELNAME     => array('customerid' => 0, 'eventid' => 1, 'title' => 2, 'name' => 3, 'adress' => 4, 'adress2' => 5, 'city' => 6, 'zip' => 7, 'taxIdentificationNr' => 8, 'active' => 9, ),
+        self::TYPE_COLNAME       => array(CustomerTableMap::COL_CUSTOMERID => 0, CustomerTableMap::COL_EVENTID => 1, CustomerTableMap::COL_TITLE => 2, CustomerTableMap::COL_NAME => 3, CustomerTableMap::COL_ADRESS => 4, CustomerTableMap::COL_ADRESS2 => 5, CustomerTableMap::COL_CITY => 6, CustomerTableMap::COL_ZIP => 7, CustomerTableMap::COL_TAX_IDENTIFICATION_NR => 8, CustomerTableMap::COL_ACTIVE => 9, ),
+        self::TYPE_FIELDNAME     => array('customerid' => 0, 'eventid' => 1, 'title' => 2, 'name' => 3, 'adress' => 4, 'adress2' => 5, 'city' => 6, 'zip' => 7, 'tax_identification_nr' => 8, 'active' => 9, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
     /**
@@ -139,18 +164,23 @@ class InvoiceTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('invoice');
-        $this->setPhpName('Invoice');
+        $this->setName('customer');
+        $this->setPhpName('Customer');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\API\\Models\\Invoice\\Invoice');
+        $this->setClassName('\\API\\Models\\Invoice\\Customer');
         $this->setPackage('API.Models.Invoice');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('invoiceid', 'Invoiceid', 'INTEGER', true, null, null);
-        $this->addForeignPrimaryKey('cashier_userid', 'CashierUserid', 'INTEGER' , 'user', 'userid', true, null, null);
-        $this->addForeignKey('customerid', 'Customerid', 'INTEGER', 'customer', 'customerid', false, null, null);
-        $this->addColumn('date', 'Date', 'TIMESTAMP', true, null, null);
-        $this->addColumn('canceled', 'Canceled', 'TIMESTAMP', false, null, null);
+        $this->addPrimaryKey('customerid', 'Customerid', 'INTEGER', true, null, null);
+        $this->addForeignPrimaryKey('eventid', 'Eventid', 'INTEGER' , 'event', 'eventid', true, null, null);
+        $this->addColumn('title', 'Title', 'VARCHAR', true, 32, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 128, null);
+        $this->addColumn('adress', 'Adress', 'VARCHAR', true, 128, null);
+        $this->addColumn('adress2', 'Adress2', 'VARCHAR', false, 128, null);
+        $this->addColumn('city', 'City', 'VARCHAR', true, 64, null);
+        $this->addColumn('zip', 'Zip', 'VARCHAR', true, 10, null);
+        $this->addColumn('tax_identification_nr', 'TaxIdentificationNr', 'VARCHAR', false, 32, null);
+        $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, null);
     } // initialize()
 
     /**
@@ -158,34 +188,20 @@ class InvoiceTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Customer', '\\API\\Models\\Invoice\\Customer', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('Event', '\\API\\Models\\Event\\Event', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':eventid',
+    1 => ':eventid',
+  ),
+), null, null, null, false);
+        $this->addRelation('Invoice', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':customerid',
     1 => ':customerid',
   ),
-), null, null, null, false);
-        $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':cashier_userid',
-    1 => ':userid',
-  ),
-), null, null, null, false);
-        $this->addRelation('InvoiceItem', '\\API\\Models\\Invoice\\InvoiceItem', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':invoiceid',
-    1 => ':invoiceid',
-  ),
-), 'CASCADE', null, 'InvoiceItems', false);
-        $this->addRelation('Payment', '\\API\\Models\\Payment\\Payment', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':invoiceid',
-    1 => ':invoiceid',
-  ),
-), null, null, 'Payments', false);
+), null, null, 'Invoices', false);
     } // buildRelations()
 
     /**
@@ -196,14 +212,14 @@ class InvoiceTableMap extends TableMap
      * to the cache in order to ensure that the same objects are always returned by find*()
      * and findPk*() calls.
      *
-     * @param \API\Models\Invoice\Invoice $obj A \API\Models\Invoice\Invoice object.
+     * @param \API\Models\Invoice\Customer $obj A \API\Models\Invoice\Customer object.
      * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
     {
         if (Propel::isInstancePoolingEnabled()) {
             if (null === $key) {
-                $key = serialize([(null === $obj->getInvoiceid() || is_scalar($obj->getInvoiceid()) || is_callable([$obj->getInvoiceid(), '__toString']) ? (string) $obj->getInvoiceid() : $obj->getInvoiceid()), (null === $obj->getCashierUserid() || is_scalar($obj->getCashierUserid()) || is_callable([$obj->getCashierUserid(), '__toString']) ? (string) $obj->getCashierUserid() : $obj->getCashierUserid())]);
+                $key = serialize([(null === $obj->getCustomerid() || is_scalar($obj->getCustomerid()) || is_callable([$obj->getCustomerid(), '__toString']) ? (string) $obj->getCustomerid() : $obj->getCustomerid()), (null === $obj->getEventid() || is_scalar($obj->getEventid()) || is_callable([$obj->getEventid(), '__toString']) ? (string) $obj->getEventid() : $obj->getEventid())]);
             } // if key === null
             self::$instances[$key] = $obj;
         }
@@ -217,13 +233,13 @@ class InvoiceTableMap extends TableMap
      * methods in your stub classes -- you may need to explicitly remove objects
      * from the cache in order to prevent returning objects that no longer exist.
      *
-     * @param mixed $value A \API\Models\Invoice\Invoice object or a primary key value.
+     * @param mixed $value A \API\Models\Invoice\Customer object or a primary key value.
      */
     public static function removeInstanceFromPool($value)
     {
         if (Propel::isInstancePoolingEnabled() && null !== $value) {
-            if (is_object($value) && $value instanceof \API\Models\Invoice\Invoice) {
-                $key = serialize([(null === $value->getInvoiceid() || is_scalar($value->getInvoiceid()) || is_callable([$value->getInvoiceid(), '__toString']) ? (string) $value->getInvoiceid() : $value->getInvoiceid()), (null === $value->getCashierUserid() || is_scalar($value->getCashierUserid()) || is_callable([$value->getCashierUserid(), '__toString']) ? (string) $value->getCashierUserid() : $value->getCashierUserid())]);
+            if (is_object($value) && $value instanceof \API\Models\Invoice\Customer) {
+                $key = serialize([(null === $value->getCustomerid() || is_scalar($value->getCustomerid()) || is_callable([$value->getCustomerid(), '__toString']) ? (string) $value->getCustomerid() : $value->getCustomerid()), (null === $value->getEventid() || is_scalar($value->getEventid()) || is_callable([$value->getEventid(), '__toString']) ? (string) $value->getEventid() : $value->getEventid())]);
 
             } elseif (is_array($value) && count($value) === 2) {
                 // assume we've been passed a primary key";
@@ -233,21 +249,12 @@ class InvoiceTableMap extends TableMap
 
                 return;
             } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \API\Models\Invoice\Invoice object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
+                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \API\Models\Invoice\Customer object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
                 throw $e;
             }
 
             unset(self::$instances[$key]);
         }
-    }
-    /**
-     * Method to invalidate the instance pool of all tables related to invoice     * by a foreign key with ON DELETE CASCADE
-     */
-    public static function clearRelatedInstancePool()
-    {
-        // Invalidate objects in related instance pools,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        InvoiceItemTableMap::clearInstancePool();
     }
 
     /**
@@ -266,11 +273,11 @@ class InvoiceTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('CashierUserid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Customerid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('CashierUserid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('CashierUserid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('CashierUserid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('CashierUserid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('CashierUserid', TableMap::TYPE_PHPNAME, $indexType)])]);
+        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Customerid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Customerid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Customerid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Customerid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Customerid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)])]);
     }
 
     /**
@@ -292,12 +299,12 @@ class InvoiceTableMap extends TableMap
         $pks[] = (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
-                : self::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('Customerid', TableMap::TYPE_PHPNAME, $indexType)
         ];
         $pks[] = (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 1 + $offset
-                : self::translateFieldName('CashierUserid', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)
         ];
 
         return $pks;
@@ -316,7 +323,7 @@ class InvoiceTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? InvoiceTableMap::CLASS_DEFAULT : InvoiceTableMap::OM_CLASS;
+        return $withPrefix ? CustomerTableMap::CLASS_DEFAULT : CustomerTableMap::OM_CLASS;
     }
 
     /**
@@ -330,22 +337,22 @@ class InvoiceTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Invoice object, last column rank)
+     * @return array           (Customer object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = InvoiceTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = InvoiceTableMap::getInstanceFromPool($key))) {
+        $key = CustomerTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = CustomerTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + InvoiceTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + CustomerTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = InvoiceTableMap::OM_CLASS;
-            /** @var Invoice $obj */
+            $cls = CustomerTableMap::OM_CLASS;
+            /** @var Customer $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            InvoiceTableMap::addInstanceToPool($obj, $key);
+            CustomerTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -368,18 +375,18 @@ class InvoiceTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = InvoiceTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = InvoiceTableMap::getInstanceFromPool($key))) {
+            $key = CustomerTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = CustomerTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Invoice $obj */
+                /** @var Customer $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                InvoiceTableMap::addInstanceToPool($obj, $key);
+                CustomerTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -400,17 +407,27 @@ class InvoiceTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(InvoiceTableMap::COL_INVOICEID);
-            $criteria->addSelectColumn(InvoiceTableMap::COL_CASHIER_USERID);
-            $criteria->addSelectColumn(InvoiceTableMap::COL_CUSTOMERID);
-            $criteria->addSelectColumn(InvoiceTableMap::COL_DATE);
-            $criteria->addSelectColumn(InvoiceTableMap::COL_CANCELED);
+            $criteria->addSelectColumn(CustomerTableMap::COL_CUSTOMERID);
+            $criteria->addSelectColumn(CustomerTableMap::COL_EVENTID);
+            $criteria->addSelectColumn(CustomerTableMap::COL_TITLE);
+            $criteria->addSelectColumn(CustomerTableMap::COL_NAME);
+            $criteria->addSelectColumn(CustomerTableMap::COL_ADRESS);
+            $criteria->addSelectColumn(CustomerTableMap::COL_ADRESS2);
+            $criteria->addSelectColumn(CustomerTableMap::COL_CITY);
+            $criteria->addSelectColumn(CustomerTableMap::COL_ZIP);
+            $criteria->addSelectColumn(CustomerTableMap::COL_TAX_IDENTIFICATION_NR);
+            $criteria->addSelectColumn(CustomerTableMap::COL_ACTIVE);
         } else {
-            $criteria->addSelectColumn($alias . '.invoiceid');
-            $criteria->addSelectColumn($alias . '.cashier_userid');
             $criteria->addSelectColumn($alias . '.customerid');
-            $criteria->addSelectColumn($alias . '.date');
-            $criteria->addSelectColumn($alias . '.canceled');
+            $criteria->addSelectColumn($alias . '.eventid');
+            $criteria->addSelectColumn($alias . '.title');
+            $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.adress');
+            $criteria->addSelectColumn($alias . '.adress2');
+            $criteria->addSelectColumn($alias . '.city');
+            $criteria->addSelectColumn($alias . '.zip');
+            $criteria->addSelectColumn($alias . '.tax_identification_nr');
+            $criteria->addSelectColumn($alias . '.active');
         }
     }
 
@@ -423,7 +440,7 @@ class InvoiceTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(InvoiceTableMap::DATABASE_NAME)->getTable(InvoiceTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(CustomerTableMap::DATABASE_NAME)->getTable(CustomerTableMap::TABLE_NAME);
     }
 
     /**
@@ -431,16 +448,16 @@ class InvoiceTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(InvoiceTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(InvoiceTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new InvoiceTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(CustomerTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(CustomerTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new CustomerTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Invoice or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a Customer or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Invoice object or primary key or array of primary keys
+     * @param mixed               $values Criteria or Customer object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -451,17 +468,17 @@ class InvoiceTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(InvoiceTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(CustomerTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \API\Models\Invoice\Invoice) { // it's a model object
+        } elseif ($values instanceof \API\Models\Invoice\Customer) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(InvoiceTableMap::DATABASE_NAME);
+            $criteria = new Criteria(CustomerTableMap::DATABASE_NAME);
             // primary key is composite; we therefore, expect
             // the primary key passed to be an array of pkey values
             if (count($values) == count($values, COUNT_RECURSIVE)) {
@@ -469,19 +486,19 @@ class InvoiceTableMap extends TableMap
                 $values = array($values);
             }
             foreach ($values as $value) {
-                $criterion = $criteria->getNewCriterion(InvoiceTableMap::COL_INVOICEID, $value[0]);
-                $criterion->addAnd($criteria->getNewCriterion(InvoiceTableMap::COL_CASHIER_USERID, $value[1]));
+                $criterion = $criteria->getNewCriterion(CustomerTableMap::COL_CUSTOMERID, $value[0]);
+                $criterion->addAnd($criteria->getNewCriterion(CustomerTableMap::COL_EVENTID, $value[1]));
                 $criteria->addOr($criterion);
             }
         }
 
-        $query = InvoiceQuery::create()->mergeWith($criteria);
+        $query = CustomerQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            InvoiceTableMap::clearInstancePool();
+            CustomerTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                InvoiceTableMap::removeInstanceFromPool($singleval);
+                CustomerTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -489,20 +506,20 @@ class InvoiceTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the invoice table.
+     * Deletes all rows from the customer table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return InvoiceQuery::create()->doDeleteAll($con);
+        return CustomerQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Invoice or Criteria object.
+     * Performs an INSERT on the database, given a Customer or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Invoice object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or Customer object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -511,22 +528,22 @@ class InvoiceTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(InvoiceTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(CustomerTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Invoice object
+            $criteria = $criteria->buildCriteria(); // build Criteria from Customer object
         }
 
-        if ($criteria->containsKey(InvoiceTableMap::COL_INVOICEID) && $criteria->keyContainsValue(InvoiceTableMap::COL_INVOICEID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.InvoiceTableMap::COL_INVOICEID.')');
+        if ($criteria->containsKey(CustomerTableMap::COL_CUSTOMERID) && $criteria->keyContainsValue(CustomerTableMap::COL_CUSTOMERID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.CustomerTableMap::COL_CUSTOMERID.')');
         }
 
 
         // Set the correct dbName
-        $query = InvoiceQuery::create()->mergeWith($criteria);
+        $query = CustomerQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -535,7 +552,7 @@ class InvoiceTableMap extends TableMap
         });
     }
 
-} // InvoiceTableMap
+} // CustomerTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-InvoiceTableMap::buildTableMap();
+CustomerTableMap::buildTableMap();

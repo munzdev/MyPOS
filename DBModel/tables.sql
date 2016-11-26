@@ -620,6 +620,34 @@ COMMENT = 'Definiert welche tische standartmäßg von wo ihre Menüs erhalten. J
 
 
 -- -----------------------------------------------------
+-- Table `customer`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `customer` ;
+
+CREATE TABLE IF NOT EXISTS `customer` (
+  `customerid` INT NOT NULL AUTO_INCREMENT,
+  `eventid` INT(11) NOT NULL,
+  `title` VARCHAR(32) NOT NULL,
+  `name` VARCHAR(128) NOT NULL,
+  `adress` VARCHAR(128) NOT NULL,
+  `adress2` VARCHAR(128) NULL,
+  `city` VARCHAR(64) NOT NULL,
+  `zip` VARCHAR(10) NOT NULL,
+  `tax_identification_nr` VARCHAR(32) NULL,
+  `active` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`customerid`, `eventid`),
+  UNIQUE INDEX `customerid_UNIQUE` (`customerid` ASC),
+  INDEX `fk_customer_event1_idx` (`eventid` ASC),
+  INDEX `name` (`name` ASC),
+  CONSTRAINT `fk_customer_event1`
+    FOREIGN KEY (`eventid`)
+    REFERENCES `event` (`eventid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `invoice`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `invoice` ;
@@ -627,14 +655,21 @@ DROP TABLE IF EXISTS `invoice` ;
 CREATE TABLE IF NOT EXISTS `invoice` (
   `invoiceid` INT(11) NOT NULL AUTO_INCREMENT,
   `cashier_userid` INT(11) NOT NULL,
+  `customerid` INT NULL,
   `date` DATETIME NOT NULL,
   `canceled` DATETIME NULL,
   PRIMARY KEY (`invoiceid`, `cashier_userid`),
   UNIQUE INDEX `invoiceid_UNIQUE` (`invoiceid` ASC),
   INDEX `fk_invoices_users1_idx` (`cashier_userid` ASC),
+  INDEX `fk_invoice_customer1_idx` (`customerid` ASC),
   CONSTRAINT `fk_invoices_users1`
     FOREIGN KEY (`cashier_userid`)
     REFERENCES `user` (`userid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_invoice_customer1`
+    FOREIGN KEY (`customerid`)
+    REFERENCES `customer` (`customerid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

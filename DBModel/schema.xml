@@ -33,6 +33,33 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="customer" idMethod="native" phpName="Customer" namespace="API\Models\Invoice">
+    <column name="customerid" phpName="Customerid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="title" phpName="Title" type="VARCHAR" size="32" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="128" required="true"/>
+    <column name="adress" phpName="Adress" type="VARCHAR" size="128" required="true"/>
+    <column name="adress2" phpName="Adress2" type="VARCHAR" size="128"/>
+    <column name="city" phpName="City" type="VARCHAR" size="64" required="true"/>
+    <column name="zip" phpName="Zip" type="VARCHAR" size="10" required="true"/>
+    <column name="tax_identification_nr" phpName="TaxIdentificationNr" type="VARCHAR" size="32"/>
+    <column name="active" phpName="Active" type="BOOLEAN" size="1" required="true"/>
+    <foreign-key foreignTable="event" name="fk_customer_event1">
+      <reference local="eventid" foreign="eventid"/>
+    </foreign-key>
+    <index name="fk_customer_event1_idx">
+      <index-column name="eventid"/>
+    </index>
+    <index name="name">
+      <index-column name="name"/>
+    </index>
+    <unique name="customerid_UNIQUE">
+      <unique-column name="customerid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="distribution_giving_out" idMethod="native" phpName="DistributionGivingOut" namespace="API\Models\OIP">
     <column name="distribution_giving_outid" phpName="DistributionGivingOutid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
@@ -217,13 +244,20 @@
   <table name="invoice" idMethod="native" phpName="Invoice" namespace="API\Models\Invoice">
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="cashier_userid" phpName="CashierUserid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="customerid" phpName="Customerid" type="INTEGER"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <column name="canceled" phpName="Canceled" type="TIMESTAMP"/>
+    <foreign-key foreignTable="customer" name="fk_invoice_customer1">
+      <reference local="customerid" foreign="customerid"/>
+    </foreign-key>
     <foreign-key foreignTable="user" name="fk_invoices_users1">
       <reference local="cashier_userid" foreign="userid"/>
     </foreign-key>
     <index name="fk_invoices_users1_idx">
       <index-column name="cashier_userid"/>
+    </index>
+    <index name="fk_invoice_customer1_idx">
+      <index-column name="customerid"/>
     </index>
     <unique name="invoiceid_UNIQUE">
       <unique-column name="invoiceid"/>

@@ -24,11 +24,13 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildInvoiceQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
  * @method     ChildInvoiceQuery orderByCashierUserid($order = Criteria::ASC) Order by the cashier_userid column
+ * @method     ChildInvoiceQuery orderByCustomerid($order = Criteria::ASC) Order by the customerid column
  * @method     ChildInvoiceQuery orderByDate($order = Criteria::ASC) Order by the date column
  * @method     ChildInvoiceQuery orderByCanceled($order = Criteria::ASC) Order by the canceled column
  *
  * @method     ChildInvoiceQuery groupByInvoiceid() Group by the invoiceid column
  * @method     ChildInvoiceQuery groupByCashierUserid() Group by the cashier_userid column
+ * @method     ChildInvoiceQuery groupByCustomerid() Group by the customerid column
  * @method     ChildInvoiceQuery groupByDate() Group by the date column
  * @method     ChildInvoiceQuery groupByCanceled() Group by the canceled column
  *
@@ -39,6 +41,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
  * @method     ChildInvoiceQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
  * @method     ChildInvoiceQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ *
+ * @method     ChildInvoiceQuery leftJoinCustomer($relationAlias = null) Adds a LEFT JOIN clause to the query using the Customer relation
+ * @method     ChildInvoiceQuery rightJoinCustomer($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Customer relation
+ * @method     ChildInvoiceQuery innerJoinCustomer($relationAlias = null) Adds a INNER JOIN clause to the query using the Customer relation
+ *
+ * @method     ChildInvoiceQuery joinWithCustomer($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Customer relation
+ *
+ * @method     ChildInvoiceQuery leftJoinWithCustomer() Adds a LEFT JOIN clause and with to the query using the Customer relation
+ * @method     ChildInvoiceQuery rightJoinWithCustomer() Adds a RIGHT JOIN clause and with to the query using the Customer relation
+ * @method     ChildInvoiceQuery innerJoinWithCustomer() Adds a INNER JOIN clause and with to the query using the Customer relation
  *
  * @method     ChildInvoiceQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
  * @method     ChildInvoiceQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
@@ -70,13 +82,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery rightJoinWithPayment() Adds a RIGHT JOIN clause and with to the query using the Payment relation
  * @method     ChildInvoiceQuery innerJoinWithPayment() Adds a INNER JOIN clause and with to the query using the Payment relation
  *
- * @method     \API\Models\User\UserQuery|\API\Models\Invoice\InvoiceItemQuery|\API\Models\Payment\PaymentQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\Invoice\CustomerQuery|\API\Models\User\UserQuery|\API\Models\Invoice\InvoiceItemQuery|\API\Models\Payment\PaymentQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildInvoice findOne(ConnectionInterface $con = null) Return the first ChildInvoice matching the query
  * @method     ChildInvoice findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoice matching the query, or a new ChildInvoice object populated from the query conditions when no match is found
  *
  * @method     ChildInvoice findOneByInvoiceid(int $invoiceid) Return the first ChildInvoice filtered by the invoiceid column
  * @method     ChildInvoice findOneByCashierUserid(int $cashier_userid) Return the first ChildInvoice filtered by the cashier_userid column
+ * @method     ChildInvoice findOneByCustomerid(int $customerid) Return the first ChildInvoice filtered by the customerid column
  * @method     ChildInvoice findOneByDate(string $date) Return the first ChildInvoice filtered by the date column
  * @method     ChildInvoice findOneByCanceled(string $canceled) Return the first ChildInvoice filtered by the canceled column *
 
@@ -85,12 +98,14 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildInvoice requireOneByInvoiceid(int $invoiceid) Return the first ChildInvoice filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByCashierUserid(int $cashier_userid) Return the first ChildInvoice filtered by the cashier_userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoice requireOneByCustomerid(int $customerid) Return the first ChildInvoice filtered by the customerid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByDate(string $date) Return the first ChildInvoice filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByCanceled(string $canceled) Return the first ChildInvoice filtered by the canceled column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildInvoice[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoice objects based on current ModelCriteria
  * @method     ChildInvoice[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildInvoice objects filtered by the invoiceid column
  * @method     ChildInvoice[]|ObjectCollection findByCashierUserid(int $cashier_userid) Return ChildInvoice objects filtered by the cashier_userid column
+ * @method     ChildInvoice[]|ObjectCollection findByCustomerid(int $customerid) Return ChildInvoice objects filtered by the customerid column
  * @method     ChildInvoice[]|ObjectCollection findByDate(string $date) Return ChildInvoice objects filtered by the date column
  * @method     ChildInvoice[]|ObjectCollection findByCanceled(string $canceled) Return ChildInvoice objects filtered by the canceled column
  * @method     ChildInvoice[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -191,7 +206,7 @@ abstract class InvoiceQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT invoiceid, cashier_userid, date, canceled FROM invoice WHERE invoiceid = :p0 AND cashier_userid = :p1';
+        $sql = 'SELECT invoiceid, cashier_userid, customerid, date, canceled FROM invoice WHERE invoiceid = :p0 AND cashier_userid = :p1';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
@@ -378,6 +393,49 @@ abstract class InvoiceQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the customerid column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByCustomerid(1234); // WHERE customerid = 1234
+     * $query->filterByCustomerid(array(12, 34)); // WHERE customerid IN (12, 34)
+     * $query->filterByCustomerid(array('min' => 12)); // WHERE customerid > 12
+     * </code>
+     *
+     * @see       filterByCustomer()
+     *
+     * @param     mixed $customerid The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildInvoiceQuery The current query, for fluid interface
+     */
+    public function filterByCustomerid($customerid = null, $comparison = null)
+    {
+        if (is_array($customerid)) {
+            $useMinMax = false;
+            if (isset($customerid['min'])) {
+                $this->addUsingAlias(InvoiceTableMap::COL_CUSTOMERID, $customerid['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($customerid['max'])) {
+                $this->addUsingAlias(InvoiceTableMap::COL_CUSTOMERID, $customerid['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InvoiceTableMap::COL_CUSTOMERID, $customerid, $comparison);
+    }
+
+    /**
      * Filter the query on the date column
      *
      * Example usage:
@@ -461,6 +519,83 @@ abstract class InvoiceQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(InvoiceTableMap::COL_CANCELED, $canceled, $comparison);
+    }
+
+    /**
+     * Filter the query by a related \API\Models\Invoice\Customer object
+     *
+     * @param \API\Models\Invoice\Customer|ObjectCollection $customer The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildInvoiceQuery The current query, for fluid interface
+     */
+    public function filterByCustomer($customer, $comparison = null)
+    {
+        if ($customer instanceof \API\Models\Invoice\Customer) {
+            return $this
+                ->addUsingAlias(InvoiceTableMap::COL_CUSTOMERID, $customer->getCustomerid(), $comparison);
+        } elseif ($customer instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(InvoiceTableMap::COL_CUSTOMERID, $customer->toKeyValue('Customerid', 'Customerid'), $comparison);
+        } else {
+            throw new PropelException('filterByCustomer() only accepts arguments of type \API\Models\Invoice\Customer or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Customer relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildInvoiceQuery The current query, for fluid interface
+     */
+    public function joinCustomer($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Customer');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Customer');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Customer relation Customer object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\Invoice\CustomerQuery A secondary query class using the current class as primary query
+     */
+    public function useCustomerQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinCustomer($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Customer', '\API\Models\Invoice\CustomerQuery');
     }
 
     /**

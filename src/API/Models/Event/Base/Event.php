@@ -21,6 +21,10 @@ use API\Models\Event\Map\EventPrinterTableMap;
 use API\Models\Event\Map\EventTableMap;
 use API\Models\Event\Map\EventTableTableMap;
 use API\Models\Event\Map\EventUserTableMap;
+use API\Models\Invoice\Customer;
+use API\Models\Invoice\CustomerQuery;
+use API\Models\Invoice\Base\Customer as BaseCustomer;
+use API\Models\Invoice\Map\CustomerTableMap;
 use API\Models\Menu\MenuExtra;
 use API\Models\Menu\MenuExtraQuery;
 use API\Models\Menu\MenuSize;
@@ -127,6 +131,12 @@ abstract class Event implements ActiveRecordInterface
     protected $collCouponsPartial;
 
     /**
+     * @var        ObjectCollection|Customer[] Collection to store aggregation of Customer objects.
+     */
+    protected $collCustomers;
+    protected $collCustomersPartial;
+
+    /**
      * @var        ObjectCollection|DistributionPlace[] Collection to store aggregation of DistributionPlace objects.
      */
     protected $collDistributionPlaces;
@@ -181,6 +191,12 @@ abstract class Event implements ActiveRecordInterface
      * @var ObjectCollection|Coupon[]
      */
     protected $couponsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|Customer[]
+     */
+    protected $customersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -718,6 +734,8 @@ abstract class Event implements ActiveRecordInterface
 
             $this->collCoupons = null;
 
+            $this->collCustomers = null;
+
             $this->collDistributionPlaces = null;
 
             $this->collEventPrinters = null;
@@ -853,6 +871,23 @@ abstract class Event implements ActiveRecordInterface
 
             if ($this->collCoupons !== null) {
                 foreach ($this->collCoupons as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->customersScheduledForDeletion !== null) {
+                if (!$this->customersScheduledForDeletion->isEmpty()) {
+                    \API\Models\Invoice\CustomerQuery::create()
+                        ->filterByPrimaryKeys($this->customersScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->customersScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collCustomers !== null) {
+                foreach ($this->collCustomers as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1172,6 +1207,21 @@ abstract class Event implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->collCoupons->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collCustomers) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'customers';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'customers';
+                        break;
+                    default:
+                        $key = 'Customers';
+                }
+
+                $result[$key] = $this->collCustomers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collDistributionPlaces) {
 
@@ -1516,6 +1566,12 @@ abstract class Event implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getCustomers() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addCustomer($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getDistributionPlaces() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addDistributionPlace($relObj->copy($deepCopy));
@@ -1601,6 +1657,9 @@ abstract class Event implements ActiveRecordInterface
     {
         if ('Coupon' == $relationName) {
             return $this->initCoupons();
+        }
+        if ('Customer' == $relationName) {
+            return $this->initCustomers();
         }
         if ('DistributionPlace' == $relationName) {
             return $this->initDistributionPlaces();
@@ -1876,6 +1935,234 @@ abstract class Event implements ActiveRecordInterface
         $query->joinWith('User', $joinBehavior);
 
         return $this->getCoupons($query, $con);
+    }
+
+    /**
+     * Clears out the collCustomers collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addCustomers()
+     */
+    public function clearCustomers()
+    {
+        $this->collCustomers = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collCustomers collection loaded partially.
+     */
+    public function resetPartialCustomers($v = true)
+    {
+        $this->collCustomersPartial = $v;
+    }
+
+    /**
+     * Initializes the collCustomers collection.
+     *
+     * By default this just sets the collCustomers collection to an empty array (like clearcollCustomers());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initCustomers($overrideExisting = true)
+    {
+        if (null !== $this->collCustomers && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = CustomerTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collCustomers = new $collectionClassName;
+        $this->collCustomers->setModel('\API\Models\Invoice\Customer');
+    }
+
+    /**
+     * Gets an array of Customer objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildEvent is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|Customer[] List of Customer objects
+     * @throws PropelException
+     */
+    public function getCustomers(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collCustomersPartial && !$this->isNew();
+        if (null === $this->collCustomers || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collCustomers) {
+                // return empty collection
+                $this->initCustomers();
+            } else {
+                $collCustomers = CustomerQuery::create(null, $criteria)
+                    ->filterByEvent($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collCustomersPartial && count($collCustomers)) {
+                        $this->initCustomers(false);
+
+                        foreach ($collCustomers as $obj) {
+                            if (false == $this->collCustomers->contains($obj)) {
+                                $this->collCustomers->append($obj);
+                            }
+                        }
+
+                        $this->collCustomersPartial = true;
+                    }
+
+                    return $collCustomers;
+                }
+
+                if ($partial && $this->collCustomers) {
+                    foreach ($this->collCustomers as $obj) {
+                        if ($obj->isNew()) {
+                            $collCustomers[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCustomers = $collCustomers;
+                $this->collCustomersPartial = false;
+            }
+        }
+
+        return $this->collCustomers;
+    }
+
+    /**
+     * Sets a collection of Customer objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $customers A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildEvent The current object (for fluent API support)
+     */
+    public function setCustomers(Collection $customers, ConnectionInterface $con = null)
+    {
+        /** @var Customer[] $customersToDelete */
+        $customersToDelete = $this->getCustomers(new Criteria(), $con)->diff($customers);
+
+
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->customersScheduledForDeletion = clone $customersToDelete;
+
+        foreach ($customersToDelete as $customerRemoved) {
+            $customerRemoved->setEvent(null);
+        }
+
+        $this->collCustomers = null;
+        foreach ($customers as $customer) {
+            $this->addCustomer($customer);
+        }
+
+        $this->collCustomers = $customers;
+        $this->collCustomersPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related BaseCustomer objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related BaseCustomer objects.
+     * @throws PropelException
+     */
+    public function countCustomers(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collCustomersPartial && !$this->isNew();
+        if (null === $this->collCustomers || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCustomers) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getCustomers());
+            }
+
+            $query = CustomerQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEvent($this)
+                ->count($con);
+        }
+
+        return count($this->collCustomers);
+    }
+
+    /**
+     * Method called to associate a Customer object to this object
+     * through the Customer foreign key attribute.
+     *
+     * @param  Customer $l Customer
+     * @return $this|\API\Models\Event\Event The current object (for fluent API support)
+     */
+    public function addCustomer(Customer $l)
+    {
+        if ($this->collCustomers === null) {
+            $this->initCustomers();
+            $this->collCustomersPartial = true;
+        }
+
+        if (!$this->collCustomers->contains($l)) {
+            $this->doAddCustomer($l);
+
+            if ($this->customersScheduledForDeletion and $this->customersScheduledForDeletion->contains($l)) {
+                $this->customersScheduledForDeletion->remove($this->customersScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Customer $customer The Customer object to add.
+     */
+    protected function doAddCustomer(Customer $customer)
+    {
+        $this->collCustomers[]= $customer;
+        $customer->setEvent($this);
+    }
+
+    /**
+     * @param  Customer $customer The Customer object to remove.
+     * @return $this|ChildEvent The current object (for fluent API support)
+     */
+    public function removeCustomer(Customer $customer)
+    {
+        if ($this->getCustomers()->contains($customer)) {
+            $pos = $this->collCustomers->search($customer);
+            $this->collCustomers->remove($pos);
+            if (null === $this->customersScheduledForDeletion) {
+                $this->customersScheduledForDeletion = clone $this->collCustomers;
+                $this->customersScheduledForDeletion->clear();
+            }
+            $this->customersScheduledForDeletion[]= clone $customer;
+            $customer->setEvent(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -3558,6 +3845,11 @@ abstract class Event implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collCustomers) {
+                foreach ($this->collCustomers as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collDistributionPlaces) {
                 foreach ($this->collDistributionPlaces as $o) {
                     $o->clearAllReferences($deep);
@@ -3596,6 +3888,7 @@ abstract class Event implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collCoupons = null;
+        $this->collCustomers = null;
         $this->collDistributionPlaces = null;
         $this->collEventPrinters = null;
         $this->collEventTables = null;
