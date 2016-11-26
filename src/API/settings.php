@@ -33,6 +33,11 @@ return [
         
         'Organisation' => [
             'Name' => '',
+            'Adress' => '',
+            'Adress2' => '',
+            'ZIP' => '',
+            'City' => '',
+            'TaxIdentificationNr' => '',
             
             'Invoice' => [
                 'Header' => "HEADER TOP LINE\nSECOND LINE\nTHIRD LINE",
