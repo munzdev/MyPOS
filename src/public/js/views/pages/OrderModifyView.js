@@ -290,7 +290,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
                                 app.ws.api.Trigger("distribution-update");
 
-                                this.changeHash("order-pay/id/" + this.orderModify.get('Orderid') + "/tableNr/" + this.tableNr);
+                                this.changeHash("order-invoice/id/" + this.orderModify.get('Orderid') + "/tableNr/" + this.tableNr);
                             })
                             .fail(() => {
                                 let t = this.i18n();
