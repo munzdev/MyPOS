@@ -75,7 +75,6 @@
         "inInvoice": "in Invoice",
         "open": "Open",
         "amount": "Amount",
-        "managerNeedsToSetPrice": "Preis wird von<br/>Manager noch<br/>festgelegt",
         "managerNeedsToSetPrice": "Price needs to<br/>be set by the<br/>Manager",
         "singlePrice": "Single price",
         "total": "Total",
