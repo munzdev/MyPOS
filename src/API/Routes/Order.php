@@ -5,4 +5,6 @@ $app->group('/Order', function () {
          ->setName('Order');
     $this->any('/{id:[0-9]+}', new API\Controllers\Order\OrderModify($this))
          ->setName('OrderModify');
+    $this->any('/Info/{id:[0-9]+}', new API\Controllers\Order\OrderInfo($this))
+         ->setName('OrderInfo');
 });

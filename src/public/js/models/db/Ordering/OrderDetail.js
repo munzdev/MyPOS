@@ -6,7 +6,8 @@ define([
     "models/db/Menu/Availability",
     "models/db/User/User",
     "collections/db/Ordering/OrderDetailExtraCollection",
-    "collections/db/Ordering/OrderDetailMixedWithCollection"
+    "collections/db/Ordering/OrderDetailMixedWithCollection",
+    "collections/db/OIP/OrderInProgressRecievedCollection"
 ], function(Order,
             Menu,
             MenuSize,
@@ -14,7 +15,8 @@ define([
             Availability,
             User,
             OrderDetailExtraCollection,
-            OrderDetailMixedWithCollection){
+            OrderDetailMixedWithCollection,
+            OrderInProgressRecievedCollection){
     "use strict";
 
     return class OrderDetail extends app.BaseModel {
@@ -83,6 +85,14 @@ define([
                     response.OrderDetailMixedWiths = new OrderDetailMixedWithCollection();
                 else
                     response.OrderDetailMixedWiths = new OrderDetailMixedWithCollection(response.OrderDetailMixedWiths, {parse: true});
+            }
+            
+            if('OrderInProgressRecieveds' in response )
+            {
+                if(response.OrderInProgressRecieveds.toString() == '')
+                    response.OrderInProgressRecieveds = new OrderInProgressRecievedCollection();
+                else
+                    response.OrderInProgressRecieveds = new OrderInProgressRecievedCollection(response.OrderInProgressRecieveds, {parse: true});
             }
                                     
             return super.parse(response);

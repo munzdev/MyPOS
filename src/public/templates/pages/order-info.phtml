@@ -1,39 +1,36 @@
 <div data-role="content">
-    <div class="nav-header"><%= header %></div>
+    <div class="nav-header"></div>
     <ul data-role="listview" data-inset="true">
         <li data-role="list-divider" style="white-space: normal;">Informationen</li>
-        <li style="white-space: normal;">Bestellungsnummer: <%- order.get('orderid') %></li>
-        <li style="white-space: normal;">Tisch: <%- order.get('table_name') %></li>
-        <li style="white-space: normal;">Bestellzeit: <%- $.format.date(MyPOS.DateFromMysql(order.get('ordertime')), DATE_JS_TIMEFORMAT) %></li>
-        <li style="white-space: normal;">Kellner: <%- order.get('user') %></li>
+        <li style="white-space: normal;">Bestellungsnummer: <%- orderInfo.get('Orderid') %></li>
+        <li style="white-space: normal;">Tisch: <%- orderInfo.get('EventTable').get('Name') %></li>
+        <li style="white-space: normal;">Bestellzeit: <%- orderInfo.get('Ordertime') %></li>
+        <li style="white-space: normal;">Kellner: <%- orderInfo.get('User').get('Firstname') %> <%- orderInfo.get('User').get('Lastname') %></li>
         <li style="white-space: normal;">Status:
-            <% switch(parseInt(order.get('status'))) {
-                case ORDER_STATUS_WAITING: %>
-                    in Warteschlange
-                <% break;
-                case ORDER_STATUS_IN_PROGRESS: %>
-                    in Bearbeitung
-                <% break;
-                case ORDER_STATUS_FINISHED: %>
-                    Fertig
-                <% break;
-            } %>-
-            <% if(order.get('open') == 0) { %>
+            <%  if(orderInfo.get('OrderInProgresses').length == 0) {
+                    print(t.waiting);
+                } else if(orderInfo.get('Finished') == null) {
+                    print(t.inProgress);
+                } else {
+                    print(t.finished);
+                } %>
+            -
+            <% if(orderInfo.get('open') == 0) { %>
                 <span style="color: green;">Bezahlt</span>
             <% } else { %>
                 <span style="color: red;">Unbezahlt</span>
             <% } %>
         </li>
-        <li style="white-space: normal;">Letzte Bezahlung: <% if(order.get('last_paydate')) { print($.format.date(MyPOS.DateFromMysql(order.get('last_paydate')), DATE_JS_TIMEFORMAT)) } %></li>
-        <li style="white-space: normal;">Fertig: <% if(order.get('finished')) { print($.format.date(MyPOS.DateFromMysql(order.get('finished')), DATE_JS_TIMEFORMAT)) } %></li>
-        <li style="white-space: normal;">Bisher bezahlt: <%- order.get('amountPayed') %> €</li>
+        <li style="white-space: normal;">Letzte Bezahlung: <% if(orderInfo.get('last_paydate')) { print($.format.date(MyPOS.DateFromMysql(orderInfo.get('last_paydate')), DATE_JS_TIMEFORMAT)) } %></li>
+        <li style="white-space: normal;">Fertig: <% if(orderInfo.get('Finished')) { print(orderInfo.get('Finished')) } %></li>
+        <li style="white-space: normal;">Bisher verrechnet: <%- orderInfo.get('amountBilled') %> €</li>
     </ul>
     <div>
-        <ul data-role="listview" data-inset="true" id="order-info-details">
+        <ul data-role="listview" data-inset="true" id="details">
         </ul>
         <h3 class="ui-bar ui-bar-a ui-corner-all">Summe</h3>
         <div class="ui-body ui-body-a ui-corner-all">
-            <h1 style="margin: 0; padding: 0" id='order-info-total'>0,00€</h1>
+            <h1 style="margin: 0; padding: 0" id='total'>0,00€</h1>
         </div>
     </div>
 </div>

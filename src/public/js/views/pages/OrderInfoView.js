@@ -1,157 +1,155 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ "models/order/info/InfoModel",
-         'views/headers/HeaderView',
-         'text!templates/pages/order-info.phtml',
-         'text!templates/pages/order-item.phtml',
-         "jquery-dateFormat"],
- function(  InfoModel,
+define(['models/custom/order/OrderInfo',
+        'views/helpers/HeaderView',
+        'text!templates/pages/order-info.phtml',
+        'text!templates/pages/order-item.phtml',
+        'jquery-dateFormat'
+], function(OrderInfo,
             HeaderView,
             Template,
             TemplateItem) {
     "use strict";
-
-    // Extends Backbone.View
-    var OrderInfoView = Backbone.View.extend( {
-
-    	title: 'order-info',
-    	el: 'body',
-
+    
+    return class OrderInfoView extends app.PageView
+    {            
         // The View Constructor
-        initialize: function(options) {
+        initialize(options) {
             _.bindAll(this, "render",
                             "renderOrder");
 
-            this.infoModel = new InfoModel();
+            this.orderInfo = new OrderInfo();
+            this.orderInfo.set('Orderid', options.orderid);
+            this.orderInfo.fetch()
+                          .done(this.render);
+        }
 
-            var self = this;
-
-            this.infoModel.fetch({
-                data: {orderid: options.id},
-                success: function() {
-                    self.render();
-                }
-            });
-        },
-
-        events: {
-
-        },
-
-        renderOrder: function()
-        {
+        renderOrder() {
             var itemTemplate = _.template(TemplateItem);
-            var self = this;
 
-            $('#order-info-details').empty();
+            this.$('#details').empty();
 
-            var counter = 0;
-            var totalSumPrice = 0;
+            let counter = 0;
+            let totalSumPrice = 0;
+            let sortedCategorys = new Map();
+            let t = this.i18n();
+            let i18n = app.i18n.template;
+            let currency = i18n.currency;
+            
+            // Presort the list by categorys
+            this.orderInfo.get('OrderDetails').each((orderDetail) => {
+                let menuid = orderDetail.get('Menuid');
+                let key = null;
+                
+                if(menuid === null && sortedCategorys.get(key) == null) {
+                    sortedCategorys.set(key, {name: t.specialOrders,
+                                              orders: new Set()});
+                } else if(menuid !== null) {
+                    let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});                    
+                    key = menuSearch.MenuTypeid;
+                                        
+                    if(sortedCategorys.get(key) == null) {
+                        let menuType = app.productList.findWhere({MenuTypeid: key});
+                        sortedCategorys.set(key, {name: menuType.get('Name'),
+                                                  orders: new Set()});
+                    }                                                            
+                }
+                
+                sortedCategorys.get(key).orders.add(orderDetail);
+            });
 
-            this.infoModel.get('orders').each(function(category){
-                $('#order-info-details').append("<li data-role='list-divider'>" + category.get('name') + "</li>");
+            for(let[menuTypeid, val] of sortedCategorys.entries()) {
+                let divider = $('<li/>').attr('data-role', 'list-divider').text(val.name);
+                this.$('#details').append(divider);
                 counter = 0;
-                var isSpecialOrder = category.get('menu_typeid') == "0";
+                let isSpecialOrder = (menuTypeid == null);
 
-                category.get('orders').each(function(originalMenu){
-                    var menuSearch = _.find(app.session.products.searchHelper, function(obj) { return obj.menuid == originalMenu.get('menuid'); });
-                    var extras = '';
-                    var price = parseFloat(originalMenu.get('price'));
+                for (let orderDetail of val.orders.values()) {
+                    let menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetail.get('Menuid'); });
+                    let extras = '';
+                    let price = parseFloat(orderDetail.get('SinglePrice'));
 
-                    var sizeToMixWith = originalMenu.get('sizes').at(0);
+                    let menuSize = orderDetail.get('MenuSize');
 
                     // Add size text if multible sizes are avaible for the product
-                    if(!isSpecialOrder && menuSearch.menu.get('sizes').length > 1)
-                    {
-                        extras = sizeToMixWith.get('name') + ", ";
-                    }
+                    if(!isSpecialOrder && menuSearch.Menu.get('MenuPossibleSize').length > 1)
+                        extras = menuSize.get('Name') + ", ";
+                    
+                    if(orderDetail.get('OrderDetailMixedWiths').length > 0) {
+                        extras += t.mixedWith + ": ";
 
-                    if(originalMenu.get('mixing').length > 0)
-                    {
-                        extras += "Gemischt mit: ";
-
-                        originalMenu.get('mixing').each(function(menuToMixWith){
-                            extras += menuToMixWith.get('name') + " - ";
+                        orderDetail.get('OrderDetailMixedWiths').each((orderDetailMixedWith) => {
+                            let menuToMixWith = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetailMixedWith.get('Menuid'); });
+                            extras += menuToMixWith.Menu.get('Name') + " - ";
                         });
                         extras = extras.slice(0, -3);
                         extras += ", ";
                     }
-
-                    originalMenu.get('extras').each(function(extra){
-                        extras += extra.get('name') + ", ";
+                    
+                    orderDetail.get('OrderDetailExtras').each(function(extra) {
+                        let menuPossibleExtra = menuSearch.Menu.get('MenuPossibleExtra')
+                                                                .findWhere({MenuPossibleExtraid: extra.get('MenuPossibleExtraid')});
+                        extras += menuPossibleExtra.get('MenuExtra').get('Name') + ", ";
                     });
 
-                    if(originalMenu.get('extra') && originalMenu.get('extra').length > 0)
-                        extras += originalMenu.get('extra') + ", ";
+                    if(orderDetail.get('ExtraDetail') && orderDetail.get('ExtraDetail').length > 0)
+                        extras += orderDetail.get('ExtraDetail') + ", ";
 
                     if(extras.length > 0)
                         extras = extras.slice(0, -2);
 
-                    var totalPrice = price * originalMenu.get('amount');
+                    let totalPrice = price * orderDetail.get('Amount');
                     totalSumPrice += totalPrice;
 
                     var status = ORDER_STATUS_WAITING;
 
-                    if(originalMenu.get('in_progress_begin') != null)
+                    if(false/*originalMenu.get('in_progress_begin') != null*/)
                     {
                         status = ORDER_STATUS_IN_PROGRESS;
                     }
-                    if(originalMenu.get('in_progress_done') != null)
+                    if(false/*originalMenu.get('in_progress_done') != null*/)
                     {
                         status = ORDER_STATUS_FINISHED;
                     }
 
-                    var datas = {name: originalMenu.get('name'),
+                    var datas = {name: isSpecialOrder ? t.specialOrder : menuSearch.Menu.get('Name'),
                                 extras: extras,
                                 mode: 'modify',
-                                amount: originalMenu.get('amount'),
+                                amount: orderDetail.get('Amount'),
                                 price: price,
                                 totalPrice: totalPrice,
-                                menu_typeid: category.get('menu_typeid'),
-                                index: counter,
+                                menuTypeid: menuTypeid,
+                                index: orderDetail.cid,
                                 isSpecialOrder: isSpecialOrder,
                                 skipCounts: true,
                                 statusInformation: true,
-                                rank: originalMenu.get('rank'),
-                                handled_by_name: originalMenu.get('handled_by_name'),
-                                in_progress_begin: originalMenu.get('in_progress_begin'),
-                                in_progress_done: originalMenu.get('in_progress_done'),
-                                amount_recieved_total: originalMenu.get('amount_recieved_total'),
-                                amount_recieved: originalMenu.get('amount_recieved'),
-                                status: status};
+                                rank: "TODO",
+                                handled_by_name: "TODO",
+                                in_progress_begin: "TODO",
+                                in_progress_done: "TODO",
+                                amount_recieved_total: "TODO",
+                                amount_recieved: "TODO",
+                                status: status,
+                                t: app.i18n.template.OrderItem,
+                                i18n: i18n};
 
-                    $('#order-info-details').append("<li>" + itemTemplate(datas) + "</li>");
+                    this.$('#details').append("<li>" + itemTemplate(datas) + "</li>");
                     counter++;
-                });
-            });
+                }
+            }
 
-            $('#order-info-total').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
-
-            //$('#order-info-details').listview('refresh');
-        },
+            this.$('#total').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
+        }
 
         // Renders all of the Category models on the UI
-        render: function() {
-            var header = new HeaderView();
-
-            header.activeButton = 'order-overview';
-
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  order: this.infoModel});
+        render() {
+            let header = new HeaderView();
+            this.registerSubview(".nav-header", header);
+            
+            this.renderTemplate(Template, {orderInfo: this.orderInfo});
 
             this.renderOrder();
 
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-
-            $.mobile.changePage( "#" + this.title);
+            this.changePage(this);
             return this;
         }
-    } );
-
-    // Returns the View class
-    return OrderInfoView;
-
+    }
 } );
