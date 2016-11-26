@@ -429,7 +429,9 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                                 menuTypeid: menuTypeid,
                                 index: orderDetail.cid,
                                 isSpecialOrder: isSpecialOrder,
-                                skipCounts: false};
+                                skipCounts: false,
+                                t: app.i18n.template.OrderItem,
+                                i18n: app.i18n.template};
 
                     this.$('#selected').append("<li>" + itemTemplate(datas) + "</li>");
                     counter++;

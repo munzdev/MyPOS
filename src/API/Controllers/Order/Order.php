@@ -125,6 +125,9 @@ class Order extends SecurityController
 
             foreach($o_order_template->getOrderDetails() as $o_order_detail_template)
             {            
+                if($o_order_detail_template->getAmount() == 0)
+                    continue;
+                
                 $o_order_detail = new OrderDetail();
                 $o_order_detail->fromArray($o_order_detail_template->toArray());
                 $o_order_detail->setOrder($o_order);
@@ -153,7 +156,6 @@ class Order extends SecurityController
         } catch(Exception $o_exception) {
             $o_connection->rollBack();
             throw $o_exception;
-        }
-               
+        }               
     }
 }
