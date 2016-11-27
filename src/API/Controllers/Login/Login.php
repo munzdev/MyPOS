@@ -5,6 +5,7 @@ namespace API\Controllers\Login;
 use API\Lib\{Auth, Controller, RememberMe};
 use API\Lib\Exceptions\GeneralException;
 use API\Models\User\UserQuery;
+use Propel\Runtime\Propel;
 use Respect\Validation\Validator;
 use Slim\App;
 
@@ -44,9 +45,14 @@ class Login extends Controller
             $o_rememberMe = new RememberMe($this->str_privateKey);            
             $str_hash = $o_rememberMe->remember($i_userid);                
             
+            Propel::disableInstancePooling();
+            
             UserQuery::create()->findPk($i_userid)
                                ->setAutologinHash($str_hash)
                                ->save();
+            
+            Propel::enableInstancePooling();
+
         }
         
         $this->o_response->withJson(true);
