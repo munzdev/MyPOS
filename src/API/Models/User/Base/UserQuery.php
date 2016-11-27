@@ -1170,40 +1170,6 @@ abstract class UserQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related DistributionPlace object
-     * using the distribution_place_user table as cross reference
-     *
-     * @param DistributionPlace $distributionPlace the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildUserQuery The current query, for fluid interface
-     */
-    public function filterByDistributionPlace($distributionPlace, $comparison = Criteria::EQUAL)
-    {
-        return $this
-            ->useDistributionPlaceUserQuery()
-            ->filterByDistributionPlace($distributionPlace, $comparison)
-            ->endUse();
-    }
-
-    /**
-     * Filter the query by a related EventPrinter object
-     * using the distribution_place_user table as cross reference
-     *
-     * @param EventPrinter $eventPrinter the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildUserQuery The current query, for fluid interface
-     */
-    public function filterByEventPrinter($eventPrinter, $comparison = Criteria::EQUAL)
-    {
-        return $this
-            ->useDistributionPlaceUserQuery()
-            ->filterByEventPrinter($eventPrinter, $comparison)
-            ->endUse();
-    }
-
-    /**
      * Exclude object from result
      *
      * @param   ChildUser $user Object to remove from the list of results

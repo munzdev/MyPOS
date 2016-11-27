@@ -129,7 +129,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="distribution_place_user" idMethod="native" phpName="DistributionPlaceUser" namespace="API\Models\DistributionPlace" isCrossRef="true">
+  <table name="distribution_place_user" idMethod="native" phpName="DistributionPlaceUser" namespace="API\Models\DistributionPlace">
     <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="event_printerid" phpName="EventPrinterid" type="INTEGER" primaryKey="true" required="true"/>

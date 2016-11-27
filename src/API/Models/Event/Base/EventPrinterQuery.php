@@ -691,40 +691,6 @@ abstract class EventPrinterQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related DistributionPlace object
-     * using the distribution_place_user table as cross reference
-     *
-     * @param DistributionPlace $distributionPlace the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildEventPrinterQuery The current query, for fluid interface
-     */
-    public function filterByDistributionPlace($distributionPlace, $comparison = Criteria::EQUAL)
-    {
-        return $this
-            ->useDistributionPlaceUserQuery()
-            ->filterByDistributionPlace($distributionPlace, $comparison)
-            ->endUse();
-    }
-
-    /**
-     * Filter the query by a related User object
-     * using the distribution_place_user table as cross reference
-     *
-     * @param User $user the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildEventPrinterQuery The current query, for fluid interface
-     */
-    public function filterByUser($user, $comparison = Criteria::EQUAL)
-    {
-        return $this
-            ->useDistributionPlaceUserQuery()
-            ->filterByUser($user, $comparison)
-            ->endUse();
-    }
-
-    /**
      * Exclude object from result
      *
      * @param   ChildEventPrinter $eventPrinter Object to remove from the list of results
