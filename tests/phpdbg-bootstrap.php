@@ -1,7 +1,16 @@
 <?php
 /**
-* Bootstrapping ...
-*/
+ * The following file shows how to bootstrap phpdbg so that you can mock specific server environments
+ * 
+ * Steps to run:
+ * 
+ * 1. Modify file to have needed vars for request simulation
+ * 2. run command 'phpdbg' in same directory as this file
+ * 3. ev include("phpdbg-bootstrap.php")
+ * 4. exec index.php
+ * 5. break ...
+ * 6. run
+ */
 if (!defined('PHPDBG_BOOTSTRAPPED'))
 {
     /* define these once */
