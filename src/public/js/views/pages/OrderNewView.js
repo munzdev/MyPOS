@@ -41,7 +41,7 @@ define(['views/helpers/HeaderView',
                 return;
             }
 
-            this.changeHash("order-modify/id/new/tableNr/" + tableNr);
+            this.changeHash("order-modify/tableNr/" + tableNr);
         }
 
         // Renders all of the Category models on the UI

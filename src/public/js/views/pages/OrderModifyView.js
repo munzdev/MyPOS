@@ -46,7 +46,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
             this.orderModify = new OrderModify();
 
-            if(options.orderid === 'new') {
+            if(options.orderid === null) {
                 this.mode = 'new';
                 this.orderModify.set('EventTable', new EventTable({Name: options.tableNr}));
             } else {
@@ -290,7 +290,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
                                 app.ws.api.Trigger("distribution-update");
 
-                                this.changeHash("order-invoice/id/" + this.orderModify.get('Orderid') + "/tableNr/" + this.tableNr);
+                                this.changeHash("order-invoice/id/" + this.orderModify.get('Orderid'));
                             })
                             .fail(() => {
                                 let t = this.i18n();

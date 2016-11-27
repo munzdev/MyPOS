@@ -1,45 +1,29 @@
-/* global _, Backbone, parseFloat */
-
-// Login View
-// =============
-
-// Includes file dependencies
-define([ "Webservice",
-         'models/order/payments/PaymentModel',
-         'collections/order/payments/OrderCollection',
-         'collections/order/payments/ExtraCollection',
-         'collections/PrinterCollection',
-         'views/headers/HeaderView',
-         'text!templates/pages/order-pay.phtml',
-         'text!templates/pages/order-item.phtml'],
-function(Webservice,
-         PaymentModel,
-         OrderCollection,
-         ExtraCollection,
-         PrinterCollection,
-         HeaderView,
-         Template,
-         TemplateItem) {
+define(['models/custom/invoice/InvoiceModel',
+        'collections/custom/event/PrinterCollection',
+        'models/custom/order/OrderUnbilled',
+        'views/helpers/HeaderView',
+        'text!templates/pages/order-invoice.phtml',
+        'text!templates/pages/order-item.phtml'
+], function(InvoiceModel,
+            PrinterCollection,
+            OrderUnbilledModel,
+            HeaderView,
+            Template,
+            TemplateItem) {
     "use strict";
-
-    // Extends Backbone.View
-    var OrderPayView = Backbone.View.extend( {
-
-    	title: 'order-pay',
-    	el: 'body',
-
-    	events: {
-            'click #order-pay-button-all': 'select_all',
-            'click #order-pay-show-all': 'set_mode_all',
-            'click #order-pay-show-single': 'set_mode_single',
-            'click #order-pay-submit': 'finish',
-            'popupafterclose #order-pay-success-popup': 'success_popup_close'
-    	},
-
-        // The View Constructor
-        initialize: function(options) {
-            _.bindAll(this, "render",
-                            "renderOpenOrders",
+    
+    return class OrderInvoiceView extends app.PageView
+    {
+        events() {
+            return {'click #button-all': 'select_all',
+                    'click #show-all': 'set_mode_all',
+                    'click #show-single': 'set_mode_single',
+                    'click #submit': 'finish',
+                    'popupafterclose #success-popup': 'success_popup_close'};
+        }
+                
+        initialize(options) {
+            _.bindAll(this, "renderOpenOrders",
                             "select_all",
                             "order_count_up",
                             "order_count_down",
@@ -48,71 +32,56 @@ function(Webservice,
                             "finish",
                             "success_popup_close");
 
-            this.id = options.id;
-            this.tableNr = options.tableNr;
-
-            this.payments = new PaymentModel();
+            this.invoice = new InvoiceModel();
+            this.orderUnbilled = new OrderUnbilledModel();
+            this.orderUnbilled.set('Orderid', options.orderid);
             this.printers = new PrinterCollection;
-            this.printerFetchStatus = this.printers.fetch({data: {eventid: app.session.user.get('eventid')},
-                                                           success: this.render});
+            this.printers.fetch()
+                         .done(() => {
+                             this.render();
+                             this.set_mode_all();
+                         });            
+        }
 
-            this.set_mode_all();
-        },
+        set_mode_all() {
+            if(DEBUG) console.log("MODE: all");
 
-        set_mode_all: function()
-        {
-            console.log("MODE: all");
+            this.orderUnbilled.set('All', true);
+            this.orderUnbilled.fetch()
+                                .done(this.renderOpenOrders);
+        }
 
-            this.mode = 'all';
+        set_mode_single() {
+            if(DEBUG) console.log("MODE: single");
 
-            var self = this;
+            this.orderUnbilled.set('All', false);
+            this.orderUnbilled.fetch()
+                                .done(this.renderOpenOrders);
+        }
 
-            $.when(this.printerFetchStatus).done(function(){
-                self.payments.fetch({data: {orderid: self.id,
-                                            tableNr: self.tableNr},
-                                     success: self.renderOpenOrders});
-            });
-        },
-
-        set_mode_single: function()
-        {
-            console.log("MODE: single");
-
-            this.mode = 'single';
-
-            var self = this;
-
-            $.when(this.printerFetchStatus).done(function(){
-                self.payments.fetch({data: {orderid: self.id},
-                                     success: self.renderOpenOrders});
-            });
-        },
-
-        select_all: function(event)
-        {
-            this.payments.get('orders').each(function(order){
+        select_all(event) {
+            this.orderUnbilled.get('orders').each(function(order){
                 order.set('currentInvoiceAmount', order.get('amount')) ;
             });
 
-            this.payments.get('extras').each(function(extra){
+            this.orderUnbilled.get('extras').each(function(extra){
                 extra.set('currentInvoiceAmount', extra.get('amount')) ;
             });
 
             this.renderOpenOrders();
-        },
+        }
 
-        order_count_up: function(event)
-        {
-            console.log("Up");
+        order_count_up(event) {
+            if(DEBUG) console.log("Up");
 
             var menu_typeid = $(event.currentTarget).attr('data-menu-typeid');
             var index = $(event.currentTarget).attr('data-index');
 
             if(menu_typeid > 0)
-                var order = this.payments.get('orders')
+                var order = this.orderUnbilled.get('orders')
                                          .at(index);
             else
-                var order = this.payments.get('extras')
+                var order = this.orderUnbilled.get('extras')
                                          .at(index);
 
             var amount_open = order.get('amount') - order.get('amount_payed');
@@ -124,31 +93,29 @@ function(Webservice,
             else if(current_amount > 0 && amount_open < 0)
                 current_amount = 0;
 
-
             if(menu_typeid > 0)
-                this.payments.get('orders')
+                this.orderUnbilled.get('orders')
                              .at(index)
                              .set('currentInvoiceAmount', current_amount);
             else
-                this.payments.get('extras')
+                this.orderUnbilled.get('extras')
                              .at(index)
                              .set('currentInvoiceAmount', current_amount);
 
             this.renderOpenOrders();
-        },
+        }
 
-        order_count_down: function(event)
-        {
-            console.log("Down");
+        order_count_down(event) {
+            if(DEBUG) console.log("Down");
 
             var menu_typeid = $(event.currentTarget).attr('data-menu-typeid');
             var index = $(event.currentTarget).attr('data-index');
 
             if(menu_typeid > 0)
-                var order = this.payments.get('orders')
+                var order = this.orderUnbilled.get('orders')
                                          .at(index);
             else
-                var order = this.payments.get('extras')
+                var order = this.orderUnbilled.get('extras')
                                          .at(index);
 
             var amount_open = order.get('amount') - order.get('amount_payed');
@@ -165,48 +132,42 @@ function(Webservice,
             }
 
             if(menu_typeid > 0)
-                this.payments.get('orders')
+                this.orderUnbilled.get('orders')
                              .at(index)
                              .set('currentInvoiceAmount', current_amount);
             else
-                this.payments.get('extras')
+                this.orderUnbilled.get('extras')
                              .at(index)
                              .set('currentInvoiceAmount', current_amount);
 
             this.renderOpenOrders();
-        },
+        }
 
-        finish: function()
-        {
+        finish() {
             var self = this;
             var webservice = new Webservice();
             webservice.action = "Orders/MakePayment";
-            webservice.formData = {orderid: this.id,
+            webservice.formData = {orderid: this.orderid,
                                    tableNr: this.tableNr,
                                    mode: this.mode,
-                                   payments: JSON.stringify(this.payments)};
+                                   payments: JSON.stringify(this.orderUnbilled)};
+            webservice.call()
+                    .done((result) => {
+                        if(this.$('#print').prop('checked') == 1)
+                        {
+                            var webservice = new Webservice();
+                            webservice.action = "Orders/PrintInvoice";
+                            webservice.formData = {invoiceid: result,
+                                                   printerid: this.$('#printer').val()};
+                            webservice.call();
+                        }
 
-            webservice.callback = {
-                success: function(result)
-                {
-                    if($('#order-pay-print').prop('checked') == 1)
-                    {
-                        var webservice = new Webservice();
-                        webservice.action = "Orders/PrintInvoice";
-                        webservice.formData = {invoiceid: result,
-                                               printerid: $('#order-pay-printer').val()};
-                        webservice.call();
-                    }
+                        this.$('#success-popup').popup("open");
+                    });
+        }
 
-                    $('#order-pay-success-popup').popup("open");
-                }
-            };
-            webservice.call();
-        },
-
-        success_popup_close: function()
-        {
-            if($('#order-pay-continue').prop('checked'))
+        success_popup_close() {
+            if(this.$('#continue').prop('checked'))
             {
                 if(this.mode == 'all')
                     this.set_mode_all();
@@ -214,14 +175,13 @@ function(Webservice,
                     this.set_mode_single();
             }
             else
-                MyPOS.ChangePage("#order-overview");
-        },
+                this.changeHash("order-overview");
+        }
 
-        renderOpenOrders: function()
-        {
+        renderOpenOrders() {
             var itemTemplate = _.template(TemplateItem);
 
-            $('#order-pay-open-orders-list').empty();
+            this.$('#open-orders-list').empty();
 
             var sortedOrders = {};
 
@@ -229,7 +189,7 @@ function(Webservice,
             var totalOpenProducts = 0;
             var totalProductsInInvoice = 0;
 
-            this.payments.get('orders').each(function(order, index)
+            this.orderUnbilled.get('orders').each(function(order, index)
             {
                 var menu_typeid = order.get('menu_typeid');
 
@@ -266,7 +226,7 @@ function(Webservice,
 
             });
 
-            this.payments.get('extras').each(function(extra, index)
+            this.orderUnbilled.get('extras').each(function(extra, index)
             {
                 if(!(0 in sortedOrders))
                 {
@@ -282,9 +242,9 @@ function(Webservice,
                     totalSumPrice += extra.get('single_price') * extra.get('currentInvoiceAmount');
             });
 
-            _.each(sortedOrders, function(category){
-                $('#order-pay-open-orders-list').append("<li data-role='list-divider'>" + category.name + "</li>");
-                category.orders.each(function(order){
+            _.each(sortedOrders, (category) => {
+                this.$('#open-orders-list').append("<li data-role='list-divider'>" + category.name + "</li>");
+                category.orders.each((order) => {
                     totalOpenProducts += order.get('amount') - order.get('amount_payed');
                     totalProductsInInvoice += order.get('currentInvoiceAmount');
 
@@ -300,9 +260,9 @@ function(Webservice,
                                 index: order.get('index'),
                                 skipCounts: false};
 
-                    $('#order-pay-open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
+                    this.$('#open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
                 });
-                category.extras.each(function(extra){
+                category.extras.each((extra) => {
                     totalOpenProducts += extra.get('amount') - extra.get('amount_payed');
                     totalProductsInInvoice += extra.get('currentInvoiceAmount');
 
@@ -317,38 +277,32 @@ function(Webservice,
                                   menu_typeid: 0,
                                   index: extra.get('index'),
                                   skipCounts: false};
-                    $('#order-pay-open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
+                    this.$('#open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
                 });
             });
 
             if(totalOpenProducts == totalProductsInInvoice)
             {
-                $('#order-pay-continue').prop("checked", false).checkboxradio('refresh');
+                this.$('#continue').prop("checked", false).checkboxradio('refresh');
             }
 
-            $('#order-pay-invoice-price').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
+            this.$('#invoice-price').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
 
-            $('.order-item-up').click(this.order_count_up);
-            $('.order-item-down').click(this.order_count_down);
-            $('#order-pay-open-orders-list').listview('refresh');
-        },
+            this.$('.order-item-up').click(this.order_count_up);
+            this.$('.order-item-down').click(this.order_count_down);
+            this.$('#open-orders-list').listview('refresh');
+        }
 
         // Renders all of the Category models on the UI
-        render: function() {
-            var header = new HeaderView();
-            header.activeButton = 'order-overview';
+        render() {
+            let header = new HeaderView();
+            this.registerSubview(".nav-header", header);
+            
+            this.renderTemplate(Template, {printers: this.printers});
 
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  printers: this.printers});
-
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-
-            $.mobile.changePage( "#" + this.title);
+            this.changePage(this);
 
             return this;
         }
-    });
-
-    return OrderPayView;
+    }
 } );

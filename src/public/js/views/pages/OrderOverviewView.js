@@ -87,14 +87,14 @@ define([ "Webservice",
             var orderid = $(event.currentTarget).attr('data-order-id');
             var tableNr = $(event.currentTarget).attr('data-table-nr');
 
-            this.changeHash("order-invoice/id/" + orderid + "/tableNr/" + tableNr);
+            this.changeHash("order-invoice/id/" + orderid);
         }
 
         click_btn_modify(event) {
             var orderid = $(event.currentTarget).attr('data-order-id');
             var tableNr = $(event.currentTarget).attr('data-table-nr');
 
-            this.changeHash("order-modify/id/" + orderid + "/tableNr/" + tableNr);
+            this.changeHash("order-modify/id/" + orderid);
         }
 
         click_btn_info(event) {

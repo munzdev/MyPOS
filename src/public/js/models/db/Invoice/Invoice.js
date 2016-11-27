@@ -1,7 +1,7 @@
-define([
-    "models/db/User/User",
-    
-], function(User){
+define(["models/db/User/User",
+        "collections/db/Invoice/InvoiceCollection"
+], function(User,
+            InvoiceCollection) {
     "use strict";
 
     return class Invoice extends app.BaseModel {
@@ -16,12 +16,20 @@ define([
         }
         
         parse(response)
-        {                       
+        {
             if('CashierUser' in response)
             {
                 response.CashierUser = new User(response.CashierUser, {parse: true});
             }
-            
+
+            if('InvoiceItems' in response)
+            {                
+                if(response.InvoiceItems.toString() == '')
+                    response.InvoiceItems = new InvoiceCollection();
+                else
+                    response.InvoiceItems = new InvoiceCollection(response.InvoiceItems, {parse: true});
+            }
+
             return super.parse(response);
         }
 
