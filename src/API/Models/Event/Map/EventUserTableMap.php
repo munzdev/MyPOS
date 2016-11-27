@@ -150,7 +150,7 @@ class EventUserTableMap extends TableMap
         $this->addPrimaryKey('event_userid', 'EventUserid', 'INTEGER', true, null, null);
         $this->addForeignPrimaryKey('eventid', 'Eventid', 'INTEGER' , 'event', 'eventid', true, null, null);
         $this->addForeignPrimaryKey('userid', 'Userid', 'INTEGER' , 'user', 'userid', true, null, null);
-        $this->addColumn('user_roles', 'UserRoles', 'TINYINT', true, null, null);
+        $this->addColumn('user_roles', 'UserRoles', 'INTEGER', true, null, null);
         $this->addColumn('begin_money', 'BeginMoney', 'DECIMAL', true, null, null);
     } // initialize()
 

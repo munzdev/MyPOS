@@ -6,13 +6,13 @@
     <% if(rights & USER_ROLE_ORDER_OVERVIEW) { %>
         <li><a href="#order-overview" class="header-link ui-btn ui-btn-icon-left ui-icon-grid">Bestellungen</a></li>
     <% } %>
-    <% if(rights & USER_ROLE_INVOICE) { %>
+    <% if(rights & USER_ROLE_INVOICE_OVERVIEW) { %>
         <li><a href="#invoice" class="header-link ui-btn ui-btn-icon-left ui-icon-money">Rechnungen</a></li>
     <% } %>
-    <% if(rights & USER_ROLE_DISTRIBUTION) { %>
+    <% if(rights & USER_ROLE_DISTRIBUTION_OVERVIEW) { %>
         <li><a href="#distribution" class="header-link ui-btn ui-btn-icon-left ui-icon-star">Ausgabe</a></li>
     <% } %>
-    <% if(rights & USER_ROLE_MANAGER) { %>
+    <% if(rights & USER_ROLE_MANAGER_OVERVIEW) { %>
         <li><a href="#manager" class="header-link ui-btn ui-btn-icon-left ui-icon-eye">Manager</a></li>
     <% } %>
     <% if(isAdmin) { %>

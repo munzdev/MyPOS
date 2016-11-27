@@ -135,7 +135,6 @@ class DistributionPlaceUserTableMap extends TableMap
         $this->setClassName('\\API\\Models\\DistributionPlace\\DistributionPlaceUser');
         $this->setPackage('API.Models.DistributionPlace');
         $this->setUseIdGenerator(false);
-        $this->setIsCrossRef(true);
         // columns
         $this->addForeignPrimaryKey('distribution_placeid', 'DistributionPlaceid', 'INTEGER' , 'distribution_place', 'distribution_placeid', true, null, null);
         $this->addForeignPrimaryKey('userid', 'Userid', 'INTEGER' , 'user', 'userid', true, null, null);

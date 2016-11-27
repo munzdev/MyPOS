@@ -14,11 +14,9 @@ use API\Models\DistributionPlace\Map\DistributionPlaceGroupTableMap;
 use API\Models\DistributionPlace\Map\DistributionPlaceTableMap;
 use API\Models\DistributionPlace\Map\DistributionPlaceUserTableMap;
 use API\Models\Event\Event;
-use API\Models\Event\EventPrinter;
 use API\Models\Event\EventQuery;
 use API\Models\Menu\MenuGroup;
 use API\Models\Menu\MenuGroupQuery;
-use API\Models\User\User;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -133,36 +131,6 @@ abstract class DistributionPlace implements ActiveRecordInterface
     protected $collMenuGroupsPartial;
 
     /**
-     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildUser, ChildEventPrinter combination combinations.
-     */
-    protected $combinationCollUserEventPrinters;
-
-    /**
-     * @var bool
-     */
-    protected $combinationCollUserEventPrintersPartial;
-
-    /**
-     * @var        ObjectCollection|User[] Cross Collection to store aggregation of User objects.
-     */
-    protected $collUsers;
-
-    /**
-     * @var bool
-     */
-    protected $collUsersPartial;
-
-    /**
-     * @var        ObjectCollection|EventPrinter[] Cross Collection to store aggregation of EventPrinter objects.
-     */
-    protected $collEventPrinters;
-
-    /**
-     * @var bool
-     */
-    protected $collEventPrintersPartial;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -174,11 +142,6 @@ abstract class DistributionPlace implements ActiveRecordInterface
      * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildMenuGroup combinations.
      */
     protected $combinationCollMenuGroupDistributionPlaceGroupidsScheduledForDeletion = null;
-
-    /**
-     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildUser, ChildEventPrinter combination combinations.
-     */
-    protected $combinationCollUserEventPrintersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -633,7 +596,6 @@ abstract class DistributionPlace implements ActiveRecordInterface
             $this->collDistributionPlaceUsers = null;
 
             $this->collMenuGroupDistributionPlaceGroupids = null;
-            $this->collUserEventPrinters = null;
         } // if (deep)
     }
 
@@ -788,45 +750,6 @@ abstract class DistributionPlace implements ActiveRecordInterface
                     }
 
                     //$combination[1] = DistributionPlaceGroupid; Nothing to save.
-                }
-            }
-
-
-            if ($this->combinationCollUserEventPrintersScheduledForDeletion !== null) {
-                if (!$this->combinationCollUserEventPrintersScheduledForDeletion->isEmpty()) {
-                    $pks = array();
-                    foreach ($this->combinationCollUserEventPrintersScheduledForDeletion as $combination) {
-                        $entryPk = [];
-
-                        $entryPk[0] = $this->getDistributionPlaceid();
-                        $entryPk[1] = $combination[0]->getUserid();
-                        $entryPk[2] = $combination[1]->getEventPrinterid();
-
-                        $pks[] = $entryPk;
-                    }
-
-                    \API\Models\DistributionPlace\DistributionPlaceUserQuery::create()
-                        ->filterByPrimaryKeys($pks)
-                        ->delete($con);
-
-                    $this->combinationCollUserEventPrintersScheduledForDeletion = null;
-                }
-
-            }
-
-            if (null !== $this->combinationCollUserEventPrinters) {
-                foreach ($this->combinationCollUserEventPrinters as $combination) {
-
-                    //$combination[0] = User (fk_distributions_places_has_users_users1)
-                    if (!$combination[0]->isDeleted() && ($combination[0]->isNew() || $combination[0]->isModified())) {
-                        $combination[0]->save($con);
-                    }
-
-                    //$combination[1] = EventPrinter (fk_distributions_places_users_events_printers1)
-                    if (!$combination[1]->isDeleted() && ($combination[1]->isNew() || $combination[1]->isModified())) {
-                        $combination[1]->save($con);
-                    }
-
                 }
             }
 
@@ -2271,333 +2194,6 @@ abstract class DistributionPlace implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collUserEventPrinters collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addUserEventPrinters()
-     */
-    public function clearUserEventPrinters()
-    {
-        $this->collUserEventPrinters = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Initializes the combinationCollUserEventPrinters crossRef collection.
-     *
-     * By default this just sets the combinationCollUserEventPrinters collection to an empty collection (like clearUserEventPrinters());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @return void
-     */
-    public function initUserEventPrinters()
-    {
-        $this->combinationCollUserEventPrinters = new ObjectCombinationCollection;
-        $this->combinationCollUserEventPrintersPartial = true;
-    }
-
-    /**
-     * Checks if the combinationCollUserEventPrinters collection is loaded.
-     *
-     * @return bool
-     */
-    public function isUserEventPrintersLoaded()
-    {
-        return null !== $this->combinationCollUserEventPrinters;
-    }
-
-    /**
-     * Gets a combined collection of User, EventPrinter objects related by a many-to-many relationship
-     * to the current object by way of the distribution_place_user cross-reference table.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildDistributionPlace is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria Optional query object to filter the query
-     * @param      ConnectionInterface $con Optional connection object
-     *
-     * @return ObjectCombinationCollection Combination list of User, EventPrinter objects
-     */
-    public function getUserEventPrinters($criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->combinationCollUserEventPrintersPartial && !$this->isNew();
-        if (null === $this->combinationCollUserEventPrinters || null !== $criteria || $partial) {
-            if ($this->isNew()) {
-                // return empty collection
-                if (null === $this->combinationCollUserEventPrinters) {
-                    $this->initUserEventPrinters();
-                }
-            } else {
-
-                $query = ChildDistributionPlaceUserQuery::create(null, $criteria)
-                    ->filterByDistributionPlace($this)
-                    ->joinUser()
-                    ->joinEventPrinter()
-                ;
-
-                $items = $query->find($con);
-                $combinationCollUserEventPrinters = new ObjectCombinationCollection();
-                foreach ($items as $item) {
-                    $combination = [];
-
-                    $combination[] = $item->getUser();
-                    $combination[] = $item->getEventPrinter();
-                    $combinationCollUserEventPrinters[] = $combination;
-                }
-
-                if (null !== $criteria) {
-                    return $combinationCollUserEventPrinters;
-                }
-
-                if ($partial && $this->combinationCollUserEventPrinters) {
-                    //make sure that already added objects gets added to the list of the database.
-                    foreach ($this->combinationCollUserEventPrinters as $obj) {
-                        if (!call_user_func_array([$combinationCollUserEventPrinters, 'contains'], $obj)) {
-                            $combinationCollUserEventPrinters[] = $obj;
-                        }
-                    }
-                }
-
-                $this->combinationCollUserEventPrinters = $combinationCollUserEventPrinters;
-                $this->combinationCollUserEventPrintersPartial = false;
-            }
-        }
-
-        return $this->combinationCollUserEventPrinters;
-    }
-
-    /**
-     * Returns a not cached ObjectCollection of User objects. This will hit always the databases.
-     * If you have attached new User object to this object you need to call `save` first to get
-     * the correct return value. Use getUserEventPrinters() to get the current internal state.
-     *
-     * @param EventPrinter $eventPrinter
-     * @param Criteria $criteria
-     * @param ConnectionInterface $con
-     *
-     * @return User[]|ObjectCollection
-     */
-    public function getUsers(EventPrinter $eventPrinter = null, Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        return $this->createUsersQuery($eventPrinter, $criteria)->find($con);
-    }
-
-    /**
-     * Sets a collection of ChildUser, ChildEventPrinter combination objects related by a many-to-many relationship
-     * to the current object by way of the distribution_place_user cross-reference table.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param  Collection $userEventPrinters A Propel collection.
-     * @param  ConnectionInterface $con Optional connection object
-     * @return $this|ChildDistributionPlace The current object (for fluent API support)
-     */
-    public function setUserEventPrinters(Collection $userEventPrinters, ConnectionInterface $con = null)
-    {
-        $this->clearUserEventPrinters();
-        $currentUserEventPrinters = $this->getUserEventPrinters();
-
-        $combinationCollUserEventPrintersScheduledForDeletion = $currentUserEventPrinters->diff($userEventPrinters);
-
-        foreach ($combinationCollUserEventPrintersScheduledForDeletion as $toDelete) {
-            call_user_func_array([$this, 'removeUserEventPrinter'], $toDelete);
-        }
-
-        foreach ($userEventPrinters as $userEventPrinter) {
-            if (!call_user_func_array([$currentUserEventPrinters, 'contains'], $userEventPrinter)) {
-                call_user_func_array([$this, 'doAddUserEventPrinter'], $userEventPrinter);
-            }
-        }
-
-        $this->combinationCollUserEventPrintersPartial = false;
-        $this->combinationCollUserEventPrinters = $userEventPrinters;
-
-        return $this;
-    }
-
-    /**
-     * Gets the number of ChildUser, ChildEventPrinter combination objects related by a many-to-many relationship
-     * to the current object by way of the distribution_place_user cross-reference table.
-     *
-     * @param      Criteria $criteria Optional query object to filter the query
-     * @param      boolean $distinct Set to true to force count distinct
-     * @param      ConnectionInterface $con Optional connection object
-     *
-     * @return int the number of related ChildUser, ChildEventPrinter combination objects
-     */
-    public function countUserEventPrinters(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->combinationCollUserEventPrintersPartial && !$this->isNew();
-        if (null === $this->combinationCollUserEventPrinters || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->combinationCollUserEventPrinters) {
-                return 0;
-            } else {
-
-                if ($partial && !$criteria) {
-                    return count($this->getUserEventPrinters());
-                }
-
-                $query = ChildDistributionPlaceUserQuery::create(null, $criteria);
-                if ($distinct) {
-                    $query->distinct();
-                }
-
-                return $query
-                    ->filterByDistributionPlace($this)
-                    ->count($con);
-            }
-        } else {
-            return count($this->combinationCollUserEventPrinters);
-        }
-    }
-
-    /**
-     * Returns the not cached count of User objects. This will hit always the databases.
-     * If you have attached new User object to this object you need to call `save` first to get
-     * the correct return value. Use getUserEventPrinters() to get the current internal state.
-     *
-     * @param EventPrinter $eventPrinter
-     * @param Criteria $criteria
-     * @param ConnectionInterface $con
-     *
-     * @return integer
-     */
-    public function countUsers(EventPrinter $eventPrinter = null, Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        return $this->createUsersQuery($eventPrinter, $criteria)->count($con);
-    }
-
-    /**
-     * Associate a User to this object
-     * through the distribution_place_user cross reference table.
-     *
-     * @param User $user,
-     * @param EventPrinter $eventPrinter
-     * @return ChildDistributionPlace The current object (for fluent API support)
-     */
-    public function addUser(User $user, EventPrinter $eventPrinter)
-    {
-        if ($this->combinationCollUserEventPrinters === null) {
-            $this->initUserEventPrinters();
-        }
-
-        if (!$this->getUserEventPrinters()->contains($user, $eventPrinter)) {
-            // only add it if the **same** object is not already associated
-            $this->combinationCollUserEventPrinters->push($user, $eventPrinter);
-            $this->doAddUserEventPrinter($user, $eventPrinter);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Associate a EventPrinter to this object
-     * through the distribution_place_user cross reference table.
-     *
-     * @param EventPrinter $eventPrinter,
-     * @param User $user
-     * @return ChildDistributionPlace The current object (for fluent API support)
-     */
-    public function addEventPrinter(EventPrinter $eventPrinter, User $user)
-    {
-        if ($this->combinationCollUserEventPrinters === null) {
-            $this->initUserEventPrinters();
-        }
-
-        if (!$this->getUserEventPrinters()->contains($eventPrinter, $user)) {
-            // only add it if the **same** object is not already associated
-            $this->combinationCollUserEventPrinters->push($eventPrinter, $user);
-            $this->doAddUserEventPrinter($eventPrinter, $user);
-        }
-
-        return $this;
-    }
-
-    /**
-     *
-     * @param User $user,
-     * @param EventPrinter $eventPrinter
-     */
-    protected function doAddUserEventPrinter(User $user, EventPrinter $eventPrinter)
-    {
-        $distributionPlaceUser = new ChildDistributionPlaceUser();
-
-        $distributionPlaceUser->setUser($user);
-        $distributionPlaceUser->setEventPrinter($eventPrinter);
-
-        $distributionPlaceUser->setDistributionPlace($this);
-
-        $this->addDistributionPlaceUser($distributionPlaceUser);
-
-        // set the back reference to this object directly as using provided method either results
-        // in endless loop or in multiple relations
-        if ($user->isDistributionPlaceEventPrintersLoaded()) {
-            $user->initDistributionPlaceEventPrinters();
-            $user->getDistributionPlaceEventPrinters()->push($this, $eventPrinter);
-        } elseif (!$user->getDistributionPlaceEventPrinters()->contains($this, $eventPrinter)) {
-            $user->getDistributionPlaceEventPrinters()->push($this, $eventPrinter);
-        }
-
-        // set the back reference to this object directly as using provided method either results
-        // in endless loop or in multiple relations
-        if ($eventPrinter->isDistributionPlaceUsersLoaded()) {
-            $eventPrinter->initDistributionPlaceUsers();
-            $eventPrinter->getDistributionPlaceUsers()->push($this, $user);
-        } elseif (!$eventPrinter->getDistributionPlaceUsers()->contains($this, $user)) {
-            $eventPrinter->getDistributionPlaceUsers()->push($this, $user);
-        }
-
-    }
-
-    /**
-     * Remove user, eventPrinter of this object
-     * through the distribution_place_user cross reference table.
-     *
-     * @param User $user,
-     * @param EventPrinter $eventPrinter
-     * @return ChildDistributionPlace The current object (for fluent API support)
-     */
-    public function removeUserEventPrinter(User $user, EventPrinter $eventPrinter)
-    {
-        if ($this->getUserEventPrinters()->contains($user, $eventPrinter)) { $distributionPlaceUser = new ChildDistributionPlaceUser();
-
-            $distributionPlaceUser->setUser($user);
-            if ($user->isDistributionPlaceEventPrintersLoaded()) {
-                //remove the back reference if available
-                $user->getDistributionPlaceEventPrinters()->removeObject($this, $eventPrinter);
-            }
-
-            $distributionPlaceUser->setEventPrinter($eventPrinter);
-            if ($eventPrinter->isDistributionPlaceUsersLoaded()) {
-                //remove the back reference if available
-                $eventPrinter->getDistributionPlaceUsers()->removeObject($this, $user);
-            }
-
-            $distributionPlaceUser->setDistributionPlace($this);
-            $this->removeDistributionPlaceUser(clone $distributionPlaceUser);
-            $distributionPlaceUser->clear();
-
-            $this->combinationCollUserEventPrinters->remove($this->combinationCollUserEventPrinters->search($user, $eventPrinter));
-
-            if (null === $this->combinationCollUserEventPrintersScheduledForDeletion) {
-                $this->combinationCollUserEventPrintersScheduledForDeletion = clone $this->combinationCollUserEventPrinters;
-                $this->combinationCollUserEventPrintersScheduledForDeletion->clear();
-            }
-
-            $this->combinationCollUserEventPrintersScheduledForDeletion->push($user, $eventPrinter);
-        }
-
-
-        return $this;
-    }
-
-    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -2643,17 +2239,11 @@ abstract class DistributionPlace implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->combinationCollUserEventPrinters) {
-                foreach ($this->combinationCollUserEventPrinters as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
         } // if ($deep)
 
         $this->collDistributionPlaceGroups = null;
         $this->collDistributionPlaceUsers = null;
         $this->combinationCollMenuGroupDistributionPlaceGroupids = null;
-        $this->combinationCollUserEventPrinters = null;
         $this->aEvent = null;
     }
 

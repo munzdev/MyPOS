@@ -242,8 +242,6 @@ class UserTableMap extends TableMap
     1 => ':userid',
   ),
 ), 'CASCADE', null, 'OrderInProgresses', false);
-        $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'DistributionPlaces');
-        $this->addRelation('EventPrinter', '\\API\\Models\\Event\\EventPrinter', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'EventPrinters');
     } // buildRelations()
     /**
      * Method to invalidate the instance pool of all tables related to user     * by a foreign key with ON DELETE CASCADE

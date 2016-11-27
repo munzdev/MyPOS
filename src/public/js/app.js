@@ -89,15 +89,15 @@ function( Webservice,
                             {
                                 hash = "order-new";
                             }
-                            else if(rights & USER_ROLE_DISTRIBUTION)
+                            else if(rights & USER_ROLE_DISTRIBUTION_OVERVIEW)
                             {
                                 hash = "distribution";
                             }
-                            else if(rights & USER_ROLE_MANAGER)
+                            else if(rights & USER_ROLE_MANAGER_OVERVIEW)
                             {
                                 hash = "manager";
                             }
-                            else if(rights & USER_ROLE_INVOICE)
+                            else if(rights & USER_ROLE_INVOICE_OVERVIEW)
                             {
                                 hash = "invoice";
                             }

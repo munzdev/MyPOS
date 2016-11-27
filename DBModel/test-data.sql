@@ -241,14 +241,14 @@ COMMIT;
 -- Data for table `event_user`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 1, 31, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 2, 18, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 3, 4, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 4, 4, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 5, 1, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 6, 31, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 7, 4, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 8, 4, DEFAULT);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 1, 2147483647, DEFAULT);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 2, 106319, DEFAULT);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 3, 1879154479, DEFAULT);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 4, 1879154479, DEFAULT);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 5, 266338304, DEFAULT);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 6, 268435455, DEFAULT);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 7, 1879154479, DEFAULT);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 8, 1879154479, DEFAULT);
 
 COMMIT;
 

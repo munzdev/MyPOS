@@ -44,10 +44,10 @@
                            <a data-order-id="<%- order.get('Orderid') %>" data-table-nr="<%- order.get('EventTable').get('Name') %>"  class="modify-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left"><%= t.edit %></a>
                            <a data-order-id="<%- order.get('Orderid') %>" class="cancel-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.cancel %></a>
                         <% } %>
-                        <% if (userRoles & USER_ROLE_MANAGER && order.get('OrderInProgresses').length == 0) { %>
+                        <% if (userRoles & USER_ROLE_ORDER_MODIFY_PRIORITY && order.get('OrderInProgresses').length == 0) { %>
                             <a data-order-id="<%- order.get('Orderid') %>" class="manage-priority-btn ui-btn ui-icon-alert ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.priority %></a>                            
                         <% } %>
-                        <% if (userRoles & USER_ROLE_MANAGER) { %>
+                        <% if (userRoles & USER_ROLE_ORDER_MODIFY_PRICE) { %>
                             <a data-order-id="<%- order.get('Orderid') %>" class="manage-price-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.editPrice %></a>
                         <% } %>
                     </td>

@@ -14,15 +14,14 @@ use Propel\Runtime\Propel;
 use Respect\Validation\Validator as v;
 use Slim\App;
 use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\Validator\Constraints\DateTime;
-use const API\USER_ROLE_ORDER_ADD;
+use const API\USER_ROLE_ORDER_MODIFY;
 
 class OrderModify extends SecurityController
 {
     public function __construct(App $o_app) {
         parent::__construct($o_app);
         
-        $this->a_security = ['GET' => USER_ROLE_ORDER_ADD];
+        $this->a_security = ['GET' => USER_ROLE_ORDER_MODIFY];
         
         $o_app->getContainer()['db'];
     }

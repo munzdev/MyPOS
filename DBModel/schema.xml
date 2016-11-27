@@ -216,7 +216,7 @@
     <column name="event_userid" phpName="EventUserid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="user_roles" phpName="UserRoles" type="TINYINT" required="true"/>
+    <column name="user_roles" phpName="UserRoles" type="INTEGER" required="true"/>
     <column name="begin_money" phpName="BeginMoney" type="DECIMAL" scale="0" required="true"/>
     <foreign-key foreignTable="event" name="fk_events_has_users_events1" onDelete="CASCADE">
       <reference local="eventid" foreign="eventid"/>
@@ -750,7 +750,7 @@
     </vendor>
   </table>
   <table name="user_role" idMethod="native" phpName="UserRole" namespace="API\Models\User">
-    <column name="user_roleid" phpName="UserRoleid" type="TINYINT" primaryKey="true" required="true"/>
+    <column name="user_roleid" phpName="UserRoleid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
     <unique name="user_roleid_UNIQUE">
       <unique-column name="user_roleid"/>

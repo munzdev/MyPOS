@@ -131,7 +131,7 @@ class UserRoleTableMap extends TableMap
         $this->setPackage('API.Models.User');
         $this->setUseIdGenerator(false);
         // columns
-        $this->addPrimaryKey('user_roleid', 'UserRoleid', 'TINYINT', true, null, null);
+        $this->addPrimaryKey('user_roleid', 'UserRoleid', 'INTEGER', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 64, null);
     } // initialize()
 
