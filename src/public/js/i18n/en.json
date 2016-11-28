@@ -89,5 +89,17 @@
         "deliveries": "Deliveries",
         "doneEditFrom": "Done - Edited from",
         "doneEditTo": "to"
+    },
+    "OrderInvoiceView": {
+        "specialOrders": "Special Orders",
+        "openOnTable": "Open on table",
+        "openOffOrder": "Open off order",
+        "payAll": "Pay all",
+        "sumForInvoice": "Total for invoice",
+        "printReceipt": "Print receipt",
+        "printer": "Printer",
+        "stayOnPage": "stay on page",
+        "payed": "Payed",
+        "paymentSuccessfull": "Payment successfull!"
     }
 }

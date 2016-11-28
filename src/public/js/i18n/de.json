@@ -89,5 +89,17 @@
         "deliveries": "Auslieferungen",
         "doneEditFrom": "Fertig - Bearbeitet von",
         "doneEditTo": "bis"
+    },
+    "OrderInvoiceView": {
+        "specialOrders": "Sonderwünsche",
+        "openOnTable": "Offen am Tisch",
+        "openOffOrder": "Offen von Bestellung",
+        "payAll": "Alles bezahlen",
+        "sumForInvoice": "Summe für Rechnung",
+        "printReceipt": "Quittung drucken",
+        "printer": "Drucker",
+        "stayOnPage": "auf Seite bleiben",
+        "payed": "Bezahlt",
+        "paymentSuccessfull": "Bezahlung erfolgreich!"
     }
 }

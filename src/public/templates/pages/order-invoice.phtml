@@ -1,45 +1,43 @@
 <div data-role="content">
-    <div class="nav-header"><%= header %></div>
+    <div class="nav-header"></div>
     <div data-role="popup" data-overlay-theme="b" data-theme="b" data-position-to="window" id="success-popup" class="ui-content">
-         <h3>Bezahlung erfolgreich!</h3>
+         <h3><%= t.paymentSuccessfull %></h3>
     </div>
     <div data-role="navbar">
         <ul>
-            <li><a id="show-all" class="ui-btn-active ui-mini">Offen am Tisch</a></li>
-            <li><a id="show-single" class="ui-mini">Offen von Bestellung</a></li>
+            <li><a id="show-all" class="ui-btn-active ui-mini"><%= t.openOnTable %></a></li>
+            <li><a id="show-single" class="ui-mini"><%= t.openOffOrder %></a></li>
         </ul>
     </div>
     <div>
-        <a class="ui-btn ui-mini" id='button-all'>Alles bezahlen</a>
+        <a class="ui-btn ui-mini" id='button-all'><%= t.payAll %></a>
     </div>
     <div>
-        <ul data-role="listview" data-inset="true" id="open-orders-list">
-
-        </ul>
+        <ul data-role="listview" data-inset="true" id="open-orders-list"></ul>
     </div>
     <div>
-        <h3 class="ui-bar ui-bar-a ui-corner-all">Summe für Rechnung</h3>
+        <h3 class="ui-bar ui-bar-a ui-corner-all"><%= t.sumForInvoice %></h3>
         <div class="ui-body ui-body-a ui-corner-all">
-            <h1 style="margin: 0; padding: 0" id="invoice-price">0.00 €</h1>
+            <h1 style="margin: 0; padding: 0" id="invoice-price">0.00 <%= i18n.currency %></h1>
         </div>
     </div>
     <div class="ui-body ui-body-a ui-corner-all">
         <form>
             <fieldset data-role="controlgroup" data-mini="true">
                 <input type="checkbox" name="print" id="print">
-                <label for="print">Quittung drucken</label>
+                <label for="print"><%= t.printReceipt %></label>
                 <select name="checkbox-printer" id="printer">
                     <% printers.each(function(printer){ %>
-                        <option value="<%- printer.get('EventPrinterid') %>">Drucker: <%- printer.get('Name') %></option>
+                        <option value="<%- printer.get('EventPrinterid') %>"><%= t.printer %>: <%- printer.get('Name') %></option>
                     <% }) %>
                 </select>
             </fieldset>
             <fieldset data-role="controlgroup" data-mini="true">
                 <input type="checkbox" name="continue" id="continue" checked="true">
-                <label for="continue">auf Seite bleiben</label>
+                <label for="continue"><%= t.stayOnPage %></label>
             </fieldset>
 
-            <input type="button" id="submit" value="Bezahlt">
+            <input type="button" id="submit" value="<%= t.payed %>">
         </form>
     </div>
 </div>

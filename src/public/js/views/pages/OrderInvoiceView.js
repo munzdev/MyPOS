@@ -1,12 +1,12 @@
-define(['models/custom/invoice/InvoiceModel',
+define(['Webservice',
         'collections/custom/event/PrinterCollection',
-        'models/custom/order/OrderUnbilled',
+        'collections/custom/order/OrderUnbilledCollection',
         'views/helpers/HeaderView',
         'text!templates/pages/order-invoice.phtml',
         'text!templates/pages/order-item.phtml'
-], function(InvoiceModel,
+], function(Webservice,
             PrinterCollection,
-            OrderUnbilledModel,
+            OrderUnbilledCollection,
             HeaderView,
             Template,
             TemplateItem) {
@@ -32,9 +32,8 @@ define(['models/custom/invoice/InvoiceModel',
                             "finish",
                             "success_popup_close");
 
-            this.invoice = new InvoiceModel();
-            this.orderUnbilled = new OrderUnbilledModel();
-            this.orderUnbilled.set('Orderid', options.orderid);
+            this.orderUnbilled = new OrderUnbilledCollection();
+            this.orderUnbilled.orderid = options.orderid;
             this.printers = new PrinterCollection;
             this.printers.fetch()
                          .done(() => {
@@ -46,7 +45,7 @@ define(['models/custom/invoice/InvoiceModel',
         set_mode_all() {
             if(DEBUG) console.log("MODE: all");
 
-            this.orderUnbilled.set('All', true);
+            this.orderUnbilled.all = true;
             this.orderUnbilled.fetch()
                                 .done(this.renderOpenOrders);
         }
@@ -54,18 +53,14 @@ define(['models/custom/invoice/InvoiceModel',
         set_mode_single() {
             if(DEBUG) console.log("MODE: single");
 
-            this.orderUnbilled.set('All', false);
+            this.orderUnbilled.all = false;
             this.orderUnbilled.fetch()
                                 .done(this.renderOpenOrders);
         }
 
         select_all(event) {
-            this.orderUnbilled.get('orders').each(function(order){
-                order.set('currentInvoiceAmount', order.get('amount')) ;
-            });
-
-            this.orderUnbilled.get('extras').each(function(extra){
-                extra.set('currentInvoiceAmount', extra.get('amount')) ;
+            this.orderUnbilled.each(function(orderDetail){
+                orderDetail.set('AmountSelected', orderDetail.get('AmountLeft')) ;
             });
 
             this.renderOpenOrders();
@@ -73,19 +68,12 @@ define(['models/custom/invoice/InvoiceModel',
 
         order_count_up(event) {
             if(DEBUG) console.log("Up");
+            
+            let index = $(event.currentTarget).attr('data-index');
+            let orderDetail = this.orderUnbilled.get({cid: index});
 
-            var menu_typeid = $(event.currentTarget).attr('data-menu-typeid');
-            var index = $(event.currentTarget).attr('data-index');
-
-            if(menu_typeid > 0)
-                var order = this.orderUnbilled.get('orders')
-                                         .at(index);
-            else
-                var order = this.orderUnbilled.get('extras')
-                                         .at(index);
-
-            var amount_open = order.get('amount') - order.get('amount_payed');
-            var current_amount = order.get('currentInvoiceAmount');
+            var amount_open = orderDetail.get('AmountLeft');
+            var current_amount = parseFloat(orderDetail.get('AmountSelected'));
             current_amount++;
 
             if(current_amount > amount_open && amount_open > 0)
@@ -93,77 +81,44 @@ define(['models/custom/invoice/InvoiceModel',
             else if(current_amount > 0 && amount_open < 0)
                 current_amount = 0;
 
-            if(menu_typeid > 0)
-                this.orderUnbilled.get('orders')
-                             .at(index)
-                             .set('currentInvoiceAmount', current_amount);
-            else
-                this.orderUnbilled.get('extras')
-                             .at(index)
-                             .set('currentInvoiceAmount', current_amount);
+            orderDetail.set('AmountSelected', current_amount);
 
             this.renderOpenOrders();
         }
 
         order_count_down(event) {
             if(DEBUG) console.log("Down");
+            
+            let index = $(event.currentTarget).attr('data-index');
+            let orderDetail = this.orderUnbilled.get({cid: index});
 
-            var menu_typeid = $(event.currentTarget).attr('data-menu-typeid');
-            var index = $(event.currentTarget).attr('data-index');
-
-            if(menu_typeid > 0)
-                var order = this.orderUnbilled.get('orders')
-                                         .at(index);
-            else
-                var order = this.orderUnbilled.get('extras')
-                                         .at(index);
-
-            var amount_open = order.get('amount') - order.get('amount_payed');
-            var current_amount = order.get('currentInvoiceAmount');
+            var amount_open = orderDetail.get('AmountLeft');
+            var current_amount = parseFloat(orderDetail.get('AmountSelected'));
             current_amount--;
 
             if((current_amount < 0 && amount_open > 0))
-            {
                 current_amount = 0;
-            }
             else if(current_amount < amount_open && amount_open < 0)
-            {
                 current_amount = amount_open;
-            }
 
-            if(menu_typeid > 0)
-                this.orderUnbilled.get('orders')
-                             .at(index)
-                             .set('currentInvoiceAmount', current_amount);
-            else
-                this.orderUnbilled.get('extras')
-                             .at(index)
-                             .set('currentInvoiceAmount', current_amount);
+            orderDetail.set('AmountSelected', current_amount);
 
             this.renderOpenOrders();
         }
 
         finish() {
-            var self = this;
-            var webservice = new Webservice();
-            webservice.action = "Orders/MakePayment";
-            webservice.formData = {orderid: this.orderid,
-                                   tableNr: this.tableNr,
-                                   mode: this.mode,
-                                   payments: JSON.stringify(this.orderUnbilled)};
-            webservice.call()
-                    .done((result) => {
-                        if(this.$('#print').prop('checked') == 1)
-                        {
-                            var webservice = new Webservice();
-                            webservice.action = "Orders/PrintInvoice";
-                            webservice.formData = {invoiceid: result,
-                                                   printerid: this.$('#printer').val()};
-                            webservice.call();
-                        }
+            this.orderUnbilled.save()
+                              .done((invoiceid) => {
+                                    if(this.$('#print').prop('checked') == 1)
+                                    {
+                                        var webservice = new Webservice();
+                                        webservice.action = "Invoice/Print/" + invoiceid;
+                                        webservice.formData = {printerid: this.$('#printer').val()};
+                                        webservice.call();
+                                    }
 
-                        this.$('#success-popup').popup("open");
-                    });
+                                    this.$('#success-popup').popup("open");
+                                });
         }
 
         success_popup_close() {
@@ -185,108 +140,106 @@ define(['models/custom/invoice/InvoiceModel',
 
             var sortedOrders = {};
 
+            let sortedCategorys = new Map();
             var totalSumPrice = 0;
             var totalOpenProducts = 0;
             var totalProductsInInvoice = 0;
-
-            this.orderUnbilled.get('orders').each(function(order, index)
-            {
-                var menu_typeid = order.get('menu_typeid');
-
-                if(!(menu_typeid in sortedOrders))
-                {
-                    sortedOrders[menu_typeid] = {name: order.get('typeName'),
-                                                 orders: new OrderCollection,
-                                                 extras: new ExtraCollection};
+            let t = this.i18n();
+            let currency = app.i18n.template.currency;
+                        
+            // Presort the list by categorys
+            this.orderUnbilled.each((orderDetail) => {
+                let menuid = orderDetail.get('Menuid');
+                let key = null;
+                
+                if(menuid === null && sortedCategorys.get(key) == null) {
+                    sortedCategorys.set(key, {name: t.specialOrders,
+                                              orders: new Set()});
+                } else if(menuid !== null) {
+                    let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});                    
+                    key = menuSearch.MenuTypeid;
+                                        
+                    if(sortedCategorys.get(key) == null) {
+                        let menuType = app.productList.findWhere({MenuTypeid: key});
+                        sortedCategorys.set(key, {name: menuType.get('Name'),
+                                                  orders: new Set()});
+                    }                                                            
                 }
-
-                var extras = order.get('sizeName');
-
-                if(order.get('mixedWith'))
-                {
-                    extras += ', Gemischt mit: ' + order.get('mixedWith');
-                }
-
-                if(order.get('selectedExtras'))
-                {
-                    extras += ', ' + order.get('selectedExtras');
-                }
-
-                if(order.get('extra_detail'))
-                {
-                    extras += ', ' + order.get('extra_detail');
-                }
-
-                order.set('extra_fulltext', extras);
-                order.set('index', index);
-
-                sortedOrders[menu_typeid].orders.add(order);
-
-                totalSumPrice += order.get('single_price') * order.get('currentInvoiceAmount');
-
+                
+                sortedCategorys.get(key).orders.add(orderDetail);
             });
+            
+            for(let[menuTypeid, val] of sortedCategorys.entries()) {
+                let divider = $('<li/>').attr('data-role', 'list-divider').text(val.name);
+                this.$('#open-orders-list').append(divider);
+                let isSpecialOrder = (menuTypeid == null);
 
-            this.orderUnbilled.get('extras').each(function(extra, index)
-            {
-                if(!(0 in sortedOrders))
-                {
-                    sortedOrders[0] = {name: "Sonderwünsche",
-                                       orders: new OrderCollection,
-                                       extras: new ExtraCollection};
-                }
+                for (let orderDetail of val.orders.values()) {
+                    let menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetail.get('Menuid'); });
+                    var extras = '';
+                    
+                    let menuSize = orderDetail.get('MenuSize');
+                    
+                    if(!isSpecialOrder && menuSearch.Menu.get('MenuPossibleSize').length > 1)
+                        extras = menuSize.get('Name') + ", ";
+                    
+                    if(orderDetail.get('OrderDetailMixedWiths').length > 0) {
+                        extras += t.mixedWith + ": ";
 
-                extra.set('index', index);
-                sortedOrders[0].extras.add(extra);
+                        orderDetail.get('OrderDetailMixedWiths').each((orderDetailMixedWith) => {
+                            let menuToMixWith = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetailMixedWith.get('Menuid'); });
+                            extras += menuToMixWith.Menu.get('Name') + " - ";
+                        });
+                        extras = extras.slice(0, -3);
+                        extras += ", ";
+                    }
+                    
+                    orderDetail.get('OrderDetailExtras').each(function(extra) {
+                        let menuPossibleExtra = menuSearch.Menu.get('MenuPossibleExtra')
+                                                                .findWhere({MenuPossibleExtraid: extra.get('MenuPossibleExtraid')});
+                        extras += menuPossibleExtra.get('MenuExtra').get('Name') + ", ";
+                    });
 
-                if(extra.get('verified'))
-                    totalSumPrice += extra.get('single_price') * extra.get('currentInvoiceAmount');
-            });
-
-            _.each(sortedOrders, (category) => {
-                this.$('#open-orders-list').append("<li data-role='list-divider'>" + category.name + "</li>");
-                category.orders.each((order) => {
-                    totalOpenProducts += order.get('amount') - order.get('amount_payed');
-                    totalProductsInInvoice += order.get('currentInvoiceAmount');
+                    if(orderDetail.get('ExtraDetail') && orderDetail.get('ExtraDetail').length > 0)
+                        extras += orderDetail.get('ExtraDetail') + ", ";
+                    
+                    if(extras.length > 0)
+                        extras = extras.slice(0, -2);
+                    
+                    if(!orderDetail.get('AmountSelected'))
+                        orderDetail.set('AmountSelected', 0);
+                    
+                    let price = parseFloat(orderDetail.get('SinglePrice')) * parseFloat(orderDetail.get('AmountSelected'));
+                    totalSumPrice += price;
+                    
+                    totalOpenProducts += orderDetail.get('AmountLeft');
+                    totalProductsInInvoice += parseFloat(orderDetail.get('AmountSelected'));
 
                     var datas = {mode: 'pay',
-                                name: order.get('menuName'),
-                                extras: order.get('extra_fulltext'),
-                                amount: order.get('currentInvoiceAmount'),
-                                open: order.get('amount') - order.get('amount_payed'),
-                                isSpecialOrder: false,
-                                price: order.get('single_price'),
-                                totalPrice: order.get('single_price') * order.get('currentInvoiceAmount'),
-                                menu_typeid: order.get('menu_typeid'),
-                                index: order.get('index'),
-                                skipCounts: false};
+                                name: isSpecialOrder ? t.specialOrder : menuSearch.Menu.get('Name'),
+                                extras: extras,
+                                amount: orderDetail.get('AmountSelected') ? orderDetail.get('AmountSelected') : 0,
+                                open: orderDetail.get('AmountLeft'),
+                                isSpecialOrder: isSpecialOrder,
+                                price: orderDetail.get('SinglePrice'),
+                                totalPrice: price,
+                                menuTypeid: menuTypeid,
+                                index: orderDetail.cid,
+                                skipCounts: false,
+                                t: app.i18n.template.OrderItem,
+                                i18n: app.i18n.template};
 
                     this.$('#open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
-                });
-                category.extras.each((extra) => {
-                    totalOpenProducts += extra.get('amount') - extra.get('amount_payed');
-                    totalProductsInInvoice += extra.get('currentInvoiceAmount');
-
-                    var datas = {mode: 'pay',
-                                  name: 'Sonderwunsch',
-                                  extras: extra.get('extra_detail'),
-                                  amount: extra.get('currentInvoiceAmount'),
-                                  open: extra.get('amount') - extra.get('amount_payed'),
-                                  isSpecialOrder: extra.get('verified') == 0,
-                                  price: extra.get('single_price'),
-                                  totalPrice: extra.get('single_price') * extra.get('currentInvoiceAmount'),
-                                  menu_typeid: 0,
-                                  index: extra.get('index'),
-                                  skipCounts: false};
-                    this.$('#open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
-                });
-            });
+                }
+                
+            }            
 
             if(totalOpenProducts == totalProductsInInvoice)
             {
                 this.$('#continue').prop("checked", false).checkboxradio('refresh');
             }
 
-            this.$('#invoice-price').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
+            this.$('#invoice-price').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
 
             this.$('.order-item-up').click(this.order_count_up);
             this.$('.order-item-down').click(this.order_count_down);
