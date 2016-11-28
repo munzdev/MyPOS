@@ -1154,9 +1154,10 @@ abstract class User implements ActiveRecordInterface
 
             if ($this->orderDetailsScheduledForDeletion !== null) {
                 if (!$this->orderDetailsScheduledForDeletion->isEmpty()) {
-                    \API\Models\Ordering\OrderDetailQuery::create()
-                        ->filterByPrimaryKeys($this->orderDetailsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
+                    foreach ($this->orderDetailsScheduledForDeletion as $orderDetail) {
+                        // need to save related object because we set the relation to null
+                        $orderDetail->save($con);
+                    }
                     $this->orderDetailsScheduledForDeletion = null;
                 }
             }
@@ -2049,10 +2050,7 @@ abstract class User implements ActiveRecordInterface
         $couponsToDelete = $this->getCoupons(new Criteria(), $con)->diff($coupons);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->couponsScheduledForDeletion = clone $couponsToDelete;
+        $this->couponsScheduledForDeletion = $couponsToDelete;
 
         foreach ($couponsToDelete as $couponRemoved) {
             $couponRemoved->setUser(null);
@@ -2580,10 +2578,7 @@ abstract class User implements ActiveRecordInterface
         $eventUsersToDelete = $this->getEventUsers(new Criteria(), $con)->diff($eventUsers);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->eventUsersScheduledForDeletion = clone $eventUsersToDelete;
+        $this->eventUsersScheduledForDeletion = $eventUsersToDelete;
 
         foreach ($eventUsersToDelete as $eventUserRemoved) {
             $eventUserRemoved->setUser(null);
@@ -2833,10 +2828,7 @@ abstract class User implements ActiveRecordInterface
         $invoicesToDelete = $this->getInvoices(new Criteria(), $con)->diff($invoices);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->invoicesScheduledForDeletion = clone $invoicesToDelete;
+        $this->invoicesScheduledForDeletion = $invoicesToDelete;
 
         foreach ($invoicesToDelete as $invoiceRemoved) {
             $invoiceRemoved->setUser(null);
@@ -3086,10 +3078,7 @@ abstract class User implements ActiveRecordInterface
         $ordersToDelete = $this->getOrders(new Criteria(), $con)->diff($orders);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->ordersScheduledForDeletion = clone $ordersToDelete;
+        $this->ordersScheduledForDeletion = $ordersToDelete;
 
         foreach ($ordersToDelete as $orderRemoved) {
             $orderRemoved->setUser(null);
@@ -3689,10 +3678,7 @@ abstract class User implements ActiveRecordInterface
         $orderInProgressesToDelete = $this->getOrderInProgresses(new Criteria(), $con)->diff($orderInProgresses);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->orderInProgressesScheduledForDeletion = clone $orderInProgressesToDelete;
+        $this->orderInProgressesScheduledForDeletion = $orderInProgressesToDelete;
 
         foreach ($orderInProgressesToDelete as $orderInProgressRemoved) {
             $orderInProgressRemoved->setUser(null);

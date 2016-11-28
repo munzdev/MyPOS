@@ -1176,8 +1176,6 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
     {
         $criteria = ChildMenuPossibleExtraQuery::create();
         $criteria->add(MenuPossibleExtraTableMap::COL_MENU_POSSIBLE_EXTRAID, $this->menu_possible_extraid);
-        $criteria->add(MenuPossibleExtraTableMap::COL_MENU_EXTRAID, $this->menu_extraid);
-        $criteria->add(MenuPossibleExtraTableMap::COL_MENUID, $this->menuid);
 
         return $criteria;
     }
@@ -1190,26 +1188,10 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getMenuPossibleExtraid() &&
-            null !== $this->getMenuExtraid() &&
-            null !== $this->getMenuid();
+        $validPk = null !== $this->getMenuPossibleExtraid();
 
-        $validPrimaryKeyFKs = 2;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_menues_possible_extras_menu_extras1 to table menu_extra
-        if ($this->aMenuExtra && $hash = spl_object_hash($this->aMenuExtra)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_menues_possible_extras_menues1 to table menu
-        if ($this->aMenu && $hash = spl_object_hash($this->aMenu)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1221,31 +1203,23 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getMenuPossibleExtraid();
-        $pks[1] = $this->getMenuExtraid();
-        $pks[2] = $this->getMenuid();
-
-        return $pks;
+        return $this->getMenuPossibleExtraid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (menu_possible_extraid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setMenuPossibleExtraid($keys[0]);
-        $this->setMenuExtraid($keys[1]);
-        $this->setMenuid($keys[2]);
+        $this->setMenuPossibleExtraid($key);
     }
 
     /**
@@ -1254,7 +1228,7 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getMenuPossibleExtraid()) && (null === $this->getMenuExtraid()) && (null === $this->getMenuid());
+        return null === $this->getMenuPossibleExtraid();
     }
 
     /**
@@ -1353,9 +1327,7 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
     public function getMenuExtra(ConnectionInterface $con = null)
     {
         if ($this->aMenuExtra === null && ($this->menu_extraid !== null)) {
-            $this->aMenuExtra = ChildMenuExtraQuery::create()
-                ->filterByMenuPossibleExtra($this) // here
-                ->findOne($con);
+            $this->aMenuExtra = ChildMenuExtraQuery::create()->findPk($this->menu_extraid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1406,9 +1378,7 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
     public function getMenu(ConnectionInterface $con = null)
     {
         if ($this->aMenu === null && ($this->menuid !== null)) {
-            $this->aMenu = ChildMenuQuery::create()
-                ->filterByMenuPossibleExtra($this) // here
-                ->findOne($con);
+            $this->aMenu = ChildMenuQuery::create()->findPk($this->menuid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

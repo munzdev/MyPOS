@@ -154,7 +154,7 @@ class DistributionPlaceTableTableMap extends TableMap
     0 => ':event_tableid',
     1 => ':event_tableid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
     } // buildRelations()
 
     /**

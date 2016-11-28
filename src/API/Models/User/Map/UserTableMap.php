@@ -2,11 +2,6 @@
 
 namespace API\Models\User\Map;
 
-use API\Models\DistributionPlace\Map\DistributionPlaceUserTableMap;
-use API\Models\Event\Map\EventUserTableMap;
-use API\Models\OIP\Map\OrderInProgressTableMap;
-use API\Models\Ordering\Map\OrderDetailTableMap;
-use API\Models\Ordering\Map\OrderTableMap;
 use API\Models\User\User;
 use API\Models\User\UserQuery;
 use Propel\Runtime\Propel;
@@ -206,14 +201,14 @@ class UserTableMap extends TableMap
     0 => ':userid',
     1 => ':userid',
   ),
-), 'CASCADE', null, 'DistributionPlaceUsers', false);
+), null, null, 'DistributionPlaceUsers', false);
         $this->addRelation('EventUser', '\\API\\Models\\Event\\EventUser', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':userid',
     1 => ':userid',
   ),
-), 'CASCADE', null, 'EventUsers', false);
+), null, null, 'EventUsers', false);
         $this->addRelation('Invoice', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -227,35 +222,22 @@ class UserTableMap extends TableMap
     0 => ':userid',
     1 => ':userid',
   ),
-), 'CASCADE', null, 'Orders', false);
+), null, null, 'Orders', false);
         $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':single_price_modified_by_userid',
     1 => ':userid',
   ),
-), 'CASCADE', null, 'OrderDetails', false);
+), null, null, 'OrderDetails', false);
         $this->addRelation('OrderInProgress', '\\API\\Models\\OIP\\OrderInProgress', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':userid',
     1 => ':userid',
   ),
-), 'CASCADE', null, 'OrderInProgresses', false);
+), null, null, 'OrderInProgresses', false);
     } // buildRelations()
-    /**
-     * Method to invalidate the instance pool of all tables related to user     * by a foreign key with ON DELETE CASCADE
-     */
-    public static function clearRelatedInstancePool()
-    {
-        // Invalidate objects in related instance pools,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        DistributionPlaceUserTableMap::clearInstancePool();
-        EventUserTableMap::clearInstancePool();
-        OrderTableMap::clearInstancePool();
-        OrderDetailTableMap::clearInstancePool();
-        OrderInProgressTableMap::clearInstancePool();
-    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.

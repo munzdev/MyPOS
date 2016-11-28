@@ -1212,9 +1212,7 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
     public function getDistributionPlace(ConnectionInterface $con = null)
     {
         if ($this->aDistributionPlace === null && ($this->distribution_placeid !== null)) {
-            $this->aDistributionPlace = ChildDistributionPlaceQuery::create()
-                ->filterByDistributionPlaceUser($this) // here
-                ->findOne($con);
+            $this->aDistributionPlace = ChildDistributionPlaceQuery::create()->findPk($this->distribution_placeid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1316,9 +1314,7 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
     public function getEventPrinter(ConnectionInterface $con = null)
     {
         if ($this->aEventPrinter === null && ($this->event_printerid !== null)) {
-            $this->aEventPrinter = EventPrinterQuery::create()
-                ->filterByDistributionPlaceUser($this) // here
-                ->findOne($con);
+            $this->aEventPrinter = EventPrinterQuery::create()->findPk($this->event_printerid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

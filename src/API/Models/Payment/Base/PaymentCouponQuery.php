@@ -424,7 +424,7 @@ abstract class PaymentCouponQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(PaymentCouponTableMap::COL_COUPONID, $coupon->toKeyValue('Couponid', 'Couponid'), $comparison);
+                ->addUsingAlias(PaymentCouponTableMap::COL_COUPONID, $coupon->toKeyValue('PrimaryKey', 'Couponid'), $comparison);
         } else {
             throw new PropelException('filterByCoupon() only accepts arguments of type \API\Models\Payment\Coupon or Collection');
         }
@@ -501,7 +501,7 @@ abstract class PaymentCouponQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(PaymentCouponTableMap::COL_PAYMENTID, $payment->toKeyValue('Paymentid', 'Paymentid'), $comparison);
+                ->addUsingAlias(PaymentCouponTableMap::COL_PAYMENTID, $payment->toKeyValue('PrimaryKey', 'Paymentid'), $comparison);
         } else {
             throw new PropelException('filterByPayment() only accepts arguments of type \API\Models\Payment\Payment or Collection');
         }

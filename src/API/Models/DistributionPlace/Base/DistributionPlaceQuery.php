@@ -136,10 +136,10 @@ abstract class DistributionPlaceQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34), $con);
+     * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param array[$distribution_placeid, $eventid] $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildDistributionPlace|array|mixed the result, formatted by the current formatter
@@ -164,7 +164,7 @@ abstract class DistributionPlaceQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = DistributionPlaceTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]))))) {
+        if ((null !== ($obj = DistributionPlaceTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -185,11 +185,10 @@ abstract class DistributionPlaceQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT distribution_placeid, eventid, name FROM distribution_place WHERE distribution_placeid = :p0 AND eventid = :p1';
+        $sql = 'SELECT distribution_placeid, eventid, name FROM distribution_place WHERE distribution_placeid = :p0';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -200,7 +199,7 @@ abstract class DistributionPlaceQuery extends ModelCriteria
             /** @var ChildDistributionPlace $obj */
             $obj = new ChildDistributionPlace();
             $obj->hydrate($row);
-            DistributionPlaceTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]));
+            DistributionPlaceTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -229,7 +228,7 @@ abstract class DistributionPlaceQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -259,10 +258,8 @@ abstract class DistributionPlaceQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(DistributionPlaceTableMap::COL_DISTRIBUTION_PLACEID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(DistributionPlaceTableMap::COL_EVENTID, $key[1], Criteria::EQUAL);
 
-        return $this;
+        return $this->addUsingAlias(DistributionPlaceTableMap::COL_DISTRIBUTION_PLACEID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -274,17 +271,8 @@ abstract class DistributionPlaceQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-        if (empty($keys)) {
-            return $this->add(null, '1<>1', Criteria::CUSTOM);
-        }
-        foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(DistributionPlaceTableMap::COL_DISTRIBUTION_PLACEID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(DistributionPlaceTableMap::COL_EVENTID, $key[1], Criteria::EQUAL);
-            $cton0->addAnd($cton1);
-            $this->addOr($cton0);
-        }
 
-        return $this;
+        return $this->addUsingAlias(DistributionPlaceTableMap::COL_DISTRIBUTION_PLACEID, $keys, Criteria::IN);
     }
 
     /**
@@ -620,23 +608,6 @@ abstract class DistributionPlaceQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related MenuGroup object
-     * using the distribution_place_group table as cross reference
-     *
-     * @param MenuGroup $menuGroup the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildDistributionPlaceQuery The current query, for fluid interface
-     */
-    public function filterByMenuGroup($menuGroup, $comparison = Criteria::EQUAL)
-    {
-        return $this
-            ->useDistributionPlaceGroupQuery()
-            ->filterByMenuGroup($menuGroup, $comparison)
-            ->endUse();
-    }
-
-    /**
      * Exclude object from result
      *
      * @param   ChildDistributionPlace $distributionPlace Object to remove from the list of results
@@ -646,9 +617,7 @@ abstract class DistributionPlaceQuery extends ModelCriteria
     public function prune($distributionPlace = null)
     {
         if ($distributionPlace) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(DistributionPlaceTableMap::COL_DISTRIBUTION_PLACEID), $distributionPlace->getDistributionPlaceid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(DistributionPlaceTableMap::COL_EVENTID), $distributionPlace->getEventid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
+            $this->addUsingAlias(DistributionPlaceTableMap::COL_DISTRIBUTION_PLACEID, $distributionPlace->getDistributionPlaceid(), Criteria::NOT_EQUAL);
         }
 
         return $this;

@@ -379,7 +379,7 @@ abstract class OrderDetailMixedWithQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(OrderDetailMixedWithTableMap::COL_MENUID, $menu->toKeyValue('Menuid', 'Menuid'), $comparison);
+                ->addUsingAlias(OrderDetailMixedWithTableMap::COL_MENUID, $menu->toKeyValue('PrimaryKey', 'Menuid'), $comparison);
         } else {
             throw new PropelException('filterByMenu() only accepts arguments of type \API\Models\Menu\Menu or Collection');
         }
@@ -456,7 +456,7 @@ abstract class OrderDetailMixedWithQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(OrderDetailMixedWithTableMap::COL_ORDER_DETAILID, $orderDetail->toKeyValue('OrderDetailid', 'OrderDetailid'), $comparison);
+                ->addUsingAlias(OrderDetailMixedWithTableMap::COL_ORDER_DETAILID, $orderDetail->toKeyValue('PrimaryKey', 'OrderDetailid'), $comparison);
         } else {
             throw new PropelException('filterByOrderDetail() only accepts arguments of type \API\Models\Ordering\OrderDetail or Collection');
         }

@@ -1804,10 +1804,7 @@ abstract class Event implements ActiveRecordInterface
         $couponsToDelete = $this->getCoupons(new Criteria(), $con)->diff($coupons);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->couponsScheduledForDeletion = clone $couponsToDelete;
+        $this->couponsScheduledForDeletion = $couponsToDelete;
 
         foreach ($couponsToDelete as $couponRemoved) {
             $couponRemoved->setEvent(null);
@@ -2057,10 +2054,7 @@ abstract class Event implements ActiveRecordInterface
         $customersToDelete = $this->getCustomers(new Criteria(), $con)->diff($customers);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->customersScheduledForDeletion = clone $customersToDelete;
+        $this->customersScheduledForDeletion = $customersToDelete;
 
         foreach ($customersToDelete as $customerRemoved) {
             $customerRemoved->setEvent(null);
@@ -2285,10 +2279,7 @@ abstract class Event implements ActiveRecordInterface
         $distributionPlacesToDelete = $this->getDistributionPlaces(new Criteria(), $con)->diff($distributionPlaces);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->distributionPlacesScheduledForDeletion = clone $distributionPlacesToDelete;
+        $this->distributionPlacesScheduledForDeletion = $distributionPlacesToDelete;
 
         foreach ($distributionPlacesToDelete as $distributionPlaceRemoved) {
             $distributionPlaceRemoved->setEvent(null);
@@ -2513,10 +2504,7 @@ abstract class Event implements ActiveRecordInterface
         $eventPrintersToDelete = $this->getEventPrinters(new Criteria(), $con)->diff($eventPrinters);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->eventPrintersScheduledForDeletion = clone $eventPrintersToDelete;
+        $this->eventPrintersScheduledForDeletion = $eventPrintersToDelete;
 
         foreach ($eventPrintersToDelete as $eventPrinterRemoved) {
             $eventPrinterRemoved->setEvent(null);
@@ -2741,10 +2729,7 @@ abstract class Event implements ActiveRecordInterface
         $eventTablesToDelete = $this->getEventTables(new Criteria(), $con)->diff($eventTables);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->eventTablesScheduledForDeletion = clone $eventTablesToDelete;
+        $this->eventTablesScheduledForDeletion = $eventTablesToDelete;
 
         foreach ($eventTablesToDelete as $eventTableRemoved) {
             $eventTableRemoved->setEvent(null);
@@ -2969,10 +2954,7 @@ abstract class Event implements ActiveRecordInterface
         $eventUsersToDelete = $this->getEventUsers(new Criteria(), $con)->diff($eventUsers);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->eventUsersScheduledForDeletion = clone $eventUsersToDelete;
+        $this->eventUsersScheduledForDeletion = $eventUsersToDelete;
 
         foreach ($eventUsersToDelete as $eventUserRemoved) {
             $eventUserRemoved->setEvent(null);
@@ -3222,10 +3204,7 @@ abstract class Event implements ActiveRecordInterface
         $menuExtrasToDelete = $this->getMenuExtras(new Criteria(), $con)->diff($menuExtras);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->menuExtrasScheduledForDeletion = clone $menuExtrasToDelete;
+        $this->menuExtrasScheduledForDeletion = $menuExtrasToDelete;
 
         foreach ($menuExtrasToDelete as $menuExtraRemoved) {
             $menuExtraRemoved->setEvent(null);
@@ -3475,10 +3454,7 @@ abstract class Event implements ActiveRecordInterface
         $menuSizesToDelete = $this->getMenuSizes(new Criteria(), $con)->diff($menuSizes);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->menuSizesScheduledForDeletion = clone $menuSizesToDelete;
+        $this->menuSizesScheduledForDeletion = $menuSizesToDelete;
 
         foreach ($menuSizesToDelete as $menuSizeRemoved) {
             $menuSizeRemoved->setEvent(null);
@@ -3703,10 +3679,7 @@ abstract class Event implements ActiveRecordInterface
         $menuTypesToDelete = $this->getMenuTypes(new Criteria(), $con)->diff($menuTypes);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->menuTypesScheduledForDeletion = clone $menuTypesToDelete;
+        $this->menuTypesScheduledForDeletion = $menuTypesToDelete;
 
         foreach ($menuTypesToDelete as $menuTypeRemoved) {
             $menuTypeRemoved->setEvent(null);

@@ -182,10 +182,10 @@ abstract class MenuQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34), $con);
+     * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param array[$menuid, $menu_groupid] $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildMenu|array|mixed the result, formatted by the current formatter
@@ -210,7 +210,7 @@ abstract class MenuQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = MenuTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]))))) {
+        if ((null !== ($obj = MenuTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -231,11 +231,10 @@ abstract class MenuQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT menuid, menu_groupid, name, price, availabilityid, availability_amount FROM menu WHERE menuid = :p0 AND menu_groupid = :p1';
+        $sql = 'SELECT menuid, menu_groupid, name, price, availabilityid, availability_amount FROM menu WHERE menuid = :p0';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -246,7 +245,7 @@ abstract class MenuQuery extends ModelCriteria
             /** @var ChildMenu $obj */
             $obj = new ChildMenu();
             $obj->hydrate($row);
-            MenuTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]));
+            MenuTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -275,7 +274,7 @@ abstract class MenuQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -305,10 +304,8 @@ abstract class MenuQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(MenuTableMap::COL_MENUID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(MenuTableMap::COL_MENU_GROUPID, $key[1], Criteria::EQUAL);
 
-        return $this;
+        return $this->addUsingAlias(MenuTableMap::COL_MENUID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -320,17 +317,8 @@ abstract class MenuQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-        if (empty($keys)) {
-            return $this->add(null, '1<>1', Criteria::CUSTOM);
-        }
-        foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(MenuTableMap::COL_MENUID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(MenuTableMap::COL_MENU_GROUPID, $key[1], Criteria::EQUAL);
-            $cton0->addAnd($cton1);
-            $this->addOr($cton0);
-        }
 
-        return $this;
+        return $this->addUsingAlias(MenuTableMap::COL_MENUID, $keys, Criteria::IN);
     }
 
     /**
@@ -665,7 +653,7 @@ abstract class MenuQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(MenuTableMap::COL_MENU_GROUPID, $menuGroup->toKeyValue('MenuGroupid', 'MenuGroupid'), $comparison);
+                ->addUsingAlias(MenuTableMap::COL_MENU_GROUPID, $menuGroup->toKeyValue('PrimaryKey', 'MenuGroupid'), $comparison);
         } else {
             throw new PropelException('filterByMenuGroup() only accepts arguments of type \API\Models\Menu\MenuGroup or Collection');
         }
@@ -1014,40 +1002,6 @@ abstract class MenuQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related MenuExtra object
-     * using the menu_possible_extra table as cross reference
-     *
-     * @param MenuExtra $menuExtra the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildMenuQuery The current query, for fluid interface
-     */
-    public function filterByMenuExtra($menuExtra, $comparison = Criteria::EQUAL)
-    {
-        return $this
-            ->useMenuPossibleExtraQuery()
-            ->filterByMenuExtra($menuExtra, $comparison)
-            ->endUse();
-    }
-
-    /**
-     * Filter the query by a related MenuSize object
-     * using the menu_possible_size table as cross reference
-     *
-     * @param MenuSize $menuSize the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildMenuQuery The current query, for fluid interface
-     */
-    public function filterByMenuSize($menuSize, $comparison = Criteria::EQUAL)
-    {
-        return $this
-            ->useMenuPossibleSizeQuery()
-            ->filterByMenuSize($menuSize, $comparison)
-            ->endUse();
-    }
-
-    /**
      * Exclude object from result
      *
      * @param   ChildMenu $menu Object to remove from the list of results
@@ -1057,9 +1011,7 @@ abstract class MenuQuery extends ModelCriteria
     public function prune($menu = null)
     {
         if ($menu) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(MenuTableMap::COL_MENUID), $menu->getMenuid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(MenuTableMap::COL_MENU_GROUPID), $menu->getMenuGroupid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
+            $this->addUsingAlias(MenuTableMap::COL_MENUID, $menu->getMenuid(), Criteria::NOT_EQUAL);
         }
 
         return $this;

@@ -1104,9 +1104,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
     public function getDistributionPlaceGroup(ConnectionInterface $con = null)
     {
         if ($this->aDistributionPlaceGroup === null && ($this->distribution_place_groupid !== null)) {
-            $this->aDistributionPlaceGroup = ChildDistributionPlaceGroupQuery::create()
-                ->filterByDistributionPlaceTable($this) // here
-                ->findOne($con);
+            $this->aDistributionPlaceGroup = ChildDistributionPlaceGroupQuery::create()->findPk($this->distribution_place_groupid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1157,9 +1155,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
     public function getEventTable(ConnectionInterface $con = null)
     {
         if ($this->aEventTable === null && ($this->event_tableid !== null)) {
-            $this->aEventTable = EventTableQuery::create()
-                ->filterByDistributionPlaceTable($this) // here
-                ->findOne($con);
+            $this->aEventTable = EventTableQuery::create()->findPk($this->event_tableid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

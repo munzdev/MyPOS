@@ -2,7 +2,6 @@
 
 namespace API\Models\Ordering\Map;
 
-use API\Models\OIP\Map\OrderInProgressRecievedTableMap;
 use API\Models\Ordering\OrderDetail;
 use API\Models\Ordering\OrderDetailQuery;
 use Propel\Runtime\Propel;
@@ -60,7 +59,7 @@ class OrderDetailTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 13;
+    const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
@@ -70,7 +69,7 @@ class OrderDetailTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 13;
+    const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the order_detailid field
@@ -118,11 +117,6 @@ class OrderDetailTableMap extends TableMap
     const COL_EXTRA_DETAIL = 'order_detail.extra_detail';
 
     /**
-     * the column name for the finished field
-     */
-    const COL_FINISHED = 'order_detail.finished';
-
-    /**
      * the column name for the availabilityid field
      */
     const COL_AVAILABILITYID = 'order_detail.availabilityid';
@@ -138,6 +132,16 @@ class OrderDetailTableMap extends TableMap
     const COL_VERIFIED = 'order_detail.verified';
 
     /**
+     * the column name for the distribution_finished field
+     */
+    const COL_DISTRIBUTION_FINISHED = 'order_detail.distribution_finished';
+
+    /**
+     * the column name for the invoice_finished field
+     */
+    const COL_INVOICE_FINISHED = 'order_detail.invoice_finished';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -149,11 +153,11 @@ class OrderDetailTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('OrderDetailid', 'Orderid', 'Menuid', 'MenuSizeid', 'MenuGroupid', 'Amount', 'SinglePrice', 'SinglePriceModifiedByUserid', 'ExtraDetail', 'Finished', 'Availabilityid', 'AvailabilityAmount', 'Verified', ),
-        self::TYPE_CAMELNAME     => array('orderDetailid', 'orderid', 'menuid', 'menuSizeid', 'menuGroupid', 'amount', 'singlePrice', 'singlePriceModifiedByUserid', 'extraDetail', 'finished', 'availabilityid', 'availabilityAmount', 'verified', ),
-        self::TYPE_COLNAME       => array(OrderDetailTableMap::COL_ORDER_DETAILID, OrderDetailTableMap::COL_ORDERID, OrderDetailTableMap::COL_MENUID, OrderDetailTableMap::COL_MENU_SIZEID, OrderDetailTableMap::COL_MENU_GROUPID, OrderDetailTableMap::COL_AMOUNT, OrderDetailTableMap::COL_SINGLE_PRICE, OrderDetailTableMap::COL_SINGLE_PRICE_MODIFIED_BY_USERID, OrderDetailTableMap::COL_EXTRA_DETAIL, OrderDetailTableMap::COL_FINISHED, OrderDetailTableMap::COL_AVAILABILITYID, OrderDetailTableMap::COL_AVAILABILITY_AMOUNT, OrderDetailTableMap::COL_VERIFIED, ),
-        self::TYPE_FIELDNAME     => array('order_detailid', 'orderid', 'menuid', 'menu_sizeid', 'menu_groupid', 'amount', 'single_price', 'single_price_modified_by_userid', 'extra_detail', 'finished', 'availabilityid', 'availability_amount', 'verified', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        self::TYPE_PHPNAME       => array('OrderDetailid', 'Orderid', 'Menuid', 'MenuSizeid', 'MenuGroupid', 'Amount', 'SinglePrice', 'SinglePriceModifiedByUserid', 'ExtraDetail', 'Availabilityid', 'AvailabilityAmount', 'Verified', 'DistributionFinished', 'InvoiceFinished', ),
+        self::TYPE_CAMELNAME     => array('orderDetailid', 'orderid', 'menuid', 'menuSizeid', 'menuGroupid', 'amount', 'singlePrice', 'singlePriceModifiedByUserid', 'extraDetail', 'availabilityid', 'availabilityAmount', 'verified', 'distributionFinished', 'invoiceFinished', ),
+        self::TYPE_COLNAME       => array(OrderDetailTableMap::COL_ORDER_DETAILID, OrderDetailTableMap::COL_ORDERID, OrderDetailTableMap::COL_MENUID, OrderDetailTableMap::COL_MENU_SIZEID, OrderDetailTableMap::COL_MENU_GROUPID, OrderDetailTableMap::COL_AMOUNT, OrderDetailTableMap::COL_SINGLE_PRICE, OrderDetailTableMap::COL_SINGLE_PRICE_MODIFIED_BY_USERID, OrderDetailTableMap::COL_EXTRA_DETAIL, OrderDetailTableMap::COL_AVAILABILITYID, OrderDetailTableMap::COL_AVAILABILITY_AMOUNT, OrderDetailTableMap::COL_VERIFIED, OrderDetailTableMap::COL_DISTRIBUTION_FINISHED, OrderDetailTableMap::COL_INVOICE_FINISHED, ),
+        self::TYPE_FIELDNAME     => array('order_detailid', 'orderid', 'menuid', 'menu_sizeid', 'menu_groupid', 'amount', 'single_price', 'single_price_modified_by_userid', 'extra_detail', 'availabilityid', 'availability_amount', 'verified', 'distribution_finished', 'invoice_finished', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -163,11 +167,11 @@ class OrderDetailTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('OrderDetailid' => 0, 'Orderid' => 1, 'Menuid' => 2, 'MenuSizeid' => 3, 'MenuGroupid' => 4, 'Amount' => 5, 'SinglePrice' => 6, 'SinglePriceModifiedByUserid' => 7, 'ExtraDetail' => 8, 'Finished' => 9, 'Availabilityid' => 10, 'AvailabilityAmount' => 11, 'Verified' => 12, ),
-        self::TYPE_CAMELNAME     => array('orderDetailid' => 0, 'orderid' => 1, 'menuid' => 2, 'menuSizeid' => 3, 'menuGroupid' => 4, 'amount' => 5, 'singlePrice' => 6, 'singlePriceModifiedByUserid' => 7, 'extraDetail' => 8, 'finished' => 9, 'availabilityid' => 10, 'availabilityAmount' => 11, 'verified' => 12, ),
-        self::TYPE_COLNAME       => array(OrderDetailTableMap::COL_ORDER_DETAILID => 0, OrderDetailTableMap::COL_ORDERID => 1, OrderDetailTableMap::COL_MENUID => 2, OrderDetailTableMap::COL_MENU_SIZEID => 3, OrderDetailTableMap::COL_MENU_GROUPID => 4, OrderDetailTableMap::COL_AMOUNT => 5, OrderDetailTableMap::COL_SINGLE_PRICE => 6, OrderDetailTableMap::COL_SINGLE_PRICE_MODIFIED_BY_USERID => 7, OrderDetailTableMap::COL_EXTRA_DETAIL => 8, OrderDetailTableMap::COL_FINISHED => 9, OrderDetailTableMap::COL_AVAILABILITYID => 10, OrderDetailTableMap::COL_AVAILABILITY_AMOUNT => 11, OrderDetailTableMap::COL_VERIFIED => 12, ),
-        self::TYPE_FIELDNAME     => array('order_detailid' => 0, 'orderid' => 1, 'menuid' => 2, 'menu_sizeid' => 3, 'menu_groupid' => 4, 'amount' => 5, 'single_price' => 6, 'single_price_modified_by_userid' => 7, 'extra_detail' => 8, 'finished' => 9, 'availabilityid' => 10, 'availability_amount' => 11, 'verified' => 12, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
+        self::TYPE_PHPNAME       => array('OrderDetailid' => 0, 'Orderid' => 1, 'Menuid' => 2, 'MenuSizeid' => 3, 'MenuGroupid' => 4, 'Amount' => 5, 'SinglePrice' => 6, 'SinglePriceModifiedByUserid' => 7, 'ExtraDetail' => 8, 'Availabilityid' => 9, 'AvailabilityAmount' => 10, 'Verified' => 11, 'DistributionFinished' => 12, 'InvoiceFinished' => 13, ),
+        self::TYPE_CAMELNAME     => array('orderDetailid' => 0, 'orderid' => 1, 'menuid' => 2, 'menuSizeid' => 3, 'menuGroupid' => 4, 'amount' => 5, 'singlePrice' => 6, 'singlePriceModifiedByUserid' => 7, 'extraDetail' => 8, 'availabilityid' => 9, 'availabilityAmount' => 10, 'verified' => 11, 'distributionFinished' => 12, 'invoiceFinished' => 13, ),
+        self::TYPE_COLNAME       => array(OrderDetailTableMap::COL_ORDER_DETAILID => 0, OrderDetailTableMap::COL_ORDERID => 1, OrderDetailTableMap::COL_MENUID => 2, OrderDetailTableMap::COL_MENU_SIZEID => 3, OrderDetailTableMap::COL_MENU_GROUPID => 4, OrderDetailTableMap::COL_AMOUNT => 5, OrderDetailTableMap::COL_SINGLE_PRICE => 6, OrderDetailTableMap::COL_SINGLE_PRICE_MODIFIED_BY_USERID => 7, OrderDetailTableMap::COL_EXTRA_DETAIL => 8, OrderDetailTableMap::COL_AVAILABILITYID => 9, OrderDetailTableMap::COL_AVAILABILITY_AMOUNT => 10, OrderDetailTableMap::COL_VERIFIED => 11, OrderDetailTableMap::COL_DISTRIBUTION_FINISHED => 12, OrderDetailTableMap::COL_INVOICE_FINISHED => 13, ),
+        self::TYPE_FIELDNAME     => array('order_detailid' => 0, 'orderid' => 1, 'menuid' => 2, 'menu_sizeid' => 3, 'menu_groupid' => 4, 'amount' => 5, 'single_price' => 6, 'single_price_modified_by_userid' => 7, 'extra_detail' => 8, 'availabilityid' => 9, 'availability_amount' => 10, 'verified' => 11, 'distribution_finished' => 12, 'invoice_finished' => 13, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -188,7 +192,7 @@ class OrderDetailTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('order_detailid', 'OrderDetailid', 'INTEGER', true, null, null);
-        $this->addForeignPrimaryKey('orderid', 'Orderid', 'INTEGER' , 'order', 'orderid', true, null, null);
+        $this->addForeignKey('orderid', 'Orderid', 'INTEGER', 'order', 'orderid', true, null, null);
         $this->addForeignKey('menuid', 'Menuid', 'INTEGER', 'menu', 'menuid', false, null, null);
         $this->addForeignKey('menu_sizeid', 'MenuSizeid', 'INTEGER', 'menu_size', 'menu_sizeid', false, null, null);
         $this->addForeignKey('menu_groupid', 'MenuGroupid', 'INTEGER', 'menu_group', 'menu_groupid', false, null, null);
@@ -196,10 +200,11 @@ class OrderDetailTableMap extends TableMap
         $this->addColumn('single_price', 'SinglePrice', 'DECIMAL', true, 7, null);
         $this->addForeignKey('single_price_modified_by_userid', 'SinglePriceModifiedByUserid', 'INTEGER', 'user', 'userid', false, null, null);
         $this->addColumn('extra_detail', 'ExtraDetail', 'VARCHAR', false, 255, null);
-        $this->addColumn('finished', 'Finished', 'TIMESTAMP', false, null, null);
         $this->addForeignKey('availabilityid', 'Availabilityid', 'INTEGER', 'availability', 'availabilityid', false, null, null);
         $this->addColumn('availability_amount', 'AvailabilityAmount', 'SMALLINT', false, null, null);
         $this->addColumn('verified', 'Verified', 'BOOLEAN', true, 1, null);
+        $this->addColumn('distribution_finished', 'DistributionFinished', 'TIMESTAMP', false, null, null);
+        $this->addColumn('invoice_finished', 'InvoiceFinished', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -234,21 +239,21 @@ class OrderDetailTableMap extends TableMap
     0 => ':menuid',
     1 => ':menuid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('Order', '\\API\\Models\\Ordering\\Order', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':orderid',
     1 => ':orderid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':single_price_modified_by_userid',
     1 => ':userid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('InvoiceItem', '\\API\\Models\\Invoice\\InvoiceItem', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -262,87 +267,23 @@ class OrderDetailTableMap extends TableMap
     0 => ':order_detailid',
     1 => ':order_detailid',
   ),
-), 'CASCADE', null, 'OrderDetailExtras', false);
+), null, null, 'OrderDetailExtras', false);
         $this->addRelation('OrderDetailMixedWith', '\\API\\Models\\Ordering\\OrderDetailMixedWith', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':order_detailid',
     1 => ':order_detailid',
   ),
-), 'CASCADE', null, 'OrderDetailMixedWiths', false);
+), null, null, 'OrderDetailMixedWiths', false);
         $this->addRelation('OrderInProgressRecieved', '\\API\\Models\\OIP\\OrderInProgressRecieved', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':order_detailid',
     1 => ':order_detailid',
   ),
-), 'CASCADE', null, 'OrderInProgressRecieveds', false);
-        $this->addRelation('MenuPossibleExtra', '\\API\\Models\\Menu\\MenuPossibleExtra', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'MenuPossibleExtras');
+), null, null, 'OrderInProgressRecieveds', false);
+        $this->addRelation('MenuPossibleExtra', '\\API\\Models\\Menu\\MenuPossibleExtra', RelationMap::MANY_TO_MANY, array(), null, null, 'MenuPossibleExtras');
     } // buildRelations()
-
-    /**
-     * Adds an object to the instance pool.
-     *
-     * Propel keeps cached copies of objects in an instance pool when they are retrieved
-     * from the database. In some cases you may need to explicitly add objects
-     * to the cache in order to ensure that the same objects are always returned by find*()
-     * and findPk*() calls.
-     *
-     * @param \API\Models\Ordering\OrderDetail $obj A \API\Models\Ordering\OrderDetail object.
-     * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
-     */
-    public static function addInstanceToPool($obj, $key = null)
-    {
-        if (Propel::isInstancePoolingEnabled()) {
-            if (null === $key) {
-                $key = serialize([(null === $obj->getOrderDetailid() || is_scalar($obj->getOrderDetailid()) || is_callable([$obj->getOrderDetailid(), '__toString']) ? (string) $obj->getOrderDetailid() : $obj->getOrderDetailid()), (null === $obj->getOrderid() || is_scalar($obj->getOrderid()) || is_callable([$obj->getOrderid(), '__toString']) ? (string) $obj->getOrderid() : $obj->getOrderid())]);
-            } // if key === null
-            self::$instances[$key] = $obj;
-        }
-    }
-
-    /**
-     * Removes an object from the instance pool.
-     *
-     * Propel keeps cached copies of objects in an instance pool when they are retrieved
-     * from the database.  In some cases -- especially when you override doDelete
-     * methods in your stub classes -- you may need to explicitly remove objects
-     * from the cache in order to prevent returning objects that no longer exist.
-     *
-     * @param mixed $value A \API\Models\Ordering\OrderDetail object or a primary key value.
-     */
-    public static function removeInstanceFromPool($value)
-    {
-        if (Propel::isInstancePoolingEnabled() && null !== $value) {
-            if (is_object($value) && $value instanceof \API\Models\Ordering\OrderDetail) {
-                $key = serialize([(null === $value->getOrderDetailid() || is_scalar($value->getOrderDetailid()) || is_callable([$value->getOrderDetailid(), '__toString']) ? (string) $value->getOrderDetailid() : $value->getOrderDetailid()), (null === $value->getOrderid() || is_scalar($value->getOrderid()) || is_callable([$value->getOrderid(), '__toString']) ? (string) $value->getOrderid() : $value->getOrderid())]);
-
-            } elseif (is_array($value) && count($value) === 2) {
-                // assume we've been passed a primary key";
-                $key = serialize([(null === $value[0] || is_scalar($value[0]) || is_callable([$value[0], '__toString']) ? (string) $value[0] : $value[0]), (null === $value[1] || is_scalar($value[1]) || is_callable([$value[1], '__toString']) ? (string) $value[1] : $value[1])]);
-            } elseif ($value instanceof Criteria) {
-                self::$instances = [];
-
-                return;
-            } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \API\Models\Ordering\OrderDetail object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
-                throw $e;
-            }
-
-            unset(self::$instances[$key]);
-        }
-    }
-    /**
-     * Method to invalidate the instance pool of all tables related to order_detail     * by a foreign key with ON DELETE CASCADE
-     */
-    public static function clearRelatedInstancePool()
-    {
-        // Invalidate objects in related instance pools,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        OrderDetailExtraTableMap::clearInstancePool();
-        OrderDetailMixedWithTableMap::clearInstancePool();
-        OrderInProgressRecievedTableMap::clearInstancePool();
-    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -360,11 +301,11 @@ class OrderDetailTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)])]);
+        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -381,20 +322,11 @@ class OrderDetailTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-            $pks = [];
-
-        $pks[] = (int) $row[
+        return (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
                 : self::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)
         ];
-        $pks[] = (int) $row[
-            $indexType == TableMap::TYPE_NUM
-                ? 1 + $offset
-                : self::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)
-        ];
-
-        return $pks;
     }
 
     /**
@@ -503,10 +435,11 @@ class OrderDetailTableMap extends TableMap
             $criteria->addSelectColumn(OrderDetailTableMap::COL_SINGLE_PRICE);
             $criteria->addSelectColumn(OrderDetailTableMap::COL_SINGLE_PRICE_MODIFIED_BY_USERID);
             $criteria->addSelectColumn(OrderDetailTableMap::COL_EXTRA_DETAIL);
-            $criteria->addSelectColumn(OrderDetailTableMap::COL_FINISHED);
             $criteria->addSelectColumn(OrderDetailTableMap::COL_AVAILABILITYID);
             $criteria->addSelectColumn(OrderDetailTableMap::COL_AVAILABILITY_AMOUNT);
             $criteria->addSelectColumn(OrderDetailTableMap::COL_VERIFIED);
+            $criteria->addSelectColumn(OrderDetailTableMap::COL_DISTRIBUTION_FINISHED);
+            $criteria->addSelectColumn(OrderDetailTableMap::COL_INVOICE_FINISHED);
         } else {
             $criteria->addSelectColumn($alias . '.order_detailid');
             $criteria->addSelectColumn($alias . '.orderid');
@@ -517,10 +450,11 @@ class OrderDetailTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.single_price');
             $criteria->addSelectColumn($alias . '.single_price_modified_by_userid');
             $criteria->addSelectColumn($alias . '.extra_detail');
-            $criteria->addSelectColumn($alias . '.finished');
             $criteria->addSelectColumn($alias . '.availabilityid');
             $criteria->addSelectColumn($alias . '.availability_amount');
             $criteria->addSelectColumn($alias . '.verified');
+            $criteria->addSelectColumn($alias . '.distribution_finished');
+            $criteria->addSelectColumn($alias . '.invoice_finished');
         }
     }
 
@@ -572,17 +506,7 @@ class OrderDetailTableMap extends TableMap
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(OrderDetailTableMap::DATABASE_NAME);
-            // primary key is composite; we therefore, expect
-            // the primary key passed to be an array of pkey values
-            if (count($values) == count($values, COUNT_RECURSIVE)) {
-                // array is not multi-dimensional
-                $values = array($values);
-            }
-            foreach ($values as $value) {
-                $criterion = $criteria->getNewCriterion(OrderDetailTableMap::COL_ORDER_DETAILID, $value[0]);
-                $criterion->addAnd($criteria->getNewCriterion(OrderDetailTableMap::COL_ORDERID, $value[1]));
-                $criteria->addOr($criterion);
-            }
+            $criteria->add(OrderDetailTableMap::COL_ORDER_DETAILID, (array) $values, Criteria::IN);
         }
 
         $query = OrderDetailQuery::create()->mergeWith($criteria);

@@ -791,9 +791,10 @@ abstract class EventUser implements ActiveRecordInterface
 
             if ($this->userMessagesRelatedByFromEventUseridScheduledForDeletion !== null) {
                 if (!$this->userMessagesRelatedByFromEventUseridScheduledForDeletion->isEmpty()) {
-                    \API\Models\User\Message\UserMessageQuery::create()
-                        ->filterByPrimaryKeys($this->userMessagesRelatedByFromEventUseridScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
+                    foreach ($this->userMessagesRelatedByFromEventUseridScheduledForDeletion as $userMessageRelatedByFromEventUserid) {
+                        // need to save related object because we set the relation to null
+                        $userMessageRelatedByFromEventUserid->save($con);
+                    }
                     $this->userMessagesRelatedByFromEventUseridScheduledForDeletion = null;
                 }
             }
@@ -1233,8 +1234,6 @@ abstract class EventUser implements ActiveRecordInterface
     {
         $criteria = ChildEventUserQuery::create();
         $criteria->add(EventUserTableMap::COL_EVENT_USERID, $this->event_userid);
-        $criteria->add(EventUserTableMap::COL_EVENTID, $this->eventid);
-        $criteria->add(EventUserTableMap::COL_USERID, $this->userid);
 
         return $criteria;
     }
@@ -1247,26 +1246,10 @@ abstract class EventUser implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getEventUserid() &&
-            null !== $this->getEventid() &&
-            null !== $this->getUserid();
+        $validPk = null !== $this->getEventUserid();
 
-        $validPrimaryKeyFKs = 2;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_events_has_users_events1 to table event
-        if ($this->aEvent && $hash = spl_object_hash($this->aEvent)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_events_has_users_users1 to table user
-        if ($this->aUser && $hash = spl_object_hash($this->aUser)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1278,31 +1261,23 @@ abstract class EventUser implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getEventUserid();
-        $pks[1] = $this->getEventid();
-        $pks[2] = $this->getUserid();
-
-        return $pks;
+        return $this->getEventUserid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (event_userid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setEventUserid($keys[0]);
-        $this->setEventid($keys[1]);
-        $this->setUserid($keys[2]);
+        $this->setEventUserid($key);
     }
 
     /**
@@ -1311,7 +1286,7 @@ abstract class EventUser implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getEventUserid()) && (null === $this->getEventid()) && (null === $this->getUserid());
+        return null === $this->getEventUserid();
     }
 
     /**
@@ -1845,10 +1820,7 @@ abstract class EventUser implements ActiveRecordInterface
         $userMessagesRelatedByToEventUseridToDelete = $this->getUserMessagesRelatedByToEventUserid(new Criteria(), $con)->diff($userMessagesRelatedByToEventUserid);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->userMessagesRelatedByToEventUseridScheduledForDeletion = clone $userMessagesRelatedByToEventUseridToDelete;
+        $this->userMessagesRelatedByToEventUseridScheduledForDeletion = $userMessagesRelatedByToEventUseridToDelete;
 
         foreach ($userMessagesRelatedByToEventUseridToDelete as $userMessageRelatedByToEventUseridRemoved) {
             $userMessageRelatedByToEventUseridRemoved->setEventUserRelatedByToEventUserid(null);

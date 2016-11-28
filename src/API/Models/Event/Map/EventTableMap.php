@@ -2,10 +2,8 @@
 
 namespace API\Models\Event\Map;
 
-use API\Models\DistributionPlace\Map\DistributionPlaceTableMap;
 use API\Models\Event\Event;
 use API\Models\Event\EventQuery;
-use API\Models\Menu\Map\MenuExtraTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -174,14 +172,14 @@ class EventTableMap extends TableMap
     0 => ':eventid',
     1 => ':eventid',
   ),
-), 'CASCADE', null, 'DistributionPlaces', false);
+), null, null, 'DistributionPlaces', false);
         $this->addRelation('EventPrinter', '\\API\\Models\\Event\\EventPrinter', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':eventid',
     1 => ':eventid',
   ),
-), 'CASCADE', null, 'EventPrinters', false);
+), null, null, 'EventPrinters', false);
         $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -195,14 +193,14 @@ class EventTableMap extends TableMap
     0 => ':eventid',
     1 => ':eventid',
   ),
-), 'CASCADE', null, 'EventUsers', false);
+), null, null, 'EventUsers', false);
         $this->addRelation('MenuExtra', '\\API\\Models\\Menu\\MenuExtra', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':eventid',
     1 => ':eventid',
   ),
-), 'CASCADE', null, 'MenuExtras', false);
+), null, null, 'MenuExtras', false);
         $this->addRelation('MenuSize', '\\API\\Models\\Menu\\MenuSize', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -218,18 +216,6 @@ class EventTableMap extends TableMap
   ),
 ), null, null, 'MenuTypes', false);
     } // buildRelations()
-    /**
-     * Method to invalidate the instance pool of all tables related to event     * by a foreign key with ON DELETE CASCADE
-     */
-    public static function clearRelatedInstancePool()
-    {
-        // Invalidate objects in related instance pools,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        DistributionPlaceTableMap::clearInstancePool();
-        EventPrinterTableMap::clearInstancePool();
-        EventUserTableMap::clearInstancePool();
-        MenuExtraTableMap::clearInstancePool();
-    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.

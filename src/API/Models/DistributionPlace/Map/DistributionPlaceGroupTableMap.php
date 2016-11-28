@@ -138,8 +138,8 @@ class DistributionPlaceGroupTableMap extends TableMap
         $this->setIsCrossRef(true);
         // columns
         $this->addPrimaryKey('distribution_place_groupid', 'DistributionPlaceGroupid', 'INTEGER', true, null, null);
-        $this->addForeignPrimaryKey('distribution_placeid', 'DistributionPlaceid', 'INTEGER' , 'distribution_place', 'distribution_placeid', true, null, null);
-        $this->addForeignPrimaryKey('menu_groupid', 'MenuGroupid', 'INTEGER' , 'menu_group', 'menu_groupid', true, null, null);
+        $this->addForeignKey('distribution_placeid', 'DistributionPlaceid', 'INTEGER', 'distribution_place', 'distribution_placeid', true, null, null);
+        $this->addForeignKey('menu_groupid', 'MenuGroupid', 'INTEGER', 'menu_group', 'menu_groupid', true, null, null);
     } // initialize()
 
     /**
@@ -153,14 +153,14 @@ class DistributionPlaceGroupTableMap extends TableMap
     0 => ':distribution_placeid',
     1 => ':distribution_placeid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('MenuGroup', '\\API\\Models\\Menu\\MenuGroup', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':menu_groupid',
     1 => ':menu_groupid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('DistributionPlaceTable', '\\API\\Models\\DistributionPlace\\DistributionPlaceTable', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -168,61 +168,8 @@ class DistributionPlaceGroupTableMap extends TableMap
     1 => ':distribution_place_groupid',
   ),
 ), null, null, 'DistributionPlaceTables', false);
-        $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::MANY_TO_MANY, array(), 'CASCADE', null, 'EventTables');
+        $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::MANY_TO_MANY, array(), null, null, 'EventTables');
     } // buildRelations()
-
-    /**
-     * Adds an object to the instance pool.
-     *
-     * Propel keeps cached copies of objects in an instance pool when they are retrieved
-     * from the database. In some cases you may need to explicitly add objects
-     * to the cache in order to ensure that the same objects are always returned by find*()
-     * and findPk*() calls.
-     *
-     * @param \API\Models\DistributionPlace\DistributionPlaceGroup $obj A \API\Models\DistributionPlace\DistributionPlaceGroup object.
-     * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
-     */
-    public static function addInstanceToPool($obj, $key = null)
-    {
-        if (Propel::isInstancePoolingEnabled()) {
-            if (null === $key) {
-                $key = serialize([(null === $obj->getDistributionPlaceGroupid() || is_scalar($obj->getDistributionPlaceGroupid()) || is_callable([$obj->getDistributionPlaceGroupid(), '__toString']) ? (string) $obj->getDistributionPlaceGroupid() : $obj->getDistributionPlaceGroupid()), (null === $obj->getDistributionPlaceid() || is_scalar($obj->getDistributionPlaceid()) || is_callable([$obj->getDistributionPlaceid(), '__toString']) ? (string) $obj->getDistributionPlaceid() : $obj->getDistributionPlaceid()), (null === $obj->getMenuGroupid() || is_scalar($obj->getMenuGroupid()) || is_callable([$obj->getMenuGroupid(), '__toString']) ? (string) $obj->getMenuGroupid() : $obj->getMenuGroupid())]);
-            } // if key === null
-            self::$instances[$key] = $obj;
-        }
-    }
-
-    /**
-     * Removes an object from the instance pool.
-     *
-     * Propel keeps cached copies of objects in an instance pool when they are retrieved
-     * from the database.  In some cases -- especially when you override doDelete
-     * methods in your stub classes -- you may need to explicitly remove objects
-     * from the cache in order to prevent returning objects that no longer exist.
-     *
-     * @param mixed $value A \API\Models\DistributionPlace\DistributionPlaceGroup object or a primary key value.
-     */
-    public static function removeInstanceFromPool($value)
-    {
-        if (Propel::isInstancePoolingEnabled() && null !== $value) {
-            if (is_object($value) && $value instanceof \API\Models\DistributionPlace\DistributionPlaceGroup) {
-                $key = serialize([(null === $value->getDistributionPlaceGroupid() || is_scalar($value->getDistributionPlaceGroupid()) || is_callable([$value->getDistributionPlaceGroupid(), '__toString']) ? (string) $value->getDistributionPlaceGroupid() : $value->getDistributionPlaceGroupid()), (null === $value->getDistributionPlaceid() || is_scalar($value->getDistributionPlaceid()) || is_callable([$value->getDistributionPlaceid(), '__toString']) ? (string) $value->getDistributionPlaceid() : $value->getDistributionPlaceid()), (null === $value->getMenuGroupid() || is_scalar($value->getMenuGroupid()) || is_callable([$value->getMenuGroupid(), '__toString']) ? (string) $value->getMenuGroupid() : $value->getMenuGroupid())]);
-
-            } elseif (is_array($value) && count($value) === 3) {
-                // assume we've been passed a primary key";
-                $key = serialize([(null === $value[0] || is_scalar($value[0]) || is_callable([$value[0], '__toString']) ? (string) $value[0] : $value[0]), (null === $value[1] || is_scalar($value[1]) || is_callable([$value[1], '__toString']) ? (string) $value[1] : $value[1]), (null === $value[2] || is_scalar($value[2]) || is_callable([$value[2], '__toString']) ? (string) $value[2] : $value[2])]);
-            } elseif ($value instanceof Criteria) {
-                self::$instances = [];
-
-                return;
-            } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \API\Models\DistributionPlace\DistributionPlaceGroup object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
-                throw $e;
-            }
-
-            unset(self::$instances[$key]);
-        }
-    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -240,11 +187,11 @@ class DistributionPlaceGroupTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)])]);
+        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -261,25 +208,11 @@ class DistributionPlaceGroupTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-            $pks = [];
-
-        $pks[] = (int) $row[
+        return (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
                 : self::translateFieldName('DistributionPlaceGroupid', TableMap::TYPE_PHPNAME, $indexType)
         ];
-        $pks[] = (int) $row[
-            $indexType == TableMap::TYPE_NUM
-                ? 1 + $offset
-                : self::translateFieldName('DistributionPlaceid', TableMap::TYPE_PHPNAME, $indexType)
-        ];
-        $pks[] = (int) $row[
-            $indexType == TableMap::TYPE_NUM
-                ? 2 + $offset
-                : self::translateFieldName('MenuGroupid', TableMap::TYPE_PHPNAME, $indexType)
-        ];
-
-        return $pks;
     }
 
     /**
@@ -437,18 +370,7 @@ class DistributionPlaceGroupTableMap extends TableMap
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(DistributionPlaceGroupTableMap::DATABASE_NAME);
-            // primary key is composite; we therefore, expect
-            // the primary key passed to be an array of pkey values
-            if (count($values) == count($values, COUNT_RECURSIVE)) {
-                // array is not multi-dimensional
-                $values = array($values);
-            }
-            foreach ($values as $value) {
-                $criterion = $criteria->getNewCriterion(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $value[0]);
-                $criterion->addAnd($criteria->getNewCriterion(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID, $value[1]));
-                $criterion->addAnd($criteria->getNewCriterion(DistributionPlaceGroupTableMap::COL_MENU_GROUPID, $value[2]));
-                $criteria->addOr($criterion);
-            }
+            $criteria->add(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, (array) $values, Criteria::IN);
         }
 
         $query = DistributionPlaceGroupQuery::create()->mergeWith($criteria);

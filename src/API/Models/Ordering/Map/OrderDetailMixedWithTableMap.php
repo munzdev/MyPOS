@@ -146,14 +146,14 @@ class OrderDetailMixedWithTableMap extends TableMap
     0 => ':menuid',
     1 => ':menuid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':order_detailid',
     1 => ':order_detailid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
     } // buildRelations()
 
     /**

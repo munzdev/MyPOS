@@ -146,10 +146,10 @@ abstract class OrderInProgressRecievedQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34, 56, 78), $con);
+     * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param array[$order_in_progress_recievedid, $order_detailid, $order_in_progressid, $distribution_giving_outid] $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildOrderInProgressRecieved|array|mixed the result, formatted by the current formatter
@@ -174,7 +174,7 @@ abstract class OrderInProgressRecievedQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = OrderInProgressRecievedTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2]), (null === $key[3] || is_scalar($key[3]) || is_callable([$key[3], '__toString']) ? (string) $key[3] : $key[3])]))))) {
+        if ((null !== ($obj = OrderInProgressRecievedTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -195,13 +195,10 @@ abstract class OrderInProgressRecievedQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT order_in_progress_recievedid, order_detailid, order_in_progressid, distribution_giving_outid, amount FROM order_in_progress_recieved WHERE order_in_progress_recievedid = :p0 AND order_detailid = :p1 AND order_in_progressid = :p2 AND distribution_giving_outid = :p3';
+        $sql = 'SELECT order_in_progress_recievedid, order_detailid, order_in_progressid, distribution_giving_outid, amount FROM order_in_progress_recieved WHERE order_in_progress_recievedid = :p0';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
-            $stmt->bindValue(':p2', $key[2], PDO::PARAM_INT);
-            $stmt->bindValue(':p3', $key[3], PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -212,7 +209,7 @@ abstract class OrderInProgressRecievedQuery extends ModelCriteria
             /** @var ChildOrderInProgressRecieved $obj */
             $obj = new ChildOrderInProgressRecieved();
             $obj->hydrate($row);
-            OrderInProgressRecievedTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2]), (null === $key[3] || is_scalar($key[3]) || is_callable([$key[3], '__toString']) ? (string) $key[3] : $key[3])]));
+            OrderInProgressRecievedTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -241,7 +238,7 @@ abstract class OrderInProgressRecievedQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -271,12 +268,8 @@ abstract class OrderInProgressRecievedQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(OrderInProgressRecievedTableMap::COL_ORDER_DETAILID, $key[1], Criteria::EQUAL);
-        $this->addUsingAlias(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESSID, $key[2], Criteria::EQUAL);
-        $this->addUsingAlias(OrderInProgressRecievedTableMap::COL_DISTRIBUTION_GIVING_OUTID, $key[3], Criteria::EQUAL);
 
-        return $this;
+        return $this->addUsingAlias(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -288,21 +281,8 @@ abstract class OrderInProgressRecievedQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-        if (empty($keys)) {
-            return $this->add(null, '1<>1', Criteria::CUSTOM);
-        }
-        foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(OrderInProgressRecievedTableMap::COL_ORDER_DETAILID, $key[1], Criteria::EQUAL);
-            $cton0->addAnd($cton1);
-            $cton2 = $this->getNewCriterion(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESSID, $key[2], Criteria::EQUAL);
-            $cton0->addAnd($cton2);
-            $cton3 = $this->getNewCriterion(OrderInProgressRecievedTableMap::COL_DISTRIBUTION_GIVING_OUTID, $key[3], Criteria::EQUAL);
-            $cton0->addAnd($cton3);
-            $this->addOr($cton0);
-        }
 
-        return $this;
+        return $this->addUsingAlias(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID, $keys, Criteria::IN);
     }
 
     /**
@@ -537,7 +517,7 @@ abstract class OrderInProgressRecievedQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(OrderInProgressRecievedTableMap::COL_ORDER_DETAILID, $orderDetail->toKeyValue('OrderDetailid', 'OrderDetailid'), $comparison);
+                ->addUsingAlias(OrderInProgressRecievedTableMap::COL_ORDER_DETAILID, $orderDetail->toKeyValue('PrimaryKey', 'OrderDetailid'), $comparison);
         } else {
             throw new PropelException('filterByOrderDetail() only accepts arguments of type \API\Models\Ordering\OrderDetail or Collection');
         }
@@ -614,7 +594,7 @@ abstract class OrderInProgressRecievedQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESSID, $orderInProgress->toKeyValue('OrderInProgressid', 'OrderInProgressid'), $comparison);
+                ->addUsingAlias(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESSID, $orderInProgress->toKeyValue('PrimaryKey', 'OrderInProgressid'), $comparison);
         } else {
             throw new PropelException('filterByOrderInProgress() only accepts arguments of type \API\Models\OIP\OrderInProgress or Collection');
         }
@@ -757,11 +737,7 @@ abstract class OrderInProgressRecievedQuery extends ModelCriteria
     public function prune($orderInProgressRecieved = null)
     {
         if ($orderInProgressRecieved) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID), $orderInProgressRecieved->getOrderInProgressRecievedid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(OrderInProgressRecievedTableMap::COL_ORDER_DETAILID), $orderInProgressRecieved->getOrderDetailid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond2', $this->getAliasedColName(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESSID), $orderInProgressRecieved->getOrderInProgressid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond3', $this->getAliasedColName(OrderInProgressRecievedTableMap::COL_DISTRIBUTION_GIVING_OUTID), $orderInProgressRecieved->getDistributionGivingOutid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2', 'pruneCond3'), Criteria::LOGICAL_OR);
+            $this->addUsingAlias(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID, $orderInProgressRecieved->getOrderInProgressRecievedid(), Criteria::NOT_EQUAL);
         }
 
         return $this;

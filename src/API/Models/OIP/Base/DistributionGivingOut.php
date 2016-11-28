@@ -1196,10 +1196,7 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
         $orderInProgressRecievedsToDelete = $this->getOrderInProgressRecieveds(new Criteria(), $con)->diff($orderInProgressRecieveds);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->orderInProgressRecievedsScheduledForDeletion = clone $orderInProgressRecievedsToDelete;
+        $this->orderInProgressRecievedsScheduledForDeletion = $orderInProgressRecievedsToDelete;
 
         foreach ($orderInProgressRecievedsToDelete as $orderInProgressRecievedRemoved) {
             $orderInProgressRecievedRemoved->setDistributionGivingOut(null);

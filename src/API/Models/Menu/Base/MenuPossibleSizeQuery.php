@@ -130,10 +130,10 @@ abstract class MenuPossibleSizeQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34, 56), $con);
+     * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param array[$menu_possible_sizeid, $menu_sizeid, $menuid] $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildMenuPossibleSize|array|mixed the result, formatted by the current formatter
@@ -158,7 +158,7 @@ abstract class MenuPossibleSizeQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = MenuPossibleSizeTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]))))) {
+        if ((null !== ($obj = MenuPossibleSizeTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -179,12 +179,10 @@ abstract class MenuPossibleSizeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT menu_possible_sizeid, menu_sizeid, menuid, price FROM menu_possible_size WHERE menu_possible_sizeid = :p0 AND menu_sizeid = :p1 AND menuid = :p2';
+        $sql = 'SELECT menu_possible_sizeid, menu_sizeid, menuid, price FROM menu_possible_size WHERE menu_possible_sizeid = :p0';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
-            $stmt->bindValue(':p2', $key[2], PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -195,7 +193,7 @@ abstract class MenuPossibleSizeQuery extends ModelCriteria
             /** @var ChildMenuPossibleSize $obj */
             $obj = new ChildMenuPossibleSize();
             $obj->hydrate($row);
-            MenuPossibleSizeTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]));
+            MenuPossibleSizeTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -224,7 +222,7 @@ abstract class MenuPossibleSizeQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -254,11 +252,8 @@ abstract class MenuPossibleSizeQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(MenuPossibleSizeTableMap::COL_MENU_POSSIBLE_SIZEID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(MenuPossibleSizeTableMap::COL_MENU_SIZEID, $key[1], Criteria::EQUAL);
-        $this->addUsingAlias(MenuPossibleSizeTableMap::COL_MENUID, $key[2], Criteria::EQUAL);
 
-        return $this;
+        return $this->addUsingAlias(MenuPossibleSizeTableMap::COL_MENU_POSSIBLE_SIZEID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -270,19 +265,8 @@ abstract class MenuPossibleSizeQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-        if (empty($keys)) {
-            return $this->add(null, '1<>1', Criteria::CUSTOM);
-        }
-        foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(MenuPossibleSizeTableMap::COL_MENU_POSSIBLE_SIZEID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(MenuPossibleSizeTableMap::COL_MENU_SIZEID, $key[1], Criteria::EQUAL);
-            $cton0->addAnd($cton1);
-            $cton2 = $this->getNewCriterion(MenuPossibleSizeTableMap::COL_MENUID, $key[2], Criteria::EQUAL);
-            $cton0->addAnd($cton2);
-            $this->addOr($cton0);
-        }
 
-        return $this;
+        return $this->addUsingAlias(MenuPossibleSizeTableMap::COL_MENU_POSSIBLE_SIZEID, $keys, Criteria::IN);
     }
 
     /**
@@ -474,7 +458,7 @@ abstract class MenuPossibleSizeQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(MenuPossibleSizeTableMap::COL_MENU_SIZEID, $menuSize->toKeyValue('MenuSizeid', 'MenuSizeid'), $comparison);
+                ->addUsingAlias(MenuPossibleSizeTableMap::COL_MENU_SIZEID, $menuSize->toKeyValue('PrimaryKey', 'MenuSizeid'), $comparison);
         } else {
             throw new PropelException('filterByMenuSize() only accepts arguments of type \API\Models\Menu\MenuSize or Collection');
         }
@@ -551,7 +535,7 @@ abstract class MenuPossibleSizeQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(MenuPossibleSizeTableMap::COL_MENUID, $menu->toKeyValue('Menuid', 'Menuid'), $comparison);
+                ->addUsingAlias(MenuPossibleSizeTableMap::COL_MENUID, $menu->toKeyValue('PrimaryKey', 'Menuid'), $comparison);
         } else {
             throw new PropelException('filterByMenu() only accepts arguments of type \API\Models\Menu\Menu or Collection');
         }
@@ -617,10 +601,7 @@ abstract class MenuPossibleSizeQuery extends ModelCriteria
     public function prune($menuPossibleSize = null)
     {
         if ($menuPossibleSize) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(MenuPossibleSizeTableMap::COL_MENU_POSSIBLE_SIZEID), $menuPossibleSize->getMenuPossibleSizeid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(MenuPossibleSizeTableMap::COL_MENU_SIZEID), $menuPossibleSize->getMenuSizeid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond2', $this->getAliasedColName(MenuPossibleSizeTableMap::COL_MENUID), $menuPossibleSize->getMenuid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2'), Criteria::LOGICAL_OR);
+            $this->addUsingAlias(MenuPossibleSizeTableMap::COL_MENU_POSSIBLE_SIZEID, $menuPossibleSize->getMenuPossibleSizeid(), Criteria::NOT_EQUAL);
         }
 
         return $this;

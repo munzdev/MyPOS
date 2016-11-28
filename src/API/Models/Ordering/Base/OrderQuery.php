@@ -28,14 +28,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery orderByUserid($order = Criteria::ASC) Order by the userid column
  * @method     ChildOrderQuery orderByOrdertime($order = Criteria::ASC) Order by the ordertime column
  * @method     ChildOrderQuery orderByPriority($order = Criteria::ASC) Order by the priority column
- * @method     ChildOrderQuery orderByFinished($order = Criteria::ASC) Order by the finished column
+ * @method     ChildOrderQuery orderByDistributionFinished($order = Criteria::ASC) Order by the distribution_finished column
+ * @method     ChildOrderQuery orderByInvoiceFinished($order = Criteria::ASC) Order by the invoice_finished column
  *
  * @method     ChildOrderQuery groupByOrderid() Group by the orderid column
  * @method     ChildOrderQuery groupByEventTableid() Group by the event_tableid column
  * @method     ChildOrderQuery groupByUserid() Group by the userid column
  * @method     ChildOrderQuery groupByOrdertime() Group by the ordertime column
  * @method     ChildOrderQuery groupByPriority() Group by the priority column
- * @method     ChildOrderQuery groupByFinished() Group by the finished column
+ * @method     ChildOrderQuery groupByDistributionFinished() Group by the distribution_finished column
+ * @method     ChildOrderQuery groupByInvoiceFinished() Group by the invoice_finished column
  *
  * @method     ChildOrderQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildOrderQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -95,7 +97,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder findOneByUserid(int $userid) Return the first ChildOrder filtered by the userid column
  * @method     ChildOrder findOneByOrdertime(string $ordertime) Return the first ChildOrder filtered by the ordertime column
  * @method     ChildOrder findOneByPriority(int $priority) Return the first ChildOrder filtered by the priority column
- * @method     ChildOrder findOneByFinished(string $finished) Return the first ChildOrder filtered by the finished column *
+ * @method     ChildOrder findOneByDistributionFinished(string $distribution_finished) Return the first ChildOrder filtered by the distribution_finished column
+ * @method     ChildOrder findOneByInvoiceFinished(string $invoice_finished) Return the first ChildOrder filtered by the invoice_finished column *
 
  * @method     ChildOrder requirePk($key, ConnectionInterface $con = null) Return the ChildOrder by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOne(ConnectionInterface $con = null) Return the first ChildOrder matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -105,7 +108,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder requireOneByUserid(int $userid) Return the first ChildOrder filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByOrdertime(string $ordertime) Return the first ChildOrder filtered by the ordertime column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildOrder requireOneByPriority(int $priority) Return the first ChildOrder filtered by the priority column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByFinished(string $finished) Return the first ChildOrder filtered by the finished column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrder requireOneByDistributionFinished(string $distribution_finished) Return the first ChildOrder filtered by the distribution_finished column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildOrder requireOneByInvoiceFinished(string $invoice_finished) Return the first ChildOrder filtered by the invoice_finished column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildOrder[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
  * @method     ChildOrder[]|ObjectCollection findByOrderid(int $orderid) Return ChildOrder objects filtered by the orderid column
@@ -113,7 +117,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrder[]|ObjectCollection findByUserid(int $userid) Return ChildOrder objects filtered by the userid column
  * @method     ChildOrder[]|ObjectCollection findByOrdertime(string $ordertime) Return ChildOrder objects filtered by the ordertime column
  * @method     ChildOrder[]|ObjectCollection findByPriority(int $priority) Return ChildOrder objects filtered by the priority column
- * @method     ChildOrder[]|ObjectCollection findByFinished(string $finished) Return ChildOrder objects filtered by the finished column
+ * @method     ChildOrder[]|ObjectCollection findByDistributionFinished(string $distribution_finished) Return ChildOrder objects filtered by the distribution_finished column
+ * @method     ChildOrder[]|ObjectCollection findByInvoiceFinished(string $invoice_finished) Return ChildOrder objects filtered by the invoice_finished column
  * @method     ChildOrder[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -163,10 +168,10 @@ abstract class OrderQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34, 56), $con);
+     * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param array[$orderid, $event_tableid, $userid] $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildOrder|array|mixed the result, formatted by the current formatter
@@ -191,7 +196,7 @@ abstract class OrderQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = OrderTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]))))) {
+        if ((null !== ($obj = OrderTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -212,12 +217,10 @@ abstract class OrderQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT `orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished` FROM `order` WHERE `orderid` = :p0 AND `event_tableid` = :p1 AND `userid` = :p2';
+        $sql = 'SELECT `orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished` FROM `order` WHERE `orderid` = :p0';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
-            $stmt->bindValue(':p2', $key[2], PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -228,7 +231,7 @@ abstract class OrderQuery extends ModelCriteria
             /** @var ChildOrder $obj */
             $obj = new ChildOrder();
             $obj->hydrate($row);
-            OrderTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]));
+            OrderTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -257,7 +260,7 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -287,11 +290,8 @@ abstract class OrderQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(OrderTableMap::COL_ORDERID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(OrderTableMap::COL_EVENT_TABLEID, $key[1], Criteria::EQUAL);
-        $this->addUsingAlias(OrderTableMap::COL_USERID, $key[2], Criteria::EQUAL);
 
-        return $this;
+        return $this->addUsingAlias(OrderTableMap::COL_ORDERID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -303,19 +303,8 @@ abstract class OrderQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-        if (empty($keys)) {
-            return $this->add(null, '1<>1', Criteria::CUSTOM);
-        }
-        foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(OrderTableMap::COL_ORDERID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(OrderTableMap::COL_EVENT_TABLEID, $key[1], Criteria::EQUAL);
-            $cton0->addAnd($cton1);
-            $cton2 = $this->getNewCriterion(OrderTableMap::COL_USERID, $key[2], Criteria::EQUAL);
-            $cton0->addAnd($cton2);
-            $this->addOr($cton0);
-        }
 
-        return $this;
+        return $this->addUsingAlias(OrderTableMap::COL_ORDERID, $keys, Criteria::IN);
     }
 
     /**
@@ -530,16 +519,16 @@ abstract class OrderQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the finished column
+     * Filter the query on the distribution_finished column
      *
      * Example usage:
      * <code>
-     * $query->filterByFinished('2011-03-14'); // WHERE finished = '2011-03-14'
-     * $query->filterByFinished('now'); // WHERE finished = '2011-03-14'
-     * $query->filterByFinished(array('max' => 'yesterday')); // WHERE finished > '2011-03-13'
+     * $query->filterByDistributionFinished('2011-03-14'); // WHERE distribution_finished = '2011-03-14'
+     * $query->filterByDistributionFinished('now'); // WHERE distribution_finished = '2011-03-14'
+     * $query->filterByDistributionFinished(array('max' => 'yesterday')); // WHERE distribution_finished > '2011-03-13'
      * </code>
      *
-     * @param     mixed $finished The value to use as filter.
+     * @param     mixed $distributionFinished The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -549,16 +538,16 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
-    public function filterByFinished($finished = null, $comparison = null)
+    public function filterByDistributionFinished($distributionFinished = null, $comparison = null)
     {
-        if (is_array($finished)) {
+        if (is_array($distributionFinished)) {
             $useMinMax = false;
-            if (isset($finished['min'])) {
-                $this->addUsingAlias(OrderTableMap::COL_FINISHED, $finished['min'], Criteria::GREATER_EQUAL);
+            if (isset($distributionFinished['min'])) {
+                $this->addUsingAlias(OrderTableMap::COL_DISTRIBUTION_FINISHED, $distributionFinished['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($finished['max'])) {
-                $this->addUsingAlias(OrderTableMap::COL_FINISHED, $finished['max'], Criteria::LESS_EQUAL);
+            if (isset($distributionFinished['max'])) {
+                $this->addUsingAlias(OrderTableMap::COL_DISTRIBUTION_FINISHED, $distributionFinished['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -569,7 +558,50 @@ abstract class OrderQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(OrderTableMap::COL_FINISHED, $finished, $comparison);
+        return $this->addUsingAlias(OrderTableMap::COL_DISTRIBUTION_FINISHED, $distributionFinished, $comparison);
+    }
+
+    /**
+     * Filter the query on the invoice_finished column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByInvoiceFinished('2011-03-14'); // WHERE invoice_finished = '2011-03-14'
+     * $query->filterByInvoiceFinished('now'); // WHERE invoice_finished = '2011-03-14'
+     * $query->filterByInvoiceFinished(array('max' => 'yesterday')); // WHERE invoice_finished > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $invoiceFinished The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildOrderQuery The current query, for fluid interface
+     */
+    public function filterByInvoiceFinished($invoiceFinished = null, $comparison = null)
+    {
+        if (is_array($invoiceFinished)) {
+            $useMinMax = false;
+            if (isset($invoiceFinished['min'])) {
+                $this->addUsingAlias(OrderTableMap::COL_INVOICE_FINISHED, $invoiceFinished['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($invoiceFinished['max'])) {
+                $this->addUsingAlias(OrderTableMap::COL_INVOICE_FINISHED, $invoiceFinished['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(OrderTableMap::COL_INVOICE_FINISHED, $invoiceFinished, $comparison);
     }
 
     /**
@@ -593,7 +625,7 @@ abstract class OrderQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(OrderTableMap::COL_EVENT_TABLEID, $eventTable->toKeyValue('EventTableid', 'EventTableid'), $comparison);
+                ->addUsingAlias(OrderTableMap::COL_EVENT_TABLEID, $eventTable->toKeyValue('PrimaryKey', 'EventTableid'), $comparison);
         } else {
             throw new PropelException('filterByEventTable() only accepts arguments of type \API\Models\Event\EventTable or Collection');
         }
@@ -882,10 +914,7 @@ abstract class OrderQuery extends ModelCriteria
     public function prune($order = null)
     {
         if ($order) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(OrderTableMap::COL_ORDERID), $order->getOrderid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(OrderTableMap::COL_EVENT_TABLEID), $order->getEventTableid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond2', $this->getAliasedColName(OrderTableMap::COL_USERID), $order->getUserid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2'), Criteria::LOGICAL_OR);
+            $this->addUsingAlias(OrderTableMap::COL_ORDERID, $order->getOrderid(), Criteria::NOT_EQUAL);
         }
 
         return $this;

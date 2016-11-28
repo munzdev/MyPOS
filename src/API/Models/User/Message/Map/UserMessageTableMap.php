@@ -153,7 +153,7 @@ class UserMessageTableMap extends TableMap
         // columns
         $this->addPrimaryKey('user_messageid', 'UserMessageid', 'INTEGER', true, null, null);
         $this->addForeignKey('from_event_userid', 'FromEventUserid', 'INTEGER', 'event_user', 'event_userid', false, null, null);
-        $this->addForeignPrimaryKey('to_event_userid', 'ToEventUserid', 'INTEGER' , 'event_user', 'event_userid', true, null, null);
+        $this->addForeignKey('to_event_userid', 'ToEventUserid', 'INTEGER', 'event_user', 'event_userid', true, null, null);
         $this->addColumn('message', 'Message', 'LONGVARCHAR', true, null, null);
         $this->addColumn('date', 'Date', 'TIMESTAMP', true, null, null);
         $this->addColumn('readed', 'Readed', 'BOOLEAN', true, 1, null);
@@ -170,68 +170,15 @@ class UserMessageTableMap extends TableMap
     0 => ':from_event_userid',
     1 => ':event_userid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('EventUserRelatedByToEventUserid', '\\API\\Models\\Event\\EventUser', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':to_event_userid',
     1 => ':event_userid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
     } // buildRelations()
-
-    /**
-     * Adds an object to the instance pool.
-     *
-     * Propel keeps cached copies of objects in an instance pool when they are retrieved
-     * from the database. In some cases you may need to explicitly add objects
-     * to the cache in order to ensure that the same objects are always returned by find*()
-     * and findPk*() calls.
-     *
-     * @param \API\Models\User\Message\UserMessage $obj A \API\Models\User\Message\UserMessage object.
-     * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
-     */
-    public static function addInstanceToPool($obj, $key = null)
-    {
-        if (Propel::isInstancePoolingEnabled()) {
-            if (null === $key) {
-                $key = serialize([(null === $obj->getUserMessageid() || is_scalar($obj->getUserMessageid()) || is_callable([$obj->getUserMessageid(), '__toString']) ? (string) $obj->getUserMessageid() : $obj->getUserMessageid()), (null === $obj->getToEventUserid() || is_scalar($obj->getToEventUserid()) || is_callable([$obj->getToEventUserid(), '__toString']) ? (string) $obj->getToEventUserid() : $obj->getToEventUserid())]);
-            } // if key === null
-            self::$instances[$key] = $obj;
-        }
-    }
-
-    /**
-     * Removes an object from the instance pool.
-     *
-     * Propel keeps cached copies of objects in an instance pool when they are retrieved
-     * from the database.  In some cases -- especially when you override doDelete
-     * methods in your stub classes -- you may need to explicitly remove objects
-     * from the cache in order to prevent returning objects that no longer exist.
-     *
-     * @param mixed $value A \API\Models\User\Message\UserMessage object or a primary key value.
-     */
-    public static function removeInstanceFromPool($value)
-    {
-        if (Propel::isInstancePoolingEnabled() && null !== $value) {
-            if (is_object($value) && $value instanceof \API\Models\User\Message\UserMessage) {
-                $key = serialize([(null === $value->getUserMessageid() || is_scalar($value->getUserMessageid()) || is_callable([$value->getUserMessageid(), '__toString']) ? (string) $value->getUserMessageid() : $value->getUserMessageid()), (null === $value->getToEventUserid() || is_scalar($value->getToEventUserid()) || is_callable([$value->getToEventUserid(), '__toString']) ? (string) $value->getToEventUserid() : $value->getToEventUserid())]);
-
-            } elseif (is_array($value) && count($value) === 2) {
-                // assume we've been passed a primary key";
-                $key = serialize([(null === $value[0] || is_scalar($value[0]) || is_callable([$value[0], '__toString']) ? (string) $value[0] : $value[0]), (null === $value[1] || is_scalar($value[1]) || is_callable([$value[1], '__toString']) ? (string) $value[1] : $value[1])]);
-            } elseif ($value instanceof Criteria) {
-                self::$instances = [];
-
-                return;
-            } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \API\Models\User\Message\UserMessage object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
-                throw $e;
-            }
-
-            unset(self::$instances[$key]);
-        }
-    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -249,11 +196,11 @@ class UserMessageTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('ToEventUserid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('ToEventUserid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('ToEventUserid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('ToEventUserid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('ToEventUserid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('ToEventUserid', TableMap::TYPE_PHPNAME, $indexType)])]);
+        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -270,20 +217,11 @@ class UserMessageTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-            $pks = [];
-
-        $pks[] = (int) $row[
+        return (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
                 : self::translateFieldName('UserMessageid', TableMap::TYPE_PHPNAME, $indexType)
         ];
-        $pks[] = (int) $row[
-            $indexType == TableMap::TYPE_NUM
-                ? 2 + $offset
-                : self::translateFieldName('ToEventUserid', TableMap::TYPE_PHPNAME, $indexType)
-        ];
-
-        return $pks;
     }
 
     /**
@@ -447,17 +385,7 @@ class UserMessageTableMap extends TableMap
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(UserMessageTableMap::DATABASE_NAME);
-            // primary key is composite; we therefore, expect
-            // the primary key passed to be an array of pkey values
-            if (count($values) == count($values, COUNT_RECURSIVE)) {
-                // array is not multi-dimensional
-                $values = array($values);
-            }
-            foreach ($values as $value) {
-                $criterion = $criteria->getNewCriterion(UserMessageTableMap::COL_USER_MESSAGEID, $value[0]);
-                $criterion->addAnd($criteria->getNewCriterion(UserMessageTableMap::COL_TO_EVENT_USERID, $value[1]));
-                $criteria->addOr($criterion);
-            }
+            $criteria->add(UserMessageTableMap::COL_USER_MESSAGEID, (array) $values, Criteria::IN);
         }
 
         $query = UserMessageQuery::create()->mergeWith($criteria);

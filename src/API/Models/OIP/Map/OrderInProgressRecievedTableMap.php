@@ -147,9 +147,9 @@ class OrderInProgressRecievedTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('order_in_progress_recievedid', 'OrderInProgressRecievedid', 'INTEGER', true, null, null);
-        $this->addForeignPrimaryKey('order_detailid', 'OrderDetailid', 'INTEGER' , 'order_detail', 'order_detailid', true, null, null);
-        $this->addForeignPrimaryKey('order_in_progressid', 'OrderInProgressid', 'INTEGER' , 'order_in_progress', 'order_in_progressid', true, null, null);
-        $this->addForeignPrimaryKey('distribution_giving_outid', 'DistributionGivingOutid', 'INTEGER' , 'distribution_giving_out', 'distribution_giving_outid', true, null, null);
+        $this->addForeignKey('order_detailid', 'OrderDetailid', 'INTEGER', 'order_detail', 'order_detailid', true, null, null);
+        $this->addForeignKey('order_in_progressid', 'OrderInProgressid', 'INTEGER', 'order_in_progress', 'order_in_progressid', true, null, null);
+        $this->addForeignKey('distribution_giving_outid', 'DistributionGivingOutid', 'INTEGER', 'distribution_giving_out', 'distribution_giving_outid', true, null, null);
         $this->addColumn('amount', 'Amount', 'TINYINT', true, null, null);
     } // initialize()
 
@@ -164,75 +164,22 @@ class OrderInProgressRecievedTableMap extends TableMap
     0 => ':order_detailid',
     1 => ':order_detailid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('OrderInProgress', '\\API\\Models\\OIP\\OrderInProgress', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':order_in_progressid',
     1 => ':order_in_progressid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('DistributionGivingOut', '\\API\\Models\\OIP\\DistributionGivingOut', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':distribution_giving_outid',
     1 => ':distribution_giving_outid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
     } // buildRelations()
-
-    /**
-     * Adds an object to the instance pool.
-     *
-     * Propel keeps cached copies of objects in an instance pool when they are retrieved
-     * from the database. In some cases you may need to explicitly add objects
-     * to the cache in order to ensure that the same objects are always returned by find*()
-     * and findPk*() calls.
-     *
-     * @param \API\Models\OIP\OrderInProgressRecieved $obj A \API\Models\OIP\OrderInProgressRecieved object.
-     * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
-     */
-    public static function addInstanceToPool($obj, $key = null)
-    {
-        if (Propel::isInstancePoolingEnabled()) {
-            if (null === $key) {
-                $key = serialize([(null === $obj->getOrderInProgressRecievedid() || is_scalar($obj->getOrderInProgressRecievedid()) || is_callable([$obj->getOrderInProgressRecievedid(), '__toString']) ? (string) $obj->getOrderInProgressRecievedid() : $obj->getOrderInProgressRecievedid()), (null === $obj->getOrderDetailid() || is_scalar($obj->getOrderDetailid()) || is_callable([$obj->getOrderDetailid(), '__toString']) ? (string) $obj->getOrderDetailid() : $obj->getOrderDetailid()), (null === $obj->getOrderInProgressid() || is_scalar($obj->getOrderInProgressid()) || is_callable([$obj->getOrderInProgressid(), '__toString']) ? (string) $obj->getOrderInProgressid() : $obj->getOrderInProgressid()), (null === $obj->getDistributionGivingOutid() || is_scalar($obj->getDistributionGivingOutid()) || is_callable([$obj->getDistributionGivingOutid(), '__toString']) ? (string) $obj->getDistributionGivingOutid() : $obj->getDistributionGivingOutid())]);
-            } // if key === null
-            self::$instances[$key] = $obj;
-        }
-    }
-
-    /**
-     * Removes an object from the instance pool.
-     *
-     * Propel keeps cached copies of objects in an instance pool when they are retrieved
-     * from the database.  In some cases -- especially when you override doDelete
-     * methods in your stub classes -- you may need to explicitly remove objects
-     * from the cache in order to prevent returning objects that no longer exist.
-     *
-     * @param mixed $value A \API\Models\OIP\OrderInProgressRecieved object or a primary key value.
-     */
-    public static function removeInstanceFromPool($value)
-    {
-        if (Propel::isInstancePoolingEnabled() && null !== $value) {
-            if (is_object($value) && $value instanceof \API\Models\OIP\OrderInProgressRecieved) {
-                $key = serialize([(null === $value->getOrderInProgressRecievedid() || is_scalar($value->getOrderInProgressRecievedid()) || is_callable([$value->getOrderInProgressRecievedid(), '__toString']) ? (string) $value->getOrderInProgressRecievedid() : $value->getOrderInProgressRecievedid()), (null === $value->getOrderDetailid() || is_scalar($value->getOrderDetailid()) || is_callable([$value->getOrderDetailid(), '__toString']) ? (string) $value->getOrderDetailid() : $value->getOrderDetailid()), (null === $value->getOrderInProgressid() || is_scalar($value->getOrderInProgressid()) || is_callable([$value->getOrderInProgressid(), '__toString']) ? (string) $value->getOrderInProgressid() : $value->getOrderInProgressid()), (null === $value->getDistributionGivingOutid() || is_scalar($value->getDistributionGivingOutid()) || is_callable([$value->getDistributionGivingOutid(), '__toString']) ? (string) $value->getDistributionGivingOutid() : $value->getDistributionGivingOutid())]);
-
-            } elseif (is_array($value) && count($value) === 4) {
-                // assume we've been passed a primary key";
-                $key = serialize([(null === $value[0] || is_scalar($value[0]) || is_callable([$value[0], '__toString']) ? (string) $value[0] : $value[0]), (null === $value[1] || is_scalar($value[1]) || is_callable([$value[1], '__toString']) ? (string) $value[1] : $value[1]), (null === $value[2] || is_scalar($value[2]) || is_callable([$value[2], '__toString']) ? (string) $value[2] : $value[2]), (null === $value[3] || is_scalar($value[3]) || is_callable([$value[3], '__toString']) ? (string) $value[3] : $value[3])]);
-            } elseif ($value instanceof Criteria) {
-                self::$instances = [];
-
-                return;
-            } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \API\Models\OIP\OrderInProgressRecieved object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
-                throw $e;
-            }
-
-            unset(self::$instances[$key]);
-        }
-    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -250,11 +197,11 @@ class OrderInProgressRecievedTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('OrderInProgressid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 3 + $offset : static::translateFieldName('DistributionGivingOutid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('OrderInProgressid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('OrderInProgressid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('OrderInProgressid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('OrderInProgressid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('OrderInProgressid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 3 + $offset : static::translateFieldName('DistributionGivingOutid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 3 + $offset : static::translateFieldName('DistributionGivingOutid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 3 + $offset : static::translateFieldName('DistributionGivingOutid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 3 + $offset : static::translateFieldName('DistributionGivingOutid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 3 + $offset : static::translateFieldName('DistributionGivingOutid', TableMap::TYPE_PHPNAME, $indexType)])]);
+        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -271,30 +218,11 @@ class OrderInProgressRecievedTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-            $pks = [];
-
-        $pks[] = (int) $row[
+        return (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
                 : self::translateFieldName('OrderInProgressRecievedid', TableMap::TYPE_PHPNAME, $indexType)
         ];
-        $pks[] = (int) $row[
-            $indexType == TableMap::TYPE_NUM
-                ? 1 + $offset
-                : self::translateFieldName('OrderDetailid', TableMap::TYPE_PHPNAME, $indexType)
-        ];
-        $pks[] = (int) $row[
-            $indexType == TableMap::TYPE_NUM
-                ? 2 + $offset
-                : self::translateFieldName('OrderInProgressid', TableMap::TYPE_PHPNAME, $indexType)
-        ];
-        $pks[] = (int) $row[
-            $indexType == TableMap::TYPE_NUM
-                ? 3 + $offset
-                : self::translateFieldName('DistributionGivingOutid', TableMap::TYPE_PHPNAME, $indexType)
-        ];
-
-        return $pks;
     }
 
     /**
@@ -456,19 +384,7 @@ class OrderInProgressRecievedTableMap extends TableMap
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(OrderInProgressRecievedTableMap::DATABASE_NAME);
-            // primary key is composite; we therefore, expect
-            // the primary key passed to be an array of pkey values
-            if (count($values) == count($values, COUNT_RECURSIVE)) {
-                // array is not multi-dimensional
-                $values = array($values);
-            }
-            foreach ($values as $value) {
-                $criterion = $criteria->getNewCriterion(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID, $value[0]);
-                $criterion->addAnd($criteria->getNewCriterion(OrderInProgressRecievedTableMap::COL_ORDER_DETAILID, $value[1]));
-                $criterion->addAnd($criteria->getNewCriterion(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESSID, $value[2]));
-                $criterion->addAnd($criteria->getNewCriterion(OrderInProgressRecievedTableMap::COL_DISTRIBUTION_GIVING_OUTID, $value[3]));
-                $criteria->addOr($criterion);
-            }
+            $criteria->add(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID, (array) $values, Criteria::IN);
         }
 
         $query = OrderInProgressRecievedQuery::create()->mergeWith($criteria);

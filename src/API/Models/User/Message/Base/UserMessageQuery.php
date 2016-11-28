@@ -141,10 +141,10 @@ abstract class UserMessageQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34), $con);
+     * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param array[$user_messageid, $to_event_userid] $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildUserMessage|array|mixed the result, formatted by the current formatter
@@ -169,7 +169,7 @@ abstract class UserMessageQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = UserMessageTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]))))) {
+        if ((null !== ($obj = UserMessageTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -190,11 +190,10 @@ abstract class UserMessageQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT user_messageid, from_event_userid, to_event_userid, message, date, readed FROM user_message WHERE user_messageid = :p0 AND to_event_userid = :p1';
+        $sql = 'SELECT user_messageid, from_event_userid, to_event_userid, message, date, readed FROM user_message WHERE user_messageid = :p0';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -205,7 +204,7 @@ abstract class UserMessageQuery extends ModelCriteria
             /** @var ChildUserMessage $obj */
             $obj = new ChildUserMessage();
             $obj->hydrate($row);
-            UserMessageTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]));
+            UserMessageTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -234,7 +233,7 @@ abstract class UserMessageQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -264,10 +263,8 @@ abstract class UserMessageQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(UserMessageTableMap::COL_USER_MESSAGEID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(UserMessageTableMap::COL_TO_EVENT_USERID, $key[1], Criteria::EQUAL);
 
-        return $this;
+        return $this->addUsingAlias(UserMessageTableMap::COL_USER_MESSAGEID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -279,17 +276,8 @@ abstract class UserMessageQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-        if (empty($keys)) {
-            return $this->add(null, '1<>1', Criteria::CUSTOM);
-        }
-        foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(UserMessageTableMap::COL_USER_MESSAGEID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(UserMessageTableMap::COL_TO_EVENT_USERID, $key[1], Criteria::EQUAL);
-            $cton0->addAnd($cton1);
-            $this->addOr($cton0);
-        }
 
-        return $this;
+        return $this->addUsingAlias(UserMessageTableMap::COL_USER_MESSAGEID, $keys, Criteria::IN);
     }
 
     /**
@@ -535,7 +523,7 @@ abstract class UserMessageQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(UserMessageTableMap::COL_FROM_EVENT_USERID, $eventUser->toKeyValue('EventUserid', 'EventUserid'), $comparison);
+                ->addUsingAlias(UserMessageTableMap::COL_FROM_EVENT_USERID, $eventUser->toKeyValue('PrimaryKey', 'EventUserid'), $comparison);
         } else {
             throw new PropelException('filterByEventUserRelatedByFromEventUserid() only accepts arguments of type \API\Models\Event\EventUser or Collection');
         }
@@ -612,7 +600,7 @@ abstract class UserMessageQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(UserMessageTableMap::COL_TO_EVENT_USERID, $eventUser->toKeyValue('EventUserid', 'EventUserid'), $comparison);
+                ->addUsingAlias(UserMessageTableMap::COL_TO_EVENT_USERID, $eventUser->toKeyValue('PrimaryKey', 'EventUserid'), $comparison);
         } else {
             throw new PropelException('filterByEventUserRelatedByToEventUserid() only accepts arguments of type \API\Models\Event\EventUser or Collection');
         }
@@ -678,9 +666,7 @@ abstract class UserMessageQuery extends ModelCriteria
     public function prune($userMessage = null)
     {
         if ($userMessage) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(UserMessageTableMap::COL_USER_MESSAGEID), $userMessage->getUserMessageid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(UserMessageTableMap::COL_TO_EVENT_USERID), $userMessage->getToEventUserid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
+            $this->addUsingAlias(UserMessageTableMap::COL_USER_MESSAGEID, $userMessage->getUserMessageid(), Criteria::NOT_EQUAL);
         }
 
         return $this;

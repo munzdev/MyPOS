@@ -1189,7 +1189,6 @@ abstract class EventTable implements ActiveRecordInterface
     {
         $criteria = ChildEventTableQuery::create();
         $criteria->add(EventTableTableMap::COL_EVENT_TABLEID, $this->event_tableid);
-        $criteria->add(EventTableTableMap::COL_EVENTID, $this->eventid);
 
         return $criteria;
     }
@@ -1202,18 +1201,10 @@ abstract class EventTable implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getEventTableid() &&
-            null !== $this->getEventid();
+        $validPk = null !== $this->getEventTableid();
 
-        $validPrimaryKeyFKs = 1;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_tables_events1 to table event
-        if ($this->aEvent && $hash = spl_object_hash($this->aEvent)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1225,29 +1216,23 @@ abstract class EventTable implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getEventTableid();
-        $pks[1] = $this->getEventid();
-
-        return $pks;
+        return $this->getEventTableid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (event_tableid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setEventTableid($keys[0]);
-        $this->setEventid($keys[1]);
+        $this->setEventTableid($key);
     }
 
     /**
@@ -1256,7 +1241,7 @@ abstract class EventTable implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getEventTableid()) && (null === $this->getEventid());
+        return null === $this->getEventTableid();
     }
 
     /**
@@ -1766,10 +1751,7 @@ abstract class EventTable implements ActiveRecordInterface
         $ordersToDelete = $this->getOrders(new Criteria(), $con)->diff($orders);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->ordersScheduledForDeletion = clone $ordersToDelete;
+        $this->ordersScheduledForDeletion = $ordersToDelete;
 
         foreach ($ordersToDelete as $orderRemoved) {
             $orderRemoved->setEventTable(null);

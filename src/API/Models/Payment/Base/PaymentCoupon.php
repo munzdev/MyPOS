@@ -1164,9 +1164,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
     public function getCoupon(ConnectionInterface $con = null)
     {
         if ($this->aCoupon === null && ($this->couponid !== null)) {
-            $this->aCoupon = ChildCouponQuery::create()
-                ->filterByPaymentCoupon($this) // here
-                ->findOne($con);
+            $this->aCoupon = ChildCouponQuery::create()->findPk($this->couponid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1217,9 +1215,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
     public function getPayment(ConnectionInterface $con = null)
     {
         if ($this->aPayment === null && ($this->paymentid !== null)) {
-            $this->aPayment = ChildPaymentQuery::create()
-                ->filterByPaymentCoupon($this) // here
-                ->findOne($con);
+            $this->aPayment = ChildPaymentQuery::create()->findPk($this->paymentid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

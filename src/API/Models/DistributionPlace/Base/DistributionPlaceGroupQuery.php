@@ -136,10 +136,10 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34, 56), $con);
+     * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param array[$distribution_place_groupid, $distribution_placeid, $menu_groupid] $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildDistributionPlaceGroup|array|mixed the result, formatted by the current formatter
@@ -164,7 +164,7 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = DistributionPlaceGroupTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]))))) {
+        if ((null !== ($obj = DistributionPlaceGroupTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -185,12 +185,10 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT distribution_place_groupid, distribution_placeid, menu_groupid FROM distribution_place_group WHERE distribution_place_groupid = :p0 AND distribution_placeid = :p1 AND menu_groupid = :p2';
+        $sql = 'SELECT distribution_place_groupid, distribution_placeid, menu_groupid FROM distribution_place_group WHERE distribution_place_groupid = :p0';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
-            $stmt->bindValue(':p2', $key[2], PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -201,7 +199,7 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
             /** @var ChildDistributionPlaceGroup $obj */
             $obj = new ChildDistributionPlaceGroup();
             $obj->hydrate($row);
-            DistributionPlaceGroupTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]));
+            DistributionPlaceGroupTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -230,7 +228,7 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -260,11 +258,8 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID, $key[1], Criteria::EQUAL);
-        $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_MENU_GROUPID, $key[2], Criteria::EQUAL);
 
-        return $this;
+        return $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -276,19 +271,8 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-        if (empty($keys)) {
-            return $this->add(null, '1<>1', Criteria::CUSTOM);
-        }
-        foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID, $key[1], Criteria::EQUAL);
-            $cton0->addAnd($cton1);
-            $cton2 = $this->getNewCriterion(DistributionPlaceGroupTableMap::COL_MENU_GROUPID, $key[2], Criteria::EQUAL);
-            $cton0->addAnd($cton2);
-            $this->addOr($cton0);
-        }
 
-        return $this;
+        return $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $keys, Criteria::IN);
     }
 
     /**
@@ -439,7 +423,7 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID, $distributionPlace->toKeyValue('DistributionPlaceid', 'DistributionPlaceid'), $comparison);
+                ->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID, $distributionPlace->toKeyValue('PrimaryKey', 'DistributionPlaceid'), $comparison);
         } else {
             throw new PropelException('filterByDistributionPlace() only accepts arguments of type \API\Models\DistributionPlace\DistributionPlace or Collection');
         }
@@ -516,7 +500,7 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(DistributionPlaceGroupTableMap::COL_MENU_GROUPID, $menuGroup->toKeyValue('MenuGroupid', 'MenuGroupid'), $comparison);
+                ->addUsingAlias(DistributionPlaceGroupTableMap::COL_MENU_GROUPID, $menuGroup->toKeyValue('PrimaryKey', 'MenuGroupid'), $comparison);
         } else {
             throw new PropelException('filterByMenuGroup() only accepts arguments of type \API\Models\Menu\MenuGroup or Collection');
         }
@@ -672,10 +656,7 @@ abstract class DistributionPlaceGroupQuery extends ModelCriteria
     public function prune($distributionPlaceGroup = null)
     {
         if ($distributionPlaceGroup) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID), $distributionPlaceGroup->getDistributionPlaceGroupid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID), $distributionPlaceGroup->getDistributionPlaceid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond2', $this->getAliasedColName(DistributionPlaceGroupTableMap::COL_MENU_GROUPID), $distributionPlaceGroup->getMenuGroupid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2'), Criteria::LOGICAL_OR);
+            $this->addUsingAlias(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $distributionPlaceGroup->getDistributionPlaceGroupid(), Criteria::NOT_EQUAL);
         }
 
         return $this;

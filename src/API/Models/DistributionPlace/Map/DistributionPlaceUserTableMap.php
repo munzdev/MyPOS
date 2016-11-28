@@ -152,21 +152,21 @@ class DistributionPlaceUserTableMap extends TableMap
     0 => ':distribution_placeid',
     1 => ':distribution_placeid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':userid',
     1 => ':userid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('EventPrinter', '\\API\\Models\\Event\\EventPrinter', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':event_printerid',
     1 => ':event_printerid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
     } // buildRelations()
 
     /**

@@ -1167,7 +1167,6 @@ abstract class MenuType implements ActiveRecordInterface
     {
         $criteria = ChildMenuTypeQuery::create();
         $criteria->add(MenuTypeTableMap::COL_MENU_TYPEID, $this->menu_typeid);
-        $criteria->add(MenuTypeTableMap::COL_EVENTID, $this->eventid);
 
         return $criteria;
     }
@@ -1180,18 +1179,10 @@ abstract class MenuType implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getMenuTypeid() &&
-            null !== $this->getEventid();
+        $validPk = null !== $this->getMenuTypeid();
 
-        $validPrimaryKeyFKs = 1;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_menu_types_events1 to table event
-        if ($this->aEvent && $hash = spl_object_hash($this->aEvent)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1203,29 +1194,23 @@ abstract class MenuType implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getMenuTypeid();
-        $pks[1] = $this->getEventid();
-
-        return $pks;
+        return $this->getMenuTypeid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (menu_typeid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setMenuTypeid($keys[0]);
-        $this->setEventid($keys[1]);
+        $this->setMenuTypeid($key);
     }
 
     /**
@@ -1234,7 +1219,7 @@ abstract class MenuType implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getMenuTypeid()) && (null === $this->getEventid());
+        return null === $this->getMenuTypeid();
     }
 
     /**
@@ -1483,10 +1468,7 @@ abstract class MenuType implements ActiveRecordInterface
         $menuGroupsToDelete = $this->getMenuGroups(new Criteria(), $con)->diff($menuGroups);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->menuGroupsScheduledForDeletion = clone $menuGroupsToDelete;
+        $this->menuGroupsScheduledForDeletion = $menuGroupsToDelete;
 
         foreach ($menuGroupsToDelete as $menuGroupRemoved) {
             $menuGroupRemoved->setMenuType(null);

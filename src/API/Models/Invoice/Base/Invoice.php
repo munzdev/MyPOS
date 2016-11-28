@@ -110,6 +110,13 @@ abstract class Invoice implements ActiveRecordInterface
     protected $canceled;
 
     /**
+     * The value for the payment_finished field.
+     *
+     * @var        DateTime
+     */
+    protected $payment_finished;
+
+    /**
      * @var        ChildCustomer
      */
     protected $aCustomer;
@@ -447,6 +454,26 @@ abstract class Invoice implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [payment_finished] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getPaymentFinished($format = NULL)
+    {
+        if ($format === null) {
+            return $this->payment_finished;
+        } else {
+            return $this->payment_finished instanceof \DateTimeInterface ? $this->payment_finished->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [invoiceid] column.
      *
      * @param int $v new value
@@ -555,6 +582,26 @@ abstract class Invoice implements ActiveRecordInterface
     } // setCanceled()
 
     /**
+     * Sets the value of [payment_finished] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\Invoice\Invoice The current object (for fluent API support)
+     */
+    public function setPaymentFinished($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->payment_finished !== null || $dt !== null) {
+            if ($this->payment_finished === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->payment_finished->format("Y-m-d H:i:s.u")) {
+                $this->payment_finished = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[InvoiceTableMap::COL_PAYMENT_FINISHED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setPaymentFinished()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -610,6 +657,12 @@ abstract class Invoice implements ActiveRecordInterface
                 $col = null;
             }
             $this->canceled = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : InvoiceTableMap::translateFieldName('PaymentFinished', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->payment_finished = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -618,7 +671,7 @@ abstract class Invoice implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 5; // 5 = InvoiceTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = InvoiceTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Invoice\\Invoice'), 0, $e);
@@ -895,6 +948,9 @@ abstract class Invoice implements ActiveRecordInterface
         if ($this->isColumnModified(InvoiceTableMap::COL_CANCELED)) {
             $modifiedColumns[':p' . $index++]  = 'canceled';
         }
+        if ($this->isColumnModified(InvoiceTableMap::COL_PAYMENT_FINISHED)) {
+            $modifiedColumns[':p' . $index++]  = 'payment_finished';
+        }
 
         $sql = sprintf(
             'INSERT INTO invoice (%s) VALUES (%s)',
@@ -920,6 +976,9 @@ abstract class Invoice implements ActiveRecordInterface
                         break;
                     case 'canceled':
                         $stmt->bindValue($identifier, $this->canceled ? $this->canceled->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'payment_finished':
+                        $stmt->bindValue($identifier, $this->payment_finished ? $this->payment_finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -998,6 +1057,9 @@ abstract class Invoice implements ActiveRecordInterface
             case 4:
                 return $this->getCanceled();
                 break;
+            case 5:
+                return $this->getPaymentFinished();
+                break;
             default:
                 return null;
                 break;
@@ -1033,6 +1095,7 @@ abstract class Invoice implements ActiveRecordInterface
             $keys[2] => $this->getCustomerid(),
             $keys[3] => $this->getDate(),
             $keys[4] => $this->getCanceled(),
+            $keys[5] => $this->getPaymentFinished(),
         );
         if ($result[$keys[3]] instanceof \DateTime) {
             $result[$keys[3]] = $result[$keys[3]]->format('c');
@@ -1040,6 +1103,10 @@ abstract class Invoice implements ActiveRecordInterface
 
         if ($result[$keys[4]] instanceof \DateTime) {
             $result[$keys[4]] = $result[$keys[4]]->format('c');
+        }
+
+        if ($result[$keys[5]] instanceof \DateTime) {
+            $result[$keys[5]] = $result[$keys[5]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1157,6 +1224,9 @@ abstract class Invoice implements ActiveRecordInterface
             case 4:
                 $this->setCanceled($value);
                 break;
+            case 5:
+                $this->setPaymentFinished($value);
+                break;
         } // switch()
 
         return $this;
@@ -1197,6 +1267,9 @@ abstract class Invoice implements ActiveRecordInterface
         }
         if (array_key_exists($keys[4], $arr)) {
             $this->setCanceled($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setPaymentFinished($arr[$keys[5]]);
         }
     }
 
@@ -1254,6 +1327,9 @@ abstract class Invoice implements ActiveRecordInterface
         if ($this->isColumnModified(InvoiceTableMap::COL_CANCELED)) {
             $criteria->add(InvoiceTableMap::COL_CANCELED, $this->canceled);
         }
+        if ($this->isColumnModified(InvoiceTableMap::COL_PAYMENT_FINISHED)) {
+            $criteria->add(InvoiceTableMap::COL_PAYMENT_FINISHED, $this->payment_finished);
+        }
 
         return $criteria;
     }
@@ -1272,7 +1348,6 @@ abstract class Invoice implements ActiveRecordInterface
     {
         $criteria = ChildInvoiceQuery::create();
         $criteria->add(InvoiceTableMap::COL_INVOICEID, $this->invoiceid);
-        $criteria->add(InvoiceTableMap::COL_CASHIER_USERID, $this->cashier_userid);
 
         return $criteria;
     }
@@ -1285,18 +1360,10 @@ abstract class Invoice implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getInvoiceid() &&
-            null !== $this->getCashierUserid();
+        $validPk = null !== $this->getInvoiceid();
 
-        $validPrimaryKeyFKs = 1;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_invoices_users1 to table user
-        if ($this->aUser && $hash = spl_object_hash($this->aUser)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1308,29 +1375,23 @@ abstract class Invoice implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getInvoiceid();
-        $pks[1] = $this->getCashierUserid();
-
-        return $pks;
+        return $this->getInvoiceid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (invoiceid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setInvoiceid($keys[0]);
-        $this->setCashierUserid($keys[1]);
+        $this->setInvoiceid($key);
     }
 
     /**
@@ -1339,7 +1400,7 @@ abstract class Invoice implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getInvoiceid()) && (null === $this->getCashierUserid());
+        return null === $this->getInvoiceid();
     }
 
     /**
@@ -1359,6 +1420,7 @@ abstract class Invoice implements ActiveRecordInterface
         $copyObj->setCustomerid($this->getCustomerid());
         $copyObj->setDate($this->getDate());
         $copyObj->setCanceled($this->getCanceled());
+        $copyObj->setPaymentFinished($this->getPaymentFinished());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1445,9 +1507,7 @@ abstract class Invoice implements ActiveRecordInterface
     public function getCustomer(ConnectionInterface $con = null)
     {
         if ($this->aCustomer === null && ($this->customerid !== null)) {
-            $this->aCustomer = ChildCustomerQuery::create()
-                ->filterByInvoice($this) // here
-                ->findOne($con);
+            $this->aCustomer = ChildCustomerQuery::create()->findPk($this->customerid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1650,10 +1710,7 @@ abstract class Invoice implements ActiveRecordInterface
         $invoiceItemsToDelete = $this->getInvoiceItems(new Criteria(), $con)->diff($invoiceItems);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->invoiceItemsScheduledForDeletion = clone $invoiceItemsToDelete;
+        $this->invoiceItemsScheduledForDeletion = $invoiceItemsToDelete;
 
         foreach ($invoiceItemsToDelete as $invoiceItemRemoved) {
             $invoiceItemRemoved->setInvoice(null);
@@ -1903,10 +1960,7 @@ abstract class Invoice implements ActiveRecordInterface
         $paymentsToDelete = $this->getPayments(new Criteria(), $con)->diff($payments);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->paymentsScheduledForDeletion = clone $paymentsToDelete;
+        $this->paymentsScheduledForDeletion = $paymentsToDelete;
 
         foreach ($paymentsToDelete as $paymentRemoved) {
             $paymentRemoved->setInvoice(null);
@@ -2054,6 +2108,7 @@ abstract class Invoice implements ActiveRecordInterface
         $this->customerid = null;
         $this->date = null;
         $this->canceled = null;
+        $this->payment_finished = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

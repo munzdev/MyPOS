@@ -163,10 +163,10 @@ abstract class OrderInProgressQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34, 56, 78), $con);
+     * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param array[$order_in_progressid, $orderid, $userid, $menu_groupid] $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildOrderInProgress|array|mixed the result, formatted by the current formatter
@@ -191,7 +191,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = OrderInProgressTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2]), (null === $key[3] || is_scalar($key[3]) || is_callable([$key[3], '__toString']) ? (string) $key[3] : $key[3])]))))) {
+        if ((null !== ($obj = OrderInProgressTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -212,13 +212,10 @@ abstract class OrderInProgressQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT order_in_progressid, orderid, userid, menu_groupid, begin, done FROM order_in_progress WHERE order_in_progressid = :p0 AND orderid = :p1 AND userid = :p2 AND menu_groupid = :p3';
+        $sql = 'SELECT order_in_progressid, orderid, userid, menu_groupid, begin, done FROM order_in_progress WHERE order_in_progressid = :p0';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
-            $stmt->bindValue(':p2', $key[2], PDO::PARAM_INT);
-            $stmt->bindValue(':p3', $key[3], PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -229,7 +226,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
             /** @var ChildOrderInProgress $obj */
             $obj = new ChildOrderInProgress();
             $obj->hydrate($row);
-            OrderInProgressTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2]), (null === $key[3] || is_scalar($key[3]) || is_callable([$key[3], '__toString']) ? (string) $key[3] : $key[3])]));
+            OrderInProgressTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -258,7 +255,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -288,12 +285,8 @@ abstract class OrderInProgressQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(OrderInProgressTableMap::COL_ORDERID, $key[1], Criteria::EQUAL);
-        $this->addUsingAlias(OrderInProgressTableMap::COL_USERID, $key[2], Criteria::EQUAL);
-        $this->addUsingAlias(OrderInProgressTableMap::COL_MENU_GROUPID, $key[3], Criteria::EQUAL);
 
-        return $this;
+        return $this->addUsingAlias(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -305,21 +298,8 @@ abstract class OrderInProgressQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-        if (empty($keys)) {
-            return $this->add(null, '1<>1', Criteria::CUSTOM);
-        }
-        foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(OrderInProgressTableMap::COL_ORDERID, $key[1], Criteria::EQUAL);
-            $cton0->addAnd($cton1);
-            $cton2 = $this->getNewCriterion(OrderInProgressTableMap::COL_USERID, $key[2], Criteria::EQUAL);
-            $cton0->addAnd($cton2);
-            $cton3 = $this->getNewCriterion(OrderInProgressTableMap::COL_MENU_GROUPID, $key[3], Criteria::EQUAL);
-            $cton0->addAnd($cton3);
-            $this->addOr($cton0);
-        }
 
-        return $this;
+        return $this->addUsingAlias(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID, $keys, Criteria::IN);
     }
 
     /**
@@ -599,7 +579,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(OrderInProgressTableMap::COL_MENU_GROUPID, $menuGroup->toKeyValue('MenuGroupid', 'MenuGroupid'), $comparison);
+                ->addUsingAlias(OrderInProgressTableMap::COL_MENU_GROUPID, $menuGroup->toKeyValue('PrimaryKey', 'MenuGroupid'), $comparison);
         } else {
             throw new PropelException('filterByMenuGroup() only accepts arguments of type \API\Models\Menu\MenuGroup or Collection');
         }
@@ -676,7 +656,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(OrderInProgressTableMap::COL_ORDERID, $order->toKeyValue('Orderid', 'Orderid'), $comparison);
+                ->addUsingAlias(OrderInProgressTableMap::COL_ORDERID, $order->toKeyValue('PrimaryKey', 'Orderid'), $comparison);
         } else {
             throw new PropelException('filterByOrder() only accepts arguments of type \API\Models\Ordering\Order or Collection');
         }
@@ -892,11 +872,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
     public function prune($orderInProgress = null)
     {
         if ($orderInProgress) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID), $orderInProgress->getOrderInProgressid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(OrderInProgressTableMap::COL_ORDERID), $orderInProgress->getOrderid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond2', $this->getAliasedColName(OrderInProgressTableMap::COL_USERID), $orderInProgress->getUserid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond3', $this->getAliasedColName(OrderInProgressTableMap::COL_MENU_GROUPID), $orderInProgress->getMenuGroupid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2', 'pruneCond3'), Criteria::LOGICAL_OR);
+            $this->addUsingAlias(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID, $orderInProgress->getOrderInProgressid(), Criteria::NOT_EQUAL);
         }
 
         return $this;

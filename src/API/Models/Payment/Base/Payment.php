@@ -1318,8 +1318,6 @@ abstract class Payment implements ActiveRecordInterface
     {
         $criteria = ChildPaymentQuery::create();
         $criteria->add(PaymentTableMap::COL_PAYMENTID, $this->paymentid);
-        $criteria->add(PaymentTableMap::COL_PAYMENT_TYPEID, $this->payment_typeid);
-        $criteria->add(PaymentTableMap::COL_INVOICEID, $this->invoiceid);
 
         return $criteria;
     }
@@ -1332,26 +1330,10 @@ abstract class Payment implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getPaymentid() &&
-            null !== $this->getPaymentTypeid() &&
-            null !== $this->getInvoiceid();
+        $validPk = null !== $this->getPaymentid();
 
-        $validPrimaryKeyFKs = 2;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_payment_types_has_invoices_invoices1 to table invoice
-        if ($this->aInvoice && $hash = spl_object_hash($this->aInvoice)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_payment_types_has_invoices_payment_types1 to table payment_type
-        if ($this->aPaymentType && $hash = spl_object_hash($this->aPaymentType)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1363,31 +1345,23 @@ abstract class Payment implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getPaymentid();
-        $pks[1] = $this->getPaymentTypeid();
-        $pks[2] = $this->getInvoiceid();
-
-        return $pks;
+        return $this->getPaymentid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (paymentid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setPaymentid($keys[0]);
-        $this->setPaymentTypeid($keys[1]);
-        $this->setInvoiceid($keys[2]);
+        $this->setPaymentid($key);
     }
 
     /**
@@ -1396,7 +1370,7 @@ abstract class Payment implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getPaymentid()) && (null === $this->getPaymentTypeid()) && (null === $this->getInvoiceid());
+        return null === $this->getPaymentid();
     }
 
     /**
@@ -1497,9 +1471,7 @@ abstract class Payment implements ActiveRecordInterface
     public function getInvoice(ConnectionInterface $con = null)
     {
         if ($this->aInvoice === null && ($this->invoiceid !== null)) {
-            $this->aInvoice = InvoiceQuery::create()
-                ->filterByPayment($this) // here
-                ->findOne($con);
+            $this->aInvoice = InvoiceQuery::create()->findPk($this->invoiceid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

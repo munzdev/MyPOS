@@ -1307,9 +1307,6 @@ abstract class OrderInProgress implements ActiveRecordInterface
     {
         $criteria = ChildOrderInProgressQuery::create();
         $criteria->add(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID, $this->order_in_progressid);
-        $criteria->add(OrderInProgressTableMap::COL_ORDERID, $this->orderid);
-        $criteria->add(OrderInProgressTableMap::COL_USERID, $this->userid);
-        $criteria->add(OrderInProgressTableMap::COL_MENU_GROUPID, $this->menu_groupid);
 
         return $criteria;
     }
@@ -1322,34 +1319,10 @@ abstract class OrderInProgress implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getOrderInProgressid() &&
-            null !== $this->getOrderid() &&
-            null !== $this->getUserid() &&
-            null !== $this->getMenuGroupid();
+        $validPk = null !== $this->getOrderInProgressid();
 
-        $validPrimaryKeyFKs = 3;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_orders_in_progress_menu_groupes1 to table menu_group
-        if ($this->aMenuGroup && $hash = spl_object_hash($this->aMenuGroup)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_orders_in_progress_orders1 to table order
-        if ($this->aOrder && $hash = spl_object_hash($this->aOrder)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_orders_in_progress_users1 to table user
-        if ($this->aUser && $hash = spl_object_hash($this->aUser)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1361,33 +1334,23 @@ abstract class OrderInProgress implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getOrderInProgressid();
-        $pks[1] = $this->getOrderid();
-        $pks[2] = $this->getUserid();
-        $pks[3] = $this->getMenuGroupid();
-
-        return $pks;
+        return $this->getOrderInProgressid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (order_in_progressid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setOrderInProgressid($keys[0]);
-        $this->setOrderid($keys[1]);
-        $this->setUserid($keys[2]);
-        $this->setMenuGroupid($keys[3]);
+        $this->setOrderInProgressid($key);
     }
 
     /**
@@ -1396,7 +1359,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getOrderInProgressid()) && (null === $this->getOrderid()) && (null === $this->getUserid()) && (null === $this->getMenuGroupid());
+        return null === $this->getOrderInProgressid();
     }
 
     /**
@@ -1497,9 +1460,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
     public function getMenuGroup(ConnectionInterface $con = null)
     {
         if ($this->aMenuGroup === null && ($this->menu_groupid !== null)) {
-            $this->aMenuGroup = MenuGroupQuery::create()
-                ->filterByOrderInProgress($this) // here
-                ->findOne($con);
+            $this->aMenuGroup = MenuGroupQuery::create()->findPk($this->menu_groupid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1550,9 +1511,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
     public function getOrder(ConnectionInterface $con = null)
     {
         if ($this->aOrder === null && ($this->orderid !== null)) {
-            $this->aOrder = OrderQuery::create()
-                ->filterByOrderInProgress($this) // here
-                ->findOne($con);
+            $this->aOrder = OrderQuery::create()->findPk($this->orderid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1752,10 +1711,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
         $orderInProgressRecievedsToDelete = $this->getOrderInProgressRecieveds(new Criteria(), $con)->diff($orderInProgressRecieveds);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->orderInProgressRecievedsScheduledForDeletion = clone $orderInProgressRecievedsToDelete;
+        $this->orderInProgressRecievedsScheduledForDeletion = $orderInProgressRecievedsToDelete;
 
         foreach ($orderInProgressRecievedsToDelete as $orderInProgressRecievedRemoved) {
             $orderInProgressRecievedRemoved->setOrderInProgress(null);

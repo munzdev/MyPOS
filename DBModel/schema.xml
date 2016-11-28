@@ -12,8 +12,8 @@
   </table>
   <table name="coupon" idMethod="native" phpName="Coupon" namespace="API\Models\Payment">
     <column name="couponid" phpName="Couponid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="created_by_userid" phpName="CreatedByUserid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
+    <column name="created_by_userid" phpName="CreatedByUserid" type="INTEGER" required="true"/>
     <column name="code" phpName="Code" type="VARCHAR" size="24" required="true"/>
     <column name="created" phpName="Created" type="TIMESTAMP" required="true"/>
     <column name="value" phpName="Value" type="DECIMAL" size="7" scale="2" required="true"/>
@@ -35,7 +35,7 @@
   </table>
   <table name="customer" idMethod="native" phpName="Customer" namespace="API\Models\Invoice">
     <column name="customerid" phpName="Customerid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="title" phpName="Title" type="VARCHAR" size="32" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="128" required="true"/>
     <column name="adress" phpName="Adress" type="VARCHAR" size="128" required="true"/>
@@ -72,9 +72,9 @@
   </table>
   <table name="distribution_place" idMethod="native" phpName="DistributionPlace" namespace="API\Models\DistributionPlace">
     <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
-    <foreign-key foreignTable="event" name="fk_events_distribution_places_events1" onDelete="CASCADE">
+    <foreign-key foreignTable="event" name="fk_events_distribution_places_events1">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
     <index name="fk_events_distribution_places_events1_idx">
@@ -89,12 +89,12 @@
   </table>
   <table name="distribution_place_group" idMethod="native" phpName="DistributionPlaceGroup" namespace="API\Models\DistributionPlace" isCrossRef="true">
     <column name="distribution_place_groupid" phpName="DistributionPlaceGroupid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
-    <foreign-key foreignTable="distribution_place" name="fk_distributions_places_has_menu_groupes_distributions_places1" onDelete="CASCADE">
+    <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" required="true"/>
+    <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" required="true"/>
+    <foreign-key foreignTable="distribution_place" name="fk_distributions_places_has_menu_groupes_distributions_places1">
       <reference local="distribution_placeid" foreign="distribution_placeid"/>
     </foreign-key>
-    <foreign-key foreignTable="menu_group" name="fk_distributions_places_has_menu_groupes_menu_groupes1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_group" name="fk_distributions_places_has_menu_groupes_menu_groupes1">
       <reference local="menu_groupid" foreign="menu_groupid"/>
     </foreign-key>
     <index name="fk_distributions_places_has_menu_groupes_menu_groupes1_idx">
@@ -116,7 +116,7 @@
     <foreign-key foreignTable="distribution_place_group" name="fk_distribution_place_table_distribution_place_group1">
       <reference local="distribution_place_groupid" foreign="distribution_place_groupid"/>
     </foreign-key>
-    <foreign-key foreignTable="event_table" name="fk_tables_has_distributions_places_tables1" onDelete="CASCADE">
+    <foreign-key foreignTable="event_table" name="fk_tables_has_distributions_places_tables1">
       <reference local="event_tableid" foreign="event_tableid"/>
     </foreign-key>
     <index name="fk_tables_has_distributions_places_tables1_idx">
@@ -133,13 +133,13 @@
     <column name="distribution_placeid" phpName="DistributionPlaceid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="event_printerid" phpName="EventPrinterid" type="INTEGER" primaryKey="true" required="true"/>
-    <foreign-key foreignTable="distribution_place" name="fk_distributions_places_has_users_distributions_places1" onDelete="CASCADE">
+    <foreign-key foreignTable="distribution_place" name="fk_distributions_places_has_users_distributions_places1">
       <reference local="distribution_placeid" foreign="distribution_placeid"/>
     </foreign-key>
-    <foreign-key foreignTable="user" name="fk_distributions_places_has_users_users1" onDelete="CASCADE">
+    <foreign-key foreignTable="user" name="fk_distributions_places_has_users_users1">
       <reference local="userid" foreign="userid"/>
     </foreign-key>
-    <foreign-key foreignTable="event_printer" name="fk_distributions_places_users_events_printers1" onDelete="CASCADE">
+    <foreign-key foreignTable="event_printer" name="fk_distributions_places_users_events_printers1">
       <reference local="event_printerid" foreign="event_printerid"/>
     </foreign-key>
     <index name="fk_distributions_places_has_users_users1_idx">
@@ -172,13 +172,13 @@
   </table>
   <table name="event_printer" idMethod="native" phpName="EventPrinter" namespace="API\Models\Event">
     <column name="event_printerid" phpName="EventPrinterid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
     <column name="ip" phpName="Ip" type="VARCHAR" size="15" required="true"/>
     <column name="port" phpName="Port" type="SMALLINT" size="5" sqlType="smallint(5) unsigned" required="true"/>
     <column name="default" phpName="Default" type="BOOLEAN" size="1" required="true"/>
     <column name="characters_per_row" phpName="CharactersPerRow" type="TINYINT" required="true"/>
-    <foreign-key foreignTable="event" name="fk_printers_events1" onDelete="CASCADE">
+    <foreign-key foreignTable="event" name="fk_printers_events1">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
     <index name="fk_printers_events1_idx">
@@ -193,7 +193,7 @@
   </table>
   <table name="event_table" idMethod="native" phpName="EventTable" namespace="API\Models\Event">
     <column name="event_tableid" phpName="EventTableid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="32" required="true"/>
     <column name="data" phpName="Data" type="VARCHAR" size="255"/>
     <foreign-key foreignTable="event" name="fk_tables_events1">
@@ -214,14 +214,14 @@
   </table>
   <table name="event_user" idMethod="native" phpName="EventUser" namespace="API\Models\Event">
     <column name="event_userid" phpName="EventUserid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="user_roles" phpName="UserRoles" type="INTEGER" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
+    <column name="userid" phpName="Userid" type="INTEGER" required="true"/>
+    <column name="user_roles" phpName="UserRoles" type="INTEGER" sqlType="int(11) unsigned" required="true"/>
     <column name="begin_money" phpName="BeginMoney" type="DECIMAL" scale="0" required="true"/>
-    <foreign-key foreignTable="event" name="fk_events_has_users_events1" onDelete="CASCADE">
+    <foreign-key foreignTable="event" name="fk_events_has_users_events1">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
-    <foreign-key foreignTable="user" name="fk_events_has_users_users1" onDelete="CASCADE">
+    <foreign-key foreignTable="user" name="fk_events_has_users_users1">
       <reference local="userid" foreign="userid"/>
     </foreign-key>
     <index name="fk_events_has_users_users1_idx">
@@ -243,10 +243,11 @@
   </table>
   <table name="invoice" idMethod="native" phpName="Invoice" namespace="API\Models\Invoice">
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="cashier_userid" phpName="CashierUserid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="cashier_userid" phpName="CashierUserid" type="INTEGER" required="true"/>
     <column name="customerid" phpName="Customerid" type="INTEGER"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <column name="canceled" phpName="Canceled" type="TIMESTAMP"/>
+    <column name="payment_finished" phpName="PaymentFinished" type="TIMESTAMP"/>
     <foreign-key foreignTable="customer" name="fk_invoice_customer1">
       <reference local="customerid" foreign="customerid"/>
     </foreign-key>
@@ -259,6 +260,9 @@
     <index name="fk_invoice_customer1_idx">
       <index-column name="customerid"/>
     </index>
+    <index name="payment_finished">
+      <index-column name="payment_finished"/>
+    </index>
     <unique name="invoiceid_UNIQUE">
       <unique-column name="invoiceid"/>
     </unique>
@@ -268,13 +272,13 @@
   </table>
   <table name="invoice_item" idMethod="native" phpName="InvoiceItem" namespace="API\Models\Invoice">
     <column name="invoice_itemid" phpName="InvoiceItemid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="invoiceid" phpName="Invoiceid" type="INTEGER" required="true"/>
+    <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" required="true"/>
     <column name="amount" phpName="Amount" type="TINYINT" required="true"/>
     <column name="price" phpName="Price" type="DECIMAL" size="7" scale="2" required="true"/>
     <column name="description" phpName="Description" type="VARCHAR" size="255" required="true"/>
     <column name="tax" phpName="Tax" type="SMALLINT" required="true"/>
-    <foreign-key foreignTable="invoice" name="fk_invoices_has_orders_details_invoices1" onDelete="CASCADE">
+    <foreign-key foreignTable="invoice" name="fk_invoices_has_orders_details_invoices1">
       <reference local="invoiceid" foreign="invoiceid"/>
     </foreign-key>
     <foreign-key foreignTable="order_detail" name="fk_invoices_has_orders_details_orders_details1">
@@ -298,7 +302,7 @@
   </table>
   <table name="menu" idMethod="native" phpName="Menu" namespace="API\Models\Menu">
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
     <column name="price" phpName="Price" type="DECIMAL" size="7" scale="2" required="true"/>
     <column name="availabilityid" phpName="Availabilityid" type="INTEGER" required="true"/>
@@ -306,7 +310,7 @@
     <foreign-key foreignTable="availability" name="fk_menues_availabilitys1">
       <reference local="availabilityid" foreign="availabilityid"/>
     </foreign-key>
-    <foreign-key foreignTable="menu_group" name="fk_menues_menu_groupes1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_group" name="fk_menues_menu_groupes1">
       <reference local="menu_groupid" foreign="menu_groupid"/>
     </foreign-key>
     <index name="fk_menues_menu_groupes1_idx">
@@ -324,14 +328,14 @@
   </table>
   <table name="menu_extra" idMethod="native" phpName="MenuExtra" namespace="API\Models\Menu">
     <column name="menu_extraid" phpName="MenuExtraid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
     <column name="availabilityid" phpName="Availabilityid" type="INTEGER" required="true"/>
     <column name="availability_amount" phpName="AvailabilityAmount" type="SMALLINT" size="5" sqlType="smallint(5) unsigned"/>
     <foreign-key foreignTable="availability" name="fk_menu_extras_availabilitys1">
       <reference local="availabilityid" foreign="availabilityid"/>
     </foreign-key>
-    <foreign-key foreignTable="event" name="fk_menu_extras_events1" onDelete="CASCADE">
+    <foreign-key foreignTable="event" name="fk_menu_extras_events1">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
     <index name="fk_menu_extras_events1_idx">
@@ -349,9 +353,9 @@
   </table>
   <table name="menu_group" idMethod="native" phpName="MenuGroup" namespace="API\Models\Menu">
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="menu_typeid" phpName="MenuTypeid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="menu_typeid" phpName="MenuTypeid" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
-    <foreign-key foreignTable="menu_type" name="fk_menu_groupes_menu_types1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_type" name="fk_menu_groupes_menu_types1">
       <reference local="menu_typeid" foreign="menu_typeid"/>
     </foreign-key>
     <index name="fk_menu_groupes_menu_types1_idx">
@@ -366,13 +370,13 @@
   </table>
   <table name="menu_possible_extra" idMethod="native" phpName="MenuPossibleExtra" namespace="API\Models\Menu" isCrossRef="true">
     <column name="menu_possible_extraid" phpName="MenuPossibleExtraid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="menu_extraid" phpName="MenuExtraid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="menu_extraid" phpName="MenuExtraid" type="INTEGER" required="true"/>
+    <column name="menuid" phpName="Menuid" type="INTEGER" required="true"/>
     <column name="price" phpName="Price" type="DECIMAL" size="7" scale="2" required="true"/>
-    <foreign-key foreignTable="menu_extra" name="fk_menues_possible_extras_menu_extras1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_extra" name="fk_menues_possible_extras_menu_extras1">
       <reference local="menu_extraid" foreign="menu_extraid"/>
     </foreign-key>
-    <foreign-key foreignTable="menu" name="fk_menues_possible_extras_menues1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu" name="fk_menues_possible_extras_menues1">
       <reference local="menuid" foreign="menuid"/>
     </foreign-key>
     <index name="fk_menues_possible_extras_menues1_idx">
@@ -390,13 +394,13 @@
   </table>
   <table name="menu_possible_size" idMethod="native" phpName="MenuPossibleSize" namespace="API\Models\Menu" isCrossRef="true">
     <column name="menu_possible_sizeid" phpName="MenuPossibleSizeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="menu_sizeid" phpName="MenuSizeid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="menu_sizeid" phpName="MenuSizeid" type="INTEGER" required="true"/>
+    <column name="menuid" phpName="Menuid" type="INTEGER" required="true"/>
     <column name="price" phpName="Price" type="DECIMAL" size="7" scale="2"/>
-    <foreign-key foreignTable="menu_size" name="fk_menues_possible_sizes_menu_sizes1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_size" name="fk_menues_possible_sizes_menu_sizes1">
       <reference local="menu_sizeid" foreign="menu_sizeid"/>
     </foreign-key>
-    <foreign-key foreignTable="menu" name="fk_menues_possible_sizes_menues1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu" name="fk_menues_possible_sizes_menues1">
       <reference local="menuid" foreign="menuid"/>
     </foreign-key>
     <index name="fk_menues_possible_sizes_menues1_idx">
@@ -414,7 +418,7 @@
   </table>
   <table name="menu_size" idMethod="native" phpName="MenuSize" namespace="API\Models\Menu">
     <column name="menu_sizeid" phpName="MenuSizeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="32" required="true"/>
     <column name="factor" phpName="Factor" type="DECIMAL" size="3" scale="2" required="true"/>
     <foreign-key foreignTable="event" name="fk_menu_sizes_events1">
@@ -432,7 +436,7 @@
   </table>
   <table name="menu_type" idMethod="native" phpName="MenuType" namespace="API\Models\Menu">
     <column name="menu_typeid" phpName="MenuTypeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
     <column name="tax" phpName="Tax" type="SMALLINT" required="true"/>
     <column name="allowMixing" phpName="Allowmixing" type="BOOLEAN" size="1" required="true"/>
@@ -451,15 +455,16 @@
   </table>
   <table name="order" idMethod="native" phpName="Order" namespace="API\Models\Ordering" identifierQuoting="true">
     <column name="orderid" phpName="Orderid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="event_tableid" phpName="EventTableid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="event_tableid" phpName="EventTableid" type="INTEGER" required="true"/>
+    <column name="userid" phpName="Userid" type="INTEGER" required="true"/>
     <column name="ordertime" phpName="Ordertime" type="TIMESTAMP" required="true"/>
     <column name="priority" phpName="Priority" type="INTEGER" required="true"/>
-    <column name="finished" phpName="Finished" type="TIMESTAMP"/>    
-    <foreign-key foreignTable="event_table" name="fk_orders_tables" onDelete="CASCADE">
+    <column name="distribution_finished" phpName="DistributionFinished" type="TIMESTAMP"/>
+    <column name="invoice_finished" phpName="InvoiceFinished" type="TIMESTAMP"/>
+    <foreign-key foreignTable="event_table" name="fk_orders_tables">
       <reference local="event_tableid" foreign="event_tableid"/>
     </foreign-key>
-    <foreign-key foreignTable="user" name="fk_orders_users1" onDelete="CASCADE">
+    <foreign-key foreignTable="user" name="fk_orders_users1">
       <reference local="userid" foreign="userid"/>
     </foreign-key>
     <index name="ordertime">
@@ -474,8 +479,11 @@
     <index name="priority">
       <index-column name="priority"/>
     </index>
-    <index name="finished">
-      <index-column name="finished"/>
+    <index name="distribution_finished">
+      <index-column name="distribution_finished"/>
+    </index>
+    <index name="invoice_finished">
+      <index-column name="invoice_finished"/>
     </index>
     <unique name="oder_id_UNIQUE">
       <unique-column name="orderid"/>
@@ -486,7 +494,7 @@
   </table>
   <table name="order_detail" idMethod="native" phpName="OrderDetail" namespace="API\Models\Ordering">
     <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="orderid" phpName="Orderid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="orderid" phpName="Orderid" type="INTEGER" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER"/>
     <column name="menu_sizeid" phpName="MenuSizeid" type="INTEGER"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER"/>
@@ -494,10 +502,11 @@
     <column name="single_price" phpName="SinglePrice" type="DECIMAL" size="7" scale="2" required="true"/>
     <column name="single_price_modified_by_userid" phpName="SinglePriceModifiedByUserid" type="INTEGER"/>
     <column name="extra_detail" phpName="ExtraDetail" type="VARCHAR" size="255"/>
-    <column name="finished" phpName="Finished" type="TIMESTAMP"/>
     <column name="availabilityid" phpName="Availabilityid" type="INTEGER"/>
     <column name="availability_amount" phpName="AvailabilityAmount" type="SMALLINT"/>
     <column name="verified" phpName="Verified" type="BOOLEAN" size="1" required="true"/>
+    <column name="distribution_finished" phpName="DistributionFinished" type="TIMESTAMP"/>
+    <column name="invoice_finished" phpName="InvoiceFinished" type="TIMESTAMP"/>
     <foreign-key foreignTable="availability" name="fk_orders_details_availabilitys1">
       <reference local="availabilityid" foreign="availabilityid"/>
     </foreign-key>
@@ -507,13 +516,13 @@
     <foreign-key foreignTable="menu_size" name="fk_orders_details_menu_sizes1">
       <reference local="menu_sizeid" foreign="menu_sizeid"/>
     </foreign-key>
-    <foreign-key foreignTable="menu" name="fk_orders_details_menues1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu" name="fk_orders_details_menues1">
       <reference local="menuid" foreign="menuid"/>
     </foreign-key>
-    <foreign-key foreignTable="order" name="fk_orders_details_orders1" onDelete="CASCADE">
+    <foreign-key foreignTable="order" name="fk_orders_details_orders1">
       <reference local="orderid" foreign="orderid"/>
     </foreign-key>
-    <foreign-key foreignTable="user" name="fk_orders_details_users1" onDelete="CASCADE">
+    <foreign-key foreignTable="user" name="fk_orders_details_users1">
       <reference local="single_price_modified_by_userid" foreign="userid"/>
     </foreign-key>
     <index name="fk_orders_details_menues1_idx">
@@ -537,6 +546,12 @@
     <index name="fk_orders_details_availabilitys1_idx">
       <index-column name="availabilityid"/>
     </index>
+    <index name="distribution_finished">
+      <index-column name="distribution_finished"/>
+    </index>
+    <index name="invoice_finished">
+      <index-column name="invoice_finished"/>
+    </index>
     <unique name="orders_detailid_UNIQUE">
       <unique-column name="order_detailid"/>
     </unique>
@@ -547,10 +562,10 @@
   <table name="order_detail_extra" idMethod="native" phpName="OrderDetailExtra" namespace="API\Models\Ordering" isCrossRef="true">
     <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menu_possible_extraid" phpName="MenuPossibleExtraid" type="INTEGER" primaryKey="true" required="true"/>
-    <foreign-key foreignTable="menu_possible_extra" name="fk_orders_detail_sizes_menues_possible_extras1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_possible_extra" name="fk_orders_detail_sizes_menues_possible_extras1">
       <reference local="menu_possible_extraid" foreign="menu_possible_extraid"/>
     </foreign-key>
-    <foreign-key foreignTable="order_detail" name="fk_orders_detail_sizes_orders_details1" onDelete="CASCADE">
+    <foreign-key foreignTable="order_detail" name="fk_orders_detail_sizes_orders_details1">
       <reference local="order_detailid" foreign="order_detailid"/>
     </foreign-key>
     <index name="fk_orders_detail_sizes_menues_possible_extras1_idx">
@@ -567,10 +582,10 @@
   <table name="order_detail_mixed_with" idMethod="native" phpName="OrderDetailMixedWith" namespace="API\Models\Ordering">
     <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" required="true"/>
-    <foreign-key foreignTable="menu" name="fk_orders_details_mixed_with_menues1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu" name="fk_orders_details_mixed_with_menues1">
       <reference local="menuid" foreign="menuid"/>
     </foreign-key>
-    <foreign-key foreignTable="order_detail" name="fk_orders_details_mixed_with_orders_details1" onDelete="CASCADE">
+    <foreign-key foreignTable="order_detail" name="fk_orders_details_mixed_with_orders_details1">
       <reference local="order_detailid" foreign="order_detailid"/>
     </foreign-key>
     <index name="fk_orders_details_mixed_with_menues1_idx">
@@ -582,18 +597,18 @@
   </table>
   <table name="order_in_progress" idMethod="native" phpName="OrderInProgress" namespace="API\Models\OIP">
     <column name="order_in_progressid" phpName="OrderInProgressid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="orderid" phpName="Orderid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="orderid" phpName="Orderid" type="INTEGER" required="true"/>
+    <column name="userid" phpName="Userid" type="INTEGER" required="true"/>
+    <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" required="true"/>
     <column name="begin" phpName="Begin" type="TIMESTAMP" required="true"/>
     <column name="done" phpName="Done" type="TIMESTAMP"/>
-    <foreign-key foreignTable="menu_group" name="fk_orders_in_progress_menu_groupes1" onDelete="CASCADE">
+    <foreign-key foreignTable="menu_group" name="fk_orders_in_progress_menu_groupes1">
       <reference local="menu_groupid" foreign="menu_groupid"/>
     </foreign-key>
-    <foreign-key foreignTable="order" name="fk_orders_in_progress_orders1" onDelete="CASCADE">
+    <foreign-key foreignTable="order" name="fk_orders_in_progress_orders1">
       <reference local="orderid" foreign="orderid"/>
     </foreign-key>
-    <foreign-key foreignTable="user" name="fk_orders_in_progress_users1" onDelete="CASCADE">
+    <foreign-key foreignTable="user" name="fk_orders_in_progress_users1">
       <reference local="userid" foreign="userid"/>
     </foreign-key>
     <index name="fk_orders_in_progress_orders1_idx">
@@ -614,17 +629,17 @@
   </table>
   <table name="order_in_progress_recieved" idMethod="native" phpName="OrderInProgressRecieved" namespace="API\Models\OIP">
     <column name="order_in_progress_recievedid" phpName="OrderInProgressRecievedid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="order_in_progressid" phpName="OrderInProgressid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="distribution_giving_outid" phpName="DistributionGivingOutid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" required="true"/>
+    <column name="order_in_progressid" phpName="OrderInProgressid" type="INTEGER" required="true"/>
+    <column name="distribution_giving_outid" phpName="DistributionGivingOutid" type="INTEGER" required="true"/>
     <column name="amount" phpName="Amount" type="TINYINT" required="true"/>
-    <foreign-key foreignTable="order_detail" name="fk_orders_details_has_orders_in_progress_orders_details1" onDelete="CASCADE">
+    <foreign-key foreignTable="order_detail" name="fk_orders_details_has_orders_in_progress_orders_details1">
       <reference local="order_detailid" foreign="order_detailid"/>
     </foreign-key>
-    <foreign-key foreignTable="order_in_progress" name="fk_orders_details_has_orders_in_progress_orders_in_progress1" onDelete="CASCADE">
+    <foreign-key foreignTable="order_in_progress" name="fk_orders_details_has_orders_in_progress_orders_in_progress1">
       <reference local="order_in_progressid" foreign="order_in_progressid"/>
     </foreign-key>
-    <foreign-key foreignTable="distribution_giving_out" name="fk_orders_in_progress_recieved_distribution_givin_out1" onDelete="CASCADE">
+    <foreign-key foreignTable="distribution_giving_out" name="fk_orders_in_progress_recieved_distribution_givin_out1">
       <reference local="distribution_giving_outid" foreign="distribution_giving_outid"/>
     </foreign-key>
     <index name="fk_orders_details_has_orders_in_progress_orders_in_progress_idx">
@@ -645,8 +660,8 @@
   </table>
   <table name="payment" idMethod="native" phpName="Payment" namespace="API\Models\Payment">
     <column name="paymentid" phpName="Paymentid" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
-    <column name="payment_typeid" phpName="PaymentTypeid" type="INTEGER" primaryKey="true" required="true"/>
-    <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="payment_typeid" phpName="PaymentTypeid" type="INTEGER" required="true"/>
+    <column name="invoiceid" phpName="Invoiceid" type="INTEGER" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <column name="amount" phpName="Amount" type="DECIMAL" size="7" scale="2" required="true"/>
     <column name="canceled" phpName="Canceled" type="TIMESTAMP"/>
@@ -723,14 +738,14 @@
   <table name="user_message" idMethod="native" phpName="UserMessage" namespace="API\Models\User\Message">
     <column name="user_messageid" phpName="UserMessageid" type="INTEGER" primaryKey="true" required="true"/>
     <column name="from_event_userid" phpName="FromEventUserid" type="INTEGER"/>
-    <column name="to_event_userid" phpName="ToEventUserid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="to_event_userid" phpName="ToEventUserid" type="INTEGER" required="true"/>
     <column name="message" phpName="Message" type="LONGVARCHAR" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <column name="readed" phpName="Readed" type="BOOLEAN" size="1" required="true"/>
-    <foreign-key foreignTable="event_user" name="fk_users_chat_events_user1" onDelete="CASCADE">
+    <foreign-key foreignTable="event_user" name="fk_users_chat_events_user1">
       <reference local="from_event_userid" foreign="event_userid"/>
     </foreign-key>
-    <foreign-key foreignTable="event_user" name="fk_users_chat_events_user2" onDelete="CASCADE">
+    <foreign-key foreignTable="event_user" name="fk_users_chat_events_user2">
       <reference local="to_event_userid" foreign="event_userid"/>
     </foreign-key>
     <index name="fk_users_chat_events_user1_idx">
@@ -750,7 +765,7 @@
     </vendor>
   </table>
   <table name="user_role" idMethod="native" phpName="UserRole" namespace="API\Models\User">
-    <column name="user_roleid" phpName="UserRoleid" type="INTEGER" primaryKey="true" required="true"/>
+    <column name="user_roleid" phpName="UserRoleid" type="INTEGER" sqlType="int(11) unsigned" primaryKey="true" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
     <unique name="user_roleid_UNIQUE">
       <unique-column name="user_roleid"/>

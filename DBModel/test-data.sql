@@ -39,10 +39,10 @@ COMMIT;
 -- Data for table `order`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished`) VALUES (DEFAULT, 1, 1, NOW(), 1, NULL);
-INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished`) VALUES (DEFAULT, 3, 1, NOW(), 2, NULL);
-INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished`) VALUES (DEFAULT, 2, 1, NOW(), 3, NULL);
-INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `finished`) VALUES (DEFAULT, 1, 1, NOW(), 4, NULL);
+INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 1, 1, NOW(), 1, NULL, NULL);
+INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 3, 1, NOW(), 2, NULL, NULL);
+INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 2, 1, NOW(), 3, NULL, NULL);
+INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 1, 1, NOW(), 4, NULL, NULL);
 
 COMMIT;
 
@@ -125,14 +125,14 @@ COMMIT;
 -- Data for table `order_detail`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`, `availabilityid`, `availability_amount`, `verified`) VALUES (DEFAULT, 1, 1, 1, NULL, 2, 7.50, NULL, NULL, NULL, NULL, NULL, DEFAULT);
-INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`, `availabilityid`, `availability_amount`, `verified`) VALUES (DEFAULT, 1, 2, 1, NULL, 1, 9, NULL, NULL, NULL, NULL, NULL, DEFAULT);
-INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`, `availabilityid`, `availability_amount`, `verified`) VALUES (DEFAULT, 2, 8, 3, NULL, 3, 2.5, NULL, NULL, NULL, NULL, NULL, DEFAULT);
-INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`, `availabilityid`, `availability_amount`, `verified`) VALUES (DEFAULT, 2, 14, 5, NULL, 2, 2.80, NULL, NULL, NULL, NULL, NULL, DEFAULT);
-INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`, `availabilityid`, `availability_amount`, `verified`) VALUES (DEFAULT, 3, 8, 2, NULL, 1, 4, NULL, NULL, NULL, NULL, NULL, DEFAULT);
-INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`, `availabilityid`, `availability_amount`, `verified`) VALUES (DEFAULT, 4, 1, 1, NULL, 2, 7.50, NULL, NULL, NULL, NULL, NULL, DEFAULT);
-INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`, `availabilityid`, `availability_amount`, `verified`) VALUES (DEFAULT, 4, 2, 1, NULL, 1, 6.50, NULL, NULL, NULL, NULL, NULL, DEFAULT);
-INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `finished`, `availabilityid`, `availability_amount`, `verified`) VALUES (DEFAULT, 1, NULL, NULL, NULL, 2, DEFAULT, NULL, 'Alles mit ohne bitte', NULL, 1, NULL, false);
+INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `availabilityid`, `availability_amount`, `verified`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 1, 1, 1, NULL, 2, 7.50, NULL, NULL, NULL, NULL, DEFAULT, NULL, NULL);
+INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `availabilityid`, `availability_amount`, `verified`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 1, 2, 1, NULL, 1, 9, NULL, NULL, NULL, NULL, DEFAULT, NULL, NULL);
+INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `availabilityid`, `availability_amount`, `verified`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 2, 8, 3, NULL, 3, 2.5, NULL, NULL, NULL, NULL, DEFAULT, NULL, NULL);
+INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `availabilityid`, `availability_amount`, `verified`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 2, 14, 5, NULL, 2, 2.80, NULL, NULL, NULL, NULL, DEFAULT, NULL, NULL);
+INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `availabilityid`, `availability_amount`, `verified`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 3, 8, 2, NULL, 1, 4, NULL, NULL, NULL, NULL, DEFAULT, NULL, NULL);
+INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `availabilityid`, `availability_amount`, `verified`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 4, 1, 1, NULL, 2, 7.50, NULL, NULL, NULL, NULL, DEFAULT, NULL, NULL);
+INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `availabilityid`, `availability_amount`, `verified`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 4, 2, 1, NULL, 1, 6.50, NULL, NULL, NULL, NULL, DEFAULT, NULL, NULL);
+INSERT INTO `order_detail` (`order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `availabilityid`, `availability_amount`, `verified`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 1, NULL, NULL, NULL, 2, DEFAULT, NULL, 'Alles mit ohne bitte', 1, NULL, false, NULL, NULL);
 
 COMMIT;
 

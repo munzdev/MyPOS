@@ -1177,10 +1177,7 @@ abstract class PaymentType implements ActiveRecordInterface
         $paymentsToDelete = $this->getPayments(new Criteria(), $con)->diff($payments);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->paymentsScheduledForDeletion = clone $paymentsToDelete;
+        $this->paymentsScheduledForDeletion = $paymentsToDelete;
 
         foreach ($paymentsToDelete as $paymentRemoved) {
             $paymentRemoved->setPaymentType(null);

@@ -379,7 +379,7 @@ abstract class OrderDetailExtraQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(OrderDetailExtraTableMap::COL_MENU_POSSIBLE_EXTRAID, $menuPossibleExtra->toKeyValue('MenuPossibleExtraid', 'MenuPossibleExtraid'), $comparison);
+                ->addUsingAlias(OrderDetailExtraTableMap::COL_MENU_POSSIBLE_EXTRAID, $menuPossibleExtra->toKeyValue('PrimaryKey', 'MenuPossibleExtraid'), $comparison);
         } else {
             throw new PropelException('filterByMenuPossibleExtra() only accepts arguments of type \API\Models\Menu\MenuPossibleExtra or Collection');
         }
@@ -456,7 +456,7 @@ abstract class OrderDetailExtraQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(OrderDetailExtraTableMap::COL_ORDER_DETAILID, $orderDetail->toKeyValue('OrderDetailid', 'OrderDetailid'), $comparison);
+                ->addUsingAlias(OrderDetailExtraTableMap::COL_ORDER_DETAILID, $orderDetail->toKeyValue('PrimaryKey', 'OrderDetailid'), $comparison);
         } else {
             throw new PropelException('filterByOrderDetail() only accepts arguments of type \API\Models\Ordering\OrderDetail or Collection');
         }

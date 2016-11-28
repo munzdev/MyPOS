@@ -442,7 +442,7 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(DistributionPlaceUserTableMap::COL_DISTRIBUTION_PLACEID, $distributionPlace->toKeyValue('DistributionPlaceid', 'DistributionPlaceid'), $comparison);
+                ->addUsingAlias(DistributionPlaceUserTableMap::COL_DISTRIBUTION_PLACEID, $distributionPlace->toKeyValue('PrimaryKey', 'DistributionPlaceid'), $comparison);
         } else {
             throw new PropelException('filterByDistributionPlace() only accepts arguments of type \API\Models\DistributionPlace\DistributionPlace or Collection');
         }
@@ -596,7 +596,7 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(DistributionPlaceUserTableMap::COL_EVENT_PRINTERID, $eventPrinter->toKeyValue('EventPrinterid', 'EventPrinterid'), $comparison);
+                ->addUsingAlias(DistributionPlaceUserTableMap::COL_EVENT_PRINTERID, $eventPrinter->toKeyValue('PrimaryKey', 'EventPrinterid'), $comparison);
         } else {
             throw new PropelException('filterByEventPrinter() only accepts arguments of type \API\Models\Event\EventPrinter or Collection');
         }

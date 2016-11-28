@@ -147,14 +147,14 @@ class OrderDetailExtraTableMap extends TableMap
     0 => ':menu_possible_extraid',
     1 => ':menu_possible_extraid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':order_detailid',
     1 => ':order_detailid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
     } // buildRelations()
 
     /**

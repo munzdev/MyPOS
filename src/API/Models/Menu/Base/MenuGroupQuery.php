@@ -158,10 +158,10 @@ abstract class MenuGroupQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34), $con);
+     * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param array[$menu_groupid, $menu_typeid] $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildMenuGroup|array|mixed the result, formatted by the current formatter
@@ -186,7 +186,7 @@ abstract class MenuGroupQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = MenuGroupTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]))))) {
+        if ((null !== ($obj = MenuGroupTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -207,11 +207,10 @@ abstract class MenuGroupQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT menu_groupid, menu_typeid, name FROM menu_group WHERE menu_groupid = :p0 AND menu_typeid = :p1';
+        $sql = 'SELECT menu_groupid, menu_typeid, name FROM menu_group WHERE menu_groupid = :p0';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -222,7 +221,7 @@ abstract class MenuGroupQuery extends ModelCriteria
             /** @var ChildMenuGroup $obj */
             $obj = new ChildMenuGroup();
             $obj->hydrate($row);
-            MenuGroupTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]));
+            MenuGroupTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -251,7 +250,7 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -281,10 +280,8 @@ abstract class MenuGroupQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(MenuGroupTableMap::COL_MENU_GROUPID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(MenuGroupTableMap::COL_MENU_TYPEID, $key[1], Criteria::EQUAL);
 
-        return $this;
+        return $this->addUsingAlias(MenuGroupTableMap::COL_MENU_GROUPID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -296,17 +293,8 @@ abstract class MenuGroupQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-        if (empty($keys)) {
-            return $this->add(null, '1<>1', Criteria::CUSTOM);
-        }
-        foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(MenuGroupTableMap::COL_MENU_GROUPID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(MenuGroupTableMap::COL_MENU_TYPEID, $key[1], Criteria::EQUAL);
-            $cton0->addAnd($cton1);
-            $this->addOr($cton0);
-        }
 
-        return $this;
+        return $this->addUsingAlias(MenuGroupTableMap::COL_MENU_GROUPID, $keys, Criteria::IN);
     }
 
     /**
@@ -439,7 +427,7 @@ abstract class MenuGroupQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(MenuGroupTableMap::COL_MENU_TYPEID, $menuType->toKeyValue('MenuTypeid', 'MenuTypeid'), $comparison);
+                ->addUsingAlias(MenuGroupTableMap::COL_MENU_TYPEID, $menuType->toKeyValue('PrimaryKey', 'MenuTypeid'), $comparison);
         } else {
             throw new PropelException('filterByMenuType() only accepts arguments of type \API\Models\Menu\MenuType or Collection');
         }
@@ -788,23 +776,6 @@ abstract class MenuGroupQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related DistributionPlace object
-     * using the distribution_place_group table as cross reference
-     *
-     * @param DistributionPlace $distributionPlace the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildMenuGroupQuery The current query, for fluid interface
-     */
-    public function filterByDistributionPlace($distributionPlace, $comparison = Criteria::EQUAL)
-    {
-        return $this
-            ->useDistributionPlaceGroupQuery()
-            ->filterByDistributionPlace($distributionPlace, $comparison)
-            ->endUse();
-    }
-
-    /**
      * Exclude object from result
      *
      * @param   ChildMenuGroup $menuGroup Object to remove from the list of results
@@ -814,9 +785,7 @@ abstract class MenuGroupQuery extends ModelCriteria
     public function prune($menuGroup = null)
     {
         if ($menuGroup) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(MenuGroupTableMap::COL_MENU_GROUPID), $menuGroup->getMenuGroupid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(MenuGroupTableMap::COL_MENU_TYPEID), $menuGroup->getMenuTypeid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
+            $this->addUsingAlias(MenuGroupTableMap::COL_MENU_GROUPID, $menuGroup->getMenuGroupid(), Criteria::NOT_EQUAL);
         }
 
         return $this;

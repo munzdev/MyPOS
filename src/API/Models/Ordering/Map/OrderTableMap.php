@@ -2,7 +2,6 @@
 
 namespace API\Models\Ordering\Map;
 
-use API\Models\OIP\Map\OrderInProgressTableMap;
 use API\Models\Ordering\Order;
 use API\Models\Ordering\OrderQuery;
 use Propel\Runtime\Propel;
@@ -60,7 +59,7 @@ class OrderTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -70,7 +69,7 @@ class OrderTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the orderid field
@@ -98,9 +97,14 @@ class OrderTableMap extends TableMap
     const COL_PRIORITY = 'order.priority';
 
     /**
-     * the column name for the finished field
+     * the column name for the distribution_finished field
      */
-    const COL_FINISHED = 'order.finished';
+    const COL_DISTRIBUTION_FINISHED = 'order.distribution_finished';
+
+    /**
+     * the column name for the invoice_finished field
+     */
+    const COL_INVOICE_FINISHED = 'order.invoice_finished';
 
     /**
      * The default string format for model objects of the related table
@@ -114,11 +118,11 @@ class OrderTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Orderid', 'EventTableid', 'Userid', 'Ordertime', 'Priority', 'Finished', ),
-        self::TYPE_CAMELNAME     => array('orderid', 'eventTableid', 'userid', 'ordertime', 'priority', 'finished', ),
-        self::TYPE_COLNAME       => array(OrderTableMap::COL_ORDERID, OrderTableMap::COL_EVENT_TABLEID, OrderTableMap::COL_USERID, OrderTableMap::COL_ORDERTIME, OrderTableMap::COL_PRIORITY, OrderTableMap::COL_FINISHED, ),
-        self::TYPE_FIELDNAME     => array('orderid', 'event_tableid', 'userid', 'ordertime', 'priority', 'finished', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Orderid', 'EventTableid', 'Userid', 'Ordertime', 'Priority', 'DistributionFinished', 'InvoiceFinished', ),
+        self::TYPE_CAMELNAME     => array('orderid', 'eventTableid', 'userid', 'ordertime', 'priority', 'distributionFinished', 'invoiceFinished', ),
+        self::TYPE_COLNAME       => array(OrderTableMap::COL_ORDERID, OrderTableMap::COL_EVENT_TABLEID, OrderTableMap::COL_USERID, OrderTableMap::COL_ORDERTIME, OrderTableMap::COL_PRIORITY, OrderTableMap::COL_DISTRIBUTION_FINISHED, OrderTableMap::COL_INVOICE_FINISHED, ),
+        self::TYPE_FIELDNAME     => array('orderid', 'event_tableid', 'userid', 'ordertime', 'priority', 'distribution_finished', 'invoice_finished', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -128,11 +132,11 @@ class OrderTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Orderid' => 0, 'EventTableid' => 1, 'Userid' => 2, 'Ordertime' => 3, 'Priority' => 4, 'Finished' => 5, ),
-        self::TYPE_CAMELNAME     => array('orderid' => 0, 'eventTableid' => 1, 'userid' => 2, 'ordertime' => 3, 'priority' => 4, 'finished' => 5, ),
-        self::TYPE_COLNAME       => array(OrderTableMap::COL_ORDERID => 0, OrderTableMap::COL_EVENT_TABLEID => 1, OrderTableMap::COL_USERID => 2, OrderTableMap::COL_ORDERTIME => 3, OrderTableMap::COL_PRIORITY => 4, OrderTableMap::COL_FINISHED => 5, ),
-        self::TYPE_FIELDNAME     => array('orderid' => 0, 'event_tableid' => 1, 'userid' => 2, 'ordertime' => 3, 'priority' => 4, 'finished' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Orderid' => 0, 'EventTableid' => 1, 'Userid' => 2, 'Ordertime' => 3, 'Priority' => 4, 'DistributionFinished' => 5, 'InvoiceFinished' => 6, ),
+        self::TYPE_CAMELNAME     => array('orderid' => 0, 'eventTableid' => 1, 'userid' => 2, 'ordertime' => 3, 'priority' => 4, 'distributionFinished' => 5, 'invoiceFinished' => 6, ),
+        self::TYPE_COLNAME       => array(OrderTableMap::COL_ORDERID => 0, OrderTableMap::COL_EVENT_TABLEID => 1, OrderTableMap::COL_USERID => 2, OrderTableMap::COL_ORDERTIME => 3, OrderTableMap::COL_PRIORITY => 4, OrderTableMap::COL_DISTRIBUTION_FINISHED => 5, OrderTableMap::COL_INVOICE_FINISHED => 6, ),
+        self::TYPE_FIELDNAME     => array('orderid' => 0, 'event_tableid' => 1, 'userid' => 2, 'ordertime' => 3, 'priority' => 4, 'distribution_finished' => 5, 'invoice_finished' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -153,11 +157,12 @@ class OrderTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('orderid', 'Orderid', 'INTEGER', true, null, null);
-        $this->addForeignPrimaryKey('event_tableid', 'EventTableid', 'INTEGER' , 'event_table', 'event_tableid', true, null, null);
-        $this->addForeignPrimaryKey('userid', 'Userid', 'INTEGER' , 'user', 'userid', true, null, null);
+        $this->addForeignKey('event_tableid', 'EventTableid', 'INTEGER', 'event_table', 'event_tableid', true, null, null);
+        $this->addForeignKey('userid', 'Userid', 'INTEGER', 'user', 'userid', true, null, null);
         $this->addColumn('ordertime', 'Ordertime', 'TIMESTAMP', true, null, null);
         $this->addColumn('priority', 'Priority', 'INTEGER', true, null, null);
-        $this->addColumn('finished', 'Finished', 'TIMESTAMP', false, null, null);
+        $this->addColumn('distribution_finished', 'DistributionFinished', 'TIMESTAMP', false, null, null);
+        $this->addColumn('invoice_finished', 'InvoiceFinished', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -171,92 +176,29 @@ class OrderTableMap extends TableMap
     0 => ':event_tableid',
     1 => ':event_tableid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':userid',
     1 => ':userid',
   ),
-), 'CASCADE', null, null, false);
+), null, null, null, false);
         $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':orderid',
     1 => ':orderid',
   ),
-), 'CASCADE', null, 'OrderDetails', false);
+), null, null, 'OrderDetails', false);
         $this->addRelation('OrderInProgress', '\\API\\Models\\OIP\\OrderInProgress', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':orderid',
     1 => ':orderid',
   ),
-), 'CASCADE', null, 'OrderInProgresses', false);
+), null, null, 'OrderInProgresses', false);
     } // buildRelations()
-
-    /**
-     * Adds an object to the instance pool.
-     *
-     * Propel keeps cached copies of objects in an instance pool when they are retrieved
-     * from the database. In some cases you may need to explicitly add objects
-     * to the cache in order to ensure that the same objects are always returned by find*()
-     * and findPk*() calls.
-     *
-     * @param \API\Models\Ordering\Order $obj A \API\Models\Ordering\Order object.
-     * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
-     */
-    public static function addInstanceToPool($obj, $key = null)
-    {
-        if (Propel::isInstancePoolingEnabled()) {
-            if (null === $key) {
-                $key = serialize([(null === $obj->getOrderid() || is_scalar($obj->getOrderid()) || is_callable([$obj->getOrderid(), '__toString']) ? (string) $obj->getOrderid() : $obj->getOrderid()), (null === $obj->getEventTableid() || is_scalar($obj->getEventTableid()) || is_callable([$obj->getEventTableid(), '__toString']) ? (string) $obj->getEventTableid() : $obj->getEventTableid()), (null === $obj->getUserid() || is_scalar($obj->getUserid()) || is_callable([$obj->getUserid(), '__toString']) ? (string) $obj->getUserid() : $obj->getUserid())]);
-            } // if key === null
-            self::$instances[$key] = $obj;
-        }
-    }
-
-    /**
-     * Removes an object from the instance pool.
-     *
-     * Propel keeps cached copies of objects in an instance pool when they are retrieved
-     * from the database.  In some cases -- especially when you override doDelete
-     * methods in your stub classes -- you may need to explicitly remove objects
-     * from the cache in order to prevent returning objects that no longer exist.
-     *
-     * @param mixed $value A \API\Models\Ordering\Order object or a primary key value.
-     */
-    public static function removeInstanceFromPool($value)
-    {
-        if (Propel::isInstancePoolingEnabled() && null !== $value) {
-            if (is_object($value) && $value instanceof \API\Models\Ordering\Order) {
-                $key = serialize([(null === $value->getOrderid() || is_scalar($value->getOrderid()) || is_callable([$value->getOrderid(), '__toString']) ? (string) $value->getOrderid() : $value->getOrderid()), (null === $value->getEventTableid() || is_scalar($value->getEventTableid()) || is_callable([$value->getEventTableid(), '__toString']) ? (string) $value->getEventTableid() : $value->getEventTableid()), (null === $value->getUserid() || is_scalar($value->getUserid()) || is_callable([$value->getUserid(), '__toString']) ? (string) $value->getUserid() : $value->getUserid())]);
-
-            } elseif (is_array($value) && count($value) === 3) {
-                // assume we've been passed a primary key";
-                $key = serialize([(null === $value[0] || is_scalar($value[0]) || is_callable([$value[0], '__toString']) ? (string) $value[0] : $value[0]), (null === $value[1] || is_scalar($value[1]) || is_callable([$value[1], '__toString']) ? (string) $value[1] : $value[1]), (null === $value[2] || is_scalar($value[2]) || is_callable([$value[2], '__toString']) ? (string) $value[2] : $value[2])]);
-            } elseif ($value instanceof Criteria) {
-                self::$instances = [];
-
-                return;
-            } else {
-                $e = new PropelException("Invalid value passed to removeInstanceFromPool().  Expected primary key or \API\Models\Ordering\Order object; got " . (is_object($value) ? get_class($value) . ' object.' : var_export($value, true)));
-                throw $e;
-            }
-
-            unset(self::$instances[$key]);
-        }
-    }
-    /**
-     * Method to invalidate the instance pool of all tables related to order     * by a foreign key with ON DELETE CASCADE
-     */
-    public static function clearRelatedInstancePool()
-    {
-        // Invalidate objects in related instance pools,
-        // since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-        OrderDetailTableMap::clearInstancePool();
-        OrderInProgressTableMap::clearInstancePool();
-    }
 
     /**
      * Retrieves a string version of the primary key from the DB resultset row that can be used to uniquely identify a row in this table.
@@ -274,11 +216,11 @@ class OrderTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 2 + $offset : static::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)])]);
+        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -295,25 +237,11 @@ class OrderTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-            $pks = [];
-
-        $pks[] = (int) $row[
+        return (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
                 : self::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)
         ];
-        $pks[] = (int) $row[
-            $indexType == TableMap::TYPE_NUM
-                ? 1 + $offset
-                : self::translateFieldName('EventTableid', TableMap::TYPE_PHPNAME, $indexType)
-        ];
-        $pks[] = (int) $row[
-            $indexType == TableMap::TYPE_NUM
-                ? 2 + $offset
-                : self::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)
-        ];
-
-        return $pks;
     }
 
     /**
@@ -418,14 +346,16 @@ class OrderTableMap extends TableMap
             $criteria->addSelectColumn(OrderTableMap::COL_USERID);
             $criteria->addSelectColumn(OrderTableMap::COL_ORDERTIME);
             $criteria->addSelectColumn(OrderTableMap::COL_PRIORITY);
-            $criteria->addSelectColumn(OrderTableMap::COL_FINISHED);
+            $criteria->addSelectColumn(OrderTableMap::COL_DISTRIBUTION_FINISHED);
+            $criteria->addSelectColumn(OrderTableMap::COL_INVOICE_FINISHED);
         } else {
             $criteria->addSelectColumn($alias . '.orderid');
             $criteria->addSelectColumn($alias . '.event_tableid');
             $criteria->addSelectColumn($alias . '.userid');
             $criteria->addSelectColumn($alias . '.ordertime');
             $criteria->addSelectColumn($alias . '.priority');
-            $criteria->addSelectColumn($alias . '.finished');
+            $criteria->addSelectColumn($alias . '.distribution_finished');
+            $criteria->addSelectColumn($alias . '.invoice_finished');
         }
     }
 
@@ -477,18 +407,7 @@ class OrderTableMap extends TableMap
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
             $criteria = new Criteria(OrderTableMap::DATABASE_NAME);
-            // primary key is composite; we therefore, expect
-            // the primary key passed to be an array of pkey values
-            if (count($values) == count($values, COUNT_RECURSIVE)) {
-                // array is not multi-dimensional
-                $values = array($values);
-            }
-            foreach ($values as $value) {
-                $criterion = $criteria->getNewCriterion(OrderTableMap::COL_ORDERID, $value[0]);
-                $criterion->addAnd($criteria->getNewCriterion(OrderTableMap::COL_EVENT_TABLEID, $value[1]));
-                $criterion->addAnd($criteria->getNewCriterion(OrderTableMap::COL_USERID, $value[2]));
-                $criteria->addOr($criterion);
-            }
+            $criteria->add(OrderTableMap::COL_ORDERID, (array) $values, Criteria::IN);
         }
 
         $query = OrderQuery::create()->mergeWith($criteria);

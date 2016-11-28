@@ -1104,9 +1104,7 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
     public function getMenuPossibleExtra(ConnectionInterface $con = null)
     {
         if ($this->aMenuPossibleExtra === null && ($this->menu_possible_extraid !== null)) {
-            $this->aMenuPossibleExtra = MenuPossibleExtraQuery::create()
-                ->filterByOrderDetailExtra($this) // here
-                ->findOne($con);
+            $this->aMenuPossibleExtra = MenuPossibleExtraQuery::create()->findPk($this->menu_possible_extraid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1157,9 +1155,7 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
     public function getOrderDetail(ConnectionInterface $con = null)
     {
         if ($this->aOrderDetail === null && ($this->order_detailid !== null)) {
-            $this->aOrderDetail = ChildOrderDetailQuery::create()
-                ->filterByOrderDetailExtra($this) // here
-                ->findOne($con);
+            $this->aOrderDetail = ChildOrderDetailQuery::create()->findPk($this->order_detailid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

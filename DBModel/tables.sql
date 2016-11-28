@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `event_table` (
   `data` VARCHAR(255) NULL,
   UNIQUE INDEX `tableid_UNIQUE` (`event_tableid` ASC),
   INDEX `tables_name` (`name` ASC),
-  PRIMARY KEY (`event_tableid`, `eventid`),
+  PRIMARY KEY (`event_tableid`),
   INDEX `fk_tables_events1_idx` (`eventid` ASC),
   CONSTRAINT `fk_tables_events1`
     FOREIGN KEY (`eventid`)
@@ -83,14 +83,16 @@ CREATE TABLE IF NOT EXISTS `order` (
   `userid` INT(11) NOT NULL,
   `ordertime` DATETIME NOT NULL,
   `priority` INT NOT NULL,
-  `finished` DATETIME NULL,
-  PRIMARY KEY (`orderid`, `event_tableid`, `userid`),
+  `distribution_finished` DATETIME NULL,
+  `invoice_finished` DATETIME NULL,
+  PRIMARY KEY (`orderid`),
   UNIQUE INDEX `oder_id_UNIQUE` (`orderid` ASC),
   INDEX `ordertime` (`ordertime` ASC),
   INDEX `fk_orders_users1_idx` (`userid` ASC),
   INDEX `fk_orders_tables_idx` (`event_tableid` ASC),
   INDEX `priority` (`priority` ASC),
-  INDEX `finished` (`finished` ASC),
+  INDEX `distribution_finished` (`distribution_finished` ASC),
+  INDEX `invoice_finished` (`invoice_finished` ASC),
   CONSTRAINT `fk_orders_tables`
     FOREIGN KEY (`event_tableid`)
     REFERENCES `event_table` (`event_tableid`)
@@ -116,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `menu_type` (
   `name` VARCHAR(64) NOT NULL,
   `tax` SMALLINT NOT NULL,
   `allowMixing` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`menu_typeid`, `eventid`),
+  PRIMARY KEY (`menu_typeid`),
   UNIQUE INDEX `menu_typeid_UNIQUE` (`menu_typeid` ASC),
   INDEX `fk_menu_types_events1_idx` (`eventid` ASC),
   CONSTRAINT `fk_menu_types_events1`
@@ -137,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `menu_group` (
   `menu_groupid` INT(11) NOT NULL AUTO_INCREMENT,
   `menu_typeid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
-  PRIMARY KEY (`menu_groupid`, `menu_typeid`),
+  PRIMARY KEY (`menu_groupid`),
   UNIQUE INDEX `menu_groupid_UNIQUE` (`menu_groupid` ASC),
   INDEX `fk_menu_groupes_menu_types1_idx` (`menu_typeid` ASC),
   CONSTRAINT `fk_menu_groupes_menu_types1`
@@ -159,7 +161,8 @@ CREATE TABLE IF NOT EXISTS `availability` (
   `name` VARCHAR(24) NOT NULL,
   PRIMARY KEY (`availabilityid`),
   UNIQUE INDEX `availabilityid_UNIQUE` (`availabilityid` ASC))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Beinhaltet die möglichen verfügbarkeits statuse den Menüs/Produkte und Sonderwünsche';
 
 
 -- -----------------------------------------------------
@@ -176,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `availability_amount` SMALLINT UNSIGNED NULL,
   UNIQUE INDEX `menuid_UNIQUE` (`menuid` ASC),
   INDEX `fk_menues_menu_groupes1_idx` (`menu_groupid` ASC),
-  PRIMARY KEY (`menuid`, `menu_groupid`),
+  PRIMARY KEY (`menuid`),
   INDEX `fk_menues_availabilitys1_idx` (`availabilityid` ASC),
   CONSTRAINT `fk_menues_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
@@ -202,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `menu_size` (
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(32) NOT NULL,
   `factor` DECIMAL(3,2) NOT NULL,
-  PRIMARY KEY (`menu_sizeid`, `eventid`),
+  PRIMARY KEY (`menu_sizeid`),
   UNIQUE INDEX `menu_sizeid_UNIQUE` (`menu_sizeid` ASC),
   INDEX `fk_menu_sizes_events1_idx` (`eventid` ASC),
   CONSTRAINT `fk_menu_sizes_events1`
@@ -229,11 +232,12 @@ CREATE TABLE IF NOT EXISTS `order_detail` (
   `single_price` DECIMAL(7,2) NOT NULL,
   `single_price_modified_by_userid` INT(11) NULL,
   `extra_detail` VARCHAR(255) NULL,
-  `finished` DATETIME NULL,
   `availabilityid` INT NULL,
   `availability_amount` SMALLINT NULL,
   `verified` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`order_detailid`, `orderid`),
+  `distribution_finished` DATETIME NULL,
+  `invoice_finished` DATETIME NULL,
+  PRIMARY KEY (`order_detailid`),
   UNIQUE INDEX `orders_detailid_UNIQUE` (`order_detailid` ASC),
   INDEX `fk_orders_details_menues1_idx` (`menuid` ASC),
   INDEX `fk_orders_details_orders1_idx` (`orderid` ASC),
@@ -242,6 +246,8 @@ CREATE TABLE IF NOT EXISTS `order_detail` (
   INDEX `fk_orders_details_menu_sizes1_idx` (`menu_sizeid` ASC),
   INDEX `fk_orders_details_menu_groupes1_idx` (`menu_groupid` ASC),
   INDEX `fk_orders_details_availabilitys1_idx` (`availabilityid` ASC),
+  INDEX `distribution_finished` (`distribution_finished` ASC),
+  INDEX `invoice_finished` (`invoice_finished` ASC),
   CONSTRAINT `fk_orders_details_menues1`
     FOREIGN KEY (`menuid`)
     REFERENCES `menu` (`menuid`)
@@ -287,7 +293,7 @@ CREATE TABLE IF NOT EXISTS `menu_extra` (
   `name` VARCHAR(64) NOT NULL,
   `availabilityid` INT NOT NULL,
   `availability_amount` SMALLINT UNSIGNED NULL,
-  PRIMARY KEY (`menu_extraid`, `eventid`),
+  PRIMARY KEY (`menu_extraid`),
   UNIQUE INDEX `menu_extraid_UNIQUE` (`menu_extraid` ASC),
   INDEX `fk_menu_extras_events1_idx` (`eventid` ASC),
   INDEX `fk_menu_extras_availabilitys1_idx` (`availabilityid` ASC),
@@ -315,7 +321,7 @@ CREATE TABLE IF NOT EXISTS `menu_possible_size` (
   `menu_sizeid` INT(11) NOT NULL,
   `menuid` INT(11) NOT NULL,
   `price` DECIMAL(7,2) NULL,
-  PRIMARY KEY (`menu_possible_sizeid`, `menu_sizeid`, `menuid`),
+  PRIMARY KEY (`menu_possible_sizeid`),
   INDEX `fk_menues_possible_sizes_menues1_idx` (`menuid` ASC),
   UNIQUE INDEX `menues_possible_sizeid_UNIQUE` (`menu_possible_sizeid` ASC),
   CONSTRAINT `fk_menues_possible_sizes_menu_sizes1`
@@ -342,7 +348,7 @@ CREATE TABLE IF NOT EXISTS `menu_possible_extra` (
   `menu_extraid` INT(11) NOT NULL,
   `menuid` INT(11) NOT NULL,
   `price` DECIMAL(7,2) NOT NULL,
-  PRIMARY KEY (`menu_possible_extraid`, `menu_extraid`, `menuid`),
+  PRIMARY KEY (`menu_possible_extraid`),
   INDEX `fk_menues_possible_extras_menues1_idx` (`menuid` ASC),
   UNIQUE INDEX `menues_possible_extraid_UNIQUE` (`menu_possible_extraid` ASC),
   CONSTRAINT `fk_menues_possible_extras_menu_extras1`
@@ -435,7 +441,7 @@ CREATE TABLE IF NOT EXISTS `order_in_progress` (
   `menu_groupid` INT(11) NOT NULL,
   `begin` DATETIME NOT NULL,
   `done` DATETIME NULL,
-  PRIMARY KEY (`order_in_progressid`, `orderid`, `userid`, `menu_groupid`),
+  PRIMARY KEY (`order_in_progressid`),
   UNIQUE INDEX `orders_in_progressid_UNIQUE` (`order_in_progressid` ASC),
   INDEX `fk_orders_in_progress_orders1_idx` (`orderid` ASC),
   INDEX `fk_orders_in_progress_users1_idx` (`userid` ASC),
@@ -470,7 +476,7 @@ CREATE TABLE IF NOT EXISTS `event_user` (
   `userid` INT(11) NOT NULL,
   `user_roles` INT(11) UNSIGNED NOT NULL,
   `begin_money` DECIMAL NOT NULL,
-  PRIMARY KEY (`event_userid`, `eventid`, `userid`),
+  PRIMARY KEY (`event_userid`),
   INDEX `fk_events_has_users_users1_idx` (`userid` ASC),
   INDEX `fk_events_has_users_events1_idx` (`eventid` ASC),
   UNIQUE INDEX `UNIQUE` (`eventid` ASC, `userid` ASC),
@@ -498,7 +504,7 @@ CREATE TABLE IF NOT EXISTS `distribution_place` (
   `distribution_placeid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
-  PRIMARY KEY (`distribution_placeid`, `eventid`),
+  PRIMARY KEY (`distribution_placeid`),
   UNIQUE INDEX `events_distribution_placeid_UNIQUE` (`distribution_placeid` ASC),
   INDEX `fk_events_distribution_places_events1_idx` (`eventid` ASC),
   CONSTRAINT `fk_events_distribution_places_events1`
@@ -523,7 +529,7 @@ CREATE TABLE IF NOT EXISTS `event_printer` (
   `port` SMALLINT UNSIGNED NOT NULL,
   `default` TINYINT(1) NOT NULL,
   `characters_per_row` TINYINT NOT NULL,
-  PRIMARY KEY (`event_printerid`, `eventid`),
+  PRIMARY KEY (`event_printerid`),
   UNIQUE INDEX `printerid_UNIQUE` (`event_printerid` ASC),
   INDEX `fk_printers_events1_idx` (`eventid` ASC),
   CONSTRAINT `fk_printers_events1`
@@ -544,7 +550,7 @@ CREATE TABLE IF NOT EXISTS `distribution_place_group` (
   `distribution_place_groupid` INT(11) NOT NULL AUTO_INCREMENT,
   `distribution_placeid` INT(11) NOT NULL,
   `menu_groupid` INT(11) NOT NULL,
-  PRIMARY KEY (`distribution_place_groupid`, `distribution_placeid`, `menu_groupid`),
+  PRIMARY KEY (`distribution_place_groupid`),
   INDEX `fk_distributions_places_has_menu_groupes_menu_groupes1_idx` (`menu_groupid` ASC),
   INDEX `fk_distributions_places_has_menu_groupes_distributions_plac_idx` (`distribution_placeid` ASC),
   UNIQUE INDEX `distribution_place_groupid_UNIQUE` (`distribution_place_groupid` ASC),
@@ -635,7 +641,7 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `zip` VARCHAR(10) NOT NULL,
   `tax_identification_nr` VARCHAR(32) NULL,
   `active` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`customerid`, `eventid`),
+  PRIMARY KEY (`customerid`),
   UNIQUE INDEX `customerid_UNIQUE` (`customerid` ASC),
   INDEX `fk_customer_event1_idx` (`eventid` ASC),
   INDEX `name` (`name` ASC),
@@ -644,7 +650,8 @@ CREATE TABLE IF NOT EXISTS `customer` (
     REFERENCES `event` (`eventid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Beinhaltet Kundendaten für Rechnungen. Wenn ein Kunde eine Vorsteuerabzugsberechtige Rechnugn braucht müssen die Kundendaten auf der Rechnung stehen genauso wie die Daten der Firma die die Rechnung ausstellt';
 
 
 -- -----------------------------------------------------
@@ -658,10 +665,12 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   `customerid` INT NULL,
   `date` DATETIME NOT NULL,
   `canceled` DATETIME NULL,
-  PRIMARY KEY (`invoiceid`, `cashier_userid`),
+  `payment_finished` DATETIME NULL,
+  PRIMARY KEY (`invoiceid`),
   UNIQUE INDEX `invoiceid_UNIQUE` (`invoiceid` ASC),
   INDEX `fk_invoices_users1_idx` (`cashier_userid` ASC),
   INDEX `fk_invoice_customer1_idx` (`customerid` ASC),
+  INDEX `payment_finished` (`payment_finished` ASC),
   CONSTRAINT `fk_invoices_users1`
     FOREIGN KEY (`cashier_userid`)
     REFERENCES `user` (`userid`)
@@ -689,7 +698,7 @@ CREATE TABLE IF NOT EXISTS `invoice_item` (
   `price` DECIMAL(7,2) NOT NULL,
   `description` VARCHAR(255) NOT NULL,
   `tax` SMALLINT NOT NULL,
-  PRIMARY KEY (`invoice_itemid`, `invoiceid`, `order_detailid`),
+  PRIMARY KEY (`invoice_itemid`),
   INDEX `fk_invoices_has_orders_details_orders_details1_idx` (`order_detailid` ASC),
   INDEX `fk_invoices_has_orders_details_invoices1_idx` (`invoiceid` ASC),
   INDEX `idx_amount` (`amount` ASC),
@@ -718,7 +727,8 @@ CREATE TABLE IF NOT EXISTS `distribution_giving_out` (
   `date` DATETIME NOT NULL,
   PRIMARY KEY (`distribution_giving_outid`),
   UNIQUE INDEX `distribution_givin_outid_UNIQUE` (`distribution_giving_outid` ASC))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+COMMENT = 'Jede einzelne Ausgabe wird hier angelegt mit einem Zeitstempel';
 
 
 -- -----------------------------------------------------
@@ -732,7 +742,7 @@ CREATE TABLE IF NOT EXISTS `order_in_progress_recieved` (
   `order_in_progressid` INT(11) NOT NULL,
   `distribution_giving_outid` INT(11) NOT NULL,
   `amount` TINYINT NOT NULL,
-  PRIMARY KEY (`order_in_progress_recievedid`, `order_detailid`, `order_in_progressid`, `distribution_giving_outid`),
+  PRIMARY KEY (`order_in_progress_recievedid`),
   INDEX `fk_orders_details_has_orders_in_progress_orders_in_progress_idx` (`order_in_progressid` ASC),
   INDEX `fk_orders_details_has_orders_in_progress_orders_details1_idx` (`order_detailid` ASC),
   UNIQUE INDEX `orders_in_progress_recievedid_UNIQUE` (`order_in_progress_recievedid` ASC),
@@ -768,7 +778,7 @@ CREATE TABLE IF NOT EXISTS `user_message` (
   `message` TEXT NOT NULL,
   `date` DATETIME NOT NULL,
   `readed` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`user_messageid`, `to_event_userid`),
+  PRIMARY KEY (`user_messageid`),
   UNIQUE INDEX `users_chatid_UNIQUE` (`user_messageid` ASC),
   INDEX `fk_users_chat_events_user1_idx` (`from_event_userid` ASC),
   INDEX `fk_users_chat_events_user2_idx` (`to_event_userid` ASC),
@@ -813,7 +823,7 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `date` DATETIME NOT NULL,
   `amount` DECIMAL(7,2) NOT NULL,
   `canceled` DATETIME NULL,
-  PRIMARY KEY (`paymentid`, `payment_typeid`, `invoiceid`),
+  PRIMARY KEY (`paymentid`),
   INDEX `fk_payment_types_has_invoices_invoices1_idx` (`invoiceid` ASC),
   INDEX `fk_payment_types_has_invoices_payment_types1_idx` (`payment_typeid` ASC),
   CONSTRAINT `fk_payment_types_has_invoices_payment_types1`
@@ -842,7 +852,7 @@ CREATE TABLE IF NOT EXISTS `coupon` (
   `code` VARCHAR(24) NOT NULL,
   `created` DATETIME NOT NULL,
   `value` DECIMAL(7,2) NOT NULL,
-  PRIMARY KEY (`couponid`, `eventid`, `created_by_userid`),
+  PRIMARY KEY (`couponid`),
   INDEX `fk_Coupons_events1_idx` (`eventid` ASC),
   INDEX `fk_Coupons_users1_idx` (`created_by_userid` ASC),
   CONSTRAINT `fk_Coupons_events1`
@@ -886,11 +896,6 @@ COMMENT = 'Beinhaltet Gutscheine die für eine Bezahlung verwendet wurden';
 
 
 -- -----------------------------------------------------
--- Placeholder table for view `order_detail_open`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `order_detail_open` (`orderid` INT, `order_detailid` INT, `menuid` INT, `amount` INT, `single_price` INT, `extra_detail` INT, `amount_payed` INT);
-
--- -----------------------------------------------------
 -- procedure open_order_priority
 -- -----------------------------------------------------
 DROP procedure IF EXISTS `open_order_priority`;
@@ -918,26 +923,6 @@ FROM (SELECT od.order_detailid, m.menu_groupid, o.priority, o.orderid
 END$$
 
 DELIMITER ;
-
--- -----------------------------------------------------
--- View `order_detail_open`
--- -----------------------------------------------------
-DROP VIEW IF EXISTS `order_detail_open` ;
-DROP TABLE IF EXISTS `order_detail_open`;
-CREATE  OR REPLACE VIEW `order_detail_open` AS
-SELECT od.orderid, 
-		od.order_detailid,
-		od.menuid,
-		od.amount,
-		od.single_price,
-		od.extra_detail,
-		(SELECT COALESCE(SUM(iod.amount), 0)
-		 FROM invoice_item iod
-		 WHERE iod.order_detailid = od.order_detailid) AS amount_payed
- FROM order_detail od
- WHERE od.amount <> (SELECT COALESCE(SUM(iod2.amount), 0)
-						 FROM invoice_item iod2
-						 WHERE iod2.order_detailid = od.order_detailid);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

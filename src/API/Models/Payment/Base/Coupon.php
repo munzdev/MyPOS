@@ -1312,8 +1312,6 @@ abstract class Coupon implements ActiveRecordInterface
     {
         $criteria = ChildCouponQuery::create();
         $criteria->add(CouponTableMap::COL_COUPONID, $this->couponid);
-        $criteria->add(CouponTableMap::COL_EVENTID, $this->eventid);
-        $criteria->add(CouponTableMap::COL_CREATED_BY_USERID, $this->created_by_userid);
 
         return $criteria;
     }
@@ -1326,26 +1324,10 @@ abstract class Coupon implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getCouponid() &&
-            null !== $this->getEventid() &&
-            null !== $this->getCreatedByUserid();
+        $validPk = null !== $this->getCouponid();
 
-        $validPrimaryKeyFKs = 2;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_Coupons_events1 to table event
-        if ($this->aEvent && $hash = spl_object_hash($this->aEvent)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_Coupons_users1 to table user
-        if ($this->aUser && $hash = spl_object_hash($this->aUser)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1357,31 +1339,23 @@ abstract class Coupon implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getCouponid();
-        $pks[1] = $this->getEventid();
-        $pks[2] = $this->getCreatedByUserid();
-
-        return $pks;
+        return $this->getCouponid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (couponid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setCouponid($keys[0]);
-        $this->setEventid($keys[1]);
-        $this->setCreatedByUserid($keys[2]);
+        $this->setCouponid($key);
     }
 
     /**
@@ -1390,7 +1364,7 @@ abstract class Coupon implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getCouponid()) && (null === $this->getEventid()) && (null === $this->getCreatedByUserid());
+        return null === $this->getCouponid();
     }
 
     /**

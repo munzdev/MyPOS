@@ -27,12 +27,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery orderByCustomerid($order = Criteria::ASC) Order by the customerid column
  * @method     ChildInvoiceQuery orderByDate($order = Criteria::ASC) Order by the date column
  * @method     ChildInvoiceQuery orderByCanceled($order = Criteria::ASC) Order by the canceled column
+ * @method     ChildInvoiceQuery orderByPaymentFinished($order = Criteria::ASC) Order by the payment_finished column
  *
  * @method     ChildInvoiceQuery groupByInvoiceid() Group by the invoiceid column
  * @method     ChildInvoiceQuery groupByCashierUserid() Group by the cashier_userid column
  * @method     ChildInvoiceQuery groupByCustomerid() Group by the customerid column
  * @method     ChildInvoiceQuery groupByDate() Group by the date column
  * @method     ChildInvoiceQuery groupByCanceled() Group by the canceled column
+ * @method     ChildInvoiceQuery groupByPaymentFinished() Group by the payment_finished column
  *
  * @method     ChildInvoiceQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildInvoiceQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -91,7 +93,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoice findOneByCashierUserid(int $cashier_userid) Return the first ChildInvoice filtered by the cashier_userid column
  * @method     ChildInvoice findOneByCustomerid(int $customerid) Return the first ChildInvoice filtered by the customerid column
  * @method     ChildInvoice findOneByDate(string $date) Return the first ChildInvoice filtered by the date column
- * @method     ChildInvoice findOneByCanceled(string $canceled) Return the first ChildInvoice filtered by the canceled column *
+ * @method     ChildInvoice findOneByCanceled(string $canceled) Return the first ChildInvoice filtered by the canceled column
+ * @method     ChildInvoice findOneByPaymentFinished(string $payment_finished) Return the first ChildInvoice filtered by the payment_finished column *
 
  * @method     ChildInvoice requirePk($key, ConnectionInterface $con = null) Return the ChildInvoice by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOne(ConnectionInterface $con = null) Return the first ChildInvoice matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -101,6 +104,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoice requireOneByCustomerid(int $customerid) Return the first ChildInvoice filtered by the customerid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByDate(string $date) Return the first ChildInvoice filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByCanceled(string $canceled) Return the first ChildInvoice filtered by the canceled column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoice requireOneByPaymentFinished(string $payment_finished) Return the first ChildInvoice filtered by the payment_finished column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildInvoice[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoice objects based on current ModelCriteria
  * @method     ChildInvoice[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildInvoice objects filtered by the invoiceid column
@@ -108,6 +112,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoice[]|ObjectCollection findByCustomerid(int $customerid) Return ChildInvoice objects filtered by the customerid column
  * @method     ChildInvoice[]|ObjectCollection findByDate(string $date) Return ChildInvoice objects filtered by the date column
  * @method     ChildInvoice[]|ObjectCollection findByCanceled(string $canceled) Return ChildInvoice objects filtered by the canceled column
+ * @method     ChildInvoice[]|ObjectCollection findByPaymentFinished(string $payment_finished) Return ChildInvoice objects filtered by the payment_finished column
  * @method     ChildInvoice[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -157,10 +162,10 @@ abstract class InvoiceQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34), $con);
+     * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param array[$invoiceid, $cashier_userid] $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildInvoice|array|mixed the result, formatted by the current formatter
@@ -185,7 +190,7 @@ abstract class InvoiceQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = InvoiceTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]))))) {
+        if ((null !== ($obj = InvoiceTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -206,11 +211,10 @@ abstract class InvoiceQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT invoiceid, cashier_userid, customerid, date, canceled FROM invoice WHERE invoiceid = :p0 AND cashier_userid = :p1';
+        $sql = 'SELECT invoiceid, cashier_userid, customerid, date, canceled, payment_finished FROM invoice WHERE invoiceid = :p0';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -221,7 +225,7 @@ abstract class InvoiceQuery extends ModelCriteria
             /** @var ChildInvoice $obj */
             $obj = new ChildInvoice();
             $obj->hydrate($row);
-            InvoiceTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1])]));
+            InvoiceTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -250,7 +254,7 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -280,10 +284,8 @@ abstract class InvoiceQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(InvoiceTableMap::COL_INVOICEID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(InvoiceTableMap::COL_CASHIER_USERID, $key[1], Criteria::EQUAL);
 
-        return $this;
+        return $this->addUsingAlias(InvoiceTableMap::COL_INVOICEID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -295,17 +297,8 @@ abstract class InvoiceQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-        if (empty($keys)) {
-            return $this->add(null, '1<>1', Criteria::CUSTOM);
-        }
-        foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(InvoiceTableMap::COL_INVOICEID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(InvoiceTableMap::COL_CASHIER_USERID, $key[1], Criteria::EQUAL);
-            $cton0->addAnd($cton1);
-            $this->addOr($cton0);
-        }
 
-        return $this;
+        return $this->addUsingAlias(InvoiceTableMap::COL_INVOICEID, $keys, Criteria::IN);
     }
 
     /**
@@ -522,6 +515,49 @@ abstract class InvoiceQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the payment_finished column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByPaymentFinished('2011-03-14'); // WHERE payment_finished = '2011-03-14'
+     * $query->filterByPaymentFinished('now'); // WHERE payment_finished = '2011-03-14'
+     * $query->filterByPaymentFinished(array('max' => 'yesterday')); // WHERE payment_finished > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $paymentFinished The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildInvoiceQuery The current query, for fluid interface
+     */
+    public function filterByPaymentFinished($paymentFinished = null, $comparison = null)
+    {
+        if (is_array($paymentFinished)) {
+            $useMinMax = false;
+            if (isset($paymentFinished['min'])) {
+                $this->addUsingAlias(InvoiceTableMap::COL_PAYMENT_FINISHED, $paymentFinished['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($paymentFinished['max'])) {
+                $this->addUsingAlias(InvoiceTableMap::COL_PAYMENT_FINISHED, $paymentFinished['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InvoiceTableMap::COL_PAYMENT_FINISHED, $paymentFinished, $comparison);
+    }
+
+    /**
      * Filter the query by a related \API\Models\Invoice\Customer object
      *
      * @param \API\Models\Invoice\Customer|ObjectCollection $customer The related object(s) to use as filter
@@ -542,7 +578,7 @@ abstract class InvoiceQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(InvoiceTableMap::COL_CUSTOMERID, $customer->toKeyValue('Customerid', 'Customerid'), $comparison);
+                ->addUsingAlias(InvoiceTableMap::COL_CUSTOMERID, $customer->toKeyValue('PrimaryKey', 'Customerid'), $comparison);
         } else {
             throw new PropelException('filterByCustomer() only accepts arguments of type \API\Models\Invoice\Customer or Collection');
         }
@@ -831,9 +867,7 @@ abstract class InvoiceQuery extends ModelCriteria
     public function prune($invoice = null)
     {
         if ($invoice) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(InvoiceTableMap::COL_INVOICEID), $invoice->getInvoiceid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(InvoiceTableMap::COL_CASHIER_USERID), $invoice->getCashierUserid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1'), Criteria::LOGICAL_OR);
+            $this->addUsingAlias(InvoiceTableMap::COL_INVOICEID, $invoice->getInvoiceid(), Criteria::NOT_EQUAL);
         }
 
         return $this;

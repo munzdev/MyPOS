@@ -1253,8 +1253,6 @@ abstract class InvoiceItem implements ActiveRecordInterface
     {
         $criteria = ChildInvoiceItemQuery::create();
         $criteria->add(InvoiceItemTableMap::COL_INVOICE_ITEMID, $this->invoice_itemid);
-        $criteria->add(InvoiceItemTableMap::COL_INVOICEID, $this->invoiceid);
-        $criteria->add(InvoiceItemTableMap::COL_ORDER_DETAILID, $this->order_detailid);
 
         return $criteria;
     }
@@ -1267,26 +1265,10 @@ abstract class InvoiceItem implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getInvoiceItemid() &&
-            null !== $this->getInvoiceid() &&
-            null !== $this->getOrderDetailid();
+        $validPk = null !== $this->getInvoiceItemid();
 
-        $validPrimaryKeyFKs = 2;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_invoices_has_orders_details_invoices1 to table invoice
-        if ($this->aInvoice && $hash = spl_object_hash($this->aInvoice)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_invoices_has_orders_details_orders_details1 to table order_detail
-        if ($this->aOrderDetail && $hash = spl_object_hash($this->aOrderDetail)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1298,31 +1280,23 @@ abstract class InvoiceItem implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getInvoiceItemid();
-        $pks[1] = $this->getInvoiceid();
-        $pks[2] = $this->getOrderDetailid();
-
-        return $pks;
+        return $this->getInvoiceItemid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (invoice_itemid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setInvoiceItemid($keys[0]);
-        $this->setInvoiceid($keys[1]);
-        $this->setOrderDetailid($keys[2]);
+        $this->setInvoiceItemid($key);
     }
 
     /**
@@ -1331,7 +1305,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getInvoiceItemid()) && (null === $this->getInvoiceid()) && (null === $this->getOrderDetailid());
+        return null === $this->getInvoiceItemid();
     }
 
     /**
@@ -1419,9 +1393,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
     public function getInvoice(ConnectionInterface $con = null)
     {
         if ($this->aInvoice === null && ($this->invoiceid !== null)) {
-            $this->aInvoice = ChildInvoiceQuery::create()
-                ->filterByInvoiceItem($this) // here
-                ->findOne($con);
+            $this->aInvoice = ChildInvoiceQuery::create()->findPk($this->invoiceid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1472,9 +1444,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
     public function getOrderDetail(ConnectionInterface $con = null)
     {
         if ($this->aOrderDetail === null && ($this->order_detailid !== null)) {
-            $this->aOrderDetail = OrderDetailQuery::create()
-                ->filterByInvoiceItem($this) // here
-                ->findOne($con);
+            $this->aOrderDetail = OrderDetailQuery::create()->findPk($this->order_detailid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

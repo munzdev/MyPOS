@@ -1116,8 +1116,6 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
     {
         $criteria = ChildDistributionPlaceGroupQuery::create();
         $criteria->add(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $this->distribution_place_groupid);
-        $criteria->add(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID, $this->distribution_placeid);
-        $criteria->add(DistributionPlaceGroupTableMap::COL_MENU_GROUPID, $this->menu_groupid);
 
         return $criteria;
     }
@@ -1130,26 +1128,10 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getDistributionPlaceGroupid() &&
-            null !== $this->getDistributionPlaceid() &&
-            null !== $this->getMenuGroupid();
+        $validPk = null !== $this->getDistributionPlaceGroupid();
 
-        $validPrimaryKeyFKs = 2;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_distributions_places_has_menu_groupes_distributions_places1 to table distribution_place
-        if ($this->aDistributionPlace && $hash = spl_object_hash($this->aDistributionPlace)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_distributions_places_has_menu_groupes_menu_groupes1 to table menu_group
-        if ($this->aMenuGroup && $hash = spl_object_hash($this->aMenuGroup)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1161,31 +1143,23 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getDistributionPlaceGroupid();
-        $pks[1] = $this->getDistributionPlaceid();
-        $pks[2] = $this->getMenuGroupid();
-
-        return $pks;
+        return $this->getDistributionPlaceGroupid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (distribution_place_groupid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setDistributionPlaceGroupid($keys[0]);
-        $this->setDistributionPlaceid($keys[1]);
-        $this->setMenuGroupid($keys[2]);
+        $this->setDistributionPlaceGroupid($key);
     }
 
     /**
@@ -1194,7 +1168,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getDistributionPlaceGroupid()) && (null === $this->getDistributionPlaceid()) && (null === $this->getMenuGroupid());
+        return null === $this->getDistributionPlaceGroupid();
     }
 
     /**
@@ -1292,9 +1266,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
     public function getDistributionPlace(ConnectionInterface $con = null)
     {
         if ($this->aDistributionPlace === null && ($this->distribution_placeid !== null)) {
-            $this->aDistributionPlace = ChildDistributionPlaceQuery::create()
-                ->filterByDistributionPlaceGroup($this) // here
-                ->findOne($con);
+            $this->aDistributionPlace = ChildDistributionPlaceQuery::create()->findPk($this->distribution_placeid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1345,9 +1317,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
     public function getMenuGroup(ConnectionInterface $con = null)
     {
         if ($this->aMenuGroup === null && ($this->menu_groupid !== null)) {
-            $this->aMenuGroup = MenuGroupQuery::create()
-                ->filterByDistributionPlaceGroup($this) // here
-                ->findOne($con);
+            $this->aMenuGroup = MenuGroupQuery::create()->findPk($this->menu_groupid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

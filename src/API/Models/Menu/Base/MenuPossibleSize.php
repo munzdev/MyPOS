@@ -1076,8 +1076,6 @@ abstract class MenuPossibleSize implements ActiveRecordInterface
     {
         $criteria = ChildMenuPossibleSizeQuery::create();
         $criteria->add(MenuPossibleSizeTableMap::COL_MENU_POSSIBLE_SIZEID, $this->menu_possible_sizeid);
-        $criteria->add(MenuPossibleSizeTableMap::COL_MENU_SIZEID, $this->menu_sizeid);
-        $criteria->add(MenuPossibleSizeTableMap::COL_MENUID, $this->menuid);
 
         return $criteria;
     }
@@ -1090,26 +1088,10 @@ abstract class MenuPossibleSize implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getMenuPossibleSizeid() &&
-            null !== $this->getMenuSizeid() &&
-            null !== $this->getMenuid();
+        $validPk = null !== $this->getMenuPossibleSizeid();
 
-        $validPrimaryKeyFKs = 2;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_menues_possible_sizes_menu_sizes1 to table menu_size
-        if ($this->aMenuSize && $hash = spl_object_hash($this->aMenuSize)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_menues_possible_sizes_menues1 to table menu
-        if ($this->aMenu && $hash = spl_object_hash($this->aMenu)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1121,31 +1103,23 @@ abstract class MenuPossibleSize implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getMenuPossibleSizeid();
-        $pks[1] = $this->getMenuSizeid();
-        $pks[2] = $this->getMenuid();
-
-        return $pks;
+        return $this->getMenuPossibleSizeid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (menu_possible_sizeid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setMenuPossibleSizeid($keys[0]);
-        $this->setMenuSizeid($keys[1]);
-        $this->setMenuid($keys[2]);
+        $this->setMenuPossibleSizeid($key);
     }
 
     /**
@@ -1154,7 +1128,7 @@ abstract class MenuPossibleSize implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getMenuPossibleSizeid()) && (null === $this->getMenuSizeid()) && (null === $this->getMenuid());
+        return null === $this->getMenuPossibleSizeid();
     }
 
     /**
@@ -1239,9 +1213,7 @@ abstract class MenuPossibleSize implements ActiveRecordInterface
     public function getMenuSize(ConnectionInterface $con = null)
     {
         if ($this->aMenuSize === null && ($this->menu_sizeid !== null)) {
-            $this->aMenuSize = ChildMenuSizeQuery::create()
-                ->filterByMenuPossibleSize($this) // here
-                ->findOne($con);
+            $this->aMenuSize = ChildMenuSizeQuery::create()->findPk($this->menu_sizeid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1292,9 +1264,7 @@ abstract class MenuPossibleSize implements ActiveRecordInterface
     public function getMenu(ConnectionInterface $con = null)
     {
         if ($this->aMenu === null && ($this->menuid !== null)) {
-            $this->aMenu = ChildMenuQuery::create()
-                ->filterByMenuPossibleSize($this) // here
-                ->findOne($con);
+            $this->aMenu = ChildMenuQuery::create()->findPk($this->menuid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

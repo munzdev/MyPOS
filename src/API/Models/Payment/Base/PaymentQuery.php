@@ -151,10 +151,10 @@ abstract class PaymentQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34, 56), $con);
+     * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param array[$paymentid, $payment_typeid, $invoiceid] $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildPayment|array|mixed the result, formatted by the current formatter
@@ -179,7 +179,7 @@ abstract class PaymentQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = PaymentTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]))))) {
+        if ((null !== ($obj = PaymentTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -200,12 +200,10 @@ abstract class PaymentQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT paymentid, payment_typeid, invoiceid, date, amount, canceled FROM payment WHERE paymentid = :p0 AND payment_typeid = :p1 AND invoiceid = :p2';
+        $sql = 'SELECT paymentid, payment_typeid, invoiceid, date, amount, canceled FROM payment WHERE paymentid = :p0';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
-            $stmt->bindValue(':p2', $key[2], PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -216,7 +214,7 @@ abstract class PaymentQuery extends ModelCriteria
             /** @var ChildPayment $obj */
             $obj = new ChildPayment();
             $obj->hydrate($row);
-            PaymentTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]));
+            PaymentTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -245,7 +243,7 @@ abstract class PaymentQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -275,11 +273,8 @@ abstract class PaymentQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(PaymentTableMap::COL_PAYMENTID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_TYPEID, $key[1], Criteria::EQUAL);
-        $this->addUsingAlias(PaymentTableMap::COL_INVOICEID, $key[2], Criteria::EQUAL);
 
-        return $this;
+        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENTID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -291,19 +286,8 @@ abstract class PaymentQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-        if (empty($keys)) {
-            return $this->add(null, '1<>1', Criteria::CUSTOM);
-        }
-        foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(PaymentTableMap::COL_PAYMENTID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(PaymentTableMap::COL_PAYMENT_TYPEID, $key[1], Criteria::EQUAL);
-            $cton0->addAnd($cton1);
-            $cton2 = $this->getNewCriterion(PaymentTableMap::COL_INVOICEID, $key[2], Criteria::EQUAL);
-            $cton0->addAnd($cton2);
-            $this->addOr($cton0);
-        }
 
-        return $this;
+        return $this->addUsingAlias(PaymentTableMap::COL_PAYMENTID, $keys, Criteria::IN);
     }
 
     /**
@@ -581,7 +565,7 @@ abstract class PaymentQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(PaymentTableMap::COL_INVOICEID, $invoice->toKeyValue('Invoiceid', 'Invoiceid'), $comparison);
+                ->addUsingAlias(PaymentTableMap::COL_INVOICEID, $invoice->toKeyValue('PrimaryKey', 'Invoiceid'), $comparison);
         } else {
             throw new PropelException('filterByInvoice() only accepts arguments of type \API\Models\Invoice\Invoice or Collection');
         }
@@ -814,10 +798,7 @@ abstract class PaymentQuery extends ModelCriteria
     public function prune($payment = null)
     {
         if ($payment) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(PaymentTableMap::COL_PAYMENTID), $payment->getPaymentid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(PaymentTableMap::COL_PAYMENT_TYPEID), $payment->getPaymentTypeid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond2', $this->getAliasedColName(PaymentTableMap::COL_INVOICEID), $payment->getInvoiceid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2'), Criteria::LOGICAL_OR);
+            $this->addUsingAlias(PaymentTableMap::COL_PAYMENTID, $payment->getPaymentid(), Criteria::NOT_EQUAL);
         }
 
         return $this;

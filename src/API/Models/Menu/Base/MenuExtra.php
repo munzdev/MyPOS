@@ -8,12 +8,10 @@ use API\Models\Event\Event;
 use API\Models\Event\EventQuery;
 use API\Models\Menu\Availability as ChildAvailability;
 use API\Models\Menu\AvailabilityQuery as ChildAvailabilityQuery;
-use API\Models\Menu\Menu as ChildMenu;
 use API\Models\Menu\MenuExtra as ChildMenuExtra;
 use API\Models\Menu\MenuExtraQuery as ChildMenuExtraQuery;
 use API\Models\Menu\MenuPossibleExtra as ChildMenuPossibleExtra;
 use API\Models\Menu\MenuPossibleExtraQuery as ChildMenuPossibleExtraQuery;
-use API\Models\Menu\MenuQuery as ChildMenuQuery;
 use API\Models\Menu\Map\MenuExtraTableMap;
 use API\Models\Menu\Map\MenuPossibleExtraTableMap;
 use Propel\Runtime\Propel;
@@ -22,7 +20,6 @@ use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
 use Propel\Runtime\Collection\ObjectCollection;
-use Propel\Runtime\Collection\ObjectCombinationCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -123,37 +120,12 @@ abstract class MenuExtra implements ActiveRecordInterface
     protected $collMenuPossibleExtrasPartial;
 
     /**
-     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildMenu combinations.
-     */
-    protected $combinationCollMenuMenuPossibleExtraids;
-
-    /**
-     * @var bool
-     */
-    protected $combinationCollMenuMenuPossibleExtraidsPartial;
-
-    /**
-     * @var        ObjectCollection|ChildMenu[] Cross Collection to store aggregation of ChildMenu objects.
-     */
-    protected $collMenus;
-
-    /**
-     * @var bool
-     */
-    protected $collMenusPartial;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var boolean
      */
     protected $alreadyInSave = false;
-
-    /**
-     * @var ObjectCombinationCollection Cross CombinationCollection to store aggregation of ChildMenu combinations.
-     */
-    protected $combinationCollMenuMenuPossibleExtraidsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -673,7 +645,6 @@ abstract class MenuExtra implements ActiveRecordInterface
             $this->aEvent = null;
             $this->collMenuPossibleExtras = null;
 
-            $this->collMenuMenuPossibleExtraids = null;
         } // if (deep)
     }
 
@@ -802,42 +773,6 @@ abstract class MenuExtra implements ActiveRecordInterface
                 }
                 $this->resetModified();
             }
-
-            if ($this->combinationCollMenuMenuPossibleExtraidsScheduledForDeletion !== null) {
-                if (!$this->combinationCollMenuMenuPossibleExtraidsScheduledForDeletion->isEmpty()) {
-                    $pks = array();
-                    foreach ($this->combinationCollMenuMenuPossibleExtraidsScheduledForDeletion as $combination) {
-                        $entryPk = [];
-
-                        $entryPk[1] = $this->getMenuExtraid();
-                        $entryPk[2] = $combination[0]->getMenuid();
-                        //$combination[1] = MenuPossibleExtraid;
-                        $entryPk[0] = $combination[1];
-
-                        $pks[] = $entryPk;
-                    }
-
-                    \API\Models\Menu\MenuPossibleExtraQuery::create()
-                        ->filterByPrimaryKeys($pks)
-                        ->delete($con);
-
-                    $this->combinationCollMenuMenuPossibleExtraidsScheduledForDeletion = null;
-                }
-
-            }
-
-            if (null !== $this->combinationCollMenuMenuPossibleExtraids) {
-                foreach ($this->combinationCollMenuMenuPossibleExtraids as $combination) {
-
-                    //$combination[0] = Menu (fk_menues_possible_extras_menues1)
-                    if (!$combination[0]->isDeleted() && ($combination[0]->isNew() || $combination[0]->isModified())) {
-                        $combination[0]->save($con);
-                    }
-
-                    //$combination[1] = MenuPossibleExtraid; Nothing to save.
-                }
-            }
-
 
             if ($this->menuPossibleExtrasScheduledForDeletion !== null) {
                 if (!$this->menuPossibleExtrasScheduledForDeletion->isEmpty()) {
@@ -1251,7 +1186,6 @@ abstract class MenuExtra implements ActiveRecordInterface
     {
         $criteria = ChildMenuExtraQuery::create();
         $criteria->add(MenuExtraTableMap::COL_MENU_EXTRAID, $this->menu_extraid);
-        $criteria->add(MenuExtraTableMap::COL_EVENTID, $this->eventid);
 
         return $criteria;
     }
@@ -1264,18 +1198,10 @@ abstract class MenuExtra implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getMenuExtraid() &&
-            null !== $this->getEventid();
+        $validPk = null !== $this->getMenuExtraid();
 
-        $validPrimaryKeyFKs = 1;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_menu_extras_events1 to table event
-        if ($this->aEvent && $hash = spl_object_hash($this->aEvent)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1287,29 +1213,23 @@ abstract class MenuExtra implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getMenuExtraid();
-        $pks[1] = $this->getEventid();
-
-        return $pks;
+        return $this->getMenuExtraid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (menu_extraid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setMenuExtraid($keys[0]);
-        $this->setEventid($keys[1]);
+        $this->setMenuExtraid($key);
     }
 
     /**
@@ -1318,7 +1238,7 @@ abstract class MenuExtra implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getMenuExtraid()) && (null === $this->getEventid());
+        return null === $this->getMenuExtraid();
     }
 
     /**
@@ -1618,10 +1538,7 @@ abstract class MenuExtra implements ActiveRecordInterface
         $menuPossibleExtrasToDelete = $this->getMenuPossibleExtras(new Criteria(), $con)->diff($menuPossibleExtras);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->menuPossibleExtrasScheduledForDeletion = clone $menuPossibleExtrasToDelete;
+        $this->menuPossibleExtrasScheduledForDeletion = $menuPossibleExtrasToDelete;
 
         foreach ($menuPossibleExtrasToDelete as $menuPossibleExtraRemoved) {
             $menuPossibleExtraRemoved->setMenuExtra(null);
@@ -1752,320 +1669,6 @@ abstract class MenuExtra implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collMenuMenuPossibleExtraids collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addMenuMenuPossibleExtraids()
-     */
-    public function clearMenuMenuPossibleExtraids()
-    {
-        $this->collMenuMenuPossibleExtraids = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Initializes the combinationCollMenuMenuPossibleExtraids crossRef collection.
-     *
-     * By default this just sets the combinationCollMenuMenuPossibleExtraids collection to an empty collection (like clearMenuMenuPossibleExtraids());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @return void
-     */
-    public function initMenuMenuPossibleExtraids()
-    {
-        $this->combinationCollMenuMenuPossibleExtraids = new ObjectCombinationCollection;
-        $this->combinationCollMenuMenuPossibleExtraidsPartial = true;
-    }
-
-    /**
-     * Checks if the combinationCollMenuMenuPossibleExtraids collection is loaded.
-     *
-     * @return bool
-     */
-    public function isMenuMenuPossibleExtraidsLoaded()
-    {
-        return null !== $this->combinationCollMenuMenuPossibleExtraids;
-    }
-
-    /**
-     * Returns a new query object pre configured with filters from current object and given arguments to query the database.
-     *
-     * @param int $menuPossibleExtraid
-     * @param Criteria $criteria
-     *
-     * @return ChildMenuQuery
-     */
-    public function createMenusQuery($menuPossibleExtraid = null, Criteria $criteria = null)
-    {
-        $criteria = ChildMenuQuery::create($criteria)
-            ->filterByMenuExtra($this);
-
-        $menuPossibleExtraQuery = $criteria->useMenuPossibleExtraQuery();
-
-        if (null !== $menuPossibleExtraid) {
-            $menuPossibleExtraQuery->filterByMenuPossibleExtraid($menuPossibleExtraid);
-        }
-
-        $menuPossibleExtraQuery->endUse();
-
-        return $criteria;
-    }
-
-    /**
-     * Gets a combined collection of ChildMenu objects related by a many-to-many relationship
-     * to the current object by way of the menu_possible_extra cross-reference table.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildMenuExtra is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria Optional query object to filter the query
-     * @param      ConnectionInterface $con Optional connection object
-     *
-     * @return ObjectCombinationCollection Combination list of ChildMenu objects
-     */
-    public function getMenuMenuPossibleExtraids($criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->combinationCollMenuMenuPossibleExtraidsPartial && !$this->isNew();
-        if (null === $this->combinationCollMenuMenuPossibleExtraids || null !== $criteria || $partial) {
-            if ($this->isNew()) {
-                // return empty collection
-                if (null === $this->combinationCollMenuMenuPossibleExtraids) {
-                    $this->initMenuMenuPossibleExtraids();
-                }
-            } else {
-
-                $query = ChildMenuPossibleExtraQuery::create(null, $criteria)
-                    ->filterByMenuExtra($this)
-                    ->joinMenu()
-                ;
-
-                $items = $query->find($con);
-                $combinationCollMenuMenuPossibleExtraids = new ObjectCombinationCollection();
-                foreach ($items as $item) {
-                    $combination = [];
-
-                    $combination[] = $item->getMenu();
-                    $combination[] = $item->getMenuPossibleExtraid();
-                    $combinationCollMenuMenuPossibleExtraids[] = $combination;
-                }
-
-                if (null !== $criteria) {
-                    return $combinationCollMenuMenuPossibleExtraids;
-                }
-
-                if ($partial && $this->combinationCollMenuMenuPossibleExtraids) {
-                    //make sure that already added objects gets added to the list of the database.
-                    foreach ($this->combinationCollMenuMenuPossibleExtraids as $obj) {
-                        if (!call_user_func_array([$combinationCollMenuMenuPossibleExtraids, 'contains'], $obj)) {
-                            $combinationCollMenuMenuPossibleExtraids[] = $obj;
-                        }
-                    }
-                }
-
-                $this->combinationCollMenuMenuPossibleExtraids = $combinationCollMenuMenuPossibleExtraids;
-                $this->combinationCollMenuMenuPossibleExtraidsPartial = false;
-            }
-        }
-
-        return $this->combinationCollMenuMenuPossibleExtraids;
-    }
-
-    /**
-     * Returns a not cached ObjectCollection of ChildMenu objects. This will hit always the databases.
-     * If you have attached new ChildMenu object to this object you need to call `save` first to get
-     * the correct return value. Use getMenuMenuPossibleExtraids() to get the current internal state.
-     *
-     * @param int $menuPossibleExtraid
-     * @param Criteria $criteria
-     * @param ConnectionInterface $con
-     *
-     * @return ChildMenu[]|ObjectCollection
-     */
-    public function getMenus($menuPossibleExtraid = null, Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        return $this->createMenusQuery($menuPossibleExtraid, $criteria)->find($con);
-    }
-
-    /**
-     * Sets a collection of ChildMenu objects related by a many-to-many relationship
-     * to the current object by way of the menu_possible_extra cross-reference table.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param  Collection $menuMenuPossibleExtraids A Propel collection.
-     * @param  ConnectionInterface $con Optional connection object
-     * @return $this|ChildMenuExtra The current object (for fluent API support)
-     */
-    public function setMenuMenuPossibleExtraids(Collection $menuMenuPossibleExtraids, ConnectionInterface $con = null)
-    {
-        $this->clearMenuMenuPossibleExtraids();
-        $currentMenuMenuPossibleExtraids = $this->getMenuMenuPossibleExtraids();
-
-        $combinationCollMenuMenuPossibleExtraidsScheduledForDeletion = $currentMenuMenuPossibleExtraids->diff($menuMenuPossibleExtraids);
-
-        foreach ($combinationCollMenuMenuPossibleExtraidsScheduledForDeletion as $toDelete) {
-            call_user_func_array([$this, 'removeMenuMenuPossibleExtraid'], $toDelete);
-        }
-
-        foreach ($menuMenuPossibleExtraids as $menuMenuPossibleExtraid) {
-            if (!call_user_func_array([$currentMenuMenuPossibleExtraids, 'contains'], $menuMenuPossibleExtraid)) {
-                call_user_func_array([$this, 'doAddMenuMenuPossibleExtraid'], $menuMenuPossibleExtraid);
-            }
-        }
-
-        $this->combinationCollMenuMenuPossibleExtraidsPartial = false;
-        $this->combinationCollMenuMenuPossibleExtraids = $menuMenuPossibleExtraids;
-
-        return $this;
-    }
-
-    /**
-     * Gets the number of ChildMenu objects related by a many-to-many relationship
-     * to the current object by way of the menu_possible_extra cross-reference table.
-     *
-     * @param      Criteria $criteria Optional query object to filter the query
-     * @param      boolean $distinct Set to true to force count distinct
-     * @param      ConnectionInterface $con Optional connection object
-     *
-     * @return int the number of related ChildMenu objects
-     */
-    public function countMenuMenuPossibleExtraids(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->combinationCollMenuMenuPossibleExtraidsPartial && !$this->isNew();
-        if (null === $this->combinationCollMenuMenuPossibleExtraids || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->combinationCollMenuMenuPossibleExtraids) {
-                return 0;
-            } else {
-
-                if ($partial && !$criteria) {
-                    return count($this->getMenuMenuPossibleExtraids());
-                }
-
-                $query = ChildMenuPossibleExtraQuery::create(null, $criteria);
-                if ($distinct) {
-                    $query->distinct();
-                }
-
-                return $query
-                    ->filterByMenuExtra($this)
-                    ->count($con);
-            }
-        } else {
-            return count($this->combinationCollMenuMenuPossibleExtraids);
-        }
-    }
-
-    /**
-     * Returns the not cached count of ChildMenu objects. This will hit always the databases.
-     * If you have attached new ChildMenu object to this object you need to call `save` first to get
-     * the correct return value. Use getMenuMenuPossibleExtraids() to get the current internal state.
-     *
-     * @param int $menuPossibleExtraid
-     * @param Criteria $criteria
-     * @param ConnectionInterface $con
-     *
-     * @return integer
-     */
-    public function countMenus($menuPossibleExtraid = null, Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        return $this->createMenusQuery($menuPossibleExtraid, $criteria)->count($con);
-    }
-
-    /**
-     * Associate a ChildMenu to this object
-     * through the menu_possible_extra cross reference table.
-     *
-     * @param ChildMenu $menu,
-     * @param int $menuPossibleExtraid
-     * @return ChildMenuExtra The current object (for fluent API support)
-     */
-    public function addMenu(ChildMenu $menu, $menuPossibleExtraid)
-    {
-        if ($this->combinationCollMenuMenuPossibleExtraids === null) {
-            $this->initMenuMenuPossibleExtraids();
-        }
-
-        if (!$this->getMenuMenuPossibleExtraids()->contains($menu, $menuPossibleExtraid)) {
-            // only add it if the **same** object is not already associated
-            $this->combinationCollMenuMenuPossibleExtraids->push($menu, $menuPossibleExtraid);
-            $this->doAddMenuMenuPossibleExtraid($menu, $menuPossibleExtraid);
-        }
-
-        return $this;
-    }
-
-    /**
-     *
-     * @param ChildMenu $menu,
-     * @param int $menuPossibleExtraid
-     */
-    protected function doAddMenuMenuPossibleExtraid(ChildMenu $menu, $menuPossibleExtraid)
-    {
-        $menuPossibleExtra = new ChildMenuPossibleExtra();
-
-        $menuPossibleExtra->setMenu($menu);
-        $menuPossibleExtra->setMenuPossibleExtraid($menuPossibleExtraid);
-
-
-        $menuPossibleExtra->setMenuExtra($this);
-
-        $this->addMenuPossibleExtra($menuPossibleExtra);
-
-        // set the back reference to this object directly as using provided method either results
-        // in endless loop or in multiple relations
-        if ($menu->isMenuExtraMenuPossibleExtraidsLoaded()) {
-            $menu->initMenuExtraMenuPossibleExtraids();
-            $menu->getMenuExtraMenuPossibleExtraids()->push($this, $menuPossibleExtraid);
-        } elseif (!$menu->getMenuExtraMenuPossibleExtraids()->contains($this, $menuPossibleExtraid)) {
-            $menu->getMenuExtraMenuPossibleExtraids()->push($this, $menuPossibleExtraid);
-        }
-
-    }
-
-    /**
-     * Remove menu, menuPossibleExtraid of this object
-     * through the menu_possible_extra cross reference table.
-     *
-     * @param ChildMenu $menu,
-     * @param int $menuPossibleExtraid
-     * @return ChildMenuExtra The current object (for fluent API support)
-     */
-    public function removeMenuMenuPossibleExtraid(ChildMenu $menu, $menuPossibleExtraid)
-    {
-        if ($this->getMenuMenuPossibleExtraids()->contains($menu, $menuPossibleExtraid)) { $menuPossibleExtra = new ChildMenuPossibleExtra();
-
-            $menuPossibleExtra->setMenu($menu);
-            if ($menu->isMenuExtraMenuPossibleExtraidsLoaded()) {
-                //remove the back reference if available
-                $menu->getMenuExtraMenuPossibleExtraids()->removeObject($this, $menuPossibleExtraid);
-            }
-
-            $menuPossibleExtra->setMenuPossibleExtraid($menuPossibleExtraid);
-            $menuPossibleExtra->setMenuExtra($this);
-            $this->removeMenuPossibleExtra(clone $menuPossibleExtra);
-            $menuPossibleExtra->clear();
-
-            $this->combinationCollMenuMenuPossibleExtraids->remove($this->combinationCollMenuMenuPossibleExtraids->search($menu, $menuPossibleExtraid));
-
-            if (null === $this->combinationCollMenuMenuPossibleExtraidsScheduledForDeletion) {
-                $this->combinationCollMenuMenuPossibleExtraidsScheduledForDeletion = clone $this->combinationCollMenuMenuPossibleExtraids;
-                $this->combinationCollMenuMenuPossibleExtraidsScheduledForDeletion->clear();
-            }
-
-            $this->combinationCollMenuMenuPossibleExtraidsScheduledForDeletion->push($menu, $menuPossibleExtraid);
-        }
-
-
-        return $this;
-    }
-
-    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -2106,15 +1709,9 @@ abstract class MenuExtra implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->combinationCollMenuMenuPossibleExtraids) {
-                foreach ($this->combinationCollMenuMenuPossibleExtraids as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
         } // if ($deep)
 
         $this->collMenuPossibleExtras = null;
-        $this->combinationCollMenuMenuPossibleExtraids = null;
         $this->aAvailability = null;
         $this->aEvent = null;
     }

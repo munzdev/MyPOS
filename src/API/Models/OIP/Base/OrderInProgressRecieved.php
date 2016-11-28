@@ -1172,9 +1172,6 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
     {
         $criteria = ChildOrderInProgressRecievedQuery::create();
         $criteria->add(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID, $this->order_in_progress_recievedid);
-        $criteria->add(OrderInProgressRecievedTableMap::COL_ORDER_DETAILID, $this->order_detailid);
-        $criteria->add(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESSID, $this->order_in_progressid);
-        $criteria->add(OrderInProgressRecievedTableMap::COL_DISTRIBUTION_GIVING_OUTID, $this->distribution_giving_outid);
 
         return $criteria;
     }
@@ -1187,34 +1184,10 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getOrderInProgressRecievedid() &&
-            null !== $this->getOrderDetailid() &&
-            null !== $this->getOrderInProgressid() &&
-            null !== $this->getDistributionGivingOutid();
+        $validPk = null !== $this->getOrderInProgressRecievedid();
 
-        $validPrimaryKeyFKs = 3;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_orders_details_has_orders_in_progress_orders_details1 to table order_detail
-        if ($this->aOrderDetail && $hash = spl_object_hash($this->aOrderDetail)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_orders_details_has_orders_in_progress_orders_in_progress1 to table order_in_progress
-        if ($this->aOrderInProgress && $hash = spl_object_hash($this->aOrderInProgress)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_orders_in_progress_recieved_distribution_givin_out1 to table distribution_giving_out
-        if ($this->aDistributionGivingOut && $hash = spl_object_hash($this->aDistributionGivingOut)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1226,33 +1199,23 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getOrderInProgressRecievedid();
-        $pks[1] = $this->getOrderDetailid();
-        $pks[2] = $this->getOrderInProgressid();
-        $pks[3] = $this->getDistributionGivingOutid();
-
-        return $pks;
+        return $this->getOrderInProgressRecievedid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (order_in_progress_recievedid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setOrderInProgressRecievedid($keys[0]);
-        $this->setOrderDetailid($keys[1]);
-        $this->setOrderInProgressid($keys[2]);
-        $this->setDistributionGivingOutid($keys[3]);
+        $this->setOrderInProgressRecievedid($key);
     }
 
     /**
@@ -1261,7 +1224,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getOrderInProgressRecievedid()) && (null === $this->getOrderDetailid()) && (null === $this->getOrderInProgressid()) && (null === $this->getDistributionGivingOutid());
+        return null === $this->getOrderInProgressRecievedid();
     }
 
     /**
@@ -1347,9 +1310,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
     public function getOrderDetail(ConnectionInterface $con = null)
     {
         if ($this->aOrderDetail === null && ($this->order_detailid !== null)) {
-            $this->aOrderDetail = OrderDetailQuery::create()
-                ->filterByOrderInProgressRecieved($this) // here
-                ->findOne($con);
+            $this->aOrderDetail = OrderDetailQuery::create()->findPk($this->order_detailid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1400,9 +1361,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
     public function getOrderInProgress(ConnectionInterface $con = null)
     {
         if ($this->aOrderInProgress === null && ($this->order_in_progressid !== null)) {
-            $this->aOrderInProgress = ChildOrderInProgressQuery::create()
-                ->filterByOrderInProgressRecieved($this) // here
-                ->findOne($con);
+            $this->aOrderInProgress = ChildOrderInProgressQuery::create()->findPk($this->order_in_progressid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

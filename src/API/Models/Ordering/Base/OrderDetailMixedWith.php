@@ -1104,9 +1104,7 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
     public function getMenu(ConnectionInterface $con = null)
     {
         if ($this->aMenu === null && ($this->menuid !== null)) {
-            $this->aMenu = MenuQuery::create()
-                ->filterByOrderDetailMixedWith($this) // here
-                ->findOne($con);
+            $this->aMenu = MenuQuery::create()->findPk($this->menuid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1157,9 +1155,7 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
     public function getOrderDetail(ConnectionInterface $con = null)
     {
         if ($this->aOrderDetail === null && ($this->order_detailid !== null)) {
-            $this->aOrderDetail = ChildOrderDetailQuery::create()
-                ->filterByOrderDetailMixedWith($this) // here
-                ->findOne($con);
+            $this->aOrderDetail = ChildOrderDetailQuery::create()->findPk($this->order_detailid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

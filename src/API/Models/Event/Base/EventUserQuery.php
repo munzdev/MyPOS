@@ -157,10 +157,10 @@ abstract class EventUserQuery extends ModelCriteria
      * Go fast if the query is untouched.
      *
      * <code>
-     * $obj = $c->findPk(array(12, 34, 56), $con);
+     * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param array[$event_userid, $eventid, $userid] $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildEventUser|array|mixed the result, formatted by the current formatter
@@ -185,7 +185,7 @@ abstract class EventUserQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = EventUserTableMap::getInstanceFromPool(serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]))))) {
+        if ((null !== ($obj = EventUserTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -206,12 +206,10 @@ abstract class EventUserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT event_userid, eventid, userid, user_roles, begin_money FROM event_user WHERE event_userid = :p0 AND eventid = :p1 AND userid = :p2';
+        $sql = 'SELECT event_userid, eventid, userid, user_roles, begin_money FROM event_user WHERE event_userid = :p0';
         try {
             $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
-            $stmt->bindValue(':p2', $key[2], PDO::PARAM_INT);
+            $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
             Propel::log($e->getMessage(), Propel::LOG_ERR);
@@ -222,7 +220,7 @@ abstract class EventUserQuery extends ModelCriteria
             /** @var ChildEventUser $obj */
             $obj = new ChildEventUser();
             $obj->hydrate($row);
-            EventUserTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]));
+            EventUserTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -251,7 +249,7 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Find objects by primary key
      * <code>
-     * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
+     * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
      * @param     array $keys Primary keys to use for the query
      * @param     ConnectionInterface $con an optional connection object
@@ -281,11 +279,8 @@ abstract class EventUserQuery extends ModelCriteria
      */
     public function filterByPrimaryKey($key)
     {
-        $this->addUsingAlias(EventUserTableMap::COL_EVENT_USERID, $key[0], Criteria::EQUAL);
-        $this->addUsingAlias(EventUserTableMap::COL_EVENTID, $key[1], Criteria::EQUAL);
-        $this->addUsingAlias(EventUserTableMap::COL_USERID, $key[2], Criteria::EQUAL);
 
-        return $this;
+        return $this->addUsingAlias(EventUserTableMap::COL_EVENT_USERID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -297,19 +292,8 @@ abstract class EventUserQuery extends ModelCriteria
      */
     public function filterByPrimaryKeys($keys)
     {
-        if (empty($keys)) {
-            return $this->add(null, '1<>1', Criteria::CUSTOM);
-        }
-        foreach ($keys as $key) {
-            $cton0 = $this->getNewCriterion(EventUserTableMap::COL_EVENT_USERID, $key[0], Criteria::EQUAL);
-            $cton1 = $this->getNewCriterion(EventUserTableMap::COL_EVENTID, $key[1], Criteria::EQUAL);
-            $cton0->addAnd($cton1);
-            $cton2 = $this->getNewCriterion(EventUserTableMap::COL_USERID, $key[2], Criteria::EQUAL);
-            $cton0->addAnd($cton2);
-            $this->addOr($cton0);
-        }
 
-        return $this;
+        return $this->addUsingAlias(EventUserTableMap::COL_EVENT_USERID, $keys, Criteria::IN);
     }
 
     /**
@@ -831,10 +815,7 @@ abstract class EventUserQuery extends ModelCriteria
     public function prune($eventUser = null)
     {
         if ($eventUser) {
-            $this->addCond('pruneCond0', $this->getAliasedColName(EventUserTableMap::COL_EVENT_USERID), $eventUser->getEventUserid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond1', $this->getAliasedColName(EventUserTableMap::COL_EVENTID), $eventUser->getEventid(), Criteria::NOT_EQUAL);
-            $this->addCond('pruneCond2', $this->getAliasedColName(EventUserTableMap::COL_USERID), $eventUser->getUserid(), Criteria::NOT_EQUAL);
-            $this->combine(array('pruneCond0', 'pruneCond1', 'pruneCond2'), Criteria::LOGICAL_OR);
+            $this->addUsingAlias(EventUserTableMap::COL_EVENT_USERID, $eventUser->getEventUserid(), Criteria::NOT_EQUAL);
         }
 
         return $this;

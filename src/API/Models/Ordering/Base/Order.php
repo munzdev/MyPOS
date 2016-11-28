@@ -110,11 +110,18 @@ abstract class Order implements ActiveRecordInterface
     protected $priority;
 
     /**
-     * The value for the finished field.
+     * The value for the distribution_finished field.
      *
      * @var        DateTime
      */
-    protected $finished;
+    protected $distribution_finished;
+
+    /**
+     * The value for the invoice_finished field.
+     *
+     * @var        DateTime
+     */
+    protected $invoice_finished;
 
     /**
      * @var        EventTable
@@ -444,7 +451,7 @@ abstract class Order implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [finished] column value.
+     * Get the [optionally formatted] temporal [distribution_finished] column value.
      *
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
@@ -454,12 +461,32 @@ abstract class Order implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getFinished($format = NULL)
+    public function getDistributionFinished($format = NULL)
     {
         if ($format === null) {
-            return $this->finished;
+            return $this->distribution_finished;
         } else {
-            return $this->finished instanceof \DateTimeInterface ? $this->finished->format($format) : null;
+            return $this->distribution_finished instanceof \DateTimeInterface ? $this->distribution_finished->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [invoice_finished] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getInvoiceFinished($format = NULL)
+    {
+        if ($format === null) {
+            return $this->invoice_finished;
+        } else {
+            return $this->invoice_finished instanceof \DateTimeInterface ? $this->invoice_finished->format($format) : null;
         }
     }
 
@@ -572,24 +599,44 @@ abstract class Order implements ActiveRecordInterface
     } // setPriority()
 
     /**
-     * Sets the value of [finished] column to a normalized version of the date/time value specified.
+     * Sets the value of [distribution_finished] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\Ordering\Order The current object (for fluent API support)
      */
-    public function setFinished($v)
+    public function setDistributionFinished($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->finished !== null || $dt !== null) {
-            if ($this->finished === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->finished->format("Y-m-d H:i:s.u")) {
-                $this->finished = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[OrderTableMap::COL_FINISHED] = true;
+        if ($this->distribution_finished !== null || $dt !== null) {
+            if ($this->distribution_finished === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->distribution_finished->format("Y-m-d H:i:s.u")) {
+                $this->distribution_finished = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[OrderTableMap::COL_DISTRIBUTION_FINISHED] = true;
             }
         } // if either are not null
 
         return $this;
-    } // setFinished()
+    } // setDistributionFinished()
+
+    /**
+     * Sets the value of [invoice_finished] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\Ordering\Order The current object (for fluent API support)
+     */
+    public function setInvoiceFinished($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->invoice_finished !== null || $dt !== null) {
+            if ($this->invoice_finished === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->invoice_finished->format("Y-m-d H:i:s.u")) {
+                $this->invoice_finished = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[OrderTableMap::COL_INVOICE_FINISHED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setInvoiceFinished()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -645,11 +692,17 @@ abstract class Order implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : OrderTableMap::translateFieldName('Priority', TableMap::TYPE_PHPNAME, $indexType)];
             $this->priority = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : OrderTableMap::translateFieldName('Finished', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : OrderTableMap::translateFieldName('DistributionFinished', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->finished = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->distribution_finished = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : OrderTableMap::translateFieldName('InvoiceFinished', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->invoice_finished = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -658,7 +711,7 @@ abstract class Order implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = OrderTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = OrderTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Ordering\\Order'), 0, $e);
@@ -935,8 +988,11 @@ abstract class Order implements ActiveRecordInterface
         if ($this->isColumnModified(OrderTableMap::COL_PRIORITY)) {
             $modifiedColumns[':p' . $index++]  = '`priority`';
         }
-        if ($this->isColumnModified(OrderTableMap::COL_FINISHED)) {
-            $modifiedColumns[':p' . $index++]  = '`finished`';
+        if ($this->isColumnModified(OrderTableMap::COL_DISTRIBUTION_FINISHED)) {
+            $modifiedColumns[':p' . $index++]  = '`distribution_finished`';
+        }
+        if ($this->isColumnModified(OrderTableMap::COL_INVOICE_FINISHED)) {
+            $modifiedColumns[':p' . $index++]  = '`invoice_finished`';
         }
 
         $sql = sprintf(
@@ -964,8 +1020,11 @@ abstract class Order implements ActiveRecordInterface
                     case '`priority`':
                         $stmt->bindValue($identifier, $this->priority, PDO::PARAM_INT);
                         break;
-                    case '`finished`':
-                        $stmt->bindValue($identifier, $this->finished ? $this->finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case '`distribution_finished`':
+                        $stmt->bindValue($identifier, $this->distribution_finished ? $this->distribution_finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case '`invoice_finished`':
+                        $stmt->bindValue($identifier, $this->invoice_finished ? $this->invoice_finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1045,7 +1104,10 @@ abstract class Order implements ActiveRecordInterface
                 return $this->getPriority();
                 break;
             case 5:
-                return $this->getFinished();
+                return $this->getDistributionFinished();
+                break;
+            case 6:
+                return $this->getInvoiceFinished();
                 break;
             default:
                 return null;
@@ -1082,7 +1144,8 @@ abstract class Order implements ActiveRecordInterface
             $keys[2] => $this->getUserid(),
             $keys[3] => $this->getOrdertime(),
             $keys[4] => $this->getPriority(),
-            $keys[5] => $this->getFinished(),
+            $keys[5] => $this->getDistributionFinished(),
+            $keys[6] => $this->getInvoiceFinished(),
         );
         if ($result[$keys[3]] instanceof \DateTime) {
             $result[$keys[3]] = $result[$keys[3]]->format('c');
@@ -1090,6 +1153,10 @@ abstract class Order implements ActiveRecordInterface
 
         if ($result[$keys[5]] instanceof \DateTime) {
             $result[$keys[5]] = $result[$keys[5]]->format('c');
+        }
+
+        if ($result[$keys[6]] instanceof \DateTime) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1208,7 +1275,10 @@ abstract class Order implements ActiveRecordInterface
                 $this->setPriority($value);
                 break;
             case 5:
-                $this->setFinished($value);
+                $this->setDistributionFinished($value);
+                break;
+            case 6:
+                $this->setInvoiceFinished($value);
                 break;
         } // switch()
 
@@ -1252,7 +1322,10 @@ abstract class Order implements ActiveRecordInterface
             $this->setPriority($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setFinished($arr[$keys[5]]);
+            $this->setDistributionFinished($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setInvoiceFinished($arr[$keys[6]]);
         }
     }
 
@@ -1310,8 +1383,11 @@ abstract class Order implements ActiveRecordInterface
         if ($this->isColumnModified(OrderTableMap::COL_PRIORITY)) {
             $criteria->add(OrderTableMap::COL_PRIORITY, $this->priority);
         }
-        if ($this->isColumnModified(OrderTableMap::COL_FINISHED)) {
-            $criteria->add(OrderTableMap::COL_FINISHED, $this->finished);
+        if ($this->isColumnModified(OrderTableMap::COL_DISTRIBUTION_FINISHED)) {
+            $criteria->add(OrderTableMap::COL_DISTRIBUTION_FINISHED, $this->distribution_finished);
+        }
+        if ($this->isColumnModified(OrderTableMap::COL_INVOICE_FINISHED)) {
+            $criteria->add(OrderTableMap::COL_INVOICE_FINISHED, $this->invoice_finished);
         }
 
         return $criteria;
@@ -1331,8 +1407,6 @@ abstract class Order implements ActiveRecordInterface
     {
         $criteria = ChildOrderQuery::create();
         $criteria->add(OrderTableMap::COL_ORDERID, $this->orderid);
-        $criteria->add(OrderTableMap::COL_EVENT_TABLEID, $this->event_tableid);
-        $criteria->add(OrderTableMap::COL_USERID, $this->userid);
 
         return $criteria;
     }
@@ -1345,26 +1419,10 @@ abstract class Order implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getOrderid() &&
-            null !== $this->getEventTableid() &&
-            null !== $this->getUserid();
+        $validPk = null !== $this->getOrderid();
 
-        $validPrimaryKeyFKs = 2;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_orders_tables to table event_table
-        if ($this->aEventTable && $hash = spl_object_hash($this->aEventTable)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
-
-        //relation fk_orders_users1 to table user
-        if ($this->aUser && $hash = spl_object_hash($this->aUser)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1376,31 +1434,23 @@ abstract class Order implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getOrderid();
-        $pks[1] = $this->getEventTableid();
-        $pks[2] = $this->getUserid();
-
-        return $pks;
+        return $this->getOrderid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (orderid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setOrderid($keys[0]);
-        $this->setEventTableid($keys[1]);
-        $this->setUserid($keys[2]);
+        $this->setOrderid($key);
     }
 
     /**
@@ -1409,7 +1459,7 @@ abstract class Order implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getOrderid()) && (null === $this->getEventTableid()) && (null === $this->getUserid());
+        return null === $this->getOrderid();
     }
 
     /**
@@ -1429,7 +1479,8 @@ abstract class Order implements ActiveRecordInterface
         $copyObj->setUserid($this->getUserid());
         $copyObj->setOrdertime($this->getOrdertime());
         $copyObj->setPriority($this->getPriority());
-        $copyObj->setFinished($this->getFinished());
+        $copyObj->setDistributionFinished($this->getDistributionFinished());
+        $copyObj->setInvoiceFinished($this->getInvoiceFinished());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1516,9 +1567,7 @@ abstract class Order implements ActiveRecordInterface
     public function getEventTable(ConnectionInterface $con = null)
     {
         if ($this->aEventTable === null && ($this->event_tableid !== null)) {
-            $this->aEventTable = EventTableQuery::create()
-                ->filterByOrder($this) // here
-                ->findOne($con);
+            $this->aEventTable = EventTableQuery::create()->findPk($this->event_tableid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1721,10 +1770,7 @@ abstract class Order implements ActiveRecordInterface
         $orderDetailsToDelete = $this->getOrderDetails(new Criteria(), $con)->diff($orderDetails);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->orderDetailsScheduledForDeletion = clone $orderDetailsToDelete;
+        $this->orderDetailsScheduledForDeletion = $orderDetailsToDelete;
 
         foreach ($orderDetailsToDelete as $orderDetailRemoved) {
             $orderDetailRemoved->setOrder(null);
@@ -2074,10 +2120,7 @@ abstract class Order implements ActiveRecordInterface
         $orderInProgressesToDelete = $this->getOrderInProgresses(new Criteria(), $con)->diff($orderInProgresses);
 
 
-        //since at least one column in the foreign key is at the same time a PK
-        //we can not just set a PK to NULL in the lines below. We have to store
-        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
-        $this->orderInProgressesScheduledForDeletion = clone $orderInProgressesToDelete;
+        $this->orderInProgressesScheduledForDeletion = $orderInProgressesToDelete;
 
         foreach ($orderInProgressesToDelete as $orderInProgressRemoved) {
             $orderInProgressRemoved->setOrder(null);
@@ -2250,7 +2293,8 @@ abstract class Order implements ActiveRecordInterface
         $this->userid = null;
         $this->ordertime = null;
         $this->priority = null;
-        $this->finished = null;
+        $this->distribution_finished = null;
+        $this->invoice_finished = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

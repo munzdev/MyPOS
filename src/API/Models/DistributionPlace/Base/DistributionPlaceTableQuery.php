@@ -379,7 +379,7 @@ abstract class DistributionPlaceTableQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $distributionPlaceGroup->toKeyValue('DistributionPlaceGroupid', 'DistributionPlaceGroupid'), $comparison);
+                ->addUsingAlias(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACE_GROUPID, $distributionPlaceGroup->toKeyValue('PrimaryKey', 'DistributionPlaceGroupid'), $comparison);
         } else {
             throw new PropelException('filterByDistributionPlaceGroup() only accepts arguments of type \API\Models\DistributionPlace\DistributionPlaceGroup or Collection');
         }
@@ -456,7 +456,7 @@ abstract class DistributionPlaceTableQuery extends ModelCriteria
             }
 
             return $this
-                ->addUsingAlias(DistributionPlaceTableTableMap::COL_EVENT_TABLEID, $eventTable->toKeyValue('EventTableid', 'EventTableid'), $comparison);
+                ->addUsingAlias(DistributionPlaceTableTableMap::COL_EVENT_TABLEID, $eventTable->toKeyValue('PrimaryKey', 'EventTableid'), $comparison);
         } else {
             throw new PropelException('filterByEventTable() only accepts arguments of type \API\Models\Event\EventTable or Collection');
         }

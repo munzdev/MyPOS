@@ -1218,7 +1218,6 @@ abstract class UserMessage implements ActiveRecordInterface
     {
         $criteria = ChildUserMessageQuery::create();
         $criteria->add(UserMessageTableMap::COL_USER_MESSAGEID, $this->user_messageid);
-        $criteria->add(UserMessageTableMap::COL_TO_EVENT_USERID, $this->to_event_userid);
 
         return $criteria;
     }
@@ -1231,18 +1230,10 @@ abstract class UserMessage implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getUserMessageid() &&
-            null !== $this->getToEventUserid();
+        $validPk = null !== $this->getUserMessageid();
 
-        $validPrimaryKeyFKs = 1;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_users_chat_events_user2 to table event_user
-        if ($this->aEventUserRelatedByToEventUserid && $hash = spl_object_hash($this->aEventUserRelatedByToEventUserid)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1254,29 +1245,23 @@ abstract class UserMessage implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getUserMessageid();
-        $pks[1] = $this->getToEventUserid();
-
-        return $pks;
+        return $this->getUserMessageid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (user_messageid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setUserMessageid($keys[0]);
-        $this->setToEventUserid($keys[1]);
+        $this->setUserMessageid($key);
     }
 
     /**
@@ -1285,7 +1270,7 @@ abstract class UserMessage implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getUserMessageid()) && (null === $this->getToEventUserid());
+        return null === $this->getUserMessageid();
     }
 
     /**
@@ -1372,9 +1357,7 @@ abstract class UserMessage implements ActiveRecordInterface
     public function getEventUserRelatedByFromEventUserid(ConnectionInterface $con = null)
     {
         if ($this->aEventUserRelatedByFromEventUserid === null && ($this->from_event_userid !== null)) {
-            $this->aEventUserRelatedByFromEventUserid = EventUserQuery::create()
-                ->filterByUserMessageRelatedByFromEventUserid($this) // here
-                ->findOne($con);
+            $this->aEventUserRelatedByFromEventUserid = EventUserQuery::create()->findPk($this->from_event_userid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -1425,9 +1408,7 @@ abstract class UserMessage implements ActiveRecordInterface
     public function getEventUserRelatedByToEventUserid(ConnectionInterface $con = null)
     {
         if ($this->aEventUserRelatedByToEventUserid === null && ($this->to_event_userid !== null)) {
-            $this->aEventUserRelatedByToEventUserid = EventUserQuery::create()
-                ->filterByUserMessageRelatedByToEventUserid($this) // here
-                ->findOne($con);
+            $this->aEventUserRelatedByToEventUserid = EventUserQuery::create()->findPk($this->to_event_userid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be

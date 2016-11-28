@@ -1463,7 +1463,6 @@ abstract class Customer implements ActiveRecordInterface
     {
         $criteria = ChildCustomerQuery::create();
         $criteria->add(CustomerTableMap::COL_CUSTOMERID, $this->customerid);
-        $criteria->add(CustomerTableMap::COL_EVENTID, $this->eventid);
 
         return $criteria;
     }
@@ -1476,18 +1475,10 @@ abstract class Customer implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getCustomerid() &&
-            null !== $this->getEventid();
+        $validPk = null !== $this->getCustomerid();
 
-        $validPrimaryKeyFKs = 1;
+        $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
-
-        //relation fk_customer_event1 to table event
-        if ($this->aEvent && $hash = spl_object_hash($this->aEvent)) {
-            $primaryKeyFKs[] = $hash;
-        } else {
-            $validPrimaryKeyFKs = false;
-        }
 
         if ($validPk) {
             return crc32(json_encode($this->getPrimaryKey(), JSON_UNESCAPED_UNICODE));
@@ -1499,29 +1490,23 @@ abstract class Customer implements ActiveRecordInterface
     }
 
     /**
-     * Returns the composite primary key for this object.
-     * The array elements will be in same order as specified in XML.
-     * @return array
+     * Returns the primary key for this object (row).
+     * @return int
      */
     public function getPrimaryKey()
     {
-        $pks = array();
-        $pks[0] = $this->getCustomerid();
-        $pks[1] = $this->getEventid();
-
-        return $pks;
+        return $this->getCustomerid();
     }
 
     /**
-     * Set the [composite] primary key.
+     * Generic method to set the primary key (customerid column).
      *
-     * @param      array $keys The elements of the composite key (order must match the order in XML file).
+     * @param       int $key Primary key.
      * @return void
      */
-    public function setPrimaryKey($keys)
+    public function setPrimaryKey($key)
     {
-        $this->setCustomerid($keys[0]);
-        $this->setEventid($keys[1]);
+        $this->setCustomerid($key);
     }
 
     /**
@@ -1530,7 +1515,7 @@ abstract class Customer implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getCustomerid()) && (null === $this->getEventid());
+        return null === $this->getCustomerid();
     }
 
     /**
