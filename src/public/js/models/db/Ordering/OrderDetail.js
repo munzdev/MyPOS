@@ -7,7 +7,8 @@ define([
     "models/db/User/User",
     "collections/db/Ordering/OrderDetailExtraCollection",
     "collections/db/Ordering/OrderDetailMixedWithCollection",
-    "collections/db/OIP/OrderInProgressRecievedCollection"
+    "collections/db/OIP/OrderInProgressRecievedCollection",
+    "collections/db/Invoice/InvoiceItemCollection"
 ], function(Order,
             Menu,
             MenuSize,
@@ -16,7 +17,8 @@ define([
             User,
             OrderDetailExtraCollection,
             OrderDetailMixedWithCollection,
-            OrderInProgressRecievedCollection){
+            OrderInProgressRecievedCollection,
+            InvoiceItemCollection){
     "use strict";
 
     return class OrderDetail extends app.BaseModel {
@@ -33,10 +35,11 @@ define([
                     SinglePrice: 0,
                     SinglePriceModifiedByUserid: null,
                     ExtraDetail: '',
-                    Finished: null,
                     Availabilityid: null,
                     AvailabilityAmount: 0,
-                    Verified: false};
+                    Verified: false,
+                    DistributionFinished: null,
+                    InvoiceFinished: null};
         }
         
         parse(response)
@@ -69,6 +72,14 @@ define([
             if('Availability' in response)
             {
                 response.Availability = new Availability(response.Availability, {parse: true});
+            }
+            
+            if('InvoiceItems' in response)
+            {
+                if(response.InvoiceItems.toString() == '')
+                    response.InvoiceItems = new InvoiceItemCollection();
+                else
+                    response.InvoiceItems = new InvoiceItemCollection(response.InvoiceItems, {parse: true});
             }
             
             if('OrderDetailExtras' in response)

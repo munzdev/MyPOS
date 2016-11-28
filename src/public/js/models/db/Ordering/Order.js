@@ -19,7 +19,8 @@ define([
                     Userid: null,
                     Ordertime: null,
                     Priority: 0,
-                    Finished: null};
+                    DistributionFinished: null,
+                    InvoiceFinished: null};
         }
         
         parse(response)

@@ -12,8 +12,9 @@ define([
             return {EventPrinterid: null,
                     Eventid: null,
                     Name: '',
-                    Ip: '',
-                    Port: 0,
+                    Type: 0,
+                    Attr1: '',
+                    Attr2: '',
                     Default: false,
                     CharactersPerRow: 0};
         }
