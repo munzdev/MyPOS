@@ -92,6 +92,7 @@
     },
     "OrderInvoiceView": {
         "specialOrders": "Sonderwünsche",
+        "specialOrder": "Sonderwunsch",
         "openOnTable": "Offen am Tisch",
         "openOffOrder": "Offen von Bestellung",
         "payAll": "Alles bezahlen",

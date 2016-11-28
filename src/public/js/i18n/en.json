@@ -92,6 +92,7 @@
     },
     "OrderInvoiceView": {
         "specialOrders": "Special Orders",
+        "specialOrder": "Special Order",
         "openOnTable": "Open on table",
         "openOffOrder": "Open off order",
         "payAll": "Pay all",
