@@ -24,16 +24,18 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventPrinterQuery orderByEventPrinterid($order = Criteria::ASC) Order by the event_printerid column
  * @method     ChildEventPrinterQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
  * @method     ChildEventPrinterQuery orderByName($order = Criteria::ASC) Order by the name column
- * @method     ChildEventPrinterQuery orderByIp($order = Criteria::ASC) Order by the ip column
- * @method     ChildEventPrinterQuery orderByPort($order = Criteria::ASC) Order by the port column
+ * @method     ChildEventPrinterQuery orderByType($order = Criteria::ASC) Order by the type column
+ * @method     ChildEventPrinterQuery orderByAttr1($order = Criteria::ASC) Order by the attr1 column
+ * @method     ChildEventPrinterQuery orderByAttr2($order = Criteria::ASC) Order by the attr2 column
  * @method     ChildEventPrinterQuery orderByDefault($order = Criteria::ASC) Order by the default column
  * @method     ChildEventPrinterQuery orderByCharactersPerRow($order = Criteria::ASC) Order by the characters_per_row column
  *
  * @method     ChildEventPrinterQuery groupByEventPrinterid() Group by the event_printerid column
  * @method     ChildEventPrinterQuery groupByEventid() Group by the eventid column
  * @method     ChildEventPrinterQuery groupByName() Group by the name column
- * @method     ChildEventPrinterQuery groupByIp() Group by the ip column
- * @method     ChildEventPrinterQuery groupByPort() Group by the port column
+ * @method     ChildEventPrinterQuery groupByType() Group by the type column
+ * @method     ChildEventPrinterQuery groupByAttr1() Group by the attr1 column
+ * @method     ChildEventPrinterQuery groupByAttr2() Group by the attr2 column
  * @method     ChildEventPrinterQuery groupByDefault() Group by the default column
  * @method     ChildEventPrinterQuery groupByCharactersPerRow() Group by the characters_per_row column
  *
@@ -73,8 +75,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventPrinter findOneByEventPrinterid(int $event_printerid) Return the first ChildEventPrinter filtered by the event_printerid column
  * @method     ChildEventPrinter findOneByEventid(int $eventid) Return the first ChildEventPrinter filtered by the eventid column
  * @method     ChildEventPrinter findOneByName(string $name) Return the first ChildEventPrinter filtered by the name column
- * @method     ChildEventPrinter findOneByIp(string $ip) Return the first ChildEventPrinter filtered by the ip column
- * @method     ChildEventPrinter findOneByPort(int $port) Return the first ChildEventPrinter filtered by the port column
+ * @method     ChildEventPrinter findOneByType(int $type) Return the first ChildEventPrinter filtered by the type column
+ * @method     ChildEventPrinter findOneByAttr1(string $attr1) Return the first ChildEventPrinter filtered by the attr1 column
+ * @method     ChildEventPrinter findOneByAttr2(string $attr2) Return the first ChildEventPrinter filtered by the attr2 column
  * @method     ChildEventPrinter findOneByDefault(boolean $default) Return the first ChildEventPrinter filtered by the default column
  * @method     ChildEventPrinter findOneByCharactersPerRow(int $characters_per_row) Return the first ChildEventPrinter filtered by the characters_per_row column *
 
@@ -84,8 +87,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventPrinter requireOneByEventPrinterid(int $event_printerid) Return the first ChildEventPrinter filtered by the event_printerid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventPrinter requireOneByEventid(int $eventid) Return the first ChildEventPrinter filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventPrinter requireOneByName(string $name) Return the first ChildEventPrinter filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventPrinter requireOneByIp(string $ip) Return the first ChildEventPrinter filtered by the ip column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventPrinter requireOneByPort(int $port) Return the first ChildEventPrinter filtered by the port column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEventPrinter requireOneByType(int $type) Return the first ChildEventPrinter filtered by the type column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEventPrinter requireOneByAttr1(string $attr1) Return the first ChildEventPrinter filtered by the attr1 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEventPrinter requireOneByAttr2(string $attr2) Return the first ChildEventPrinter filtered by the attr2 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventPrinter requireOneByDefault(boolean $default) Return the first ChildEventPrinter filtered by the default column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventPrinter requireOneByCharactersPerRow(int $characters_per_row) Return the first ChildEventPrinter filtered by the characters_per_row column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
@@ -93,8 +97,9 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventPrinter[]|ObjectCollection findByEventPrinterid(int $event_printerid) Return ChildEventPrinter objects filtered by the event_printerid column
  * @method     ChildEventPrinter[]|ObjectCollection findByEventid(int $eventid) Return ChildEventPrinter objects filtered by the eventid column
  * @method     ChildEventPrinter[]|ObjectCollection findByName(string $name) Return ChildEventPrinter objects filtered by the name column
- * @method     ChildEventPrinter[]|ObjectCollection findByIp(string $ip) Return ChildEventPrinter objects filtered by the ip column
- * @method     ChildEventPrinter[]|ObjectCollection findByPort(int $port) Return ChildEventPrinter objects filtered by the port column
+ * @method     ChildEventPrinter[]|ObjectCollection findByType(int $type) Return ChildEventPrinter objects filtered by the type column
+ * @method     ChildEventPrinter[]|ObjectCollection findByAttr1(string $attr1) Return ChildEventPrinter objects filtered by the attr1 column
+ * @method     ChildEventPrinter[]|ObjectCollection findByAttr2(string $attr2) Return ChildEventPrinter objects filtered by the attr2 column
  * @method     ChildEventPrinter[]|ObjectCollection findByDefault(boolean $default) Return ChildEventPrinter objects filtered by the default column
  * @method     ChildEventPrinter[]|ObjectCollection findByCharactersPerRow(int $characters_per_row) Return ChildEventPrinter objects filtered by the characters_per_row column
  * @method     ChildEventPrinter[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -195,7 +200,7 @@ abstract class EventPrinterQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT event_printerid, eventid, name, ip, port, default, characters_per_row FROM event_printer WHERE event_printerid = :p0';
+        $sql = 'SELECT event_printerid, eventid, name, type, attr1, attr2, default, characters_per_row FROM event_printer WHERE event_printerid = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -395,41 +400,16 @@ abstract class EventPrinterQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the ip column
+     * Filter the query on the type column
      *
      * Example usage:
      * <code>
-     * $query->filterByIp('fooValue');   // WHERE ip = 'fooValue'
-     * $query->filterByIp('%fooValue%', Criteria::LIKE); // WHERE ip LIKE '%fooValue%'
+     * $query->filterByType(1234); // WHERE type = 1234
+     * $query->filterByType(array(12, 34)); // WHERE type IN (12, 34)
+     * $query->filterByType(array('min' => 12)); // WHERE type > 12
      * </code>
      *
-     * @param     string $ip The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this|ChildEventPrinterQuery The current query, for fluid interface
-     */
-    public function filterByIp($ip = null, $comparison = null)
-    {
-        if (null === $comparison) {
-            if (is_array($ip)) {
-                $comparison = Criteria::IN;
-            }
-        }
-
-        return $this->addUsingAlias(EventPrinterTableMap::COL_IP, $ip, $comparison);
-    }
-
-    /**
-     * Filter the query on the port column
-     *
-     * Example usage:
-     * <code>
-     * $query->filterByPort(1234); // WHERE port = 1234
-     * $query->filterByPort(array(12, 34)); // WHERE port IN (12, 34)
-     * $query->filterByPort(array('min' => 12)); // WHERE port > 12
-     * </code>
-     *
-     * @param     mixed $port The value to use as filter.
+     * @param     mixed $type The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -437,16 +417,16 @@ abstract class EventPrinterQuery extends ModelCriteria
      *
      * @return $this|ChildEventPrinterQuery The current query, for fluid interface
      */
-    public function filterByPort($port = null, $comparison = null)
+    public function filterByType($type = null, $comparison = null)
     {
-        if (is_array($port)) {
+        if (is_array($type)) {
             $useMinMax = false;
-            if (isset($port['min'])) {
-                $this->addUsingAlias(EventPrinterTableMap::COL_PORT, $port['min'], Criteria::GREATER_EQUAL);
+            if (isset($type['min'])) {
+                $this->addUsingAlias(EventPrinterTableMap::COL_TYPE, $type['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($port['max'])) {
-                $this->addUsingAlias(EventPrinterTableMap::COL_PORT, $port['max'], Criteria::LESS_EQUAL);
+            if (isset($type['max'])) {
+                $this->addUsingAlias(EventPrinterTableMap::COL_TYPE, $type['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -457,7 +437,57 @@ abstract class EventPrinterQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(EventPrinterTableMap::COL_PORT, $port, $comparison);
+        return $this->addUsingAlias(EventPrinterTableMap::COL_TYPE, $type, $comparison);
+    }
+
+    /**
+     * Filter the query on the attr1 column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAttr1('fooValue');   // WHERE attr1 = 'fooValue'
+     * $query->filterByAttr1('%fooValue%', Criteria::LIKE); // WHERE attr1 LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $attr1 The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildEventPrinterQuery The current query, for fluid interface
+     */
+    public function filterByAttr1($attr1 = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($attr1)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EventPrinterTableMap::COL_ATTR1, $attr1, $comparison);
+    }
+
+    /**
+     * Filter the query on the attr2 column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAttr2('fooValue');   // WHERE attr2 = 'fooValue'
+     * $query->filterByAttr2('%fooValue%', Criteria::LIKE); // WHERE attr2 LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $attr2 The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildEventPrinterQuery The current query, for fluid interface
+     */
+    public function filterByAttr2($attr2 = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($attr2)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EventPrinterTableMap::COL_ATTR2, $attr2, $comparison);
     }
 
     /**

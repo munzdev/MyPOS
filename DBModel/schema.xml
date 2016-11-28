@@ -174,8 +174,9 @@
     <column name="event_printerid" phpName="EventPrinterid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
-    <column name="ip" phpName="Ip" type="VARCHAR" size="15" required="true"/>
-    <column name="port" phpName="Port" type="SMALLINT" size="5" sqlType="smallint(5) unsigned" required="true"/>
+    <column name="type" phpName="Type" type="SMALLINT" required="true"/>
+    <column name="attr1" phpName="Attr1" type="VARCHAR" size="128"/>
+    <column name="attr2" phpName="Attr2" type="VARCHAR" size="128"/>
     <column name="default" phpName="Default" type="BOOLEAN" size="1" required="true"/>
     <column name="characters_per_row" phpName="CharactersPerRow" type="TINYINT" required="true"/>
     <foreign-key foreignTable="event" name="fk_printers_events1">

@@ -525,8 +525,9 @@ CREATE TABLE IF NOT EXISTS `event_printer` (
   `event_printerid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
-  `ip` VARCHAR(15) NOT NULL,
-  `port` SMALLINT UNSIGNED NOT NULL,
+  `type` SMALLINT NOT NULL,
+  `attr1` VARCHAR(128) NULL,
+  `attr2` VARCHAR(128) NULL,
   `default` TINYINT(1) NOT NULL,
   `characters_per_row` TINYINT NOT NULL,
   PRIMARY KEY (`event_printerid`),
@@ -538,7 +539,7 @@ CREATE TABLE IF NOT EXISTS `event_printer` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enthält die IP:Port der Drucker, die bei einem Event zur verfügung stehen';
+COMMENT = 'Enthält die Konfiguration der Drucker, die bei einem Event zur verfügung stehen\nType:\n1: Network\n2: File\n3: Windows\n4: Cups\n5: Dummy';
 
 
 -- -----------------------------------------------------

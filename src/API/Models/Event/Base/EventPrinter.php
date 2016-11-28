@@ -89,18 +89,25 @@ abstract class EventPrinter implements ActiveRecordInterface
     protected $name;
 
     /**
-     * The value for the ip field.
-     *
-     * @var        string
-     */
-    protected $ip;
-
-    /**
-     * The value for the port field.
+     * The value for the type field.
      *
      * @var        int
      */
-    protected $port;
+    protected $type;
+
+    /**
+     * The value for the attr1 field.
+     *
+     * @var        string
+     */
+    protected $attr1;
+
+    /**
+     * The value for the attr2 field.
+     *
+     * @var        string
+     */
+    protected $attr2;
 
     /**
      * The value for the default field.
@@ -397,23 +404,33 @@ abstract class EventPrinter implements ActiveRecordInterface
     }
 
     /**
-     * Get the [ip] column value.
-     *
-     * @return string
-     */
-    public function getIp()
-    {
-        return $this->ip;
-    }
-
-    /**
-     * Get the [port] column value.
+     * Get the [type] column value.
      *
      * @return int
      */
-    public function getPort()
+    public function getType()
     {
-        return $this->port;
+        return $this->type;
+    }
+
+    /**
+     * Get the [attr1] column value.
+     *
+     * @return string
+     */
+    public function getAttr1()
+    {
+        return $this->attr1;
+    }
+
+    /**
+     * Get the [attr2] column value.
+     *
+     * @return string
+     */
+    public function getAttr2()
+    {
+        return $this->attr2;
     }
 
     /**
@@ -511,44 +528,64 @@ abstract class EventPrinter implements ActiveRecordInterface
     } // setName()
 
     /**
-     * Set the value of [ip] column.
-     *
-     * @param string $v new value
-     * @return $this|\API\Models\Event\EventPrinter The current object (for fluent API support)
-     */
-    public function setIp($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->ip !== $v) {
-            $this->ip = $v;
-            $this->modifiedColumns[EventPrinterTableMap::COL_IP] = true;
-        }
-
-        return $this;
-    } // setIp()
-
-    /**
-     * Set the value of [port] column.
+     * Set the value of [type] column.
      *
      * @param int $v new value
      * @return $this|\API\Models\Event\EventPrinter The current object (for fluent API support)
      */
-    public function setPort($v)
+    public function setType($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->port !== $v) {
-            $this->port = $v;
-            $this->modifiedColumns[EventPrinterTableMap::COL_PORT] = true;
+        if ($this->type !== $v) {
+            $this->type = $v;
+            $this->modifiedColumns[EventPrinterTableMap::COL_TYPE] = true;
         }
 
         return $this;
-    } // setPort()
+    } // setType()
+
+    /**
+     * Set the value of [attr1] column.
+     *
+     * @param string $v new value
+     * @return $this|\API\Models\Event\EventPrinter The current object (for fluent API support)
+     */
+    public function setAttr1($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->attr1 !== $v) {
+            $this->attr1 = $v;
+            $this->modifiedColumns[EventPrinterTableMap::COL_ATTR1] = true;
+        }
+
+        return $this;
+    } // setAttr1()
+
+    /**
+     * Set the value of [attr2] column.
+     *
+     * @param string $v new value
+     * @return $this|\API\Models\Event\EventPrinter The current object (for fluent API support)
+     */
+    public function setAttr2($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->attr2 !== $v) {
+            $this->attr2 = $v;
+            $this->modifiedColumns[EventPrinterTableMap::COL_ATTR2] = true;
+        }
+
+        return $this;
+    } // setAttr2()
 
     /**
      * Sets the value of the [default] column.
@@ -643,16 +680,19 @@ abstract class EventPrinter implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : EventPrinterTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
             $this->name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : EventPrinterTableMap::translateFieldName('Ip', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->ip = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : EventPrinterTableMap::translateFieldName('Type', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->type = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : EventPrinterTableMap::translateFieldName('Port', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->port = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : EventPrinterTableMap::translateFieldName('Attr1', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->attr1 = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : EventPrinterTableMap::translateFieldName('Default', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : EventPrinterTableMap::translateFieldName('Attr2', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->attr2 = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : EventPrinterTableMap::translateFieldName('Default', TableMap::TYPE_PHPNAME, $indexType)];
             $this->default = (null !== $col) ? (boolean) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : EventPrinterTableMap::translateFieldName('CharactersPerRow', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : EventPrinterTableMap::translateFieldName('CharactersPerRow', TableMap::TYPE_PHPNAME, $indexType)];
             $this->characters_per_row = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
@@ -662,7 +702,7 @@ abstract class EventPrinter implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = EventPrinterTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = EventPrinterTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Event\\EventPrinter'), 0, $e);
@@ -903,11 +943,14 @@ abstract class EventPrinter implements ActiveRecordInterface
         if ($this->isColumnModified(EventPrinterTableMap::COL_NAME)) {
             $modifiedColumns[':p' . $index++]  = 'name';
         }
-        if ($this->isColumnModified(EventPrinterTableMap::COL_IP)) {
-            $modifiedColumns[':p' . $index++]  = 'ip';
+        if ($this->isColumnModified(EventPrinterTableMap::COL_TYPE)) {
+            $modifiedColumns[':p' . $index++]  = 'type';
         }
-        if ($this->isColumnModified(EventPrinterTableMap::COL_PORT)) {
-            $modifiedColumns[':p' . $index++]  = 'port';
+        if ($this->isColumnModified(EventPrinterTableMap::COL_ATTR1)) {
+            $modifiedColumns[':p' . $index++]  = 'attr1';
+        }
+        if ($this->isColumnModified(EventPrinterTableMap::COL_ATTR2)) {
+            $modifiedColumns[':p' . $index++]  = 'attr2';
         }
         if ($this->isColumnModified(EventPrinterTableMap::COL_DEFAULT)) {
             $modifiedColumns[':p' . $index++]  = 'default';
@@ -935,11 +978,14 @@ abstract class EventPrinter implements ActiveRecordInterface
                     case 'name':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'ip':
-                        $stmt->bindValue($identifier, $this->ip, PDO::PARAM_STR);
+                    case 'type':
+                        $stmt->bindValue($identifier, $this->type, PDO::PARAM_INT);
                         break;
-                    case 'port':
-                        $stmt->bindValue($identifier, $this->port, PDO::PARAM_INT);
+                    case 'attr1':
+                        $stmt->bindValue($identifier, $this->attr1, PDO::PARAM_STR);
+                        break;
+                    case 'attr2':
+                        $stmt->bindValue($identifier, $this->attr2, PDO::PARAM_STR);
                         break;
                     case 'default':
                         $stmt->bindValue($identifier, (int) $this->default, PDO::PARAM_INT);
@@ -1019,15 +1065,18 @@ abstract class EventPrinter implements ActiveRecordInterface
                 return $this->getName();
                 break;
             case 3:
-                return $this->getIp();
+                return $this->getType();
                 break;
             case 4:
-                return $this->getPort();
+                return $this->getAttr1();
                 break;
             case 5:
-                return $this->getDefault();
+                return $this->getAttr2();
                 break;
             case 6:
+                return $this->getDefault();
+                break;
+            case 7:
                 return $this->getCharactersPerRow();
                 break;
             default:
@@ -1063,10 +1112,11 @@ abstract class EventPrinter implements ActiveRecordInterface
             $keys[0] => $this->getEventPrinterid(),
             $keys[1] => $this->getEventid(),
             $keys[2] => $this->getName(),
-            $keys[3] => $this->getIp(),
-            $keys[4] => $this->getPort(),
-            $keys[5] => $this->getDefault(),
-            $keys[6] => $this->getCharactersPerRow(),
+            $keys[3] => $this->getType(),
+            $keys[4] => $this->getAttr1(),
+            $keys[5] => $this->getAttr2(),
+            $keys[6] => $this->getDefault(),
+            $keys[7] => $this->getCharactersPerRow(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1148,15 +1198,18 @@ abstract class EventPrinter implements ActiveRecordInterface
                 $this->setName($value);
                 break;
             case 3:
-                $this->setIp($value);
+                $this->setType($value);
                 break;
             case 4:
-                $this->setPort($value);
+                $this->setAttr1($value);
                 break;
             case 5:
-                $this->setDefault($value);
+                $this->setAttr2($value);
                 break;
             case 6:
+                $this->setDefault($value);
+                break;
+            case 7:
                 $this->setCharactersPerRow($value);
                 break;
         } // switch()
@@ -1195,16 +1248,19 @@ abstract class EventPrinter implements ActiveRecordInterface
             $this->setName($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setIp($arr[$keys[3]]);
+            $this->setType($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setPort($arr[$keys[4]]);
+            $this->setAttr1($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setDefault($arr[$keys[5]]);
+            $this->setAttr2($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setCharactersPerRow($arr[$keys[6]]);
+            $this->setDefault($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setCharactersPerRow($arr[$keys[7]]);
         }
     }
 
@@ -1256,11 +1312,14 @@ abstract class EventPrinter implements ActiveRecordInterface
         if ($this->isColumnModified(EventPrinterTableMap::COL_NAME)) {
             $criteria->add(EventPrinterTableMap::COL_NAME, $this->name);
         }
-        if ($this->isColumnModified(EventPrinterTableMap::COL_IP)) {
-            $criteria->add(EventPrinterTableMap::COL_IP, $this->ip);
+        if ($this->isColumnModified(EventPrinterTableMap::COL_TYPE)) {
+            $criteria->add(EventPrinterTableMap::COL_TYPE, $this->type);
         }
-        if ($this->isColumnModified(EventPrinterTableMap::COL_PORT)) {
-            $criteria->add(EventPrinterTableMap::COL_PORT, $this->port);
+        if ($this->isColumnModified(EventPrinterTableMap::COL_ATTR1)) {
+            $criteria->add(EventPrinterTableMap::COL_ATTR1, $this->attr1);
+        }
+        if ($this->isColumnModified(EventPrinterTableMap::COL_ATTR2)) {
+            $criteria->add(EventPrinterTableMap::COL_ATTR2, $this->attr2);
         }
         if ($this->isColumnModified(EventPrinterTableMap::COL_DEFAULT)) {
             $criteria->add(EventPrinterTableMap::COL_DEFAULT, $this->default);
@@ -1356,8 +1415,9 @@ abstract class EventPrinter implements ActiveRecordInterface
     {
         $copyObj->setEventid($this->getEventid());
         $copyObj->setName($this->getName());
-        $copyObj->setIp($this->getIp());
-        $copyObj->setPort($this->getPort());
+        $copyObj->setType($this->getType());
+        $copyObj->setAttr1($this->getAttr1());
+        $copyObj->setAttr2($this->getAttr2());
         $copyObj->setDefault($this->getDefault());
         $copyObj->setCharactersPerRow($this->getCharactersPerRow());
 
@@ -1760,8 +1820,9 @@ abstract class EventPrinter implements ActiveRecordInterface
         $this->event_printerid = null;
         $this->eventid = null;
         $this->name = null;
-        $this->ip = null;
-        $this->port = null;
+        $this->type = null;
+        $this->attr1 = null;
+        $this->attr2 = null;
         $this->default = null;
         $this->characters_per_row = null;
         $this->alreadyInSave = false;

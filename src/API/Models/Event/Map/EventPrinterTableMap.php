@@ -59,7 +59,7 @@ class EventPrinterTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 8;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class EventPrinterTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 8;
 
     /**
      * the column name for the event_printerid field
@@ -87,14 +87,19 @@ class EventPrinterTableMap extends TableMap
     const COL_NAME = 'event_printer.name';
 
     /**
-     * the column name for the ip field
+     * the column name for the type field
      */
-    const COL_IP = 'event_printer.ip';
+    const COL_TYPE = 'event_printer.type';
 
     /**
-     * the column name for the port field
+     * the column name for the attr1 field
      */
-    const COL_PORT = 'event_printer.port';
+    const COL_ATTR1 = 'event_printer.attr1';
+
+    /**
+     * the column name for the attr2 field
+     */
+    const COL_ATTR2 = 'event_printer.attr2';
 
     /**
      * the column name for the default field
@@ -118,11 +123,11 @@ class EventPrinterTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('EventPrinterid', 'Eventid', 'Name', 'Ip', 'Port', 'Default', 'CharactersPerRow', ),
-        self::TYPE_CAMELNAME     => array('eventPrinterid', 'eventid', 'name', 'ip', 'port', 'default', 'charactersPerRow', ),
-        self::TYPE_COLNAME       => array(EventPrinterTableMap::COL_EVENT_PRINTERID, EventPrinterTableMap::COL_EVENTID, EventPrinterTableMap::COL_NAME, EventPrinterTableMap::COL_IP, EventPrinterTableMap::COL_PORT, EventPrinterTableMap::COL_DEFAULT, EventPrinterTableMap::COL_CHARACTERS_PER_ROW, ),
-        self::TYPE_FIELDNAME     => array('event_printerid', 'eventid', 'name', 'ip', 'port', 'default', 'characters_per_row', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('EventPrinterid', 'Eventid', 'Name', 'Type', 'Attr1', 'Attr2', 'Default', 'CharactersPerRow', ),
+        self::TYPE_CAMELNAME     => array('eventPrinterid', 'eventid', 'name', 'type', 'attr1', 'attr2', 'default', 'charactersPerRow', ),
+        self::TYPE_COLNAME       => array(EventPrinterTableMap::COL_EVENT_PRINTERID, EventPrinterTableMap::COL_EVENTID, EventPrinterTableMap::COL_NAME, EventPrinterTableMap::COL_TYPE, EventPrinterTableMap::COL_ATTR1, EventPrinterTableMap::COL_ATTR2, EventPrinterTableMap::COL_DEFAULT, EventPrinterTableMap::COL_CHARACTERS_PER_ROW, ),
+        self::TYPE_FIELDNAME     => array('event_printerid', 'eventid', 'name', 'type', 'attr1', 'attr2', 'default', 'characters_per_row', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -132,11 +137,11 @@ class EventPrinterTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('EventPrinterid' => 0, 'Eventid' => 1, 'Name' => 2, 'Ip' => 3, 'Port' => 4, 'Default' => 5, 'CharactersPerRow' => 6, ),
-        self::TYPE_CAMELNAME     => array('eventPrinterid' => 0, 'eventid' => 1, 'name' => 2, 'ip' => 3, 'port' => 4, 'default' => 5, 'charactersPerRow' => 6, ),
-        self::TYPE_COLNAME       => array(EventPrinterTableMap::COL_EVENT_PRINTERID => 0, EventPrinterTableMap::COL_EVENTID => 1, EventPrinterTableMap::COL_NAME => 2, EventPrinterTableMap::COL_IP => 3, EventPrinterTableMap::COL_PORT => 4, EventPrinterTableMap::COL_DEFAULT => 5, EventPrinterTableMap::COL_CHARACTERS_PER_ROW => 6, ),
-        self::TYPE_FIELDNAME     => array('event_printerid' => 0, 'eventid' => 1, 'name' => 2, 'ip' => 3, 'port' => 4, 'default' => 5, 'characters_per_row' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('EventPrinterid' => 0, 'Eventid' => 1, 'Name' => 2, 'Type' => 3, 'Attr1' => 4, 'Attr2' => 5, 'Default' => 6, 'CharactersPerRow' => 7, ),
+        self::TYPE_CAMELNAME     => array('eventPrinterid' => 0, 'eventid' => 1, 'name' => 2, 'type' => 3, 'attr1' => 4, 'attr2' => 5, 'default' => 6, 'charactersPerRow' => 7, ),
+        self::TYPE_COLNAME       => array(EventPrinterTableMap::COL_EVENT_PRINTERID => 0, EventPrinterTableMap::COL_EVENTID => 1, EventPrinterTableMap::COL_NAME => 2, EventPrinterTableMap::COL_TYPE => 3, EventPrinterTableMap::COL_ATTR1 => 4, EventPrinterTableMap::COL_ATTR2 => 5, EventPrinterTableMap::COL_DEFAULT => 6, EventPrinterTableMap::COL_CHARACTERS_PER_ROW => 7, ),
+        self::TYPE_FIELDNAME     => array('event_printerid' => 0, 'eventid' => 1, 'name' => 2, 'type' => 3, 'attr1' => 4, 'attr2' => 5, 'default' => 6, 'characters_per_row' => 7, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
     );
 
     /**
@@ -159,8 +164,9 @@ class EventPrinterTableMap extends TableMap
         $this->addPrimaryKey('event_printerid', 'EventPrinterid', 'INTEGER', true, null, null);
         $this->addForeignKey('eventid', 'Eventid', 'INTEGER', 'event', 'eventid', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 64, null);
-        $this->addColumn('ip', 'Ip', 'VARCHAR', true, 15, null);
-        $this->addColumn('port', 'Port', 'SMALLINT', true, 5, null);
+        $this->addColumn('type', 'Type', 'SMALLINT', true, null, null);
+        $this->addColumn('attr1', 'Attr1', 'VARCHAR', false, 128, null);
+        $this->addColumn('attr2', 'Attr2', 'VARCHAR', false, 128, null);
         $this->addColumn('default', 'Default', 'BOOLEAN', true, 1, null);
         $this->addColumn('characters_per_row', 'CharactersPerRow', 'TINYINT', true, null, null);
     } // initialize()
@@ -330,16 +336,18 @@ class EventPrinterTableMap extends TableMap
             $criteria->addSelectColumn(EventPrinterTableMap::COL_EVENT_PRINTERID);
             $criteria->addSelectColumn(EventPrinterTableMap::COL_EVENTID);
             $criteria->addSelectColumn(EventPrinterTableMap::COL_NAME);
-            $criteria->addSelectColumn(EventPrinterTableMap::COL_IP);
-            $criteria->addSelectColumn(EventPrinterTableMap::COL_PORT);
+            $criteria->addSelectColumn(EventPrinterTableMap::COL_TYPE);
+            $criteria->addSelectColumn(EventPrinterTableMap::COL_ATTR1);
+            $criteria->addSelectColumn(EventPrinterTableMap::COL_ATTR2);
             $criteria->addSelectColumn(EventPrinterTableMap::COL_DEFAULT);
             $criteria->addSelectColumn(EventPrinterTableMap::COL_CHARACTERS_PER_ROW);
         } else {
             $criteria->addSelectColumn($alias . '.event_printerid');
             $criteria->addSelectColumn($alias . '.eventid');
             $criteria->addSelectColumn($alias . '.name');
-            $criteria->addSelectColumn($alias . '.ip');
-            $criteria->addSelectColumn($alias . '.port');
+            $criteria->addSelectColumn($alias . '.type');
+            $criteria->addSelectColumn($alias . '.attr1');
+            $criteria->addSelectColumn($alias . '.attr2');
             $criteria->addSelectColumn($alias . '.default');
             $criteria->addSelectColumn($alias . '.characters_per_row');
         }
