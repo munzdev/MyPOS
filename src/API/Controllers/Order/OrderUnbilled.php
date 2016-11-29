@@ -31,40 +31,15 @@ class OrderUnbilled extends SecurityController
     }
     
     protected function GET() : void  {                
-        $o_user = Auth::GetCurrentUser();      
-        
         $i_orderid = intval($this->a_args['id']);
         $b_all = filter_var($this->a_args['all'], FILTER_VALIDATE_BOOLEAN);
         
-        $o_eventTable = null;
-        if($b_all) {
-            $o_eventTable = EventTableQuery::create()
-                                            ->useOrderQuery()
-                                               ->filterByOrderid($i_orderid)
-                                            ->endUse()
-                                            ->findOne();
-        }
-        
-        $o_payments = OrderDetailQuery::create()
-                                        ->_if($b_all)
-                                            ->useOrderQuery()
-                                                ->filterByEventTable($o_eventTable)
-                                            ->endUse()
-                                        ->_else()
-                                            ->filterByOrderid($i_orderid)
-                                        ->_endIf()
-                                        ->leftJoinWithMenuSize()
-                                        ->leftJoinWithOrderDetailExtra()                                        
-                                        ->leftJoinWithOrderDetailMixedWith()                                       
-                                        ->leftJoinWithInvoiceItem()
-                                        ->filterByInvoiceFinished(null)        
-                                        ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                        ->find();
-        $a_return = array();
+        $o_unbilledOrderDetails = $this->getUnbilledOrderDetails($i_orderid, $b_all);
+        $a_unbilledOrderDetails = array();
         
         // if all order from table are returned, merge same order types
-        if($o_payments->count() > 0) {
-            foreach($o_payments as $a_order_detail) {
+        if($o_unbilledOrderDetails->count() > 0) {
+            foreach($o_unbilledOrderDetails as $a_order_detail) {
                 $str_index = $a_order_detail['Menuid'] . '-' .
                              $a_order_detail['SinglePrice'] . '-' .
                              $a_order_detail['ExtraDetail'] . '-' .
@@ -101,21 +76,65 @@ class OrderUnbilled extends SecurityController
                 
                 $a_order_detail['AmountLeft'] = $a_order_detail['Amount'] - $i_allready_in_invoice;
 
-                if(!isset($a_return[$str_index]))
+                if(!isset($a_unbilledOrderDetails[$str_index]))
                 {
-                    $a_return[$str_index] = $a_order_detail;
+                    $a_unbilledOrderDetails[$str_index] = $a_order_detail;
                 }
                 else
                 {
-                    $a_return[$str_index]['Amount'] += $a_order_detail['Amount'];
-                    $a_return[$str_index]['AmountLeft'] += $a_order_detail['AmountLeft'];
+                    $a_unbilledOrderDetails[$str_index]['Amount'] += $a_order_detail['Amount'];
+                    $a_unbilledOrderDetails[$str_index]['AmountLeft'] += $a_order_detail['AmountLeft'];
                 }
             }
             
-            $a_return = array_values($a_return);
+            $a_unbilledOrderDetails = array_values($a_unbilledOrderDetails);
         }
         
+        $a_return = array('Orderid' => $i_orderid,
+                          'All' => $b_all,
+                          'UnbilledOrderDetails' => $a_unbilledOrderDetails,
+                          'UsedCoupons' => null);
+        
         $this->o_response->withJson($a_return);
+    }
+    
+    function POST() : void{
+        $o_user = Auth::GetCurrentUser();      
+        
+        $i_orderid = intval($this->a_args['id']);
+        $b_all = filter_var($this->a_args['all'], FILTER_VALIDATE_BOOLEAN);
+        
+        $o_unbilledOrderDetails = $this->getUnbilledOrderDetails($i_orderid, $b_all);
+    }
+    
+    private function getUnbilledOrderDetails($i_orderid, $b_all)
+    {
+        $o_eventTable = null;
+        if($b_all) {
+            $o_eventTable = EventTableQuery::create()
+                                            ->useOrderQuery()
+                                               ->filterByOrderid($i_orderid)
+                                            ->endUse()
+                                            ->findOne();
+        }
+        
+        $o_unbilledOrderDetails = OrderDetailQuery::create()
+                                                    ->_if($b_all)
+                                                        ->useOrderQuery()
+                                                            ->filterByEventTable($o_eventTable)
+                                                        ->endUse()
+                                                    ->_else()
+                                                        ->filterByOrderid($i_orderid)
+                                                    ->_endIf()
+                                                    ->leftJoinWithMenuSize()
+                                                    ->leftJoinWithOrderDetailExtra()                                        
+                                                    ->leftJoinWithOrderDetailMixedWith()                                       
+                                                    ->leftJoinWithInvoiceItem()
+                                                    ->filterByInvoiceFinished(null)        
+                                                    ->setFormatter(ModelCriteria::FORMAT_ARRAY)
+                                                    ->find();
+        
+        return $o_unbilledOrderDetails;
     }
     
 }

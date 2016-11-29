@@ -101,6 +101,14 @@
         "printer": "Drucker",
         "stayOnPage": "auf Seite bleiben",
         "payed": "Bezahlt",
-        "paymentSuccessfull": "Bezahlung erfolgreich!"
+        "paymentSuccessfull": "Bezahlung erfolgreich!",
+        "addCoupon": "Gutschein hinzufügen",
+        "code": "Code",
+        "abort": "Abbrechen",
+        "verify": "Prüfen",
+        "usedCoupons": "Verwendete Gutscheine",
+        "value": "Wert",
+        "consumed": "Verbraucht",
+        "withoutCoupon": "ohne Gutscheine"
     }
 }

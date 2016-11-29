@@ -1,12 +1,14 @@
 define(['Webservice',
         'collections/custom/event/PrinterCollection',
-        'collections/custom/order/OrderUnbilledCollection',
+        'models/custom/order/OrderUnbilled',
+        'models/custom/payment/VerifyCoupon',
         'views/helpers/HeaderView',
         'text!templates/pages/order-invoice.phtml',
         'text!templates/pages/order-item.phtml'
 ], function(Webservice,
             PrinterCollection,
-            OrderUnbilledCollection,
+            OrderUnbilled,
+            VerifyCoupon,
             HeaderView,
             Template,
             TemplateItem) {
@@ -18,22 +20,20 @@ define(['Webservice',
             return {'click #button-all': 'select_all',
                     'click #show-all': 'set_mode_all',
                     'click #show-single': 'set_mode_single',
+                    'click #use-coupon': 'use_coupon',
+                    'click #coupon-code-verify': 'verify_coupon',
                     'click #submit': 'finish',
-                    'popupafterclose #success-popup': 'success_popup_close'};
+                    'popupafterclose #success-popup': 'success_popup_close',
+                    'popupafterclose #add-coupon-popup': 'add_coupon_popup_close'};
         }
                 
         initialize(options) {
             _.bindAll(this, "renderOpenOrders",
-                            "select_all",
                             "order_count_up",
-                            "order_count_down",
-                            "set_mode_all",
-                            "set_mode_single",
-                            "finish",
-                            "success_popup_close");
+                            "order_count_down");
 
-            this.orderUnbilled = new OrderUnbilledCollection();
-            this.orderUnbilled.orderid = options.orderid;
+            this.orderUnbilled = new OrderUnbilled();
+            this.orderUnbilled.set('Orderid', options.orderid);
             this.printers = new PrinterCollection;
             this.printers.fetch()
                          .done(() => {
@@ -45,7 +45,7 @@ define(['Webservice',
         set_mode_all() {
             if(DEBUG) console.log("MODE: all");
 
-            this.orderUnbilled.all = true;
+            this.orderUnbilled.set('All', true);
             this.orderUnbilled.fetch()
                                 .done(this.renderOpenOrders);
         }
@@ -53,13 +53,13 @@ define(['Webservice',
         set_mode_single() {
             if(DEBUG) console.log("MODE: single");
 
-            this.orderUnbilled.all = false;
+            this.orderUnbilled.set('All', false);
             this.orderUnbilled.fetch()
                                 .done(this.renderOpenOrders);
         }
 
         select_all(event) {
-            this.orderUnbilled.each(function(orderDetail){
+            this.orderUnbilled.get('UnbilledOrderDetails').each(function(orderDetail){
                 orderDetail.set('AmountSelected', orderDetail.get('AmountLeft')) ;
             });
 
@@ -70,7 +70,7 @@ define(['Webservice',
             if(DEBUG) console.log("Up");
             
             let index = $(event.currentTarget).attr('data-index');
-            let orderDetail = this.orderUnbilled.get({cid: index});
+            let orderDetail = this.orderUnbilled.get('UnbilledOrderDetails').get({cid: index});
 
             var amount_open = orderDetail.get('AmountLeft');
             var current_amount = parseFloat(orderDetail.get('AmountSelected'));
@@ -90,7 +90,7 @@ define(['Webservice',
             if(DEBUG) console.log("Down");
             
             let index = $(event.currentTarget).attr('data-index');
-            let orderDetail = this.orderUnbilled.get({cid: index});
+            let orderDetail = this.orderUnbilled.get('UnbilledOrderDetails').get({cid: index});
 
             var amount_open = orderDetail.get('AmountLeft');
             var current_amount = parseFloat(orderDetail.get('AmountSelected'));
@@ -120,6 +120,44 @@ define(['Webservice',
                                     this.$('#success-popup').popup("open");
                                 });
         }
+        
+        use_coupon() {
+            this.$('#add-coupon-popup').popup("open");
+        }
+        
+        verify_coupon() {
+            let code = $.trim(this.$('#coupon-code').val());
+            let hasCode = false;1
+           
+            if(code == '')
+                return;
+            
+            this.orderUnbilled.get('UsedCoupons').find((coupon) => {
+                if(code == coupon.get('Code')) {
+                    hasCode = true;
+                    return code;
+                }
+            });
+                                   
+            if(hasCode) {
+                this.$('#add-coupon-popup').popup("close");
+                app.error.showAlert('Fehler!', 'Gutschein wurde bereits hinzugefügt!');
+                return;
+            }
+            
+            let verifyCoupon = new VerifyCoupon();
+            verifyCoupon.set('Code', code);
+            verifyCoupon.fetch()
+                        .done((coupon) => {
+                            this.orderUnbilled.get('UsedCoupons').add(coupon);
+                            this.$('#add-coupon-popup').popup("close");
+                            this.renderOpenOrders();
+                        })
+                        .fail(() => {
+                            this.$('#add-coupon-popup').popup("close");
+                            app.error.showAlert('Fehler!', 'Code nicht gültig oder Gutschein bereits verbraucht!');
+                        });
+        }
 
         success_popup_close() {
             if(this.$('#continue').prop('checked'))
@@ -132,11 +170,16 @@ define(['Webservice',
             else
                 this.changeHash("order-overview");
         }
+        
+        add_coupon_popup_close() {
+            this.$('#coupon-code').val('');
+        }
 
         renderOpenOrders() {
             var itemTemplate = _.template(TemplateItem);
 
             this.$('#open-orders-list').empty();
+            this.$('#coupons-list').empty();
 
             var sortedOrders = {};
 
@@ -148,7 +191,7 @@ define(['Webservice',
             let currency = app.i18n.template.currency;
                         
             // Presort the list by categorys
-            this.orderUnbilled.each((orderDetail) => {
+            this.orderUnbilled.get('UnbilledOrderDetails').each((orderDetail) => {
                 let menuid = orderDetail.get('Menuid');
                 let key = null;
                 
@@ -230,20 +273,46 @@ define(['Webservice',
                                 i18n: app.i18n.template};
 
                     this.$('#open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
-                }
-                
-            }            
+                }                
+            }
 
-            if(totalOpenProducts == totalProductsInInvoice)
-            {
+            let totalSumPriceWithoutCoupon = totalSumPrice;
+            
+            if(this.orderUnbilled.get('UsedCoupons').length > 0) {
+                let divider = $('<li/>').attr('data-role', 'list-divider').text(t.usedCoupons);
+                this.$('#coupons-list').append(divider);    
+                
+                this.orderUnbilled.get('UsedCoupons').each((coupon) => {
+                    
+                    let orgTotalSumPrice = totalSumPrice;
+                    totalSumPrice -= coupon.get('Value');                
+                    
+                    if(totalSumPrice < 0)
+                        totalSumPrice = 0;
+                    
+                    let usedValue = totalSumPrice > 0 ? coupon.get('Value') : orgTotalSumPrice.toFixed(2);
+                    
+                    let text = t.code + ": " + coupon.get('Code');
+                    text +=  ", " + t.value + ": " + coupon.get('Value') + currency;
+                    text +=  ", " + t.consumed + ": " + usedValue + currency;                                      
+                    
+                    let li = $('<li/>').text(text);
+                    
+                    this.$('#coupons-list').append(li);
+                });
+            }
+
+            if(totalOpenProducts == totalProductsInInvoice) {
                 this.$('#continue').prop("checked", false).checkboxradio('refresh');
             }
 
             this.$('#invoice-price').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
+            this.$('#invoice-price-without-coupon').text(t.withoutCoupon + ': ' + totalSumPriceWithoutCoupon.toFixed(2) + currency);
 
             this.$('.order-item-up').click(this.order_count_up);
             this.$('.order-item-down').click(this.order_count_down);
             this.$('#open-orders-list').listview('refresh');
+            this.$('#coupons-list').listview('refresh');
         }
 
         // Renders all of the Category models on the UI

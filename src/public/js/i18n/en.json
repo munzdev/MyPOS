@@ -101,6 +101,14 @@
         "printer": "Printer",
         "stayOnPage": "stay on page",
         "payed": "Payed",
-        "paymentSuccessfull": "Payment successfull!"
+        "paymentSuccessfull": "Payment successfull!",
+        "addCoupon": "Add coupon",
+        "code": "Code",
+        "abort": "Abort",
+        "verify": "Verify",
+        "usedCoupons": "Used coupons",
+        "value": "Value",
+        "consumed": "Consumed",
+        "withoutCoupon": "without coupons"
     }
 }
