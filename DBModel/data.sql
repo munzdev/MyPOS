@@ -41,8 +41,6 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 INSERT INTO `payment_type` (`payment_typeid`, `name`) VALUES (DEFAULT, 'CASH');
-INSERT INTO `payment_type` (`payment_typeid`, `name`) VALUES (DEFAULT, 'CREDIT_CARD');
-INSERT INTO `payment_type` (`payment_typeid`, `name`) VALUES (DEFAULT, 'DEBIT_CARD');
 INSERT INTO `payment_type` (`payment_typeid`, `name`) VALUES (DEFAULT, 'BANK_TRANSFER');
 
 COMMIT;
