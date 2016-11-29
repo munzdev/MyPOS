@@ -1,7 +1,7 @@
 {
     "errorLoadingApp": "App Ladefehler",
     "errorLoadingAppRouteText": "Es wurde keine Startseite gefunden. Haben Sie irgendeine Berechtigung bekommen?",
-    "errorLoadingAppText": "Bitte laden Sie die App neu",
+    "errorLoadingAppText": "Bitte laden Sie die App neu",    
     "currency": "€",
     "LoginView": {
         "username": "Benutzername",
@@ -100,7 +100,7 @@
         "printReceipt": "Quittung drucken",
         "printer": "Drucker",
         "stayOnPage": "auf Seite bleiben",
-        "payed": "Bezahlt",
+        "create": "Erstellen",
         "paymentSuccessfull": "Bezahlung erfolgreich!",
         "addCoupon": "Gutschein hinzufügen",
         "code": "Code",
@@ -109,6 +109,28 @@
         "usedCoupons": "Verwendete Gutscheine",
         "value": "Wert",
         "consumed": "Verbraucht",
-        "withoutCoupon": "ohne Gutscheine"
+        "withoutCoupon": "ohne Gutscheine",
+        "selectCustomer": "Kunde auswählen",
+        "name": "Name",
+        "searchResult": "Suchergebnisse",
+        "noSearchResult": "Kein Suchergebniss",
+        "search": "Suchen",
+        "createPlant": "Neuanlage",
+        "createCustomer": "Kunde anlegen",
+        "title": "Titel",
+        "mr": "Herr",
+        "ms": "Frau",
+        "company": "Firma",
+        "address": "Adresse",
+        "address2": "Adressenzusatz",
+        "city": "Ort",
+        "zip": "PLZ",
+        "tin": "UID",
+        "fillInAllFields": "Bitte alle Felder ausfüllen!",
+        "save": "Speichern",
+        "payType": "Zahlart",
+        "moreOptions": "weitere Optionen",
+        "CASH": "Bar",
+        "BANK_TRANSFER": "Rechnung/Überweisung"
     }
 }

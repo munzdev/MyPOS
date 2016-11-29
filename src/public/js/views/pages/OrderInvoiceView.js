@@ -1,14 +1,20 @@
 define(['Webservice',
         'collections/custom/event/PrinterCollection',
+        'collections/db/Payment/PaymentTypeCollection',
+        'collections/custom/invoice/CustomerSearchCollection',
         'models/custom/order/OrderUnbilled',
         'models/custom/payment/VerifyCoupon',
+        'models/custom/invoice/CustomerModel',
         'views/helpers/HeaderView',
         'text!templates/pages/order-invoice.phtml',
         'text!templates/pages/order-item.phtml'
 ], function(Webservice,
             PrinterCollection,
+            PaymentTypeCollection,
+            CustomerSearchCollection,
             OrderUnbilled,
             VerifyCoupon,
+            CustomerModel,
             HeaderView,
             Template,
             TemplateItem) {
@@ -21,6 +27,10 @@ define(['Webservice',
                     'click #show-all': 'set_mode_all',
                     'click #show-single': 'set_mode_single',
                     'click #use-coupon': 'use_coupon',
+                    'click #use-customer': 'use_customer',
+                    'click #customer-add': 'use_customer_add',
+                    'click #customer-search': "customer_search",
+                    'click #customer-save': "customer_save",
                     'click #coupon-code-verify': 'verify_coupon',
                     'click #submit': 'finish',
                     'popupafterclose #success-popup': 'success_popup_close',
@@ -34,12 +44,16 @@ define(['Webservice',
 
             this.orderUnbilled = new OrderUnbilled();
             this.orderUnbilled.set('Orderid', options.orderid);
+            this.paymentTypes = new PaymentTypeCollection;
             this.printers = new PrinterCollection;
-            this.printers.fetch()
-                         .done(() => {
-                             this.render();
-                             this.set_mode_all();
-                         });            
+            this.customerSearch = new CustomerSearchCollection;
+            
+            $.when(this.printers.fetch(),
+                   this.paymentTypes.fetch())
+             .then(() => {
+                 this.render();
+                 this.set_mode_all();
+             });            
         }
 
         set_mode_all() {
@@ -125,9 +139,87 @@ define(['Webservice',
             this.$('#add-coupon-popup').popup("open");
         }
         
+        use_customer() {
+            this.$('#select-customer-popup').popup("open");
+        }
+        
+        use_customer_add() {
+            this.$('#select-customer-popup').popup("close");
+            this.$('#add-customer-popup').popup("open");
+        }
+        
+        customer_search() {
+            let name = $.trim(this.$('#customer-search-name').val());
+            
+            if(name == '')
+                return;
+            
+            this.customerSearch.name = name;
+            this.customerSearch.fetch()
+                                .done(() => {
+                                    this.$('#customer-search-result').empty();
+                                    let t = this.i18n();
+                            
+                                    let divider = $('<li/>').attr('data-role', 'list-divider').text(t.searchResult);
+                                    this.$('#customer-search-result').append(divider);   
+                                    
+                                    if(this.customerSearch.length == 0) {
+                                        this.$('#customer-search-result').append($('<li/>').text(t.noSearchResult));
+                                    } else {
+                                        this.customerSearch.each((customer) => {
+                                            let a = $('<a/>').attr('class', "customer-search-result-btn ui-btn ui-corner-all ui-shadow ui-btn-b ui-mini ui-icon-check ui-btn-icon-right")
+                                                             .attr('data-customercid', customer.cid)
+                                                             .text(customer.get('Name'));
+
+                                            this.$('#customer-search-result').append($('<li/>').append(a));
+                                        });
+                                    }
+                                                                        
+                                    this.$('.customer-search-result-btn').click((event) => {
+                                        let cid = $(event.currentTarget).attr('data-customercid');
+                                        this.orderUnbilled.set('Customer', this.customerSearch.get({cid: cid}));                                        
+                                        this.$('#select-customer-popup').popup("close");
+                                        this.renderOpenOrders();
+                                    });
+                                    this.$('#customer-search-result').listview('refresh');
+                                });
+                               
+        }        
+        
+        customer_save() {
+            console.log('test');
+            let title = $.trim(this.$('#customer-title').val());
+            let name = $.trim(this.$('#customer-name').val());
+            let address = $.trim(this.$('#customer-address').val());
+            let address2 = $.trim(this.$('#customer-address2').val());
+            let city = $.trim(this.$('#customer-city').val());
+            let zip = $.trim(this.$('#customer-zip').val());
+            let tin = $.trim(this.$('#customer-tin').val());
+            
+            if(title == '' || name == '' || address == '' || city == '' || zip == '') {
+                alert(t.fillInAllFields);
+                return;
+            }
+            
+            let customer = new CustomerModel;
+            customer.set('Title', title);
+            customer.set('Name', title);
+            customer.set('Address', address);
+            customer.set('Address2', address2 == '' ? null : address2);
+            customer.set('City', city);
+            customer.set('Zip', zip);
+            customer.set('Tin', tin == '' ? null : tin);
+            customer.save()
+                    .done(() => {
+                        this.orderUnbilled.set('Customer', customer);                                        
+                        this.$('#select-customer-popup').popup("close");
+                        this.renderOpenOrders();
+                    });
+        }
+        
         verify_coupon() {
             let code = $.trim(this.$('#coupon-code').val());
-            let hasCode = false;1
+            let hasCode = false;
            
             if(code == '')
                 return;
@@ -305,6 +397,13 @@ define(['Webservice',
             if(totalOpenProducts == totalProductsInInvoice) {
                 this.$('#continue').prop("checked", false).checkboxradio('refresh');
             }
+            
+            if(this.orderUnbilled.get('Customer') != null) {
+                let customer = this.orderUnbilled.get('Customer');
+                
+                this.$('#selected-customer-display').empty();
+                this.$('#selected-customer-display').text(customer.get('Title') + ' ' + customer.get('Name'));
+            }
 
             this.$('#invoice-price').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
             this.$('#invoice-price-without-coupon').text(t.withoutCoupon + ': ' + totalSumPriceWithoutCoupon.toFixed(2) + currency);
@@ -320,7 +419,8 @@ define(['Webservice',
             let header = new HeaderView();
             this.registerSubview(".nav-header", header);
             
-            this.renderTemplate(Template, {printers: this.printers});
+            this.renderTemplate(Template, {printers: this.printers,
+                                           paymentTypes: this.paymentTypes});
 
             this.changePage(this);
 

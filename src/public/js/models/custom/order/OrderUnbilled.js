@@ -1,7 +1,9 @@
 define(["collections/db/Ordering/OrderDetailCollection",
-        "collections/db/Payment/CouponCollection"        
+        "collections/db/Payment/CouponCollection",
+        "models/db/Invoice/Customer"
 ], function(OrderDetailCollection,
-            CouponCollection){
+            CouponCollection,
+            Customer){
     "use strict";
 
     return class OrderUnbilled extends app.BaseModel {
@@ -9,6 +11,7 @@ define(["collections/db/Ordering/OrderDetailCollection",
         defaults() {
             return {Orderid: null,
                     All: false,
+                    Customer: null,
                     UnbilledOrderDetails: new OrderDetailCollection(),
                     UsedCoupons: new CouponCollection()};
         }

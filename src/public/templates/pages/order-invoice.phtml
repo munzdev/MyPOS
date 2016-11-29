@@ -15,6 +15,64 @@
             <a id='coupon-code-verify' class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.verify %></a>
         </div>
     </div>
+    <div data-role="popup" data-position-to="window" id="select-customer-popup" data-overlay-theme="b" data-theme="b">
+         <div data-role="header">
+            <h1><%= t.selectCustomer %></h1>
+        </div>
+        <div role="main" class="ui-content">
+            <label for="customer-search-name"><%= t.name %>:</label>
+            <input type="text" id="customer-search-name" />
+            
+            <ul data-role="listview" data-inset="true" id="customer-search-result"></ul>
+            
+            <a id='customer-search' class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.search %></a>
+            <a id='customer-add' class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.createPlant %></a>
+            <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back"><%= t.abort %></a>
+        </div>
+    </div>
+    <div data-role="popup" data-position-to="window" id="add-customer-popup" data-overlay-theme="b" data-theme="b">
+        <div data-role="header">
+            <h1><%= t.createCustomer %></h1>
+        </div>
+        <div role="main" class="ui-content">            
+            <div data-role="fieldcontain">
+                <label for="customer-title"><%= t.title %>:</label>
+                <select id="customer-title" data-mini="true">
+                    <option></option>
+                    <option><%= t.mr %></option>
+                    <option><%= t.ms %></option>
+                    <option><%= t.company %></option>
+                </select>
+            </div>
+            <div data-role="fieldcontain">
+                <label for="customer-name"><%= t.name %>:</label>
+                <input type="text" id="customer-name" data-mini="true"/>
+            </div>
+            <div data-role="fieldcontain">
+                <label for="customer-adress"><%= t.address %>:</label>
+                <input type="text" id="customer-adress" data-mini="true"/>
+            </div>
+            <div data-role="fieldcontain">
+                <label for="customer-adress2"><%= t.address2 %>:</label>
+                <input type="text" id="customer-adress2" data-mini="true"/>
+            </div>
+            <div data-role="fieldcontain">
+                <label for="customer-city"><%= t.city %>:</label>
+                <input type="text" id="customer-city" data-mini="true"/>
+            </div>
+            <div data-role="fieldcontain">
+                <label for="customer-zip"><%= t.zip %>:</label>
+                <input type="text" id="customer-zip" data-mini="true"/>
+            </div>
+            <div data-role="fieldcontain">
+                <label for="customer-tin"><%= t.tin %>:</label>
+                <input type="text" id="customer-tin" data-mini="true"/>
+            </div>    
+            
+            <a id="customer-save" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.save %></a>
+            <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" ><%= t.abort %></a>
+        </div>
+    </div>
     <div data-role="navbar">
         <ul>
             <li><a id="show-all" class="ui-btn-active ui-mini"><%= t.openOnTable %></a></li>
@@ -37,24 +95,37 @@
     <div class="ui-body ui-body-a ui-corner-all">
         <form>
             <fieldset data-role="controlgroup" data-mini="true">
-                <input type="button" id="use-coupon" value="<%= t.addCoupon %>">
-                <ul data-role="listview" data-inset="true" id="coupons-list"></ul>
-            </fieldset>
-            <fieldset data-role="controlgroup" data-mini="true">
-                <input type="checkbox" name="print" id="print">
-                <label for="print"><%= t.printReceipt %></label>
-                <select name="checkbox-printer" id="printer">
-                    <% printers.each(function(printer){ %>
-                        <option value="<%- printer.get('EventPrinterid') %>"><%= t.printer %>: <%- printer.get('Name') %></option>
-                    <% }) %>
-                </select>
-            </fieldset>
-            <fieldset data-role="controlgroup" data-mini="true">
                 <input type="checkbox" name="continue" id="continue" checked="true">
                 <label for="continue"><%= t.stayOnPage %></label>
             </fieldset>
-
-            <input type="button" id="submit" value="<%= t.payed %>">
+            <div data-role="collapsible" data-inset="false" data-mini="true" data-collapsed-icon="carat-d" data-expanded-icon="carat-u">
+                <h4><%= t.moreOptions %></h4>
+                <fieldset data-role="controlgroup" data-mini="true">
+                    <input type="button" id="use-coupon" value="<%= t.addCoupon %>">
+                    <ul data-role="listview" data-inset="true" id="coupons-list"></ul>
+                </fieldset>
+                <fieldset data-role="controlgroup" data-mini="true">
+                    <input type="checkbox" name="print" id="print">
+                    <label for="print"><%= t.printReceipt %></label>
+                    <select name="checkbox-printer" id="printer">
+                        <% printers.each(function(printer){ %>
+                            <option value="<%- printer.get('EventPrinterid') %>"><%= t.printer %>: <%- printer.get('Name') %></option>
+                        <% }) %>
+                    </select>
+                </fieldset>            
+                <fieldset data-role="controlgroup" data-mini="true">
+                    <select name="checkbox-printer" id="paymentTypeList">
+                        <% paymentTypes.each(function(paymenType){ %>
+                            <option value="<%- paymenType.get('PaymentTypeid') %>"><%= t.payType %>: <%- t[paymenType.get('Name')] %></option>
+                        <% }) %>
+                    </select>
+                </fieldset>
+                <fieldset data-role="controlgroup" data-mini="true">
+                    <input type="button" id="use-customer" value="<%= t.selectCustomer%>">
+                    <div id="selected-customer-display"></div>
+                </fieldset>
+            </div>
+            <input type="button" id="submit" value="<%= t.create %>">
         </form>
     </div>
 </div>
