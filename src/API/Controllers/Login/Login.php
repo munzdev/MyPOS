@@ -72,17 +72,17 @@ class Login extends Controller
         if($i_userid !== false)
         {
             $o_user = UserQuery::create()->findPk($i_userid);
-            $str_newHash = $o_rememberMe->validateHash($o_user->getAutologinHash());
+            $str_newHash = $o_rememberMe->validateHash((string)$o_user->getAutologinHash());
+            
+            if($str_newHash === false)
+                throw new GeneralException("Autologin Failed");
+                
             $o_user->setAutologinHash($str_newHash)->save();
             
             $this->o_auth->DoLogin($o_user->getUsername());
             
             $this->o_response->withJson(array('username' => $o_user->getUsername(),
                                               'rememberMe' => true));
-        }
-        else
-        {
-            throw new GeneralException("Autologin Failed");
         }
     }
     
