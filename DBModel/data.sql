@@ -36,6 +36,22 @@ INSERT INTO `user_role` (`user_roleid`, `name`) VALUES (1073741824, 'USER_ROLE_D
 
 COMMIT;
 
+-- -----------------------------------------------------
+-- Data for table `payment_type`
+-- -----------------------------------------------------
+START TRANSACTION;
+INSERT INTO `payment_type` (`payment_typeid`, `name`) VALUES (DEFAULT, 'CASH');
+INSERT INTO `payment_type` (`payment_typeid`, `name`) VALUES (DEFAULT, 'CREDIT_CARD');
+INSERT INTO `payment_type` (`payment_typeid`, `name`) VALUES (DEFAULT, 'DEBIT_CARD');
+INSERT INTO `payment_type` (`payment_typeid`, `name`) VALUES (DEFAULT, 'BANK_TRANSFER');
+
+COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `menu_size`
+-- -----------------------------------------------------
+START TRANSACTION;
+
 INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`) VALUES (DEFAULT, 1, 'Normal', 1);
 
 COMMIT;

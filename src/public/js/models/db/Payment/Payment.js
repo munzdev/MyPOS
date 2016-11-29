@@ -14,9 +14,11 @@ define([
             return {Paymentid: null,
                     PaymentTypeid: null,
                     Invoiceid: null,
-                    Date: null,
+                    Created: null,
                     Amount: 0,
-                    Canceled: false};
+                    Canceled: null,
+                    Recieved: null,
+                    AmountRecieved: 0};
         }
 
         parse(response)

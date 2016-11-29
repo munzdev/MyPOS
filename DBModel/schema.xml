@@ -29,6 +29,9 @@
     <index name="fk_Coupons_users1_idx">
       <index-column name="created_by_userid"/>
     </index>
+    <index name="code">
+      <index-column name="code"/>
+    </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
@@ -663,9 +666,11 @@
     <column name="paymentid" phpName="Paymentid" type="INTEGER" size="10" sqlType="int(10) unsigned" primaryKey="true" required="true"/>
     <column name="payment_typeid" phpName="PaymentTypeid" type="INTEGER" required="true"/>
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" required="true"/>
-    <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
+    <column name="created" phpName="Created" type="TIMESTAMP" required="true"/>
     <column name="amount" phpName="Amount" type="DECIMAL" size="7" scale="2" required="true"/>
     <column name="canceled" phpName="Canceled" type="TIMESTAMP"/>
+    <column name="recieved" phpName="Recieved" type="TIMESTAMP"/>
+    <column name="amount_recieved" phpName="AmountRecieved" type="DECIMAL" size="7" scale="2"/>
     <foreign-key foreignTable="invoice" name="fk_payment_types_has_invoices_invoices1">
       <reference local="invoiceid" foreign="invoiceid"/>
     </foreign-key>
@@ -677,6 +682,12 @@
     </index>
     <index name="fk_payment_types_has_invoices_payment_types1_idx">
       <index-column name="payment_typeid"/>
+    </index>
+    <index name="recieved">
+      <index-column name="recieved"/>
+    </index>
+    <index name="canceled">
+      <index-column name="canceled"/>
     </index>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>

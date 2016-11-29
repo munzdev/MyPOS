@@ -821,12 +821,16 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `paymentid` INT UNSIGNED NOT NULL,
   `payment_typeid` INT NOT NULL,
   `invoiceid` INT(11) NOT NULL,
-  `date` DATETIME NOT NULL,
+  `created` DATETIME NOT NULL,
   `amount` DECIMAL(7,2) NOT NULL,
   `canceled` DATETIME NULL,
+  `recieved` DATETIME NULL,
+  `amount_recieved` DECIMAL(7,2) NULL,
   PRIMARY KEY (`paymentid`),
   INDEX `fk_payment_types_has_invoices_invoices1_idx` (`invoiceid` ASC),
   INDEX `fk_payment_types_has_invoices_payment_types1_idx` (`payment_typeid` ASC),
+  INDEX `recieved` (`recieved` ASC),
+  INDEX `canceled` (`canceled` ASC),
   CONSTRAINT `fk_payment_types_has_invoices_payment_types1`
     FOREIGN KEY (`payment_typeid`)
     REFERENCES `payment_type` (`payment_typeid`)
@@ -856,6 +860,7 @@ CREATE TABLE IF NOT EXISTS `coupon` (
   PRIMARY KEY (`couponid`),
   INDEX `fk_Coupons_events1_idx` (`eventid` ASC),
   INDEX `fk_Coupons_users1_idx` (`created_by_userid` ASC),
+  INDEX `code` (`code` ASC),
   CONSTRAINT `fk_Coupons_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `event` (`eventid`)

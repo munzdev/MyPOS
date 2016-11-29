@@ -94,11 +94,11 @@ abstract class Payment implements ActiveRecordInterface
     protected $invoiceid;
 
     /**
-     * The value for the date field.
+     * The value for the created field.
      *
      * @var        DateTime
      */
-    protected $date;
+    protected $created;
 
     /**
      * The value for the amount field.
@@ -113,6 +113,20 @@ abstract class Payment implements ActiveRecordInterface
      * @var        DateTime
      */
     protected $canceled;
+
+    /**
+     * The value for the recieved field.
+     *
+     * @var        DateTime
+     */
+    protected $recieved;
+
+    /**
+     * The value for the amount_recieved field.
+     *
+     * @var        string
+     */
+    protected $amount_recieved;
 
     /**
      * @var        Invoice
@@ -416,7 +430,7 @@ abstract class Payment implements ActiveRecordInterface
     }
 
     /**
-     * Get the [optionally formatted] temporal [date] column value.
+     * Get the [optionally formatted] temporal [created] column value.
      *
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
@@ -426,12 +440,12 @@ abstract class Payment implements ActiveRecordInterface
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getDate($format = NULL)
+    public function getCreated($format = NULL)
     {
         if ($format === null) {
-            return $this->date;
+            return $this->created;
         } else {
-            return $this->date instanceof \DateTimeInterface ? $this->date->format($format) : null;
+            return $this->created instanceof \DateTimeInterface ? $this->created->format($format) : null;
         }
     }
 
@@ -463,6 +477,36 @@ abstract class Payment implements ActiveRecordInterface
         } else {
             return $this->canceled instanceof \DateTimeInterface ? $this->canceled->format($format) : null;
         }
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [recieved] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getRecieved($format = NULL)
+    {
+        if ($format === null) {
+            return $this->recieved;
+        } else {
+            return $this->recieved instanceof \DateTimeInterface ? $this->recieved->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [amount_recieved] column value.
+     *
+     * @return string
+     */
+    public function getAmountRecieved()
+    {
+        return $this->amount_recieved;
     }
 
     /**
@@ -534,24 +578,24 @@ abstract class Payment implements ActiveRecordInterface
     } // setInvoiceid()
 
     /**
-     * Sets the value of [date] column to a normalized version of the date/time value specified.
+     * Sets the value of [created] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\Payment\Payment The current object (for fluent API support)
      */
-    public function setDate($v)
+    public function setCreated($v)
     {
         $dt = PropelDateTime::newInstance($v, null, 'DateTime');
-        if ($this->date !== null || $dt !== null) {
-            if ($this->date === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->date->format("Y-m-d H:i:s.u")) {
-                $this->date = $dt === null ? null : clone $dt;
-                $this->modifiedColumns[PaymentTableMap::COL_DATE] = true;
+        if ($this->created !== null || $dt !== null) {
+            if ($this->created === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->created->format("Y-m-d H:i:s.u")) {
+                $this->created = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[PaymentTableMap::COL_CREATED] = true;
             }
         } // if either are not null
 
         return $this;
-    } // setDate()
+    } // setCreated()
 
     /**
      * Set the value of [amount] column.
@@ -592,6 +636,46 @@ abstract class Payment implements ActiveRecordInterface
 
         return $this;
     } // setCanceled()
+
+    /**
+     * Sets the value of [recieved] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\Payment\Payment The current object (for fluent API support)
+     */
+    public function setRecieved($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->recieved !== null || $dt !== null) {
+            if ($this->recieved === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->recieved->format("Y-m-d H:i:s.u")) {
+                $this->recieved = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[PaymentTableMap::COL_RECIEVED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setRecieved()
+
+    /**
+     * Set the value of [amount_recieved] column.
+     *
+     * @param string $v new value
+     * @return $this|\API\Models\Payment\Payment The current object (for fluent API support)
+     */
+    public function setAmountRecieved($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->amount_recieved !== $v) {
+            $this->amount_recieved = $v;
+            $this->modifiedColumns[PaymentTableMap::COL_AMOUNT_RECIEVED] = true;
+        }
+
+        return $this;
+    } // setAmountRecieved()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -638,11 +722,11 @@ abstract class Payment implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PaymentTableMap::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->invoiceid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PaymentTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PaymentTableMap::translateFieldName('Created', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
-            $this->date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+            $this->created = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : PaymentTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->amount = (null !== $col) ? (string) $col : null;
@@ -652,6 +736,15 @@ abstract class Payment implements ActiveRecordInterface
                 $col = null;
             }
             $this->canceled = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : PaymentTableMap::translateFieldName('Recieved', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->recieved = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : PaymentTableMap::translateFieldName('AmountRecieved', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->amount_recieved = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -660,7 +753,7 @@ abstract class Payment implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = PaymentTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 8; // 8 = PaymentTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Payment\\Payment'), 0, $e);
@@ -938,14 +1031,20 @@ abstract class Payment implements ActiveRecordInterface
         if ($this->isColumnModified(PaymentTableMap::COL_INVOICEID)) {
             $modifiedColumns[':p' . $index++]  = 'invoiceid';
         }
-        if ($this->isColumnModified(PaymentTableMap::COL_DATE)) {
-            $modifiedColumns[':p' . $index++]  = 'date';
+        if ($this->isColumnModified(PaymentTableMap::COL_CREATED)) {
+            $modifiedColumns[':p' . $index++]  = 'created';
         }
         if ($this->isColumnModified(PaymentTableMap::COL_AMOUNT)) {
             $modifiedColumns[':p' . $index++]  = 'amount';
         }
         if ($this->isColumnModified(PaymentTableMap::COL_CANCELED)) {
             $modifiedColumns[':p' . $index++]  = 'canceled';
+        }
+        if ($this->isColumnModified(PaymentTableMap::COL_RECIEVED)) {
+            $modifiedColumns[':p' . $index++]  = 'recieved';
+        }
+        if ($this->isColumnModified(PaymentTableMap::COL_AMOUNT_RECIEVED)) {
+            $modifiedColumns[':p' . $index++]  = 'amount_recieved';
         }
 
         $sql = sprintf(
@@ -967,14 +1066,20 @@ abstract class Payment implements ActiveRecordInterface
                     case 'invoiceid':
                         $stmt->bindValue($identifier, $this->invoiceid, PDO::PARAM_INT);
                         break;
-                    case 'date':
-                        $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                    case 'created':
+                        $stmt->bindValue($identifier, $this->created ? $this->created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'amount':
                         $stmt->bindValue($identifier, $this->amount, PDO::PARAM_STR);
                         break;
                     case 'canceled':
                         $stmt->bindValue($identifier, $this->canceled ? $this->canceled->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'recieved':
+                        $stmt->bindValue($identifier, $this->recieved ? $this->recieved->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'amount_recieved':
+                        $stmt->bindValue($identifier, $this->amount_recieved, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1041,13 +1146,19 @@ abstract class Payment implements ActiveRecordInterface
                 return $this->getInvoiceid();
                 break;
             case 3:
-                return $this->getDate();
+                return $this->getCreated();
                 break;
             case 4:
                 return $this->getAmount();
                 break;
             case 5:
                 return $this->getCanceled();
+                break;
+            case 6:
+                return $this->getRecieved();
+                break;
+            case 7:
+                return $this->getAmountRecieved();
                 break;
             default:
                 return null;
@@ -1082,9 +1193,11 @@ abstract class Payment implements ActiveRecordInterface
             $keys[0] => $this->getPaymentid(),
             $keys[1] => $this->getPaymentTypeid(),
             $keys[2] => $this->getInvoiceid(),
-            $keys[3] => $this->getDate(),
+            $keys[3] => $this->getCreated(),
             $keys[4] => $this->getAmount(),
             $keys[5] => $this->getCanceled(),
+            $keys[6] => $this->getRecieved(),
+            $keys[7] => $this->getAmountRecieved(),
         );
         if ($result[$keys[3]] instanceof \DateTime) {
             $result[$keys[3]] = $result[$keys[3]]->format('c');
@@ -1092,6 +1205,10 @@ abstract class Payment implements ActiveRecordInterface
 
         if ($result[$keys[5]] instanceof \DateTime) {
             $result[$keys[5]] = $result[$keys[5]]->format('c');
+        }
+
+        if ($result[$keys[6]] instanceof \DateTime) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1189,13 +1306,19 @@ abstract class Payment implements ActiveRecordInterface
                 $this->setInvoiceid($value);
                 break;
             case 3:
-                $this->setDate($value);
+                $this->setCreated($value);
                 break;
             case 4:
                 $this->setAmount($value);
                 break;
             case 5:
                 $this->setCanceled($value);
+                break;
+            case 6:
+                $this->setRecieved($value);
+                break;
+            case 7:
+                $this->setAmountRecieved($value);
                 break;
         } // switch()
 
@@ -1233,13 +1356,19 @@ abstract class Payment implements ActiveRecordInterface
             $this->setInvoiceid($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setDate($arr[$keys[3]]);
+            $this->setCreated($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
             $this->setAmount($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
             $this->setCanceled($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setRecieved($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setAmountRecieved($arr[$keys[7]]);
         }
     }
 
@@ -1291,14 +1420,20 @@ abstract class Payment implements ActiveRecordInterface
         if ($this->isColumnModified(PaymentTableMap::COL_INVOICEID)) {
             $criteria->add(PaymentTableMap::COL_INVOICEID, $this->invoiceid);
         }
-        if ($this->isColumnModified(PaymentTableMap::COL_DATE)) {
-            $criteria->add(PaymentTableMap::COL_DATE, $this->date);
+        if ($this->isColumnModified(PaymentTableMap::COL_CREATED)) {
+            $criteria->add(PaymentTableMap::COL_CREATED, $this->created);
         }
         if ($this->isColumnModified(PaymentTableMap::COL_AMOUNT)) {
             $criteria->add(PaymentTableMap::COL_AMOUNT, $this->amount);
         }
         if ($this->isColumnModified(PaymentTableMap::COL_CANCELED)) {
             $criteria->add(PaymentTableMap::COL_CANCELED, $this->canceled);
+        }
+        if ($this->isColumnModified(PaymentTableMap::COL_RECIEVED)) {
+            $criteria->add(PaymentTableMap::COL_RECIEVED, $this->recieved);
+        }
+        if ($this->isColumnModified(PaymentTableMap::COL_AMOUNT_RECIEVED)) {
+            $criteria->add(PaymentTableMap::COL_AMOUNT_RECIEVED, $this->amount_recieved);
         }
 
         return $criteria;
@@ -1389,9 +1524,11 @@ abstract class Payment implements ActiveRecordInterface
         $copyObj->setPaymentid($this->getPaymentid());
         $copyObj->setPaymentTypeid($this->getPaymentTypeid());
         $copyObj->setInvoiceid($this->getInvoiceid());
-        $copyObj->setDate($this->getDate());
+        $copyObj->setCreated($this->getCreated());
         $copyObj->setAmount($this->getAmount());
         $copyObj->setCanceled($this->getCanceled());
+        $copyObj->setRecieved($this->getRecieved());
+        $copyObj->setAmountRecieved($this->getAmountRecieved());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2063,9 +2200,11 @@ abstract class Payment implements ActiveRecordInterface
         $this->paymentid = null;
         $this->payment_typeid = null;
         $this->invoiceid = null;
-        $this->date = null;
+        $this->created = null;
         $this->amount = null;
         $this->canceled = null;
+        $this->recieved = null;
+        $this->amount_recieved = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

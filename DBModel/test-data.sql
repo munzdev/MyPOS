@@ -326,14 +326,3 @@ INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_gro
 INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (4, 7);
 
 COMMIT;
-
-
--- -----------------------------------------------------
--- Data for table `payment_type`
--- -----------------------------------------------------
-START TRANSACTION;
-INSERT INTO `payment_type` (`payment_typeid`, `name`) VALUES (DEFAULT, 'Cash');
-INSERT INTO `payment_type` (`payment_typeid`, `name`) VALUES (DEFAULT, 'Creditcard');
-INSERT INTO `payment_type` (`payment_typeid`, `name`) VALUES (DEFAULT, 'Debitcard');
-
-COMMIT;

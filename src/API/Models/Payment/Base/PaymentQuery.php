@@ -24,16 +24,20 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPaymentQuery orderByPaymentid($order = Criteria::ASC) Order by the paymentid column
  * @method     ChildPaymentQuery orderByPaymentTypeid($order = Criteria::ASC) Order by the payment_typeid column
  * @method     ChildPaymentQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
- * @method     ChildPaymentQuery orderByDate($order = Criteria::ASC) Order by the date column
+ * @method     ChildPaymentQuery orderByCreated($order = Criteria::ASC) Order by the created column
  * @method     ChildPaymentQuery orderByAmount($order = Criteria::ASC) Order by the amount column
  * @method     ChildPaymentQuery orderByCanceled($order = Criteria::ASC) Order by the canceled column
+ * @method     ChildPaymentQuery orderByRecieved($order = Criteria::ASC) Order by the recieved column
+ * @method     ChildPaymentQuery orderByAmountRecieved($order = Criteria::ASC) Order by the amount_recieved column
  *
  * @method     ChildPaymentQuery groupByPaymentid() Group by the paymentid column
  * @method     ChildPaymentQuery groupByPaymentTypeid() Group by the payment_typeid column
  * @method     ChildPaymentQuery groupByInvoiceid() Group by the invoiceid column
- * @method     ChildPaymentQuery groupByDate() Group by the date column
+ * @method     ChildPaymentQuery groupByCreated() Group by the created column
  * @method     ChildPaymentQuery groupByAmount() Group by the amount column
  * @method     ChildPaymentQuery groupByCanceled() Group by the canceled column
+ * @method     ChildPaymentQuery groupByRecieved() Group by the recieved column
+ * @method     ChildPaymentQuery groupByAmountRecieved() Group by the amount_recieved column
  *
  * @method     ChildPaymentQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildPaymentQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -81,9 +85,11 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment findOneByPaymentid(int $paymentid) Return the first ChildPayment filtered by the paymentid column
  * @method     ChildPayment findOneByPaymentTypeid(int $payment_typeid) Return the first ChildPayment filtered by the payment_typeid column
  * @method     ChildPayment findOneByInvoiceid(int $invoiceid) Return the first ChildPayment filtered by the invoiceid column
- * @method     ChildPayment findOneByDate(string $date) Return the first ChildPayment filtered by the date column
+ * @method     ChildPayment findOneByCreated(string $created) Return the first ChildPayment filtered by the created column
  * @method     ChildPayment findOneByAmount(string $amount) Return the first ChildPayment filtered by the amount column
- * @method     ChildPayment findOneByCanceled(string $canceled) Return the first ChildPayment filtered by the canceled column *
+ * @method     ChildPayment findOneByCanceled(string $canceled) Return the first ChildPayment filtered by the canceled column
+ * @method     ChildPayment findOneByRecieved(string $recieved) Return the first ChildPayment filtered by the recieved column
+ * @method     ChildPayment findOneByAmountRecieved(string $amount_recieved) Return the first ChildPayment filtered by the amount_recieved column *
 
  * @method     ChildPayment requirePk($key, ConnectionInterface $con = null) Return the ChildPayment by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOne(ConnectionInterface $con = null) Return the first ChildPayment matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -91,17 +97,21 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment requireOneByPaymentid(int $paymentid) Return the first ChildPayment filtered by the paymentid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByPaymentTypeid(int $payment_typeid) Return the first ChildPayment filtered by the payment_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByInvoiceid(int $invoiceid) Return the first ChildPayment filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPayment requireOneByDate(string $date) Return the first ChildPayment filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPayment requireOneByCreated(string $created) Return the first ChildPayment filtered by the created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByAmount(string $amount) Return the first ChildPayment filtered by the amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByCanceled(string $canceled) Return the first ChildPayment filtered by the canceled column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPayment requireOneByRecieved(string $recieved) Return the first ChildPayment filtered by the recieved column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPayment requireOneByAmountRecieved(string $amount_recieved) Return the first ChildPayment filtered by the amount_recieved column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPayment[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
  * @method     ChildPayment[]|ObjectCollection findByPaymentid(int $paymentid) Return ChildPayment objects filtered by the paymentid column
  * @method     ChildPayment[]|ObjectCollection findByPaymentTypeid(int $payment_typeid) Return ChildPayment objects filtered by the payment_typeid column
  * @method     ChildPayment[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildPayment objects filtered by the invoiceid column
- * @method     ChildPayment[]|ObjectCollection findByDate(string $date) Return ChildPayment objects filtered by the date column
+ * @method     ChildPayment[]|ObjectCollection findByCreated(string $created) Return ChildPayment objects filtered by the created column
  * @method     ChildPayment[]|ObjectCollection findByAmount(string $amount) Return ChildPayment objects filtered by the amount column
  * @method     ChildPayment[]|ObjectCollection findByCanceled(string $canceled) Return ChildPayment objects filtered by the canceled column
+ * @method     ChildPayment[]|ObjectCollection findByRecieved(string $recieved) Return ChildPayment objects filtered by the recieved column
+ * @method     ChildPayment[]|ObjectCollection findByAmountRecieved(string $amount_recieved) Return ChildPayment objects filtered by the amount_recieved column
  * @method     ChildPayment[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -200,7 +210,7 @@ abstract class PaymentQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT paymentid, payment_typeid, invoiceid, date, amount, canceled FROM payment WHERE paymentid = :p0';
+        $sql = 'SELECT paymentid, payment_typeid, invoiceid, created, amount, canceled, recieved, amount_recieved FROM payment WHERE paymentid = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -418,16 +428,16 @@ abstract class PaymentQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the date column
+     * Filter the query on the created column
      *
      * Example usage:
      * <code>
-     * $query->filterByDate('2011-03-14'); // WHERE date = '2011-03-14'
-     * $query->filterByDate('now'); // WHERE date = '2011-03-14'
-     * $query->filterByDate(array('max' => 'yesterday')); // WHERE date > '2011-03-13'
+     * $query->filterByCreated('2011-03-14'); // WHERE created = '2011-03-14'
+     * $query->filterByCreated('now'); // WHERE created = '2011-03-14'
+     * $query->filterByCreated(array('max' => 'yesterday')); // WHERE created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
+     * @param     mixed $created The value to use as filter.
      *              Values can be integers (unix timestamps), DateTime objects, or strings.
      *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
@@ -437,16 +447,16 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return $this|ChildPaymentQuery The current query, for fluid interface
      */
-    public function filterByDate($date = null, $comparison = null)
+    public function filterByCreated($created = null, $comparison = null)
     {
-        if (is_array($date)) {
+        if (is_array($created)) {
             $useMinMax = false;
-            if (isset($date['min'])) {
-                $this->addUsingAlias(PaymentTableMap::COL_DATE, $date['min'], Criteria::GREATER_EQUAL);
+            if (isset($created['min'])) {
+                $this->addUsingAlias(PaymentTableMap::COL_CREATED, $created['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($date['max'])) {
-                $this->addUsingAlias(PaymentTableMap::COL_DATE, $date['max'], Criteria::LESS_EQUAL);
+            if (isset($created['max'])) {
+                $this->addUsingAlias(PaymentTableMap::COL_CREATED, $created['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -457,7 +467,7 @@ abstract class PaymentQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTableMap::COL_DATE, $date, $comparison);
+        return $this->addUsingAlias(PaymentTableMap::COL_CREATED, $created, $comparison);
     }
 
     /**
@@ -542,6 +552,90 @@ abstract class PaymentQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PaymentTableMap::COL_CANCELED, $canceled, $comparison);
+    }
+
+    /**
+     * Filter the query on the recieved column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByRecieved('2011-03-14'); // WHERE recieved = '2011-03-14'
+     * $query->filterByRecieved('now'); // WHERE recieved = '2011-03-14'
+     * $query->filterByRecieved(array('max' => 'yesterday')); // WHERE recieved > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $recieved The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     */
+    public function filterByRecieved($recieved = null, $comparison = null)
+    {
+        if (is_array($recieved)) {
+            $useMinMax = false;
+            if (isset($recieved['min'])) {
+                $this->addUsingAlias(PaymentTableMap::COL_RECIEVED, $recieved['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($recieved['max'])) {
+                $this->addUsingAlias(PaymentTableMap::COL_RECIEVED, $recieved['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(PaymentTableMap::COL_RECIEVED, $recieved, $comparison);
+    }
+
+    /**
+     * Filter the query on the amount_recieved column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAmountRecieved(1234); // WHERE amount_recieved = 1234
+     * $query->filterByAmountRecieved(array(12, 34)); // WHERE amount_recieved IN (12, 34)
+     * $query->filterByAmountRecieved(array('min' => 12)); // WHERE amount_recieved > 12
+     * </code>
+     *
+     * @param     mixed $amountRecieved The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     */
+    public function filterByAmountRecieved($amountRecieved = null, $comparison = null)
+    {
+        if (is_array($amountRecieved)) {
+            $useMinMax = false;
+            if (isset($amountRecieved['min'])) {
+                $this->addUsingAlias(PaymentTableMap::COL_AMOUNT_RECIEVED, $amountRecieved['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($amountRecieved['max'])) {
+                $this->addUsingAlias(PaymentTableMap::COL_AMOUNT_RECIEVED, $amountRecieved['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(PaymentTableMap::COL_AMOUNT_RECIEVED, $amountRecieved, $comparison);
     }
 
     /**
