@@ -326,3 +326,12 @@ INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_gro
 INSERT INTO `distribution_place_table` (`event_tableid`, `distribution_place_groupid`) VALUES (4, 7);
 
 COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `customer`
+-- -----------------------------------------------------
+START TRANSACTION;
+INSERT INTO `customer` (`customerid`, `eventid`, `title`, `name`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `active`) VALUES (DEFAULT, 1, 'Herr', 'Max Mustermann', 'Strasse 1', NULL, 'Olstadt', '21123', 'UID!1213', true);
+
+COMMIT;

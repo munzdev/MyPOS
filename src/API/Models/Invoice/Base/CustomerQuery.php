@@ -25,8 +25,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomerQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
  * @method     ChildCustomerQuery orderByTitle($order = Criteria::ASC) Order by the title column
  * @method     ChildCustomerQuery orderByName($order = Criteria::ASC) Order by the name column
- * @method     ChildCustomerQuery orderByAdress($order = Criteria::ASC) Order by the adress column
- * @method     ChildCustomerQuery orderByAdress2($order = Criteria::ASC) Order by the adress2 column
+ * @method     ChildCustomerQuery orderByAddress($order = Criteria::ASC) Order by the address column
+ * @method     ChildCustomerQuery orderByAddress2($order = Criteria::ASC) Order by the address2 column
  * @method     ChildCustomerQuery orderByCity($order = Criteria::ASC) Order by the city column
  * @method     ChildCustomerQuery orderByZip($order = Criteria::ASC) Order by the zip column
  * @method     ChildCustomerQuery orderByTaxIdentificationNr($order = Criteria::ASC) Order by the tax_identification_nr column
@@ -36,8 +36,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomerQuery groupByEventid() Group by the eventid column
  * @method     ChildCustomerQuery groupByTitle() Group by the title column
  * @method     ChildCustomerQuery groupByName() Group by the name column
- * @method     ChildCustomerQuery groupByAdress() Group by the adress column
- * @method     ChildCustomerQuery groupByAdress2() Group by the adress2 column
+ * @method     ChildCustomerQuery groupByAddress() Group by the address column
+ * @method     ChildCustomerQuery groupByAddress2() Group by the address2 column
  * @method     ChildCustomerQuery groupByCity() Group by the city column
  * @method     ChildCustomerQuery groupByZip() Group by the zip column
  * @method     ChildCustomerQuery groupByTaxIdentificationNr() Group by the tax_identification_nr column
@@ -80,8 +80,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomer findOneByEventid(int $eventid) Return the first ChildCustomer filtered by the eventid column
  * @method     ChildCustomer findOneByTitle(string $title) Return the first ChildCustomer filtered by the title column
  * @method     ChildCustomer findOneByName(string $name) Return the first ChildCustomer filtered by the name column
- * @method     ChildCustomer findOneByAdress(string $adress) Return the first ChildCustomer filtered by the adress column
- * @method     ChildCustomer findOneByAdress2(string $adress2) Return the first ChildCustomer filtered by the adress2 column
+ * @method     ChildCustomer findOneByAddress(string $address) Return the first ChildCustomer filtered by the address column
+ * @method     ChildCustomer findOneByAddress2(string $address2) Return the first ChildCustomer filtered by the address2 column
  * @method     ChildCustomer findOneByCity(string $city) Return the first ChildCustomer filtered by the city column
  * @method     ChildCustomer findOneByZip(string $zip) Return the first ChildCustomer filtered by the zip column
  * @method     ChildCustomer findOneByTaxIdentificationNr(string $tax_identification_nr) Return the first ChildCustomer filtered by the tax_identification_nr column
@@ -94,8 +94,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomer requireOneByEventid(int $eventid) Return the first ChildCustomer filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByTitle(string $title) Return the first ChildCustomer filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByName(string $name) Return the first ChildCustomer filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCustomer requireOneByAdress(string $adress) Return the first ChildCustomer filtered by the adress column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCustomer requireOneByAdress2(string $adress2) Return the first ChildCustomer filtered by the adress2 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCustomer requireOneByAddress(string $address) Return the first ChildCustomer filtered by the address column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCustomer requireOneByAddress2(string $address2) Return the first ChildCustomer filtered by the address2 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByCity(string $city) Return the first ChildCustomer filtered by the city column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByZip(string $zip) Return the first ChildCustomer filtered by the zip column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByTaxIdentificationNr(string $tax_identification_nr) Return the first ChildCustomer filtered by the tax_identification_nr column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -106,8 +106,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomer[]|ObjectCollection findByEventid(int $eventid) Return ChildCustomer objects filtered by the eventid column
  * @method     ChildCustomer[]|ObjectCollection findByTitle(string $title) Return ChildCustomer objects filtered by the title column
  * @method     ChildCustomer[]|ObjectCollection findByName(string $name) Return ChildCustomer objects filtered by the name column
- * @method     ChildCustomer[]|ObjectCollection findByAdress(string $adress) Return ChildCustomer objects filtered by the adress column
- * @method     ChildCustomer[]|ObjectCollection findByAdress2(string $adress2) Return ChildCustomer objects filtered by the adress2 column
+ * @method     ChildCustomer[]|ObjectCollection findByAddress(string $address) Return ChildCustomer objects filtered by the address column
+ * @method     ChildCustomer[]|ObjectCollection findByAddress2(string $address2) Return ChildCustomer objects filtered by the address2 column
  * @method     ChildCustomer[]|ObjectCollection findByCity(string $city) Return ChildCustomer objects filtered by the city column
  * @method     ChildCustomer[]|ObjectCollection findByZip(string $zip) Return ChildCustomer objects filtered by the zip column
  * @method     ChildCustomer[]|ObjectCollection findByTaxIdentificationNr(string $tax_identification_nr) Return ChildCustomer objects filtered by the tax_identification_nr column
@@ -210,7 +210,7 @@ abstract class CustomerQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT customerid, eventid, title, name, adress, adress2, city, zip, tax_identification_nr, active FROM customer WHERE customerid = :p0';
+        $sql = 'SELECT customerid, eventid, title, name, address, address2, city, zip, tax_identification_nr, active FROM customer WHERE customerid = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -435,53 +435,53 @@ abstract class CustomerQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the adress column
+     * Filter the query on the address column
      *
      * Example usage:
      * <code>
-     * $query->filterByAdress('fooValue');   // WHERE adress = 'fooValue'
-     * $query->filterByAdress('%fooValue%', Criteria::LIKE); // WHERE adress LIKE '%fooValue%'
+     * $query->filterByAddress('fooValue');   // WHERE address = 'fooValue'
+     * $query->filterByAddress('%fooValue%', Criteria::LIKE); // WHERE address LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $adress The value to use as filter.
+     * @param     string $address The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildCustomerQuery The current query, for fluid interface
      */
-    public function filterByAdress($adress = null, $comparison = null)
+    public function filterByAddress($address = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($adress)) {
+            if (is_array($address)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_ADRESS, $adress, $comparison);
+        return $this->addUsingAlias(CustomerTableMap::COL_ADDRESS, $address, $comparison);
     }
 
     /**
-     * Filter the query on the adress2 column
+     * Filter the query on the address2 column
      *
      * Example usage:
      * <code>
-     * $query->filterByAdress2('fooValue');   // WHERE adress2 = 'fooValue'
-     * $query->filterByAdress2('%fooValue%', Criteria::LIKE); // WHERE adress2 LIKE '%fooValue%'
+     * $query->filterByAddress2('fooValue');   // WHERE address2 = 'fooValue'
+     * $query->filterByAddress2('%fooValue%', Criteria::LIKE); // WHERE address2 LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $adress2 The value to use as filter.
+     * @param     string $address2 The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildCustomerQuery The current query, for fluid interface
      */
-    public function filterByAdress2($adress2 = null, $comparison = null)
+    public function filterByAddress2($address2 = null, $comparison = null)
     {
         if (null === $comparison) {
-            if (is_array($adress2)) {
+            if (is_array($address2)) {
                 $comparison = Criteria::IN;
             }
         }
 
-        return $this->addUsingAlias(CustomerTableMap::COL_ADRESS2, $adress2, $comparison);
+        return $this->addUsingAlias(CustomerTableMap::COL_ADDRESS2, $address2, $comparison);
     }
 
     /**

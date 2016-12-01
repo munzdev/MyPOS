@@ -41,8 +41,8 @@
     <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="title" phpName="Title" type="VARCHAR" size="32" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="128" required="true"/>
-    <column name="adress" phpName="Adress" type="VARCHAR" size="128" required="true"/>
-    <column name="adress2" phpName="Adress2" type="VARCHAR" size="128"/>
+    <column name="address" phpName="Address" type="VARCHAR" size="128" required="true"/>
+    <column name="address2" phpName="Address2" type="VARCHAR" size="128"/>
     <column name="city" phpName="City" type="VARCHAR" size="64" required="true"/>
     <column name="zip" phpName="Zip" type="VARCHAR" size="10" required="true"/>
     <column name="tax_identification_nr" phpName="TaxIdentificationNr" type="VARCHAR" size="32"/>

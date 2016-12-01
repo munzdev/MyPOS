@@ -95,18 +95,18 @@ abstract class Customer implements ActiveRecordInterface
     protected $name;
 
     /**
-     * The value for the adress field.
+     * The value for the address field.
      *
      * @var        string
      */
-    protected $adress;
+    protected $address;
 
     /**
-     * The value for the adress2 field.
+     * The value for the address2 field.
      *
      * @var        string
      */
-    protected $adress2;
+    protected $address2;
 
     /**
      * The value for the city field.
@@ -427,23 +427,23 @@ abstract class Customer implements ActiveRecordInterface
     }
 
     /**
-     * Get the [adress] column value.
+     * Get the [address] column value.
      *
      * @return string
      */
-    public function getAdress()
+    public function getAddress()
     {
-        return $this->adress;
+        return $this->address;
     }
 
     /**
-     * Get the [adress2] column value.
+     * Get the [address2] column value.
      *
      * @return string
      */
-    public function getAdress2()
+    public function getAddress2()
     {
-        return $this->adress2;
+        return $this->address2;
     }
 
     /**
@@ -581,44 +581,44 @@ abstract class Customer implements ActiveRecordInterface
     } // setName()
 
     /**
-     * Set the value of [adress] column.
+     * Set the value of [address] column.
      *
      * @param string $v new value
      * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
      */
-    public function setAdress($v)
+    public function setAddress($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->adress !== $v) {
-            $this->adress = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_ADRESS] = true;
+        if ($this->address !== $v) {
+            $this->address = $v;
+            $this->modifiedColumns[CustomerTableMap::COL_ADDRESS] = true;
         }
 
         return $this;
-    } // setAdress()
+    } // setAddress()
 
     /**
-     * Set the value of [adress2] column.
+     * Set the value of [address2] column.
      *
      * @param string $v new value
      * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
      */
-    public function setAdress2($v)
+    public function setAddress2($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->adress2 !== $v) {
-            $this->adress2 = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_ADRESS2] = true;
+        if ($this->address2 !== $v) {
+            $this->address2 = $v;
+            $this->modifiedColumns[CustomerTableMap::COL_ADDRESS2] = true;
         }
 
         return $this;
-    } // setAdress2()
+    } // setAddress2()
 
     /**
      * Set the value of [city] column.
@@ -756,11 +756,11 @@ abstract class Customer implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CustomerTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
             $this->name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CustomerTableMap::translateFieldName('Adress', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->adress = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CustomerTableMap::translateFieldName('Address', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->address = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CustomerTableMap::translateFieldName('Adress2', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->adress2 = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CustomerTableMap::translateFieldName('Address2', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->address2 = (null !== $col) ? (string) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CustomerTableMap::translateFieldName('City', TableMap::TYPE_PHPNAME, $indexType)];
             $this->city = (null !== $col) ? (string) $col : null;
@@ -1026,11 +1026,11 @@ abstract class Customer implements ActiveRecordInterface
         if ($this->isColumnModified(CustomerTableMap::COL_NAME)) {
             $modifiedColumns[':p' . $index++]  = 'name';
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_ADRESS)) {
-            $modifiedColumns[':p' . $index++]  = 'adress';
+        if ($this->isColumnModified(CustomerTableMap::COL_ADDRESS)) {
+            $modifiedColumns[':p' . $index++]  = 'address';
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_ADRESS2)) {
-            $modifiedColumns[':p' . $index++]  = 'adress2';
+        if ($this->isColumnModified(CustomerTableMap::COL_ADDRESS2)) {
+            $modifiedColumns[':p' . $index++]  = 'address2';
         }
         if ($this->isColumnModified(CustomerTableMap::COL_CITY)) {
             $modifiedColumns[':p' . $index++]  = 'city';
@@ -1067,11 +1067,11 @@ abstract class Customer implements ActiveRecordInterface
                     case 'name':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'adress':
-                        $stmt->bindValue($identifier, $this->adress, PDO::PARAM_STR);
+                    case 'address':
+                        $stmt->bindValue($identifier, $this->address, PDO::PARAM_STR);
                         break;
-                    case 'adress2':
-                        $stmt->bindValue($identifier, $this->adress2, PDO::PARAM_STR);
+                    case 'address2':
+                        $stmt->bindValue($identifier, $this->address2, PDO::PARAM_STR);
                         break;
                     case 'city':
                         $stmt->bindValue($identifier, $this->city, PDO::PARAM_STR);
@@ -1160,10 +1160,10 @@ abstract class Customer implements ActiveRecordInterface
                 return $this->getName();
                 break;
             case 4:
-                return $this->getAdress();
+                return $this->getAddress();
                 break;
             case 5:
-                return $this->getAdress2();
+                return $this->getAddress2();
                 break;
             case 6:
                 return $this->getCity();
@@ -1211,8 +1211,8 @@ abstract class Customer implements ActiveRecordInterface
             $keys[1] => $this->getEventid(),
             $keys[2] => $this->getTitle(),
             $keys[3] => $this->getName(),
-            $keys[4] => $this->getAdress(),
-            $keys[5] => $this->getAdress2(),
+            $keys[4] => $this->getAddress(),
+            $keys[5] => $this->getAddress2(),
             $keys[6] => $this->getCity(),
             $keys[7] => $this->getZip(),
             $keys[8] => $this->getTaxIdentificationNr(),
@@ -1301,10 +1301,10 @@ abstract class Customer implements ActiveRecordInterface
                 $this->setName($value);
                 break;
             case 4:
-                $this->setAdress($value);
+                $this->setAddress($value);
                 break;
             case 5:
-                $this->setAdress2($value);
+                $this->setAddress2($value);
                 break;
             case 6:
                 $this->setCity($value);
@@ -1357,10 +1357,10 @@ abstract class Customer implements ActiveRecordInterface
             $this->setName($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setAdress($arr[$keys[4]]);
+            $this->setAddress($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setAdress2($arr[$keys[5]]);
+            $this->setAddress2($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
             $this->setCity($arr[$keys[6]]);
@@ -1427,11 +1427,11 @@ abstract class Customer implements ActiveRecordInterface
         if ($this->isColumnModified(CustomerTableMap::COL_NAME)) {
             $criteria->add(CustomerTableMap::COL_NAME, $this->name);
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_ADRESS)) {
-            $criteria->add(CustomerTableMap::COL_ADRESS, $this->adress);
+        if ($this->isColumnModified(CustomerTableMap::COL_ADDRESS)) {
+            $criteria->add(CustomerTableMap::COL_ADDRESS, $this->address);
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_ADRESS2)) {
-            $criteria->add(CustomerTableMap::COL_ADRESS2, $this->adress2);
+        if ($this->isColumnModified(CustomerTableMap::COL_ADDRESS2)) {
+            $criteria->add(CustomerTableMap::COL_ADDRESS2, $this->address2);
         }
         if ($this->isColumnModified(CustomerTableMap::COL_CITY)) {
             $criteria->add(CustomerTableMap::COL_CITY, $this->city);
@@ -1534,8 +1534,8 @@ abstract class Customer implements ActiveRecordInterface
         $copyObj->setEventid($this->getEventid());
         $copyObj->setTitle($this->getTitle());
         $copyObj->setName($this->getName());
-        $copyObj->setAdress($this->getAdress());
-        $copyObj->setAdress2($this->getAdress2());
+        $copyObj->setAddress($this->getAddress());
+        $copyObj->setAddress2($this->getAddress2());
         $copyObj->setCity($this->getCity());
         $copyObj->setZip($this->getZip());
         $copyObj->setTaxIdentificationNr($this->getTaxIdentificationNr());
@@ -1913,8 +1913,8 @@ abstract class Customer implements ActiveRecordInterface
         $this->eventid = null;
         $this->title = null;
         $this->name = null;
-        $this->adress = null;
-        $this->adress2 = null;
+        $this->address = null;
+        $this->address2 = null;
         $this->city = null;
         $this->zip = null;
         $this->tax_identification_nr = null;
