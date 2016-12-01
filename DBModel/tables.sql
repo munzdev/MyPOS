@@ -818,7 +818,7 @@ COMMENT = 'Beinhaltet bezahlarten';
 DROP TABLE IF EXISTS `payment` ;
 
 CREATE TABLE IF NOT EXISTS `payment` (
-  `paymentid` INT UNSIGNED NOT NULL,
+  `paymentid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `payment_typeid` INT NOT NULL,
   `invoiceid` INT(11) NOT NULL,
   `created` DATETIME NOT NULL,
