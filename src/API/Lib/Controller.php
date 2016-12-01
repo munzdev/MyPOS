@@ -139,6 +139,8 @@ abstract class Controller
                 
                 if(method_exists($o_propel, $str_methodName))
                     $o_propel->$str_methodName($value); 
+                else
+                    $o_propel->setVirtualColumn($str_key, $value);
             }
         }
         
