@@ -131,6 +131,12 @@
         "payType": "Zahlart",
         "moreOptions": "weitere Optionen",
         "CASH": "Bar",
-        "BANK_TRANSFER": "Rechnung/Überweisung"
+        "BANK_TRANSFER": "Rechnung/Überweisung",
+        "errorTitle": "Titel auswählen!",
+        "errorName": "Name eingeben!",
+        "errorAddress": "Adresse eingeben!",
+        "errorCity": "Ort eingeben!",
+        "errorZip": "PLZ eingeben!",
+        "currentCustomer": "Aktueller Kunde"
     }
 }

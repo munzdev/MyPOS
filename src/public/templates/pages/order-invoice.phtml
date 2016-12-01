@@ -34,43 +34,45 @@
         <div data-role="header">
             <h1><%= t.createCustomer %></h1>
         </div>
-        <div role="main" class="ui-content">            
-            <div data-role="fieldcontain">
-                <label for="customer-title"><%= t.title %>:</label>
-                <select id="customer-title" data-mini="true">
-                    <option></option>
-                    <option><%= t.mr %></option>
-                    <option><%= t.ms %></option>
-                    <option><%= t.company %></option>
-                </select>
-            </div>
-            <div data-role="fieldcontain">
-                <label for="customer-name"><%= t.name %>:</label>
-                <input type="text" id="customer-name" data-mini="true"/>
-            </div>
-            <div data-role="fieldcontain">
-                <label for="customer-adress"><%= t.address %>:</label>
-                <input type="text" id="customer-adress" data-mini="true"/>
-            </div>
-            <div data-role="fieldcontain">
-                <label for="customer-adress2"><%= t.address2 %>:</label>
-                <input type="text" id="customer-adress2" data-mini="true"/>
-            </div>
-            <div data-role="fieldcontain">
-                <label for="customer-city"><%= t.city %>:</label>
-                <input type="text" id="customer-city" data-mini="true"/>
-            </div>
-            <div data-role="fieldcontain">
-                <label for="customer-zip"><%= t.zip %>:</label>
-                <input type="text" id="customer-zip" data-mini="true"/>
-            </div>
-            <div data-role="fieldcontain">
-                <label for="customer-tin"><%= t.tin %>:</label>
-                <input type="text" id="customer-tin" data-mini="true"/>
-            </div>    
-            
-            <a id="customer-save" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.save %></a>
-            <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" ><%= t.abort %></a>
+        <div role="main" class="ui-content">
+            <form id="customer-form">            
+                <div data-role="fieldcontain">
+                    <label for="customer-title"><%= t.title %>:</label>
+                    <select id="customer-title" name="title" data-mini="true">
+                        <option value="" disabled="disabled" selected="">Auswählen</option>
+                        <option><%= t.mr %></option>
+                        <option><%= t.ms %></option>
+                        <option><%= t.company %></option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-name"><%= t.name %>:</label>
+                    <input type="text" id="customer-name" name="name" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-address"><%= t.address %>:</label>
+                    <input type="text" id="customer-address" name="address" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-address2"><%= t.address2 %>:</label>
+                    <input type="text" id="customer-address2" name="address2" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-city"><%= t.city %>:</label>
+                    <input type="text" id="customer-city" name="city" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-zip"><%= t.zip %>:</label>
+                    <input type="text" id="customer-zip" name="zip" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-tin"><%= t.tin %>:</label>
+                    <input type="text" id="customer-tin" name="tin" data-mini="true"/>
+                </div>    
+
+                <a id="customer-save" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.save %></a>                
+                <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" ><%= t.abort %></a>
+            </form>
         </div>
     </div>
     <div data-role="navbar">
@@ -122,7 +124,7 @@
                 </fieldset>
                 <fieldset data-role="controlgroup" data-mini="true">
                     <input type="button" id="use-customer" value="<%= t.selectCustomer%>">
-                    <div id="selected-customer-display"></div>
+                    <div id="selected-customer-display" style="text-align: center"></div>
                 </fieldset>
             </div>
             <input type="button" id="submit" value="<%= t.create %>">

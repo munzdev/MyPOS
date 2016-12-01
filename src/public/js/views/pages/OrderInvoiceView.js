@@ -7,7 +7,8 @@ define(['Webservice',
         'models/custom/invoice/CustomerModel',
         'views/helpers/HeaderView',
         'text!templates/pages/order-invoice.phtml',
-        'text!templates/pages/order-item.phtml'
+        'text!templates/pages/order-item.phtml',
+        'jquery-validate'
 ], function(Webservice,
             PrinterCollection,
             PaymentTypeCollection,
@@ -30,15 +31,16 @@ define(['Webservice',
                     'click #use-customer': 'use_customer',
                     'click #customer-add': 'use_customer_add',
                     'click #customer-search': "customer_search",
-                    'click #customer-save': "customer_save",
                     'click #coupon-code-verify': 'verify_coupon',
                     'click #submit': 'finish',
+                    'popupafterclose #select-customer-popup': 'select_customer_popup_close',
                     'popupafterclose #success-popup': 'success_popup_close',
                     'popupafterclose #add-coupon-popup': 'add_coupon_popup_close'};
         }
                 
         initialize(options) {
             _.bindAll(this, "renderOpenOrders",
+                            "customer_save",
                             "order_count_up",
                             "order_count_down");
 
@@ -73,7 +75,7 @@ define(['Webservice',
         }
 
         select_all(event) {
-            this.orderUnbilled.get('UnbilledOrderDetails').each(function(orderDetail){
+            this.orderUnbilled.get('UnbilledOrderDetails').each(function(orderDetail) {
                 orderDetail.set('AmountSelected', orderDetail.get('AmountLeft')) ;
             });
 
@@ -182,39 +184,27 @@ define(['Webservice',
                                         this.renderOpenOrders();
                                     });
                                     this.$('#customer-search-result').listview('refresh');
-                                });
-                               
+                                });                               
         }        
         
         customer_save() {
-            console.log('test');
-            let title = $.trim(this.$('#customer-title').val());
-            let name = $.trim(this.$('#customer-name').val());
-            let address = $.trim(this.$('#customer-address').val());
-            let address2 = $.trim(this.$('#customer-address2').val());
-            let city = $.trim(this.$('#customer-city').val());
-            let zip = $.trim(this.$('#customer-zip').val());
-            let tin = $.trim(this.$('#customer-tin').val());
-            
-            if(title == '' || name == '' || address == '' || city == '' || zip == '') {
-                alert(t.fillInAllFields);
-                return;
+            if(this.$('#customer-form').valid()) {
+                let customer = new CustomerModel;
+                customer.set('Title', this.$('#customer-title').val());
+                customer.set('Name', this.$('#customer-name').val());
+                customer.set('Address', this.$('#customer-address').val());
+                customer.set('Address2', this.$('#customer-address2').val() == '' ? null : this.$('#customer-address2').val());
+                customer.set('City', this.$('#customer-city').val());
+                customer.set('Zip', this.$('#customer-zip').val());
+                customer.set('TaxIdentificationNr', this.$('#customer-tin').val() == '' ? null : this.$('#customer-tin').val());
+                customer.save()
+                        .done(() => {                            
+                            this.orderUnbilled.set('Customer', customer);                                                                    
+                            this.$('#add-customer-popup').popup("close");
+                            this.renderOpenOrders();
+                        });
+                return false;
             }
-            
-            let customer = new CustomerModel;
-            customer.set('Title', title);
-            customer.set('Name', title);
-            customer.set('Address', address);
-            customer.set('Address2', address2 == '' ? null : address2);
-            customer.set('City', city);
-            customer.set('Zip', zip);
-            customer.set('Tin', tin == '' ? null : tin);
-            customer.save()
-                    .done(() => {
-                        this.orderUnbilled.set('Customer', customer);                                        
-                        this.$('#select-customer-popup').popup("close");
-                        this.renderOpenOrders();
-                    });
         }
         
         verify_coupon() {
@@ -249,6 +239,11 @@ define(['Webservice',
                             this.$('#add-coupon-popup').popup("close");
                             app.error.showAlert('Fehler!', 'Code nicht gültig oder Gutschein bereits verbraucht!');
                         });
+        }
+
+        select_customer_popup_close() {
+            this.$('#customer-search-name').val('');
+            this.$('#customer-search-result').empty();
         }
 
         success_popup_close() {
@@ -402,7 +397,7 @@ define(['Webservice',
                 let customer = this.orderUnbilled.get('Customer');
                 
                 this.$('#selected-customer-display').empty();
-                this.$('#selected-customer-display').text(customer.get('Title') + ' ' + customer.get('Name'));
+                this.$('#selected-customer-display').append('<b>' + t.currentCustomer + ':</b> ' + customer.get('Title') + ' ' + customer.get('Name'));
             }
 
             this.$('#invoice-price').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
@@ -411,16 +406,45 @@ define(['Webservice',
             this.$('.order-item-up').click(this.order_count_up);
             this.$('.order-item-down').click(this.order_count_down);
             this.$('#open-orders-list').listview('refresh');
-            this.$('#coupons-list').listview('refresh');
+            this.$('#coupons-list').listview('refresh');            
         }
 
         // Renders all of the Category models on the UI
         render() {
+            let t = this.i18n();
             let header = new HeaderView();
             this.registerSubview(".nav-header", header);
-            
+
             this.renderTemplate(Template, {printers: this.printers,
                                            paymentTypes: this.paymentTypes});
+                                       
+            // TODO: Somehow this event is not fired when registered in the events() method.
+            // Manualy fix this
+            this.$('#customer-save').click(this.customer_save);
+            
+            // Register new customer form validation
+            this.$('#customer-form').validate({
+                rules: {
+                    title: {required: true},
+                    name: {required: true},
+                    address: {required: true},
+                    city: {required: true},
+                    zip: {required: true}
+                },
+                messages: {
+                    title: {required: t.errorTitle},
+                    name: {required: t.errorName},
+                    address: {required: t.errorAddress},
+                    city: {required: t.errorCity},
+                    zip: {required: t.errorZip}
+                },
+                errorPlacement: function (error, element) {                    
+                    if(element.is('select'))
+                        error.appendTo(element.parent().parent().prev());
+                    else
+                        error.appendTo(element.parent().prev());
+                }
+            });         
 
             this.changePage(this);
 

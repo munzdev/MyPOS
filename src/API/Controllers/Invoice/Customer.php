@@ -19,7 +19,8 @@ class Customer extends SecurityController
         $o_user = Auth::GetCurrentUser();     
         
         $o_customer = new CustomerModel();
-        $o_customer->fromArray($this->a_json)
+        $o_customer->fromArray($this->a_json);
+        $o_customer->setActive(true)
                    ->setEventid($o_user->getEventUser()->getEventid())
                    ->save();
         

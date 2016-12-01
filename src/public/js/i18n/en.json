@@ -131,6 +131,12 @@
         "payType": "Paytype",
         "moreOptions": "more Options",
         "CASH": "Cash",
-        "BANK_TRANSFER": "Invoice/Bank Transfer"
+        "BANK_TRANSFER": "Invoice/Bank Transfer",
+        "errorTitle": "Select Title!",
+        "errorName": "Enter name!",
+        "errorAddress": "Enter address!",
+        "errorCity": "Enter city!",
+        "errorZip": "Emter zip!",
+        "currentCustomer": "Current customer"
     }
 }
