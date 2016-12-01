@@ -15,7 +15,7 @@ define(["models/db/Event/Event"
                     Adress2: '',
                     City: '',
                     Zip: '',
-                    TaxIdentifictionNr: '',
+                    TaxIdentificationNr: '',
                     Active: false};
         }
         
