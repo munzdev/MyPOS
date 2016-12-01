@@ -8,6 +8,7 @@ require.config( {
         // Core Libraries
         "jquery": "libs/jquery/jquery-2.2.4",
         "jquery-dateFormat": "libs/jquery/jquery-dateFormat",
+        "jquery-validate": "libs/jquery/jquery.validate",
         "jquerymobile": "libs/jqueryMobile/jquery.mobile-1.4.5",
         "jquerymobile-datebox": "libs/jqueryMobile/jtsage-datebox",
         "underscore": "libs/underscore/underscore",

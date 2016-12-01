@@ -27,8 +27,8 @@
     overflow-x:hidden;
 }
 
-.messages-dialog-input {
-
+.error {
+    color:red;
 }
 
 .messages-dialog-select {
