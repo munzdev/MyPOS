@@ -1,6 +1,8 @@
 define(["models/db/User/User",
+        "models/db/Invoice/Customer",
         "collections/db/Invoice/InvoiceCollection"
 ], function(User,
+            Customer,
             InvoiceCollection) {
     "use strict";
 
@@ -20,6 +22,11 @@ define(["models/db/User/User",
             if('CashierUser' in response)
             {
                 response.CashierUser = new User(response.CashierUser, {parse: true});
+            }
+            
+            if('Customer' in response)
+            {
+                response.Customer = new Customer(response.Customer, {parse: true});
             }
 
             if('InvoiceItems' in response)
