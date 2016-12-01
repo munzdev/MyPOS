@@ -123,6 +123,7 @@ define(['Webservice',
         }
 
         finish() {
+            this.orderUnbilled.set('PaymentTypeid', this.$('#paymentTypeList').val());
             this.orderUnbilled.save()
                               .done((invoiceid) => {
                                     if(this.$('#print').prop('checked') == 1)
