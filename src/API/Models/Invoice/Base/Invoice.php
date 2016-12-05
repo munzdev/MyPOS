@@ -5,6 +5,8 @@ namespace API\Models\Invoice\Base;
 use \DateTime;
 use \Exception;
 use \PDO;
+use API\Models\Event\Event;
+use API\Models\Event\EventQuery;
 use API\Models\Invoice\Customer as ChildCustomer;
 use API\Models\Invoice\CustomerQuery as ChildCustomerQuery;
 use API\Models\Invoice\Invoice as ChildInvoice;
@@ -82,6 +84,13 @@ abstract class Invoice implements ActiveRecordInterface
     protected $invoiceid;
 
     /**
+     * The value for the eventid field.
+     *
+     * @var        int
+     */
+    protected $eventid;
+
+    /**
      * The value for the cashier_userid field.
      *
      * @var        int
@@ -120,6 +129,11 @@ abstract class Invoice implements ActiveRecordInterface
      * @var        ChildCustomer
      */
     protected $aCustomer;
+
+    /**
+     * @var        Event
+     */
+    protected $aEvent;
 
     /**
      * @var        User
@@ -394,6 +408,16 @@ abstract class Invoice implements ActiveRecordInterface
     }
 
     /**
+     * Get the [eventid] column value.
+     *
+     * @return int
+     */
+    public function getEventid()
+    {
+        return $this->eventid;
+    }
+
+    /**
      * Get the [cashier_userid] column value.
      *
      * @return int
@@ -492,6 +516,30 @@ abstract class Invoice implements ActiveRecordInterface
 
         return $this;
     } // setInvoiceid()
+
+    /**
+     * Set the value of [eventid] column.
+     *
+     * @param int $v new value
+     * @return $this|\API\Models\Invoice\Invoice The current object (for fluent API support)
+     */
+    public function setEventid($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->eventid !== $v) {
+            $this->eventid = $v;
+            $this->modifiedColumns[InvoiceTableMap::COL_EVENTID] = true;
+        }
+
+        if ($this->aEvent !== null && $this->aEvent->getEventid() !== $v) {
+            $this->aEvent = null;
+        }
+
+        return $this;
+    } // setEventid()
 
     /**
      * Set the value of [cashier_userid] column.
@@ -640,25 +688,28 @@ abstract class Invoice implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : InvoiceTableMap::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->invoiceid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : InvoiceTableMap::translateFieldName('CashierUserid', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : InvoiceTableMap::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->eventid = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : InvoiceTableMap::translateFieldName('CashierUserid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->cashier_userid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : InvoiceTableMap::translateFieldName('Customerid', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : InvoiceTableMap::translateFieldName('Customerid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->customerid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : InvoiceTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : InvoiceTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : InvoiceTableMap::translateFieldName('Canceled', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : InvoiceTableMap::translateFieldName('Canceled', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->canceled = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : InvoiceTableMap::translateFieldName('PaymentFinished', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : InvoiceTableMap::translateFieldName('PaymentFinished', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -671,7 +722,7 @@ abstract class Invoice implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = InvoiceTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = InvoiceTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Invoice\\Invoice'), 0, $e);
@@ -693,6 +744,9 @@ abstract class Invoice implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
+        if ($this->aEvent !== null && $this->eventid !== $this->aEvent->getEventid()) {
+            $this->aEvent = null;
+        }
         if ($this->aUser !== null && $this->cashier_userid !== $this->aUser->getUserid()) {
             $this->aUser = null;
         }
@@ -739,6 +793,7 @@ abstract class Invoice implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aCustomer = null;
+            $this->aEvent = null;
             $this->aUser = null;
             $this->collInvoiceItems = null;
 
@@ -855,6 +910,13 @@ abstract class Invoice implements ActiveRecordInterface
                 $this->setCustomer($this->aCustomer);
             }
 
+            if ($this->aEvent !== null) {
+                if ($this->aEvent->isModified() || $this->aEvent->isNew()) {
+                    $affectedRows += $this->aEvent->save($con);
+                }
+                $this->setEvent($this->aEvent);
+            }
+
             if ($this->aUser !== null) {
                 if ($this->aUser->isModified() || $this->aUser->isNew()) {
                     $affectedRows += $this->aUser->save($con);
@@ -936,6 +998,9 @@ abstract class Invoice implements ActiveRecordInterface
         if ($this->isColumnModified(InvoiceTableMap::COL_INVOICEID)) {
             $modifiedColumns[':p' . $index++]  = 'invoiceid';
         }
+        if ($this->isColumnModified(InvoiceTableMap::COL_EVENTID)) {
+            $modifiedColumns[':p' . $index++]  = 'eventid';
+        }
         if ($this->isColumnModified(InvoiceTableMap::COL_CASHIER_USERID)) {
             $modifiedColumns[':p' . $index++]  = 'cashier_userid';
         }
@@ -964,6 +1029,9 @@ abstract class Invoice implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'invoiceid':
                         $stmt->bindValue($identifier, $this->invoiceid, PDO::PARAM_INT);
+                        break;
+                    case 'eventid':
+                        $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
                     case 'cashier_userid':
                         $stmt->bindValue($identifier, $this->cashier_userid, PDO::PARAM_INT);
@@ -1046,18 +1114,21 @@ abstract class Invoice implements ActiveRecordInterface
                 return $this->getInvoiceid();
                 break;
             case 1:
-                return $this->getCashierUserid();
+                return $this->getEventid();
                 break;
             case 2:
-                return $this->getCustomerid();
+                return $this->getCashierUserid();
                 break;
             case 3:
-                return $this->getDate();
+                return $this->getCustomerid();
                 break;
             case 4:
-                return $this->getCanceled();
+                return $this->getDate();
                 break;
             case 5:
+                return $this->getCanceled();
+                break;
+            case 6:
                 return $this->getPaymentFinished();
                 break;
             default:
@@ -1091,22 +1162,23 @@ abstract class Invoice implements ActiveRecordInterface
         $keys = InvoiceTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getInvoiceid(),
-            $keys[1] => $this->getCashierUserid(),
-            $keys[2] => $this->getCustomerid(),
-            $keys[3] => $this->getDate(),
-            $keys[4] => $this->getCanceled(),
-            $keys[5] => $this->getPaymentFinished(),
+            $keys[1] => $this->getEventid(),
+            $keys[2] => $this->getCashierUserid(),
+            $keys[3] => $this->getCustomerid(),
+            $keys[4] => $this->getDate(),
+            $keys[5] => $this->getCanceled(),
+            $keys[6] => $this->getPaymentFinished(),
         );
-        if ($result[$keys[3]] instanceof \DateTime) {
-            $result[$keys[3]] = $result[$keys[3]]->format('c');
-        }
-
         if ($result[$keys[4]] instanceof \DateTime) {
             $result[$keys[4]] = $result[$keys[4]]->format('c');
         }
 
         if ($result[$keys[5]] instanceof \DateTime) {
             $result[$keys[5]] = $result[$keys[5]]->format('c');
+        }
+
+        if ($result[$keys[6]] instanceof \DateTime) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1129,6 +1201,21 @@ abstract class Invoice implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aCustomer->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aEvent) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'event';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'event';
+                        break;
+                    default:
+                        $key = 'Event';
+                }
+
+                $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
 
@@ -1213,18 +1300,21 @@ abstract class Invoice implements ActiveRecordInterface
                 $this->setInvoiceid($value);
                 break;
             case 1:
-                $this->setCashierUserid($value);
+                $this->setEventid($value);
                 break;
             case 2:
-                $this->setCustomerid($value);
+                $this->setCashierUserid($value);
                 break;
             case 3:
-                $this->setDate($value);
+                $this->setCustomerid($value);
                 break;
             case 4:
-                $this->setCanceled($value);
+                $this->setDate($value);
                 break;
             case 5:
+                $this->setCanceled($value);
+                break;
+            case 6:
                 $this->setPaymentFinished($value);
                 break;
         } // switch()
@@ -1257,19 +1347,22 @@ abstract class Invoice implements ActiveRecordInterface
             $this->setInvoiceid($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setCashierUserid($arr[$keys[1]]);
+            $this->setEventid($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setCustomerid($arr[$keys[2]]);
+            $this->setCashierUserid($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setDate($arr[$keys[3]]);
+            $this->setCustomerid($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setCanceled($arr[$keys[4]]);
+            $this->setDate($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setPaymentFinished($arr[$keys[5]]);
+            $this->setCanceled($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setPaymentFinished($arr[$keys[6]]);
         }
     }
 
@@ -1314,6 +1407,9 @@ abstract class Invoice implements ActiveRecordInterface
 
         if ($this->isColumnModified(InvoiceTableMap::COL_INVOICEID)) {
             $criteria->add(InvoiceTableMap::COL_INVOICEID, $this->invoiceid);
+        }
+        if ($this->isColumnModified(InvoiceTableMap::COL_EVENTID)) {
+            $criteria->add(InvoiceTableMap::COL_EVENTID, $this->eventid);
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_CASHIER_USERID)) {
             $criteria->add(InvoiceTableMap::COL_CASHIER_USERID, $this->cashier_userid);
@@ -1416,6 +1512,7 @@ abstract class Invoice implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setEventid($this->getEventid());
         $copyObj->setCashierUserid($this->getCashierUserid());
         $copyObj->setCustomerid($this->getCustomerid());
         $copyObj->setDate($this->getDate());
@@ -1518,6 +1615,57 @@ abstract class Invoice implements ActiveRecordInterface
         }
 
         return $this->aCustomer;
+    }
+
+    /**
+     * Declares an association between this object and a Event object.
+     *
+     * @param  Event $v
+     * @return $this|\API\Models\Invoice\Invoice The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setEvent(Event $v = null)
+    {
+        if ($v === null) {
+            $this->setEventid(NULL);
+        } else {
+            $this->setEventid($v->getEventid());
+        }
+
+        $this->aEvent = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Event object, it will not be re-added.
+        if ($v !== null) {
+            $v->addInvoice($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Event object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return Event The associated Event object.
+     * @throws PropelException
+     */
+    public function getEvent(ConnectionInterface $con = null)
+    {
+        if ($this->aEvent === null && ($this->eventid !== null)) {
+            $this->aEvent = EventQuery::create()->findPk($this->eventid, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aEvent->addInvoices($this);
+             */
+        }
+
+        return $this->aEvent;
     }
 
     /**
@@ -2100,10 +2248,14 @@ abstract class Invoice implements ActiveRecordInterface
         if (null !== $this->aCustomer) {
             $this->aCustomer->removeInvoice($this);
         }
+        if (null !== $this->aEvent) {
+            $this->aEvent->removeInvoice($this);
+        }
         if (null !== $this->aUser) {
             $this->aUser->removeInvoice($this);
         }
         $this->invoiceid = null;
+        $this->eventid = null;
         $this->cashier_userid = null;
         $this->customerid = null;
         $this->date = null;
@@ -2142,6 +2294,7 @@ abstract class Invoice implements ActiveRecordInterface
         $this->collInvoiceItems = null;
         $this->collPayments = null;
         $this->aCustomer = null;
+        $this->aEvent = null;
         $this->aUser = null;
     }
 

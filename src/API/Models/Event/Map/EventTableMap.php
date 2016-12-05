@@ -194,6 +194,13 @@ class EventTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, 'EventUsers', false);
+        $this->addRelation('Invoice', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':eventid',
+    1 => ':eventid',
+  ),
+), null, null, 'Invoices', false);
         $this->addRelation('MenuExtra', '\\API\\Models\\Menu\\MenuExtra', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

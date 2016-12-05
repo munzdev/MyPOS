@@ -59,7 +59,7 @@ class InvoiceTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -69,12 +69,17 @@ class InvoiceTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the invoiceid field
      */
     const COL_INVOICEID = 'invoice.invoiceid';
+
+    /**
+     * the column name for the eventid field
+     */
+    const COL_EVENTID = 'invoice.eventid';
 
     /**
      * the column name for the cashier_userid field
@@ -113,11 +118,11 @@ class InvoiceTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Invoiceid', 'CashierUserid', 'Customerid', 'Date', 'Canceled', 'PaymentFinished', ),
-        self::TYPE_CAMELNAME     => array('invoiceid', 'cashierUserid', 'customerid', 'date', 'canceled', 'paymentFinished', ),
-        self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID, InvoiceTableMap::COL_CASHIER_USERID, InvoiceTableMap::COL_CUSTOMERID, InvoiceTableMap::COL_DATE, InvoiceTableMap::COL_CANCELED, InvoiceTableMap::COL_PAYMENT_FINISHED, ),
-        self::TYPE_FIELDNAME     => array('invoiceid', 'cashier_userid', 'customerid', 'date', 'canceled', 'payment_finished', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Invoiceid', 'Eventid', 'CashierUserid', 'Customerid', 'Date', 'Canceled', 'PaymentFinished', ),
+        self::TYPE_CAMELNAME     => array('invoiceid', 'eventid', 'cashierUserid', 'customerid', 'date', 'canceled', 'paymentFinished', ),
+        self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID, InvoiceTableMap::COL_EVENTID, InvoiceTableMap::COL_CASHIER_USERID, InvoiceTableMap::COL_CUSTOMERID, InvoiceTableMap::COL_DATE, InvoiceTableMap::COL_CANCELED, InvoiceTableMap::COL_PAYMENT_FINISHED, ),
+        self::TYPE_FIELDNAME     => array('invoiceid', 'eventid', 'cashier_userid', 'customerid', 'date', 'canceled', 'payment_finished', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -127,11 +132,11 @@ class InvoiceTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Invoiceid' => 0, 'CashierUserid' => 1, 'Customerid' => 2, 'Date' => 3, 'Canceled' => 4, 'PaymentFinished' => 5, ),
-        self::TYPE_CAMELNAME     => array('invoiceid' => 0, 'cashierUserid' => 1, 'customerid' => 2, 'date' => 3, 'canceled' => 4, 'paymentFinished' => 5, ),
-        self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID => 0, InvoiceTableMap::COL_CASHIER_USERID => 1, InvoiceTableMap::COL_CUSTOMERID => 2, InvoiceTableMap::COL_DATE => 3, InvoiceTableMap::COL_CANCELED => 4, InvoiceTableMap::COL_PAYMENT_FINISHED => 5, ),
-        self::TYPE_FIELDNAME     => array('invoiceid' => 0, 'cashier_userid' => 1, 'customerid' => 2, 'date' => 3, 'canceled' => 4, 'payment_finished' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Invoiceid' => 0, 'Eventid' => 1, 'CashierUserid' => 2, 'Customerid' => 3, 'Date' => 4, 'Canceled' => 5, 'PaymentFinished' => 6, ),
+        self::TYPE_CAMELNAME     => array('invoiceid' => 0, 'eventid' => 1, 'cashierUserid' => 2, 'customerid' => 3, 'date' => 4, 'canceled' => 5, 'paymentFinished' => 6, ),
+        self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID => 0, InvoiceTableMap::COL_EVENTID => 1, InvoiceTableMap::COL_CASHIER_USERID => 2, InvoiceTableMap::COL_CUSTOMERID => 3, InvoiceTableMap::COL_DATE => 4, InvoiceTableMap::COL_CANCELED => 5, InvoiceTableMap::COL_PAYMENT_FINISHED => 6, ),
+        self::TYPE_FIELDNAME     => array('invoiceid' => 0, 'eventid' => 1, 'cashier_userid' => 2, 'customerid' => 3, 'date' => 4, 'canceled' => 5, 'payment_finished' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -152,6 +157,7 @@ class InvoiceTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('invoiceid', 'Invoiceid', 'INTEGER', true, null, null);
+        $this->addForeignKey('eventid', 'Eventid', 'INTEGER', 'event', 'eventid', true, null, null);
         $this->addForeignKey('cashier_userid', 'CashierUserid', 'INTEGER', 'user', 'userid', true, null, null);
         $this->addForeignKey('customerid', 'Customerid', 'INTEGER', 'customer', 'customerid', false, null, null);
         $this->addColumn('date', 'Date', 'TIMESTAMP', true, null, null);
@@ -169,6 +175,13 @@ class InvoiceTableMap extends TableMap
   array (
     0 => ':customerid',
     1 => ':customerid',
+  ),
+), null, null, null, false);
+        $this->addRelation('Event', '\\API\\Models\\Event\\Event', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':eventid',
+    1 => ':eventid',
   ),
 ), null, null, null, false);
         $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
@@ -336,6 +349,7 @@ class InvoiceTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(InvoiceTableMap::COL_INVOICEID);
+            $criteria->addSelectColumn(InvoiceTableMap::COL_EVENTID);
             $criteria->addSelectColumn(InvoiceTableMap::COL_CASHIER_USERID);
             $criteria->addSelectColumn(InvoiceTableMap::COL_CUSTOMERID);
             $criteria->addSelectColumn(InvoiceTableMap::COL_DATE);
@@ -343,6 +357,7 @@ class InvoiceTableMap extends TableMap
             $criteria->addSelectColumn(InvoiceTableMap::COL_PAYMENT_FINISHED);
         } else {
             $criteria->addSelectColumn($alias . '.invoiceid');
+            $criteria->addSelectColumn($alias . '.eventid');
             $criteria->addSelectColumn($alias . '.cashier_userid');
             $criteria->addSelectColumn($alias . '.customerid');
             $criteria->addSelectColumn($alias . '.date');

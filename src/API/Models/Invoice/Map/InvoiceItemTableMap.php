@@ -158,7 +158,7 @@ class InvoiceItemTableMap extends TableMap
         // columns
         $this->addPrimaryKey('invoice_itemid', 'InvoiceItemid', 'INTEGER', true, null, null);
         $this->addForeignKey('invoiceid', 'Invoiceid', 'INTEGER', 'invoice', 'invoiceid', true, null, null);
-        $this->addForeignKey('order_detailid', 'OrderDetailid', 'INTEGER', 'order_detail', 'order_detailid', true, null, null);
+        $this->addForeignKey('order_detailid', 'OrderDetailid', 'INTEGER', 'order_detail', 'order_detailid', false, null, null);
         $this->addColumn('amount', 'Amount', 'TINYINT', true, null, null);
         $this->addColumn('price', 'Price', 'DECIMAL', true, 7, null);
         $this->addColumn('description', 'Description', 'VARCHAR', true, 255, null);

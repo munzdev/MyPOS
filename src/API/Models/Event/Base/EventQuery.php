@@ -9,6 +9,7 @@ use API\Models\Event\Event as ChildEvent;
 use API\Models\Event\EventQuery as ChildEventQuery;
 use API\Models\Event\Map\EventTableMap;
 use API\Models\Invoice\Customer;
+use API\Models\Invoice\Invoice;
 use API\Models\Menu\MenuExtra;
 use API\Models\Menu\MenuSize;
 use API\Models\Menu\MenuType;
@@ -104,6 +105,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery rightJoinWithEventUser() Adds a RIGHT JOIN clause and with to the query using the EventUser relation
  * @method     ChildEventQuery innerJoinWithEventUser() Adds a INNER JOIN clause and with to the query using the EventUser relation
  *
+ * @method     ChildEventQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
+ * @method     ChildEventQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
+ * @method     ChildEventQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
+ *
+ * @method     ChildEventQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
+ *
+ * @method     ChildEventQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
+ * @method     ChildEventQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
+ * @method     ChildEventQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
+ *
  * @method     ChildEventQuery leftJoinMenuExtra($relationAlias = null) Adds a LEFT JOIN clause to the query using the MenuExtra relation
  * @method     ChildEventQuery rightJoinMenuExtra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MenuExtra relation
  * @method     ChildEventQuery innerJoinMenuExtra($relationAlias = null) Adds a INNER JOIN clause to the query using the MenuExtra relation
@@ -134,7 +145,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery rightJoinWithMenuType() Adds a RIGHT JOIN clause and with to the query using the MenuType relation
  * @method     ChildEventQuery innerJoinWithMenuType() Adds a INNER JOIN clause and with to the query using the MenuType relation
  *
- * @method     \API\Models\Payment\CouponQuery|\API\Models\Invoice\CustomerQuery|\API\Models\DistributionPlace\DistributionPlaceQuery|\API\Models\Event\EventPrinterQuery|\API\Models\Event\EventTableQuery|\API\Models\Event\EventUserQuery|\API\Models\Menu\MenuExtraQuery|\API\Models\Menu\MenuSizeQuery|\API\Models\Menu\MenuTypeQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\Payment\CouponQuery|\API\Models\Invoice\CustomerQuery|\API\Models\DistributionPlace\DistributionPlaceQuery|\API\Models\Event\EventPrinterQuery|\API\Models\Event\EventTableQuery|\API\Models\Event\EventUserQuery|\API\Models\Invoice\InvoiceQuery|\API\Models\Menu\MenuExtraQuery|\API\Models\Menu\MenuSizeQuery|\API\Models\Menu\MenuTypeQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildEvent findOne(ConnectionInterface $con = null) Return the first ChildEvent matching the query
  * @method     ChildEvent findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEvent matching the query, or a new ChildEvent object populated from the query conditions when no match is found
@@ -917,6 +928,79 @@ abstract class EventQuery extends ModelCriteria
         return $this
             ->joinEventUser($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'EventUser', '\API\Models\Event\EventUserQuery');
+    }
+
+    /**
+     * Filter the query by a related \API\Models\Invoice\Invoice object
+     *
+     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildEventQuery The current query, for fluid interface
+     */
+    public function filterByInvoice($invoice, $comparison = null)
+    {
+        if ($invoice instanceof \API\Models\Invoice\Invoice) {
+            return $this
+                ->addUsingAlias(EventTableMap::COL_EVENTID, $invoice->getEventid(), $comparison);
+        } elseif ($invoice instanceof ObjectCollection) {
+            return $this
+                ->useInvoiceQuery()
+                ->filterByPrimaryKeys($invoice->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByInvoice() only accepts arguments of type \API\Models\Invoice\Invoice or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Invoice relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildEventQuery The current query, for fluid interface
+     */
+    public function joinInvoice($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Invoice');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Invoice');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Invoice relation Invoice object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\Invoice\InvoiceQuery A secondary query class using the current class as primary query
+     */
+    public function useInvoiceQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinInvoice($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Invoice', '\API\Models\Invoice\InvoiceQuery');
     }
 
     /**

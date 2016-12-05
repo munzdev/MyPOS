@@ -247,6 +247,7 @@
   </table>
   <table name="invoice" idMethod="native" phpName="Invoice" namespace="API\Models\Invoice">
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="cashier_userid" phpName="CashierUserid" type="INTEGER" required="true"/>
     <column name="customerid" phpName="Customerid" type="INTEGER"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
@@ -254,6 +255,9 @@
     <column name="payment_finished" phpName="PaymentFinished" type="TIMESTAMP"/>
     <foreign-key foreignTable="customer" name="fk_invoice_customer1">
       <reference local="customerid" foreign="customerid"/>
+    </foreign-key>
+    <foreign-key foreignTable="event" name="fk_invoice_event1">
+      <reference local="eventid" foreign="eventid"/>
     </foreign-key>
     <foreign-key foreignTable="user" name="fk_invoices_users1">
       <reference local="cashier_userid" foreign="userid"/>
@@ -267,6 +271,9 @@
     <index name="payment_finished">
       <index-column name="payment_finished"/>
     </index>
+    <index name="fk_invoice_event1_idx">
+      <index-column name="eventid"/>
+    </index>
     <unique name="invoiceid_UNIQUE">
       <unique-column name="invoiceid"/>
     </unique>
@@ -277,7 +284,7 @@
   <table name="invoice_item" idMethod="native" phpName="InvoiceItem" namespace="API\Models\Invoice">
     <column name="invoice_itemid" phpName="InvoiceItemid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" required="true"/>
-    <column name="order_detailid" phpName="OrderDetailid" type="INTEGER" required="true"/>
+    <column name="order_detailid" phpName="OrderDetailid" type="INTEGER"/>
     <column name="amount" phpName="Amount" type="TINYINT" required="true"/>
     <column name="price" phpName="Price" type="DECIMAL" size="7" scale="2" required="true"/>
     <column name="description" phpName="Description" type="VARCHAR" size="255" required="true"/>

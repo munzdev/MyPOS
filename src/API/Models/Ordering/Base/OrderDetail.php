@@ -1371,9 +1371,10 @@ abstract class OrderDetail implements ActiveRecordInterface
 
             if ($this->invoiceItemsScheduledForDeletion !== null) {
                 if (!$this->invoiceItemsScheduledForDeletion->isEmpty()) {
-                    \API\Models\Invoice\InvoiceItemQuery::create()
-                        ->filterByPrimaryKeys($this->invoiceItemsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
+                    foreach ($this->invoiceItemsScheduledForDeletion as $invoiceItem) {
+                        // need to save related object because we set the relation to null
+                        $invoiceItem->save($con);
+                    }
                     $this->invoiceItemsScheduledForDeletion = null;
                 }
             }
@@ -2806,7 +2807,7 @@ abstract class OrderDetail implements ActiveRecordInterface
                 $this->invoiceItemsScheduledForDeletion = clone $this->collInvoiceItems;
                 $this->invoiceItemsScheduledForDeletion->clear();
             }
-            $this->invoiceItemsScheduledForDeletion[]= clone $invoiceItem;
+            $this->invoiceItemsScheduledForDeletion[]= $invoiceItem;
             $invoiceItem->setOrderDetail(null);
         }
 

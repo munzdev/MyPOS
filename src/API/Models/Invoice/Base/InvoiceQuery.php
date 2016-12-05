@@ -4,6 +4,7 @@ namespace API\Models\Invoice\Base;
 
 use \Exception;
 use \PDO;
+use API\Models\Event\Event;
 use API\Models\Invoice\Invoice as ChildInvoice;
 use API\Models\Invoice\InvoiceQuery as ChildInvoiceQuery;
 use API\Models\Invoice\Map\InvoiceTableMap;
@@ -23,6 +24,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  *
  * @method     ChildInvoiceQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
+ * @method     ChildInvoiceQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
  * @method     ChildInvoiceQuery orderByCashierUserid($order = Criteria::ASC) Order by the cashier_userid column
  * @method     ChildInvoiceQuery orderByCustomerid($order = Criteria::ASC) Order by the customerid column
  * @method     ChildInvoiceQuery orderByDate($order = Criteria::ASC) Order by the date column
@@ -30,6 +32,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery orderByPaymentFinished($order = Criteria::ASC) Order by the payment_finished column
  *
  * @method     ChildInvoiceQuery groupByInvoiceid() Group by the invoiceid column
+ * @method     ChildInvoiceQuery groupByEventid() Group by the eventid column
  * @method     ChildInvoiceQuery groupByCashierUserid() Group by the cashier_userid column
  * @method     ChildInvoiceQuery groupByCustomerid() Group by the customerid column
  * @method     ChildInvoiceQuery groupByDate() Group by the date column
@@ -53,6 +56,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery leftJoinWithCustomer() Adds a LEFT JOIN clause and with to the query using the Customer relation
  * @method     ChildInvoiceQuery rightJoinWithCustomer() Adds a RIGHT JOIN clause and with to the query using the Customer relation
  * @method     ChildInvoiceQuery innerJoinWithCustomer() Adds a INNER JOIN clause and with to the query using the Customer relation
+ *
+ * @method     ChildInvoiceQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
+ * @method     ChildInvoiceQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
+ * @method     ChildInvoiceQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
+ *
+ * @method     ChildInvoiceQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
+ *
+ * @method     ChildInvoiceQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
+ * @method     ChildInvoiceQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
+ * @method     ChildInvoiceQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
  *
  * @method     ChildInvoiceQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
  * @method     ChildInvoiceQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
@@ -84,12 +97,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery rightJoinWithPayment() Adds a RIGHT JOIN clause and with to the query using the Payment relation
  * @method     ChildInvoiceQuery innerJoinWithPayment() Adds a INNER JOIN clause and with to the query using the Payment relation
  *
- * @method     \API\Models\Invoice\CustomerQuery|\API\Models\User\UserQuery|\API\Models\Invoice\InvoiceItemQuery|\API\Models\Payment\PaymentQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\Invoice\CustomerQuery|\API\Models\Event\EventQuery|\API\Models\User\UserQuery|\API\Models\Invoice\InvoiceItemQuery|\API\Models\Payment\PaymentQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildInvoice findOne(ConnectionInterface $con = null) Return the first ChildInvoice matching the query
  * @method     ChildInvoice findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoice matching the query, or a new ChildInvoice object populated from the query conditions when no match is found
  *
  * @method     ChildInvoice findOneByInvoiceid(int $invoiceid) Return the first ChildInvoice filtered by the invoiceid column
+ * @method     ChildInvoice findOneByEventid(int $eventid) Return the first ChildInvoice filtered by the eventid column
  * @method     ChildInvoice findOneByCashierUserid(int $cashier_userid) Return the first ChildInvoice filtered by the cashier_userid column
  * @method     ChildInvoice findOneByCustomerid(int $customerid) Return the first ChildInvoice filtered by the customerid column
  * @method     ChildInvoice findOneByDate(string $date) Return the first ChildInvoice filtered by the date column
@@ -100,6 +114,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoice requireOne(ConnectionInterface $con = null) Return the first ChildInvoice matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildInvoice requireOneByInvoiceid(int $invoiceid) Return the first ChildInvoice filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoice requireOneByEventid(int $eventid) Return the first ChildInvoice filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByCashierUserid(int $cashier_userid) Return the first ChildInvoice filtered by the cashier_userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByCustomerid(int $customerid) Return the first ChildInvoice filtered by the customerid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByDate(string $date) Return the first ChildInvoice filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -108,6 +123,7 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildInvoice[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoice objects based on current ModelCriteria
  * @method     ChildInvoice[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildInvoice objects filtered by the invoiceid column
+ * @method     ChildInvoice[]|ObjectCollection findByEventid(int $eventid) Return ChildInvoice objects filtered by the eventid column
  * @method     ChildInvoice[]|ObjectCollection findByCashierUserid(int $cashier_userid) Return ChildInvoice objects filtered by the cashier_userid column
  * @method     ChildInvoice[]|ObjectCollection findByCustomerid(int $customerid) Return ChildInvoice objects filtered by the customerid column
  * @method     ChildInvoice[]|ObjectCollection findByDate(string $date) Return ChildInvoice objects filtered by the date column
@@ -211,7 +227,7 @@ abstract class InvoiceQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT invoiceid, cashier_userid, customerid, date, canceled, payment_finished FROM invoice WHERE invoiceid = :p0';
+        $sql = 'SELECT invoiceid, eventid, cashier_userid, customerid, date, canceled, payment_finished FROM invoice WHERE invoiceid = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -340,6 +356,49 @@ abstract class InvoiceQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(InvoiceTableMap::COL_INVOICEID, $invoiceid, $comparison);
+    }
+
+    /**
+     * Filter the query on the eventid column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEventid(1234); // WHERE eventid = 1234
+     * $query->filterByEventid(array(12, 34)); // WHERE eventid IN (12, 34)
+     * $query->filterByEventid(array('min' => 12)); // WHERE eventid > 12
+     * </code>
+     *
+     * @see       filterByEvent()
+     *
+     * @param     mixed $eventid The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildInvoiceQuery The current query, for fluid interface
+     */
+    public function filterByEventid($eventid = null, $comparison = null)
+    {
+        if (is_array($eventid)) {
+            $useMinMax = false;
+            if (isset($eventid['min'])) {
+                $this->addUsingAlias(InvoiceTableMap::COL_EVENTID, $eventid['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($eventid['max'])) {
+                $this->addUsingAlias(InvoiceTableMap::COL_EVENTID, $eventid['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InvoiceTableMap::COL_EVENTID, $eventid, $comparison);
     }
 
     /**
@@ -632,6 +691,83 @@ abstract class InvoiceQuery extends ModelCriteria
         return $this
             ->joinCustomer($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Customer', '\API\Models\Invoice\CustomerQuery');
+    }
+
+    /**
+     * Filter the query by a related \API\Models\Event\Event object
+     *
+     * @param \API\Models\Event\Event|ObjectCollection $event The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildInvoiceQuery The current query, for fluid interface
+     */
+    public function filterByEvent($event, $comparison = null)
+    {
+        if ($event instanceof \API\Models\Event\Event) {
+            return $this
+                ->addUsingAlias(InvoiceTableMap::COL_EVENTID, $event->getEventid(), $comparison);
+        } elseif ($event instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(InvoiceTableMap::COL_EVENTID, $event->toKeyValue('PrimaryKey', 'Eventid'), $comparison);
+        } else {
+            throw new PropelException('filterByEvent() only accepts arguments of type \API\Models\Event\Event or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Event relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildInvoiceQuery The current query, for fluid interface
+     */
+    public function joinEvent($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Event');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Event');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Event relation Event object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\Event\EventQuery A secondary query class using the current class as primary query
+     */
+    public function useEventQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinEvent($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Event', '\API\Models\Event\EventQuery');
     }
 
     /**

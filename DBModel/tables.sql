@@ -662,6 +662,7 @@ DROP TABLE IF EXISTS `invoice` ;
 
 CREATE TABLE IF NOT EXISTS `invoice` (
   `invoiceid` INT(11) NOT NULL AUTO_INCREMENT,
+  `eventid` INT(11) NOT NULL,
   `cashier_userid` INT(11) NOT NULL,
   `customerid` INT NULL,
   `date` DATETIME NOT NULL,
@@ -672,6 +673,7 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   INDEX `fk_invoices_users1_idx` (`cashier_userid` ASC),
   INDEX `fk_invoice_customer1_idx` (`customerid` ASC),
   INDEX `payment_finished` (`payment_finished` ASC),
+  INDEX `fk_invoice_event1_idx` (`eventid` ASC),
   CONSTRAINT `fk_invoices_users1`
     FOREIGN KEY (`cashier_userid`)
     REFERENCES `user` (`userid`)
@@ -680,6 +682,11 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   CONSTRAINT `fk_invoice_customer1`
     FOREIGN KEY (`customerid`)
     REFERENCES `customer` (`customerid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_invoice_event1`
+    FOREIGN KEY (`eventid`)
+    REFERENCES `event` (`eventid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -694,7 +701,7 @@ DROP TABLE IF EXISTS `invoice_item` ;
 CREATE TABLE IF NOT EXISTS `invoice_item` (
   `invoice_itemid` INT(11) NOT NULL AUTO_INCREMENT,
   `invoiceid` INT(11) NOT NULL,
-  `order_detailid` INT(11) NOT NULL,
+  `order_detailid` INT(11) NULL,
   `amount` TINYINT NOT NULL,
   `price` DECIMAL(7,2) NOT NULL,
   `description` VARCHAR(255) NOT NULL,

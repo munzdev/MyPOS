@@ -1459,7 +1459,7 @@ abstract class OrderDetailQuery extends ModelCriteria
      *
      * @return $this|ChildOrderDetailQuery The current query, for fluid interface
      */
-    public function joinInvoiceItem($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinInvoiceItem($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('InvoiceItem');
@@ -1494,7 +1494,7 @@ abstract class OrderDetailQuery extends ModelCriteria
      *
      * @return \API\Models\Invoice\InvoiceItemQuery A secondary query class using the current class as primary query
      */
-    public function useInvoiceItemQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useInvoiceItemQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinInvoiceItem($relationAlias, $joinType)

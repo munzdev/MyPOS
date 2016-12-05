@@ -1,7 +1,9 @@
 define(["models/db/User/User",
+        "models/db/Event/Event",
         "models/db/Invoice/Customer",
         "collections/db/Invoice/InvoiceCollection"
 ], function(User,
+            Event,
             Customer,
             InvoiceCollection) {
     "use strict";
@@ -12,6 +14,7 @@ define(["models/db/User/User",
 
         defaults() {
             return {Invoiceid: null,
+                    Eventid: null,
                     CashierUserid: null,
                     Date: null,
                     Canceled: null};
@@ -22,6 +25,11 @@ define(["models/db/User/User",
             if('CashierUser' in response)
             {
                 response.CashierUser = new User(response.CashierUser, {parse: true});
+            }
+            
+            if('Event' in response)
+            {
+                response.Event = new Event(response.Event, {parse: true});
             }
             
             if('Customer' in response)
