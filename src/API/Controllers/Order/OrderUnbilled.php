@@ -256,7 +256,7 @@ class OrderUnbilled extends SecurityController
                 StatusCheck::verifyOrder($i_orderid);
             }
             
-            $this->o_response->withJson($o_invoice->getInvoiceid());
+            $this->o_response->withJson($o_invoice->toArray());
 
             $o_connection->commit();
         } catch(Exception $o_exception) {
