@@ -1,16 +1,32 @@
 <?php
 namespace API\Lib;
 
+use API\Models\Event\EventPrinter;
+use Mike42\Escpos\EscposImage;
+use Mike42\Escpos\PrintConnectors\CupsPrintConnector;
+use Mike42\Escpos\PrintConnectors\DummyPrintConnector;
+use Mike42\Escpos\PrintConnectors\FilePrintConnector;
+use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
+use Mike42\Escpos\PrintConnectors\PrintConnector;
+use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
+use Mike42\Escpos\Printer;
+use const API\DATE_PHP_TIMEFORMAT;
+use const API\PRINTER_CHARACTER_EURO;
+use const API\PRINTER_LOGO_BIT_IMAGE;
+use const API\PRINTER_LOGO_BIT_IMAGE_COLUMN;
+use const API\PRINTER_LOGO_DEFAULT;
+use const API\PRINTER_TYPE_CUPS;
+use const API\PRINTER_TYPE_DUMMY;
+use const API\PRINTER_TYPE_FILE;
+use const API\PRINTER_TYPE_NETWORK;
+use const API\PRINTER_TYPE_WINDOWS;
+use function mb_str_pad;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-use Mike42\Escpos\Printer;
-use Mike42\Escpos\PrintConnectors\PrintConnector;
-use Mike42\Escpos\EscposImage;
-use MyPOS;
 
 class ReciepPrint
 {
@@ -53,6 +69,25 @@ class ReciepPrint
     public function __destruct()
     {
         $this->Close();
+    }
+    
+    public static function GetConnector(EventPrinter $o_printer) {
+        switch($o_printer->getType()) {
+            case PRINTER_TYPE_NETWORK:
+                return new NetworkPrintConnector($o_printer->getAttr1(), $o_printer->getAttr2());
+            
+            case PRINTER_TYPE_FILE:
+                return new FilePrintConnector($o_printer->getAttr1());
+            
+            case PRINTER_TYPE_WINDOWS:
+                return new WindowsPrintConnector($o_printer->getAttr1());
+            
+            case PRINTER_TYPE_CUPS:
+                return new CupsPrintConnector($o_printer->getAttr1());
+            
+            case PRINTER_TYPE_DUMMY:
+                return new DummyPrintConnector();
+        }
     }
 
     public function Add($str_name, $i_amount, $i_price = null, $i_tax = null)
@@ -120,11 +155,11 @@ class ReciepPrint
         {
             $o_logo = EscposImage::load($this->str_logo);
 
-            if($this->i_logo_type == MyPOS\PRINTER_LOGO_DEFAULT)
+            if($this->i_logo_type == PRINTER_LOGO_DEFAULT)
                 $this->o_printer->graphics($o_logo);
-            elseif($this->i_logo_type == MyPOS\PRINTER_LOGO_BIT_IMAGE)
+            elseif($this->i_logo_type == PRINTER_LOGO_BIT_IMAGE)
                 $this->o_printer->bitImage ($o_logo);
-            elseif($this->i_logo_type == MyPOS\PRINTER_LOGO_BIT_IMAGE_COLUMN)
+            elseif($this->i_logo_type == PRINTER_LOGO_BIT_IMAGE_COLUMN)
                 $this->o_printer->bitImageColumnFormat($o_logo);
         }
 
@@ -219,11 +254,11 @@ class ReciepPrint
         {
             $o_logo = EscposImage::load($this->str_logo);
 
-            if($this->i_logo_type == MyPOS\PRINTER_LOGO_DEFAULT)
+            if($this->i_logo_type == PRINTER_LOGO_DEFAULT)
                 $this->o_printer->graphics($o_logo);
-            elseif($this->i_logo_type == MyPOS\PRINTER_LOGO_BIT_IMAGE)
+            elseif($this->i_logo_type == PRINTER_LOGO_BIT_IMAGE)
                 $this->o_printer->bitImage ($o_logo);
-            elseif($this->i_logo_type == MyPOS\PRINTER_LOGO_BIT_IMAGE_COLUMN)
+            elseif($this->i_logo_type == PRINTER_LOGO_BIT_IMAGE_COLUMN)
                 $this->o_printer->bitImageColumnFormat($o_logo);
         }
 
@@ -282,7 +317,7 @@ class ReciepPrint
         $this->o_printer -> feed(2);
         $this->o_printer -> setJustification(Printer::JUSTIFY_CENTER);
         $this->o_printer -> text("Danke für Ihren Besuch!\n");
-        $this->o_printer -> text(($this->d_date) ? $this->d_date : date(MyPOS\DATE_PHP_TIMEFORMAT) . "\n");
+        $this->o_printer -> text(($this->d_date) ? $this->d_date : date(DATE_PHP_TIMEFORMAT) . "\n");
         $this->o_printer -> feed(2);
 
         /* Cut the receipt and open the cash drawer */
@@ -356,7 +391,7 @@ class ReciepPrint
         for($i = 0; $i < count($a_final_parts); $i++)
         {
             if($i > 0)
-                $this->o_printer->getPrintConnector()->write(MyPOS\PRINTER_CHARACTER_EURO);
+                $this->o_printer->getPrintConnector()->write(PRINTER_CHARACTER_EURO);
 
             $this->o_printer->text($a_final_parts[$i]);
         }
