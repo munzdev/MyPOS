@@ -125,12 +125,12 @@ define(['Webservice',
         finish() {
             this.orderUnbilled.set('PaymentTypeid', this.$('#paymentTypeList').val());
             this.orderUnbilled.save()
-                              .done((invoiceid) => {
+                              .done(() => {
                                     if(this.$('#print').prop('checked') == 1)
                                     {
                                         var webservice = new Webservice();
-                                        webservice.action = "Invoice/Print/" + invoiceid;
-                                        webservice.formData = {printerid: this.$('#printer').val()};
+                                        webservice.action = "Invoice/Printing/" + this.orderUnbilled.get('Invoiceid');
+                                        webservice.formData = {EventPrinterid: this.$('#printer').val()};
                                         webservice.call();
                                     }
 
@@ -418,11 +418,11 @@ define(['Webservice',
 
             this.renderTemplate(Template, {printers: this.printers,
                                            paymentTypes: this.paymentTypes});
-                                       
+
             // TODO: Somehow this event is not fired when registered in the events() method.
             // Manualy fix this
             this.$('#customer-save').click(this.customer_save);
-            
+
             // Register new customer form validation
             this.$('#customer-form').validate({
                 rules: {
