@@ -3,6 +3,7 @@
 namespace API\Controllers\Order;
 
 use API\Lib\Auth;
+use API\Lib\StatusCheck;
 use API\Lib\SecurityController;
 use API\Models\Event\EventTableQuery;
 use API\Models\Invoice\Customer;
@@ -109,6 +110,7 @@ class OrderUnbilled extends SecurityController
         try {        
             $o_invoice = new Invoice();
             $o_invoice->setCashierUserid($o_user->getUserid());
+            $o_invoice->setEventid($o_user->getEventUser()->getEventid());
             $o_invoice->setDate(new DateTime());
             
             if($o_customer)
@@ -117,6 +119,7 @@ class OrderUnbilled extends SecurityController
             $o_invoice->save();
             
             $i_payed = 0;
+            $a_orderids_to_verify = [];
 
             foreach($o_unbilledOrderDetails as $a_order_detail) {
                 foreach($o_invoiceOrderDetails as $o_order_detail_json) {                    
@@ -157,7 +160,6 @@ class OrderUnbilled extends SecurityController
                         $i_payed += $o_order_detail->getSinglePrice() * $i_amount;
 
                         if($o_order_detail->getMenuid() == null) {
-                            var_dump();
                             $o_invoiceItem->setDescription($o_order_detail->getExtraDetail());
                             $o_invoiceItem->setTax($o_order_detail->getMenuGroup()
                                                                   ->getMenuType()
@@ -198,6 +200,8 @@ class OrderUnbilled extends SecurityController
                         }
 
                         $o_invoiceItem->save();
+                        
+                        $a_orderids_to_verify[] = $o_order_detail->getOrderid();
                     }
                 }
             }
@@ -243,6 +247,13 @@ class OrderUnbilled extends SecurityController
                 $o_paymentCoupon->setPayment($o_payment);
                 $o_paymentCoupon->setValueUsed($i_usedValue);                
                 $o_paymentCoupon->save();                
+            }            
+            
+            StatusCheck::verifyInvoice($o_invoice->getInvoiceid());
+            
+            $a_orderids_to_verify = array_unique($a_orderids_to_verify);
+            foreach($a_orderids_to_verify as $i_orderid) {
+                StatusCheck::verifyOrder($i_orderid);
             }
             
             $this->o_response->withJson($o_invoice->getInvoiceid());
