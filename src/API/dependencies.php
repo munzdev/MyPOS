@@ -19,6 +19,19 @@ $o_container['logger'] = function ($o_container) {
     return $logger;
 };
 
+// i18n multi language support
+$o_container['i18n'] = function($o_container) {
+    $str_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+    
+    $str_file = \API\PUBLIC_ROOT . 'js/i18n/' . $str_lang . '.json';
+    
+    if(!file_exists($str_file)) 
+        $str_file = \API\PUBLIC_ROOT . 'js/i18n/en.json';    
+    
+    $str_json = file_get_contents($str_file);
+    return json_decode($str_json);
+};
+
 // Propel
 $o_container['db'] = function($o_container)
 {
