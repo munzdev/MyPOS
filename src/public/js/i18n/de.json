@@ -138,5 +138,23 @@
         "errorCity": "Ort eingeben!",
         "errorZip": "PLZ eingeben!",
         "currentCustomer": "Aktueller Kunde"
+    },
+    "ReciepPrint": {
+        "invoiceNr": "RECHNUNG",
+        "orderNr": "BESTELLUNG",
+        "tableNr": "TISCH NUMMER",
+        "recordedBy": "AUFGENOMMEN VON",
+        "recordedAt": "AUFGENOMMEN AM",
+        "cashier": "KASSIER",
+        "title": "Bezeichnung",
+        "multiplier": "x",
+        "distributionTime": "Ausgabe",
+        "amountAndTitle": "Anzahl und Produkt",
+        "price": "Preis",
+        "totalSum": "Endsumme",
+        "totalSumContainsTax": "Die Endsumme enthält an MwSt",
+        "percentTaxOfCurrency": "% MwSt aus € ",
+        "thanks": "Danke für Ihren Besuch",
+        "currency": "€"
     }
 }

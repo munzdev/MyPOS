@@ -138,5 +138,23 @@
         "errorCity": "Enter city!",
         "errorZip": "Emter zip!",
         "currentCustomer": "Current customer"
+    },
+    "ReciepPrint": {
+        "invoiceNr": "INVOICE",
+        "orderNr": "ORDER",
+        "tableNr": "TABLE NUMBER",
+        "recordedBy": "RECORDED BY",
+        "recordedAt": "RECORDED AT",
+        "cashier": "CASHIER",
+        "title": "Title",
+        "multiplier": "x",
+        "distributionTime": "Distribution Time",
+        "amountAndTitle": "Amount and Title",
+        "price": "Price",
+        "totalSum": "Total sum",
+        "totalSumContainsTax": "The total sum contains following taxes",
+        "percentTaxOfCurrency": "% tax at $ ",
+        "thanks": "Thanks for your order",
+        "currency": "$"
     }
 }

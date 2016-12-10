@@ -10,6 +10,7 @@ use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Mike42\Escpos\PrintConnectors\PrintConnector;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer;
+use stdClass;
 use const API\DATE_PHP_TIMEFORMAT;
 use const API\PRINTER_CHARACTER_EURO;
 use const API\PRINTER_LOGO_BIT_IMAGE;
@@ -30,7 +31,8 @@ use function mb_str_pad;
 
 class ReciepPrint
 {
-    //put your code here
+    private $o_i18n;
+            
     private $a_entries = array();
 
     private $o_printer;
@@ -59,11 +61,12 @@ class ReciepPrint
 
     const LEFT_PADDING = 4;
 
-    public function __construct(PrintConnector $o_connector, $i_paper_row_length)
+    public function __construct(PrintConnector $o_connector, $i_paper_row_length, stdClass $o_i18n)
     {
         $this->o_printer = new Printer($o_connector);
         $this->b_connector_open = true;
         $this->i_paper_row_length = $i_paper_row_length;
+        $this->o_i18n = $o_i18n;
     }
 
     public function __destruct()
@@ -71,7 +74,7 @@ class ReciepPrint
         $this->Close();
     }
     
-    public static function GetConnector(EventPrinter $o_printer) {
+    public static function GetConnector(EventPrinter $o_printer) : PrintConnector {
         switch($o_printer->getType()) {
             case PRINTER_TYPE_NETWORK:
                 return new NetworkPrintConnector($o_printer->getAttr1(), $o_printer->getAttr2());
@@ -165,19 +168,19 @@ class ReciepPrint
 
         /* Title of receipt */
         $this->o_printer -> setEmphasis(true);
-        $this->o_printer -> text("BESTELLUNG: " . $this->i_nr  . "\n");
-        $this->o_printer -> text("TISCH NUMMER: ");
+        $this->o_printer -> text($this->o_i18n->orderNr . ": " . $this->i_nr  . "\n");
+        $this->o_printer -> text($this->o_i18n->tableNr . ": ");
         $this->o_printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH | Printer::MODE_DOUBLE_HEIGHT);
         $this->o_printer -> text($this->str_tableNr  . "\n");
         $this->o_printer -> selectPrintMode();
-        $this->o_printer -> text("AUFGENOMMEN VON: " . $this->str_name  . "\n");
-        $this->o_printer -> text("AUFGENOMMEN AM: " . $this->d_date . "\n");
+        $this->o_printer -> text($this->o_i18n->recordedBy . ": " . $this->str_name  . "\n");
+        $this->o_printer -> text($this->o_i18n->recordedAt . ": " . date_format($this->d_date, DATE_PHP_TIMEFORMAT) . "\n");
         $this->o_printer -> setEmphasis(false);
 
         /* Items */
         $this->o_printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
         $this->o_printer -> setEmphasis(true);
-        $this->o_printer -> text("Bezeichung\n");
+        $this->o_printer -> text($this->o_i18n->title . "\n");
         $this->o_printer -> selectPrintMode();
         $this->o_printer -> setEmphasis(false);
 
@@ -191,7 +194,7 @@ class ReciepPrint
         {
             foreach($a_entries as $a_entrie)
             {
-                $str_text = $a_entrie['amount'] . "x " . $a_entrie['name'];
+                $str_text = $a_entrie['amount'] . $this->o_i18n->multiplier . " " . $a_entrie['name'];
 
                 $a_left_elements = explode(' ', $str_text);
                 $a_final = array('');
@@ -235,7 +238,7 @@ class ReciepPrint
 
         /* Footer */
         $this->o_printer -> feed(2);
-        $this->o_printer -> text("Ausgabe: " . $this->d_date_footer);
+        $this->o_printer -> text($this->o_i18n->distributionTime . ": " . $this->d_date_footer);
         $this->o_printer -> feed(2);
 
         /* Cut the receipt and open the cash drawer */
@@ -269,15 +272,15 @@ class ReciepPrint
 
         /* Title of receipt */
         $this->o_printer -> setEmphasis(true);
-        $this->o_printer -> text("RECHNUNG: " . $this->i_nr  . "\n");
-        $this->o_printer -> text("TISCH NUMMER: " . $this->str_tableNr  . "\n");
-        $this->o_printer -> text("KASSIER: " . $this->str_name  . "\n");
+        $this->o_printer -> text($this->o_i18n->orderNr . ": " . $this->i_nr  . "\n");
+        $this->o_printer -> text($this->o_i18n->tableNr . ": " . $this->str_tableNr  . "\n");
+        $this->o_printer -> text($this->o_i18n->cashier . ": " . $this->str_name  . "\n");
         $this->o_printer -> setEmphasis(false);
 
         /* Items */
         $this->o_printer -> setJustification(Printer::JUSTIFY_LEFT);
         $this->o_printer -> setEmphasis(true);
-        $this->PrintItem('Anzahl und Produkt', '', 'Preis');
+        $this->PrintItem($this->o_i18n->amountAndTitle, '', $this->o_i18n->price);
         $this->o_printer -> setEmphasis(false);
 
         $i_total = 0;
@@ -300,24 +303,24 @@ class ReciepPrint
 
         $this->o_printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
         $this->o_printer -> setEmphasis(true);
-        $this->PrintItem('Endsumme', '', sprintf('%0.2f', $i_total), true, true);
+        $this->PrintItem($this->o_i18n->totalSum, '', sprintf('%0.2f', $i_total), true, true);
         $this->o_printer -> setEmphasis(false);
         $this->o_printer -> selectPrintMode();
         $this->o_printer -> feed();
 
         /* Tax and total */
-        $this->o_printer->text("Die Endsumme enthält an MwSt\n");
+        $this->o_printer->text($this->o_i18n->totalSumContainsTax . "\n");
 
         foreach($a_taxes as $i_tax => $i_price)
         {
-            $this->PrintItem($i_tax . '% MwSt aus € ' . sprintf('%0.2f', $i_price), '', sprintf('%0.2f', $i_price * ($i_tax / 100)), true);
+            $this->PrintItem($i_tax . $this->o_i18n->percentTaxOfCurrency . sprintf('%0.2f', $i_price), '', sprintf('%0.2f', $i_price * ($i_tax / 100)), true);
         }
 
         /* Footer */
         $this->o_printer -> feed(2);
         $this->o_printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $this->o_printer -> text("Danke für Ihren Besuch!\n");
-        $this->o_printer -> text(($this->d_date) ? $this->d_date : date(DATE_PHP_TIMEFORMAT) . "\n");
+        $this->o_printer -> text($this->o_i18n->thanks . "!\n");
+        $this->o_printer -> text(($this->d_date) ? date_format($this->d_date, DATE_PHP_TIMEFORMAT) : date(DATE_PHP_TIMEFORMAT) . "\n");
         $this->o_printer -> feed(2);
 
         /* Cut the receipt and open the cash drawer */
@@ -327,7 +330,7 @@ class ReciepPrint
         $this->Close();
     }
 
-    private function PrintItem($str_name, $i_amount = 0, $i_price = 0, $b_euroSign = false, $b_bold = false)
+    private function PrintItem($str_name, $i_amount = 0, $i_price = 0, $b_currencySign = false, $b_bold = false)
     {
         $i_rightCols = self::RIGHT_COLS;
         $i_left_padding = self::LEFT_PADDING;
@@ -364,7 +367,7 @@ class ReciepPrint
 
         $a_final[$i_row_counter] .= mb_str_pad($str_row, $i_leftCols);
 
-        $str_sign = ($b_euroSign ? '€ ' : '');
+        $str_sign = ($b_currencySign ? $this->o_i18n->currency . ' ' : '');
 
         if($i_amount)
         {
@@ -380,7 +383,7 @@ class ReciepPrint
 
         if($i_amount)
         {
-            $str_final .= "\n" . mb_str_pad(' ', $i_left_padding) . $i_amount . ' x € ' . sprintf('%0.2f', $i_price);
+            $str_final .= "\n" . mb_str_pad(' ', $i_left_padding) . $i_amount . ' ' . $this->o_i18n->multiplier . ' ' . $this->o_i18n->currency . ' ' . sprintf('%0.2f', $i_price);
         }
 
         $str_final .= "\n";

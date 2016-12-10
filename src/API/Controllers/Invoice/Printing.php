@@ -10,6 +10,7 @@ use API\Models\Invoice\Base\InvoiceQuery;
 use API\Models\Payment\Map\PaymentCouponTableMap;
 use API\Models\Payment\Map\PaymentTableMap;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Respect\Validation\Validator as v;
 use Slim\App;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use const API\DATE_PHP_TIMEFORMAT;
@@ -55,11 +56,12 @@ class Printing extends SecurityController
                                    ->getFirst();
         
         $a_config = $this->o_app->getContainer()['settings']['Organisation'];
+        $o_i18n = $this->o_app->getContainer()['i18n'];
         $a_invoice = $a_config['Invoice'];
 
-        $o_cashierUser = $o_invoice->getCashierUser();
+        $o_cashierUser = $o_invoice->getUser();
         $o_connector = ReciepPrint::GetConnector($o_printer);
-        $o_reciepPrint = new ReciepPrint($o_connector, $o_printer->getCharactersPerRow());
+        $o_reciepPrint = new ReciepPrint($o_connector, $o_printer->getCharactersPerRow(), $o_i18n->ReciepPrint);
         
         $str_tableNr = null;
         
@@ -93,7 +95,6 @@ class Printing extends SecurityController
         catch(Exception $o_exception)
         {
             throw new Exception("Rechnungsdruck fehlgeschlagen! Bitte Vorgang wiederhollen! Rechnungsnummer: $a_params[invoiceid]", $o_exception->getCode(), $o_exception);
-        }                
-    }        
-    
+        }
+    }
 }

@@ -8,10 +8,13 @@ use API\Lib\ReciepPrint;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use const API\PRINTER_LOGO_BIT_IMAGE_COLUMN;
 
+$str_json = file_get_contents("../../src/public/js/i18n/de.json");
+$o_i18n = json_decode($str_json);
+
 $o_connector = new NetworkPrintConnector("192.168.0.50", 9100);
 //$o_connector = new FilePrintConnector("php://stdout");
 
-$o_invoice = new ReciepPrint($o_connector, 48);
+$o_invoice = new ReciepPrint($o_connector, 48, $o_i18n->ReciepPrint);
 $o_invoice->SetLogo("resources/escpos-php.png", PRINTER_LOGO_BIT_IMAGE_COLUMN);
 $o_invoice->SetHeader("HEADER TOP LINE\nSECOND LINE\n THIRD LINE");
 $o_invoice->SetNr(587472);
