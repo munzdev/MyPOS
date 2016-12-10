@@ -335,3 +335,12 @@ START TRANSACTION;
 INSERT INTO `customer` (`customerid`, `eventid`, `title`, `name`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `active`) VALUES (DEFAULT, 1, 'Herr', 'Max Mustermann', 'Strasse 1', NULL, 'Olstadt', '21123', 'UID!1213', true);
 
 COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `coupon`
+-- -----------------------------------------------------
+START TRANSACTION;
+INSERT INTO `coupon` (`couponid`, `eventid`, `created_by_userid`, `code`, `created`, `value`) VALUES (DEFAULT, 1, 1, '1234', 'NOW', 20);
+
+COMMIT;
