@@ -36,8 +36,8 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="customer" idMethod="native" phpName="Customer" namespace="API\Models\Invoice">
-    <column name="customerid" phpName="Customerid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+  <table name="event_contact" idMethod="native" phpName="EventContact" namespace="API\Models\Event">
+    <column name="event_contactid" phpName="EventContactid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="title" phpName="Title" type="VARCHAR" size="32" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="128" required="true"/>
@@ -51,6 +51,7 @@
     <column name="fax" phpName="Fax" type="VARCHAR" size="32"/>
     <column name="email" phpName="Email" type="VARCHAR" size="254"/>
     <column name="active" phpName="Active" type="BOOLEAN" size="1" required="true"/>
+    <column name="default" phpName="Default" type="BOOLEAN" size="1" required="true"/>
     <foreign-key foreignTable="event" name="fk_customer_event1">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
@@ -60,8 +61,34 @@
     <index name="name">
       <index-column name="name"/>
     </index>
+    <index name="active">
+      <index-column name="active"/>
+    </index>
+    <index name="default">
+      <index-column name="default"/>
+    </index>
     <unique name="customerid_UNIQUE">
-      <unique-column name="customerid"/>
+      <unique-column name="event_contactid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="event_bankinformation" idMethod="native" phpName="EventBankinformation" namespace="API\Models\Event">
+    <column name="event_bankinformationid" phpName="EventBankinformationid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
+    <column name="iban" phpName="Iban" type="VARCHAR" size="32" required="true"/>
+    <column name="bic" phpName="Bic" type="VARCHAR" size="16" required="true"/>
+    <column name="active" phpName="Active" type="BOOLEAN" size="1" required="true"/>
+    <foreign-key foreignTable="event" name="fk_event_bankinformation_event1">
+      <reference local="eventid" foreign="eventid"/>
+    </foreign-key>
+    <index name="fk_event_bankinformation_event1_idx">
+      <index-column name="eventid"/>
+    </index>
+    <unique name="event_bankinformation_UNIQUE">
+      <unique-column name="event_bankinformationid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -251,17 +278,17 @@
   </table>
   <table name="invoice" idMethod="native" phpName="Invoice" namespace="API\Models\Invoice">
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
+    <column name="event_contactid" phpName="EventContactid" type="INTEGER" required="true"/>
     <column name="cashier_userid" phpName="CashierUserid" type="INTEGER" required="true"/>
     <column name="customerid" phpName="Customerid" type="INTEGER"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <column name="canceled" phpName="Canceled" type="TIMESTAMP"/>
     <column name="payment_finished" phpName="PaymentFinished" type="TIMESTAMP"/>
-    <foreign-key foreignTable="customer" name="fk_invoice_customer1">
-      <reference local="customerid" foreign="customerid"/>
+    <foreign-key foreignTable="event_contact" name="fk_invoice_customer1">
+      <reference local="customerid" foreign="event_contactid"/>
     </foreign-key>
-    <foreign-key foreignTable="event" name="fk_invoice_event1">
-      <reference local="eventid" foreign="eventid"/>
+    <foreign-key foreignTable="event_contact" name="fk_invoice_event_contact1">
+      <reference local="event_contactid" foreign="event_contactid"/>
     </foreign-key>
     <foreign-key foreignTable="user" name="fk_invoices_users1">
       <reference local="cashier_userid" foreign="userid"/>
@@ -275,8 +302,8 @@
     <index name="payment_finished">
       <index-column name="payment_finished"/>
     </index>
-    <index name="fk_invoice_event1_idx">
-      <index-column name="eventid"/>
+    <index name="fk_invoice_event_contact1_idx">
+      <index-column name="event_contactid"/>
     </index>
     <unique name="invoiceid_UNIQUE">
       <unique-column name="invoiceid"/>

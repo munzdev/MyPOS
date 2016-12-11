@@ -1,9 +1,9 @@
 <?php
 
-namespace API\Models\Invoice\Map;
+namespace API\Models\Event\Map;
 
-use API\Models\Invoice\Invoice;
-use API\Models\Invoice\InvoiceQuery;
+use API\Models\Event\EventBankinformation;
+use API\Models\Event\EventBankinformationQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'invoice' table.
+ * This class defines the structure of the 'event_bankinformation' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class InvoiceTableMap extends TableMap
+class EventBankinformationTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class InvoiceTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'API.Models.Invoice.Map.InvoiceTableMap';
+    const CLASS_NAME = 'API.Models.Event.Map.EventBankinformationTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class InvoiceTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'invoice';
+    const TABLE_NAME = 'event_bankinformation';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\API\\Models\\Invoice\\Invoice';
+    const OM_CLASS = '\\API\\Models\\Event\\EventBankinformation';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'API.Models.Invoice.Invoice';
+    const CLASS_DEFAULT = 'API.Models.Event.EventBankinformation';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -69,42 +69,37 @@ class InvoiceTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
-     * the column name for the invoiceid field
+     * the column name for the event_bankinformationid field
      */
-    const COL_INVOICEID = 'invoice.invoiceid';
+    const COL_EVENT_BANKINFORMATIONID = 'event_bankinformation.event_bankinformationid';
 
     /**
-     * the column name for the event_contactid field
+     * the column name for the eventid field
      */
-    const COL_EVENT_CONTACTID = 'invoice.event_contactid';
+    const COL_EVENTID = 'event_bankinformation.eventid';
 
     /**
-     * the column name for the cashier_userid field
+     * the column name for the name field
      */
-    const COL_CASHIER_USERID = 'invoice.cashier_userid';
+    const COL_NAME = 'event_bankinformation.name';
 
     /**
-     * the column name for the customerid field
+     * the column name for the iban field
      */
-    const COL_CUSTOMERID = 'invoice.customerid';
+    const COL_IBAN = 'event_bankinformation.iban';
 
     /**
-     * the column name for the date field
+     * the column name for the bic field
      */
-    const COL_DATE = 'invoice.date';
+    const COL_BIC = 'event_bankinformation.bic';
 
     /**
-     * the column name for the canceled field
+     * the column name for the active field
      */
-    const COL_CANCELED = 'invoice.canceled';
-
-    /**
-     * the column name for the payment_finished field
-     */
-    const COL_PAYMENT_FINISHED = 'invoice.payment_finished';
+    const COL_ACTIVE = 'event_bankinformation.active';
 
     /**
      * The default string format for model objects of the related table
@@ -118,11 +113,11 @@ class InvoiceTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Invoiceid', 'EventContactid', 'CashierUserid', 'Customerid', 'Date', 'Canceled', 'PaymentFinished', ),
-        self::TYPE_CAMELNAME     => array('invoiceid', 'eventContactid', 'cashierUserid', 'customerid', 'date', 'canceled', 'paymentFinished', ),
-        self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID, InvoiceTableMap::COL_EVENT_CONTACTID, InvoiceTableMap::COL_CASHIER_USERID, InvoiceTableMap::COL_CUSTOMERID, InvoiceTableMap::COL_DATE, InvoiceTableMap::COL_CANCELED, InvoiceTableMap::COL_PAYMENT_FINISHED, ),
-        self::TYPE_FIELDNAME     => array('invoiceid', 'event_contactid', 'cashier_userid', 'customerid', 'date', 'canceled', 'payment_finished', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('EventBankinformationid', 'Eventid', 'Name', 'Iban', 'Bic', 'Active', ),
+        self::TYPE_CAMELNAME     => array('eventBankinformationid', 'eventid', 'name', 'iban', 'bic', 'active', ),
+        self::TYPE_COLNAME       => array(EventBankinformationTableMap::COL_EVENT_BANKINFORMATIONID, EventBankinformationTableMap::COL_EVENTID, EventBankinformationTableMap::COL_NAME, EventBankinformationTableMap::COL_IBAN, EventBankinformationTableMap::COL_BIC, EventBankinformationTableMap::COL_ACTIVE, ),
+        self::TYPE_FIELDNAME     => array('event_bankinformationid', 'eventid', 'name', 'iban', 'bic', 'active', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -132,11 +127,11 @@ class InvoiceTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Invoiceid' => 0, 'EventContactid' => 1, 'CashierUserid' => 2, 'Customerid' => 3, 'Date' => 4, 'Canceled' => 5, 'PaymentFinished' => 6, ),
-        self::TYPE_CAMELNAME     => array('invoiceid' => 0, 'eventContactid' => 1, 'cashierUserid' => 2, 'customerid' => 3, 'date' => 4, 'canceled' => 5, 'paymentFinished' => 6, ),
-        self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID => 0, InvoiceTableMap::COL_EVENT_CONTACTID => 1, InvoiceTableMap::COL_CASHIER_USERID => 2, InvoiceTableMap::COL_CUSTOMERID => 3, InvoiceTableMap::COL_DATE => 4, InvoiceTableMap::COL_CANCELED => 5, InvoiceTableMap::COL_PAYMENT_FINISHED => 6, ),
-        self::TYPE_FIELDNAME     => array('invoiceid' => 0, 'event_contactid' => 1, 'cashier_userid' => 2, 'customerid' => 3, 'date' => 4, 'canceled' => 5, 'payment_finished' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('EventBankinformationid' => 0, 'Eventid' => 1, 'Name' => 2, 'Iban' => 3, 'Bic' => 4, 'Active' => 5, ),
+        self::TYPE_CAMELNAME     => array('eventBankinformationid' => 0, 'eventid' => 1, 'name' => 2, 'iban' => 3, 'bic' => 4, 'active' => 5, ),
+        self::TYPE_COLNAME       => array(EventBankinformationTableMap::COL_EVENT_BANKINFORMATIONID => 0, EventBankinformationTableMap::COL_EVENTID => 1, EventBankinformationTableMap::COL_NAME => 2, EventBankinformationTableMap::COL_IBAN => 3, EventBankinformationTableMap::COL_BIC => 4, EventBankinformationTableMap::COL_ACTIVE => 5, ),
+        self::TYPE_FIELDNAME     => array('event_bankinformationid' => 0, 'eventid' => 1, 'name' => 2, 'iban' => 3, 'bic' => 4, 'active' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -149,20 +144,19 @@ class InvoiceTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('invoice');
-        $this->setPhpName('Invoice');
+        $this->setName('event_bankinformation');
+        $this->setPhpName('EventBankinformation');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\API\\Models\\Invoice\\Invoice');
-        $this->setPackage('API.Models.Invoice');
+        $this->setClassName('\\API\\Models\\Event\\EventBankinformation');
+        $this->setPackage('API.Models.Event');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('invoiceid', 'Invoiceid', 'INTEGER', true, null, null);
-        $this->addForeignKey('event_contactid', 'EventContactid', 'INTEGER', 'event_contact', 'event_contactid', true, null, null);
-        $this->addForeignKey('cashier_userid', 'CashierUserid', 'INTEGER', 'user', 'userid', true, null, null);
-        $this->addForeignKey('customerid', 'Customerid', 'INTEGER', 'event_contact', 'event_contactid', false, null, null);
-        $this->addColumn('date', 'Date', 'TIMESTAMP', true, null, null);
-        $this->addColumn('canceled', 'Canceled', 'TIMESTAMP', false, null, null);
-        $this->addColumn('payment_finished', 'PaymentFinished', 'TIMESTAMP', false, null, null);
+        $this->addPrimaryKey('event_bankinformationid', 'EventBankinformationid', 'INTEGER', true, null, null);
+        $this->addForeignKey('eventid', 'Eventid', 'INTEGER', 'event', 'eventid', true, null, null);
+        $this->addColumn('name', 'Name', 'VARCHAR', true, 64, null);
+        $this->addColumn('iban', 'Iban', 'VARCHAR', true, 32, null);
+        $this->addColumn('bic', 'Bic', 'VARCHAR', true, 16, null);
+        $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, null);
     } // initialize()
 
     /**
@@ -170,41 +164,13 @@ class InvoiceTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('EventContactRelatedByCustomerid', '\\API\\Models\\Event\\EventContact', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('Event', '\\API\\Models\\Event\\Event', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':customerid',
-    1 => ':event_contactid',
+    0 => ':eventid',
+    1 => ':eventid',
   ),
 ), null, null, null, false);
-        $this->addRelation('EventContactRelatedByEventContactid', '\\API\\Models\\Event\\EventContact', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':event_contactid',
-    1 => ':event_contactid',
-  ),
-), null, null, null, false);
-        $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':cashier_userid',
-    1 => ':userid',
-  ),
-), null, null, null, false);
-        $this->addRelation('InvoiceItem', '\\API\\Models\\Invoice\\InvoiceItem', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':invoiceid',
-    1 => ':invoiceid',
-  ),
-), null, null, 'InvoiceItems', false);
-        $this->addRelation('Payment', '\\API\\Models\\Payment\\Payment', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':invoiceid',
-    1 => ':invoiceid',
-  ),
-), null, null, 'Payments', false);
     } // buildRelations()
 
     /**
@@ -223,11 +189,11 @@ class InvoiceTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventBankinformationid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)];
+        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventBankinformationid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventBankinformationid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventBankinformationid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventBankinformationid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('EventBankinformationid', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -247,7 +213,7 @@ class InvoiceTableMap extends TableMap
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
-                : self::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('EventBankinformationid', TableMap::TYPE_PHPNAME, $indexType)
         ];
     }
 
@@ -264,7 +230,7 @@ class InvoiceTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? InvoiceTableMap::CLASS_DEFAULT : InvoiceTableMap::OM_CLASS;
+        return $withPrefix ? EventBankinformationTableMap::CLASS_DEFAULT : EventBankinformationTableMap::OM_CLASS;
     }
 
     /**
@@ -278,22 +244,22 @@ class InvoiceTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Invoice object, last column rank)
+     * @return array           (EventBankinformation object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = InvoiceTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = InvoiceTableMap::getInstanceFromPool($key))) {
+        $key = EventBankinformationTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = EventBankinformationTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + InvoiceTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + EventBankinformationTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = InvoiceTableMap::OM_CLASS;
-            /** @var Invoice $obj */
+            $cls = EventBankinformationTableMap::OM_CLASS;
+            /** @var EventBankinformation $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            InvoiceTableMap::addInstanceToPool($obj, $key);
+            EventBankinformationTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -316,18 +282,18 @@ class InvoiceTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = InvoiceTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = InvoiceTableMap::getInstanceFromPool($key))) {
+            $key = EventBankinformationTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = EventBankinformationTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Invoice $obj */
+                /** @var EventBankinformation $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                InvoiceTableMap::addInstanceToPool($obj, $key);
+                EventBankinformationTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -348,21 +314,19 @@ class InvoiceTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(InvoiceTableMap::COL_INVOICEID);
-            $criteria->addSelectColumn(InvoiceTableMap::COL_EVENT_CONTACTID);
-            $criteria->addSelectColumn(InvoiceTableMap::COL_CASHIER_USERID);
-            $criteria->addSelectColumn(InvoiceTableMap::COL_CUSTOMERID);
-            $criteria->addSelectColumn(InvoiceTableMap::COL_DATE);
-            $criteria->addSelectColumn(InvoiceTableMap::COL_CANCELED);
-            $criteria->addSelectColumn(InvoiceTableMap::COL_PAYMENT_FINISHED);
+            $criteria->addSelectColumn(EventBankinformationTableMap::COL_EVENT_BANKINFORMATIONID);
+            $criteria->addSelectColumn(EventBankinformationTableMap::COL_EVENTID);
+            $criteria->addSelectColumn(EventBankinformationTableMap::COL_NAME);
+            $criteria->addSelectColumn(EventBankinformationTableMap::COL_IBAN);
+            $criteria->addSelectColumn(EventBankinformationTableMap::COL_BIC);
+            $criteria->addSelectColumn(EventBankinformationTableMap::COL_ACTIVE);
         } else {
-            $criteria->addSelectColumn($alias . '.invoiceid');
-            $criteria->addSelectColumn($alias . '.event_contactid');
-            $criteria->addSelectColumn($alias . '.cashier_userid');
-            $criteria->addSelectColumn($alias . '.customerid');
-            $criteria->addSelectColumn($alias . '.date');
-            $criteria->addSelectColumn($alias . '.canceled');
-            $criteria->addSelectColumn($alias . '.payment_finished');
+            $criteria->addSelectColumn($alias . '.event_bankinformationid');
+            $criteria->addSelectColumn($alias . '.eventid');
+            $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.iban');
+            $criteria->addSelectColumn($alias . '.bic');
+            $criteria->addSelectColumn($alias . '.active');
         }
     }
 
@@ -375,7 +339,7 @@ class InvoiceTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(InvoiceTableMap::DATABASE_NAME)->getTable(InvoiceTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(EventBankinformationTableMap::DATABASE_NAME)->getTable(EventBankinformationTableMap::TABLE_NAME);
     }
 
     /**
@@ -383,16 +347,16 @@ class InvoiceTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(InvoiceTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(InvoiceTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new InvoiceTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(EventBankinformationTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(EventBankinformationTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new EventBankinformationTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Invoice or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a EventBankinformation or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Invoice object or primary key or array of primary keys
+     * @param mixed               $values Criteria or EventBankinformation object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -403,27 +367,27 @@ class InvoiceTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(InvoiceTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(EventBankinformationTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \API\Models\Invoice\Invoice) { // it's a model object
+        } elseif ($values instanceof \API\Models\Event\EventBankinformation) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(InvoiceTableMap::DATABASE_NAME);
-            $criteria->add(InvoiceTableMap::COL_INVOICEID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(EventBankinformationTableMap::DATABASE_NAME);
+            $criteria->add(EventBankinformationTableMap::COL_EVENT_BANKINFORMATIONID, (array) $values, Criteria::IN);
         }
 
-        $query = InvoiceQuery::create()->mergeWith($criteria);
+        $query = EventBankinformationQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            InvoiceTableMap::clearInstancePool();
+            EventBankinformationTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                InvoiceTableMap::removeInstanceFromPool($singleval);
+                EventBankinformationTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -431,20 +395,20 @@ class InvoiceTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the invoice table.
+     * Deletes all rows from the event_bankinformation table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return InvoiceQuery::create()->doDeleteAll($con);
+        return EventBankinformationQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Invoice or Criteria object.
+     * Performs an INSERT on the database, given a EventBankinformation or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Invoice object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or EventBankinformation object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -453,22 +417,22 @@ class InvoiceTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(InvoiceTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(EventBankinformationTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Invoice object
+            $criteria = $criteria->buildCriteria(); // build Criteria from EventBankinformation object
         }
 
-        if ($criteria->containsKey(InvoiceTableMap::COL_INVOICEID) && $criteria->keyContainsValue(InvoiceTableMap::COL_INVOICEID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.InvoiceTableMap::COL_INVOICEID.')');
+        if ($criteria->containsKey(EventBankinformationTableMap::COL_EVENT_BANKINFORMATIONID) && $criteria->keyContainsValue(EventBankinformationTableMap::COL_EVENT_BANKINFORMATIONID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.EventBankinformationTableMap::COL_EVENT_BANKINFORMATIONID.')');
         }
 
 
         // Set the correct dbName
-        $query = InvoiceQuery::create()->mergeWith($criteria);
+        $query = EventBankinformationQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -477,7 +441,7 @@ class InvoiceTableMap extends TableMap
         });
     }
 
-} // InvoiceTableMap
+} // EventBankinformationTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-InvoiceTableMap::buildTableMap();
+EventBankinformationTableMap::buildTableMap();

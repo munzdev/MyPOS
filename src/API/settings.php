@@ -30,22 +30,7 @@ return [
         'Auth' => [
             'RememberMe_PrivateKey' => 'MFswDQYJKoZIhvcNAQEBBQADSgAwRwJAfmBSwS0WmfKNW1Dq2N4MJ4gYDApG6lW19QhvDp2g80ajw74D2Xijm4rIuxaJPJ64GazdNWUHuc+1CL5eEkBopwIDAQAB'
         ],
-
-        'Organisation' => [
-            'Name' => '',
-            'Adress' => '',
-            'Adress2' => '',
-            'ZIP' => '',
-            'City' => '',
-            'TaxIdentificationNr' => '',
-            'Telephon' => '',
-            'Fax' => '',
-            'Email' => '',
-            'Bank' => '',
-            'IBAN' => '',
-            'BIC' => '',
-        ],
-
+        
         'Invoice' => [
             'Header' => "HEADER TOP LINE\nSECOND LINE\nTHIRD LINE",
 

@@ -2950,10 +2950,10 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Invoice[] List of Invoice objects
      */
-    public function getInvoicesJoinCustomer(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getInvoicesJoinEventContactRelatedByCustomerid(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = InvoiceQuery::create(null, $criteria);
-        $query->joinWith('Customer', $joinBehavior);
+        $query->joinWith('EventContactRelatedByCustomerid', $joinBehavior);
 
         return $this->getInvoices($query, $con);
     }
@@ -2975,10 +2975,10 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Invoice[] List of Invoice objects
      */
-    public function getInvoicesJoinEvent(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getInvoicesJoinEventContactRelatedByEventContactid(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = InvoiceQuery::create(null, $criteria);
-        $query->joinWith('Event', $joinBehavior);
+        $query->joinWith('EventContactRelatedByEventContactid', $joinBehavior);
 
         return $this->getInvoices($query, $con);
     }

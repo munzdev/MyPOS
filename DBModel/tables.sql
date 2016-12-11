@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `event` (
   UNIQUE INDEX `eventsid_UNIQUE` (`eventid` ASC),
   INDEX `events_active` (`active` ASC))
 ENGINE = InnoDB
-COMMENT = 'Enthält die verschiedene Events, bei dem das POS System verwendet wird';
+COMMENT = 'Enthält die verschiedene Events, bei dem das POS System ver' /* comment truncated */ /*wendet wird*/;
 
 
 -- -----------------------------------------------------
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `order` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enthält die Bestellungen die von einem Tisch gemacht wurden durch einen Benutzer';
+COMMENT = 'Enthält die Bestellungen die von einem Tisch gemacht wurden' /* comment truncated */ /* durch einen Benutzer*/;
 
 
 -- -----------------------------------------------------
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `menu_type` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enthält die grundlegende Nahrungstypen ( Essen, Trinken, ...) und die dafür gesetzlichen Steuern';
+COMMENT = 'Enthält die grundlegende Nahrungstypen ( Essen, Trinken, ..' /* comment truncated */ /*.) und die dafür gesetzlichen Steuern*/;
 
 
 -- -----------------------------------------------------
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `menu_group` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enhält die Untergruppen der Menükarte (Hauptspeise, Beilagen, Antigetränke, Biere, ... )';
+COMMENT = 'Enhält die Untergruppen der Menükarte (Hauptspeise, Beilag' /* comment truncated */ /*en, Antigetränke, Biere, ... )*/;
 
 
 -- -----------------------------------------------------
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `availability` (
   PRIMARY KEY (`availabilityid`),
   UNIQUE INDEX `availabilityid_UNIQUE` (`availabilityid` ASC))
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet die möglichen verfügbarkeits statuse den Menüs/Produkte und Sonderwünsche';
+COMMENT = 'Beinhaltet die möglichen verfügbarkeits statuse den Menüs' /* comment truncated */ /*/Produkte und Sonderwünsche*/;
 
 
 -- -----------------------------------------------------
@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enhält das Menü das Angeboten werden kann (Schnitzel, Schweinsbaraten, Cola, Sprite, Wasser, ...) mit dem Standartpreis';
+COMMENT = 'Enhält das Menü das Angeboten werden kann (Schnitzel, Schw' /* comment truncated */ /*einsbaraten, Cola, Sprite, Wasser, ...) mit dem Standartpreis*/;
 
 
 -- -----------------------------------------------------
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `menu_size` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enhält die verschiedene Einheitsgröße, die es für eine Speise/Getränk geben kann. (Normal, Kleine Speise, 0,25L, 0,5L, ...)';
+COMMENT = 'Enhält die verschiedene Einheitsgröße, die es für eine S' /* comment truncated */ /*peise/Getränk geben kann. (Normal, Kleine Speise, 0,25L, 0,5L, ...)*/;
 
 
 -- -----------------------------------------------------
@@ -279,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `order_detail` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enthält die genauen Bestell-Positionen einner Bestellung, die getätigte Zahlung dafür und wie oft diese Position bestellt wurde. menuid is leer(0), wenn es sich um einen \"extrawunsch\" handelt.';
+COMMENT = 'Enthält die genauen Bestell-Positionen einner Bestellung, d' /* comment truncated */ /*ie getätigte Zahlung dafür und wie oft diese Position bestellt wurde. menuid is leer(0), wenn es sich um einen "extrawunsch" handelt.*/;
 
 
 -- -----------------------------------------------------
@@ -308,7 +308,7 @@ CREATE TABLE IF NOT EXISTS `menu_extra` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert alle möglichen Extras die zu einer Speise bestellt werden können (miz Pommes, mit Reis, kein Salat, ...)';
+COMMENT = 'Definiert alle möglichen Extras die zu einer Speise bestell' /* comment truncated */ /*t werden können (miz Pommes, mit Reis, kein Salat, ...)*/;
 
 
 -- -----------------------------------------------------
@@ -335,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `menu_possible_size` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert, welche Größen für die verschiedene Speisen verfügbar ist mit dem angepassten Preis (Schnitzel kann als Beispiel \"Normal\" und als \"Kleine Portion\" bestellt werden. Cola in 0,25, 0,5L, ....)';
+COMMENT = 'Definiert, welche Größen für die verschiedene Speisen ver' /* comment truncated */ /*fügbar ist mit dem angepassten Preis (Schnitzel kann als Beispiel "Normal" und als "Kleine Portion" bestellt werden. Cola in 0,25, 0,5L, ....)*/;
 
 
 -- -----------------------------------------------------
@@ -362,7 +362,7 @@ CREATE TABLE IF NOT EXISTS `menu_possible_extra` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert, welche extras für die verschiedene Speisen/Getränke verfügbar ist mit dem angepassten Preis (Schnitzel \"mit Reis\" statt Pommes, Schweinsbraten \"mit Kartoffel\" statt Knödel, Cola \"mit Zitrone\"...)';
+COMMENT = 'Definiert, welche extras für die verschiedene Speisen/Get' /* comment truncated */ /*ränke verfügbar ist mit dem angepassten Preis (Schnitzel "mit Reis" statt Pommes, Schweinsbraten "mit Kartoffel" statt Knödel, Cola "mit Zitrone"...)*/;
 
 
 -- -----------------------------------------------------
@@ -387,7 +387,7 @@ CREATE TABLE IF NOT EXISTS `order_detail_extra` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Gibt an welches Extra einer Speise/eines Getränkens bestellt worden ist';
+COMMENT = 'Gibt an welches Extra einer Speise/eines Getränkens bestell' /* comment truncated */ /*t worden ist*/;
 
 
 -- -----------------------------------------------------
@@ -411,7 +411,7 @@ CREATE TABLE IF NOT EXISTS `order_detail_mixed_with` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enthält Referenzen zu gespritzten Getränken (Cola gespritzt mit Mineral )';
+COMMENT = 'Enthält Referenzen zu gespritzten Getränken (Cola gespritz' /* comment truncated */ /*t mit Mineral )*/;
 
 
 -- -----------------------------------------------------
@@ -462,7 +462,7 @@ CREATE TABLE IF NOT EXISTS `order_in_progress` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beschreibt, welche Teile aus einer Bestellung zurzeit in Arbeit ist (Benutzer XYZ, der bei der Ausgabe \"Bierbar\" ist, Bearbeitet zurzeit die Bestellungen von  der Gruppe \"Biere\") Benutzer kann auch mehrere gleichzeitig bearbeiten (Beispiel: Benutzer A bearbeitet zur zeit die Bestellung XYZ und kümmert sich um die Menü Gruppen \"Antigetränk\", \"Biere\". Benutzer B kümmert sich um die Menügruppe \"Wein\". Kann auch eine andere Ausgabestelle sein, falls nötig.';
+COMMENT = 'Beschreibt, welche Teile aus einer Bestellung zurzeit in Arb' /* comment truncated */ /*eit ist (Benutzer XYZ, der bei der Ausgabe "Bierbar" ist, Bearbeitet zurzeit die Bestellungen von  der Gruppe "Biere") Benutzer kann auch mehrere gleichzeitig bearbeiten (Beispiel: Benutzer A bearbeitet zur zeit die Bestellung XYZ und kümmert sich um die Menü Gruppen "Antigetränk", "Biere". Benutzer B kümmert sich um die Menügruppe "Wein". Kann auch eine andere Ausgabestelle sein, falls nötig.*/;
 
 
 -- -----------------------------------------------------
@@ -492,7 +492,7 @@ CREATE TABLE IF NOT EXISTS `event_user` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beschreibt welche Benutzer bei welchem Event, welche Rechte haben. Beispiel: Heuer ist Benutzer X der Admin, nächstes Event nur ein Kellner';
+COMMENT = 'Beschreibt welche Benutzer bei welchem Event, welche Rechte ' /* comment truncated */ /*haben. Beispiel: Heuer ist Benutzer X der Admin, nächstes Event nur ein Kellner*/;
 
 
 -- -----------------------------------------------------
@@ -513,7 +513,7 @@ CREATE TABLE IF NOT EXISTS `distribution_place` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltelt die Ausgabestellen, die es auf einem Event gibt. n';
+COMMENT = 'Beinhaltelt die Ausgabestellen, die es auf einem Event gibt.' /* comment truncated */ /* n*/;
 
 
 -- -----------------------------------------------------
@@ -539,7 +539,13 @@ CREATE TABLE IF NOT EXISTS `event_printer` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enthält die Konfiguration der Drucker, die bei einem Event zur verfügung stehen\nType:\n1: Network\n2: File\n3: Windows\n4: Cups\n5: Dummy';
+COMMENT = 'Enthält die Konfiguration der Drucker, die bei einem Event ' /* comment truncated */ /*zur verfügung stehen
+Type:
+1: Network
+2: File
+3: Windows
+4: Cups
+5: Dummy*/;
 
 
 -- -----------------------------------------------------
@@ -566,7 +572,7 @@ CREATE TABLE IF NOT EXISTS `distribution_place_group` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert, welche Ausgaben bei einer Ausgabestelle gemacht werden (Essensausgabe: Hauptgerichte, Salat; Bar: Antigetränk, Bier, Wein, Schnaps; Süsswarne: Kuchen; ...)';
+COMMENT = 'Definiert, welche Ausgaben bei einer Ausgabestelle gemacht w' /* comment truncated */ /*erden (Essensausgabe: Hauptgerichte, Salat; Bar: Antigetränk, Bier, Wein, Schnaps; Süsswarne: Kuchen; ...)*/;
 
 
 -- -----------------------------------------------------
@@ -598,7 +604,7 @@ CREATE TABLE IF NOT EXISTS `distribution_place_user` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert, welcher Benutzer zugriff auf die Ausgabestelle hat bzw. sich um die Ausgabestelle kümmert. Definiert außerdem, welcher Drucker im dort zur verfügung steht, um Bons zu drucke';
+COMMENT = 'Definiert, welcher Benutzer zugriff auf die Ausgabestelle ha' /* comment truncated */ /*t bzw. sich um die Ausgabestelle kümmert. Definiert außerdem, welcher Drucker im dort zur verfügung steht, um Bons zu drucke*/;
 
 
 -- -----------------------------------------------------
@@ -623,16 +629,17 @@ CREATE TABLE IF NOT EXISTS `distribution_place_table` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert welche tische standartmäßg von wo ihre Menüs erhalten. Jeder\nMenü Gruppe kann einem eigenem Ausgabeort zugeteilt werden';
+COMMENT = 'Definiert welche tische standartmäßg von wo ihre Menüs er' /* comment truncated */ /*halten. Jeder
+Menü Gruppe kann einem eigenem Ausgabeort zugeteilt werden*/;
 
 
 -- -----------------------------------------------------
--- Table `customer`
+-- Table `event_contact`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `customer` ;
+DROP TABLE IF EXISTS `event_contact` ;
 
-CREATE TABLE IF NOT EXISTS `customer` (
-  `customerid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `event_contact` (
+  `event_contactid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `title` VARCHAR(32) NOT NULL,
   `name` VARCHAR(128) NOT NULL,
@@ -646,17 +653,20 @@ CREATE TABLE IF NOT EXISTS `customer` (
   `fax` VARCHAR(32) NULL,
   `email` VARCHAR(254) NULL,
   `active` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`customerid`),
-  UNIQUE INDEX `customerid_UNIQUE` (`customerid` ASC),
+  `default` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`event_contactid`),
+  UNIQUE INDEX `customerid_UNIQUE` (`event_contactid` ASC),
   INDEX `fk_customer_event1_idx` (`eventid` ASC),
   INDEX `name` (`name` ASC),
+  INDEX `active` (`active` ASC),
+  INDEX `default` (`default` ASC),
   CONSTRAINT `fk_customer_event1`
     FOREIGN KEY (`eventid`)
     REFERENCES `event` (`eventid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet Kundendaten für Rechnungen. Wenn ein Kunde eine Vorsteuerabzugsberechtige Rechnugn braucht müssen die Kundendaten auf der Rechnung stehen genauso wie die Daten der Firma die die Rechnung ausstellt';
+COMMENT = 'Beinhaltet Kundendaten für Rechnungen. Wenn ein Kunde eine ' /* comment truncated */ /*Vorsteuerabzugsberechtige Rechnugn braucht müssen die Kundendaten auf der Rechnung stehen genauso wie die Daten der Firma die die Rechnung ausstellt*/;
 
 
 -- -----------------------------------------------------
@@ -666,7 +676,7 @@ DROP TABLE IF EXISTS `invoice` ;
 
 CREATE TABLE IF NOT EXISTS `invoice` (
   `invoiceid` INT(11) NOT NULL AUTO_INCREMENT,
-  `eventid` INT(11) NOT NULL,
+  `event_contactid` INT(11) NOT NULL,
   `cashier_userid` INT(11) NOT NULL,
   `customerid` INT(11) NULL,
   `date` DATETIME NOT NULL,
@@ -677,7 +687,7 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   INDEX `fk_invoices_users1_idx` (`cashier_userid` ASC),
   INDEX `fk_invoice_customer1_idx` (`customerid` ASC),
   INDEX `payment_finished` (`payment_finished` ASC),
-  INDEX `fk_invoice_event1_idx` (`eventid` ASC),
+  INDEX `fk_invoice_event_contact1_idx` (`event_contactid` ASC),
   CONSTRAINT `fk_invoices_users1`
     FOREIGN KEY (`cashier_userid`)
     REFERENCES `user` (`userid`)
@@ -685,16 +695,16 @@ CREATE TABLE IF NOT EXISTS `invoice` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_invoice_customer1`
     FOREIGN KEY (`customerid`)
-    REFERENCES `customer` (`customerid`)
+    REFERENCES `event_contact` (`event_contactid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_invoice_event1`
-    FOREIGN KEY (`eventid`)
-    REFERENCES `event` (`eventid`)
+  CONSTRAINT `fk_invoice_event_contact1`
+    FOREIGN KEY (`event_contactid`)
+    REFERENCES `event_contact` (`event_contactid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet die Rechnungsnummer mit dem Aussstellungsdatum, die es gibt. Auserdem ob Rechnung storniert wurde';
+COMMENT = 'Beinhaltet die Rechnungsnummer mit dem Aussstellungsdatum, d' /* comment truncated */ /*ie es gibt. Auserdem ob Rechnung storniert wurde*/;
 
 
 -- -----------------------------------------------------
@@ -726,7 +736,7 @@ CREATE TABLE IF NOT EXISTS `invoice_item` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet die Zeilen einer Rechnung. Gibt an wieviel, von einer Bestellung bezahlt worden ist. Preis wird der Bestellung entnommen';
+COMMENT = 'Beinhaltet die Zeilen einer Rechnung. Gibt an wieviel, von e' /* comment truncated */ /*iner Bestellung bezahlt worden ist. Preis wird der Bestellung entnommen*/;
 
 
 -- -----------------------------------------------------
@@ -740,7 +750,7 @@ CREATE TABLE IF NOT EXISTS `distribution_giving_out` (
   PRIMARY KEY (`distribution_giving_outid`),
   UNIQUE INDEX `distribution_givin_outid_UNIQUE` (`distribution_giving_outid` ASC))
 ENGINE = InnoDB
-COMMENT = 'Jede einzelne Ausgabe wird hier angelegt mit einem Zeitstempel';
+COMMENT = 'Jede einzelne Ausgabe wird hier angelegt mit einem Zeitstemp' /* comment truncated */ /*el*/;
 
 
 -- -----------------------------------------------------
@@ -775,7 +785,7 @@ CREATE TABLE IF NOT EXISTS `order_in_progress_recieved` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Gibt an, wann und wieviel ein Kunde bereits von seiner Bestellung erhalten hat. Erhalt kann aufgeteitl sein falls zbs. nur mehr 2 Schnitzel vorhanden sind und 3 Bestellt wurden. 1 wird später nachgeliefert und ist ein eigener eintrag';
+COMMENT = 'Gibt an, wann und wieviel ein Kunde bereits von seiner Beste' /* comment truncated */ /*llung erhalten hat. Erhalt kann aufgeteitl sein falls zbs. nur mehr 2 Schnitzel vorhanden sind und 3 Bestellt wurden. 1 wird später nachgeliefert und ist ein eigener eintrag*/;
 
 
 -- -----------------------------------------------------
@@ -806,7 +816,7 @@ CREATE TABLE IF NOT EXISTS `user_message` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet die Kommunikationsnachrichten zwischen den Benutzern für den internen Chat. Auserdem beinhaltet es Systemnachrichten an die Benutzer (keine\'from_events_userid\')';
+COMMENT = 'Beinhaltet die Kommunikationsnachrichten zwischen den Benutz' /* comment truncated */ /*ern für den internen Chat. Auserdem beinhaltet es Systemnachrichten an die Benutzer (keine'from_events_userid')*/;
 
 
 -- -----------------------------------------------------
@@ -912,7 +922,7 @@ CREATE TABLE IF NOT EXISTS `payment_coupon` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet Gutscheine die für eine Bezahlung verwendet wurden';
+COMMENT = 'Beinhaltet Gutscheine die für eine Bezahlung verwendet wurd' /* comment truncated */ /*en*/;
 
 
 -- -----------------------------------------------------
@@ -960,6 +970,29 @@ CREATE TABLE IF NOT EXISTS `payment_warning` (
   CONSTRAINT `fk_payment_warning_payment_warning_type1`
     FOREIGN KEY (`payment_warning_typeid`)
     REFERENCES `payment_warning_type` (`payment_warning_typeid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `event_bankinformation`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `event_bankinformation` ;
+
+CREATE TABLE IF NOT EXISTS `event_bankinformation` (
+  `event_bankinformationid` INT(11) NOT NULL AUTO_INCREMENT,
+  `eventid` INT(11) NOT NULL,
+  `name` VARCHAR(64) NOT NULL,
+  `iban` VARCHAR(32) NOT NULL,
+  `bic` VARCHAR(16) NOT NULL,
+  `active` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`event_bankinformationid`),
+  UNIQUE INDEX `event_bankinformation_UNIQUE` (`event_bankinformationid` ASC),
+  INDEX `fk_event_bankinformation_event1_idx` (`eventid` ASC),
+  CONSTRAINT `fk_event_bankinformation_event1`
+    FOREIGN KEY (`eventid`)
+    REFERENCES `event` (`eventid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

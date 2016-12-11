@@ -10,6 +10,10 @@ use API\Models\DistributionPlace\DistributionPlaceQuery;
 use API\Models\DistributionPlace\Base\DistributionPlace as BaseDistributionPlace;
 use API\Models\DistributionPlace\Map\DistributionPlaceTableMap;
 use API\Models\Event\Event as ChildEvent;
+use API\Models\Event\EventBankinformation as ChildEventBankinformation;
+use API\Models\Event\EventBankinformationQuery as ChildEventBankinformationQuery;
+use API\Models\Event\EventContact as ChildEventContact;
+use API\Models\Event\EventContactQuery as ChildEventContactQuery;
 use API\Models\Event\EventPrinter as ChildEventPrinter;
 use API\Models\Event\EventPrinterQuery as ChildEventPrinterQuery;
 use API\Models\Event\EventQuery as ChildEventQuery;
@@ -17,18 +21,12 @@ use API\Models\Event\EventTable as ChildEventTable;
 use API\Models\Event\EventTableQuery as ChildEventTableQuery;
 use API\Models\Event\EventUser as ChildEventUser;
 use API\Models\Event\EventUserQuery as ChildEventUserQuery;
+use API\Models\Event\Map\EventBankinformationTableMap;
+use API\Models\Event\Map\EventContactTableMap;
 use API\Models\Event\Map\EventPrinterTableMap;
 use API\Models\Event\Map\EventTableMap;
 use API\Models\Event\Map\EventTableTableMap;
 use API\Models\Event\Map\EventUserTableMap;
-use API\Models\Invoice\Customer;
-use API\Models\Invoice\CustomerQuery;
-use API\Models\Invoice\Invoice;
-use API\Models\Invoice\InvoiceQuery;
-use API\Models\Invoice\Base\Customer as BaseCustomer;
-use API\Models\Invoice\Base\Invoice as BaseInvoice;
-use API\Models\Invoice\Map\CustomerTableMap;
-use API\Models\Invoice\Map\InvoiceTableMap;
 use API\Models\Menu\MenuExtra;
 use API\Models\Menu\MenuExtraQuery;
 use API\Models\Menu\MenuSize;
@@ -139,10 +137,16 @@ abstract class Event implements ActiveRecordInterface
     protected $collCouponsPartial;
 
     /**
-     * @var        ObjectCollection|Customer[] Collection to store aggregation of Customer objects.
+     * @var        ObjectCollection|ChildEventContact[] Collection to store aggregation of ChildEventContact objects.
      */
-    protected $collCustomers;
-    protected $collCustomersPartial;
+    protected $collEventContacts;
+    protected $collEventContactsPartial;
+
+    /**
+     * @var        ObjectCollection|ChildEventBankinformation[] Collection to store aggregation of ChildEventBankinformation objects.
+     */
+    protected $collEventBankinformations;
+    protected $collEventBankinformationsPartial;
 
     /**
      * @var        ObjectCollection|DistributionPlace[] Collection to store aggregation of DistributionPlace objects.
@@ -167,12 +171,6 @@ abstract class Event implements ActiveRecordInterface
      */
     protected $collEventUsers;
     protected $collEventUsersPartial;
-
-    /**
-     * @var        ObjectCollection|Invoice[] Collection to store aggregation of Invoice objects.
-     */
-    protected $collInvoices;
-    protected $collInvoicesPartial;
 
     /**
      * @var        ObjectCollection|MenuExtra[] Collection to store aggregation of MenuExtra objects.
@@ -214,9 +212,15 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|Customer[]
+     * @var ObjectCollection|ChildEventContact[]
      */
-    protected $customersScheduledForDeletion = null;
+    protected $eventContactsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildEventBankinformation[]
+     */
+    protected $eventBankinformationsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -241,12 +245,6 @@ abstract class Event implements ActiveRecordInterface
      * @var ObjectCollection|ChildEventUser[]
      */
     protected $eventUsersScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|Invoice[]
-     */
-    protected $invoicesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -766,7 +764,9 @@ abstract class Event implements ActiveRecordInterface
 
             $this->collCoupons = null;
 
-            $this->collCustomers = null;
+            $this->collEventContacts = null;
+
+            $this->collEventBankinformations = null;
 
             $this->collDistributionPlaces = null;
 
@@ -775,8 +775,6 @@ abstract class Event implements ActiveRecordInterface
             $this->collEventTables = null;
 
             $this->collEventUsers = null;
-
-            $this->collInvoices = null;
 
             $this->collMenuExtras = null;
 
@@ -913,17 +911,34 @@ abstract class Event implements ActiveRecordInterface
                 }
             }
 
-            if ($this->customersScheduledForDeletion !== null) {
-                if (!$this->customersScheduledForDeletion->isEmpty()) {
-                    \API\Models\Invoice\CustomerQuery::create()
-                        ->filterByPrimaryKeys($this->customersScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->eventContactsScheduledForDeletion !== null) {
+                if (!$this->eventContactsScheduledForDeletion->isEmpty()) {
+                    \API\Models\Event\EventContactQuery::create()
+                        ->filterByPrimaryKeys($this->eventContactsScheduledForDeletion->getPrimaryKeys(false))
                         ->delete($con);
-                    $this->customersScheduledForDeletion = null;
+                    $this->eventContactsScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collCustomers !== null) {
-                foreach ($this->collCustomers as $referrerFK) {
+            if ($this->collEventContacts !== null) {
+                foreach ($this->collEventContacts as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->eventBankinformationsScheduledForDeletion !== null) {
+                if (!$this->eventBankinformationsScheduledForDeletion->isEmpty()) {
+                    \API\Models\Event\EventBankinformationQuery::create()
+                        ->filterByPrimaryKeys($this->eventBankinformationsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->eventBankinformationsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collEventBankinformations !== null) {
+                foreach ($this->collEventBankinformations as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -992,23 +1007,6 @@ abstract class Event implements ActiveRecordInterface
 
             if ($this->collEventUsers !== null) {
                 foreach ($this->collEventUsers as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->invoicesScheduledForDeletion !== null) {
-                if (!$this->invoicesScheduledForDeletion->isEmpty()) {
-                    \API\Models\Invoice\InvoiceQuery::create()
-                        ->filterByPrimaryKeys($this->invoicesScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->invoicesScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collInvoices !== null) {
-                foreach ($this->collInvoices as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1278,20 +1276,35 @@ abstract class Event implements ActiveRecordInterface
 
                 $result[$key] = $this->collCoupons->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collCustomers) {
+            if (null !== $this->collEventContacts) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'customers';
+                        $key = 'eventContacts';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'customers';
+                        $key = 'event_contacts';
                         break;
                     default:
-                        $key = 'Customers';
+                        $key = 'EventContacts';
                 }
 
-                $result[$key] = $this->collCustomers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collEventContacts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collEventBankinformations) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'eventBankinformations';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'event_bankinformations';
+                        break;
+                    default:
+                        $key = 'EventBankinformations';
+                }
+
+                $result[$key] = $this->collEventBankinformations->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collDistributionPlaces) {
 
@@ -1352,21 +1365,6 @@ abstract class Event implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->collEventUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collInvoices) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'invoices';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'invoices';
-                        break;
-                    default:
-                        $key = 'Invoices';
-                }
-
-                $result[$key] = $this->collInvoices->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collMenuExtras) {
 
@@ -1666,9 +1664,15 @@ abstract class Event implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getCustomers() as $relObj) {
+            foreach ($this->getEventContacts() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addCustomer($relObj->copy($deepCopy));
+                    $copyObj->addEventContact($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getEventBankinformations() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addEventBankinformation($relObj->copy($deepCopy));
                 }
             }
 
@@ -1693,12 +1697,6 @@ abstract class Event implements ActiveRecordInterface
             foreach ($this->getEventUsers() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addEventUser($relObj->copy($deepCopy));
-                }
-            }
-
-            foreach ($this->getInvoices() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addInvoice($relObj->copy($deepCopy));
                 }
             }
 
@@ -1770,8 +1768,11 @@ abstract class Event implements ActiveRecordInterface
         if ('Coupon' == $relationName) {
             return $this->initCoupons();
         }
-        if ('Customer' == $relationName) {
-            return $this->initCustomers();
+        if ('EventContact' == $relationName) {
+            return $this->initEventContacts();
+        }
+        if ('EventBankinformation' == $relationName) {
+            return $this->initEventBankinformations();
         }
         if ('DistributionPlace' == $relationName) {
             return $this->initDistributionPlaces();
@@ -1784,9 +1785,6 @@ abstract class Event implements ActiveRecordInterface
         }
         if ('EventUser' == $relationName) {
             return $this->initEventUsers();
-        }
-        if ('Invoice' == $relationName) {
-            return $this->initInvoices();
         }
         if ('MenuExtra' == $relationName) {
             return $this->initMenuExtras();
@@ -2053,31 +2051,31 @@ abstract class Event implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collCustomers collection
+     * Clears out the collEventContacts collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addCustomers()
+     * @see        addEventContacts()
      */
-    public function clearCustomers()
+    public function clearEventContacts()
     {
-        $this->collCustomers = null; // important to set this to NULL since that means it is uninitialized
+        $this->collEventContacts = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collCustomers collection loaded partially.
+     * Reset is the collEventContacts collection loaded partially.
      */
-    public function resetPartialCustomers($v = true)
+    public function resetPartialEventContacts($v = true)
     {
-        $this->collCustomersPartial = $v;
+        $this->collEventContactsPartial = $v;
     }
 
     /**
-     * Initializes the collCustomers collection.
+     * Initializes the collEventContacts collection.
      *
-     * By default this just sets the collCustomers collection to an empty array (like clearcollCustomers());
+     * By default this just sets the collEventContacts collection to an empty array (like clearcollEventContacts());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -2086,20 +2084,20 @@ abstract class Event implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initCustomers($overrideExisting = true)
+    public function initEventContacts($overrideExisting = true)
     {
-        if (null !== $this->collCustomers && !$overrideExisting) {
+        if (null !== $this->collEventContacts && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = CustomerTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = EventContactTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collCustomers = new $collectionClassName;
-        $this->collCustomers->setModel('\API\Models\Invoice\Customer');
+        $this->collEventContacts = new $collectionClassName;
+        $this->collEventContacts->setModel('\API\Models\Event\EventContact');
     }
 
     /**
-     * Gets an array of Customer objects which contain a foreign key that references this object.
+     * Gets an array of ChildEventContact objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
@@ -2109,108 +2107,108 @@ abstract class Event implements ActiveRecordInterface
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|Customer[] List of Customer objects
+     * @return ObjectCollection|ChildEventContact[] List of ChildEventContact objects
      * @throws PropelException
      */
-    public function getCustomers(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getEventContacts(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collCustomersPartial && !$this->isNew();
-        if (null === $this->collCustomers || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collCustomers) {
+        $partial = $this->collEventContactsPartial && !$this->isNew();
+        if (null === $this->collEventContacts || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collEventContacts) {
                 // return empty collection
-                $this->initCustomers();
+                $this->initEventContacts();
             } else {
-                $collCustomers = CustomerQuery::create(null, $criteria)
+                $collEventContacts = ChildEventContactQuery::create(null, $criteria)
                     ->filterByEvent($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collCustomersPartial && count($collCustomers)) {
-                        $this->initCustomers(false);
+                    if (false !== $this->collEventContactsPartial && count($collEventContacts)) {
+                        $this->initEventContacts(false);
 
-                        foreach ($collCustomers as $obj) {
-                            if (false == $this->collCustomers->contains($obj)) {
-                                $this->collCustomers->append($obj);
+                        foreach ($collEventContacts as $obj) {
+                            if (false == $this->collEventContacts->contains($obj)) {
+                                $this->collEventContacts->append($obj);
                             }
                         }
 
-                        $this->collCustomersPartial = true;
+                        $this->collEventContactsPartial = true;
                     }
 
-                    return $collCustomers;
+                    return $collEventContacts;
                 }
 
-                if ($partial && $this->collCustomers) {
-                    foreach ($this->collCustomers as $obj) {
+                if ($partial && $this->collEventContacts) {
+                    foreach ($this->collEventContacts as $obj) {
                         if ($obj->isNew()) {
-                            $collCustomers[] = $obj;
+                            $collEventContacts[] = $obj;
                         }
                     }
                 }
 
-                $this->collCustomers = $collCustomers;
-                $this->collCustomersPartial = false;
+                $this->collEventContacts = $collEventContacts;
+                $this->collEventContactsPartial = false;
             }
         }
 
-        return $this->collCustomers;
+        return $this->collEventContacts;
     }
 
     /**
-     * Sets a collection of Customer objects related by a one-to-many relationship
+     * Sets a collection of ChildEventContact objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $customers A Propel collection.
+     * @param      Collection $eventContacts A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildEvent The current object (for fluent API support)
      */
-    public function setCustomers(Collection $customers, ConnectionInterface $con = null)
+    public function setEventContacts(Collection $eventContacts, ConnectionInterface $con = null)
     {
-        /** @var Customer[] $customersToDelete */
-        $customersToDelete = $this->getCustomers(new Criteria(), $con)->diff($customers);
+        /** @var ChildEventContact[] $eventContactsToDelete */
+        $eventContactsToDelete = $this->getEventContacts(new Criteria(), $con)->diff($eventContacts);
 
 
-        $this->customersScheduledForDeletion = $customersToDelete;
+        $this->eventContactsScheduledForDeletion = $eventContactsToDelete;
 
-        foreach ($customersToDelete as $customerRemoved) {
-            $customerRemoved->setEvent(null);
+        foreach ($eventContactsToDelete as $eventContactRemoved) {
+            $eventContactRemoved->setEvent(null);
         }
 
-        $this->collCustomers = null;
-        foreach ($customers as $customer) {
-            $this->addCustomer($customer);
+        $this->collEventContacts = null;
+        foreach ($eventContacts as $eventContact) {
+            $this->addEventContact($eventContact);
         }
 
-        $this->collCustomers = $customers;
-        $this->collCustomersPartial = false;
+        $this->collEventContacts = $eventContacts;
+        $this->collEventContactsPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related BaseCustomer objects.
+     * Returns the number of related EventContact objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related BaseCustomer objects.
+     * @return int             Count of related EventContact objects.
      * @throws PropelException
      */
-    public function countCustomers(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countEventContacts(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collCustomersPartial && !$this->isNew();
-        if (null === $this->collCustomers || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collCustomers) {
+        $partial = $this->collEventContactsPartial && !$this->isNew();
+        if (null === $this->collEventContacts || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collEventContacts) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getCustomers());
+                return count($this->getEventContacts());
             }
 
-            $query = CustomerQuery::create(null, $criteria);
+            $query = ChildEventContactQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
@@ -2220,28 +2218,28 @@ abstract class Event implements ActiveRecordInterface
                 ->count($con);
         }
 
-        return count($this->collCustomers);
+        return count($this->collEventContacts);
     }
 
     /**
-     * Method called to associate a Customer object to this object
-     * through the Customer foreign key attribute.
+     * Method called to associate a ChildEventContact object to this object
+     * through the ChildEventContact foreign key attribute.
      *
-     * @param  Customer $l Customer
+     * @param  ChildEventContact $l ChildEventContact
      * @return $this|\API\Models\Event\Event The current object (for fluent API support)
      */
-    public function addCustomer(Customer $l)
+    public function addEventContact(ChildEventContact $l)
     {
-        if ($this->collCustomers === null) {
-            $this->initCustomers();
-            $this->collCustomersPartial = true;
+        if ($this->collEventContacts === null) {
+            $this->initEventContacts();
+            $this->collEventContactsPartial = true;
         }
 
-        if (!$this->collCustomers->contains($l)) {
-            $this->doAddCustomer($l);
+        if (!$this->collEventContacts->contains($l)) {
+            $this->doAddEventContact($l);
 
-            if ($this->customersScheduledForDeletion and $this->customersScheduledForDeletion->contains($l)) {
-                $this->customersScheduledForDeletion->remove($this->customersScheduledForDeletion->search($l));
+            if ($this->eventContactsScheduledForDeletion and $this->eventContactsScheduledForDeletion->contains($l)) {
+                $this->eventContactsScheduledForDeletion->remove($this->eventContactsScheduledForDeletion->search($l));
             }
         }
 
@@ -2249,29 +2247,254 @@ abstract class Event implements ActiveRecordInterface
     }
 
     /**
-     * @param Customer $customer The Customer object to add.
+     * @param ChildEventContact $eventContact The ChildEventContact object to add.
      */
-    protected function doAddCustomer(Customer $customer)
+    protected function doAddEventContact(ChildEventContact $eventContact)
     {
-        $this->collCustomers[]= $customer;
-        $customer->setEvent($this);
+        $this->collEventContacts[]= $eventContact;
+        $eventContact->setEvent($this);
     }
 
     /**
-     * @param  Customer $customer The Customer object to remove.
+     * @param  ChildEventContact $eventContact The ChildEventContact object to remove.
      * @return $this|ChildEvent The current object (for fluent API support)
      */
-    public function removeCustomer(Customer $customer)
+    public function removeEventContact(ChildEventContact $eventContact)
     {
-        if ($this->getCustomers()->contains($customer)) {
-            $pos = $this->collCustomers->search($customer);
-            $this->collCustomers->remove($pos);
-            if (null === $this->customersScheduledForDeletion) {
-                $this->customersScheduledForDeletion = clone $this->collCustomers;
-                $this->customersScheduledForDeletion->clear();
+        if ($this->getEventContacts()->contains($eventContact)) {
+            $pos = $this->collEventContacts->search($eventContact);
+            $this->collEventContacts->remove($pos);
+            if (null === $this->eventContactsScheduledForDeletion) {
+                $this->eventContactsScheduledForDeletion = clone $this->collEventContacts;
+                $this->eventContactsScheduledForDeletion->clear();
             }
-            $this->customersScheduledForDeletion[]= clone $customer;
-            $customer->setEvent(null);
+            $this->eventContactsScheduledForDeletion[]= clone $eventContact;
+            $eventContact->setEvent(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Clears out the collEventBankinformations collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addEventBankinformations()
+     */
+    public function clearEventBankinformations()
+    {
+        $this->collEventBankinformations = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collEventBankinformations collection loaded partially.
+     */
+    public function resetPartialEventBankinformations($v = true)
+    {
+        $this->collEventBankinformationsPartial = $v;
+    }
+
+    /**
+     * Initializes the collEventBankinformations collection.
+     *
+     * By default this just sets the collEventBankinformations collection to an empty array (like clearcollEventBankinformations());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initEventBankinformations($overrideExisting = true)
+    {
+        if (null !== $this->collEventBankinformations && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = EventBankinformationTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collEventBankinformations = new $collectionClassName;
+        $this->collEventBankinformations->setModel('\API\Models\Event\EventBankinformation');
+    }
+
+    /**
+     * Gets an array of ChildEventBankinformation objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildEvent is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildEventBankinformation[] List of ChildEventBankinformation objects
+     * @throws PropelException
+     */
+    public function getEventBankinformations(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collEventBankinformationsPartial && !$this->isNew();
+        if (null === $this->collEventBankinformations || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collEventBankinformations) {
+                // return empty collection
+                $this->initEventBankinformations();
+            } else {
+                $collEventBankinformations = ChildEventBankinformationQuery::create(null, $criteria)
+                    ->filterByEvent($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collEventBankinformationsPartial && count($collEventBankinformations)) {
+                        $this->initEventBankinformations(false);
+
+                        foreach ($collEventBankinformations as $obj) {
+                            if (false == $this->collEventBankinformations->contains($obj)) {
+                                $this->collEventBankinformations->append($obj);
+                            }
+                        }
+
+                        $this->collEventBankinformationsPartial = true;
+                    }
+
+                    return $collEventBankinformations;
+                }
+
+                if ($partial && $this->collEventBankinformations) {
+                    foreach ($this->collEventBankinformations as $obj) {
+                        if ($obj->isNew()) {
+                            $collEventBankinformations[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collEventBankinformations = $collEventBankinformations;
+                $this->collEventBankinformationsPartial = false;
+            }
+        }
+
+        return $this->collEventBankinformations;
+    }
+
+    /**
+     * Sets a collection of ChildEventBankinformation objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $eventBankinformations A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildEvent The current object (for fluent API support)
+     */
+    public function setEventBankinformations(Collection $eventBankinformations, ConnectionInterface $con = null)
+    {
+        /** @var ChildEventBankinformation[] $eventBankinformationsToDelete */
+        $eventBankinformationsToDelete = $this->getEventBankinformations(new Criteria(), $con)->diff($eventBankinformations);
+
+
+        $this->eventBankinformationsScheduledForDeletion = $eventBankinformationsToDelete;
+
+        foreach ($eventBankinformationsToDelete as $eventBankinformationRemoved) {
+            $eventBankinformationRemoved->setEvent(null);
+        }
+
+        $this->collEventBankinformations = null;
+        foreach ($eventBankinformations as $eventBankinformation) {
+            $this->addEventBankinformation($eventBankinformation);
+        }
+
+        $this->collEventBankinformations = $eventBankinformations;
+        $this->collEventBankinformationsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related EventBankinformation objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related EventBankinformation objects.
+     * @throws PropelException
+     */
+    public function countEventBankinformations(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collEventBankinformationsPartial && !$this->isNew();
+        if (null === $this->collEventBankinformations || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collEventBankinformations) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getEventBankinformations());
+            }
+
+            $query = ChildEventBankinformationQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEvent($this)
+                ->count($con);
+        }
+
+        return count($this->collEventBankinformations);
+    }
+
+    /**
+     * Method called to associate a ChildEventBankinformation object to this object
+     * through the ChildEventBankinformation foreign key attribute.
+     *
+     * @param  ChildEventBankinformation $l ChildEventBankinformation
+     * @return $this|\API\Models\Event\Event The current object (for fluent API support)
+     */
+    public function addEventBankinformation(ChildEventBankinformation $l)
+    {
+        if ($this->collEventBankinformations === null) {
+            $this->initEventBankinformations();
+            $this->collEventBankinformationsPartial = true;
+        }
+
+        if (!$this->collEventBankinformations->contains($l)) {
+            $this->doAddEventBankinformation($l);
+
+            if ($this->eventBankinformationsScheduledForDeletion and $this->eventBankinformationsScheduledForDeletion->contains($l)) {
+                $this->eventBankinformationsScheduledForDeletion->remove($this->eventBankinformationsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildEventBankinformation $eventBankinformation The ChildEventBankinformation object to add.
+     */
+    protected function doAddEventBankinformation(ChildEventBankinformation $eventBankinformation)
+    {
+        $this->collEventBankinformations[]= $eventBankinformation;
+        $eventBankinformation->setEvent($this);
+    }
+
+    /**
+     * @param  ChildEventBankinformation $eventBankinformation The ChildEventBankinformation object to remove.
+     * @return $this|ChildEvent The current object (for fluent API support)
+     */
+    public function removeEventBankinformation(ChildEventBankinformation $eventBankinformation)
+    {
+        if ($this->getEventBankinformations()->contains($eventBankinformation)) {
+            $pos = $this->collEventBankinformations->search($eventBankinformation);
+            $this->collEventBankinformations->remove($pos);
+            if (null === $this->eventBankinformationsScheduledForDeletion) {
+                $this->eventBankinformationsScheduledForDeletion = clone $this->collEventBankinformations;
+                $this->eventBankinformationsScheduledForDeletion->clear();
+            }
+            $this->eventBankinformationsScheduledForDeletion[]= clone $eventBankinformation;
+            $eventBankinformation->setEvent(null);
         }
 
         return $this;
@@ -3200,281 +3423,6 @@ abstract class Event implements ActiveRecordInterface
         $query->joinWith('User', $joinBehavior);
 
         return $this->getEventUsers($query, $con);
-    }
-
-    /**
-     * Clears out the collInvoices collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addInvoices()
-     */
-    public function clearInvoices()
-    {
-        $this->collInvoices = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collInvoices collection loaded partially.
-     */
-    public function resetPartialInvoices($v = true)
-    {
-        $this->collInvoicesPartial = $v;
-    }
-
-    /**
-     * Initializes the collInvoices collection.
-     *
-     * By default this just sets the collInvoices collection to an empty array (like clearcollInvoices());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initInvoices($overrideExisting = true)
-    {
-        if (null !== $this->collInvoices && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = InvoiceTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collInvoices = new $collectionClassName;
-        $this->collInvoices->setModel('\API\Models\Invoice\Invoice');
-    }
-
-    /**
-     * Gets an array of Invoice objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildEvent is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|Invoice[] List of Invoice objects
-     * @throws PropelException
-     */
-    public function getInvoices(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collInvoicesPartial && !$this->isNew();
-        if (null === $this->collInvoices || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collInvoices) {
-                // return empty collection
-                $this->initInvoices();
-            } else {
-                $collInvoices = InvoiceQuery::create(null, $criteria)
-                    ->filterByEvent($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collInvoicesPartial && count($collInvoices)) {
-                        $this->initInvoices(false);
-
-                        foreach ($collInvoices as $obj) {
-                            if (false == $this->collInvoices->contains($obj)) {
-                                $this->collInvoices->append($obj);
-                            }
-                        }
-
-                        $this->collInvoicesPartial = true;
-                    }
-
-                    return $collInvoices;
-                }
-
-                if ($partial && $this->collInvoices) {
-                    foreach ($this->collInvoices as $obj) {
-                        if ($obj->isNew()) {
-                            $collInvoices[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collInvoices = $collInvoices;
-                $this->collInvoicesPartial = false;
-            }
-        }
-
-        return $this->collInvoices;
-    }
-
-    /**
-     * Sets a collection of Invoice objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $invoices A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildEvent The current object (for fluent API support)
-     */
-    public function setInvoices(Collection $invoices, ConnectionInterface $con = null)
-    {
-        /** @var Invoice[] $invoicesToDelete */
-        $invoicesToDelete = $this->getInvoices(new Criteria(), $con)->diff($invoices);
-
-
-        $this->invoicesScheduledForDeletion = $invoicesToDelete;
-
-        foreach ($invoicesToDelete as $invoiceRemoved) {
-            $invoiceRemoved->setEvent(null);
-        }
-
-        $this->collInvoices = null;
-        foreach ($invoices as $invoice) {
-            $this->addInvoice($invoice);
-        }
-
-        $this->collInvoices = $invoices;
-        $this->collInvoicesPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related BaseInvoice objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related BaseInvoice objects.
-     * @throws PropelException
-     */
-    public function countInvoices(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collInvoicesPartial && !$this->isNew();
-        if (null === $this->collInvoices || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collInvoices) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getInvoices());
-            }
-
-            $query = InvoiceQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByEvent($this)
-                ->count($con);
-        }
-
-        return count($this->collInvoices);
-    }
-
-    /**
-     * Method called to associate a Invoice object to this object
-     * through the Invoice foreign key attribute.
-     *
-     * @param  Invoice $l Invoice
-     * @return $this|\API\Models\Event\Event The current object (for fluent API support)
-     */
-    public function addInvoice(Invoice $l)
-    {
-        if ($this->collInvoices === null) {
-            $this->initInvoices();
-            $this->collInvoicesPartial = true;
-        }
-
-        if (!$this->collInvoices->contains($l)) {
-            $this->doAddInvoice($l);
-
-            if ($this->invoicesScheduledForDeletion and $this->invoicesScheduledForDeletion->contains($l)) {
-                $this->invoicesScheduledForDeletion->remove($this->invoicesScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Invoice $invoice The Invoice object to add.
-     */
-    protected function doAddInvoice(Invoice $invoice)
-    {
-        $this->collInvoices[]= $invoice;
-        $invoice->setEvent($this);
-    }
-
-    /**
-     * @param  Invoice $invoice The Invoice object to remove.
-     * @return $this|ChildEvent The current object (for fluent API support)
-     */
-    public function removeInvoice(Invoice $invoice)
-    {
-        if ($this->getInvoices()->contains($invoice)) {
-            $pos = $this->collInvoices->search($invoice);
-            $this->collInvoices->remove($pos);
-            if (null === $this->invoicesScheduledForDeletion) {
-                $this->invoicesScheduledForDeletion = clone $this->collInvoices;
-                $this->invoicesScheduledForDeletion->clear();
-            }
-            $this->invoicesScheduledForDeletion[]= clone $invoice;
-            $invoice->setEvent(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Event is new, it will return
-     * an empty collection; or if this Event has previously
-     * been saved, it will retrieve related Invoices from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Event.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|Invoice[] List of Invoice objects
-     */
-    public function getInvoicesJoinCustomer(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = InvoiceQuery::create(null, $criteria);
-        $query->joinWith('Customer', $joinBehavior);
-
-        return $this->getInvoices($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Event is new, it will return
-     * an empty collection; or if this Event has previously
-     * been saved, it will retrieve related Invoices from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Event.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|Invoice[] List of Invoice objects
-     */
-    public function getInvoicesJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = InvoiceQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
-
-        return $this->getInvoices($query, $con);
     }
 
     /**
@@ -4436,8 +4384,13 @@ abstract class Event implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collCustomers) {
-                foreach ($this->collCustomers as $o) {
+            if ($this->collEventContacts) {
+                foreach ($this->collEventContacts as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collEventBankinformations) {
+                foreach ($this->collEventBankinformations as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -4458,11 +4411,6 @@ abstract class Event implements ActiveRecordInterface
             }
             if ($this->collEventUsers) {
                 foreach ($this->collEventUsers as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
-            if ($this->collInvoices) {
-                foreach ($this->collInvoices as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -4489,12 +4437,12 @@ abstract class Event implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collCoupons = null;
-        $this->collCustomers = null;
+        $this->collEventContacts = null;
+        $this->collEventBankinformations = null;
         $this->collDistributionPlaces = null;
         $this->collEventPrinters = null;
         $this->collEventTables = null;
         $this->collEventUsers = null;
-        $this->collInvoices = null;
         $this->collMenuExtras = null;
         $this->collMenuSizes = null;
         $this->collMenuTypes = null;

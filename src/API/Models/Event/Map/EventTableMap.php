@@ -159,13 +159,20 @@ class EventTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, 'Coupons', false);
-        $this->addRelation('Customer', '\\API\\Models\\Invoice\\Customer', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('EventContact', '\\API\\Models\\Event\\EventContact', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':eventid',
     1 => ':eventid',
   ),
-), null, null, 'Customers', false);
+), null, null, 'EventContacts', false);
+        $this->addRelation('EventBankinformation', '\\API\\Models\\Event\\EventBankinformation', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':eventid',
+    1 => ':eventid',
+  ),
+), null, null, 'EventBankinformations', false);
         $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -194,13 +201,6 @@ class EventTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, 'EventUsers', false);
-        $this->addRelation('Invoice', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'Invoices', false);
         $this->addRelation('MenuExtra', '\\API\\Models\\Menu\\MenuExtra', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

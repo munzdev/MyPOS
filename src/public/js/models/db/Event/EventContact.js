@@ -2,12 +2,12 @@ define(["models/db/Event/Event"
 ], function(Event){
     "use strict";
 
-    return class Customer extends app.BaseModel {
+    return class EventContact extends app.BaseModel {
 
-        idAttribute() { return 'Customerid'; }
+        idAttribute() { return 'EventContactid'; }
 
         defaults() {
-            return {Customerid: null,
+            return {EventContactid: null,
                     Eventid: null,
                     Title: '',
                     Name: '',
@@ -20,7 +20,8 @@ define(["models/db/Event/Event"
                     Telephon: '',
                     Fax: '',
                     Email: '',
-                    Active: false};
+                    Active: false,
+                    Default: false};
         }
 
         parse(response)

@@ -329,10 +329,11 @@ COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `customer`
+-- Data for table `event_contact`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `customer` (`customerid`, `eventid`, `title`, `name`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `active`) VALUES (DEFAULT, 1, 'Herr', 'Max Mustermann', 'Strasse 1', NULL, 'Olstadt', '21123', 'UID!1213', true);
+INSERT INTO `event_contact` (`event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `active`, `default`) VALUES (DEFAULT, 1, 'Herr', 'Max Mustermann', NULL, 'Strasse 1', NULL, 'Olstadt', '21123', '1213', NULL, NULL, 'customer@email.com', true, false);
+INSERT INTO `event_contact` (`event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `active`, `default`) VALUES (DEFAULT, 1, 'Firma', 'Company Test', NULL, 'Street whatever 1', NULL, 'City', '1234', '141231', '0664/123456', NULL, 'company@test.at', true, true);
 
 COMMIT;
 
@@ -342,5 +343,14 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 INSERT INTO `coupon` (`couponid`, `eventid`, `created_by_userid`, `code`, `created`, `value`) VALUES (DEFAULT, 1, 1, '1234', 'NOW', 20);
+
+COMMIT;
+
+
+-- -----------------------------------------------------
+-- Data for table `event_bankinformation`
+-- -----------------------------------------------------
+START TRANSACTION;
+INSERT INTO `event_bankinformation` (`event_bankinformationid`, `eventid`, `name`, `iban`, `bic`, `active`) VALUES (DEFAULT, 1, 'Test Bank Int.', 'AT32123456', 'ATOO123454', 1);
 
 COMMIT;
