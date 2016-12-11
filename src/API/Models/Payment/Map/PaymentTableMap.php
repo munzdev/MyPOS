@@ -59,7 +59,7 @@ class PaymentTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 8;
+    const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class PaymentTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 8;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /**
      * the column name for the paymentid field
@@ -95,6 +95,11 @@ class PaymentTableMap extends TableMap
      * the column name for the amount field
      */
     const COL_AMOUNT = 'payment.amount';
+
+    /**
+     * the column name for the maturity_date field
+     */
+    const COL_MATURITY_DATE = 'payment.maturity_date';
 
     /**
      * the column name for the canceled field
@@ -123,11 +128,11 @@ class PaymentTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Paymentid', 'PaymentTypeid', 'Invoiceid', 'Created', 'Amount', 'Canceled', 'Recieved', 'AmountRecieved', ),
-        self::TYPE_CAMELNAME     => array('paymentid', 'paymentTypeid', 'invoiceid', 'created', 'amount', 'canceled', 'recieved', 'amountRecieved', ),
-        self::TYPE_COLNAME       => array(PaymentTableMap::COL_PAYMENTID, PaymentTableMap::COL_PAYMENT_TYPEID, PaymentTableMap::COL_INVOICEID, PaymentTableMap::COL_CREATED, PaymentTableMap::COL_AMOUNT, PaymentTableMap::COL_CANCELED, PaymentTableMap::COL_RECIEVED, PaymentTableMap::COL_AMOUNT_RECIEVED, ),
-        self::TYPE_FIELDNAME     => array('paymentid', 'payment_typeid', 'invoiceid', 'created', 'amount', 'canceled', 'recieved', 'amount_recieved', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Paymentid', 'PaymentTypeid', 'Invoiceid', 'Created', 'Amount', 'MaturityDate', 'Canceled', 'Recieved', 'AmountRecieved', ),
+        self::TYPE_CAMELNAME     => array('paymentid', 'paymentTypeid', 'invoiceid', 'created', 'amount', 'maturityDate', 'canceled', 'recieved', 'amountRecieved', ),
+        self::TYPE_COLNAME       => array(PaymentTableMap::COL_PAYMENTID, PaymentTableMap::COL_PAYMENT_TYPEID, PaymentTableMap::COL_INVOICEID, PaymentTableMap::COL_CREATED, PaymentTableMap::COL_AMOUNT, PaymentTableMap::COL_MATURITY_DATE, PaymentTableMap::COL_CANCELED, PaymentTableMap::COL_RECIEVED, PaymentTableMap::COL_AMOUNT_RECIEVED, ),
+        self::TYPE_FIELDNAME     => array('paymentid', 'payment_typeid', 'invoiceid', 'created', 'amount', 'maturity_date', 'canceled', 'recieved', 'amount_recieved', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -137,11 +142,11 @@ class PaymentTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Paymentid' => 0, 'PaymentTypeid' => 1, 'Invoiceid' => 2, 'Created' => 3, 'Amount' => 4, 'Canceled' => 5, 'Recieved' => 6, 'AmountRecieved' => 7, ),
-        self::TYPE_CAMELNAME     => array('paymentid' => 0, 'paymentTypeid' => 1, 'invoiceid' => 2, 'created' => 3, 'amount' => 4, 'canceled' => 5, 'recieved' => 6, 'amountRecieved' => 7, ),
-        self::TYPE_COLNAME       => array(PaymentTableMap::COL_PAYMENTID => 0, PaymentTableMap::COL_PAYMENT_TYPEID => 1, PaymentTableMap::COL_INVOICEID => 2, PaymentTableMap::COL_CREATED => 3, PaymentTableMap::COL_AMOUNT => 4, PaymentTableMap::COL_CANCELED => 5, PaymentTableMap::COL_RECIEVED => 6, PaymentTableMap::COL_AMOUNT_RECIEVED => 7, ),
-        self::TYPE_FIELDNAME     => array('paymentid' => 0, 'payment_typeid' => 1, 'invoiceid' => 2, 'created' => 3, 'amount' => 4, 'canceled' => 5, 'recieved' => 6, 'amount_recieved' => 7, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, )
+        self::TYPE_PHPNAME       => array('Paymentid' => 0, 'PaymentTypeid' => 1, 'Invoiceid' => 2, 'Created' => 3, 'Amount' => 4, 'MaturityDate' => 5, 'Canceled' => 6, 'Recieved' => 7, 'AmountRecieved' => 8, ),
+        self::TYPE_CAMELNAME     => array('paymentid' => 0, 'paymentTypeid' => 1, 'invoiceid' => 2, 'created' => 3, 'amount' => 4, 'maturityDate' => 5, 'canceled' => 6, 'recieved' => 7, 'amountRecieved' => 8, ),
+        self::TYPE_COLNAME       => array(PaymentTableMap::COL_PAYMENTID => 0, PaymentTableMap::COL_PAYMENT_TYPEID => 1, PaymentTableMap::COL_INVOICEID => 2, PaymentTableMap::COL_CREATED => 3, PaymentTableMap::COL_AMOUNT => 4, PaymentTableMap::COL_MATURITY_DATE => 5, PaymentTableMap::COL_CANCELED => 6, PaymentTableMap::COL_RECIEVED => 7, PaymentTableMap::COL_AMOUNT_RECIEVED => 8, ),
+        self::TYPE_FIELDNAME     => array('paymentid' => 0, 'payment_typeid' => 1, 'invoiceid' => 2, 'created' => 3, 'amount' => 4, 'maturity_date' => 5, 'canceled' => 6, 'recieved' => 7, 'amount_recieved' => 8, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -166,6 +171,7 @@ class PaymentTableMap extends TableMap
         $this->addForeignKey('invoiceid', 'Invoiceid', 'INTEGER', 'invoice', 'invoiceid', true, null, null);
         $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
         $this->addColumn('amount', 'Amount', 'DECIMAL', true, 7, null);
+        $this->addColumn('maturity_date', 'MaturityDate', 'TIMESTAMP', true, null, null);
         $this->addColumn('canceled', 'Canceled', 'TIMESTAMP', false, null, null);
         $this->addColumn('recieved', 'Recieved', 'TIMESTAMP', false, null, null);
         $this->addColumn('amount_recieved', 'AmountRecieved', 'DECIMAL', false, 7, null);
@@ -197,6 +203,13 @@ class PaymentTableMap extends TableMap
     1 => ':paymentid',
   ),
 ), null, null, 'PaymentCoupons', false);
+        $this->addRelation('PaymentWarning', '\\API\\Models\\Payment\\PaymentWarning', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':paymentid',
+    1 => ':paymentid',
+  ),
+), null, null, 'PaymentWarnings', false);
         $this->addRelation('Coupon', '\\API\\Models\\Payment\\Coupon', RelationMap::MANY_TO_MANY, array(), null, null, 'Coupons');
     } // buildRelations()
 
@@ -346,6 +359,7 @@ class PaymentTableMap extends TableMap
             $criteria->addSelectColumn(PaymentTableMap::COL_INVOICEID);
             $criteria->addSelectColumn(PaymentTableMap::COL_CREATED);
             $criteria->addSelectColumn(PaymentTableMap::COL_AMOUNT);
+            $criteria->addSelectColumn(PaymentTableMap::COL_MATURITY_DATE);
             $criteria->addSelectColumn(PaymentTableMap::COL_CANCELED);
             $criteria->addSelectColumn(PaymentTableMap::COL_RECIEVED);
             $criteria->addSelectColumn(PaymentTableMap::COL_AMOUNT_RECIEVED);
@@ -355,6 +369,7 @@ class PaymentTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.invoiceid');
             $criteria->addSelectColumn($alias . '.created');
             $criteria->addSelectColumn($alias . '.amount');
+            $criteria->addSelectColumn($alias . '.maturity_date');
             $criteria->addSelectColumn($alias . '.canceled');
             $criteria->addSelectColumn($alias . '.recieved');
             $criteria->addSelectColumn($alias . '.amount_recieved');

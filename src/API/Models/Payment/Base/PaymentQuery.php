@@ -26,6 +26,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPaymentQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
  * @method     ChildPaymentQuery orderByCreated($order = Criteria::ASC) Order by the created column
  * @method     ChildPaymentQuery orderByAmount($order = Criteria::ASC) Order by the amount column
+ * @method     ChildPaymentQuery orderByMaturityDate($order = Criteria::ASC) Order by the maturity_date column
  * @method     ChildPaymentQuery orderByCanceled($order = Criteria::ASC) Order by the canceled column
  * @method     ChildPaymentQuery orderByRecieved($order = Criteria::ASC) Order by the recieved column
  * @method     ChildPaymentQuery orderByAmountRecieved($order = Criteria::ASC) Order by the amount_recieved column
@@ -35,6 +36,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPaymentQuery groupByInvoiceid() Group by the invoiceid column
  * @method     ChildPaymentQuery groupByCreated() Group by the created column
  * @method     ChildPaymentQuery groupByAmount() Group by the amount column
+ * @method     ChildPaymentQuery groupByMaturityDate() Group by the maturity_date column
  * @method     ChildPaymentQuery groupByCanceled() Group by the canceled column
  * @method     ChildPaymentQuery groupByRecieved() Group by the recieved column
  * @method     ChildPaymentQuery groupByAmountRecieved() Group by the amount_recieved column
@@ -77,7 +79,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPaymentQuery rightJoinWithPaymentCoupon() Adds a RIGHT JOIN clause and with to the query using the PaymentCoupon relation
  * @method     ChildPaymentQuery innerJoinWithPaymentCoupon() Adds a INNER JOIN clause and with to the query using the PaymentCoupon relation
  *
- * @method     \API\Models\Invoice\InvoiceQuery|\API\Models\Payment\PaymentTypeQuery|\API\Models\Payment\PaymentCouponQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildPaymentQuery leftJoinPaymentWarning($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentWarning relation
+ * @method     ChildPaymentQuery rightJoinPaymentWarning($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentWarning relation
+ * @method     ChildPaymentQuery innerJoinPaymentWarning($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentWarning relation
+ *
+ * @method     ChildPaymentQuery joinWithPaymentWarning($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentWarning relation
+ *
+ * @method     ChildPaymentQuery leftJoinWithPaymentWarning() Adds a LEFT JOIN clause and with to the query using the PaymentWarning relation
+ * @method     ChildPaymentQuery rightJoinWithPaymentWarning() Adds a RIGHT JOIN clause and with to the query using the PaymentWarning relation
+ * @method     ChildPaymentQuery innerJoinWithPaymentWarning() Adds a INNER JOIN clause and with to the query using the PaymentWarning relation
+ *
+ * @method     \API\Models\Invoice\InvoiceQuery|\API\Models\Payment\PaymentTypeQuery|\API\Models\Payment\PaymentCouponQuery|\API\Models\Payment\PaymentWarningQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildPayment findOne(ConnectionInterface $con = null) Return the first ChildPayment matching the query
  * @method     ChildPayment findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPayment matching the query, or a new ChildPayment object populated from the query conditions when no match is found
@@ -87,6 +99,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment findOneByInvoiceid(int $invoiceid) Return the first ChildPayment filtered by the invoiceid column
  * @method     ChildPayment findOneByCreated(string $created) Return the first ChildPayment filtered by the created column
  * @method     ChildPayment findOneByAmount(string $amount) Return the first ChildPayment filtered by the amount column
+ * @method     ChildPayment findOneByMaturityDate(string $maturity_date) Return the first ChildPayment filtered by the maturity_date column
  * @method     ChildPayment findOneByCanceled(string $canceled) Return the first ChildPayment filtered by the canceled column
  * @method     ChildPayment findOneByRecieved(string $recieved) Return the first ChildPayment filtered by the recieved column
  * @method     ChildPayment findOneByAmountRecieved(string $amount_recieved) Return the first ChildPayment filtered by the amount_recieved column *
@@ -99,6 +112,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment requireOneByInvoiceid(int $invoiceid) Return the first ChildPayment filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByCreated(string $created) Return the first ChildPayment filtered by the created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByAmount(string $amount) Return the first ChildPayment filtered by the amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPayment requireOneByMaturityDate(string $maturity_date) Return the first ChildPayment filtered by the maturity_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByCanceled(string $canceled) Return the first ChildPayment filtered by the canceled column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByRecieved(string $recieved) Return the first ChildPayment filtered by the recieved column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByAmountRecieved(string $amount_recieved) Return the first ChildPayment filtered by the amount_recieved column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -109,6 +123,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildPayment objects filtered by the invoiceid column
  * @method     ChildPayment[]|ObjectCollection findByCreated(string $created) Return ChildPayment objects filtered by the created column
  * @method     ChildPayment[]|ObjectCollection findByAmount(string $amount) Return ChildPayment objects filtered by the amount column
+ * @method     ChildPayment[]|ObjectCollection findByMaturityDate(string $maturity_date) Return ChildPayment objects filtered by the maturity_date column
  * @method     ChildPayment[]|ObjectCollection findByCanceled(string $canceled) Return ChildPayment objects filtered by the canceled column
  * @method     ChildPayment[]|ObjectCollection findByRecieved(string $recieved) Return ChildPayment objects filtered by the recieved column
  * @method     ChildPayment[]|ObjectCollection findByAmountRecieved(string $amount_recieved) Return ChildPayment objects filtered by the amount_recieved column
@@ -210,7 +225,7 @@ abstract class PaymentQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT paymentid, payment_typeid, invoiceid, created, amount, canceled, recieved, amount_recieved FROM payment WHERE paymentid = :p0';
+        $sql = 'SELECT paymentid, payment_typeid, invoiceid, created, amount, maturity_date, canceled, recieved, amount_recieved FROM payment WHERE paymentid = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -509,6 +524,49 @@ abstract class PaymentQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(PaymentTableMap::COL_AMOUNT, $amount, $comparison);
+    }
+
+    /**
+     * Filter the query on the maturity_date column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByMaturityDate('2011-03-14'); // WHERE maturity_date = '2011-03-14'
+     * $query->filterByMaturityDate('now'); // WHERE maturity_date = '2011-03-14'
+     * $query->filterByMaturityDate(array('max' => 'yesterday')); // WHERE maturity_date > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $maturityDate The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     */
+    public function filterByMaturityDate($maturityDate = null, $comparison = null)
+    {
+        if (is_array($maturityDate)) {
+            $useMinMax = false;
+            if (isset($maturityDate['min'])) {
+                $this->addUsingAlias(PaymentTableMap::COL_MATURITY_DATE, $maturityDate['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($maturityDate['max'])) {
+                $this->addUsingAlias(PaymentTableMap::COL_MATURITY_DATE, $maturityDate['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(PaymentTableMap::COL_MATURITY_DATE, $maturityDate, $comparison);
     }
 
     /**
@@ -863,6 +921,79 @@ abstract class PaymentQuery extends ModelCriteria
         return $this
             ->joinPaymentCoupon($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'PaymentCoupon', '\API\Models\Payment\PaymentCouponQuery');
+    }
+
+    /**
+     * Filter the query by a related \API\Models\Payment\PaymentWarning object
+     *
+     * @param \API\Models\Payment\PaymentWarning|ObjectCollection $paymentWarning the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildPaymentQuery The current query, for fluid interface
+     */
+    public function filterByPaymentWarning($paymentWarning, $comparison = null)
+    {
+        if ($paymentWarning instanceof \API\Models\Payment\PaymentWarning) {
+            return $this
+                ->addUsingAlias(PaymentTableMap::COL_PAYMENTID, $paymentWarning->getPaymentid(), $comparison);
+        } elseif ($paymentWarning instanceof ObjectCollection) {
+            return $this
+                ->usePaymentWarningQuery()
+                ->filterByPrimaryKeys($paymentWarning->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByPaymentWarning() only accepts arguments of type \API\Models\Payment\PaymentWarning or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the PaymentWarning relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildPaymentQuery The current query, for fluid interface
+     */
+    public function joinPaymentWarning($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('PaymentWarning');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'PaymentWarning');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the PaymentWarning relation PaymentWarning object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\Payment\PaymentWarningQuery A secondary query class using the current class as primary query
+     */
+    public function usePaymentWarningQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinPaymentWarning($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'PaymentWarning', '\API\Models\Payment\PaymentWarningQuery');
     }
 
     /**

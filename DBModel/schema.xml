@@ -41,11 +41,15 @@
     <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="title" phpName="Title" type="VARCHAR" size="32" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="128" required="true"/>
+    <column name="contact_person" phpName="ContactPerson" type="VARCHAR" size="128"/>
     <column name="address" phpName="Address" type="VARCHAR" size="128" required="true"/>
     <column name="address2" phpName="Address2" type="VARCHAR" size="128"/>
     <column name="city" phpName="City" type="VARCHAR" size="64" required="true"/>
     <column name="zip" phpName="Zip" type="VARCHAR" size="10" required="true"/>
     <column name="tax_identification_nr" phpName="TaxIdentificationNr" type="VARCHAR" size="32"/>
+    <column name="telephon" phpName="Telephon" type="VARCHAR" size="32"/>
+    <column name="fax" phpName="Fax" type="VARCHAR" size="32"/>
+    <column name="email" phpName="Email" type="VARCHAR" size="254"/>
     <column name="active" phpName="Active" type="BOOLEAN" size="1" required="true"/>
     <foreign-key foreignTable="event" name="fk_customer_event1">
       <reference local="eventid" foreign="eventid"/>
@@ -675,6 +679,7 @@
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" required="true"/>
     <column name="created" phpName="Created" type="TIMESTAMP" required="true"/>
     <column name="amount" phpName="Amount" type="DECIMAL" size="7" scale="2" required="true"/>
+    <column name="maturity_date" phpName="MaturityDate" type="TIMESTAMP" required="true"/>
     <column name="canceled" phpName="Canceled" type="TIMESTAMP"/>
     <column name="recieved" phpName="Recieved" type="TIMESTAMP"/>
     <column name="amount_recieved" phpName="AmountRecieved" type="DECIMAL" size="7" scale="2"/>
@@ -725,6 +730,50 @@
     <column name="name" phpName="Name" type="VARCHAR" size="24" required="true"/>
     <unique name="idpayment_typeid_UNIQUE">
       <unique-column name="payment_typeid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="payment_warning" idMethod="native" phpName="PaymentWarning" namespace="API\Models\Payment">
+    <column name="payment_warningid" phpName="PaymentWarningid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="paymentid" phpName="Paymentid" type="INTEGER" required="true"/>
+    <column name="payment_warning_typeid" phpName="PaymentWarningTypeid" type="INTEGER" required="true"/>
+    <column name="warning_date" phpName="WarningDate" type="TIMESTAMP" required="true"/>
+    <column name="maturity_date" phpName="MaturityDate" type="TIMESTAMP" required="true"/>
+    <column name="warning_value" phpName="WarningValue" type="DECIMAL" size="7" scale="2" required="true"/>
+    <foreign-key foreignTable="payment" name="fk_payment_warning_payment1">
+      <reference local="paymentid" foreign="paymentid"/>
+    </foreign-key>
+    <foreign-key foreignTable="payment_warning_type" name="fk_payment_warning_payment_warning_type1">
+      <reference local="payment_warning_typeid" foreign="payment_warning_typeid"/>
+    </foreign-key>
+    <index name="fk_payment_warning_payment1_idx">
+      <index-column name="paymentid"/>
+    </index>
+    <index name="fk_payment_warning_payment_warning_type1_idx">
+      <index-column name="payment_warning_typeid"/>
+    </index>
+    <unique name="payment_warningid_UNIQUE">
+      <unique-column name="payment_warningid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="payment_warning_type" idMethod="native" phpName="PaymentWarningType" namespace="API\Models\Payment">
+    <column name="payment_warning_typeid" phpName="PaymentWarningTypeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
+    <column name="extra_price" phpName="ExtraPrice" type="DECIMAL" size="7" scale="2" required="true"/>
+    <foreign-key foreignTable="event" name="fk_payment_warning_type_event1">
+      <reference local="eventid" foreign="eventid"/>
+    </foreign-key>
+    <index name="fk_payment_warning_type_event1_idx">
+      <index-column name="eventid"/>
+    </index>
+    <unique name="payment_warning_typeid_UNIQUE">
+      <unique-column name="payment_warning_typeid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>

@@ -14,6 +14,7 @@ use API\Models\Menu\MenuExtra;
 use API\Models\Menu\MenuSize;
 use API\Models\Menu\MenuType;
 use API\Models\Payment\Coupon;
+use API\Models\Payment\PaymentWarningType;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -145,7 +146,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery rightJoinWithMenuType() Adds a RIGHT JOIN clause and with to the query using the MenuType relation
  * @method     ChildEventQuery innerJoinWithMenuType() Adds a INNER JOIN clause and with to the query using the MenuType relation
  *
- * @method     \API\Models\Payment\CouponQuery|\API\Models\Invoice\CustomerQuery|\API\Models\DistributionPlace\DistributionPlaceQuery|\API\Models\Event\EventPrinterQuery|\API\Models\Event\EventTableQuery|\API\Models\Event\EventUserQuery|\API\Models\Invoice\InvoiceQuery|\API\Models\Menu\MenuExtraQuery|\API\Models\Menu\MenuSizeQuery|\API\Models\Menu\MenuTypeQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildEventQuery leftJoinPaymentWarningType($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentWarningType relation
+ * @method     ChildEventQuery rightJoinPaymentWarningType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentWarningType relation
+ * @method     ChildEventQuery innerJoinPaymentWarningType($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentWarningType relation
+ *
+ * @method     ChildEventQuery joinWithPaymentWarningType($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentWarningType relation
+ *
+ * @method     ChildEventQuery leftJoinWithPaymentWarningType() Adds a LEFT JOIN clause and with to the query using the PaymentWarningType relation
+ * @method     ChildEventQuery rightJoinWithPaymentWarningType() Adds a RIGHT JOIN clause and with to the query using the PaymentWarningType relation
+ * @method     ChildEventQuery innerJoinWithPaymentWarningType() Adds a INNER JOIN clause and with to the query using the PaymentWarningType relation
+ *
+ * @method     \API\Models\Payment\CouponQuery|\API\Models\Invoice\CustomerQuery|\API\Models\DistributionPlace\DistributionPlaceQuery|\API\Models\Event\EventPrinterQuery|\API\Models\Event\EventTableQuery|\API\Models\Event\EventUserQuery|\API\Models\Invoice\InvoiceQuery|\API\Models\Menu\MenuExtraQuery|\API\Models\Menu\MenuSizeQuery|\API\Models\Menu\MenuTypeQuery|\API\Models\Payment\PaymentWarningTypeQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildEvent findOne(ConnectionInterface $con = null) Return the first ChildEvent matching the query
  * @method     ChildEvent findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEvent matching the query, or a new ChildEvent object populated from the query conditions when no match is found
@@ -1220,6 +1231,79 @@ abstract class EventQuery extends ModelCriteria
         return $this
             ->joinMenuType($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'MenuType', '\API\Models\Menu\MenuTypeQuery');
+    }
+
+    /**
+     * Filter the query by a related \API\Models\Payment\PaymentWarningType object
+     *
+     * @param \API\Models\Payment\PaymentWarningType|ObjectCollection $paymentWarningType the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildEventQuery The current query, for fluid interface
+     */
+    public function filterByPaymentWarningType($paymentWarningType, $comparison = null)
+    {
+        if ($paymentWarningType instanceof \API\Models\Payment\PaymentWarningType) {
+            return $this
+                ->addUsingAlias(EventTableMap::COL_EVENTID, $paymentWarningType->getEventid(), $comparison);
+        } elseif ($paymentWarningType instanceof ObjectCollection) {
+            return $this
+                ->usePaymentWarningTypeQuery()
+                ->filterByPrimaryKeys($paymentWarningType->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByPaymentWarningType() only accepts arguments of type \API\Models\Payment\PaymentWarningType or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the PaymentWarningType relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildEventQuery The current query, for fluid interface
+     */
+    public function joinPaymentWarningType($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('PaymentWarningType');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'PaymentWarningType');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the PaymentWarningType relation PaymentWarningType object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\Payment\PaymentWarningTypeQuery A secondary query class using the current class as primary query
+     */
+    public function usePaymentWarningTypeQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinPaymentWarningType($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'PaymentWarningType', '\API\Models\Payment\PaymentWarningTypeQuery');
     }
 
     /**

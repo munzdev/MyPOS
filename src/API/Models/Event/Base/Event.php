@@ -43,8 +43,12 @@ use API\Models\Menu\Map\MenuSizeTableMap;
 use API\Models\Menu\Map\MenuTypeTableMap;
 use API\Models\Payment\Coupon;
 use API\Models\Payment\CouponQuery;
+use API\Models\Payment\PaymentWarningType;
+use API\Models\Payment\PaymentWarningTypeQuery;
 use API\Models\Payment\Base\Coupon as BaseCoupon;
+use API\Models\Payment\Base\PaymentWarningType as BasePaymentWarningType;
 use API\Models\Payment\Map\CouponTableMap;
+use API\Models\Payment\Map\PaymentWarningTypeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -189,6 +193,12 @@ abstract class Event implements ActiveRecordInterface
     protected $collMenuTypesPartial;
 
     /**
+     * @var        ObjectCollection|PaymentWarningType[] Collection to store aggregation of PaymentWarningType objects.
+     */
+    protected $collPaymentWarningTypes;
+    protected $collPaymentWarningTypesPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -255,6 +265,12 @@ abstract class Event implements ActiveRecordInterface
      * @var ObjectCollection|MenuType[]
      */
     protected $menuTypesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|PaymentWarningType[]
+     */
+    protected $paymentWarningTypesScheduledForDeletion = null;
 
     /**
      * Initializes internal state of API\Models\Event\Base\Event object.
@@ -768,6 +784,8 @@ abstract class Event implements ActiveRecordInterface
 
             $this->collMenuTypes = null;
 
+            $this->collPaymentWarningTypes = null;
+
         } // if (deep)
     }
 
@@ -1042,6 +1060,23 @@ abstract class Event implements ActiveRecordInterface
 
             if ($this->collMenuTypes !== null) {
                 foreach ($this->collMenuTypes as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->paymentWarningTypesScheduledForDeletion !== null) {
+                if (!$this->paymentWarningTypesScheduledForDeletion->isEmpty()) {
+                    \API\Models\Payment\PaymentWarningTypeQuery::create()
+                        ->filterByPrimaryKeys($this->paymentWarningTypesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->paymentWarningTypesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPaymentWarningTypes !== null) {
+                foreach ($this->collPaymentWarningTypes as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1378,6 +1413,21 @@ abstract class Event implements ActiveRecordInterface
 
                 $result[$key] = $this->collMenuTypes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collPaymentWarningTypes) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'paymentWarningTypes';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'payment_warning_types';
+                        break;
+                    default:
+                        $key = 'PaymentWarningTypes';
+                }
+
+                $result[$key] = $this->collPaymentWarningTypes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
         }
 
         return $result;
@@ -1670,6 +1720,12 @@ abstract class Event implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getPaymentWarningTypes() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPaymentWarningType($relObj->copy($deepCopy));
+                }
+            }
+
         } // if ($deepCopy)
 
         if ($makeNew) {
@@ -1740,6 +1796,9 @@ abstract class Event implements ActiveRecordInterface
         }
         if ('MenuType' == $relationName) {
             return $this->initMenuTypes();
+        }
+        if ('PaymentWarningType' == $relationName) {
+            return $this->initPaymentWarningTypes();
         }
     }
 
@@ -4119,6 +4178,231 @@ abstract class Event implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collPaymentWarningTypes collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addPaymentWarningTypes()
+     */
+    public function clearPaymentWarningTypes()
+    {
+        $this->collPaymentWarningTypes = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collPaymentWarningTypes collection loaded partially.
+     */
+    public function resetPartialPaymentWarningTypes($v = true)
+    {
+        $this->collPaymentWarningTypesPartial = $v;
+    }
+
+    /**
+     * Initializes the collPaymentWarningTypes collection.
+     *
+     * By default this just sets the collPaymentWarningTypes collection to an empty array (like clearcollPaymentWarningTypes());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initPaymentWarningTypes($overrideExisting = true)
+    {
+        if (null !== $this->collPaymentWarningTypes && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = PaymentWarningTypeTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collPaymentWarningTypes = new $collectionClassName;
+        $this->collPaymentWarningTypes->setModel('\API\Models\Payment\PaymentWarningType');
+    }
+
+    /**
+     * Gets an array of PaymentWarningType objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildEvent is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|PaymentWarningType[] List of PaymentWarningType objects
+     * @throws PropelException
+     */
+    public function getPaymentWarningTypes(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPaymentWarningTypesPartial && !$this->isNew();
+        if (null === $this->collPaymentWarningTypes || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPaymentWarningTypes) {
+                // return empty collection
+                $this->initPaymentWarningTypes();
+            } else {
+                $collPaymentWarningTypes = PaymentWarningTypeQuery::create(null, $criteria)
+                    ->filterByEvent($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collPaymentWarningTypesPartial && count($collPaymentWarningTypes)) {
+                        $this->initPaymentWarningTypes(false);
+
+                        foreach ($collPaymentWarningTypes as $obj) {
+                            if (false == $this->collPaymentWarningTypes->contains($obj)) {
+                                $this->collPaymentWarningTypes->append($obj);
+                            }
+                        }
+
+                        $this->collPaymentWarningTypesPartial = true;
+                    }
+
+                    return $collPaymentWarningTypes;
+                }
+
+                if ($partial && $this->collPaymentWarningTypes) {
+                    foreach ($this->collPaymentWarningTypes as $obj) {
+                        if ($obj->isNew()) {
+                            $collPaymentWarningTypes[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPaymentWarningTypes = $collPaymentWarningTypes;
+                $this->collPaymentWarningTypesPartial = false;
+            }
+        }
+
+        return $this->collPaymentWarningTypes;
+    }
+
+    /**
+     * Sets a collection of PaymentWarningType objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $paymentWarningTypes A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildEvent The current object (for fluent API support)
+     */
+    public function setPaymentWarningTypes(Collection $paymentWarningTypes, ConnectionInterface $con = null)
+    {
+        /** @var PaymentWarningType[] $paymentWarningTypesToDelete */
+        $paymentWarningTypesToDelete = $this->getPaymentWarningTypes(new Criteria(), $con)->diff($paymentWarningTypes);
+
+
+        $this->paymentWarningTypesScheduledForDeletion = $paymentWarningTypesToDelete;
+
+        foreach ($paymentWarningTypesToDelete as $paymentWarningTypeRemoved) {
+            $paymentWarningTypeRemoved->setEvent(null);
+        }
+
+        $this->collPaymentWarningTypes = null;
+        foreach ($paymentWarningTypes as $paymentWarningType) {
+            $this->addPaymentWarningType($paymentWarningType);
+        }
+
+        $this->collPaymentWarningTypes = $paymentWarningTypes;
+        $this->collPaymentWarningTypesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related BasePaymentWarningType objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related BasePaymentWarningType objects.
+     * @throws PropelException
+     */
+    public function countPaymentWarningTypes(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPaymentWarningTypesPartial && !$this->isNew();
+        if (null === $this->collPaymentWarningTypes || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPaymentWarningTypes) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getPaymentWarningTypes());
+            }
+
+            $query = PaymentWarningTypeQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEvent($this)
+                ->count($con);
+        }
+
+        return count($this->collPaymentWarningTypes);
+    }
+
+    /**
+     * Method called to associate a PaymentWarningType object to this object
+     * through the PaymentWarningType foreign key attribute.
+     *
+     * @param  PaymentWarningType $l PaymentWarningType
+     * @return $this|\API\Models\Event\Event The current object (for fluent API support)
+     */
+    public function addPaymentWarningType(PaymentWarningType $l)
+    {
+        if ($this->collPaymentWarningTypes === null) {
+            $this->initPaymentWarningTypes();
+            $this->collPaymentWarningTypesPartial = true;
+        }
+
+        if (!$this->collPaymentWarningTypes->contains($l)) {
+            $this->doAddPaymentWarningType($l);
+
+            if ($this->paymentWarningTypesScheduledForDeletion and $this->paymentWarningTypesScheduledForDeletion->contains($l)) {
+                $this->paymentWarningTypesScheduledForDeletion->remove($this->paymentWarningTypesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param PaymentWarningType $paymentWarningType The PaymentWarningType object to add.
+     */
+    protected function doAddPaymentWarningType(PaymentWarningType $paymentWarningType)
+    {
+        $this->collPaymentWarningTypes[]= $paymentWarningType;
+        $paymentWarningType->setEvent($this);
+    }
+
+    /**
+     * @param  PaymentWarningType $paymentWarningType The PaymentWarningType object to remove.
+     * @return $this|ChildEvent The current object (for fluent API support)
+     */
+    public function removePaymentWarningType(PaymentWarningType $paymentWarningType)
+    {
+        if ($this->getPaymentWarningTypes()->contains($paymentWarningType)) {
+            $pos = $this->collPaymentWarningTypes->search($paymentWarningType);
+            $this->collPaymentWarningTypes->remove($pos);
+            if (null === $this->paymentWarningTypesScheduledForDeletion) {
+                $this->paymentWarningTypesScheduledForDeletion = clone $this->collPaymentWarningTypes;
+                $this->paymentWarningTypesScheduledForDeletion->clear();
+            }
+            $this->paymentWarningTypesScheduledForDeletion[]= clone $paymentWarningType;
+            $paymentWarningType->setEvent(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -4197,6 +4481,11 @@ abstract class Event implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collPaymentWarningTypes) {
+                foreach ($this->collPaymentWarningTypes as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collCoupons = null;
@@ -4209,6 +4498,7 @@ abstract class Event implements ActiveRecordInterface
         $this->collMenuExtras = null;
         $this->collMenuSizes = null;
         $this->collMenuTypes = null;
+        $this->collPaymentWarningTypes = null;
     }
 
     /**

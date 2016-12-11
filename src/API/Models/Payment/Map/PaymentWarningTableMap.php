@@ -1,9 +1,9 @@
 <?php
 
-namespace API\Models\Event\Map;
+namespace API\Models\Payment\Map;
 
-use API\Models\Event\Event;
-use API\Models\Event\EventQuery;
+use API\Models\Payment\PaymentWarning;
+use API\Models\Payment\PaymentWarningQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'event' table.
+ * This class defines the structure of the 'payment_warning' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class EventTableMap extends TableMap
+class PaymentWarningTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class EventTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'API.Models.Event.Map.EventTableMap';
+    const CLASS_NAME = 'API.Models.Payment.Map.PaymentWarningTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class EventTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'event';
+    const TABLE_NAME = 'payment_warning';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\API\\Models\\Event\\Event';
+    const OM_CLASS = '\\API\\Models\\Payment\\PaymentWarning';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'API.Models.Event.Event';
+    const CLASS_DEFAULT = 'API.Models.Payment.PaymentWarning';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -69,27 +69,37 @@ class EventTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
-     * the column name for the eventid field
+     * the column name for the payment_warningid field
      */
-    const COL_EVENTID = 'event.eventid';
+    const COL_PAYMENT_WARNINGID = 'payment_warning.payment_warningid';
 
     /**
-     * the column name for the name field
+     * the column name for the paymentid field
      */
-    const COL_NAME = 'event.name';
+    const COL_PAYMENTID = 'payment_warning.paymentid';
 
     /**
-     * the column name for the date field
+     * the column name for the payment_warning_typeid field
      */
-    const COL_DATE = 'event.date';
+    const COL_PAYMENT_WARNING_TYPEID = 'payment_warning.payment_warning_typeid';
 
     /**
-     * the column name for the active field
+     * the column name for the warning_date field
      */
-    const COL_ACTIVE = 'event.active';
+    const COL_WARNING_DATE = 'payment_warning.warning_date';
+
+    /**
+     * the column name for the maturity_date field
+     */
+    const COL_MATURITY_DATE = 'payment_warning.maturity_date';
+
+    /**
+     * the column name for the warning_value field
+     */
+    const COL_WARNING_VALUE = 'payment_warning.warning_value';
 
     /**
      * The default string format for model objects of the related table
@@ -103,11 +113,11 @@ class EventTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Eventid', 'Name', 'Date', 'Active', ),
-        self::TYPE_CAMELNAME     => array('eventid', 'name', 'date', 'active', ),
-        self::TYPE_COLNAME       => array(EventTableMap::COL_EVENTID, EventTableMap::COL_NAME, EventTableMap::COL_DATE, EventTableMap::COL_ACTIVE, ),
-        self::TYPE_FIELDNAME     => array('eventid', 'name', 'date', 'active', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('PaymentWarningid', 'Paymentid', 'PaymentWarningTypeid', 'WarningDate', 'MaturityDate', 'WarningValue', ),
+        self::TYPE_CAMELNAME     => array('paymentWarningid', 'paymentid', 'paymentWarningTypeid', 'warningDate', 'maturityDate', 'warningValue', ),
+        self::TYPE_COLNAME       => array(PaymentWarningTableMap::COL_PAYMENT_WARNINGID, PaymentWarningTableMap::COL_PAYMENTID, PaymentWarningTableMap::COL_PAYMENT_WARNING_TYPEID, PaymentWarningTableMap::COL_WARNING_DATE, PaymentWarningTableMap::COL_MATURITY_DATE, PaymentWarningTableMap::COL_WARNING_VALUE, ),
+        self::TYPE_FIELDNAME     => array('payment_warningid', 'paymentid', 'payment_warning_typeid', 'warning_date', 'maturity_date', 'warning_value', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -117,11 +127,11 @@ class EventTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Eventid' => 0, 'Name' => 1, 'Date' => 2, 'Active' => 3, ),
-        self::TYPE_CAMELNAME     => array('eventid' => 0, 'name' => 1, 'date' => 2, 'active' => 3, ),
-        self::TYPE_COLNAME       => array(EventTableMap::COL_EVENTID => 0, EventTableMap::COL_NAME => 1, EventTableMap::COL_DATE => 2, EventTableMap::COL_ACTIVE => 3, ),
-        self::TYPE_FIELDNAME     => array('eventid' => 0, 'name' => 1, 'date' => 2, 'active' => 3, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('PaymentWarningid' => 0, 'Paymentid' => 1, 'PaymentWarningTypeid' => 2, 'WarningDate' => 3, 'MaturityDate' => 4, 'WarningValue' => 5, ),
+        self::TYPE_CAMELNAME     => array('paymentWarningid' => 0, 'paymentid' => 1, 'paymentWarningTypeid' => 2, 'warningDate' => 3, 'maturityDate' => 4, 'warningValue' => 5, ),
+        self::TYPE_COLNAME       => array(PaymentWarningTableMap::COL_PAYMENT_WARNINGID => 0, PaymentWarningTableMap::COL_PAYMENTID => 1, PaymentWarningTableMap::COL_PAYMENT_WARNING_TYPEID => 2, PaymentWarningTableMap::COL_WARNING_DATE => 3, PaymentWarningTableMap::COL_MATURITY_DATE => 4, PaymentWarningTableMap::COL_WARNING_VALUE => 5, ),
+        self::TYPE_FIELDNAME     => array('payment_warningid' => 0, 'paymentid' => 1, 'payment_warning_typeid' => 2, 'warning_date' => 3, 'maturity_date' => 4, 'warning_value' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -134,17 +144,19 @@ class EventTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('event');
-        $this->setPhpName('Event');
+        $this->setName('payment_warning');
+        $this->setPhpName('PaymentWarning');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\API\\Models\\Event\\Event');
-        $this->setPackage('API.Models.Event');
+        $this->setClassName('\\API\\Models\\Payment\\PaymentWarning');
+        $this->setPackage('API.Models.Payment');
         $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('eventid', 'Eventid', 'INTEGER', true, null, null);
-        $this->addColumn('name', 'Name', 'VARCHAR', true, 45, null);
-        $this->addColumn('date', 'Date', 'TIMESTAMP', true, null, null);
-        $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, null);
+        $this->addPrimaryKey('payment_warningid', 'PaymentWarningid', 'INTEGER', true, null, null);
+        $this->addForeignKey('paymentid', 'Paymentid', 'INTEGER', 'payment', 'paymentid', true, null, null);
+        $this->addForeignKey('payment_warning_typeid', 'PaymentWarningTypeid', 'INTEGER', 'payment_warning_type', 'payment_warning_typeid', true, null, null);
+        $this->addColumn('warning_date', 'WarningDate', 'TIMESTAMP', true, null, null);
+        $this->addColumn('maturity_date', 'MaturityDate', 'TIMESTAMP', true, null, null);
+        $this->addColumn('warning_value', 'WarningValue', 'DECIMAL', true, 7, null);
     } // initialize()
 
     /**
@@ -152,83 +164,20 @@ class EventTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Coupon', '\\API\\Models\\Payment\\Coupon', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('Payment', '\\API\\Models\\Payment\\Payment', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':eventid',
-    1 => ':eventid',
+    0 => ':paymentid',
+    1 => ':paymentid',
   ),
-), null, null, 'Coupons', false);
-        $this->addRelation('Customer', '\\API\\Models\\Invoice\\Customer', RelationMap::ONE_TO_MANY, array (
+), null, null, null, false);
+        $this->addRelation('PaymentWarningType', '\\API\\Models\\Payment\\PaymentWarningType', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':eventid',
-    1 => ':eventid',
+    0 => ':payment_warning_typeid',
+    1 => ':payment_warning_typeid',
   ),
-), null, null, 'Customers', false);
-        $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'DistributionPlaces', false);
-        $this->addRelation('EventPrinter', '\\API\\Models\\Event\\EventPrinter', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'EventPrinters', false);
-        $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'EventTables', false);
-        $this->addRelation('EventUser', '\\API\\Models\\Event\\EventUser', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'EventUsers', false);
-        $this->addRelation('Invoice', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'Invoices', false);
-        $this->addRelation('MenuExtra', '\\API\\Models\\Menu\\MenuExtra', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'MenuExtras', false);
-        $this->addRelation('MenuSize', '\\API\\Models\\Menu\\MenuSize', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'MenuSizes', false);
-        $this->addRelation('MenuType', '\\API\\Models\\Menu\\MenuType', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'MenuTypes', false);
-        $this->addRelation('PaymentWarningType', '\\API\\Models\\Payment\\PaymentWarningType', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'PaymentWarningTypes', false);
+), null, null, null, false);
     } // buildRelations()
 
     /**
@@ -247,11 +196,11 @@ class EventTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PaymentWarningid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)];
+        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PaymentWarningid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PaymentWarningid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PaymentWarningid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PaymentWarningid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('PaymentWarningid', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -271,7 +220,7 @@ class EventTableMap extends TableMap
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
-                : self::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('PaymentWarningid', TableMap::TYPE_PHPNAME, $indexType)
         ];
     }
 
@@ -288,7 +237,7 @@ class EventTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? EventTableMap::CLASS_DEFAULT : EventTableMap::OM_CLASS;
+        return $withPrefix ? PaymentWarningTableMap::CLASS_DEFAULT : PaymentWarningTableMap::OM_CLASS;
     }
 
     /**
@@ -302,22 +251,22 @@ class EventTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Event object, last column rank)
+     * @return array           (PaymentWarning object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = EventTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = EventTableMap::getInstanceFromPool($key))) {
+        $key = PaymentWarningTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = PaymentWarningTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + EventTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + PaymentWarningTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = EventTableMap::OM_CLASS;
-            /** @var Event $obj */
+            $cls = PaymentWarningTableMap::OM_CLASS;
+            /** @var PaymentWarning $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            EventTableMap::addInstanceToPool($obj, $key);
+            PaymentWarningTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -340,18 +289,18 @@ class EventTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = EventTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = EventTableMap::getInstanceFromPool($key))) {
+            $key = PaymentWarningTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = PaymentWarningTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Event $obj */
+                /** @var PaymentWarning $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                EventTableMap::addInstanceToPool($obj, $key);
+                PaymentWarningTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -372,15 +321,19 @@ class EventTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(EventTableMap::COL_EVENTID);
-            $criteria->addSelectColumn(EventTableMap::COL_NAME);
-            $criteria->addSelectColumn(EventTableMap::COL_DATE);
-            $criteria->addSelectColumn(EventTableMap::COL_ACTIVE);
+            $criteria->addSelectColumn(PaymentWarningTableMap::COL_PAYMENT_WARNINGID);
+            $criteria->addSelectColumn(PaymentWarningTableMap::COL_PAYMENTID);
+            $criteria->addSelectColumn(PaymentWarningTableMap::COL_PAYMENT_WARNING_TYPEID);
+            $criteria->addSelectColumn(PaymentWarningTableMap::COL_WARNING_DATE);
+            $criteria->addSelectColumn(PaymentWarningTableMap::COL_MATURITY_DATE);
+            $criteria->addSelectColumn(PaymentWarningTableMap::COL_WARNING_VALUE);
         } else {
-            $criteria->addSelectColumn($alias . '.eventid');
-            $criteria->addSelectColumn($alias . '.name');
-            $criteria->addSelectColumn($alias . '.date');
-            $criteria->addSelectColumn($alias . '.active');
+            $criteria->addSelectColumn($alias . '.payment_warningid');
+            $criteria->addSelectColumn($alias . '.paymentid');
+            $criteria->addSelectColumn($alias . '.payment_warning_typeid');
+            $criteria->addSelectColumn($alias . '.warning_date');
+            $criteria->addSelectColumn($alias . '.maturity_date');
+            $criteria->addSelectColumn($alias . '.warning_value');
         }
     }
 
@@ -393,7 +346,7 @@ class EventTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(EventTableMap::DATABASE_NAME)->getTable(EventTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(PaymentWarningTableMap::DATABASE_NAME)->getTable(PaymentWarningTableMap::TABLE_NAME);
     }
 
     /**
@@ -401,16 +354,16 @@ class EventTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(EventTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(EventTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new EventTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PaymentWarningTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(PaymentWarningTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new PaymentWarningTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Event or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a PaymentWarning or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Event object or primary key or array of primary keys
+     * @param mixed               $values Criteria or PaymentWarning object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -421,27 +374,27 @@ class EventTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EventTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PaymentWarningTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \API\Models\Event\Event) { // it's a model object
+        } elseif ($values instanceof \API\Models\Payment\PaymentWarning) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(EventTableMap::DATABASE_NAME);
-            $criteria->add(EventTableMap::COL_EVENTID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(PaymentWarningTableMap::DATABASE_NAME);
+            $criteria->add(PaymentWarningTableMap::COL_PAYMENT_WARNINGID, (array) $values, Criteria::IN);
         }
 
-        $query = EventQuery::create()->mergeWith($criteria);
+        $query = PaymentWarningQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            EventTableMap::clearInstancePool();
+            PaymentWarningTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                EventTableMap::removeInstanceFromPool($singleval);
+                PaymentWarningTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -449,20 +402,20 @@ class EventTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the event table.
+     * Deletes all rows from the payment_warning table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return EventQuery::create()->doDeleteAll($con);
+        return PaymentWarningQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Event or Criteria object.
+     * Performs an INSERT on the database, given a PaymentWarning or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Event object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or PaymentWarning object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -471,22 +424,22 @@ class EventTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(EventTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PaymentWarningTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Event object
+            $criteria = $criteria->buildCriteria(); // build Criteria from PaymentWarning object
         }
 
-        if ($criteria->containsKey(EventTableMap::COL_EVENTID) && $criteria->keyContainsValue(EventTableMap::COL_EVENTID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.EventTableMap::COL_EVENTID.')');
+        if ($criteria->containsKey(PaymentWarningTableMap::COL_PAYMENT_WARNINGID) && $criteria->keyContainsValue(PaymentWarningTableMap::COL_PAYMENT_WARNINGID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.PaymentWarningTableMap::COL_PAYMENT_WARNINGID.')');
         }
 
 
         // Set the correct dbName
-        $query = EventQuery::create()->mergeWith($criteria);
+        $query = PaymentWarningQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -495,7 +448,7 @@ class EventTableMap extends TableMap
         });
     }
 
-} // EventTableMap
+} // PaymentWarningTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-EventTableMap::buildTableMap();
+PaymentWarningTableMap::buildTableMap();

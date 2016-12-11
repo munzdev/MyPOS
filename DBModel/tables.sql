@@ -632,15 +632,19 @@ COMMENT = 'Definiert welche tische standartmäßg von wo ihre Menüs erhalten. J
 DROP TABLE IF EXISTS `customer` ;
 
 CREATE TABLE IF NOT EXISTS `customer` (
-  `customerid` INT NOT NULL AUTO_INCREMENT,
+  `customerid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `title` VARCHAR(32) NOT NULL,
   `name` VARCHAR(128) NOT NULL,
+  `contact_person` VARCHAR(128) NULL,
   `address` VARCHAR(128) NOT NULL,
   `address2` VARCHAR(128) NULL,
   `city` VARCHAR(64) NOT NULL,
   `zip` VARCHAR(10) NOT NULL,
   `tax_identification_nr` VARCHAR(32) NULL,
+  `telephon` VARCHAR(32) NULL,
+  `fax` VARCHAR(32) NULL,
+  `email` VARCHAR(254) NULL,
   `active` TINYINT(1) NOT NULL,
   PRIMARY KEY (`customerid`),
   UNIQUE INDEX `customerid_UNIQUE` (`customerid` ASC),
@@ -664,7 +668,7 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   `invoiceid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `cashier_userid` INT(11) NOT NULL,
-  `customerid` INT NULL,
+  `customerid` INT(11) NULL,
   `date` DATETIME NOT NULL,
   `canceled` DATETIME NULL,
   `payment_finished` DATETIME NULL,
@@ -811,7 +815,7 @@ COMMENT = 'Beinhaltet die Kommunikationsnachrichten zwischen den Benutzern für 
 DROP TABLE IF EXISTS `payment_type` ;
 
 CREATE TABLE IF NOT EXISTS `payment_type` (
-  `payment_typeid` INT NOT NULL AUTO_INCREMENT,
+  `payment_typeid` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(24) NOT NULL,
   PRIMARY KEY (`payment_typeid`),
   UNIQUE INDEX `idpayment_typeid_UNIQUE` (`payment_typeid` ASC))
@@ -825,11 +829,12 @@ COMMENT = 'Beinhaltet bezahlarten';
 DROP TABLE IF EXISTS `payment` ;
 
 CREATE TABLE IF NOT EXISTS `payment` (
-  `paymentid` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `payment_typeid` INT NOT NULL,
+  `paymentid` INT(11) NOT NULL AUTO_INCREMENT,
+  `payment_typeid` INT(11) NOT NULL,
   `invoiceid` INT(11) NOT NULL,
   `created` DATETIME NOT NULL,
   `amount` DECIMAL(7,2) NOT NULL,
+  `maturity_date` DATETIME NOT NULL,
   `canceled` DATETIME NULL,
   `recieved` DATETIME NULL,
   `amount_recieved` DECIMAL(7,2) NULL,
@@ -838,6 +843,7 @@ CREATE TABLE IF NOT EXISTS `payment` (
   INDEX `fk_payment_types_has_invoices_payment_types1_idx` (`payment_typeid` ASC),
   INDEX `recieved` (`recieved` ASC),
   INDEX `canceled` (`canceled` ASC),
+  UNIQUE INDEX `paymentid_UNIQUE` (`paymentid` ASC),
   CONSTRAINT `fk_payment_types_has_invoices_payment_types1`
     FOREIGN KEY (`payment_typeid`)
     REFERENCES `payment_type` (`payment_typeid`)
@@ -858,7 +864,7 @@ COMMENT = 'Beinhaltet die Zahlung für eine Rechnung';
 DROP TABLE IF EXISTS `coupon` ;
 
 CREATE TABLE IF NOT EXISTS `coupon` (
-  `couponid` INT NOT NULL AUTO_INCREMENT,
+  `couponid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `created_by_userid` INT(11) NOT NULL,
   `code` VARCHAR(24) NOT NULL,
@@ -868,6 +874,7 @@ CREATE TABLE IF NOT EXISTS `coupon` (
   INDEX `fk_Coupons_events1_idx` (`eventid` ASC),
   INDEX `fk_Coupons_users1_idx` (`created_by_userid` ASC),
   INDEX `code` (`code` ASC),
+  UNIQUE INDEX `couponid_UNIQUE` (`couponid` ASC),
   CONSTRAINT `fk_Coupons_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `event` (`eventid`)
@@ -888,8 +895,8 @@ COMMENT = 'Beinhaltet ausgegebene Gutscheine';
 DROP TABLE IF EXISTS `payment_coupon` ;
 
 CREATE TABLE IF NOT EXISTS `payment_coupon` (
-  `couponid` INT NOT NULL,
-  `paymentid` INT UNSIGNED NOT NULL,
+  `couponid` INT(11) NOT NULL,
+  `paymentid` INT(11) NOT NULL,
   `value_used` DECIMAL(7,2) NOT NULL,
   PRIMARY KEY (`couponid`, `paymentid`),
   INDEX `fk_Coupons_has_payments_payments1_idx` (`paymentid` ASC),
@@ -906,6 +913,56 @@ CREATE TABLE IF NOT EXISTS `payment_coupon` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 COMMENT = 'Beinhaltet Gutscheine die für eine Bezahlung verwendet wurden';
+
+
+-- -----------------------------------------------------
+-- Table `payment_warning_type`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `payment_warning_type` ;
+
+CREATE TABLE IF NOT EXISTS `payment_warning_type` (
+  `payment_warning_typeid` INT(11) NOT NULL AUTO_INCREMENT,
+  `eventid` INT(11) NOT NULL,
+  `name` VARCHAR(64) NOT NULL,
+  `extra_price` DECIMAL(7,2) NOT NULL,
+  PRIMARY KEY (`payment_warning_typeid`),
+  INDEX `fk_payment_warning_type_event1_idx` (`eventid` ASC),
+  UNIQUE INDEX `payment_warning_typeid_UNIQUE` (`payment_warning_typeid` ASC),
+  CONSTRAINT `fk_payment_warning_type_event1`
+    FOREIGN KEY (`eventid`)
+    REFERENCES `event` (`eventid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `payment_warning`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `payment_warning` ;
+
+CREATE TABLE IF NOT EXISTS `payment_warning` (
+  `payment_warningid` INT(11) NOT NULL AUTO_INCREMENT,
+  `paymentid` INT(11) NOT NULL,
+  `payment_warning_typeid` INT(11) NOT NULL,
+  `warning_date` DATETIME NOT NULL,
+  `maturity_date` DATETIME NOT NULL,
+  `warning_value` DECIMAL(7,2) NOT NULL,
+  PRIMARY KEY (`payment_warningid`),
+  INDEX `fk_payment_warning_payment1_idx` (`paymentid` ASC),
+  INDEX `fk_payment_warning_payment_warning_type1_idx` (`payment_warning_typeid` ASC),
+  UNIQUE INDEX `payment_warningid_UNIQUE` (`payment_warningid` ASC),
+  CONSTRAINT `fk_payment_warning_payment1`
+    FOREIGN KEY (`paymentid`)
+    REFERENCES `payment` (`paymentid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_payment_warning_payment_warning_type1`
+    FOREIGN KEY (`payment_warning_typeid`)
+    REFERENCES `payment_warning_type` (`payment_warning_typeid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------

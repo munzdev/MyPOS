@@ -25,22 +25,30 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomerQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
  * @method     ChildCustomerQuery orderByTitle($order = Criteria::ASC) Order by the title column
  * @method     ChildCustomerQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     ChildCustomerQuery orderByContactPerson($order = Criteria::ASC) Order by the contact_person column
  * @method     ChildCustomerQuery orderByAddress($order = Criteria::ASC) Order by the address column
  * @method     ChildCustomerQuery orderByAddress2($order = Criteria::ASC) Order by the address2 column
  * @method     ChildCustomerQuery orderByCity($order = Criteria::ASC) Order by the city column
  * @method     ChildCustomerQuery orderByZip($order = Criteria::ASC) Order by the zip column
  * @method     ChildCustomerQuery orderByTaxIdentificationNr($order = Criteria::ASC) Order by the tax_identification_nr column
+ * @method     ChildCustomerQuery orderByTelephon($order = Criteria::ASC) Order by the telephon column
+ * @method     ChildCustomerQuery orderByFax($order = Criteria::ASC) Order by the fax column
+ * @method     ChildCustomerQuery orderByEmail($order = Criteria::ASC) Order by the email column
  * @method     ChildCustomerQuery orderByActive($order = Criteria::ASC) Order by the active column
  *
  * @method     ChildCustomerQuery groupByCustomerid() Group by the customerid column
  * @method     ChildCustomerQuery groupByEventid() Group by the eventid column
  * @method     ChildCustomerQuery groupByTitle() Group by the title column
  * @method     ChildCustomerQuery groupByName() Group by the name column
+ * @method     ChildCustomerQuery groupByContactPerson() Group by the contact_person column
  * @method     ChildCustomerQuery groupByAddress() Group by the address column
  * @method     ChildCustomerQuery groupByAddress2() Group by the address2 column
  * @method     ChildCustomerQuery groupByCity() Group by the city column
  * @method     ChildCustomerQuery groupByZip() Group by the zip column
  * @method     ChildCustomerQuery groupByTaxIdentificationNr() Group by the tax_identification_nr column
+ * @method     ChildCustomerQuery groupByTelephon() Group by the telephon column
+ * @method     ChildCustomerQuery groupByFax() Group by the fax column
+ * @method     ChildCustomerQuery groupByEmail() Group by the email column
  * @method     ChildCustomerQuery groupByActive() Group by the active column
  *
  * @method     ChildCustomerQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -80,11 +88,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomer findOneByEventid(int $eventid) Return the first ChildCustomer filtered by the eventid column
  * @method     ChildCustomer findOneByTitle(string $title) Return the first ChildCustomer filtered by the title column
  * @method     ChildCustomer findOneByName(string $name) Return the first ChildCustomer filtered by the name column
+ * @method     ChildCustomer findOneByContactPerson(string $contact_person) Return the first ChildCustomer filtered by the contact_person column
  * @method     ChildCustomer findOneByAddress(string $address) Return the first ChildCustomer filtered by the address column
  * @method     ChildCustomer findOneByAddress2(string $address2) Return the first ChildCustomer filtered by the address2 column
  * @method     ChildCustomer findOneByCity(string $city) Return the first ChildCustomer filtered by the city column
  * @method     ChildCustomer findOneByZip(string $zip) Return the first ChildCustomer filtered by the zip column
  * @method     ChildCustomer findOneByTaxIdentificationNr(string $tax_identification_nr) Return the first ChildCustomer filtered by the tax_identification_nr column
+ * @method     ChildCustomer findOneByTelephon(string $telephon) Return the first ChildCustomer filtered by the telephon column
+ * @method     ChildCustomer findOneByFax(string $fax) Return the first ChildCustomer filtered by the fax column
+ * @method     ChildCustomer findOneByEmail(string $email) Return the first ChildCustomer filtered by the email column
  * @method     ChildCustomer findOneByActive(boolean $active) Return the first ChildCustomer filtered by the active column *
 
  * @method     ChildCustomer requirePk($key, ConnectionInterface $con = null) Return the ChildCustomer by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -94,11 +106,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomer requireOneByEventid(int $eventid) Return the first ChildCustomer filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByTitle(string $title) Return the first ChildCustomer filtered by the title column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByName(string $name) Return the first ChildCustomer filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCustomer requireOneByContactPerson(string $contact_person) Return the first ChildCustomer filtered by the contact_person column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByAddress(string $address) Return the first ChildCustomer filtered by the address column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByAddress2(string $address2) Return the first ChildCustomer filtered by the address2 column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByCity(string $city) Return the first ChildCustomer filtered by the city column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByZip(string $zip) Return the first ChildCustomer filtered by the zip column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByTaxIdentificationNr(string $tax_identification_nr) Return the first ChildCustomer filtered by the tax_identification_nr column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCustomer requireOneByTelephon(string $telephon) Return the first ChildCustomer filtered by the telephon column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCustomer requireOneByFax(string $fax) Return the first ChildCustomer filtered by the fax column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCustomer requireOneByEmail(string $email) Return the first ChildCustomer filtered by the email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCustomer requireOneByActive(boolean $active) Return the first ChildCustomer filtered by the active column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCustomer[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCustomer objects based on current ModelCriteria
@@ -106,11 +122,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCustomer[]|ObjectCollection findByEventid(int $eventid) Return ChildCustomer objects filtered by the eventid column
  * @method     ChildCustomer[]|ObjectCollection findByTitle(string $title) Return ChildCustomer objects filtered by the title column
  * @method     ChildCustomer[]|ObjectCollection findByName(string $name) Return ChildCustomer objects filtered by the name column
+ * @method     ChildCustomer[]|ObjectCollection findByContactPerson(string $contact_person) Return ChildCustomer objects filtered by the contact_person column
  * @method     ChildCustomer[]|ObjectCollection findByAddress(string $address) Return ChildCustomer objects filtered by the address column
  * @method     ChildCustomer[]|ObjectCollection findByAddress2(string $address2) Return ChildCustomer objects filtered by the address2 column
  * @method     ChildCustomer[]|ObjectCollection findByCity(string $city) Return ChildCustomer objects filtered by the city column
  * @method     ChildCustomer[]|ObjectCollection findByZip(string $zip) Return ChildCustomer objects filtered by the zip column
  * @method     ChildCustomer[]|ObjectCollection findByTaxIdentificationNr(string $tax_identification_nr) Return ChildCustomer objects filtered by the tax_identification_nr column
+ * @method     ChildCustomer[]|ObjectCollection findByTelephon(string $telephon) Return ChildCustomer objects filtered by the telephon column
+ * @method     ChildCustomer[]|ObjectCollection findByFax(string $fax) Return ChildCustomer objects filtered by the fax column
+ * @method     ChildCustomer[]|ObjectCollection findByEmail(string $email) Return ChildCustomer objects filtered by the email column
  * @method     ChildCustomer[]|ObjectCollection findByActive(boolean $active) Return ChildCustomer objects filtered by the active column
  * @method     ChildCustomer[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -210,7 +230,7 @@ abstract class CustomerQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT customerid, eventid, title, name, address, address2, city, zip, tax_identification_nr, active FROM customer WHERE customerid = :p0';
+        $sql = 'SELECT customerid, eventid, title, name, contact_person, address, address2, city, zip, tax_identification_nr, telephon, fax, email, active FROM customer WHERE customerid = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -435,6 +455,31 @@ abstract class CustomerQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the contact_person column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByContactPerson('fooValue');   // WHERE contact_person = 'fooValue'
+     * $query->filterByContactPerson('%fooValue%', Criteria::LIKE); // WHERE contact_person LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $contactPerson The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     */
+    public function filterByContactPerson($contactPerson = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($contactPerson)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CustomerTableMap::COL_CONTACT_PERSON, $contactPerson, $comparison);
+    }
+
+    /**
      * Filter the query on the address column
      *
      * Example usage:
@@ -557,6 +602,81 @@ abstract class CustomerQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CustomerTableMap::COL_TAX_IDENTIFICATION_NR, $taxIdentificationNr, $comparison);
+    }
+
+    /**
+     * Filter the query on the telephon column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByTelephon('fooValue');   // WHERE telephon = 'fooValue'
+     * $query->filterByTelephon('%fooValue%', Criteria::LIKE); // WHERE telephon LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $telephon The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     */
+    public function filterByTelephon($telephon = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($telephon)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CustomerTableMap::COL_TELEPHON, $telephon, $comparison);
+    }
+
+    /**
+     * Filter the query on the fax column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByFax('fooValue');   // WHERE fax = 'fooValue'
+     * $query->filterByFax('%fooValue%', Criteria::LIKE); // WHERE fax LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $fax The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     */
+    public function filterByFax($fax = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($fax)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CustomerTableMap::COL_FAX, $fax, $comparison);
+    }
+
+    /**
+     * Filter the query on the email column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByEmail('fooValue');   // WHERE email = 'fooValue'
+     * $query->filterByEmail('%fooValue%', Criteria::LIKE); // WHERE email LIKE '%fooValue%'
+     * </code>
+     *
+     * @param     string $email The value to use as filter.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildCustomerQuery The current query, for fluid interface
+     */
+    public function filterByEmail($email = null, $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($email)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CustomerTableMap::COL_EMAIL, $email, $comparison);
     }
 
     /**

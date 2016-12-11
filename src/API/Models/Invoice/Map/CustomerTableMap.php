@@ -59,7 +59,7 @@ class CustomerTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 10;
+    const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class CustomerTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 10;
+    const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the customerid field
@@ -90,6 +90,11 @@ class CustomerTableMap extends TableMap
      * the column name for the name field
      */
     const COL_NAME = 'customer.name';
+
+    /**
+     * the column name for the contact_person field
+     */
+    const COL_CONTACT_PERSON = 'customer.contact_person';
 
     /**
      * the column name for the address field
@@ -117,6 +122,21 @@ class CustomerTableMap extends TableMap
     const COL_TAX_IDENTIFICATION_NR = 'customer.tax_identification_nr';
 
     /**
+     * the column name for the telephon field
+     */
+    const COL_TELEPHON = 'customer.telephon';
+
+    /**
+     * the column name for the fax field
+     */
+    const COL_FAX = 'customer.fax';
+
+    /**
+     * the column name for the email field
+     */
+    const COL_EMAIL = 'customer.email';
+
+    /**
      * the column name for the active field
      */
     const COL_ACTIVE = 'customer.active';
@@ -133,11 +153,11 @@ class CustomerTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Customerid', 'Eventid', 'Title', 'Name', 'Address', 'Address2', 'City', 'Zip', 'TaxIdentificationNr', 'Active', ),
-        self::TYPE_CAMELNAME     => array('customerid', 'eventid', 'title', 'name', 'address', 'address2', 'city', 'zip', 'taxIdentificationNr', 'active', ),
-        self::TYPE_COLNAME       => array(CustomerTableMap::COL_CUSTOMERID, CustomerTableMap::COL_EVENTID, CustomerTableMap::COL_TITLE, CustomerTableMap::COL_NAME, CustomerTableMap::COL_ADDRESS, CustomerTableMap::COL_ADDRESS2, CustomerTableMap::COL_CITY, CustomerTableMap::COL_ZIP, CustomerTableMap::COL_TAX_IDENTIFICATION_NR, CustomerTableMap::COL_ACTIVE, ),
-        self::TYPE_FIELDNAME     => array('customerid', 'eventid', 'title', 'name', 'address', 'address2', 'city', 'zip', 'tax_identification_nr', 'active', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        self::TYPE_PHPNAME       => array('Customerid', 'Eventid', 'Title', 'Name', 'ContactPerson', 'Address', 'Address2', 'City', 'Zip', 'TaxIdentificationNr', 'Telephon', 'Fax', 'Email', 'Active', ),
+        self::TYPE_CAMELNAME     => array('customerid', 'eventid', 'title', 'name', 'contactPerson', 'address', 'address2', 'city', 'zip', 'taxIdentificationNr', 'telephon', 'fax', 'email', 'active', ),
+        self::TYPE_COLNAME       => array(CustomerTableMap::COL_CUSTOMERID, CustomerTableMap::COL_EVENTID, CustomerTableMap::COL_TITLE, CustomerTableMap::COL_NAME, CustomerTableMap::COL_CONTACT_PERSON, CustomerTableMap::COL_ADDRESS, CustomerTableMap::COL_ADDRESS2, CustomerTableMap::COL_CITY, CustomerTableMap::COL_ZIP, CustomerTableMap::COL_TAX_IDENTIFICATION_NR, CustomerTableMap::COL_TELEPHON, CustomerTableMap::COL_FAX, CustomerTableMap::COL_EMAIL, CustomerTableMap::COL_ACTIVE, ),
+        self::TYPE_FIELDNAME     => array('customerid', 'eventid', 'title', 'name', 'contact_person', 'address', 'address2', 'city', 'zip', 'tax_identification_nr', 'telephon', 'fax', 'email', 'active', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -147,11 +167,11 @@ class CustomerTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Customerid' => 0, 'Eventid' => 1, 'Title' => 2, 'Name' => 3, 'Address' => 4, 'Address2' => 5, 'City' => 6, 'Zip' => 7, 'TaxIdentificationNr' => 8, 'Active' => 9, ),
-        self::TYPE_CAMELNAME     => array('customerid' => 0, 'eventid' => 1, 'title' => 2, 'name' => 3, 'address' => 4, 'address2' => 5, 'city' => 6, 'zip' => 7, 'taxIdentificationNr' => 8, 'active' => 9, ),
-        self::TYPE_COLNAME       => array(CustomerTableMap::COL_CUSTOMERID => 0, CustomerTableMap::COL_EVENTID => 1, CustomerTableMap::COL_TITLE => 2, CustomerTableMap::COL_NAME => 3, CustomerTableMap::COL_ADDRESS => 4, CustomerTableMap::COL_ADDRESS2 => 5, CustomerTableMap::COL_CITY => 6, CustomerTableMap::COL_ZIP => 7, CustomerTableMap::COL_TAX_IDENTIFICATION_NR => 8, CustomerTableMap::COL_ACTIVE => 9, ),
-        self::TYPE_FIELDNAME     => array('customerid' => 0, 'eventid' => 1, 'title' => 2, 'name' => 3, 'address' => 4, 'address2' => 5, 'city' => 6, 'zip' => 7, 'tax_identification_nr' => 8, 'active' => 9, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
+        self::TYPE_PHPNAME       => array('Customerid' => 0, 'Eventid' => 1, 'Title' => 2, 'Name' => 3, 'ContactPerson' => 4, 'Address' => 5, 'Address2' => 6, 'City' => 7, 'Zip' => 8, 'TaxIdentificationNr' => 9, 'Telephon' => 10, 'Fax' => 11, 'Email' => 12, 'Active' => 13, ),
+        self::TYPE_CAMELNAME     => array('customerid' => 0, 'eventid' => 1, 'title' => 2, 'name' => 3, 'contactPerson' => 4, 'address' => 5, 'address2' => 6, 'city' => 7, 'zip' => 8, 'taxIdentificationNr' => 9, 'telephon' => 10, 'fax' => 11, 'email' => 12, 'active' => 13, ),
+        self::TYPE_COLNAME       => array(CustomerTableMap::COL_CUSTOMERID => 0, CustomerTableMap::COL_EVENTID => 1, CustomerTableMap::COL_TITLE => 2, CustomerTableMap::COL_NAME => 3, CustomerTableMap::COL_CONTACT_PERSON => 4, CustomerTableMap::COL_ADDRESS => 5, CustomerTableMap::COL_ADDRESS2 => 6, CustomerTableMap::COL_CITY => 7, CustomerTableMap::COL_ZIP => 8, CustomerTableMap::COL_TAX_IDENTIFICATION_NR => 9, CustomerTableMap::COL_TELEPHON => 10, CustomerTableMap::COL_FAX => 11, CustomerTableMap::COL_EMAIL => 12, CustomerTableMap::COL_ACTIVE => 13, ),
+        self::TYPE_FIELDNAME     => array('customerid' => 0, 'eventid' => 1, 'title' => 2, 'name' => 3, 'contact_person' => 4, 'address' => 5, 'address2' => 6, 'city' => 7, 'zip' => 8, 'tax_identification_nr' => 9, 'telephon' => 10, 'fax' => 11, 'email' => 12, 'active' => 13, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
     );
 
     /**
@@ -175,11 +195,15 @@ class CustomerTableMap extends TableMap
         $this->addForeignKey('eventid', 'Eventid', 'INTEGER', 'event', 'eventid', true, null, null);
         $this->addColumn('title', 'Title', 'VARCHAR', true, 32, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 128, null);
+        $this->addColumn('contact_person', 'ContactPerson', 'VARCHAR', false, 128, null);
         $this->addColumn('address', 'Address', 'VARCHAR', true, 128, null);
         $this->addColumn('address2', 'Address2', 'VARCHAR', false, 128, null);
         $this->addColumn('city', 'City', 'VARCHAR', true, 64, null);
         $this->addColumn('zip', 'Zip', 'VARCHAR', true, 10, null);
         $this->addColumn('tax_identification_nr', 'TaxIdentificationNr', 'VARCHAR', false, 32, null);
+        $this->addColumn('telephon', 'Telephon', 'VARCHAR', false, 32, null);
+        $this->addColumn('fax', 'Fax', 'VARCHAR', false, 32, null);
+        $this->addColumn('email', 'Email', 'VARCHAR', false, 254, null);
         $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, null);
     } // initialize()
 
@@ -349,22 +373,30 @@ class CustomerTableMap extends TableMap
             $criteria->addSelectColumn(CustomerTableMap::COL_EVENTID);
             $criteria->addSelectColumn(CustomerTableMap::COL_TITLE);
             $criteria->addSelectColumn(CustomerTableMap::COL_NAME);
+            $criteria->addSelectColumn(CustomerTableMap::COL_CONTACT_PERSON);
             $criteria->addSelectColumn(CustomerTableMap::COL_ADDRESS);
             $criteria->addSelectColumn(CustomerTableMap::COL_ADDRESS2);
             $criteria->addSelectColumn(CustomerTableMap::COL_CITY);
             $criteria->addSelectColumn(CustomerTableMap::COL_ZIP);
             $criteria->addSelectColumn(CustomerTableMap::COL_TAX_IDENTIFICATION_NR);
+            $criteria->addSelectColumn(CustomerTableMap::COL_TELEPHON);
+            $criteria->addSelectColumn(CustomerTableMap::COL_FAX);
+            $criteria->addSelectColumn(CustomerTableMap::COL_EMAIL);
             $criteria->addSelectColumn(CustomerTableMap::COL_ACTIVE);
         } else {
             $criteria->addSelectColumn($alias . '.customerid');
             $criteria->addSelectColumn($alias . '.eventid');
             $criteria->addSelectColumn($alias . '.title');
             $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.contact_person');
             $criteria->addSelectColumn($alias . '.address');
             $criteria->addSelectColumn($alias . '.address2');
             $criteria->addSelectColumn($alias . '.city');
             $criteria->addSelectColumn($alias . '.zip');
             $criteria->addSelectColumn($alias . '.tax_identification_nr');
+            $criteria->addSelectColumn($alias . '.telephon');
+            $criteria->addSelectColumn($alias . '.fax');
+            $criteria->addSelectColumn($alias . '.email');
             $criteria->addSelectColumn($alias . '.active');
         }
     }

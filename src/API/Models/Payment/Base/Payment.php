@@ -15,8 +15,11 @@ use API\Models\Payment\PaymentCouponQuery as ChildPaymentCouponQuery;
 use API\Models\Payment\PaymentQuery as ChildPaymentQuery;
 use API\Models\Payment\PaymentType as ChildPaymentType;
 use API\Models\Payment\PaymentTypeQuery as ChildPaymentTypeQuery;
+use API\Models\Payment\PaymentWarning as ChildPaymentWarning;
+use API\Models\Payment\PaymentWarningQuery as ChildPaymentWarningQuery;
 use API\Models\Payment\Map\PaymentCouponTableMap;
 use API\Models\Payment\Map\PaymentTableMap;
+use API\Models\Payment\Map\PaymentWarningTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -108,6 +111,13 @@ abstract class Payment implements ActiveRecordInterface
     protected $amount;
 
     /**
+     * The value for the maturity_date field.
+     *
+     * @var        DateTime
+     */
+    protected $maturity_date;
+
+    /**
      * The value for the canceled field.
      *
      * @var        DateTime
@@ -145,6 +155,12 @@ abstract class Payment implements ActiveRecordInterface
     protected $collPaymentCouponsPartial;
 
     /**
+     * @var        ObjectCollection|ChildPaymentWarning[] Collection to store aggregation of ChildPaymentWarning objects.
+     */
+    protected $collPaymentWarnings;
+    protected $collPaymentWarningsPartial;
+
+    /**
      * @var        ObjectCollection|ChildCoupon[] Cross Collection to store aggregation of ChildCoupon objects.
      */
     protected $collCoupons;
@@ -173,6 +189,12 @@ abstract class Payment implements ActiveRecordInterface
      * @var ObjectCollection|ChildPaymentCoupon[]
      */
     protected $paymentCouponsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildPaymentWarning[]
+     */
+    protected $paymentWarningsScheduledForDeletion = null;
 
     /**
      * Initializes internal state of API\Models\Payment\Base\Payment object.
@@ -460,6 +482,26 @@ abstract class Payment implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [maturity_date] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getMaturityDate($format = NULL)
+    {
+        if ($format === null) {
+            return $this->maturity_date;
+        } else {
+            return $this->maturity_date instanceof \DateTimeInterface ? $this->maturity_date->format($format) : null;
+        }
+    }
+
+    /**
      * Get the [optionally formatted] temporal [canceled] column value.
      *
      *
@@ -618,6 +660,26 @@ abstract class Payment implements ActiveRecordInterface
     } // setAmount()
 
     /**
+     * Sets the value of [maturity_date] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\Payment\Payment The current object (for fluent API support)
+     */
+    public function setMaturityDate($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->maturity_date !== null || $dt !== null) {
+            if ($this->maturity_date === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->maturity_date->format("Y-m-d H:i:s.u")) {
+                $this->maturity_date = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[PaymentTableMap::COL_MATURITY_DATE] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setMaturityDate()
+
+    /**
      * Sets the value of [canceled] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
@@ -731,19 +793,25 @@ abstract class Payment implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : PaymentTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->amount = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : PaymentTableMap::translateFieldName('Canceled', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : PaymentTableMap::translateFieldName('MaturityDate', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->maturity_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : PaymentTableMap::translateFieldName('Canceled', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->canceled = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : PaymentTableMap::translateFieldName('Recieved', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : PaymentTableMap::translateFieldName('Recieved', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->recieved = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : PaymentTableMap::translateFieldName('AmountRecieved', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : PaymentTableMap::translateFieldName('AmountRecieved', TableMap::TYPE_PHPNAME, $indexType)];
             $this->amount_recieved = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
@@ -753,7 +821,7 @@ abstract class Payment implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 8; // 8 = PaymentTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = PaymentTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Payment\\Payment'), 0, $e);
@@ -823,6 +891,8 @@ abstract class Payment implements ActiveRecordInterface
             $this->aInvoice = null;
             $this->aPaymentType = null;
             $this->collPaymentCoupons = null;
+
+            $this->collPaymentWarnings = null;
 
             $this->collCoupons = null;
         } // if (deep)
@@ -1000,6 +1070,23 @@ abstract class Payment implements ActiveRecordInterface
                 }
             }
 
+            if ($this->paymentWarningsScheduledForDeletion !== null) {
+                if (!$this->paymentWarningsScheduledForDeletion->isEmpty()) {
+                    \API\Models\Payment\PaymentWarningQuery::create()
+                        ->filterByPrimaryKeys($this->paymentWarningsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->paymentWarningsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPaymentWarnings !== null) {
+                foreach ($this->collPaymentWarnings as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             $this->alreadyInSave = false;
 
         }
@@ -1037,6 +1124,9 @@ abstract class Payment implements ActiveRecordInterface
         if ($this->isColumnModified(PaymentTableMap::COL_AMOUNT)) {
             $modifiedColumns[':p' . $index++]  = 'amount';
         }
+        if ($this->isColumnModified(PaymentTableMap::COL_MATURITY_DATE)) {
+            $modifiedColumns[':p' . $index++]  = 'maturity_date';
+        }
         if ($this->isColumnModified(PaymentTableMap::COL_CANCELED)) {
             $modifiedColumns[':p' . $index++]  = 'canceled';
         }
@@ -1071,6 +1161,9 @@ abstract class Payment implements ActiveRecordInterface
                         break;
                     case 'amount':
                         $stmt->bindValue($identifier, $this->amount, PDO::PARAM_STR);
+                        break;
+                    case 'maturity_date':
+                        $stmt->bindValue($identifier, $this->maturity_date ? $this->maturity_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'canceled':
                         $stmt->bindValue($identifier, $this->canceled ? $this->canceled->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -1152,12 +1245,15 @@ abstract class Payment implements ActiveRecordInterface
                 return $this->getAmount();
                 break;
             case 5:
-                return $this->getCanceled();
+                return $this->getMaturityDate();
                 break;
             case 6:
-                return $this->getRecieved();
+                return $this->getCanceled();
                 break;
             case 7:
+                return $this->getRecieved();
+                break;
+            case 8:
                 return $this->getAmountRecieved();
                 break;
             default:
@@ -1195,9 +1291,10 @@ abstract class Payment implements ActiveRecordInterface
             $keys[2] => $this->getInvoiceid(),
             $keys[3] => $this->getCreated(),
             $keys[4] => $this->getAmount(),
-            $keys[5] => $this->getCanceled(),
-            $keys[6] => $this->getRecieved(),
-            $keys[7] => $this->getAmountRecieved(),
+            $keys[5] => $this->getMaturityDate(),
+            $keys[6] => $this->getCanceled(),
+            $keys[7] => $this->getRecieved(),
+            $keys[8] => $this->getAmountRecieved(),
         );
         if ($result[$keys[3]] instanceof \DateTime) {
             $result[$keys[3]] = $result[$keys[3]]->format('c');
@@ -1209,6 +1306,10 @@ abstract class Payment implements ActiveRecordInterface
 
         if ($result[$keys[6]] instanceof \DateTime) {
             $result[$keys[6]] = $result[$keys[6]]->format('c');
+        }
+
+        if ($result[$keys[7]] instanceof \DateTime) {
+            $result[$keys[7]] = $result[$keys[7]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1262,6 +1363,21 @@ abstract class Payment implements ActiveRecordInterface
 
                 $result[$key] = $this->collPaymentCoupons->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collPaymentWarnings) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'paymentWarnings';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'payment_warnings';
+                        break;
+                    default:
+                        $key = 'PaymentWarnings';
+                }
+
+                $result[$key] = $this->collPaymentWarnings->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
         }
 
         return $result;
@@ -1312,12 +1428,15 @@ abstract class Payment implements ActiveRecordInterface
                 $this->setAmount($value);
                 break;
             case 5:
-                $this->setCanceled($value);
+                $this->setMaturityDate($value);
                 break;
             case 6:
-                $this->setRecieved($value);
+                $this->setCanceled($value);
                 break;
             case 7:
+                $this->setRecieved($value);
+                break;
+            case 8:
                 $this->setAmountRecieved($value);
                 break;
         } // switch()
@@ -1362,13 +1481,16 @@ abstract class Payment implements ActiveRecordInterface
             $this->setAmount($arr[$keys[4]]);
         }
         if (array_key_exists($keys[5], $arr)) {
-            $this->setCanceled($arr[$keys[5]]);
+            $this->setMaturityDate($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setRecieved($arr[$keys[6]]);
+            $this->setCanceled($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setAmountRecieved($arr[$keys[7]]);
+            $this->setRecieved($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setAmountRecieved($arr[$keys[8]]);
         }
     }
 
@@ -1425,6 +1547,9 @@ abstract class Payment implements ActiveRecordInterface
         }
         if ($this->isColumnModified(PaymentTableMap::COL_AMOUNT)) {
             $criteria->add(PaymentTableMap::COL_AMOUNT, $this->amount);
+        }
+        if ($this->isColumnModified(PaymentTableMap::COL_MATURITY_DATE)) {
+            $criteria->add(PaymentTableMap::COL_MATURITY_DATE, $this->maturity_date);
         }
         if ($this->isColumnModified(PaymentTableMap::COL_CANCELED)) {
             $criteria->add(PaymentTableMap::COL_CANCELED, $this->canceled);
@@ -1526,6 +1651,7 @@ abstract class Payment implements ActiveRecordInterface
         $copyObj->setInvoiceid($this->getInvoiceid());
         $copyObj->setCreated($this->getCreated());
         $copyObj->setAmount($this->getAmount());
+        $copyObj->setMaturityDate($this->getMaturityDate());
         $copyObj->setCanceled($this->getCanceled());
         $copyObj->setRecieved($this->getRecieved());
         $copyObj->setAmountRecieved($this->getAmountRecieved());
@@ -1538,6 +1664,12 @@ abstract class Payment implements ActiveRecordInterface
             foreach ($this->getPaymentCoupons() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addPaymentCoupon($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getPaymentWarnings() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPaymentWarning($relObj->copy($deepCopy));
                 }
             }
 
@@ -1685,6 +1817,9 @@ abstract class Payment implements ActiveRecordInterface
     {
         if ('PaymentCoupon' == $relationName) {
             return $this->initPaymentCoupons();
+        }
+        if ('PaymentWarning' == $relationName) {
+            return $this->initPaymentWarnings();
         }
     }
 
@@ -1939,6 +2074,256 @@ abstract class Payment implements ActiveRecordInterface
         $query->joinWith('Coupon', $joinBehavior);
 
         return $this->getPaymentCoupons($query, $con);
+    }
+
+    /**
+     * Clears out the collPaymentWarnings collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addPaymentWarnings()
+     */
+    public function clearPaymentWarnings()
+    {
+        $this->collPaymentWarnings = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collPaymentWarnings collection loaded partially.
+     */
+    public function resetPartialPaymentWarnings($v = true)
+    {
+        $this->collPaymentWarningsPartial = $v;
+    }
+
+    /**
+     * Initializes the collPaymentWarnings collection.
+     *
+     * By default this just sets the collPaymentWarnings collection to an empty array (like clearcollPaymentWarnings());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initPaymentWarnings($overrideExisting = true)
+    {
+        if (null !== $this->collPaymentWarnings && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = PaymentWarningTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collPaymentWarnings = new $collectionClassName;
+        $this->collPaymentWarnings->setModel('\API\Models\Payment\PaymentWarning');
+    }
+
+    /**
+     * Gets an array of ChildPaymentWarning objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPayment is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildPaymentWarning[] List of ChildPaymentWarning objects
+     * @throws PropelException
+     */
+    public function getPaymentWarnings(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPaymentWarningsPartial && !$this->isNew();
+        if (null === $this->collPaymentWarnings || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPaymentWarnings) {
+                // return empty collection
+                $this->initPaymentWarnings();
+            } else {
+                $collPaymentWarnings = ChildPaymentWarningQuery::create(null, $criteria)
+                    ->filterByPayment($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collPaymentWarningsPartial && count($collPaymentWarnings)) {
+                        $this->initPaymentWarnings(false);
+
+                        foreach ($collPaymentWarnings as $obj) {
+                            if (false == $this->collPaymentWarnings->contains($obj)) {
+                                $this->collPaymentWarnings->append($obj);
+                            }
+                        }
+
+                        $this->collPaymentWarningsPartial = true;
+                    }
+
+                    return $collPaymentWarnings;
+                }
+
+                if ($partial && $this->collPaymentWarnings) {
+                    foreach ($this->collPaymentWarnings as $obj) {
+                        if ($obj->isNew()) {
+                            $collPaymentWarnings[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPaymentWarnings = $collPaymentWarnings;
+                $this->collPaymentWarningsPartial = false;
+            }
+        }
+
+        return $this->collPaymentWarnings;
+    }
+
+    /**
+     * Sets a collection of ChildPaymentWarning objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $paymentWarnings A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildPayment The current object (for fluent API support)
+     */
+    public function setPaymentWarnings(Collection $paymentWarnings, ConnectionInterface $con = null)
+    {
+        /** @var ChildPaymentWarning[] $paymentWarningsToDelete */
+        $paymentWarningsToDelete = $this->getPaymentWarnings(new Criteria(), $con)->diff($paymentWarnings);
+
+
+        $this->paymentWarningsScheduledForDeletion = $paymentWarningsToDelete;
+
+        foreach ($paymentWarningsToDelete as $paymentWarningRemoved) {
+            $paymentWarningRemoved->setPayment(null);
+        }
+
+        $this->collPaymentWarnings = null;
+        foreach ($paymentWarnings as $paymentWarning) {
+            $this->addPaymentWarning($paymentWarning);
+        }
+
+        $this->collPaymentWarnings = $paymentWarnings;
+        $this->collPaymentWarningsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related PaymentWarning objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related PaymentWarning objects.
+     * @throws PropelException
+     */
+    public function countPaymentWarnings(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPaymentWarningsPartial && !$this->isNew();
+        if (null === $this->collPaymentWarnings || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPaymentWarnings) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getPaymentWarnings());
+            }
+
+            $query = ChildPaymentWarningQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPayment($this)
+                ->count($con);
+        }
+
+        return count($this->collPaymentWarnings);
+    }
+
+    /**
+     * Method called to associate a ChildPaymentWarning object to this object
+     * through the ChildPaymentWarning foreign key attribute.
+     *
+     * @param  ChildPaymentWarning $l ChildPaymentWarning
+     * @return $this|\API\Models\Payment\Payment The current object (for fluent API support)
+     */
+    public function addPaymentWarning(ChildPaymentWarning $l)
+    {
+        if ($this->collPaymentWarnings === null) {
+            $this->initPaymentWarnings();
+            $this->collPaymentWarningsPartial = true;
+        }
+
+        if (!$this->collPaymentWarnings->contains($l)) {
+            $this->doAddPaymentWarning($l);
+
+            if ($this->paymentWarningsScheduledForDeletion and $this->paymentWarningsScheduledForDeletion->contains($l)) {
+                $this->paymentWarningsScheduledForDeletion->remove($this->paymentWarningsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildPaymentWarning $paymentWarning The ChildPaymentWarning object to add.
+     */
+    protected function doAddPaymentWarning(ChildPaymentWarning $paymentWarning)
+    {
+        $this->collPaymentWarnings[]= $paymentWarning;
+        $paymentWarning->setPayment($this);
+    }
+
+    /**
+     * @param  ChildPaymentWarning $paymentWarning The ChildPaymentWarning object to remove.
+     * @return $this|ChildPayment The current object (for fluent API support)
+     */
+    public function removePaymentWarning(ChildPaymentWarning $paymentWarning)
+    {
+        if ($this->getPaymentWarnings()->contains($paymentWarning)) {
+            $pos = $this->collPaymentWarnings->search($paymentWarning);
+            $this->collPaymentWarnings->remove($pos);
+            if (null === $this->paymentWarningsScheduledForDeletion) {
+                $this->paymentWarningsScheduledForDeletion = clone $this->collPaymentWarnings;
+                $this->paymentWarningsScheduledForDeletion->clear();
+            }
+            $this->paymentWarningsScheduledForDeletion[]= clone $paymentWarning;
+            $paymentWarning->setPayment(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Payment is new, it will return
+     * an empty collection; or if this Payment has previously
+     * been saved, it will retrieve related PaymentWarnings from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Payment.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildPaymentWarning[] List of ChildPaymentWarning objects
+     */
+    public function getPaymentWarningsJoinPaymentWarningType(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildPaymentWarningQuery::create(null, $criteria);
+        $query->joinWith('PaymentWarningType', $joinBehavior);
+
+        return $this->getPaymentWarnings($query, $con);
     }
 
     /**
@@ -2202,6 +2587,7 @@ abstract class Payment implements ActiveRecordInterface
         $this->invoiceid = null;
         $this->created = null;
         $this->amount = null;
+        $this->maturity_date = null;
         $this->canceled = null;
         $this->recieved = null;
         $this->amount_recieved = null;
@@ -2228,6 +2614,11 @@ abstract class Payment implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collPaymentWarnings) {
+                foreach ($this->collPaymentWarnings as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collCoupons) {
                 foreach ($this->collCoupons as $o) {
                     $o->clearAllReferences($deep);
@@ -2236,6 +2627,7 @@ abstract class Payment implements ActiveRecordInterface
         } // if ($deep)
 
         $this->collPaymentCoupons = null;
+        $this->collPaymentWarnings = null;
         $this->collCoupons = null;
         $this->aInvoice = null;
         $this->aPaymentType = null;
