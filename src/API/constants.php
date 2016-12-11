@@ -56,6 +56,7 @@ const DATE_MYSQL_TIMEFORMAT = "Y-m-d H:i:s";
 const DATE_JS_TIMEFORMAT = "dd.MM.yyyy H:mm:ss";
 const DATE_JS_DATEFORMAT = "dd.MM.yyyy";
 const DATE_PHP_TIMEFORMAT = "d.m.Y H:i:s";
+const DATE_PHP_DATEFORMAT = "d.m.Y";
 
 const PRINTER_CHARACTER_EURO = "\x1B\x74\x13\xD5";
 const PRINTER_LOGO_DEFAULT = 1;

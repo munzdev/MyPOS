@@ -152,9 +152,25 @@
         "amountAndTitle": "Amount and Title",
         "price": "Price",
         "totalSum": "Total sum",
-        "totalSumContainsTax": "The total sum contains following taxes",
+        "totalSumContainsTax": "Contains taxes",
         "percentTaxOfCurrency": "% tax at $ ",
         "thanks": "Thanks for your order",
-        "currency": "$"
+        "currency": "$",
+        "customerData": "Customer data",
+        "customerid": "Customer-Nr",
+        "paymentType": "PAYMENTTYPE",
+        "paymentTypeCash": "CASH",
+        "paymentTypeBankTransfer": "INVOICE/BANK TRANSFER",
+        "bankInformation": "Bankinformation",
+        "bankName": "Bankname",
+        "iban": "IBAN",
+        "bic": "BIC",
+        "maturityDate": "Maturity date",
+        "tax": "TAX",
+        "fax": "Fax",
+        "tel": "Tel",
+        "email": "Email",
+        "usedCoupons": "Used coupons",
+        "couponCode": "Coupon code"
     }
 }

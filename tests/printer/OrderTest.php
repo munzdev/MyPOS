@@ -13,21 +13,21 @@ $o_i18n = json_decode($str_json);
 $o_connector = new NetworkPrintConnector("192.168.0.50", 9100);
 //$o_connector = new FilePrintConnector("php://stdout");
 
-$o_invoice = new ReciepPrint($o_connector, 48, $o_i18n->ReciepPrint);
-$o_invoice->SetNr(584);
-$o_invoice->SetTableNr("B32");
-$o_invoice->SetName("Test Order");
-$o_invoice->SetDate(new DateTime("-10 Minutes"));
+$o_reciep = new ReciepPrint($o_connector, 48, $o_i18n->ReciepPrint);
+$o_reciep->SetNr(584);
+$o_reciep->SetTableNr("B32");
+$o_reciep->SetName("Test Order");
+$o_reciep->SetDate(new DateTime("-10 Minutes"));
 
-$o_invoice->Add("Colla 0.5L", "2");
-$o_invoice->Add("Colla 0.5L mit Zitronne", "1");
-$o_invoice->Add("Mineral 0.25L", "2");
+$o_reciep->Add("Colla 0.5L", "2");
+$o_reciep->Add("Colla 0.5L mit Zitronne", "1");
+$o_reciep->Add("Mineral 0.25L", "2");
 
 
-$o_invoice->Add("Wiener Schnitzel", "1");
-$o_invoice->Add("Schweinsbratten ohne Knödel", "3");
-$o_invoice->Add("Schweinsbratten ohne Knödel, mit Wurstsemmel", "10");
-$o_invoice->Add("Wiener Schnitzel klein ohne Pommes, mit extra Ketchup, bla blalsaf bsadfsdafsda fsdasd ds", "1");
-$o_invoice->Add("Salat Klein", "1");
+$o_reciep->Add("Wiener Schnitzel", "1");
+$o_reciep->Add("Schweinsbratten ohne Knödel", "3");
+$o_reciep->Add("Schweinsbratten ohne Knödel, mit Wurstsemmel", "10");
+$o_reciep->Add("Wiener Schnitzel klein ohne Pommes, mit extra Ketchup, bla blalsaf bsadfsdafsda fsdasd ds", "1");
+$o_reciep->Add("Salat Klein", "1");
 
-$o_invoice->PrintOrder();
+$o_reciep->PrintOrder();

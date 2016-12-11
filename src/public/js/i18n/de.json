@@ -1,7 +1,7 @@
 {
     "errorLoadingApp": "App Ladefehler",
     "errorLoadingAppRouteText": "Es wurde keine Startseite gefunden. Haben Sie irgendeine Berechtigung bekommen?",
-    "errorLoadingAppText": "Bitte laden Sie die App neu",    
+    "errorLoadingAppText": "Bitte laden Sie die App neu",
     "currency": "€",
     "LoginView": {
         "username": "Benutzername",
@@ -151,10 +151,27 @@
         "distributionTime": "Ausgabe",
         "amountAndTitle": "Anzahl und Produkt",
         "price": "Preis",
+        "subTotal": "Zwischensumme",
         "totalSum": "Endsumme",
-        "totalSumContainsTax": "Die Endsumme enthält an MwSt",
+        "totalSumContainsTax": "Enthält an MwSt",
         "percentTaxOfCurrency": "% MwSt aus € ",
         "thanks": "Danke für Ihren Besuch",
-        "currency": "€"
+        "currency": "€",
+        "customerData": "Kundendaten",
+        "customerid": "Kunden-Nr",
+        "paymentType": "BEZAHLART",
+        "paymentTypeCash": "BAR",
+        "paymentTypeBankTransfer": "RECHNUNG/ÜBERWEISUNG",
+        "bankInformation": "Bankdaten",
+        "bankName": "Bankname",
+        "iban": "IBAN",
+        "bic": "BIC",
+        "maturityDate": "Zahlbar bis",
+        "tax": "UID",
+        "fax": "Fax",
+        "tel": "Tel",
+        "email": "Email",
+        "usedCoupons": "Verwendete Gutscheine",
+        "couponCode": "Gutschein Code"
     }
 }
