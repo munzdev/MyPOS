@@ -1,13 +1,13 @@
 define(["collections/db/Ordering/OrderDetailCollection",
         "collections/db/Payment/CouponCollection",
-        "models/db/Invoice/Customer"
+        "models/db/Event/EventContact"
 ], function(OrderDetailCollection,
             CouponCollection,
-            Customer){
+            EventContact){
     "use strict";
 
     return class OrderUnbilled extends app.BaseModel {
-        
+
         defaults() {
             return {Orderid: null,
                     All: false,
@@ -15,7 +15,7 @@ define(["collections/db/Ordering/OrderDetailCollection",
                     UnbilledOrderDetails: new OrderDetailCollection(),
                     UsedCoupons: new CouponCollection()};
         }
-        
+
         url() {return app.API + "Order/Unbilled/" + this.get('Orderid') + '/' + this.get('All');}
 
         parse(response)
@@ -29,7 +29,7 @@ define(["collections/db/Ordering/OrderDetailCollection",
             {
                 response.UsedCoupons = new CouponCollection(response.UsedCoupons, {parse: true});
             }
-            
+
             return super.parse(response);
         }
     }

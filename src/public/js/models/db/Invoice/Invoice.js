@@ -1,10 +1,8 @@
 define(["models/db/User/User",
         "models/db/Event/EventContact",
-        "models/db/Invoice/Customer",
         "collections/db/Invoice/InvoiceCollection"
 ], function(User,
             EventContact,
-            Customer,
             InvoiceCollection) {
     "use strict";
 
@@ -34,7 +32,7 @@ define(["models/db/User/User",
 
             if('Customer' in response)
             {
-                response.Customer = new Customer(response.Customer, {parse: true});
+                response.Customer = new EventContact(response.Customer, {parse: true});
             }
 
             if('InvoiceItems' in response)

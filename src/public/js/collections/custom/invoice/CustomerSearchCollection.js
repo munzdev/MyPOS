@@ -1,12 +1,12 @@
-define(["collections/db/Invoice/CustomerCollection"
-], function(CustomerCollection ){
+define(["collections/db/Event/EventContactCollection"
+], function(EventContactCollection ){
     "use strict";
-    
-    return class CustomerSearchCollection extends CustomerCollection
-    {                
-        initialize() {            
+
+    return class CustomerSearchCollection extends EventContactCollection
+    {
+        initialize() {
             this.name = '';
         }
-        url() {return app.API + "Invoice/Customer/" + this.name;}        
+        url() {return app.API + "Invoice/Customer/" + this.name;}
     }
 });

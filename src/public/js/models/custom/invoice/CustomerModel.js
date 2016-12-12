@@ -1,8 +1,8 @@
-define(["models/db/Invoice/Customer"
-], function(CustomerModel) {
+define(["models/db/Event/EventContact"
+], function(EventContact) {
     "use strict";
 
-    return class Customer extends CustomerModel {
+    return class Customer extends EventContact {
         urlRoot() { return app.API + "Invoice/Customer"; }
     }
 });
