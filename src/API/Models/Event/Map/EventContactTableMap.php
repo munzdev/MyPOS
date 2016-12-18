@@ -225,13 +225,13 @@ class EventContactTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, null, false);
-        $this->addRelation('InvoiceRelatedByCustomerid', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('InvoiceRelatedByCustomerEventContactid', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':customerid',
+    0 => ':customer_event_contactid',
     1 => ':event_contactid',
   ),
-), null, null, 'InvoicesRelatedByCustomerid', false);
+), null, null, 'InvoicesRelatedByCustomerEventContactid', false);
         $this->addRelation('InvoiceRelatedByEventContactid', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

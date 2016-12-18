@@ -2,16 +2,21 @@
 
 namespace API\Models\Payment\Base;
 
+use \DateTime;
 use \Exception;
 use \PDO;
-use API\Models\Event\Event;
-use API\Models\Event\EventQuery;
-use API\Models\Payment\PaymentWarning as ChildPaymentWarning;
-use API\Models\Payment\PaymentWarningQuery as ChildPaymentWarningQuery;
-use API\Models\Payment\PaymentWarningType as ChildPaymentWarningType;
-use API\Models\Payment\PaymentWarningTypeQuery as ChildPaymentWarningTypeQuery;
-use API\Models\Payment\Map\PaymentWarningTableMap;
-use API\Models\Payment\Map\PaymentWarningTypeTableMap;
+use API\Models\Invoice\Invoice;
+use API\Models\Invoice\InvoiceQuery;
+use API\Models\Payment\Coupon as ChildCoupon;
+use API\Models\Payment\CouponQuery as ChildCouponQuery;
+use API\Models\Payment\PaymentCoupon as ChildPaymentCoupon;
+use API\Models\Payment\PaymentCouponQuery as ChildPaymentCouponQuery;
+use API\Models\Payment\PaymentRecieved as ChildPaymentRecieved;
+use API\Models\Payment\PaymentRecievedQuery as ChildPaymentRecievedQuery;
+use API\Models\Payment\PaymentType as ChildPaymentType;
+use API\Models\Payment\PaymentTypeQuery as ChildPaymentTypeQuery;
+use API\Models\Payment\Map\PaymentCouponTableMap;
+use API\Models\Payment\Map\PaymentRecievedTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -24,20 +29,21 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Propel\Runtime\Util\PropelDateTime;
 
 /**
- * Base class that represents a row from the 'payment_warning_type' table.
+ * Base class that represents a row from the 'payment_recieved' table.
  *
  *
  *
  * @package    propel.generator.API.Models.Payment.Base
  */
-abstract class PaymentWarningType implements ActiveRecordInterface
+abstract class PaymentRecieved implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\API\\Models\\Payment\\Map\\PaymentWarningTypeTableMap';
+    const TABLE_MAP = '\\API\\Models\\Payment\\Map\\PaymentRecievedTableMap';
 
 
     /**
@@ -67,43 +73,65 @@ abstract class PaymentWarningType implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
-     * The value for the payment_warning_typeid field.
+     * The value for the payment_recievedid field.
      *
      * @var        int
      */
-    protected $payment_warning_typeid;
+    protected $payment_recievedid;
 
     /**
-     * The value for the eventid field.
+     * The value for the invoiceid field.
      *
      * @var        int
      */
-    protected $eventid;
+    protected $invoiceid;
 
     /**
-     * The value for the name field.
+     * The value for the payment_typeid field.
+     *
+     * @var        int
+     */
+    protected $payment_typeid;
+
+    /**
+     * The value for the date field.
+     *
+     * @var        DateTime
+     */
+    protected $date;
+
+    /**
+     * The value for the amount field.
      *
      * @var        string
      */
-    protected $name;
+    protected $amount;
 
     /**
-     * The value for the extra_price field.
-     *
-     * @var        string
+     * @var        Invoice
      */
-    protected $extra_price;
+    protected $aInvoice;
 
     /**
-     * @var        Event
+     * @var        ChildPaymentType
      */
-    protected $aEvent;
+    protected $aPaymentType;
 
     /**
-     * @var        ObjectCollection|ChildPaymentWarning[] Collection to store aggregation of ChildPaymentWarning objects.
+     * @var        ObjectCollection|ChildPaymentCoupon[] Collection to store aggregation of ChildPaymentCoupon objects.
      */
-    protected $collPaymentWarnings;
-    protected $collPaymentWarningsPartial;
+    protected $collPaymentCoupons;
+    protected $collPaymentCouponsPartial;
+
+    /**
+     * @var        ObjectCollection|ChildCoupon[] Cross Collection to store aggregation of ChildCoupon objects.
+     */
+    protected $collCoupons;
+
+    /**
+     * @var bool
+     */
+    protected $collCouponsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -115,12 +143,18 @@ abstract class PaymentWarningType implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildPaymentWarning[]
+     * @var ObjectCollection|ChildCoupon[]
      */
-    protected $paymentWarningsScheduledForDeletion = null;
+    protected $couponsScheduledForDeletion = null;
 
     /**
-     * Initializes internal state of API\Models\Payment\Base\PaymentWarningType object.
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildPaymentCoupon[]
+     */
+    protected $paymentCouponsScheduledForDeletion = null;
+
+    /**
+     * Initializes internal state of API\Models\Payment\Base\PaymentRecieved object.
      */
     public function __construct()
     {
@@ -215,9 +249,9 @@ abstract class PaymentWarningType implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>PaymentWarningType</code> instance.  If
-     * <code>obj</code> is an instance of <code>PaymentWarningType</code>, delegates to
-     * <code>equals(PaymentWarningType)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>PaymentRecieved</code> instance.  If
+     * <code>obj</code> is an instance of <code>PaymentRecieved</code>, delegates to
+     * <code>equals(PaymentRecieved)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -283,7 +317,7 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|PaymentWarningType The current object, for fluid interface
+     * @return $this|PaymentRecieved The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -345,128 +379,172 @@ abstract class PaymentWarningType implements ActiveRecordInterface
     }
 
     /**
-     * Get the [payment_warning_typeid] column value.
+     * Get the [payment_recievedid] column value.
      *
      * @return int
      */
-    public function getPaymentWarningTypeid()
+    public function getPaymentRecievedid()
     {
-        return $this->payment_warning_typeid;
+        return $this->payment_recievedid;
     }
 
     /**
-     * Get the [eventid] column value.
+     * Get the [invoiceid] column value.
      *
      * @return int
      */
-    public function getEventid()
+    public function getInvoiceid()
     {
-        return $this->eventid;
+        return $this->invoiceid;
     }
 
     /**
-     * Get the [name] column value.
+     * Get the [payment_typeid] column value.
+     *
+     * @return int
+     */
+    public function getPaymentTypeid()
+    {
+        return $this->payment_typeid;
+    }
+
+    /**
+     * Get the [optionally formatted] temporal [date] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getDate($format = NULL)
+    {
+        if ($format === null) {
+            return $this->date;
+        } else {
+            return $this->date instanceof \DateTimeInterface ? $this->date->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [amount] column value.
      *
      * @return string
      */
-    public function getName()
+    public function getAmount()
     {
-        return $this->name;
+        return $this->amount;
     }
 
     /**
-     * Get the [extra_price] column value.
-     *
-     * @return string
-     */
-    public function getExtraPrice()
-    {
-        return $this->extra_price;
-    }
-
-    /**
-     * Set the value of [payment_warning_typeid] column.
+     * Set the value of [payment_recievedid] column.
      *
      * @param int $v new value
-     * @return $this|\API\Models\Payment\PaymentWarningType The current object (for fluent API support)
+     * @return $this|\API\Models\Payment\PaymentRecieved The current object (for fluent API support)
      */
-    public function setPaymentWarningTypeid($v)
+    public function setPaymentRecievedid($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->payment_warning_typeid !== $v) {
-            $this->payment_warning_typeid = $v;
-            $this->modifiedColumns[PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID] = true;
+        if ($this->payment_recievedid !== $v) {
+            $this->payment_recievedid = $v;
+            $this->modifiedColumns[PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID] = true;
         }
 
         return $this;
-    } // setPaymentWarningTypeid()
+    } // setPaymentRecievedid()
 
     /**
-     * Set the value of [eventid] column.
+     * Set the value of [invoiceid] column.
      *
      * @param int $v new value
-     * @return $this|\API\Models\Payment\PaymentWarningType The current object (for fluent API support)
+     * @return $this|\API\Models\Payment\PaymentRecieved The current object (for fluent API support)
      */
-    public function setEventid($v)
+    public function setInvoiceid($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->eventid !== $v) {
-            $this->eventid = $v;
-            $this->modifiedColumns[PaymentWarningTypeTableMap::COL_EVENTID] = true;
+        if ($this->invoiceid !== $v) {
+            $this->invoiceid = $v;
+            $this->modifiedColumns[PaymentRecievedTableMap::COL_INVOICEID] = true;
         }
 
-        if ($this->aEvent !== null && $this->aEvent->getEventid() !== $v) {
-            $this->aEvent = null;
+        if ($this->aInvoice !== null && $this->aInvoice->getInvoiceid() !== $v) {
+            $this->aInvoice = null;
         }
 
         return $this;
-    } // setEventid()
+    } // setInvoiceid()
 
     /**
-     * Set the value of [name] column.
+     * Set the value of [payment_typeid] column.
+     *
+     * @param int $v new value
+     * @return $this|\API\Models\Payment\PaymentRecieved The current object (for fluent API support)
+     */
+    public function setPaymentTypeid($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->payment_typeid !== $v) {
+            $this->payment_typeid = $v;
+            $this->modifiedColumns[PaymentRecievedTableMap::COL_PAYMENT_TYPEID] = true;
+        }
+
+        if ($this->aPaymentType !== null && $this->aPaymentType->getPaymentTypeid() !== $v) {
+            $this->aPaymentType = null;
+        }
+
+        return $this;
+    } // setPaymentTypeid()
+
+    /**
+     * Sets the value of [date] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\Payment\PaymentRecieved The current object (for fluent API support)
+     */
+    public function setDate($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->date !== null || $dt !== null) {
+            if ($this->date === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->date->format("Y-m-d H:i:s.u")) {
+                $this->date = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[PaymentRecievedTableMap::COL_DATE] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setDate()
+
+    /**
+     * Set the value of [amount] column.
      *
      * @param string $v new value
-     * @return $this|\API\Models\Payment\PaymentWarningType The current object (for fluent API support)
+     * @return $this|\API\Models\Payment\PaymentRecieved The current object (for fluent API support)
      */
-    public function setName($v)
+    public function setAmount($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->name !== $v) {
-            $this->name = $v;
-            $this->modifiedColumns[PaymentWarningTypeTableMap::COL_NAME] = true;
+        if ($this->amount !== $v) {
+            $this->amount = $v;
+            $this->modifiedColumns[PaymentRecievedTableMap::COL_AMOUNT] = true;
         }
 
         return $this;
-    } // setName()
-
-    /**
-     * Set the value of [extra_price] column.
-     *
-     * @param string $v new value
-     * @return $this|\API\Models\Payment\PaymentWarningType The current object (for fluent API support)
-     */
-    public function setExtraPrice($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->extra_price !== $v) {
-            $this->extra_price = $v;
-            $this->modifiedColumns[PaymentWarningTypeTableMap::COL_EXTRA_PRICE] = true;
-        }
-
-        return $this;
-    } // setExtraPrice()
+    } // setAmount()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -504,17 +582,23 @@ abstract class PaymentWarningType implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : PaymentWarningTypeTableMap::translateFieldName('PaymentWarningTypeid', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->payment_warning_typeid = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : PaymentRecievedTableMap::translateFieldName('PaymentRecievedid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->payment_recievedid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PaymentWarningTypeTableMap::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->eventid = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PaymentRecievedTableMap::translateFieldName('Invoiceid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->invoiceid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PaymentWarningTypeTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->name = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PaymentRecievedTableMap::translateFieldName('PaymentTypeid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->payment_typeid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PaymentWarningTypeTableMap::translateFieldName('ExtraPrice', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->extra_price = (null !== $col) ? (string) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PaymentRecievedTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : PaymentRecievedTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->amount = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -523,10 +607,10 @@ abstract class PaymentWarningType implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = PaymentWarningTypeTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = PaymentRecievedTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Payment\\PaymentWarningType'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Payment\\PaymentRecieved'), 0, $e);
         }
     }
 
@@ -545,8 +629,11 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      */
     public function ensureConsistency()
     {
-        if ($this->aEvent !== null && $this->eventid !== $this->aEvent->getEventid()) {
-            $this->aEvent = null;
+        if ($this->aInvoice !== null && $this->invoiceid !== $this->aInvoice->getInvoiceid()) {
+            $this->aInvoice = null;
+        }
+        if ($this->aPaymentType !== null && $this->payment_typeid !== $this->aPaymentType->getPaymentTypeid()) {
+            $this->aPaymentType = null;
         }
     } // ensureConsistency
 
@@ -571,13 +658,13 @@ abstract class PaymentWarningType implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(PaymentWarningTypeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(PaymentRecievedTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildPaymentWarningTypeQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildPaymentRecievedQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -587,9 +674,11 @@ abstract class PaymentWarningType implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
-            $this->aEvent = null;
-            $this->collPaymentWarnings = null;
+            $this->aInvoice = null;
+            $this->aPaymentType = null;
+            $this->collPaymentCoupons = null;
 
+            $this->collCoupons = null;
         } // if (deep)
     }
 
@@ -599,8 +688,8 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see PaymentWarningType::setDeleted()
-     * @see PaymentWarningType::isDeleted()
+     * @see PaymentRecieved::setDeleted()
+     * @see PaymentRecieved::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -609,11 +698,11 @@ abstract class PaymentWarningType implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PaymentWarningTypeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PaymentRecievedTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildPaymentWarningTypeQuery::create()
+            $deleteQuery = ChildPaymentRecievedQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -644,7 +733,7 @@ abstract class PaymentWarningType implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PaymentWarningTypeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(PaymentRecievedTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -663,7 +752,7 @@ abstract class PaymentWarningType implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                PaymentWarningTypeTableMap::addInstanceToPool($this);
+                PaymentRecievedTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -694,11 +783,18 @@ abstract class PaymentWarningType implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
-            if ($this->aEvent !== null) {
-                if ($this->aEvent->isModified() || $this->aEvent->isNew()) {
-                    $affectedRows += $this->aEvent->save($con);
+            if ($this->aInvoice !== null) {
+                if ($this->aInvoice->isModified() || $this->aInvoice->isNew()) {
+                    $affectedRows += $this->aInvoice->save($con);
                 }
-                $this->setEvent($this->aEvent);
+                $this->setInvoice($this->aInvoice);
+            }
+
+            if ($this->aPaymentType !== null) {
+                if ($this->aPaymentType->isModified() || $this->aPaymentType->isNew()) {
+                    $affectedRows += $this->aPaymentType->save($con);
+                }
+                $this->setPaymentType($this->aPaymentType);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -712,17 +808,46 @@ abstract class PaymentWarningType implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->paymentWarningsScheduledForDeletion !== null) {
-                if (!$this->paymentWarningsScheduledForDeletion->isEmpty()) {
-                    \API\Models\Payment\PaymentWarningQuery::create()
-                        ->filterByPrimaryKeys($this->paymentWarningsScheduledForDeletion->getPrimaryKeys(false))
+            if ($this->couponsScheduledForDeletion !== null) {
+                if (!$this->couponsScheduledForDeletion->isEmpty()) {
+                    $pks = array();
+                    foreach ($this->couponsScheduledForDeletion as $entry) {
+                        $entryPk = [];
+
+                        $entryPk[1] = $this->getPaymentRecievedid();
+                        $entryPk[0] = $entry->getCouponid();
+                        $pks[] = $entryPk;
+                    }
+
+                    \API\Models\Payment\PaymentCouponQuery::create()
+                        ->filterByPrimaryKeys($pks)
                         ->delete($con);
-                    $this->paymentWarningsScheduledForDeletion = null;
+
+                    $this->couponsScheduledForDeletion = null;
+                }
+
+            }
+
+            if ($this->collCoupons) {
+                foreach ($this->collCoupons as $coupon) {
+                    if (!$coupon->isDeleted() && ($coupon->isNew() || $coupon->isModified())) {
+                        $coupon->save($con);
+                    }
                 }
             }
 
-            if ($this->collPaymentWarnings !== null) {
-                foreach ($this->collPaymentWarnings as $referrerFK) {
+
+            if ($this->paymentCouponsScheduledForDeletion !== null) {
+                if (!$this->paymentCouponsScheduledForDeletion->isEmpty()) {
+                    \API\Models\Payment\PaymentCouponQuery::create()
+                        ->filterByPrimaryKeys($this->paymentCouponsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->paymentCouponsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPaymentCoupons !== null) {
+                foreach ($this->collPaymentCoupons as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -749,27 +874,30 @@ abstract class PaymentWarningType implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID] = true;
-        if (null !== $this->payment_warning_typeid) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID . ')');
+        $this->modifiedColumns[PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID] = true;
+        if (null !== $this->payment_recievedid) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID)) {
-            $modifiedColumns[':p' . $index++]  = 'payment_warning_typeid';
+        if ($this->isColumnModified(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID)) {
+            $modifiedColumns[':p' . $index++]  = 'payment_recievedid';
         }
-        if ($this->isColumnModified(PaymentWarningTypeTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventid';
+        if ($this->isColumnModified(PaymentRecievedTableMap::COL_INVOICEID)) {
+            $modifiedColumns[':p' . $index++]  = 'invoiceid';
         }
-        if ($this->isColumnModified(PaymentWarningTypeTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+        if ($this->isColumnModified(PaymentRecievedTableMap::COL_PAYMENT_TYPEID)) {
+            $modifiedColumns[':p' . $index++]  = 'payment_typeid';
         }
-        if ($this->isColumnModified(PaymentWarningTypeTableMap::COL_EXTRA_PRICE)) {
-            $modifiedColumns[':p' . $index++]  = 'extra_price';
+        if ($this->isColumnModified(PaymentRecievedTableMap::COL_DATE)) {
+            $modifiedColumns[':p' . $index++]  = 'date';
+        }
+        if ($this->isColumnModified(PaymentRecievedTableMap::COL_AMOUNT)) {
+            $modifiedColumns[':p' . $index++]  = 'amount';
         }
 
         $sql = sprintf(
-            'INSERT INTO payment_warning_type (%s) VALUES (%s)',
+            'INSERT INTO payment_recieved (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -778,17 +906,20 @@ abstract class PaymentWarningType implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'payment_warning_typeid':
-                        $stmt->bindValue($identifier, $this->payment_warning_typeid, PDO::PARAM_INT);
+                    case 'payment_recievedid':
+                        $stmt->bindValue($identifier, $this->payment_recievedid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':
-                        $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
+                    case 'invoiceid':
+                        $stmt->bindValue($identifier, $this->invoiceid, PDO::PARAM_INT);
                         break;
-                    case 'name':
-                        $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                    case 'payment_typeid':
+                        $stmt->bindValue($identifier, $this->payment_typeid, PDO::PARAM_INT);
                         break;
-                    case 'extra_price':
-                        $stmt->bindValue($identifier, $this->extra_price, PDO::PARAM_STR);
+                    case 'date':
+                        $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case 'amount':
+                        $stmt->bindValue($identifier, $this->amount, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -803,7 +934,7 @@ abstract class PaymentWarningType implements ActiveRecordInterface
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', 0, $e);
         }
-        $this->setPaymentWarningTypeid($pk);
+        $this->setPaymentRecievedid($pk);
 
         $this->setNew(false);
     }
@@ -836,7 +967,7 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = PaymentWarningTypeTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = PaymentRecievedTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -853,16 +984,19 @@ abstract class PaymentWarningType implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getPaymentWarningTypeid();
+                return $this->getPaymentRecievedid();
                 break;
             case 1:
-                return $this->getEventid();
+                return $this->getInvoiceid();
                 break;
             case 2:
-                return $this->getName();
+                return $this->getPaymentTypeid();
                 break;
             case 3:
-                return $this->getExtraPrice();
+                return $this->getDate();
+                break;
+            case 4:
+                return $this->getAmount();
                 break;
             default:
                 return null;
@@ -888,52 +1022,72 @@ abstract class PaymentWarningType implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['PaymentWarningType'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['PaymentRecieved'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['PaymentWarningType'][$this->hashCode()] = true;
-        $keys = PaymentWarningTypeTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['PaymentRecieved'][$this->hashCode()] = true;
+        $keys = PaymentRecievedTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getPaymentWarningTypeid(),
-            $keys[1] => $this->getEventid(),
-            $keys[2] => $this->getName(),
-            $keys[3] => $this->getExtraPrice(),
+            $keys[0] => $this->getPaymentRecievedid(),
+            $keys[1] => $this->getInvoiceid(),
+            $keys[2] => $this->getPaymentTypeid(),
+            $keys[3] => $this->getDate(),
+            $keys[4] => $this->getAmount(),
         );
+        if ($result[$keys[3]] instanceof \DateTime) {
+            $result[$keys[3]] = $result[$keys[3]]->format('c');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
-            if (null !== $this->aEvent) {
+            if (null !== $this->aInvoice) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'event';
+                        $key = 'invoice';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'event';
+                        $key = 'invoice';
                         break;
                     default:
-                        $key = 'Event';
+                        $key = 'Invoice';
                 }
 
-                $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aInvoice->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->collPaymentWarnings) {
+            if (null !== $this->aPaymentType) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'paymentWarnings';
+                        $key = 'paymentType';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'payment_warnings';
+                        $key = 'payment_type';
                         break;
                     default:
-                        $key = 'PaymentWarnings';
+                        $key = 'PaymentType';
                 }
 
-                $result[$key] = $this->collPaymentWarnings->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->aPaymentType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collPaymentCoupons) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'paymentCoupons';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'payment_coupons';
+                        break;
+                    default:
+                        $key = 'PaymentCoupons';
+                }
+
+                $result[$key] = $this->collPaymentCoupons->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -949,11 +1103,11 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\API\Models\Payment\PaymentWarningType
+     * @return $this|\API\Models\Payment\PaymentRecieved
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = PaymentWarningTypeTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = PaymentRecievedTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -964,22 +1118,25 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\API\Models\Payment\PaymentWarningType
+     * @return $this|\API\Models\Payment\PaymentRecieved
      */
     public function setByPosition($pos, $value)
     {
         switch ($pos) {
             case 0:
-                $this->setPaymentWarningTypeid($value);
+                $this->setPaymentRecievedid($value);
                 break;
             case 1:
-                $this->setEventid($value);
+                $this->setInvoiceid($value);
                 break;
             case 2:
-                $this->setName($value);
+                $this->setPaymentTypeid($value);
                 break;
             case 3:
-                $this->setExtraPrice($value);
+                $this->setDate($value);
+                break;
+            case 4:
+                $this->setAmount($value);
                 break;
         } // switch()
 
@@ -1005,19 +1162,22 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = PaymentWarningTypeTableMap::getFieldNames($keyType);
+        $keys = PaymentRecievedTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setPaymentWarningTypeid($arr[$keys[0]]);
+            $this->setPaymentRecievedid($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setEventid($arr[$keys[1]]);
+            $this->setInvoiceid($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setName($arr[$keys[2]]);
+            $this->setPaymentTypeid($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setExtraPrice($arr[$keys[3]]);
+            $this->setDate($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setAmount($arr[$keys[4]]);
         }
     }
 
@@ -1038,7 +1198,7 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\API\Models\Payment\PaymentWarningType The current object, for fluid interface
+     * @return $this|\API\Models\Payment\PaymentRecieved The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1058,19 +1218,22 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(PaymentWarningTypeTableMap::DATABASE_NAME);
+        $criteria = new Criteria(PaymentRecievedTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID)) {
-            $criteria->add(PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID, $this->payment_warning_typeid);
+        if ($this->isColumnModified(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID)) {
+            $criteria->add(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID, $this->payment_recievedid);
         }
-        if ($this->isColumnModified(PaymentWarningTypeTableMap::COL_EVENTID)) {
-            $criteria->add(PaymentWarningTypeTableMap::COL_EVENTID, $this->eventid);
+        if ($this->isColumnModified(PaymentRecievedTableMap::COL_INVOICEID)) {
+            $criteria->add(PaymentRecievedTableMap::COL_INVOICEID, $this->invoiceid);
         }
-        if ($this->isColumnModified(PaymentWarningTypeTableMap::COL_NAME)) {
-            $criteria->add(PaymentWarningTypeTableMap::COL_NAME, $this->name);
+        if ($this->isColumnModified(PaymentRecievedTableMap::COL_PAYMENT_TYPEID)) {
+            $criteria->add(PaymentRecievedTableMap::COL_PAYMENT_TYPEID, $this->payment_typeid);
         }
-        if ($this->isColumnModified(PaymentWarningTypeTableMap::COL_EXTRA_PRICE)) {
-            $criteria->add(PaymentWarningTypeTableMap::COL_EXTRA_PRICE, $this->extra_price);
+        if ($this->isColumnModified(PaymentRecievedTableMap::COL_DATE)) {
+            $criteria->add(PaymentRecievedTableMap::COL_DATE, $this->date);
+        }
+        if ($this->isColumnModified(PaymentRecievedTableMap::COL_AMOUNT)) {
+            $criteria->add(PaymentRecievedTableMap::COL_AMOUNT, $this->amount);
         }
 
         return $criteria;
@@ -1088,8 +1251,8 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildPaymentWarningTypeQuery::create();
-        $criteria->add(PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID, $this->payment_warning_typeid);
+        $criteria = ChildPaymentRecievedQuery::create();
+        $criteria->add(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID, $this->payment_recievedid);
 
         return $criteria;
     }
@@ -1102,7 +1265,7 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getPaymentWarningTypeid();
+        $validPk = null !== $this->getPaymentRecievedid();
 
         $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
@@ -1122,18 +1285,18 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      */
     public function getPrimaryKey()
     {
-        return $this->getPaymentWarningTypeid();
+        return $this->getPaymentRecievedid();
     }
 
     /**
-     * Generic method to set the primary key (payment_warning_typeid column).
+     * Generic method to set the primary key (payment_recievedid column).
      *
      * @param       int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setPaymentWarningTypeid($key);
+        $this->setPaymentRecievedid($key);
     }
 
     /**
@@ -1142,7 +1305,7 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return null === $this->getPaymentWarningTypeid();
+        return null === $this->getPaymentRecievedid();
     }
 
     /**
@@ -1151,25 +1314,26 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \API\Models\Payment\PaymentWarningType (or compatible) type.
+     * @param      object $copyObj An object of \API\Models\Payment\PaymentRecieved (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setEventid($this->getEventid());
-        $copyObj->setName($this->getName());
-        $copyObj->setExtraPrice($this->getExtraPrice());
+        $copyObj->setInvoiceid($this->getInvoiceid());
+        $copyObj->setPaymentTypeid($this->getPaymentTypeid());
+        $copyObj->setDate($this->getDate());
+        $copyObj->setAmount($this->getAmount());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getPaymentWarnings() as $relObj) {
+            foreach ($this->getPaymentCoupons() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addPaymentWarning($relObj->copy($deepCopy));
+                    $copyObj->addPaymentCoupon($relObj->copy($deepCopy));
                 }
             }
 
@@ -1177,7 +1341,7 @@ abstract class PaymentWarningType implements ActiveRecordInterface
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setPaymentWarningTypeid(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setPaymentRecievedid(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1190,7 +1354,7 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \API\Models\Payment\PaymentWarningType Clone of current object.
+     * @return \API\Models\Payment\PaymentRecieved Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1204,26 +1368,26 @@ abstract class PaymentWarningType implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a Event object.
+     * Declares an association between this object and a Invoice object.
      *
-     * @param  Event $v
-     * @return $this|\API\Models\Payment\PaymentWarningType The current object (for fluent API support)
+     * @param  Invoice $v
+     * @return $this|\API\Models\Payment\PaymentRecieved The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setEvent(Event $v = null)
+    public function setInvoice(Invoice $v = null)
     {
         if ($v === null) {
-            $this->setEventid(NULL);
+            $this->setInvoiceid(NULL);
         } else {
-            $this->setEventid($v->getEventid());
+            $this->setInvoiceid($v->getInvoiceid());
         }
 
-        $this->aEvent = $v;
+        $this->aInvoice = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the Event object, it will not be re-added.
+        // If this object has already been added to the Invoice object, it will not be re-added.
         if ($v !== null) {
-            $v->addPaymentWarningType($this);
+            $v->addPaymentRecieved($this);
         }
 
 
@@ -1232,26 +1396,77 @@ abstract class PaymentWarningType implements ActiveRecordInterface
 
 
     /**
-     * Get the associated Event object
+     * Get the associated Invoice object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return Event The associated Event object.
+     * @return Invoice The associated Invoice object.
      * @throws PropelException
      */
-    public function getEvent(ConnectionInterface $con = null)
+    public function getInvoice(ConnectionInterface $con = null)
     {
-        if ($this->aEvent === null && ($this->eventid !== null)) {
-            $this->aEvent = EventQuery::create()->findPk($this->eventid, $con);
+        if ($this->aInvoice === null && ($this->invoiceid !== null)) {
+            $this->aInvoice = InvoiceQuery::create()->findPk($this->invoiceid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aEvent->addPaymentWarningTypes($this);
+                $this->aInvoice->addPaymentRecieveds($this);
              */
         }
 
-        return $this->aEvent;
+        return $this->aInvoice;
+    }
+
+    /**
+     * Declares an association between this object and a ChildPaymentType object.
+     *
+     * @param  ChildPaymentType $v
+     * @return $this|\API\Models\Payment\PaymentRecieved The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setPaymentType(ChildPaymentType $v = null)
+    {
+        if ($v === null) {
+            $this->setPaymentTypeid(NULL);
+        } else {
+            $this->setPaymentTypeid($v->getPaymentTypeid());
+        }
+
+        $this->aPaymentType = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildPaymentType object, it will not be re-added.
+        if ($v !== null) {
+            $v->addPaymentRecieved($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildPaymentType object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return ChildPaymentType The associated ChildPaymentType object.
+     * @throws PropelException
+     */
+    public function getPaymentType(ConnectionInterface $con = null)
+    {
+        if ($this->aPaymentType === null && ($this->payment_typeid !== null)) {
+            $this->aPaymentType = ChildPaymentTypeQuery::create()->findPk($this->payment_typeid, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aPaymentType->addPaymentRecieveds($this);
+             */
+        }
+
+        return $this->aPaymentType;
     }
 
 
@@ -1265,37 +1480,37 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('PaymentWarning' == $relationName) {
-            return $this->initPaymentWarnings();
+        if ('PaymentCoupon' == $relationName) {
+            return $this->initPaymentCoupons();
         }
     }
 
     /**
-     * Clears out the collPaymentWarnings collection
+     * Clears out the collPaymentCoupons collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addPaymentWarnings()
+     * @see        addPaymentCoupons()
      */
-    public function clearPaymentWarnings()
+    public function clearPaymentCoupons()
     {
-        $this->collPaymentWarnings = null; // important to set this to NULL since that means it is uninitialized
+        $this->collPaymentCoupons = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collPaymentWarnings collection loaded partially.
+     * Reset is the collPaymentCoupons collection loaded partially.
      */
-    public function resetPartialPaymentWarnings($v = true)
+    public function resetPartialPaymentCoupons($v = true)
     {
-        $this->collPaymentWarningsPartial = $v;
+        $this->collPaymentCouponsPartial = $v;
     }
 
     /**
-     * Initializes the collPaymentWarnings collection.
+     * Initializes the collPaymentCoupons collection.
      *
-     * By default this just sets the collPaymentWarnings collection to an empty array (like clearcollPaymentWarnings());
+     * By default this just sets the collPaymentCoupons collection to an empty array (like clearcollPaymentCoupons());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1304,162 +1519,165 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initPaymentWarnings($overrideExisting = true)
+    public function initPaymentCoupons($overrideExisting = true)
     {
-        if (null !== $this->collPaymentWarnings && !$overrideExisting) {
+        if (null !== $this->collPaymentCoupons && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = PaymentWarningTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = PaymentCouponTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collPaymentWarnings = new $collectionClassName;
-        $this->collPaymentWarnings->setModel('\API\Models\Payment\PaymentWarning');
+        $this->collPaymentCoupons = new $collectionClassName;
+        $this->collPaymentCoupons->setModel('\API\Models\Payment\PaymentCoupon');
     }
 
     /**
-     * Gets an array of ChildPaymentWarning objects which contain a foreign key that references this object.
+     * Gets an array of ChildPaymentCoupon objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildPaymentWarningType is new, it will return
+     * If this ChildPaymentRecieved is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildPaymentWarning[] List of ChildPaymentWarning objects
+     * @return ObjectCollection|ChildPaymentCoupon[] List of ChildPaymentCoupon objects
      * @throws PropelException
      */
-    public function getPaymentWarnings(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getPaymentCoupons(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collPaymentWarningsPartial && !$this->isNew();
-        if (null === $this->collPaymentWarnings || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collPaymentWarnings) {
+        $partial = $this->collPaymentCouponsPartial && !$this->isNew();
+        if (null === $this->collPaymentCoupons || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPaymentCoupons) {
                 // return empty collection
-                $this->initPaymentWarnings();
+                $this->initPaymentCoupons();
             } else {
-                $collPaymentWarnings = ChildPaymentWarningQuery::create(null, $criteria)
-                    ->filterByPaymentWarningType($this)
+                $collPaymentCoupons = ChildPaymentCouponQuery::create(null, $criteria)
+                    ->filterByPaymentRecieved($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collPaymentWarningsPartial && count($collPaymentWarnings)) {
-                        $this->initPaymentWarnings(false);
+                    if (false !== $this->collPaymentCouponsPartial && count($collPaymentCoupons)) {
+                        $this->initPaymentCoupons(false);
 
-                        foreach ($collPaymentWarnings as $obj) {
-                            if (false == $this->collPaymentWarnings->contains($obj)) {
-                                $this->collPaymentWarnings->append($obj);
+                        foreach ($collPaymentCoupons as $obj) {
+                            if (false == $this->collPaymentCoupons->contains($obj)) {
+                                $this->collPaymentCoupons->append($obj);
                             }
                         }
 
-                        $this->collPaymentWarningsPartial = true;
+                        $this->collPaymentCouponsPartial = true;
                     }
 
-                    return $collPaymentWarnings;
+                    return $collPaymentCoupons;
                 }
 
-                if ($partial && $this->collPaymentWarnings) {
-                    foreach ($this->collPaymentWarnings as $obj) {
+                if ($partial && $this->collPaymentCoupons) {
+                    foreach ($this->collPaymentCoupons as $obj) {
                         if ($obj->isNew()) {
-                            $collPaymentWarnings[] = $obj;
+                            $collPaymentCoupons[] = $obj;
                         }
                     }
                 }
 
-                $this->collPaymentWarnings = $collPaymentWarnings;
-                $this->collPaymentWarningsPartial = false;
+                $this->collPaymentCoupons = $collPaymentCoupons;
+                $this->collPaymentCouponsPartial = false;
             }
         }
 
-        return $this->collPaymentWarnings;
+        return $this->collPaymentCoupons;
     }
 
     /**
-     * Sets a collection of ChildPaymentWarning objects related by a one-to-many relationship
+     * Sets a collection of ChildPaymentCoupon objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $paymentWarnings A Propel collection.
+     * @param      Collection $paymentCoupons A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildPaymentWarningType The current object (for fluent API support)
+     * @return $this|ChildPaymentRecieved The current object (for fluent API support)
      */
-    public function setPaymentWarnings(Collection $paymentWarnings, ConnectionInterface $con = null)
+    public function setPaymentCoupons(Collection $paymentCoupons, ConnectionInterface $con = null)
     {
-        /** @var ChildPaymentWarning[] $paymentWarningsToDelete */
-        $paymentWarningsToDelete = $this->getPaymentWarnings(new Criteria(), $con)->diff($paymentWarnings);
+        /** @var ChildPaymentCoupon[] $paymentCouponsToDelete */
+        $paymentCouponsToDelete = $this->getPaymentCoupons(new Criteria(), $con)->diff($paymentCoupons);
 
 
-        $this->paymentWarningsScheduledForDeletion = $paymentWarningsToDelete;
+        //since at least one column in the foreign key is at the same time a PK
+        //we can not just set a PK to NULL in the lines below. We have to store
+        //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
+        $this->paymentCouponsScheduledForDeletion = clone $paymentCouponsToDelete;
 
-        foreach ($paymentWarningsToDelete as $paymentWarningRemoved) {
-            $paymentWarningRemoved->setPaymentWarningType(null);
+        foreach ($paymentCouponsToDelete as $paymentCouponRemoved) {
+            $paymentCouponRemoved->setPaymentRecieved(null);
         }
 
-        $this->collPaymentWarnings = null;
-        foreach ($paymentWarnings as $paymentWarning) {
-            $this->addPaymentWarning($paymentWarning);
+        $this->collPaymentCoupons = null;
+        foreach ($paymentCoupons as $paymentCoupon) {
+            $this->addPaymentCoupon($paymentCoupon);
         }
 
-        $this->collPaymentWarnings = $paymentWarnings;
-        $this->collPaymentWarningsPartial = false;
+        $this->collPaymentCoupons = $paymentCoupons;
+        $this->collPaymentCouponsPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related PaymentWarning objects.
+     * Returns the number of related PaymentCoupon objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related PaymentWarning objects.
+     * @return int             Count of related PaymentCoupon objects.
      * @throws PropelException
      */
-    public function countPaymentWarnings(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countPaymentCoupons(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collPaymentWarningsPartial && !$this->isNew();
-        if (null === $this->collPaymentWarnings || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collPaymentWarnings) {
+        $partial = $this->collPaymentCouponsPartial && !$this->isNew();
+        if (null === $this->collPaymentCoupons || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPaymentCoupons) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getPaymentWarnings());
+                return count($this->getPaymentCoupons());
             }
 
-            $query = ChildPaymentWarningQuery::create(null, $criteria);
+            $query = ChildPaymentCouponQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
 
             return $query
-                ->filterByPaymentWarningType($this)
+                ->filterByPaymentRecieved($this)
                 ->count($con);
         }
 
-        return count($this->collPaymentWarnings);
+        return count($this->collPaymentCoupons);
     }
 
     /**
-     * Method called to associate a ChildPaymentWarning object to this object
-     * through the ChildPaymentWarning foreign key attribute.
+     * Method called to associate a ChildPaymentCoupon object to this object
+     * through the ChildPaymentCoupon foreign key attribute.
      *
-     * @param  ChildPaymentWarning $l ChildPaymentWarning
-     * @return $this|\API\Models\Payment\PaymentWarningType The current object (for fluent API support)
+     * @param  ChildPaymentCoupon $l ChildPaymentCoupon
+     * @return $this|\API\Models\Payment\PaymentRecieved The current object (for fluent API support)
      */
-    public function addPaymentWarning(ChildPaymentWarning $l)
+    public function addPaymentCoupon(ChildPaymentCoupon $l)
     {
-        if ($this->collPaymentWarnings === null) {
-            $this->initPaymentWarnings();
-            $this->collPaymentWarningsPartial = true;
+        if ($this->collPaymentCoupons === null) {
+            $this->initPaymentCoupons();
+            $this->collPaymentCouponsPartial = true;
         }
 
-        if (!$this->collPaymentWarnings->contains($l)) {
-            $this->doAddPaymentWarning($l);
+        if (!$this->collPaymentCoupons->contains($l)) {
+            $this->doAddPaymentCoupon($l);
 
-            if ($this->paymentWarningsScheduledForDeletion and $this->paymentWarningsScheduledForDeletion->contains($l)) {
-                $this->paymentWarningsScheduledForDeletion->remove($this->paymentWarningsScheduledForDeletion->search($l));
+            if ($this->paymentCouponsScheduledForDeletion and $this->paymentCouponsScheduledForDeletion->contains($l)) {
+                $this->paymentCouponsScheduledForDeletion->remove($this->paymentCouponsScheduledForDeletion->search($l));
             }
         }
 
@@ -1467,29 +1685,29 @@ abstract class PaymentWarningType implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildPaymentWarning $paymentWarning The ChildPaymentWarning object to add.
+     * @param ChildPaymentCoupon $paymentCoupon The ChildPaymentCoupon object to add.
      */
-    protected function doAddPaymentWarning(ChildPaymentWarning $paymentWarning)
+    protected function doAddPaymentCoupon(ChildPaymentCoupon $paymentCoupon)
     {
-        $this->collPaymentWarnings[]= $paymentWarning;
-        $paymentWarning->setPaymentWarningType($this);
+        $this->collPaymentCoupons[]= $paymentCoupon;
+        $paymentCoupon->setPaymentRecieved($this);
     }
 
     /**
-     * @param  ChildPaymentWarning $paymentWarning The ChildPaymentWarning object to remove.
-     * @return $this|ChildPaymentWarningType The current object (for fluent API support)
+     * @param  ChildPaymentCoupon $paymentCoupon The ChildPaymentCoupon object to remove.
+     * @return $this|ChildPaymentRecieved The current object (for fluent API support)
      */
-    public function removePaymentWarning(ChildPaymentWarning $paymentWarning)
+    public function removePaymentCoupon(ChildPaymentCoupon $paymentCoupon)
     {
-        if ($this->getPaymentWarnings()->contains($paymentWarning)) {
-            $pos = $this->collPaymentWarnings->search($paymentWarning);
-            $this->collPaymentWarnings->remove($pos);
-            if (null === $this->paymentWarningsScheduledForDeletion) {
-                $this->paymentWarningsScheduledForDeletion = clone $this->collPaymentWarnings;
-                $this->paymentWarningsScheduledForDeletion->clear();
+        if ($this->getPaymentCoupons()->contains($paymentCoupon)) {
+            $pos = $this->collPaymentCoupons->search($paymentCoupon);
+            $this->collPaymentCoupons->remove($pos);
+            if (null === $this->paymentCouponsScheduledForDeletion) {
+                $this->paymentCouponsScheduledForDeletion = clone $this->collPaymentCoupons;
+                $this->paymentCouponsScheduledForDeletion->clear();
             }
-            $this->paymentWarningsScheduledForDeletion[]= clone $paymentWarning;
-            $paymentWarning->setPaymentWarningType(null);
+            $this->paymentCouponsScheduledForDeletion[]= clone $paymentCoupon;
+            $paymentCoupon->setPaymentRecieved(null);
         }
 
         return $this;
@@ -1499,25 +1717,268 @@ abstract class PaymentWarningType implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this PaymentWarningType is new, it will return
-     * an empty collection; or if this PaymentWarningType has previously
-     * been saved, it will retrieve related PaymentWarnings from storage.
+     * Otherwise if this PaymentRecieved is new, it will return
+     * an empty collection; or if this PaymentRecieved has previously
+     * been saved, it will retrieve related PaymentCoupons from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in PaymentWarningType.
+     * actually need in PaymentRecieved.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildPaymentWarning[] List of ChildPaymentWarning objects
+     * @return ObjectCollection|ChildPaymentCoupon[] List of ChildPaymentCoupon objects
      */
-    public function getPaymentWarningsJoinPayment(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getPaymentCouponsJoinCoupon(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildPaymentWarningQuery::create(null, $criteria);
-        $query->joinWith('Payment', $joinBehavior);
+        $query = ChildPaymentCouponQuery::create(null, $criteria);
+        $query->joinWith('Coupon', $joinBehavior);
 
-        return $this->getPaymentWarnings($query, $con);
+        return $this->getPaymentCoupons($query, $con);
+    }
+
+    /**
+     * Clears out the collCoupons collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addCoupons()
+     */
+    public function clearCoupons()
+    {
+        $this->collCoupons = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Initializes the collCoupons crossRef collection.
+     *
+     * By default this just sets the collCoupons collection to an empty collection (like clearCoupons());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @return void
+     */
+    public function initCoupons()
+    {
+        $collectionClassName = PaymentCouponTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collCoupons = new $collectionClassName;
+        $this->collCouponsPartial = true;
+        $this->collCoupons->setModel('\API\Models\Payment\Coupon');
+    }
+
+    /**
+     * Checks if the collCoupons collection is loaded.
+     *
+     * @return bool
+     */
+    public function isCouponsLoaded()
+    {
+        return null !== $this->collCoupons;
+    }
+
+    /**
+     * Gets a collection of ChildCoupon objects related by a many-to-many relationship
+     * to the current object by way of the payment_coupon cross-reference table.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPaymentRecieved is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return ObjectCollection|ChildCoupon[] List of ChildCoupon objects
+     */
+    public function getCoupons(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collCouponsPartial && !$this->isNew();
+        if (null === $this->collCoupons || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collCoupons) {
+                    $this->initCoupons();
+                }
+            } else {
+
+                $query = ChildCouponQuery::create(null, $criteria)
+                    ->filterByPaymentRecieved($this);
+                $collCoupons = $query->find($con);
+                if (null !== $criteria) {
+                    return $collCoupons;
+                }
+
+                if ($partial && $this->collCoupons) {
+                    //make sure that already added objects gets added to the list of the database.
+                    foreach ($this->collCoupons as $obj) {
+                        if (!$collCoupons->contains($obj)) {
+                            $collCoupons[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collCoupons = $collCoupons;
+                $this->collCouponsPartial = false;
+            }
+        }
+
+        return $this->collCoupons;
+    }
+
+    /**
+     * Sets a collection of Coupon objects related by a many-to-many relationship
+     * to the current object by way of the payment_coupon cross-reference table.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param  Collection $coupons A Propel collection.
+     * @param  ConnectionInterface $con Optional connection object
+     * @return $this|ChildPaymentRecieved The current object (for fluent API support)
+     */
+    public function setCoupons(Collection $coupons, ConnectionInterface $con = null)
+    {
+        $this->clearCoupons();
+        $currentCoupons = $this->getCoupons();
+
+        $couponsScheduledForDeletion = $currentCoupons->diff($coupons);
+
+        foreach ($couponsScheduledForDeletion as $toDelete) {
+            $this->removeCoupon($toDelete);
+        }
+
+        foreach ($coupons as $coupon) {
+            if (!$currentCoupons->contains($coupon)) {
+                $this->doAddCoupon($coupon);
+            }
+        }
+
+        $this->collCouponsPartial = false;
+        $this->collCoupons = $coupons;
+
+        return $this;
+    }
+
+    /**
+     * Gets the number of Coupon objects related by a many-to-many relationship
+     * to the current object by way of the payment_coupon cross-reference table.
+     *
+     * @param      Criteria $criteria Optional query object to filter the query
+     * @param      boolean $distinct Set to true to force count distinct
+     * @param      ConnectionInterface $con Optional connection object
+     *
+     * @return int the number of related Coupon objects
+     */
+    public function countCoupons(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collCouponsPartial && !$this->isNew();
+        if (null === $this->collCoupons || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collCoupons) {
+                return 0;
+            } else {
+
+                if ($partial && !$criteria) {
+                    return count($this->getCoupons());
+                }
+
+                $query = ChildCouponQuery::create(null, $criteria);
+                if ($distinct) {
+                    $query->distinct();
+                }
+
+                return $query
+                    ->filterByPaymentRecieved($this)
+                    ->count($con);
+            }
+        } else {
+            return count($this->collCoupons);
+        }
+    }
+
+    /**
+     * Associate a ChildCoupon to this object
+     * through the payment_coupon cross reference table.
+     *
+     * @param ChildCoupon $coupon
+     * @return ChildPaymentRecieved The current object (for fluent API support)
+     */
+    public function addCoupon(ChildCoupon $coupon)
+    {
+        if ($this->collCoupons === null) {
+            $this->initCoupons();
+        }
+
+        if (!$this->getCoupons()->contains($coupon)) {
+            // only add it if the **same** object is not already associated
+            $this->collCoupons->push($coupon);
+            $this->doAddCoupon($coupon);
+        }
+
+        return $this;
+    }
+
+    /**
+     *
+     * @param ChildCoupon $coupon
+     */
+    protected function doAddCoupon(ChildCoupon $coupon)
+    {
+        $paymentCoupon = new ChildPaymentCoupon();
+
+        $paymentCoupon->setCoupon($coupon);
+
+        $paymentCoupon->setPaymentRecieved($this);
+
+        $this->addPaymentCoupon($paymentCoupon);
+
+        // set the back reference to this object directly as using provided method either results
+        // in endless loop or in multiple relations
+        if (!$coupon->isPaymentRecievedsLoaded()) {
+            $coupon->initPaymentRecieveds();
+            $coupon->getPaymentRecieveds()->push($this);
+        } elseif (!$coupon->getPaymentRecieveds()->contains($this)) {
+            $coupon->getPaymentRecieveds()->push($this);
+        }
+
+    }
+
+    /**
+     * Remove coupon of this object
+     * through the payment_coupon cross reference table.
+     *
+     * @param ChildCoupon $coupon
+     * @return ChildPaymentRecieved The current object (for fluent API support)
+     */
+    public function removeCoupon(ChildCoupon $coupon)
+    {
+        if ($this->getCoupons()->contains($coupon)) { $paymentCoupon = new ChildPaymentCoupon();
+
+            $paymentCoupon->setCoupon($coupon);
+            if ($coupon->isPaymentRecievedsLoaded()) {
+                //remove the back reference if available
+                $coupon->getPaymentRecieveds()->removeObject($this);
+            }
+
+            $paymentCoupon->setPaymentRecieved($this);
+            $this->removePaymentCoupon(clone $paymentCoupon);
+            $paymentCoupon->clear();
+
+            $this->collCoupons->remove($this->collCoupons->search($coupon));
+
+            if (null === $this->couponsScheduledForDeletion) {
+                $this->couponsScheduledForDeletion = clone $this->collCoupons;
+                $this->couponsScheduledForDeletion->clear();
+            }
+
+            $this->couponsScheduledForDeletion->push($coupon);
+        }
+
+
+        return $this;
     }
 
     /**
@@ -1527,13 +1988,17 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      */
     public function clear()
     {
-        if (null !== $this->aEvent) {
-            $this->aEvent->removePaymentWarningType($this);
+        if (null !== $this->aInvoice) {
+            $this->aInvoice->removePaymentRecieved($this);
         }
-        $this->payment_warning_typeid = null;
-        $this->eventid = null;
-        $this->name = null;
-        $this->extra_price = null;
+        if (null !== $this->aPaymentType) {
+            $this->aPaymentType->removePaymentRecieved($this);
+        }
+        $this->payment_recievedid = null;
+        $this->invoiceid = null;
+        $this->payment_typeid = null;
+        $this->date = null;
+        $this->amount = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1552,15 +2017,22 @@ abstract class PaymentWarningType implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collPaymentWarnings) {
-                foreach ($this->collPaymentWarnings as $o) {
+            if ($this->collPaymentCoupons) {
+                foreach ($this->collPaymentCoupons as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collCoupons) {
+                foreach ($this->collCoupons as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
-        $this->collPaymentWarnings = null;
-        $this->aEvent = null;
+        $this->collPaymentCoupons = null;
+        $this->collCoupons = null;
+        $this->aInvoice = null;
+        $this->aPaymentType = null;
     }
 
     /**
@@ -1570,7 +2042,7 @@ abstract class PaymentWarningType implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(PaymentWarningTypeTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(PaymentRecievedTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

@@ -1,11 +1,11 @@
 <?php
 
-namespace API\Models\Payment;
+namespace API\Models\Invoice;
 
-use API\Models\Payment\Base\PaymentWarning as BasePaymentWarning;
+use API\Models\Invoice\Base\InvoiceType as BaseInvoiceType;
 
 /**
- * Skeleton subclass for representing a row from the 'payment_warning' table.
+ * Skeleton subclass for representing a row from the 'invoice_type' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use API\Models\Payment\Base\PaymentWarning as BasePaymentWarning;
  * long as it does not already exist in the output directory.
  *
  */
-class PaymentWarning extends BasePaymentWarning
+class InvoiceType extends BaseInvoiceType
 {
 
 }

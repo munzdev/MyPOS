@@ -180,8 +180,8 @@ abstract class EventContact implements ActiveRecordInterface
     /**
      * @var        ObjectCollection|Invoice[] Collection to store aggregation of Invoice objects.
      */
-    protected $collInvoicesRelatedByCustomerid;
-    protected $collInvoicesRelatedByCustomeridPartial;
+    protected $collInvoicesRelatedByCustomerEventContactid;
+    protected $collInvoicesRelatedByCustomerEventContactidPartial;
 
     /**
      * @var        ObjectCollection|Invoice[] Collection to store aggregation of Invoice objects.
@@ -201,7 +201,7 @@ abstract class EventContact implements ActiveRecordInterface
      * An array of objects scheduled for deletion.
      * @var ObjectCollection|Invoice[]
      */
-    protected $invoicesRelatedByCustomeridScheduledForDeletion = null;
+    protected $invoicesRelatedByCustomerEventContactidScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1077,7 +1077,7 @@ abstract class EventContact implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aEvent = null;
-            $this->collInvoicesRelatedByCustomerid = null;
+            $this->collInvoicesRelatedByCustomerEventContactid = null;
 
             $this->collInvoicesRelatedByEventContactid = null;
 
@@ -1203,18 +1203,18 @@ abstract class EventContact implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->invoicesRelatedByCustomeridScheduledForDeletion !== null) {
-                if (!$this->invoicesRelatedByCustomeridScheduledForDeletion->isEmpty()) {
-                    foreach ($this->invoicesRelatedByCustomeridScheduledForDeletion as $invoiceRelatedByCustomerid) {
+            if ($this->invoicesRelatedByCustomerEventContactidScheduledForDeletion !== null) {
+                if (!$this->invoicesRelatedByCustomerEventContactidScheduledForDeletion->isEmpty()) {
+                    foreach ($this->invoicesRelatedByCustomerEventContactidScheduledForDeletion as $invoiceRelatedByCustomerEventContactid) {
                         // need to save related object because we set the relation to null
-                        $invoiceRelatedByCustomerid->save($con);
+                        $invoiceRelatedByCustomerEventContactid->save($con);
                     }
-                    $this->invoicesRelatedByCustomeridScheduledForDeletion = null;
+                    $this->invoicesRelatedByCustomerEventContactidScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collInvoicesRelatedByCustomerid !== null) {
-                foreach ($this->collInvoicesRelatedByCustomerid as $referrerFK) {
+            if ($this->collInvoicesRelatedByCustomerEventContactid !== null) {
+                foreach ($this->collInvoicesRelatedByCustomerEventContactid as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1539,7 +1539,7 @@ abstract class EventContact implements ActiveRecordInterface
 
                 $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->collInvoicesRelatedByCustomerid) {
+            if (null !== $this->collInvoicesRelatedByCustomerEventContactid) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
@@ -1552,7 +1552,7 @@ abstract class EventContact implements ActiveRecordInterface
                         $key = 'Invoices';
                 }
 
-                $result[$key] = $this->collInvoicesRelatedByCustomerid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collInvoicesRelatedByCustomerEventContactid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collInvoicesRelatedByEventContactid) {
 
@@ -1911,9 +1911,9 @@ abstract class EventContact implements ActiveRecordInterface
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getInvoicesRelatedByCustomerid() as $relObj) {
+            foreach ($this->getInvoicesRelatedByCustomerEventContactid() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addInvoiceRelatedByCustomerid($relObj->copy($deepCopy));
+                    $copyObj->addInvoiceRelatedByCustomerEventContactid($relObj->copy($deepCopy));
                 }
             }
 
@@ -2015,8 +2015,8 @@ abstract class EventContact implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('InvoiceRelatedByCustomerid' == $relationName) {
-            return $this->initInvoicesRelatedByCustomerid();
+        if ('InvoiceRelatedByCustomerEventContactid' == $relationName) {
+            return $this->initInvoicesRelatedByCustomerEventContactid();
         }
         if ('InvoiceRelatedByEventContactid' == $relationName) {
             return $this->initInvoicesRelatedByEventContactid();
@@ -2024,31 +2024,31 @@ abstract class EventContact implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collInvoicesRelatedByCustomerid collection
+     * Clears out the collInvoicesRelatedByCustomerEventContactid collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addInvoicesRelatedByCustomerid()
+     * @see        addInvoicesRelatedByCustomerEventContactid()
      */
-    public function clearInvoicesRelatedByCustomerid()
+    public function clearInvoicesRelatedByCustomerEventContactid()
     {
-        $this->collInvoicesRelatedByCustomerid = null; // important to set this to NULL since that means it is uninitialized
+        $this->collInvoicesRelatedByCustomerEventContactid = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collInvoicesRelatedByCustomerid collection loaded partially.
+     * Reset is the collInvoicesRelatedByCustomerEventContactid collection loaded partially.
      */
-    public function resetPartialInvoicesRelatedByCustomerid($v = true)
+    public function resetPartialInvoicesRelatedByCustomerEventContactid($v = true)
     {
-        $this->collInvoicesRelatedByCustomeridPartial = $v;
+        $this->collInvoicesRelatedByCustomerEventContactidPartial = $v;
     }
 
     /**
-     * Initializes the collInvoicesRelatedByCustomerid collection.
+     * Initializes the collInvoicesRelatedByCustomerEventContactid collection.
      *
-     * By default this just sets the collInvoicesRelatedByCustomerid collection to an empty array (like clearcollInvoicesRelatedByCustomerid());
+     * By default this just sets the collInvoicesRelatedByCustomerEventContactid collection to an empty array (like clearcollInvoicesRelatedByCustomerEventContactid());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -2057,16 +2057,16 @@ abstract class EventContact implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initInvoicesRelatedByCustomerid($overrideExisting = true)
+    public function initInvoicesRelatedByCustomerEventContactid($overrideExisting = true)
     {
-        if (null !== $this->collInvoicesRelatedByCustomerid && !$overrideExisting) {
+        if (null !== $this->collInvoicesRelatedByCustomerEventContactid && !$overrideExisting) {
             return;
         }
 
         $collectionClassName = InvoiceTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collInvoicesRelatedByCustomerid = new $collectionClassName;
-        $this->collInvoicesRelatedByCustomerid->setModel('\API\Models\Invoice\Invoice');
+        $this->collInvoicesRelatedByCustomerEventContactid = new $collectionClassName;
+        $this->collInvoicesRelatedByCustomerEventContactid->setModel('\API\Models\Invoice\Invoice');
     }
 
     /**
@@ -2083,48 +2083,48 @@ abstract class EventContact implements ActiveRecordInterface
      * @return ObjectCollection|Invoice[] List of Invoice objects
      * @throws PropelException
      */
-    public function getInvoicesRelatedByCustomerid(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getInvoicesRelatedByCustomerEventContactid(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collInvoicesRelatedByCustomeridPartial && !$this->isNew();
-        if (null === $this->collInvoicesRelatedByCustomerid || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collInvoicesRelatedByCustomerid) {
+        $partial = $this->collInvoicesRelatedByCustomerEventContactidPartial && !$this->isNew();
+        if (null === $this->collInvoicesRelatedByCustomerEventContactid || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collInvoicesRelatedByCustomerEventContactid) {
                 // return empty collection
-                $this->initInvoicesRelatedByCustomerid();
+                $this->initInvoicesRelatedByCustomerEventContactid();
             } else {
-                $collInvoicesRelatedByCustomerid = InvoiceQuery::create(null, $criteria)
-                    ->filterByEventContactRelatedByCustomerid($this)
+                $collInvoicesRelatedByCustomerEventContactid = InvoiceQuery::create(null, $criteria)
+                    ->filterByEventContactRelatedByCustomerEventContactid($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collInvoicesRelatedByCustomeridPartial && count($collInvoicesRelatedByCustomerid)) {
-                        $this->initInvoicesRelatedByCustomerid(false);
+                    if (false !== $this->collInvoicesRelatedByCustomerEventContactidPartial && count($collInvoicesRelatedByCustomerEventContactid)) {
+                        $this->initInvoicesRelatedByCustomerEventContactid(false);
 
-                        foreach ($collInvoicesRelatedByCustomerid as $obj) {
-                            if (false == $this->collInvoicesRelatedByCustomerid->contains($obj)) {
-                                $this->collInvoicesRelatedByCustomerid->append($obj);
+                        foreach ($collInvoicesRelatedByCustomerEventContactid as $obj) {
+                            if (false == $this->collInvoicesRelatedByCustomerEventContactid->contains($obj)) {
+                                $this->collInvoicesRelatedByCustomerEventContactid->append($obj);
                             }
                         }
 
-                        $this->collInvoicesRelatedByCustomeridPartial = true;
+                        $this->collInvoicesRelatedByCustomerEventContactidPartial = true;
                     }
 
-                    return $collInvoicesRelatedByCustomerid;
+                    return $collInvoicesRelatedByCustomerEventContactid;
                 }
 
-                if ($partial && $this->collInvoicesRelatedByCustomerid) {
-                    foreach ($this->collInvoicesRelatedByCustomerid as $obj) {
+                if ($partial && $this->collInvoicesRelatedByCustomerEventContactid) {
+                    foreach ($this->collInvoicesRelatedByCustomerEventContactid as $obj) {
                         if ($obj->isNew()) {
-                            $collInvoicesRelatedByCustomerid[] = $obj;
+                            $collInvoicesRelatedByCustomerEventContactid[] = $obj;
                         }
                     }
                 }
 
-                $this->collInvoicesRelatedByCustomerid = $collInvoicesRelatedByCustomerid;
-                $this->collInvoicesRelatedByCustomeridPartial = false;
+                $this->collInvoicesRelatedByCustomerEventContactid = $collInvoicesRelatedByCustomerEventContactid;
+                $this->collInvoicesRelatedByCustomerEventContactidPartial = false;
             }
         }
 
-        return $this->collInvoicesRelatedByCustomerid;
+        return $this->collInvoicesRelatedByCustomerEventContactid;
     }
 
     /**
@@ -2133,29 +2133,29 @@ abstract class EventContact implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $invoicesRelatedByCustomerid A Propel collection.
+     * @param      Collection $invoicesRelatedByCustomerEventContactid A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildEventContact The current object (for fluent API support)
      */
-    public function setInvoicesRelatedByCustomerid(Collection $invoicesRelatedByCustomerid, ConnectionInterface $con = null)
+    public function setInvoicesRelatedByCustomerEventContactid(Collection $invoicesRelatedByCustomerEventContactid, ConnectionInterface $con = null)
     {
-        /** @var Invoice[] $invoicesRelatedByCustomeridToDelete */
-        $invoicesRelatedByCustomeridToDelete = $this->getInvoicesRelatedByCustomerid(new Criteria(), $con)->diff($invoicesRelatedByCustomerid);
+        /** @var Invoice[] $invoicesRelatedByCustomerEventContactidToDelete */
+        $invoicesRelatedByCustomerEventContactidToDelete = $this->getInvoicesRelatedByCustomerEventContactid(new Criteria(), $con)->diff($invoicesRelatedByCustomerEventContactid);
 
 
-        $this->invoicesRelatedByCustomeridScheduledForDeletion = $invoicesRelatedByCustomeridToDelete;
+        $this->invoicesRelatedByCustomerEventContactidScheduledForDeletion = $invoicesRelatedByCustomerEventContactidToDelete;
 
-        foreach ($invoicesRelatedByCustomeridToDelete as $invoiceRelatedByCustomeridRemoved) {
-            $invoiceRelatedByCustomeridRemoved->setEventContactRelatedByCustomerid(null);
+        foreach ($invoicesRelatedByCustomerEventContactidToDelete as $invoiceRelatedByCustomerEventContactidRemoved) {
+            $invoiceRelatedByCustomerEventContactidRemoved->setEventContactRelatedByCustomerEventContactid(null);
         }
 
-        $this->collInvoicesRelatedByCustomerid = null;
-        foreach ($invoicesRelatedByCustomerid as $invoiceRelatedByCustomerid) {
-            $this->addInvoiceRelatedByCustomerid($invoiceRelatedByCustomerid);
+        $this->collInvoicesRelatedByCustomerEventContactid = null;
+        foreach ($invoicesRelatedByCustomerEventContactid as $invoiceRelatedByCustomerEventContactid) {
+            $this->addInvoiceRelatedByCustomerEventContactid($invoiceRelatedByCustomerEventContactid);
         }
 
-        $this->collInvoicesRelatedByCustomerid = $invoicesRelatedByCustomerid;
-        $this->collInvoicesRelatedByCustomeridPartial = false;
+        $this->collInvoicesRelatedByCustomerEventContactid = $invoicesRelatedByCustomerEventContactid;
+        $this->collInvoicesRelatedByCustomerEventContactidPartial = false;
 
         return $this;
     }
@@ -2169,16 +2169,16 @@ abstract class EventContact implements ActiveRecordInterface
      * @return int             Count of related BaseInvoice objects.
      * @throws PropelException
      */
-    public function countInvoicesRelatedByCustomerid(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countInvoicesRelatedByCustomerEventContactid(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collInvoicesRelatedByCustomeridPartial && !$this->isNew();
-        if (null === $this->collInvoicesRelatedByCustomerid || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collInvoicesRelatedByCustomerid) {
+        $partial = $this->collInvoicesRelatedByCustomerEventContactidPartial && !$this->isNew();
+        if (null === $this->collInvoicesRelatedByCustomerEventContactid || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collInvoicesRelatedByCustomerEventContactid) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getInvoicesRelatedByCustomerid());
+                return count($this->getInvoicesRelatedByCustomerEventContactid());
             }
 
             $query = InvoiceQuery::create(null, $criteria);
@@ -2187,11 +2187,11 @@ abstract class EventContact implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByEventContactRelatedByCustomerid($this)
+                ->filterByEventContactRelatedByCustomerEventContactid($this)
                 ->count($con);
         }
 
-        return count($this->collInvoicesRelatedByCustomerid);
+        return count($this->collInvoicesRelatedByCustomerEventContactid);
     }
 
     /**
@@ -2201,18 +2201,18 @@ abstract class EventContact implements ActiveRecordInterface
      * @param  Invoice $l Invoice
      * @return $this|\API\Models\Event\EventContact The current object (for fluent API support)
      */
-    public function addInvoiceRelatedByCustomerid(Invoice $l)
+    public function addInvoiceRelatedByCustomerEventContactid(Invoice $l)
     {
-        if ($this->collInvoicesRelatedByCustomerid === null) {
-            $this->initInvoicesRelatedByCustomerid();
-            $this->collInvoicesRelatedByCustomeridPartial = true;
+        if ($this->collInvoicesRelatedByCustomerEventContactid === null) {
+            $this->initInvoicesRelatedByCustomerEventContactid();
+            $this->collInvoicesRelatedByCustomerEventContactidPartial = true;
         }
 
-        if (!$this->collInvoicesRelatedByCustomerid->contains($l)) {
-            $this->doAddInvoiceRelatedByCustomerid($l);
+        if (!$this->collInvoicesRelatedByCustomerEventContactid->contains($l)) {
+            $this->doAddInvoiceRelatedByCustomerEventContactid($l);
 
-            if ($this->invoicesRelatedByCustomeridScheduledForDeletion and $this->invoicesRelatedByCustomeridScheduledForDeletion->contains($l)) {
-                $this->invoicesRelatedByCustomeridScheduledForDeletion->remove($this->invoicesRelatedByCustomeridScheduledForDeletion->search($l));
+            if ($this->invoicesRelatedByCustomerEventContactidScheduledForDeletion and $this->invoicesRelatedByCustomerEventContactidScheduledForDeletion->contains($l)) {
+                $this->invoicesRelatedByCustomerEventContactidScheduledForDeletion->remove($this->invoicesRelatedByCustomerEventContactidScheduledForDeletion->search($l));
             }
         }
 
@@ -2220,29 +2220,29 @@ abstract class EventContact implements ActiveRecordInterface
     }
 
     /**
-     * @param Invoice $invoiceRelatedByCustomerid The Invoice object to add.
+     * @param Invoice $invoiceRelatedByCustomerEventContactid The Invoice object to add.
      */
-    protected function doAddInvoiceRelatedByCustomerid(Invoice $invoiceRelatedByCustomerid)
+    protected function doAddInvoiceRelatedByCustomerEventContactid(Invoice $invoiceRelatedByCustomerEventContactid)
     {
-        $this->collInvoicesRelatedByCustomerid[]= $invoiceRelatedByCustomerid;
-        $invoiceRelatedByCustomerid->setEventContactRelatedByCustomerid($this);
+        $this->collInvoicesRelatedByCustomerEventContactid[]= $invoiceRelatedByCustomerEventContactid;
+        $invoiceRelatedByCustomerEventContactid->setEventContactRelatedByCustomerEventContactid($this);
     }
 
     /**
-     * @param  Invoice $invoiceRelatedByCustomerid The Invoice object to remove.
+     * @param  Invoice $invoiceRelatedByCustomerEventContactid The Invoice object to remove.
      * @return $this|ChildEventContact The current object (for fluent API support)
      */
-    public function removeInvoiceRelatedByCustomerid(Invoice $invoiceRelatedByCustomerid)
+    public function removeInvoiceRelatedByCustomerEventContactid(Invoice $invoiceRelatedByCustomerEventContactid)
     {
-        if ($this->getInvoicesRelatedByCustomerid()->contains($invoiceRelatedByCustomerid)) {
-            $pos = $this->collInvoicesRelatedByCustomerid->search($invoiceRelatedByCustomerid);
-            $this->collInvoicesRelatedByCustomerid->remove($pos);
-            if (null === $this->invoicesRelatedByCustomeridScheduledForDeletion) {
-                $this->invoicesRelatedByCustomeridScheduledForDeletion = clone $this->collInvoicesRelatedByCustomerid;
-                $this->invoicesRelatedByCustomeridScheduledForDeletion->clear();
+        if ($this->getInvoicesRelatedByCustomerEventContactid()->contains($invoiceRelatedByCustomerEventContactid)) {
+            $pos = $this->collInvoicesRelatedByCustomerEventContactid->search($invoiceRelatedByCustomerEventContactid);
+            $this->collInvoicesRelatedByCustomerEventContactid->remove($pos);
+            if (null === $this->invoicesRelatedByCustomerEventContactidScheduledForDeletion) {
+                $this->invoicesRelatedByCustomerEventContactidScheduledForDeletion = clone $this->collInvoicesRelatedByCustomerEventContactid;
+                $this->invoicesRelatedByCustomerEventContactidScheduledForDeletion->clear();
             }
-            $this->invoicesRelatedByCustomeridScheduledForDeletion[]= $invoiceRelatedByCustomerid;
-            $invoiceRelatedByCustomerid->setEventContactRelatedByCustomerid(null);
+            $this->invoicesRelatedByCustomerEventContactidScheduledForDeletion[]= $invoiceRelatedByCustomerEventContactid;
+            $invoiceRelatedByCustomerEventContactid->setEventContactRelatedByCustomerEventContactid(null);
         }
 
         return $this;
@@ -2254,7 +2254,7 @@ abstract class EventContact implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this EventContact is new, it will return
      * an empty collection; or if this EventContact has previously
-     * been saved, it will retrieve related InvoicesRelatedByCustomerid from storage.
+     * been saved, it will retrieve related InvoicesRelatedByCustomerEventContactid from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -2265,12 +2265,87 @@ abstract class EventContact implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Invoice[] List of Invoice objects
      */
-    public function getInvoicesRelatedByCustomeridJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getInvoicesRelatedByCustomerEventContactidJoinEventBankinformation(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = InvoiceQuery::create(null, $criteria);
+        $query->joinWith('EventBankinformation', $joinBehavior);
+
+        return $this->getInvoicesRelatedByCustomerEventContactid($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this EventContact is new, it will return
+     * an empty collection; or if this EventContact has previously
+     * been saved, it will retrieve related InvoicesRelatedByCustomerEventContactid from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in EventContact.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|Invoice[] List of Invoice objects
+     */
+    public function getInvoicesRelatedByCustomerEventContactidJoinInvoiceRelatedByCanceledInvoiceid(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = InvoiceQuery::create(null, $criteria);
+        $query->joinWith('InvoiceRelatedByCanceledInvoiceid', $joinBehavior);
+
+        return $this->getInvoicesRelatedByCustomerEventContactid($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this EventContact is new, it will return
+     * an empty collection; or if this EventContact has previously
+     * been saved, it will retrieve related InvoicesRelatedByCustomerEventContactid from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in EventContact.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|Invoice[] List of Invoice objects
+     */
+    public function getInvoicesRelatedByCustomerEventContactidJoinInvoiceType(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = InvoiceQuery::create(null, $criteria);
+        $query->joinWith('InvoiceType', $joinBehavior);
+
+        return $this->getInvoicesRelatedByCustomerEventContactid($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this EventContact is new, it will return
+     * an empty collection; or if this EventContact has previously
+     * been saved, it will retrieve related InvoicesRelatedByCustomerEventContactid from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in EventContact.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|Invoice[] List of Invoice objects
+     */
+    public function getInvoicesRelatedByCustomerEventContactidJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = InvoiceQuery::create(null, $criteria);
         $query->joinWith('User', $joinBehavior);
 
-        return $this->getInvoicesRelatedByCustomerid($query, $con);
+        return $this->getInvoicesRelatedByCustomerEventContactid($query, $con);
     }
 
     /**
@@ -2515,6 +2590,81 @@ abstract class EventContact implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Invoice[] List of Invoice objects
      */
+    public function getInvoicesRelatedByEventContactidJoinEventBankinformation(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = InvoiceQuery::create(null, $criteria);
+        $query->joinWith('EventBankinformation', $joinBehavior);
+
+        return $this->getInvoicesRelatedByEventContactid($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this EventContact is new, it will return
+     * an empty collection; or if this EventContact has previously
+     * been saved, it will retrieve related InvoicesRelatedByEventContactid from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in EventContact.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|Invoice[] List of Invoice objects
+     */
+    public function getInvoicesRelatedByEventContactidJoinInvoiceRelatedByCanceledInvoiceid(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = InvoiceQuery::create(null, $criteria);
+        $query->joinWith('InvoiceRelatedByCanceledInvoiceid', $joinBehavior);
+
+        return $this->getInvoicesRelatedByEventContactid($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this EventContact is new, it will return
+     * an empty collection; or if this EventContact has previously
+     * been saved, it will retrieve related InvoicesRelatedByEventContactid from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in EventContact.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|Invoice[] List of Invoice objects
+     */
+    public function getInvoicesRelatedByEventContactidJoinInvoiceType(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = InvoiceQuery::create(null, $criteria);
+        $query->joinWith('InvoiceType', $joinBehavior);
+
+        return $this->getInvoicesRelatedByEventContactid($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this EventContact is new, it will return
+     * an empty collection; or if this EventContact has previously
+     * been saved, it will retrieve related InvoicesRelatedByEventContactid from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in EventContact.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|Invoice[] List of Invoice objects
+     */
     public function getInvoicesRelatedByEventContactidJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = InvoiceQuery::create(null, $criteria);
@@ -2566,8 +2716,8 @@ abstract class EventContact implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collInvoicesRelatedByCustomerid) {
-                foreach ($this->collInvoicesRelatedByCustomerid as $o) {
+            if ($this->collInvoicesRelatedByCustomerEventContactid) {
+                foreach ($this->collInvoicesRelatedByCustomerEventContactid as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -2578,7 +2728,7 @@ abstract class EventContact implements ActiveRecordInterface
             }
         } // if ($deep)
 
-        $this->collInvoicesRelatedByCustomerid = null;
+        $this->collInvoicesRelatedByCustomerEventContactid = null;
         $this->collInvoicesRelatedByEventContactid = null;
         $this->aEvent = null;
     }

@@ -1,8 +1,12 @@
 define(["models/db/User/User",
         "models/db/Event/EventContact",
+        "models/db/Invoice/InvoiceType",
+        "models/db/Event/EventBankinformation",
         "collections/db/Invoice/InvoiceCollection"
 ], function(User,
             EventContact,
+            InvoiceType,
+            EventBankinformation,
             InvoiceCollection) {
     "use strict";
 
@@ -12,14 +16,26 @@ define(["models/db/User/User",
 
         defaults() {
             return {Invoiceid: null,
+                    InvoiceTypeid: null,
                     EventContactid: null,
                     CashierUserid: null,
+                    EventBankinformationid: null,
+                    CustomerEventContactid: null,
+                    CanceledInvoiceid: null,
                     Date: null,
-                    Canceled: null};
+                    Amount: 0,
+                    MaturityDate: null,
+                    PaymentFinished: null,
+                    AmountRecieve: 0};
         }
 
         parse(response)
         {
+            if('InvoiceType' in response)
+            {
+                response.InvoiceType = new InvoiceType(response.InvoiceType, {parse: true});
+            }
+
             if('CashierUser' in response)
             {
                 response.CashierUser = new User(response.CashierUser, {parse: true});
@@ -30,9 +46,19 @@ define(["models/db/User/User",
                 response.EventContact = new EventContact(response.EventContact, {parse: true});
             }
 
-            if('Customer' in response)
+            if('EventBankinformation' in response)
             {
-                response.Customer = new EventContact(response.Customer, {parse: true});
+                response.EventBankinformation = new EventBankinformation(response.EventBankinformation, {parse: true});
+            }
+
+            if('CustomerEventContact' in response)
+            {
+                response.CustomerEventContact = new EventContact(response.CustomerEventContact, {parse: true});
+            }
+
+            if('CanceledInvoice' in response)
+            {
+                response.CanceledInvoice = new Invoice(response.CanceledInvoice, {parse: true});
             }
 
             if('InvoiceItems' in response)

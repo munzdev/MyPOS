@@ -7,6 +7,7 @@ use \PDO;
 use API\Models\Event\EventBankinformation as ChildEventBankinformation;
 use API\Models\Event\EventBankinformationQuery as ChildEventBankinformationQuery;
 use API\Models\Event\Map\EventBankinformationTableMap;
+use API\Models\Invoice\Invoice;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -52,7 +53,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventBankinformationQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
  * @method     ChildEventBankinformationQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
  *
- * @method     \API\Models\Event\EventQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildEventBankinformationQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
+ * @method     ChildEventBankinformationQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
+ * @method     ChildEventBankinformationQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
+ *
+ * @method     ChildEventBankinformationQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
+ *
+ * @method     ChildEventBankinformationQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
+ * @method     ChildEventBankinformationQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
+ * @method     ChildEventBankinformationQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
+ *
+ * @method     \API\Models\Event\EventQuery|\API\Models\Invoice\InvoiceQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildEventBankinformation findOne(ConnectionInterface $con = null) Return the first ChildEventBankinformation matching the query
  * @method     ChildEventBankinformation findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEventBankinformation matching the query, or a new ChildEventBankinformation object populated from the query conditions when no match is found
@@ -530,6 +541,79 @@ abstract class EventBankinformationQuery extends ModelCriteria
         return $this
             ->joinEvent($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Event', '\API\Models\Event\EventQuery');
+    }
+
+    /**
+     * Filter the query by a related \API\Models\Invoice\Invoice object
+     *
+     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildEventBankinformationQuery The current query, for fluid interface
+     */
+    public function filterByInvoice($invoice, $comparison = null)
+    {
+        if ($invoice instanceof \API\Models\Invoice\Invoice) {
+            return $this
+                ->addUsingAlias(EventBankinformationTableMap::COL_EVENT_BANKINFORMATIONID, $invoice->getEventBankinformationid(), $comparison);
+        } elseif ($invoice instanceof ObjectCollection) {
+            return $this
+                ->useInvoiceQuery()
+                ->filterByPrimaryKeys($invoice->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByInvoice() only accepts arguments of type \API\Models\Invoice\Invoice or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Invoice relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildEventBankinformationQuery The current query, for fluid interface
+     */
+    public function joinInvoice($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Invoice');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Invoice');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Invoice relation Invoice object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\Invoice\InvoiceQuery A secondary query class using the current class as primary query
+     */
+    public function useInvoiceQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinInvoice($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Invoice', '\API\Models\Invoice\InvoiceQuery');
     }
 
     /**

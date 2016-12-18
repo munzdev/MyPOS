@@ -6,9 +6,9 @@ use \Exception;
 use \PDO;
 use API\Models\Payment\Coupon as ChildCoupon;
 use API\Models\Payment\CouponQuery as ChildCouponQuery;
-use API\Models\Payment\Payment as ChildPayment;
 use API\Models\Payment\PaymentCouponQuery as ChildPaymentCouponQuery;
-use API\Models\Payment\PaymentQuery as ChildPaymentQuery;
+use API\Models\Payment\PaymentRecieved as ChildPaymentRecieved;
+use API\Models\Payment\PaymentRecievedQuery as ChildPaymentRecievedQuery;
 use API\Models\Payment\Map\PaymentCouponTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -71,11 +71,11 @@ abstract class PaymentCoupon implements ActiveRecordInterface
     protected $couponid;
 
     /**
-     * The value for the paymentid field.
+     * The value for the payment_recievedid field.
      *
      * @var        int
      */
-    protected $paymentid;
+    protected $payment_recievedid;
 
     /**
      * The value for the value_used field.
@@ -90,9 +90,9 @@ abstract class PaymentCoupon implements ActiveRecordInterface
     protected $aCoupon;
 
     /**
-     * @var        ChildPayment
+     * @var        ChildPaymentRecieved
      */
-    protected $aPayment;
+    protected $aPaymentRecieved;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -338,13 +338,13 @@ abstract class PaymentCoupon implements ActiveRecordInterface
     }
 
     /**
-     * Get the [paymentid] column value.
+     * Get the [payment_recievedid] column value.
      *
      * @return int
      */
-    public function getPaymentid()
+    public function getPaymentRecievedid()
     {
-        return $this->paymentid;
+        return $this->payment_recievedid;
     }
 
     /**
@@ -382,28 +382,28 @@ abstract class PaymentCoupon implements ActiveRecordInterface
     } // setCouponid()
 
     /**
-     * Set the value of [paymentid] column.
+     * Set the value of [payment_recievedid] column.
      *
      * @param int $v new value
      * @return $this|\API\Models\Payment\PaymentCoupon The current object (for fluent API support)
      */
-    public function setPaymentid($v)
+    public function setPaymentRecievedid($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->paymentid !== $v) {
-            $this->paymentid = $v;
-            $this->modifiedColumns[PaymentCouponTableMap::COL_PAYMENTID] = true;
+        if ($this->payment_recievedid !== $v) {
+            $this->payment_recievedid = $v;
+            $this->modifiedColumns[PaymentCouponTableMap::COL_PAYMENT_RECIEVEDID] = true;
         }
 
-        if ($this->aPayment !== null && $this->aPayment->getPaymentid() !== $v) {
-            $this->aPayment = null;
+        if ($this->aPaymentRecieved !== null && $this->aPaymentRecieved->getPaymentRecievedid() !== $v) {
+            $this->aPaymentRecieved = null;
         }
 
         return $this;
-    } // setPaymentid()
+    } // setPaymentRecievedid()
 
     /**
      * Set the value of [value_used] column.
@@ -464,8 +464,8 @@ abstract class PaymentCoupon implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : PaymentCouponTableMap::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->couponid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PaymentCouponTableMap::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->paymentid = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : PaymentCouponTableMap::translateFieldName('PaymentRecievedid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->payment_recievedid = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PaymentCouponTableMap::translateFieldName('ValueUsed', TableMap::TYPE_PHPNAME, $indexType)];
             $this->value_used = (null !== $col) ? (string) $col : null;
@@ -502,8 +502,8 @@ abstract class PaymentCoupon implements ActiveRecordInterface
         if ($this->aCoupon !== null && $this->couponid !== $this->aCoupon->getCouponid()) {
             $this->aCoupon = null;
         }
-        if ($this->aPayment !== null && $this->paymentid !== $this->aPayment->getPaymentid()) {
-            $this->aPayment = null;
+        if ($this->aPaymentRecieved !== null && $this->payment_recievedid !== $this->aPaymentRecieved->getPaymentRecievedid()) {
+            $this->aPaymentRecieved = null;
         }
     } // ensureConsistency
 
@@ -545,7 +545,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aCoupon = null;
-            $this->aPayment = null;
+            $this->aPaymentRecieved = null;
         } // if (deep)
     }
 
@@ -657,11 +657,11 @@ abstract class PaymentCoupon implements ActiveRecordInterface
                 $this->setCoupon($this->aCoupon);
             }
 
-            if ($this->aPayment !== null) {
-                if ($this->aPayment->isModified() || $this->aPayment->isNew()) {
-                    $affectedRows += $this->aPayment->save($con);
+            if ($this->aPaymentRecieved !== null) {
+                if ($this->aPaymentRecieved->isModified() || $this->aPaymentRecieved->isNew()) {
+                    $affectedRows += $this->aPaymentRecieved->save($con);
                 }
-                $this->setPayment($this->aPayment);
+                $this->setPaymentRecieved($this->aPaymentRecieved);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -700,8 +700,8 @@ abstract class PaymentCoupon implements ActiveRecordInterface
         if ($this->isColumnModified(PaymentCouponTableMap::COL_COUPONID)) {
             $modifiedColumns[':p' . $index++]  = 'couponid';
         }
-        if ($this->isColumnModified(PaymentCouponTableMap::COL_PAYMENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'paymentid';
+        if ($this->isColumnModified(PaymentCouponTableMap::COL_PAYMENT_RECIEVEDID)) {
+            $modifiedColumns[':p' . $index++]  = 'payment_recievedid';
         }
         if ($this->isColumnModified(PaymentCouponTableMap::COL_VALUE_USED)) {
             $modifiedColumns[':p' . $index++]  = 'value_used';
@@ -720,8 +720,8 @@ abstract class PaymentCoupon implements ActiveRecordInterface
                     case 'couponid':
                         $stmt->bindValue($identifier, $this->couponid, PDO::PARAM_INT);
                         break;
-                    case 'paymentid':
-                        $stmt->bindValue($identifier, $this->paymentid, PDO::PARAM_INT);
+                    case 'payment_recievedid':
+                        $stmt->bindValue($identifier, $this->payment_recievedid, PDO::PARAM_INT);
                         break;
                     case 'value_used':
                         $stmt->bindValue($identifier, $this->value_used, PDO::PARAM_STR);
@@ -785,7 +785,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
                 return $this->getCouponid();
                 break;
             case 1:
-                return $this->getPaymentid();
+                return $this->getPaymentRecievedid();
                 break;
             case 2:
                 return $this->getValueUsed();
@@ -821,7 +821,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
         $keys = PaymentCouponTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getCouponid(),
-            $keys[1] => $this->getPaymentid(),
+            $keys[1] => $this->getPaymentRecievedid(),
             $keys[2] => $this->getValueUsed(),
         );
         $virtualColumns = $this->virtualColumns;
@@ -845,20 +845,20 @@ abstract class PaymentCoupon implements ActiveRecordInterface
 
                 $result[$key] = $this->aCoupon->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aPayment) {
+            if (null !== $this->aPaymentRecieved) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'payment';
+                        $key = 'paymentRecieved';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'payment';
+                        $key = 'payment_recieved';
                         break;
                     default:
-                        $key = 'Payment';
+                        $key = 'PaymentRecieved';
                 }
 
-                $result[$key] = $this->aPayment->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aPaymentRecieved->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
 
@@ -898,7 +898,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
                 $this->setCouponid($value);
                 break;
             case 1:
-                $this->setPaymentid($value);
+                $this->setPaymentRecievedid($value);
                 break;
             case 2:
                 $this->setValueUsed($value);
@@ -933,7 +933,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
             $this->setCouponid($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
-            $this->setPaymentid($arr[$keys[1]]);
+            $this->setPaymentRecievedid($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setValueUsed($arr[$keys[2]]);
@@ -982,8 +982,8 @@ abstract class PaymentCoupon implements ActiveRecordInterface
         if ($this->isColumnModified(PaymentCouponTableMap::COL_COUPONID)) {
             $criteria->add(PaymentCouponTableMap::COL_COUPONID, $this->couponid);
         }
-        if ($this->isColumnModified(PaymentCouponTableMap::COL_PAYMENTID)) {
-            $criteria->add(PaymentCouponTableMap::COL_PAYMENTID, $this->paymentid);
+        if ($this->isColumnModified(PaymentCouponTableMap::COL_PAYMENT_RECIEVEDID)) {
+            $criteria->add(PaymentCouponTableMap::COL_PAYMENT_RECIEVEDID, $this->payment_recievedid);
         }
         if ($this->isColumnModified(PaymentCouponTableMap::COL_VALUE_USED)) {
             $criteria->add(PaymentCouponTableMap::COL_VALUE_USED, $this->value_used);
@@ -1006,7 +1006,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
     {
         $criteria = ChildPaymentCouponQuery::create();
         $criteria->add(PaymentCouponTableMap::COL_COUPONID, $this->couponid);
-        $criteria->add(PaymentCouponTableMap::COL_PAYMENTID, $this->paymentid);
+        $criteria->add(PaymentCouponTableMap::COL_PAYMENT_RECIEVEDID, $this->payment_recievedid);
 
         return $criteria;
     }
@@ -1020,7 +1020,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
     public function hashCode()
     {
         $validPk = null !== $this->getCouponid() &&
-            null !== $this->getPaymentid();
+            null !== $this->getPaymentRecievedid();
 
         $validPrimaryKeyFKs = 2;
         $primaryKeyFKs = [];
@@ -1032,8 +1032,8 @@ abstract class PaymentCoupon implements ActiveRecordInterface
             $validPrimaryKeyFKs = false;
         }
 
-        //relation fk_Coupons_has_payments_payments1 to table payment
-        if ($this->aPayment && $hash = spl_object_hash($this->aPayment)) {
+        //relation fk_payment_coupon_payment_recieved1 to table payment_recieved
+        if ($this->aPaymentRecieved && $hash = spl_object_hash($this->aPaymentRecieved)) {
             $primaryKeyFKs[] = $hash;
         } else {
             $validPrimaryKeyFKs = false;
@@ -1057,7 +1057,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
     {
         $pks = array();
         $pks[0] = $this->getCouponid();
-        $pks[1] = $this->getPaymentid();
+        $pks[1] = $this->getPaymentRecievedid();
 
         return $pks;
     }
@@ -1071,7 +1071,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
     public function setPrimaryKey($keys)
     {
         $this->setCouponid($keys[0]);
-        $this->setPaymentid($keys[1]);
+        $this->setPaymentRecievedid($keys[1]);
     }
 
     /**
@@ -1080,7 +1080,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return (null === $this->getCouponid()) && (null === $this->getPaymentid());
+        return (null === $this->getCouponid()) && (null === $this->getPaymentRecievedid());
     }
 
     /**
@@ -1097,7 +1097,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setCouponid($this->getCouponid());
-        $copyObj->setPaymentid($this->getPaymentid());
+        $copyObj->setPaymentRecievedid($this->getPaymentRecievedid());
         $copyObj->setValueUsed($this->getValueUsed());
         if ($makeNew) {
             $copyObj->setNew(true);
@@ -1178,24 +1178,24 @@ abstract class PaymentCoupon implements ActiveRecordInterface
     }
 
     /**
-     * Declares an association between this object and a ChildPayment object.
+     * Declares an association between this object and a ChildPaymentRecieved object.
      *
-     * @param  ChildPayment $v
+     * @param  ChildPaymentRecieved $v
      * @return $this|\API\Models\Payment\PaymentCoupon The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setPayment(ChildPayment $v = null)
+    public function setPaymentRecieved(ChildPaymentRecieved $v = null)
     {
         if ($v === null) {
-            $this->setPaymentid(NULL);
+            $this->setPaymentRecievedid(NULL);
         } else {
-            $this->setPaymentid($v->getPaymentid());
+            $this->setPaymentRecievedid($v->getPaymentRecievedid());
         }
 
-        $this->aPayment = $v;
+        $this->aPaymentRecieved = $v;
 
         // Add binding for other direction of this n:n relationship.
-        // If this object has already been added to the ChildPayment object, it will not be re-added.
+        // If this object has already been added to the ChildPaymentRecieved object, it will not be re-added.
         if ($v !== null) {
             $v->addPaymentCoupon($this);
         }
@@ -1206,26 +1206,26 @@ abstract class PaymentCoupon implements ActiveRecordInterface
 
 
     /**
-     * Get the associated ChildPayment object
+     * Get the associated ChildPaymentRecieved object
      *
      * @param  ConnectionInterface $con Optional Connection object.
-     * @return ChildPayment The associated ChildPayment object.
+     * @return ChildPaymentRecieved The associated ChildPaymentRecieved object.
      * @throws PropelException
      */
-    public function getPayment(ConnectionInterface $con = null)
+    public function getPaymentRecieved(ConnectionInterface $con = null)
     {
-        if ($this->aPayment === null && ($this->paymentid !== null)) {
-            $this->aPayment = ChildPaymentQuery::create()->findPk($this->paymentid, $con);
+        if ($this->aPaymentRecieved === null && ($this->payment_recievedid !== null)) {
+            $this->aPaymentRecieved = ChildPaymentRecievedQuery::create()->findPk($this->payment_recievedid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aPayment->addPaymentCoupons($this);
+                $this->aPaymentRecieved->addPaymentCoupons($this);
              */
         }
 
-        return $this->aPayment;
+        return $this->aPaymentRecieved;
     }
 
     /**
@@ -1238,11 +1238,11 @@ abstract class PaymentCoupon implements ActiveRecordInterface
         if (null !== $this->aCoupon) {
             $this->aCoupon->removePaymentCoupon($this);
         }
-        if (null !== $this->aPayment) {
-            $this->aPayment->removePaymentCoupon($this);
+        if (null !== $this->aPaymentRecieved) {
+            $this->aPaymentRecieved->removePaymentCoupon($this);
         }
         $this->couponid = null;
-        $this->paymentid = null;
+        $this->payment_recievedid = null;
         $this->value_used = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
@@ -1265,7 +1265,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
         } // if ($deep)
 
         $this->aCoupon = null;
-        $this->aPayment = null;
+        $this->aPaymentRecieved = null;
     }
 
     /**

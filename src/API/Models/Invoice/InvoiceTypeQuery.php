@@ -2,10 +2,10 @@
 
 namespace API\Models\Invoice;
 
-use API\Models\Invoice\Base\Customer as BaseCustomer;
+use API\Models\Invoice\Base\InvoiceTypeQuery as BaseInvoiceTypeQuery;
 
 /**
- * Skeleton subclass for representing a row from the 'customer' table.
+ * Skeleton subclass for performing query and update operations on the 'invoice_type' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use API\Models\Invoice\Base\Customer as BaseCustomer;
  * long as it does not already exist in the output directory.
  *
  */
-class Customer extends BaseCustomer
+class InvoiceTypeQuery extends BaseInvoiceTypeQuery
 {
 
 }

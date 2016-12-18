@@ -77,9 +77,9 @@ class PaymentCouponTableMap extends TableMap
     const COL_COUPONID = 'payment_coupon.couponid';
 
     /**
-     * the column name for the paymentid field
+     * the column name for the payment_recievedid field
      */
-    const COL_PAYMENTID = 'payment_coupon.paymentid';
+    const COL_PAYMENT_RECIEVEDID = 'payment_coupon.payment_recievedid';
 
     /**
      * the column name for the value_used field
@@ -98,10 +98,10 @@ class PaymentCouponTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Couponid', 'Paymentid', 'ValueUsed', ),
-        self::TYPE_CAMELNAME     => array('couponid', 'paymentid', 'valueUsed', ),
-        self::TYPE_COLNAME       => array(PaymentCouponTableMap::COL_COUPONID, PaymentCouponTableMap::COL_PAYMENTID, PaymentCouponTableMap::COL_VALUE_USED, ),
-        self::TYPE_FIELDNAME     => array('couponid', 'paymentid', 'value_used', ),
+        self::TYPE_PHPNAME       => array('Couponid', 'PaymentRecievedid', 'ValueUsed', ),
+        self::TYPE_CAMELNAME     => array('couponid', 'paymentRecievedid', 'valueUsed', ),
+        self::TYPE_COLNAME       => array(PaymentCouponTableMap::COL_COUPONID, PaymentCouponTableMap::COL_PAYMENT_RECIEVEDID, PaymentCouponTableMap::COL_VALUE_USED, ),
+        self::TYPE_FIELDNAME     => array('couponid', 'payment_recievedid', 'value_used', ),
         self::TYPE_NUM           => array(0, 1, 2, )
     );
 
@@ -112,10 +112,10 @@ class PaymentCouponTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Couponid' => 0, 'Paymentid' => 1, 'ValueUsed' => 2, ),
-        self::TYPE_CAMELNAME     => array('couponid' => 0, 'paymentid' => 1, 'valueUsed' => 2, ),
-        self::TYPE_COLNAME       => array(PaymentCouponTableMap::COL_COUPONID => 0, PaymentCouponTableMap::COL_PAYMENTID => 1, PaymentCouponTableMap::COL_VALUE_USED => 2, ),
-        self::TYPE_FIELDNAME     => array('couponid' => 0, 'paymentid' => 1, 'value_used' => 2, ),
+        self::TYPE_PHPNAME       => array('Couponid' => 0, 'PaymentRecievedid' => 1, 'ValueUsed' => 2, ),
+        self::TYPE_CAMELNAME     => array('couponid' => 0, 'paymentRecievedid' => 1, 'valueUsed' => 2, ),
+        self::TYPE_COLNAME       => array(PaymentCouponTableMap::COL_COUPONID => 0, PaymentCouponTableMap::COL_PAYMENT_RECIEVEDID => 1, PaymentCouponTableMap::COL_VALUE_USED => 2, ),
+        self::TYPE_FIELDNAME     => array('couponid' => 0, 'payment_recievedid' => 1, 'value_used' => 2, ),
         self::TYPE_NUM           => array(0, 1, 2, )
     );
 
@@ -138,7 +138,7 @@ class PaymentCouponTableMap extends TableMap
         $this->setIsCrossRef(true);
         // columns
         $this->addForeignPrimaryKey('couponid', 'Couponid', 'INTEGER' , 'coupon', 'couponid', true, null, null);
-        $this->addForeignPrimaryKey('paymentid', 'Paymentid', 'INTEGER' , 'payment', 'paymentid', true, 10, null);
+        $this->addForeignPrimaryKey('payment_recievedid', 'PaymentRecievedid', 'INTEGER' , 'payment_recieved', 'payment_recievedid', true, null, null);
         $this->addColumn('value_used', 'ValueUsed', 'DECIMAL', true, 7, null);
     } // initialize()
 
@@ -154,11 +154,11 @@ class PaymentCouponTableMap extends TableMap
     1 => ':couponid',
   ),
 ), null, null, null, false);
-        $this->addRelation('Payment', '\\API\\Models\\Payment\\Payment', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('PaymentRecieved', '\\API\\Models\\Payment\\PaymentRecieved', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':paymentid',
-    1 => ':paymentid',
+    0 => ':payment_recievedid',
+    1 => ':payment_recievedid',
   ),
 ), null, null, null, false);
     } // buildRelations()
@@ -178,7 +178,7 @@ class PaymentCouponTableMap extends TableMap
     {
         if (Propel::isInstancePoolingEnabled()) {
             if (null === $key) {
-                $key = serialize([(null === $obj->getCouponid() || is_scalar($obj->getCouponid()) || is_callable([$obj->getCouponid(), '__toString']) ? (string) $obj->getCouponid() : $obj->getCouponid()), (null === $obj->getPaymentid() || is_scalar($obj->getPaymentid()) || is_callable([$obj->getPaymentid(), '__toString']) ? (string) $obj->getPaymentid() : $obj->getPaymentid())]);
+                $key = serialize([(null === $obj->getCouponid() || is_scalar($obj->getCouponid()) || is_callable([$obj->getCouponid(), '__toString']) ? (string) $obj->getCouponid() : $obj->getCouponid()), (null === $obj->getPaymentRecievedid() || is_scalar($obj->getPaymentRecievedid()) || is_callable([$obj->getPaymentRecievedid(), '__toString']) ? (string) $obj->getPaymentRecievedid() : $obj->getPaymentRecievedid())]);
             } // if key === null
             self::$instances[$key] = $obj;
         }
@@ -198,7 +198,7 @@ class PaymentCouponTableMap extends TableMap
     {
         if (Propel::isInstancePoolingEnabled() && null !== $value) {
             if (is_object($value) && $value instanceof \API\Models\Payment\PaymentCoupon) {
-                $key = serialize([(null === $value->getCouponid() || is_scalar($value->getCouponid()) || is_callable([$value->getCouponid(), '__toString']) ? (string) $value->getCouponid() : $value->getCouponid()), (null === $value->getPaymentid() || is_scalar($value->getPaymentid()) || is_callable([$value->getPaymentid(), '__toString']) ? (string) $value->getPaymentid() : $value->getPaymentid())]);
+                $key = serialize([(null === $value->getCouponid() || is_scalar($value->getCouponid()) || is_callable([$value->getCouponid(), '__toString']) ? (string) $value->getCouponid() : $value->getCouponid()), (null === $value->getPaymentRecievedid() || is_scalar($value->getPaymentRecievedid()) || is_callable([$value->getPaymentRecievedid(), '__toString']) ? (string) $value->getPaymentRecievedid() : $value->getPaymentRecievedid())]);
 
             } elseif (is_array($value) && count($value) === 2) {
                 // assume we've been passed a primary key";
@@ -232,11 +232,11 @@ class PaymentCouponTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)] === null && $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('PaymentRecievedid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)])]);
+        return serialize([(null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Couponid', TableMap::TYPE_PHPNAME, $indexType)]), (null === $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('PaymentRecievedid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('PaymentRecievedid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('PaymentRecievedid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('PaymentRecievedid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 1 + $offset : static::translateFieldName('PaymentRecievedid', TableMap::TYPE_PHPNAME, $indexType)])]);
     }
 
     /**
@@ -263,7 +263,7 @@ class PaymentCouponTableMap extends TableMap
         $pks[] = (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 1 + $offset
-                : self::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('PaymentRecievedid', TableMap::TYPE_PHPNAME, $indexType)
         ];
 
         return $pks;
@@ -367,11 +367,11 @@ class PaymentCouponTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(PaymentCouponTableMap::COL_COUPONID);
-            $criteria->addSelectColumn(PaymentCouponTableMap::COL_PAYMENTID);
+            $criteria->addSelectColumn(PaymentCouponTableMap::COL_PAYMENT_RECIEVEDID);
             $criteria->addSelectColumn(PaymentCouponTableMap::COL_VALUE_USED);
         } else {
             $criteria->addSelectColumn($alias . '.couponid');
-            $criteria->addSelectColumn($alias . '.paymentid');
+            $criteria->addSelectColumn($alias . '.payment_recievedid');
             $criteria->addSelectColumn($alias . '.value_used');
         }
     }
@@ -432,7 +432,7 @@ class PaymentCouponTableMap extends TableMap
             }
             foreach ($values as $value) {
                 $criterion = $criteria->getNewCriterion(PaymentCouponTableMap::COL_COUPONID, $value[0]);
-                $criterion->addAnd($criteria->getNewCriterion(PaymentCouponTableMap::COL_PAYMENTID, $value[1]));
+                $criterion->addAnd($criteria->getNewCriterion(PaymentCouponTableMap::COL_PAYMENT_RECIEVEDID, $value[1]));
                 $criteria->addOr($criterion);
             }
         }

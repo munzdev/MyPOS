@@ -9,10 +9,10 @@ use API\Models\Event\Event;
 use API\Models\Event\EventQuery;
 use API\Models\Payment\Coupon as ChildCoupon;
 use API\Models\Payment\CouponQuery as ChildCouponQuery;
-use API\Models\Payment\Payment as ChildPayment;
 use API\Models\Payment\PaymentCoupon as ChildPaymentCoupon;
 use API\Models\Payment\PaymentCouponQuery as ChildPaymentCouponQuery;
-use API\Models\Payment\PaymentQuery as ChildPaymentQuery;
+use API\Models\Payment\PaymentRecieved as ChildPaymentRecieved;
+use API\Models\Payment\PaymentRecievedQuery as ChildPaymentRecievedQuery;
 use API\Models\Payment\Map\CouponTableMap;
 use API\Models\Payment\Map\PaymentCouponTableMap;
 use API\Models\User\User;
@@ -131,14 +131,14 @@ abstract class Coupon implements ActiveRecordInterface
     protected $collPaymentCouponsPartial;
 
     /**
-     * @var        ObjectCollection|ChildPayment[] Cross Collection to store aggregation of ChildPayment objects.
+     * @var        ObjectCollection|ChildPaymentRecieved[] Cross Collection to store aggregation of ChildPaymentRecieved objects.
      */
-    protected $collPayments;
+    protected $collPaymentRecieveds;
 
     /**
      * @var bool
      */
-    protected $collPaymentsPartial;
+    protected $collPaymentRecievedsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -150,9 +150,9 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildPayment[]
+     * @var ObjectCollection|ChildPaymentRecieved[]
      */
-    protected $paymentsScheduledForDeletion = null;
+    protected $paymentRecievedsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -718,7 +718,7 @@ abstract class Coupon implements ActiveRecordInterface
             $this->aUser = null;
             $this->collPaymentCoupons = null;
 
-            $this->collPayments = null;
+            $this->collPaymentRecieveds = null;
         } // if (deep)
     }
 
@@ -848,14 +848,14 @@ abstract class Coupon implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->paymentsScheduledForDeletion !== null) {
-                if (!$this->paymentsScheduledForDeletion->isEmpty()) {
+            if ($this->paymentRecievedsScheduledForDeletion !== null) {
+                if (!$this->paymentRecievedsScheduledForDeletion->isEmpty()) {
                     $pks = array();
-                    foreach ($this->paymentsScheduledForDeletion as $entry) {
+                    foreach ($this->paymentRecievedsScheduledForDeletion as $entry) {
                         $entryPk = [];
 
                         $entryPk[0] = $this->getCouponid();
-                        $entryPk[1] = $entry->getPaymentid();
+                        $entryPk[1] = $entry->getPaymentRecievedid();
                         $pks[] = $entryPk;
                     }
 
@@ -863,15 +863,15 @@ abstract class Coupon implements ActiveRecordInterface
                         ->filterByPrimaryKeys($pks)
                         ->delete($con);
 
-                    $this->paymentsScheduledForDeletion = null;
+                    $this->paymentRecievedsScheduledForDeletion = null;
                 }
 
             }
 
-            if ($this->collPayments) {
-                foreach ($this->collPayments as $payment) {
-                    if (!$payment->isDeleted() && ($payment->isNew() || $payment->isModified())) {
-                        $payment->save($con);
+            if ($this->collPaymentRecieveds) {
+                foreach ($this->collPaymentRecieveds as $paymentRecieved) {
+                    if (!$paymentRecieved->isDeleted() && ($paymentRecieved->isNew() || $paymentRecieved->isModified())) {
+                        $paymentRecieved->save($con);
                     }
                 }
             }
@@ -1790,58 +1790,58 @@ abstract class Coupon implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildPaymentCoupon[] List of ChildPaymentCoupon objects
      */
-    public function getPaymentCouponsJoinPayment(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getPaymentCouponsJoinPaymentRecieved(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildPaymentCouponQuery::create(null, $criteria);
-        $query->joinWith('Payment', $joinBehavior);
+        $query->joinWith('PaymentRecieved', $joinBehavior);
 
         return $this->getPaymentCoupons($query, $con);
     }
 
     /**
-     * Clears out the collPayments collection
+     * Clears out the collPaymentRecieveds collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addPayments()
+     * @see        addPaymentRecieveds()
      */
-    public function clearPayments()
+    public function clearPaymentRecieveds()
     {
-        $this->collPayments = null; // important to set this to NULL since that means it is uninitialized
+        $this->collPaymentRecieveds = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Initializes the collPayments crossRef collection.
+     * Initializes the collPaymentRecieveds crossRef collection.
      *
-     * By default this just sets the collPayments collection to an empty collection (like clearPayments());
+     * By default this just sets the collPaymentRecieveds collection to an empty collection (like clearPaymentRecieveds());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
      * @return void
      */
-    public function initPayments()
+    public function initPaymentRecieveds()
     {
         $collectionClassName = PaymentCouponTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collPayments = new $collectionClassName;
-        $this->collPaymentsPartial = true;
-        $this->collPayments->setModel('\API\Models\Payment\Payment');
+        $this->collPaymentRecieveds = new $collectionClassName;
+        $this->collPaymentRecievedsPartial = true;
+        $this->collPaymentRecieveds->setModel('\API\Models\Payment\PaymentRecieved');
     }
 
     /**
-     * Checks if the collPayments collection is loaded.
+     * Checks if the collPaymentRecieveds collection is loaded.
      *
      * @return bool
      */
-    public function isPaymentsLoaded()
+    public function isPaymentRecievedsLoaded()
     {
-        return null !== $this->collPayments;
+        return null !== $this->collPaymentRecieveds;
     }
 
     /**
-     * Gets a collection of ChildPayment objects related by a many-to-many relationship
+     * Gets a collection of ChildPaymentRecieved objects related by a many-to-many relationship
      * to the current object by way of the payment_coupon cross-reference table.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
@@ -1853,99 +1853,99 @@ abstract class Coupon implements ActiveRecordInterface
      * @param      Criteria $criteria Optional query object to filter the query
      * @param      ConnectionInterface $con Optional connection object
      *
-     * @return ObjectCollection|ChildPayment[] List of ChildPayment objects
+     * @return ObjectCollection|ChildPaymentRecieved[] List of ChildPaymentRecieved objects
      */
-    public function getPayments(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getPaymentRecieveds(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collPaymentsPartial && !$this->isNew();
-        if (null === $this->collPayments || null !== $criteria || $partial) {
+        $partial = $this->collPaymentRecievedsPartial && !$this->isNew();
+        if (null === $this->collPaymentRecieveds || null !== $criteria || $partial) {
             if ($this->isNew()) {
                 // return empty collection
-                if (null === $this->collPayments) {
-                    $this->initPayments();
+                if (null === $this->collPaymentRecieveds) {
+                    $this->initPaymentRecieveds();
                 }
             } else {
 
-                $query = ChildPaymentQuery::create(null, $criteria)
+                $query = ChildPaymentRecievedQuery::create(null, $criteria)
                     ->filterByCoupon($this);
-                $collPayments = $query->find($con);
+                $collPaymentRecieveds = $query->find($con);
                 if (null !== $criteria) {
-                    return $collPayments;
+                    return $collPaymentRecieveds;
                 }
 
-                if ($partial && $this->collPayments) {
+                if ($partial && $this->collPaymentRecieveds) {
                     //make sure that already added objects gets added to the list of the database.
-                    foreach ($this->collPayments as $obj) {
-                        if (!$collPayments->contains($obj)) {
-                            $collPayments[] = $obj;
+                    foreach ($this->collPaymentRecieveds as $obj) {
+                        if (!$collPaymentRecieveds->contains($obj)) {
+                            $collPaymentRecieveds[] = $obj;
                         }
                     }
                 }
 
-                $this->collPayments = $collPayments;
-                $this->collPaymentsPartial = false;
+                $this->collPaymentRecieveds = $collPaymentRecieveds;
+                $this->collPaymentRecievedsPartial = false;
             }
         }
 
-        return $this->collPayments;
+        return $this->collPaymentRecieveds;
     }
 
     /**
-     * Sets a collection of Payment objects related by a many-to-many relationship
+     * Sets a collection of PaymentRecieved objects related by a many-to-many relationship
      * to the current object by way of the payment_coupon cross-reference table.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param  Collection $payments A Propel collection.
+     * @param  Collection $paymentRecieveds A Propel collection.
      * @param  ConnectionInterface $con Optional connection object
      * @return $this|ChildCoupon The current object (for fluent API support)
      */
-    public function setPayments(Collection $payments, ConnectionInterface $con = null)
+    public function setPaymentRecieveds(Collection $paymentRecieveds, ConnectionInterface $con = null)
     {
-        $this->clearPayments();
-        $currentPayments = $this->getPayments();
+        $this->clearPaymentRecieveds();
+        $currentPaymentRecieveds = $this->getPaymentRecieveds();
 
-        $paymentsScheduledForDeletion = $currentPayments->diff($payments);
+        $paymentRecievedsScheduledForDeletion = $currentPaymentRecieveds->diff($paymentRecieveds);
 
-        foreach ($paymentsScheduledForDeletion as $toDelete) {
-            $this->removePayment($toDelete);
+        foreach ($paymentRecievedsScheduledForDeletion as $toDelete) {
+            $this->removePaymentRecieved($toDelete);
         }
 
-        foreach ($payments as $payment) {
-            if (!$currentPayments->contains($payment)) {
-                $this->doAddPayment($payment);
+        foreach ($paymentRecieveds as $paymentRecieved) {
+            if (!$currentPaymentRecieveds->contains($paymentRecieved)) {
+                $this->doAddPaymentRecieved($paymentRecieved);
             }
         }
 
-        $this->collPaymentsPartial = false;
-        $this->collPayments = $payments;
+        $this->collPaymentRecievedsPartial = false;
+        $this->collPaymentRecieveds = $paymentRecieveds;
 
         return $this;
     }
 
     /**
-     * Gets the number of Payment objects related by a many-to-many relationship
+     * Gets the number of PaymentRecieved objects related by a many-to-many relationship
      * to the current object by way of the payment_coupon cross-reference table.
      *
      * @param      Criteria $criteria Optional query object to filter the query
      * @param      boolean $distinct Set to true to force count distinct
      * @param      ConnectionInterface $con Optional connection object
      *
-     * @return int the number of related Payment objects
+     * @return int the number of related PaymentRecieved objects
      */
-    public function countPayments(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countPaymentRecieveds(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collPaymentsPartial && !$this->isNew();
-        if (null === $this->collPayments || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collPayments) {
+        $partial = $this->collPaymentRecievedsPartial && !$this->isNew();
+        if (null === $this->collPaymentRecieveds || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPaymentRecieveds) {
                 return 0;
             } else {
 
                 if ($partial && !$criteria) {
-                    return count($this->getPayments());
+                    return count($this->getPaymentRecieveds());
                 }
 
-                $query = ChildPaymentQuery::create(null, $criteria);
+                $query = ChildPaymentRecievedQuery::create(null, $criteria);
                 if ($distinct) {
                     $query->distinct();
                 }
@@ -1955,27 +1955,27 @@ abstract class Coupon implements ActiveRecordInterface
                     ->count($con);
             }
         } else {
-            return count($this->collPayments);
+            return count($this->collPaymentRecieveds);
         }
     }
 
     /**
-     * Associate a ChildPayment to this object
+     * Associate a ChildPaymentRecieved to this object
      * through the payment_coupon cross reference table.
      *
-     * @param ChildPayment $payment
+     * @param ChildPaymentRecieved $paymentRecieved
      * @return ChildCoupon The current object (for fluent API support)
      */
-    public function addPayment(ChildPayment $payment)
+    public function addPaymentRecieved(ChildPaymentRecieved $paymentRecieved)
     {
-        if ($this->collPayments === null) {
-            $this->initPayments();
+        if ($this->collPaymentRecieveds === null) {
+            $this->initPaymentRecieveds();
         }
 
-        if (!$this->getPayments()->contains($payment)) {
+        if (!$this->getPaymentRecieveds()->contains($paymentRecieved)) {
             // only add it if the **same** object is not already associated
-            $this->collPayments->push($payment);
-            $this->doAddPayment($payment);
+            $this->collPaymentRecieveds->push($paymentRecieved);
+            $this->doAddPaymentRecieved($paymentRecieved);
         }
 
         return $this;
@@ -1983,13 +1983,13 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      *
-     * @param ChildPayment $payment
+     * @param ChildPaymentRecieved $paymentRecieved
      */
-    protected function doAddPayment(ChildPayment $payment)
+    protected function doAddPaymentRecieved(ChildPaymentRecieved $paymentRecieved)
     {
         $paymentCoupon = new ChildPaymentCoupon();
 
-        $paymentCoupon->setPayment($payment);
+        $paymentCoupon->setPaymentRecieved($paymentRecieved);
 
         $paymentCoupon->setCoupon($this);
 
@@ -1997,44 +1997,44 @@ abstract class Coupon implements ActiveRecordInterface
 
         // set the back reference to this object directly as using provided method either results
         // in endless loop or in multiple relations
-        if (!$payment->isCouponsLoaded()) {
-            $payment->initCoupons();
-            $payment->getCoupons()->push($this);
-        } elseif (!$payment->getCoupons()->contains($this)) {
-            $payment->getCoupons()->push($this);
+        if (!$paymentRecieved->isCouponsLoaded()) {
+            $paymentRecieved->initCoupons();
+            $paymentRecieved->getCoupons()->push($this);
+        } elseif (!$paymentRecieved->getCoupons()->contains($this)) {
+            $paymentRecieved->getCoupons()->push($this);
         }
 
     }
 
     /**
-     * Remove payment of this object
+     * Remove paymentRecieved of this object
      * through the payment_coupon cross reference table.
      *
-     * @param ChildPayment $payment
+     * @param ChildPaymentRecieved $paymentRecieved
      * @return ChildCoupon The current object (for fluent API support)
      */
-    public function removePayment(ChildPayment $payment)
+    public function removePaymentRecieved(ChildPaymentRecieved $paymentRecieved)
     {
-        if ($this->getPayments()->contains($payment)) { $paymentCoupon = new ChildPaymentCoupon();
+        if ($this->getPaymentRecieveds()->contains($paymentRecieved)) { $paymentCoupon = new ChildPaymentCoupon();
 
-            $paymentCoupon->setPayment($payment);
-            if ($payment->isCouponsLoaded()) {
+            $paymentCoupon->setPaymentRecieved($paymentRecieved);
+            if ($paymentRecieved->isCouponsLoaded()) {
                 //remove the back reference if available
-                $payment->getCoupons()->removeObject($this);
+                $paymentRecieved->getCoupons()->removeObject($this);
             }
 
             $paymentCoupon->setCoupon($this);
             $this->removePaymentCoupon(clone $paymentCoupon);
             $paymentCoupon->clear();
 
-            $this->collPayments->remove($this->collPayments->search($payment));
+            $this->collPaymentRecieveds->remove($this->collPaymentRecieveds->search($paymentRecieved));
 
-            if (null === $this->paymentsScheduledForDeletion) {
-                $this->paymentsScheduledForDeletion = clone $this->collPayments;
-                $this->paymentsScheduledForDeletion->clear();
+            if (null === $this->paymentRecievedsScheduledForDeletion) {
+                $this->paymentRecievedsScheduledForDeletion = clone $this->collPaymentRecieveds;
+                $this->paymentRecievedsScheduledForDeletion->clear();
             }
 
-            $this->paymentsScheduledForDeletion->push($payment);
+            $this->paymentRecievedsScheduledForDeletion->push($paymentRecieved);
         }
 
 
@@ -2083,15 +2083,15 @@ abstract class Coupon implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collPayments) {
-                foreach ($this->collPayments as $o) {
+            if ($this->collPaymentRecieveds) {
+                foreach ($this->collPaymentRecieveds as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
         $this->collPaymentCoupons = null;
-        $this->collPayments = null;
+        $this->collPaymentRecieveds = null;
         $this->aEvent = null;
         $this->aUser = null;
     }

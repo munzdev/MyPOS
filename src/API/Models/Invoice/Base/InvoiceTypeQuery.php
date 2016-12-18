@@ -1,12 +1,12 @@
 <?php
 
-namespace API\Models\Payment\Base;
+namespace API\Models\Invoice\Base;
 
 use \Exception;
 use \PDO;
-use API\Models\Payment\PaymentType as ChildPaymentType;
-use API\Models\Payment\PaymentTypeQuery as ChildPaymentTypeQuery;
-use API\Models\Payment\Map\PaymentTypeTableMap;
+use API\Models\Invoice\InvoiceType as ChildInvoiceType;
+use API\Models\Invoice\InvoiceTypeQuery as ChildInvoiceTypeQuery;
+use API\Models\Invoice\Map\InvoiceTypeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -16,84 +16,84 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'payment_type' table.
+ * Base class that represents a query for the 'invoice_type' table.
  *
  *
  *
- * @method     ChildPaymentTypeQuery orderByPaymentTypeid($order = Criteria::ASC) Order by the payment_typeid column
- * @method     ChildPaymentTypeQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     ChildInvoiceTypeQuery orderByInvoiceTypeid($order = Criteria::ASC) Order by the invoice_typeid column
+ * @method     ChildInvoiceTypeQuery orderByName($order = Criteria::ASC) Order by the name column
  *
- * @method     ChildPaymentTypeQuery groupByPaymentTypeid() Group by the payment_typeid column
- * @method     ChildPaymentTypeQuery groupByName() Group by the name column
+ * @method     ChildInvoiceTypeQuery groupByInvoiceTypeid() Group by the invoice_typeid column
+ * @method     ChildInvoiceTypeQuery groupByName() Group by the name column
  *
- * @method     ChildPaymentTypeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildPaymentTypeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildPaymentTypeQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildInvoiceTypeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildInvoiceTypeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildInvoiceTypeQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildPaymentTypeQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildPaymentTypeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildPaymentTypeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildInvoiceTypeQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildInvoiceTypeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildInvoiceTypeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildPaymentTypeQuery leftJoinPaymentRecieved($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentRecieved relation
- * @method     ChildPaymentTypeQuery rightJoinPaymentRecieved($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentRecieved relation
- * @method     ChildPaymentTypeQuery innerJoinPaymentRecieved($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentRecieved relation
+ * @method     ChildInvoiceTypeQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
+ * @method     ChildInvoiceTypeQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
+ * @method     ChildInvoiceTypeQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
  *
- * @method     ChildPaymentTypeQuery joinWithPaymentRecieved($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentRecieved relation
+ * @method     ChildInvoiceTypeQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
  *
- * @method     ChildPaymentTypeQuery leftJoinWithPaymentRecieved() Adds a LEFT JOIN clause and with to the query using the PaymentRecieved relation
- * @method     ChildPaymentTypeQuery rightJoinWithPaymentRecieved() Adds a RIGHT JOIN clause and with to the query using the PaymentRecieved relation
- * @method     ChildPaymentTypeQuery innerJoinWithPaymentRecieved() Adds a INNER JOIN clause and with to the query using the PaymentRecieved relation
+ * @method     ChildInvoiceTypeQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
+ * @method     ChildInvoiceTypeQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
+ * @method     ChildInvoiceTypeQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
  *
- * @method     \API\Models\Payment\PaymentRecievedQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\Invoice\InvoiceQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildPaymentType findOne(ConnectionInterface $con = null) Return the first ChildPaymentType matching the query
- * @method     ChildPaymentType findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPaymentType matching the query, or a new ChildPaymentType object populated from the query conditions when no match is found
+ * @method     ChildInvoiceType findOne(ConnectionInterface $con = null) Return the first ChildInvoiceType matching the query
+ * @method     ChildInvoiceType findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoiceType matching the query, or a new ChildInvoiceType object populated from the query conditions when no match is found
  *
- * @method     ChildPaymentType findOneByPaymentTypeid(int $payment_typeid) Return the first ChildPaymentType filtered by the payment_typeid column
- * @method     ChildPaymentType findOneByName(string $name) Return the first ChildPaymentType filtered by the name column *
+ * @method     ChildInvoiceType findOneByInvoiceTypeid(int $invoice_typeid) Return the first ChildInvoiceType filtered by the invoice_typeid column
+ * @method     ChildInvoiceType findOneByName(string $name) Return the first ChildInvoiceType filtered by the name column *
 
- * @method     ChildPaymentType requirePk($key, ConnectionInterface $con = null) Return the ChildPaymentType by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPaymentType requireOne(ConnectionInterface $con = null) Return the first ChildPaymentType matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoiceType requirePk($key, ConnectionInterface $con = null) Return the ChildInvoiceType by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoiceType requireOne(ConnectionInterface $con = null) Return the first ChildInvoiceType matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPaymentType requireOneByPaymentTypeid(int $payment_typeid) Return the first ChildPaymentType filtered by the payment_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPaymentType requireOneByName(string $name) Return the first ChildPaymentType filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoiceType requireOneByInvoiceTypeid(int $invoice_typeid) Return the first ChildInvoiceType filtered by the invoice_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoiceType requireOneByName(string $name) Return the first ChildInvoiceType filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPaymentType[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPaymentType objects based on current ModelCriteria
- * @method     ChildPaymentType[]|ObjectCollection findByPaymentTypeid(int $payment_typeid) Return ChildPaymentType objects filtered by the payment_typeid column
- * @method     ChildPaymentType[]|ObjectCollection findByName(string $name) Return ChildPaymentType objects filtered by the name column
- * @method     ChildPaymentType[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildInvoiceType[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoiceType objects based on current ModelCriteria
+ * @method     ChildInvoiceType[]|ObjectCollection findByInvoiceTypeid(int $invoice_typeid) Return ChildInvoiceType objects filtered by the invoice_typeid column
+ * @method     ChildInvoiceType[]|ObjectCollection findByName(string $name) Return ChildInvoiceType objects filtered by the name column
+ * @method     ChildInvoiceType[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class PaymentTypeQuery extends ModelCriteria
+abstract class InvoiceTypeQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \API\Models\Payment\Base\PaymentTypeQuery object.
+     * Initializes internal state of \API\Models\Invoice\Base\InvoiceTypeQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Payment\\PaymentType', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Invoice\\InvoiceType', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildPaymentTypeQuery object.
+     * Returns a new ChildInvoiceTypeQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildPaymentTypeQuery
+     * @return ChildInvoiceTypeQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof ChildPaymentTypeQuery) {
+        if ($criteria instanceof ChildInvoiceTypeQuery) {
             return $criteria;
         }
-        $query = new ChildPaymentTypeQuery();
+        $query = new ChildInvoiceTypeQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -116,7 +116,7 @@ abstract class PaymentTypeQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildPaymentType|array|mixed the result, formatted by the current formatter
+     * @return ChildInvoiceType|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
@@ -125,7 +125,7 @@ abstract class PaymentTypeQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(PaymentTypeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(InvoiceTypeTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -138,7 +138,7 @@ abstract class PaymentTypeQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = PaymentTypeTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = InvoiceTypeTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -155,11 +155,11 @@ abstract class PaymentTypeQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildPaymentType A model object, or null if the key is not found
+     * @return ChildInvoiceType A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT payment_typeid, name FROM payment_type WHERE payment_typeid = :p0';
+        $sql = 'SELECT invoice_typeid, name FROM invoice_type WHERE invoice_typeid = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -170,10 +170,10 @@ abstract class PaymentTypeQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildPaymentType $obj */
-            $obj = new ChildPaymentType();
+            /** @var ChildInvoiceType $obj */
+            $obj = new ChildInvoiceType();
             $obj->hydrate($row);
-            PaymentTypeTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            InvoiceTypeTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -186,7 +186,7 @@ abstract class PaymentTypeQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildPaymentType|array|mixed the result, formatted by the current formatter
+     * @return ChildInvoiceType|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -228,12 +228,12 @@ abstract class PaymentTypeQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|ChildPaymentTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceTypeQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(PaymentTypeTableMap::COL_PAYMENT_TYPEID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(InvoiceTypeTableMap::COL_INVOICE_TYPEID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -241,42 +241,42 @@ abstract class PaymentTypeQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|ChildPaymentTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceTypeQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(PaymentTypeTableMap::COL_PAYMENT_TYPEID, $keys, Criteria::IN);
+        return $this->addUsingAlias(InvoiceTypeTableMap::COL_INVOICE_TYPEID, $keys, Criteria::IN);
     }
 
     /**
-     * Filter the query on the payment_typeid column
+     * Filter the query on the invoice_typeid column
      *
      * Example usage:
      * <code>
-     * $query->filterByPaymentTypeid(1234); // WHERE payment_typeid = 1234
-     * $query->filterByPaymentTypeid(array(12, 34)); // WHERE payment_typeid IN (12, 34)
-     * $query->filterByPaymentTypeid(array('min' => 12)); // WHERE payment_typeid > 12
+     * $query->filterByInvoiceTypeid(1234); // WHERE invoice_typeid = 1234
+     * $query->filterByInvoiceTypeid(array(12, 34)); // WHERE invoice_typeid IN (12, 34)
+     * $query->filterByInvoiceTypeid(array('min' => 12)); // WHERE invoice_typeid > 12
      * </code>
      *
-     * @param     mixed $paymentTypeid The value to use as filter.
+     * @param     mixed $invoiceTypeid The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceTypeQuery The current query, for fluid interface
      */
-    public function filterByPaymentTypeid($paymentTypeid = null, $comparison = null)
+    public function filterByInvoiceTypeid($invoiceTypeid = null, $comparison = null)
     {
-        if (is_array($paymentTypeid)) {
+        if (is_array($invoiceTypeid)) {
             $useMinMax = false;
-            if (isset($paymentTypeid['min'])) {
-                $this->addUsingAlias(PaymentTypeTableMap::COL_PAYMENT_TYPEID, $paymentTypeid['min'], Criteria::GREATER_EQUAL);
+            if (isset($invoiceTypeid['min'])) {
+                $this->addUsingAlias(InvoiceTypeTableMap::COL_INVOICE_TYPEID, $invoiceTypeid['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($paymentTypeid['max'])) {
-                $this->addUsingAlias(PaymentTypeTableMap::COL_PAYMENT_TYPEID, $paymentTypeid['max'], Criteria::LESS_EQUAL);
+            if (isset($invoiceTypeid['max'])) {
+                $this->addUsingAlias(InvoiceTypeTableMap::COL_INVOICE_TYPEID, $invoiceTypeid['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -287,7 +287,7 @@ abstract class PaymentTypeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTypeTableMap::COL_PAYMENT_TYPEID, $paymentTypeid, $comparison);
+        return $this->addUsingAlias(InvoiceTypeTableMap::COL_INVOICE_TYPEID, $invoiceTypeid, $comparison);
     }
 
     /**
@@ -302,7 +302,7 @@ abstract class PaymentTypeQuery extends ModelCriteria
      * @param     string $name The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceTypeQuery The current query, for fluid interface
      */
     public function filterByName($name = null, $comparison = null)
     {
@@ -312,44 +312,44 @@ abstract class PaymentTypeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentTypeTableMap::COL_NAME, $name, $comparison);
+        return $this->addUsingAlias(InvoiceTypeTableMap::COL_NAME, $name, $comparison);
     }
 
     /**
-     * Filter the query by a related \API\Models\Payment\PaymentRecieved object
+     * Filter the query by a related \API\Models\Invoice\Invoice object
      *
-     * @param \API\Models\Payment\PaymentRecieved|ObjectCollection $paymentRecieved the related object to use as filter
+     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildPaymentTypeQuery The current query, for fluid interface
+     * @return ChildInvoiceTypeQuery The current query, for fluid interface
      */
-    public function filterByPaymentRecieved($paymentRecieved, $comparison = null)
+    public function filterByInvoice($invoice, $comparison = null)
     {
-        if ($paymentRecieved instanceof \API\Models\Payment\PaymentRecieved) {
+        if ($invoice instanceof \API\Models\Invoice\Invoice) {
             return $this
-                ->addUsingAlias(PaymentTypeTableMap::COL_PAYMENT_TYPEID, $paymentRecieved->getPaymentTypeid(), $comparison);
-        } elseif ($paymentRecieved instanceof ObjectCollection) {
+                ->addUsingAlias(InvoiceTypeTableMap::COL_INVOICE_TYPEID, $invoice->getInvoiceTypeid(), $comparison);
+        } elseif ($invoice instanceof ObjectCollection) {
             return $this
-                ->usePaymentRecievedQuery()
-                ->filterByPrimaryKeys($paymentRecieved->getPrimaryKeys())
+                ->useInvoiceQuery()
+                ->filterByPrimaryKeys($invoice->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByPaymentRecieved() only accepts arguments of type \API\Models\Payment\PaymentRecieved or Collection');
+            throw new PropelException('filterByInvoice() only accepts arguments of type \API\Models\Invoice\Invoice or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the PaymentRecieved relation
+     * Adds a JOIN clause to the query using the Invoice relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPaymentTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceTypeQuery The current query, for fluid interface
      */
-    public function joinPaymentRecieved($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinInvoice($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('PaymentRecieved');
+        $relationMap = $tableMap->getRelation('Invoice');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -364,14 +364,14 @@ abstract class PaymentTypeQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'PaymentRecieved');
+            $this->addJoinObject($join, 'Invoice');
         }
 
         return $this;
     }
 
     /**
-     * Use the PaymentRecieved relation PaymentRecieved object
+     * Use the Invoice relation Invoice object
      *
      * @see useQuery()
      *
@@ -379,33 +379,33 @@ abstract class PaymentTypeQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \API\Models\Payment\PaymentRecievedQuery A secondary query class using the current class as primary query
+     * @return \API\Models\Invoice\InvoiceQuery A secondary query class using the current class as primary query
      */
-    public function usePaymentRecievedQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useInvoiceQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinPaymentRecieved($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'PaymentRecieved', '\API\Models\Payment\PaymentRecievedQuery');
+            ->joinInvoice($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Invoice', '\API\Models\Invoice\InvoiceQuery');
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildPaymentType $paymentType Object to remove from the list of results
+     * @param   ChildInvoiceType $invoiceType Object to remove from the list of results
      *
-     * @return $this|ChildPaymentTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceTypeQuery The current query, for fluid interface
      */
-    public function prune($paymentType = null)
+    public function prune($invoiceType = null)
     {
-        if ($paymentType) {
-            $this->addUsingAlias(PaymentTypeTableMap::COL_PAYMENT_TYPEID, $paymentType->getPaymentTypeid(), Criteria::NOT_EQUAL);
+        if ($invoiceType) {
+            $this->addUsingAlias(InvoiceTypeTableMap::COL_INVOICE_TYPEID, $invoiceType->getInvoiceTypeid(), Criteria::NOT_EQUAL);
         }
 
         return $this;
     }
 
     /**
-     * Deletes all rows from the payment_type table.
+     * Deletes all rows from the invoice_type table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
@@ -413,7 +413,7 @@ abstract class PaymentTypeQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PaymentTypeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(InvoiceTypeTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -424,8 +424,8 @@ abstract class PaymentTypeQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            PaymentTypeTableMap::clearInstancePool();
-            PaymentTypeTableMap::clearRelatedInstancePool();
+            InvoiceTypeTableMap::clearInstancePool();
+            InvoiceTypeTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -443,26 +443,26 @@ abstract class PaymentTypeQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PaymentTypeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(InvoiceTypeTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(PaymentTypeTableMap::DATABASE_NAME);
+        $criteria->setDbName(InvoiceTypeTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            PaymentTypeTableMap::removeInstanceFromPool($criteria);
+            InvoiceTypeTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            PaymentTypeTableMap::clearRelatedInstancePool();
+            InvoiceTypeTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
     }
 
-} // PaymentTypeQuery
+} // InvoiceTypeQuery

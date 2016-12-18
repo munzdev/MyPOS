@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `event` (
   UNIQUE INDEX `eventsid_UNIQUE` (`eventid` ASC),
   INDEX `events_active` (`active` ASC))
 ENGINE = InnoDB
-COMMENT = 'Enthält die verschiedene Events, bei dem das POS System ver' /* comment truncated */ /*wendet wird*/;
+COMMENT = 'Enthält die verschiedene Events, bei dem das POS System verwendet wird';
 
 
 -- -----------------------------------------------------
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `order` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enthält die Bestellungen die von einem Tisch gemacht wurden' /* comment truncated */ /* durch einen Benutzer*/;
+COMMENT = 'Enthält die Bestellungen die von einem Tisch gemacht wurden durch einen Benutzer';
 
 
 -- -----------------------------------------------------
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `menu_type` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enthält die grundlegende Nahrungstypen ( Essen, Trinken, ..' /* comment truncated */ /*.) und die dafür gesetzlichen Steuern*/;
+COMMENT = 'Enthält die grundlegende Nahrungstypen ( Essen, Trinken, ...) und die dafür gesetzlichen Steuern';
 
 
 -- -----------------------------------------------------
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `menu_group` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enhält die Untergruppen der Menükarte (Hauptspeise, Beilag' /* comment truncated */ /*en, Antigetränke, Biere, ... )*/;
+COMMENT = 'Enhält die Untergruppen der Menükarte (Hauptspeise, Beilagen, Antigetränke, Biere, ... )';
 
 
 -- -----------------------------------------------------
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `availability` (
   PRIMARY KEY (`availabilityid`),
   UNIQUE INDEX `availabilityid_UNIQUE` (`availabilityid` ASC))
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet die möglichen verfügbarkeits statuse den Menüs' /* comment truncated */ /*/Produkte und Sonderwünsche*/;
+COMMENT = 'Beinhaltet die möglichen verfügbarkeits statuse den Menüs/Produkte und Sonderwünsche';
 
 
 -- -----------------------------------------------------
@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enhält das Menü das Angeboten werden kann (Schnitzel, Schw' /* comment truncated */ /*einsbaraten, Cola, Sprite, Wasser, ...) mit dem Standartpreis*/;
+COMMENT = 'Enhält das Menü das Angeboten werden kann (Schnitzel, Schweinsbaraten, Cola, Sprite, Wasser, ...) mit dem Standartpreis';
 
 
 -- -----------------------------------------------------
@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `menu_size` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enhält die verschiedene Einheitsgröße, die es für eine S' /* comment truncated */ /*peise/Getränk geben kann. (Normal, Kleine Speise, 0,25L, 0,5L, ...)*/;
+COMMENT = 'Enhält die verschiedene Einheitsgröße, die es für eine Speise/Getränk geben kann. (Normal, Kleine Speise, 0,25L, 0,5L, ...)';
 
 
 -- -----------------------------------------------------
@@ -279,7 +279,7 @@ CREATE TABLE IF NOT EXISTS `order_detail` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enthält die genauen Bestell-Positionen einner Bestellung, d' /* comment truncated */ /*ie getätigte Zahlung dafür und wie oft diese Position bestellt wurde. menuid is leer(0), wenn es sich um einen "extrawunsch" handelt.*/;
+COMMENT = 'Enthält die genauen Bestell-Positionen einner Bestellung, die getätigte Zahlung dafür und wie oft diese Position bestellt wurde. menuid is leer(0), wenn es sich um einen \"extrawunsch\" handelt.';
 
 
 -- -----------------------------------------------------
@@ -308,7 +308,7 @@ CREATE TABLE IF NOT EXISTS `menu_extra` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert alle möglichen Extras die zu einer Speise bestell' /* comment truncated */ /*t werden können (miz Pommes, mit Reis, kein Salat, ...)*/;
+COMMENT = 'Definiert alle möglichen Extras die zu einer Speise bestellt werden können (miz Pommes, mit Reis, kein Salat, ...)';
 
 
 -- -----------------------------------------------------
@@ -335,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `menu_possible_size` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert, welche Größen für die verschiedene Speisen ver' /* comment truncated */ /*fügbar ist mit dem angepassten Preis (Schnitzel kann als Beispiel "Normal" und als "Kleine Portion" bestellt werden. Cola in 0,25, 0,5L, ....)*/;
+COMMENT = 'Definiert, welche Größen für die verschiedene Speisen verfügbar ist mit dem angepassten Preis (Schnitzel kann als Beispiel \"Normal\" und als \"Kleine Portion\" bestellt werden. Cola in 0,25, 0,5L, ....)';
 
 
 -- -----------------------------------------------------
@@ -362,7 +362,7 @@ CREATE TABLE IF NOT EXISTS `menu_possible_extra` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert, welche extras für die verschiedene Speisen/Get' /* comment truncated */ /*ränke verfügbar ist mit dem angepassten Preis (Schnitzel "mit Reis" statt Pommes, Schweinsbraten "mit Kartoffel" statt Knödel, Cola "mit Zitrone"...)*/;
+COMMENT = 'Definiert, welche extras für die verschiedene Speisen/Getränke verfügbar ist mit dem angepassten Preis (Schnitzel \"mit Reis\" statt Pommes, Schweinsbraten \"mit Kartoffel\" statt Knödel, Cola \"mit Zitrone\"...)';
 
 
 -- -----------------------------------------------------
@@ -387,7 +387,7 @@ CREATE TABLE IF NOT EXISTS `order_detail_extra` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Gibt an welches Extra einer Speise/eines Getränkens bestell' /* comment truncated */ /*t worden ist*/;
+COMMENT = 'Gibt an welches Extra einer Speise/eines Getränkens bestellt worden ist';
 
 
 -- -----------------------------------------------------
@@ -411,7 +411,7 @@ CREATE TABLE IF NOT EXISTS `order_detail_mixed_with` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enthält Referenzen zu gespritzten Getränken (Cola gespritz' /* comment truncated */ /*t mit Mineral )*/;
+COMMENT = 'Enthält Referenzen zu gespritzten Getränken (Cola gespritzt mit Mineral )';
 
 
 -- -----------------------------------------------------
@@ -462,7 +462,7 @@ CREATE TABLE IF NOT EXISTS `order_in_progress` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beschreibt, welche Teile aus einer Bestellung zurzeit in Arb' /* comment truncated */ /*eit ist (Benutzer XYZ, der bei der Ausgabe "Bierbar" ist, Bearbeitet zurzeit die Bestellungen von  der Gruppe "Biere") Benutzer kann auch mehrere gleichzeitig bearbeiten (Beispiel: Benutzer A bearbeitet zur zeit die Bestellung XYZ und kümmert sich um die Menü Gruppen "Antigetränk", "Biere". Benutzer B kümmert sich um die Menügruppe "Wein". Kann auch eine andere Ausgabestelle sein, falls nötig.*/;
+COMMENT = 'Beschreibt, welche Teile aus einer Bestellung zurzeit in Arbeit ist (Benutzer XYZ, der bei der Ausgabe \"Bierbar\" ist, Bearbeitet zurzeit die Bestellungen von  der Gruppe \"Biere\") Benutzer kann auch mehrere gleichzeitig bearbeiten (Beispiel: Benutzer A bearbeitet zur zeit die Bestellung XYZ und kümmert sich um die Menü Gruppen \"Antigetränk\", \"Biere\". Benutzer B kümmert sich um die Menügruppe \"Wein\". Kann auch eine andere Ausgabestelle sein, falls nötig.';
 
 
 -- -----------------------------------------------------
@@ -492,7 +492,7 @@ CREATE TABLE IF NOT EXISTS `event_user` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beschreibt welche Benutzer bei welchem Event, welche Rechte ' /* comment truncated */ /*haben. Beispiel: Heuer ist Benutzer X der Admin, nächstes Event nur ein Kellner*/;
+COMMENT = 'Beschreibt welche Benutzer bei welchem Event, welche Rechte haben. Beispiel: Heuer ist Benutzer X der Admin, nächstes Event nur ein Kellner';
 
 
 -- -----------------------------------------------------
@@ -513,7 +513,7 @@ CREATE TABLE IF NOT EXISTS `distribution_place` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltelt die Ausgabestellen, die es auf einem Event gibt.' /* comment truncated */ /* n*/;
+COMMENT = 'Beinhaltelt die Ausgabestellen, die es auf einem Event gibt. n';
 
 
 -- -----------------------------------------------------
@@ -539,13 +539,7 @@ CREATE TABLE IF NOT EXISTS `event_printer` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Enthält die Konfiguration der Drucker, die bei einem Event ' /* comment truncated */ /*zur verfügung stehen
-Type:
-1: Network
-2: File
-3: Windows
-4: Cups
-5: Dummy*/;
+COMMENT = 'Enthält die Konfiguration der Drucker, die bei einem Event zur verfügung stehen\nType:\n1: Network\n2: File\n3: Windows\n4: Cups\n5: Dummy';
 
 
 -- -----------------------------------------------------
@@ -572,7 +566,7 @@ CREATE TABLE IF NOT EXISTS `distribution_place_group` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert, welche Ausgaben bei einer Ausgabestelle gemacht w' /* comment truncated */ /*erden (Essensausgabe: Hauptgerichte, Salat; Bar: Antigetränk, Bier, Wein, Schnaps; Süsswarne: Kuchen; ...)*/;
+COMMENT = 'Definiert, welche Ausgaben bei einer Ausgabestelle gemacht werden (Essensausgabe: Hauptgerichte, Salat; Bar: Antigetränk, Bier, Wein, Schnaps; Süsswarne: Kuchen; ...)';
 
 
 -- -----------------------------------------------------
@@ -604,7 +598,7 @@ CREATE TABLE IF NOT EXISTS `distribution_place_user` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert, welcher Benutzer zugriff auf die Ausgabestelle ha' /* comment truncated */ /*t bzw. sich um die Ausgabestelle kümmert. Definiert außerdem, welcher Drucker im dort zur verfügung steht, um Bons zu drucke*/;
+COMMENT = 'Definiert, welcher Benutzer zugriff auf die Ausgabestelle hat bzw. sich um die Ausgabestelle kümmert. Definiert außerdem, welcher Drucker im dort zur verfügung steht, um Bons zu drucke';
 
 
 -- -----------------------------------------------------
@@ -629,8 +623,7 @@ CREATE TABLE IF NOT EXISTS `distribution_place_table` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Definiert welche tische standartmäßg von wo ihre Menüs er' /* comment truncated */ /*halten. Jeder
-Menü Gruppe kann einem eigenem Ausgabeort zugeteilt werden*/;
+COMMENT = 'Definiert welche tische standartmäßg von wo ihre Menüs erhalten. Jeder\nMenü Gruppe kann einem eigenem Ausgabeort zugeteilt werden';
 
 
 -- -----------------------------------------------------
@@ -666,7 +659,43 @@ CREATE TABLE IF NOT EXISTS `event_contact` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet Kundendaten für Rechnungen. Wenn ein Kunde eine ' /* comment truncated */ /*Vorsteuerabzugsberechtige Rechnugn braucht müssen die Kundendaten auf der Rechnung stehen genauso wie die Daten der Firma die die Rechnung ausstellt*/;
+COMMENT = 'Beinhaltet Kundendaten für Rechnungen. Wenn ein Kunde eine Vorsteuerabzugsberechtige Rechnugn braucht müssen die Kundendaten auf der Rechnung stehen genauso wie die Daten der Firma die die Rechnung ausstellt';
+
+
+-- -----------------------------------------------------
+-- Table `invoice_type`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `invoice_type` ;
+
+CREATE TABLE IF NOT EXISTS `invoice_type` (
+  `invoice_typeid` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(64) NOT NULL,
+  PRIMARY KEY (`invoice_typeid`),
+  UNIQUE INDEX `invoice_typeid_UNIQUE` (`invoice_typeid` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `event_bankinformation`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `event_bankinformation` ;
+
+CREATE TABLE IF NOT EXISTS `event_bankinformation` (
+  `event_bankinformationid` INT(11) NOT NULL AUTO_INCREMENT,
+  `eventid` INT(11) NOT NULL,
+  `name` VARCHAR(64) NOT NULL,
+  `iban` VARCHAR(32) NOT NULL,
+  `bic` VARCHAR(16) NOT NULL,
+  `active` TINYINT(1) NOT NULL,
+  PRIMARY KEY (`event_bankinformationid`),
+  UNIQUE INDEX `event_bankinformation_UNIQUE` (`event_bankinformationid` ASC),
+  INDEX `fk_event_bankinformation_event1_idx` (`eventid` ASC),
+  CONSTRAINT `fk_event_bankinformation_event1`
+    FOREIGN KEY (`eventid`)
+    REFERENCES `event` (`eventid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -676,25 +705,33 @@ DROP TABLE IF EXISTS `invoice` ;
 
 CREATE TABLE IF NOT EXISTS `invoice` (
   `invoiceid` INT(11) NOT NULL AUTO_INCREMENT,
+  `invoice_typeid` INT(11) NOT NULL,
   `event_contactid` INT(11) NOT NULL,
   `cashier_userid` INT(11) NOT NULL,
-  `customerid` INT(11) NULL,
+  `event_bankinformationid` INT(11) NOT NULL,
+  `customer_event_contactid` INT(11) NULL,
+  `canceled_invoiceid` INT(11) NULL,
   `date` DATETIME NOT NULL,
-  `canceled` DATETIME NULL,
+  `amount` DECIMAL(7,2) NOT NULL,
+  `maturity_date` DATETIME NOT NULL,
   `payment_finished` DATETIME NULL,
+  `amount_recieved` DECIMAL(7,2) NULL,
   PRIMARY KEY (`invoiceid`),
   UNIQUE INDEX `invoiceid_UNIQUE` (`invoiceid` ASC),
   INDEX `fk_invoices_users1_idx` (`cashier_userid` ASC),
-  INDEX `fk_invoice_customer1_idx` (`customerid` ASC),
+  INDEX `fk_invoice_customer1_idx` (`customer_event_contactid` ASC),
   INDEX `payment_finished` (`payment_finished` ASC),
   INDEX `fk_invoice_event_contact1_idx` (`event_contactid` ASC),
+  INDEX `fk_invoice_invoice_type1_idx` (`invoice_typeid` ASC),
+  INDEX `fk_invoice_invoice1_idx` (`canceled_invoiceid` ASC),
+  INDEX `fk_invoice_event_bankinformation1_idx` (`event_bankinformationid` ASC),
   CONSTRAINT `fk_invoices_users1`
     FOREIGN KEY (`cashier_userid`)
     REFERENCES `user` (`userid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_invoice_customer1`
-    FOREIGN KEY (`customerid`)
+    FOREIGN KEY (`customer_event_contactid`)
     REFERENCES `event_contact` (`event_contactid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -702,9 +739,24 @@ CREATE TABLE IF NOT EXISTS `invoice` (
     FOREIGN KEY (`event_contactid`)
     REFERENCES `event_contact` (`event_contactid`)
     ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_invoice_invoice_type1`
+    FOREIGN KEY (`invoice_typeid`)
+    REFERENCES `invoice_type` (`invoice_typeid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_invoice_invoice1`
+    FOREIGN KEY (`canceled_invoiceid`)
+    REFERENCES `invoice` (`invoiceid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_invoice_event_bankinformation1`
+    FOREIGN KEY (`event_bankinformationid`)
+    REFERENCES `event_bankinformation` (`event_bankinformationid`)
+    ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet die Rechnungsnummer mit dem Aussstellungsdatum, d' /* comment truncated */ /*ie es gibt. Auserdem ob Rechnung storniert wurde*/;
+COMMENT = 'Beinhaltet die Rechnungsnummer mit dem Aussstellungsdatum, die es gibt. Auserdem ob Rechnung storniert wurde';
 
 
 -- -----------------------------------------------------
@@ -736,7 +788,7 @@ CREATE TABLE IF NOT EXISTS `invoice_item` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet die Zeilen einer Rechnung. Gibt an wieviel, von e' /* comment truncated */ /*iner Bestellung bezahlt worden ist. Preis wird der Bestellung entnommen*/;
+COMMENT = 'Beinhaltet die Zeilen einer Rechnung. Gibt an wieviel, von einer Bestellung bezahlt worden ist. Preis wird der Bestellung entnommen';
 
 
 -- -----------------------------------------------------
@@ -750,7 +802,7 @@ CREATE TABLE IF NOT EXISTS `distribution_giving_out` (
   PRIMARY KEY (`distribution_giving_outid`),
   UNIQUE INDEX `distribution_givin_outid_UNIQUE` (`distribution_giving_outid` ASC))
 ENGINE = InnoDB
-COMMENT = 'Jede einzelne Ausgabe wird hier angelegt mit einem Zeitstemp' /* comment truncated */ /*el*/;
+COMMENT = 'Jede einzelne Ausgabe wird hier angelegt mit einem Zeitstempel';
 
 
 -- -----------------------------------------------------
@@ -785,7 +837,7 @@ CREATE TABLE IF NOT EXISTS `order_in_progress_recieved` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Gibt an, wann und wieviel ein Kunde bereits von seiner Beste' /* comment truncated */ /*llung erhalten hat. Erhalt kann aufgeteitl sein falls zbs. nur mehr 2 Schnitzel vorhanden sind und 3 Bestellt wurden. 1 wird später nachgeliefert und ist ein eigener eintrag*/;
+COMMENT = 'Gibt an, wann und wieviel ein Kunde bereits von seiner Bestellung erhalten hat. Erhalt kann aufgeteitl sein falls zbs. nur mehr 2 Schnitzel vorhanden sind und 3 Bestellt wurden. 1 wird später nachgeliefert und ist ein eigener eintrag';
 
 
 -- -----------------------------------------------------
@@ -816,7 +868,7 @@ CREATE TABLE IF NOT EXISTS `user_message` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet die Kommunikationsnachrichten zwischen den Benutz' /* comment truncated */ /*ern für den internen Chat. Auserdem beinhaltet es Systemnachrichten an die Benutzer (keine'from_events_userid')*/;
+COMMENT = 'Beinhaltet die Kommunikationsnachrichten zwischen den Benutzern für den internen Chat. Auserdem beinhaltet es Systemnachrichten an die Benutzer (keine\'from_events_userid\')';
 
 
 -- -----------------------------------------------------
@@ -831,41 +883,6 @@ CREATE TABLE IF NOT EXISTS `payment_type` (
   UNIQUE INDEX `idpayment_typeid_UNIQUE` (`payment_typeid` ASC))
 ENGINE = InnoDB
 COMMENT = 'Beinhaltet bezahlarten';
-
-
--- -----------------------------------------------------
--- Table `payment`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `payment` ;
-
-CREATE TABLE IF NOT EXISTS `payment` (
-  `paymentid` INT(11) NOT NULL AUTO_INCREMENT,
-  `payment_typeid` INT(11) NOT NULL,
-  `invoiceid` INT(11) NOT NULL,
-  `created` DATETIME NOT NULL,
-  `amount` DECIMAL(7,2) NOT NULL,
-  `maturity_date` DATETIME NOT NULL,
-  `canceled` DATETIME NULL,
-  `recieved` DATETIME NULL,
-  `amount_recieved` DECIMAL(7,2) NULL,
-  PRIMARY KEY (`paymentid`),
-  INDEX `fk_payment_types_has_invoices_invoices1_idx` (`invoiceid` ASC),
-  INDEX `fk_payment_types_has_invoices_payment_types1_idx` (`payment_typeid` ASC),
-  INDEX `recieved` (`recieved` ASC),
-  INDEX `canceled` (`canceled` ASC),
-  UNIQUE INDEX `paymentid_UNIQUE` (`paymentid` ASC),
-  CONSTRAINT `fk_payment_types_has_invoices_payment_types1`
-    FOREIGN KEY (`payment_typeid`)
-    REFERENCES `payment_type` (`payment_typeid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_payment_types_has_invoices_invoices1`
-    FOREIGN KEY (`invoiceid`)
-    REFERENCES `invoice` (`invoiceid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
-COMMENT = 'Beinhaltet die Zahlung für eine Rechnung';
 
 
 -- -----------------------------------------------------
@@ -900,44 +917,72 @@ COMMENT = 'Beinhaltet ausgegebene Gutscheine';
 
 
 -- -----------------------------------------------------
+-- Table `payment_recieved`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `payment_recieved` ;
+
+CREATE TABLE IF NOT EXISTS `payment_recieved` (
+  `payment_recievedid` INT(11) NOT NULL AUTO_INCREMENT,
+  `invoiceid` INT(11) NOT NULL,
+  `payment_typeid` INT(11) NOT NULL,
+  `date` DATETIME NOT NULL,
+  `amount` DECIMAL(7,2) NOT NULL,
+  PRIMARY KEY (`payment_recievedid`),
+  UNIQUE INDEX `payment_recievedid_UNIQUE` (`payment_recievedid` ASC),
+  INDEX `fk_payment_recieved_payment_type1_idx` (`payment_typeid` ASC),
+  INDEX `fk_payment_recieved_invoice1_idx` (`invoiceid` ASC),
+  CONSTRAINT `fk_payment_recieved_payment_type1`
+    FOREIGN KEY (`payment_typeid`)
+    REFERENCES `payment_type` (`payment_typeid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_payment_recieved_invoice1`
+    FOREIGN KEY (`invoiceid`)
+    REFERENCES `invoice` (`invoiceid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `payment_coupon`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `payment_coupon` ;
 
 CREATE TABLE IF NOT EXISTS `payment_coupon` (
   `couponid` INT(11) NOT NULL,
-  `paymentid` INT(11) NOT NULL,
+  `payment_recievedid` INT(11) NOT NULL,
   `value_used` DECIMAL(7,2) NOT NULL,
-  PRIMARY KEY (`couponid`, `paymentid`),
-  INDEX `fk_Coupons_has_payments_payments1_idx` (`paymentid` ASC),
+  PRIMARY KEY (`couponid`, `payment_recievedid`),
   INDEX `fk_Coupons_has_payments_Coupons1_idx` (`couponid` ASC),
+  INDEX `fk_payment_coupon_payment_recieved1_idx` (`payment_recievedid` ASC),
   CONSTRAINT `fk_Coupons_has_payments_Coupons1`
     FOREIGN KEY (`couponid`)
     REFERENCES `coupon` (`couponid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Coupons_has_payments_payments1`
-    FOREIGN KEY (`paymentid`)
-    REFERENCES `payment` (`paymentid`)
+  CONSTRAINT `fk_payment_coupon_payment_recieved1`
+    FOREIGN KEY (`payment_recievedid`)
+    REFERENCES `payment_recieved` (`payment_recievedid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
-COMMENT = 'Beinhaltet Gutscheine die für eine Bezahlung verwendet wurd' /* comment truncated */ /*en*/;
+COMMENT = 'Beinhaltet Gutscheine die für eine Bezahlung verwendet wurden';
 
 
 -- -----------------------------------------------------
--- Table `payment_warning_type`
+-- Table `invoice_warning_type`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `payment_warning_type` ;
+DROP TABLE IF EXISTS `invoice_warning_type` ;
 
-CREATE TABLE IF NOT EXISTS `payment_warning_type` (
-  `payment_warning_typeid` INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `invoice_warning_type` (
+  `invoice_warning_typeid` INT(11) NOT NULL AUTO_INCREMENT,
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
   `extra_price` DECIMAL(7,2) NOT NULL,
-  PRIMARY KEY (`payment_warning_typeid`),
+  PRIMARY KEY (`invoice_warning_typeid`),
   INDEX `fk_payment_warning_type_event1_idx` (`eventid` ASC),
-  UNIQUE INDEX `payment_warning_typeid_UNIQUE` (`payment_warning_typeid` ASC),
+  UNIQUE INDEX `payment_warning_typeid_UNIQUE` (`invoice_warning_typeid` ASC),
   CONSTRAINT `fk_payment_warning_type_event1`
     FOREIGN KEY (`eventid`)
     REFERENCES `event` (`eventid`)
@@ -947,52 +992,29 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `payment_warning`
+-- Table `invoice_warning`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `payment_warning` ;
+DROP TABLE IF EXISTS `invoice_warning` ;
 
-CREATE TABLE IF NOT EXISTS `payment_warning` (
-  `payment_warningid` INT(11) NOT NULL AUTO_INCREMENT,
-  `paymentid` INT(11) NOT NULL,
-  `payment_warning_typeid` INT(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `invoice_warning` (
+  `invoice_warningid` INT(11) NOT NULL AUTO_INCREMENT,
+  `invoiceid` INT(11) NOT NULL,
+  `invoice_warning_typeid` INT(11) NOT NULL,
   `warning_date` DATETIME NOT NULL,
   `maturity_date` DATETIME NOT NULL,
   `warning_value` DECIMAL(7,2) NOT NULL,
-  PRIMARY KEY (`payment_warningid`),
-  INDEX `fk_payment_warning_payment1_idx` (`paymentid` ASC),
-  INDEX `fk_payment_warning_payment_warning_type1_idx` (`payment_warning_typeid` ASC),
-  UNIQUE INDEX `payment_warningid_UNIQUE` (`payment_warningid` ASC),
-  CONSTRAINT `fk_payment_warning_payment1`
-    FOREIGN KEY (`paymentid`)
-    REFERENCES `payment` (`paymentid`)
+  PRIMARY KEY (`invoice_warningid`),
+  INDEX `fk_payment_warning_payment_warning_type1_idx` (`invoice_warning_typeid` ASC),
+  UNIQUE INDEX `payment_warningid_UNIQUE` (`invoice_warningid` ASC),
+  INDEX `fk_payment_warning_invoice1_idx` (`invoiceid` ASC),
+  CONSTRAINT `fk_payment_warning_payment_warning_type1`
+    FOREIGN KEY (`invoice_warning_typeid`)
+    REFERENCES `invoice_warning_type` (`invoice_warning_typeid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_payment_warning_payment_warning_type1`
-    FOREIGN KEY (`payment_warning_typeid`)
-    REFERENCES `payment_warning_type` (`payment_warning_typeid`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `event_bankinformation`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `event_bankinformation` ;
-
-CREATE TABLE IF NOT EXISTS `event_bankinformation` (
-  `event_bankinformationid` INT(11) NOT NULL AUTO_INCREMENT,
-  `eventid` INT(11) NOT NULL,
-  `name` VARCHAR(64) NOT NULL,
-  `iban` VARCHAR(32) NOT NULL,
-  `bic` VARCHAR(16) NOT NULL,
-  `active` TINYINT(1) NOT NULL,
-  PRIMARY KEY (`event_bankinformationid`),
-  UNIQUE INDEX `event_bankinformation_UNIQUE` (`event_bankinformationid` ASC),
-  INDEX `fk_event_bankinformation_event1_idx` (`eventid` ASC),
-  CONSTRAINT `fk_event_bankinformation_event1`
-    FOREIGN KEY (`eventid`)
-    REFERENCES `event` (`eventid`)
+  CONSTRAINT `fk_payment_warning_invoice1`
+    FOREIGN KEY (`invoiceid`)
+    REFERENCES `invoice` (`invoiceid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

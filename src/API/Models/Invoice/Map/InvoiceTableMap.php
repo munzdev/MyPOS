@@ -59,7 +59,7 @@ class InvoiceTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 12;
 
     /**
      * The number of lazy-loaded columns
@@ -69,12 +69,17 @@ class InvoiceTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 12;
 
     /**
      * the column name for the invoiceid field
      */
     const COL_INVOICEID = 'invoice.invoiceid';
+
+    /**
+     * the column name for the invoice_typeid field
+     */
+    const COL_INVOICE_TYPEID = 'invoice.invoice_typeid';
 
     /**
      * the column name for the event_contactid field
@@ -87,9 +92,19 @@ class InvoiceTableMap extends TableMap
     const COL_CASHIER_USERID = 'invoice.cashier_userid';
 
     /**
-     * the column name for the customerid field
+     * the column name for the event_bankinformationid field
      */
-    const COL_CUSTOMERID = 'invoice.customerid';
+    const COL_EVENT_BANKINFORMATIONID = 'invoice.event_bankinformationid';
+
+    /**
+     * the column name for the customer_event_contactid field
+     */
+    const COL_CUSTOMER_EVENT_CONTACTID = 'invoice.customer_event_contactid';
+
+    /**
+     * the column name for the canceled_invoiceid field
+     */
+    const COL_CANCELED_INVOICEID = 'invoice.canceled_invoiceid';
 
     /**
      * the column name for the date field
@@ -97,14 +112,24 @@ class InvoiceTableMap extends TableMap
     const COL_DATE = 'invoice.date';
 
     /**
-     * the column name for the canceled field
+     * the column name for the amount field
      */
-    const COL_CANCELED = 'invoice.canceled';
+    const COL_AMOUNT = 'invoice.amount';
+
+    /**
+     * the column name for the maturity_date field
+     */
+    const COL_MATURITY_DATE = 'invoice.maturity_date';
 
     /**
      * the column name for the payment_finished field
      */
     const COL_PAYMENT_FINISHED = 'invoice.payment_finished';
+
+    /**
+     * the column name for the amount_recieved field
+     */
+    const COL_AMOUNT_RECIEVED = 'invoice.amount_recieved';
 
     /**
      * The default string format for model objects of the related table
@@ -118,11 +143,11 @@ class InvoiceTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Invoiceid', 'EventContactid', 'CashierUserid', 'Customerid', 'Date', 'Canceled', 'PaymentFinished', ),
-        self::TYPE_CAMELNAME     => array('invoiceid', 'eventContactid', 'cashierUserid', 'customerid', 'date', 'canceled', 'paymentFinished', ),
-        self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID, InvoiceTableMap::COL_EVENT_CONTACTID, InvoiceTableMap::COL_CASHIER_USERID, InvoiceTableMap::COL_CUSTOMERID, InvoiceTableMap::COL_DATE, InvoiceTableMap::COL_CANCELED, InvoiceTableMap::COL_PAYMENT_FINISHED, ),
-        self::TYPE_FIELDNAME     => array('invoiceid', 'event_contactid', 'cashier_userid', 'customerid', 'date', 'canceled', 'payment_finished', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Invoiceid', 'InvoiceTypeid', 'EventContactid', 'CashierUserid', 'EventBankinformationid', 'CustomerEventContactid', 'CanceledInvoiceid', 'Date', 'Amount', 'MaturityDate', 'PaymentFinished', 'AmountRecieved', ),
+        self::TYPE_CAMELNAME     => array('invoiceid', 'invoiceTypeid', 'eventContactid', 'cashierUserid', 'eventBankinformationid', 'customerEventContactid', 'canceledInvoiceid', 'date', 'amount', 'maturityDate', 'paymentFinished', 'amountRecieved', ),
+        self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID, InvoiceTableMap::COL_INVOICE_TYPEID, InvoiceTableMap::COL_EVENT_CONTACTID, InvoiceTableMap::COL_CASHIER_USERID, InvoiceTableMap::COL_EVENT_BANKINFORMATIONID, InvoiceTableMap::COL_CUSTOMER_EVENT_CONTACTID, InvoiceTableMap::COL_CANCELED_INVOICEID, InvoiceTableMap::COL_DATE, InvoiceTableMap::COL_AMOUNT, InvoiceTableMap::COL_MATURITY_DATE, InvoiceTableMap::COL_PAYMENT_FINISHED, InvoiceTableMap::COL_AMOUNT_RECIEVED, ),
+        self::TYPE_FIELDNAME     => array('invoiceid', 'invoice_typeid', 'event_contactid', 'cashier_userid', 'event_bankinformationid', 'customer_event_contactid', 'canceled_invoiceid', 'date', 'amount', 'maturity_date', 'payment_finished', 'amount_recieved', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -132,11 +157,11 @@ class InvoiceTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Invoiceid' => 0, 'EventContactid' => 1, 'CashierUserid' => 2, 'Customerid' => 3, 'Date' => 4, 'Canceled' => 5, 'PaymentFinished' => 6, ),
-        self::TYPE_CAMELNAME     => array('invoiceid' => 0, 'eventContactid' => 1, 'cashierUserid' => 2, 'customerid' => 3, 'date' => 4, 'canceled' => 5, 'paymentFinished' => 6, ),
-        self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID => 0, InvoiceTableMap::COL_EVENT_CONTACTID => 1, InvoiceTableMap::COL_CASHIER_USERID => 2, InvoiceTableMap::COL_CUSTOMERID => 3, InvoiceTableMap::COL_DATE => 4, InvoiceTableMap::COL_CANCELED => 5, InvoiceTableMap::COL_PAYMENT_FINISHED => 6, ),
-        self::TYPE_FIELDNAME     => array('invoiceid' => 0, 'event_contactid' => 1, 'cashier_userid' => 2, 'customerid' => 3, 'date' => 4, 'canceled' => 5, 'payment_finished' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Invoiceid' => 0, 'InvoiceTypeid' => 1, 'EventContactid' => 2, 'CashierUserid' => 3, 'EventBankinformationid' => 4, 'CustomerEventContactid' => 5, 'CanceledInvoiceid' => 6, 'Date' => 7, 'Amount' => 8, 'MaturityDate' => 9, 'PaymentFinished' => 10, 'AmountRecieved' => 11, ),
+        self::TYPE_CAMELNAME     => array('invoiceid' => 0, 'invoiceTypeid' => 1, 'eventContactid' => 2, 'cashierUserid' => 3, 'eventBankinformationid' => 4, 'customerEventContactid' => 5, 'canceledInvoiceid' => 6, 'date' => 7, 'amount' => 8, 'maturityDate' => 9, 'paymentFinished' => 10, 'amountRecieved' => 11, ),
+        self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID => 0, InvoiceTableMap::COL_INVOICE_TYPEID => 1, InvoiceTableMap::COL_EVENT_CONTACTID => 2, InvoiceTableMap::COL_CASHIER_USERID => 3, InvoiceTableMap::COL_EVENT_BANKINFORMATIONID => 4, InvoiceTableMap::COL_CUSTOMER_EVENT_CONTACTID => 5, InvoiceTableMap::COL_CANCELED_INVOICEID => 6, InvoiceTableMap::COL_DATE => 7, InvoiceTableMap::COL_AMOUNT => 8, InvoiceTableMap::COL_MATURITY_DATE => 9, InvoiceTableMap::COL_PAYMENT_FINISHED => 10, InvoiceTableMap::COL_AMOUNT_RECIEVED => 11, ),
+        self::TYPE_FIELDNAME     => array('invoiceid' => 0, 'invoice_typeid' => 1, 'event_contactid' => 2, 'cashier_userid' => 3, 'event_bankinformationid' => 4, 'customer_event_contactid' => 5, 'canceled_invoiceid' => 6, 'date' => 7, 'amount' => 8, 'maturity_date' => 9, 'payment_finished' => 10, 'amount_recieved' => 11, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
     );
 
     /**
@@ -157,12 +182,17 @@ class InvoiceTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('invoiceid', 'Invoiceid', 'INTEGER', true, null, null);
+        $this->addForeignKey('invoice_typeid', 'InvoiceTypeid', 'INTEGER', 'invoice_type', 'invoice_typeid', true, null, null);
         $this->addForeignKey('event_contactid', 'EventContactid', 'INTEGER', 'event_contact', 'event_contactid', true, null, null);
         $this->addForeignKey('cashier_userid', 'CashierUserid', 'INTEGER', 'user', 'userid', true, null, null);
-        $this->addForeignKey('customerid', 'Customerid', 'INTEGER', 'event_contact', 'event_contactid', false, null, null);
+        $this->addForeignKey('event_bankinformationid', 'EventBankinformationid', 'INTEGER', 'event_bankinformation', 'event_bankinformationid', true, null, null);
+        $this->addForeignKey('customer_event_contactid', 'CustomerEventContactid', 'INTEGER', 'event_contact', 'event_contactid', false, null, null);
+        $this->addForeignKey('canceled_invoiceid', 'CanceledInvoiceid', 'INTEGER', 'invoice', 'invoiceid', false, null, null);
         $this->addColumn('date', 'Date', 'TIMESTAMP', true, null, null);
-        $this->addColumn('canceled', 'Canceled', 'TIMESTAMP', false, null, null);
+        $this->addColumn('amount', 'Amount', 'DECIMAL', true, 7, null);
+        $this->addColumn('maturity_date', 'MaturityDate', 'TIMESTAMP', true, null, null);
         $this->addColumn('payment_finished', 'PaymentFinished', 'TIMESTAMP', false, null, null);
+        $this->addColumn('amount_recieved', 'AmountRecieved', 'DECIMAL', false, 7, null);
     } // initialize()
 
     /**
@@ -170,11 +200,18 @@ class InvoiceTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('EventContactRelatedByCustomerid', '\\API\\Models\\Event\\EventContact', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('EventContactRelatedByCustomerEventContactid', '\\API\\Models\\Event\\EventContact', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':customerid',
+    0 => ':customer_event_contactid',
     1 => ':event_contactid',
+  ),
+), null, null, null, false);
+        $this->addRelation('EventBankinformation', '\\API\\Models\\Event\\EventBankinformation', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':event_bankinformationid',
+    1 => ':event_bankinformationid',
   ),
 ), null, null, null, false);
         $this->addRelation('EventContactRelatedByEventContactid', '\\API\\Models\\Event\\EventContact', RelationMap::MANY_TO_ONE, array (
@@ -184,6 +221,20 @@ class InvoiceTableMap extends TableMap
     1 => ':event_contactid',
   ),
 ), null, null, null, false);
+        $this->addRelation('InvoiceRelatedByCanceledInvoiceid', '\\API\\Models\\Invoice\\Invoice', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':canceled_invoiceid',
+    1 => ':invoiceid',
+  ),
+), null, null, null, false);
+        $this->addRelation('InvoiceType', '\\API\\Models\\Invoice\\InvoiceType', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':invoice_typeid',
+    1 => ':invoice_typeid',
+  ),
+), null, null, null, false);
         $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
@@ -191,6 +242,13 @@ class InvoiceTableMap extends TableMap
     1 => ':userid',
   ),
 ), null, null, null, false);
+        $this->addRelation('InvoiceRelatedByInvoiceid', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':canceled_invoiceid',
+    1 => ':invoiceid',
+  ),
+), null, null, 'InvoicesRelatedByInvoiceid', false);
         $this->addRelation('InvoiceItem', '\\API\\Models\\Invoice\\InvoiceItem', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -198,13 +256,20 @@ class InvoiceTableMap extends TableMap
     1 => ':invoiceid',
   ),
 ), null, null, 'InvoiceItems', false);
-        $this->addRelation('Payment', '\\API\\Models\\Payment\\Payment', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('PaymentRecieved', '\\API\\Models\\Payment\\PaymentRecieved', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':invoiceid',
     1 => ':invoiceid',
   ),
-), null, null, 'Payments', false);
+), null, null, 'PaymentRecieveds', false);
+        $this->addRelation('InvoiceWarning', '\\API\\Models\\Invoice\\InvoiceWarning', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':invoiceid',
+    1 => ':invoiceid',
+  ),
+), null, null, 'InvoiceWarnings', false);
     } // buildRelations()
 
     /**
@@ -349,20 +414,30 @@ class InvoiceTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(InvoiceTableMap::COL_INVOICEID);
+            $criteria->addSelectColumn(InvoiceTableMap::COL_INVOICE_TYPEID);
             $criteria->addSelectColumn(InvoiceTableMap::COL_EVENT_CONTACTID);
             $criteria->addSelectColumn(InvoiceTableMap::COL_CASHIER_USERID);
-            $criteria->addSelectColumn(InvoiceTableMap::COL_CUSTOMERID);
+            $criteria->addSelectColumn(InvoiceTableMap::COL_EVENT_BANKINFORMATIONID);
+            $criteria->addSelectColumn(InvoiceTableMap::COL_CUSTOMER_EVENT_CONTACTID);
+            $criteria->addSelectColumn(InvoiceTableMap::COL_CANCELED_INVOICEID);
             $criteria->addSelectColumn(InvoiceTableMap::COL_DATE);
-            $criteria->addSelectColumn(InvoiceTableMap::COL_CANCELED);
+            $criteria->addSelectColumn(InvoiceTableMap::COL_AMOUNT);
+            $criteria->addSelectColumn(InvoiceTableMap::COL_MATURITY_DATE);
             $criteria->addSelectColumn(InvoiceTableMap::COL_PAYMENT_FINISHED);
+            $criteria->addSelectColumn(InvoiceTableMap::COL_AMOUNT_RECIEVED);
         } else {
             $criteria->addSelectColumn($alias . '.invoiceid');
+            $criteria->addSelectColumn($alias . '.invoice_typeid');
             $criteria->addSelectColumn($alias . '.event_contactid');
             $criteria->addSelectColumn($alias . '.cashier_userid');
-            $criteria->addSelectColumn($alias . '.customerid');
+            $criteria->addSelectColumn($alias . '.event_bankinformationid');
+            $criteria->addSelectColumn($alias . '.customer_event_contactid');
+            $criteria->addSelectColumn($alias . '.canceled_invoiceid');
             $criteria->addSelectColumn($alias . '.date');
-            $criteria->addSelectColumn($alias . '.canceled');
+            $criteria->addSelectColumn($alias . '.amount');
+            $criteria->addSelectColumn($alias . '.maturity_date');
             $criteria->addSelectColumn($alias . '.payment_finished');
+            $criteria->addSelectColumn($alias . '.amount_recieved');
         }
     }
 

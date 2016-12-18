@@ -1,13 +1,13 @@
 <?php
 
-namespace API\Models\Payment\Base;
+namespace API\Models\Invoice\Base;
 
 use \Exception;
 use \PDO;
 use API\Models\Event\Event;
-use API\Models\Payment\PaymentWarningType as ChildPaymentWarningType;
-use API\Models\Payment\PaymentWarningTypeQuery as ChildPaymentWarningTypeQuery;
-use API\Models\Payment\Map\PaymentWarningTypeTableMap;
+use API\Models\Invoice\InvoiceWarningType as ChildInvoiceWarningType;
+use API\Models\Invoice\InvoiceWarningTypeQuery as ChildInvoiceWarningTypeQuery;
+use API\Models\Invoice\Map\InvoiceWarningTypeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -17,104 +17,104 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
- * Base class that represents a query for the 'payment_warning_type' table.
+ * Base class that represents a query for the 'invoice_warning_type' table.
  *
  *
  *
- * @method     ChildPaymentWarningTypeQuery orderByPaymentWarningTypeid($order = Criteria::ASC) Order by the payment_warning_typeid column
- * @method     ChildPaymentWarningTypeQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
- * @method     ChildPaymentWarningTypeQuery orderByName($order = Criteria::ASC) Order by the name column
- * @method     ChildPaymentWarningTypeQuery orderByExtraPrice($order = Criteria::ASC) Order by the extra_price column
+ * @method     ChildInvoiceWarningTypeQuery orderByInvoiceWarningTypeid($order = Criteria::ASC) Order by the invoice_warning_typeid column
+ * @method     ChildInvoiceWarningTypeQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
+ * @method     ChildInvoiceWarningTypeQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     ChildInvoiceWarningTypeQuery orderByExtraPrice($order = Criteria::ASC) Order by the extra_price column
  *
- * @method     ChildPaymentWarningTypeQuery groupByPaymentWarningTypeid() Group by the payment_warning_typeid column
- * @method     ChildPaymentWarningTypeQuery groupByEventid() Group by the eventid column
- * @method     ChildPaymentWarningTypeQuery groupByName() Group by the name column
- * @method     ChildPaymentWarningTypeQuery groupByExtraPrice() Group by the extra_price column
+ * @method     ChildInvoiceWarningTypeQuery groupByInvoiceWarningTypeid() Group by the invoice_warning_typeid column
+ * @method     ChildInvoiceWarningTypeQuery groupByEventid() Group by the eventid column
+ * @method     ChildInvoiceWarningTypeQuery groupByName() Group by the name column
+ * @method     ChildInvoiceWarningTypeQuery groupByExtraPrice() Group by the extra_price column
  *
- * @method     ChildPaymentWarningTypeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildPaymentWarningTypeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildPaymentWarningTypeQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method     ChildInvoiceWarningTypeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method     ChildInvoiceWarningTypeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method     ChildInvoiceWarningTypeQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildPaymentWarningTypeQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildPaymentWarningTypeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildPaymentWarningTypeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method     ChildInvoiceWarningTypeQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method     ChildInvoiceWarningTypeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method     ChildInvoiceWarningTypeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildPaymentWarningTypeQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
- * @method     ChildPaymentWarningTypeQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
- * @method     ChildPaymentWarningTypeQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
+ * @method     ChildInvoiceWarningTypeQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
+ * @method     ChildInvoiceWarningTypeQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
+ * @method     ChildInvoiceWarningTypeQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
  *
- * @method     ChildPaymentWarningTypeQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
+ * @method     ChildInvoiceWarningTypeQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
  *
- * @method     ChildPaymentWarningTypeQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
- * @method     ChildPaymentWarningTypeQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
- * @method     ChildPaymentWarningTypeQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
+ * @method     ChildInvoiceWarningTypeQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
+ * @method     ChildInvoiceWarningTypeQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
+ * @method     ChildInvoiceWarningTypeQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
  *
- * @method     ChildPaymentWarningTypeQuery leftJoinPaymentWarning($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentWarning relation
- * @method     ChildPaymentWarningTypeQuery rightJoinPaymentWarning($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentWarning relation
- * @method     ChildPaymentWarningTypeQuery innerJoinPaymentWarning($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentWarning relation
+ * @method     ChildInvoiceWarningTypeQuery leftJoinInvoiceWarning($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceWarning relation
+ * @method     ChildInvoiceWarningTypeQuery rightJoinInvoiceWarning($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceWarning relation
+ * @method     ChildInvoiceWarningTypeQuery innerJoinInvoiceWarning($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceWarning relation
  *
- * @method     ChildPaymentWarningTypeQuery joinWithPaymentWarning($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentWarning relation
+ * @method     ChildInvoiceWarningTypeQuery joinWithInvoiceWarning($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceWarning relation
  *
- * @method     ChildPaymentWarningTypeQuery leftJoinWithPaymentWarning() Adds a LEFT JOIN clause and with to the query using the PaymentWarning relation
- * @method     ChildPaymentWarningTypeQuery rightJoinWithPaymentWarning() Adds a RIGHT JOIN clause and with to the query using the PaymentWarning relation
- * @method     ChildPaymentWarningTypeQuery innerJoinWithPaymentWarning() Adds a INNER JOIN clause and with to the query using the PaymentWarning relation
+ * @method     ChildInvoiceWarningTypeQuery leftJoinWithInvoiceWarning() Adds a LEFT JOIN clause and with to the query using the InvoiceWarning relation
+ * @method     ChildInvoiceWarningTypeQuery rightJoinWithInvoiceWarning() Adds a RIGHT JOIN clause and with to the query using the InvoiceWarning relation
+ * @method     ChildInvoiceWarningTypeQuery innerJoinWithInvoiceWarning() Adds a INNER JOIN clause and with to the query using the InvoiceWarning relation
  *
- * @method     \API\Models\Event\EventQuery|\API\Models\Payment\PaymentWarningQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\Event\EventQuery|\API\Models\Invoice\InvoiceWarningQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildPaymentWarningType findOne(ConnectionInterface $con = null) Return the first ChildPaymentWarningType matching the query
- * @method     ChildPaymentWarningType findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPaymentWarningType matching the query, or a new ChildPaymentWarningType object populated from the query conditions when no match is found
+ * @method     ChildInvoiceWarningType findOne(ConnectionInterface $con = null) Return the first ChildInvoiceWarningType matching the query
+ * @method     ChildInvoiceWarningType findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoiceWarningType matching the query, or a new ChildInvoiceWarningType object populated from the query conditions when no match is found
  *
- * @method     ChildPaymentWarningType findOneByPaymentWarningTypeid(int $payment_warning_typeid) Return the first ChildPaymentWarningType filtered by the payment_warning_typeid column
- * @method     ChildPaymentWarningType findOneByEventid(int $eventid) Return the first ChildPaymentWarningType filtered by the eventid column
- * @method     ChildPaymentWarningType findOneByName(string $name) Return the first ChildPaymentWarningType filtered by the name column
- * @method     ChildPaymentWarningType findOneByExtraPrice(string $extra_price) Return the first ChildPaymentWarningType filtered by the extra_price column *
+ * @method     ChildInvoiceWarningType findOneByInvoiceWarningTypeid(int $invoice_warning_typeid) Return the first ChildInvoiceWarningType filtered by the invoice_warning_typeid column
+ * @method     ChildInvoiceWarningType findOneByEventid(int $eventid) Return the first ChildInvoiceWarningType filtered by the eventid column
+ * @method     ChildInvoiceWarningType findOneByName(string $name) Return the first ChildInvoiceWarningType filtered by the name column
+ * @method     ChildInvoiceWarningType findOneByExtraPrice(string $extra_price) Return the first ChildInvoiceWarningType filtered by the extra_price column *
 
- * @method     ChildPaymentWarningType requirePk($key, ConnectionInterface $con = null) Return the ChildPaymentWarningType by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPaymentWarningType requireOne(ConnectionInterface $con = null) Return the first ChildPaymentWarningType matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoiceWarningType requirePk($key, ConnectionInterface $con = null) Return the ChildInvoiceWarningType by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoiceWarningType requireOne(ConnectionInterface $con = null) Return the first ChildInvoiceWarningType matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPaymentWarningType requireOneByPaymentWarningTypeid(int $payment_warning_typeid) Return the first ChildPaymentWarningType filtered by the payment_warning_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPaymentWarningType requireOneByEventid(int $eventid) Return the first ChildPaymentWarningType filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPaymentWarningType requireOneByName(string $name) Return the first ChildPaymentWarningType filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPaymentWarningType requireOneByExtraPrice(string $extra_price) Return the first ChildPaymentWarningType filtered by the extra_price column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoiceWarningType requireOneByInvoiceWarningTypeid(int $invoice_warning_typeid) Return the first ChildInvoiceWarningType filtered by the invoice_warning_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoiceWarningType requireOneByEventid(int $eventid) Return the first ChildInvoiceWarningType filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoiceWarningType requireOneByName(string $name) Return the first ChildInvoiceWarningType filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoiceWarningType requireOneByExtraPrice(string $extra_price) Return the first ChildInvoiceWarningType filtered by the extra_price column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPaymentWarningType[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPaymentWarningType objects based on current ModelCriteria
- * @method     ChildPaymentWarningType[]|ObjectCollection findByPaymentWarningTypeid(int $payment_warning_typeid) Return ChildPaymentWarningType objects filtered by the payment_warning_typeid column
- * @method     ChildPaymentWarningType[]|ObjectCollection findByEventid(int $eventid) Return ChildPaymentWarningType objects filtered by the eventid column
- * @method     ChildPaymentWarningType[]|ObjectCollection findByName(string $name) Return ChildPaymentWarningType objects filtered by the name column
- * @method     ChildPaymentWarningType[]|ObjectCollection findByExtraPrice(string $extra_price) Return ChildPaymentWarningType objects filtered by the extra_price column
- * @method     ChildPaymentWarningType[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
+ * @method     ChildInvoiceWarningType[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoiceWarningType objects based on current ModelCriteria
+ * @method     ChildInvoiceWarningType[]|ObjectCollection findByInvoiceWarningTypeid(int $invoice_warning_typeid) Return ChildInvoiceWarningType objects filtered by the invoice_warning_typeid column
+ * @method     ChildInvoiceWarningType[]|ObjectCollection findByEventid(int $eventid) Return ChildInvoiceWarningType objects filtered by the eventid column
+ * @method     ChildInvoiceWarningType[]|ObjectCollection findByName(string $name) Return ChildInvoiceWarningType objects filtered by the name column
+ * @method     ChildInvoiceWarningType[]|ObjectCollection findByExtraPrice(string $extra_price) Return ChildInvoiceWarningType objects filtered by the extra_price column
+ * @method     ChildInvoiceWarningType[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
-abstract class PaymentWarningTypeQuery extends ModelCriteria
+abstract class InvoiceWarningTypeQuery extends ModelCriteria
 {
     protected $entityNotFoundExceptionClass = '\\Propel\\Runtime\\Exception\\EntityNotFoundException';
 
     /**
-     * Initializes internal state of \API\Models\Payment\Base\PaymentWarningTypeQuery object.
+     * Initializes internal state of \API\Models\Invoice\Base\InvoiceWarningTypeQuery object.
      *
      * @param     string $dbName The database name
      * @param     string $modelName The phpName of a model, e.g. 'Book'
      * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Payment\\PaymentWarningType', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Invoice\\InvoiceWarningType', $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
 
     /**
-     * Returns a new ChildPaymentWarningTypeQuery object.
+     * Returns a new ChildInvoiceWarningTypeQuery object.
      *
      * @param     string $modelAlias The alias of a model in the query
      * @param     Criteria $criteria Optional Criteria to build the query from
      *
-     * @return ChildPaymentWarningTypeQuery
+     * @return ChildInvoiceWarningTypeQuery
      */
     public static function create($modelAlias = null, Criteria $criteria = null)
     {
-        if ($criteria instanceof ChildPaymentWarningTypeQuery) {
+        if ($criteria instanceof ChildInvoiceWarningTypeQuery) {
             return $criteria;
         }
-        $query = new ChildPaymentWarningTypeQuery();
+        $query = new ChildInvoiceWarningTypeQuery();
         if (null !== $modelAlias) {
             $query->setModelAlias($modelAlias);
         }
@@ -137,7 +137,7 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
      * @param mixed $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
-     * @return ChildPaymentWarningType|array|mixed the result, formatted by the current formatter
+     * @return ChildInvoiceWarningType|array|mixed the result, formatted by the current formatter
      */
     public function findPk($key, ConnectionInterface $con = null)
     {
@@ -146,7 +146,7 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(PaymentWarningTypeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(InvoiceWarningTypeTableMap::DATABASE_NAME);
         }
 
         $this->basePreSelect($con);
@@ -159,7 +159,7 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
             return $this->findPkComplex($key, $con);
         }
 
-        if ((null !== ($obj = PaymentWarningTypeTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
+        if ((null !== ($obj = InvoiceWarningTypeTableMap::getInstanceFromPool(null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key)))) {
             // the object is already in the instance pool
             return $obj;
         }
@@ -176,11 +176,11 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildPaymentWarningType A model object, or null if the key is not found
+     * @return ChildInvoiceWarningType A model object, or null if the key is not found
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT payment_warning_typeid, eventid, name, extra_price FROM payment_warning_type WHERE payment_warning_typeid = :p0';
+        $sql = 'SELECT invoice_warning_typeid, eventid, name, extra_price FROM invoice_warning_type WHERE invoice_warning_typeid = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -191,10 +191,10 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildPaymentWarningType $obj */
-            $obj = new ChildPaymentWarningType();
+            /** @var ChildInvoiceWarningType $obj */
+            $obj = new ChildInvoiceWarningType();
             $obj->hydrate($row);
-            PaymentWarningTypeTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
+            InvoiceWarningTypeTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
         }
         $stmt->closeCursor();
 
@@ -207,7 +207,7 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
      * @param     mixed $key Primary key to use for the query
      * @param     ConnectionInterface $con A connection object
      *
-     * @return ChildPaymentWarningType|array|mixed the result, formatted by the current formatter
+     * @return ChildInvoiceWarningType|array|mixed the result, formatted by the current formatter
      */
     protected function findPkComplex($key, ConnectionInterface $con)
     {
@@ -249,12 +249,12 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
      *
      * @param     mixed $key Primary key to use for the query
      *
-     * @return $this|ChildPaymentWarningTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceWarningTypeQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
 
-        return $this->addUsingAlias(PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID, $key, Criteria::EQUAL);
+        return $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID, $key, Criteria::EQUAL);
     }
 
     /**
@@ -262,42 +262,42 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
      *
      * @param     array $keys The list of primary key to use for the query
      *
-     * @return $this|ChildPaymentWarningTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceWarningTypeQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
 
-        return $this->addUsingAlias(PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID, $keys, Criteria::IN);
+        return $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID, $keys, Criteria::IN);
     }
 
     /**
-     * Filter the query on the payment_warning_typeid column
+     * Filter the query on the invoice_warning_typeid column
      *
      * Example usage:
      * <code>
-     * $query->filterByPaymentWarningTypeid(1234); // WHERE payment_warning_typeid = 1234
-     * $query->filterByPaymentWarningTypeid(array(12, 34)); // WHERE payment_warning_typeid IN (12, 34)
-     * $query->filterByPaymentWarningTypeid(array('min' => 12)); // WHERE payment_warning_typeid > 12
+     * $query->filterByInvoiceWarningTypeid(1234); // WHERE invoice_warning_typeid = 1234
+     * $query->filterByInvoiceWarningTypeid(array(12, 34)); // WHERE invoice_warning_typeid IN (12, 34)
+     * $query->filterByInvoiceWarningTypeid(array('min' => 12)); // WHERE invoice_warning_typeid > 12
      * </code>
      *
-     * @param     mixed $paymentWarningTypeid The value to use as filter.
+     * @param     mixed $invoiceWarningTypeid The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentWarningTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceWarningTypeQuery The current query, for fluid interface
      */
-    public function filterByPaymentWarningTypeid($paymentWarningTypeid = null, $comparison = null)
+    public function filterByInvoiceWarningTypeid($invoiceWarningTypeid = null, $comparison = null)
     {
-        if (is_array($paymentWarningTypeid)) {
+        if (is_array($invoiceWarningTypeid)) {
             $useMinMax = false;
-            if (isset($paymentWarningTypeid['min'])) {
-                $this->addUsingAlias(PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID, $paymentWarningTypeid['min'], Criteria::GREATER_EQUAL);
+            if (isset($invoiceWarningTypeid['min'])) {
+                $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID, $invoiceWarningTypeid['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($paymentWarningTypeid['max'])) {
-                $this->addUsingAlias(PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID, $paymentWarningTypeid['max'], Criteria::LESS_EQUAL);
+            if (isset($invoiceWarningTypeid['max'])) {
+                $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID, $invoiceWarningTypeid['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -308,7 +308,7 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID, $paymentWarningTypeid, $comparison);
+        return $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID, $invoiceWarningTypeid, $comparison);
     }
 
     /**
@@ -329,18 +329,18 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentWarningTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceWarningTypeQuery The current query, for fluid interface
      */
     public function filterByEventid($eventid = null, $comparison = null)
     {
         if (is_array($eventid)) {
             $useMinMax = false;
             if (isset($eventid['min'])) {
-                $this->addUsingAlias(PaymentWarningTypeTableMap::COL_EVENTID, $eventid['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_EVENTID, $eventid['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($eventid['max'])) {
-                $this->addUsingAlias(PaymentWarningTypeTableMap::COL_EVENTID, $eventid['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_EVENTID, $eventid['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -351,7 +351,7 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentWarningTypeTableMap::COL_EVENTID, $eventid, $comparison);
+        return $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_EVENTID, $eventid, $comparison);
     }
 
     /**
@@ -366,7 +366,7 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
      * @param     string $name The value to use as filter.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentWarningTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceWarningTypeQuery The current query, for fluid interface
      */
     public function filterByName($name = null, $comparison = null)
     {
@@ -376,7 +376,7 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentWarningTypeTableMap::COL_NAME, $name, $comparison);
+        return $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_NAME, $name, $comparison);
     }
 
     /**
@@ -395,18 +395,18 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return $this|ChildPaymentWarningTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceWarningTypeQuery The current query, for fluid interface
      */
     public function filterByExtraPrice($extraPrice = null, $comparison = null)
     {
         if (is_array($extraPrice)) {
             $useMinMax = false;
             if (isset($extraPrice['min'])) {
-                $this->addUsingAlias(PaymentWarningTypeTableMap::COL_EXTRA_PRICE, $extraPrice['min'], Criteria::GREATER_EQUAL);
+                $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_EXTRA_PRICE, $extraPrice['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
             if (isset($extraPrice['max'])) {
-                $this->addUsingAlias(PaymentWarningTypeTableMap::COL_EXTRA_PRICE, $extraPrice['max'], Criteria::LESS_EQUAL);
+                $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_EXTRA_PRICE, $extraPrice['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -417,7 +417,7 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(PaymentWarningTypeTableMap::COL_EXTRA_PRICE, $extraPrice, $comparison);
+        return $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_EXTRA_PRICE, $extraPrice, $comparison);
     }
 
     /**
@@ -428,20 +428,20 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
-     * @return ChildPaymentWarningTypeQuery The current query, for fluid interface
+     * @return ChildInvoiceWarningTypeQuery The current query, for fluid interface
      */
     public function filterByEvent($event, $comparison = null)
     {
         if ($event instanceof \API\Models\Event\Event) {
             return $this
-                ->addUsingAlias(PaymentWarningTypeTableMap::COL_EVENTID, $event->getEventid(), $comparison);
+                ->addUsingAlias(InvoiceWarningTypeTableMap::COL_EVENTID, $event->getEventid(), $comparison);
         } elseif ($event instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(PaymentWarningTypeTableMap::COL_EVENTID, $event->toKeyValue('PrimaryKey', 'Eventid'), $comparison);
+                ->addUsingAlias(InvoiceWarningTypeTableMap::COL_EVENTID, $event->toKeyValue('PrimaryKey', 'Eventid'), $comparison);
         } else {
             throw new PropelException('filterByEvent() only accepts arguments of type \API\Models\Event\Event or Collection');
         }
@@ -453,7 +453,7 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPaymentWarningTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceWarningTypeQuery The current query, for fluid interface
      */
     public function joinEvent($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
@@ -498,40 +498,40 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \API\Models\Payment\PaymentWarning object
+     * Filter the query by a related \API\Models\Invoice\InvoiceWarning object
      *
-     * @param \API\Models\Payment\PaymentWarning|ObjectCollection $paymentWarning the related object to use as filter
+     * @param \API\Models\Invoice\InvoiceWarning|ObjectCollection $invoiceWarning the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
-     * @return ChildPaymentWarningTypeQuery The current query, for fluid interface
+     * @return ChildInvoiceWarningTypeQuery The current query, for fluid interface
      */
-    public function filterByPaymentWarning($paymentWarning, $comparison = null)
+    public function filterByInvoiceWarning($invoiceWarning, $comparison = null)
     {
-        if ($paymentWarning instanceof \API\Models\Payment\PaymentWarning) {
+        if ($invoiceWarning instanceof \API\Models\Invoice\InvoiceWarning) {
             return $this
-                ->addUsingAlias(PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID, $paymentWarning->getPaymentWarningTypeid(), $comparison);
-        } elseif ($paymentWarning instanceof ObjectCollection) {
+                ->addUsingAlias(InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID, $invoiceWarning->getInvoiceWarningTypeid(), $comparison);
+        } elseif ($invoiceWarning instanceof ObjectCollection) {
             return $this
-                ->usePaymentWarningQuery()
-                ->filterByPrimaryKeys($paymentWarning->getPrimaryKeys())
+                ->useInvoiceWarningQuery()
+                ->filterByPrimaryKeys($invoiceWarning->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByPaymentWarning() only accepts arguments of type \API\Models\Payment\PaymentWarning or Collection');
+            throw new PropelException('filterByInvoiceWarning() only accepts arguments of type \API\Models\Invoice\InvoiceWarning or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the PaymentWarning relation
+     * Adds a JOIN clause to the query using the InvoiceWarning relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return $this|ChildPaymentWarningTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceWarningTypeQuery The current query, for fluid interface
      */
-    public function joinPaymentWarning($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinInvoiceWarning($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('PaymentWarning');
+        $relationMap = $tableMap->getRelation('InvoiceWarning');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -546,14 +546,14 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'PaymentWarning');
+            $this->addJoinObject($join, 'InvoiceWarning');
         }
 
         return $this;
     }
 
     /**
-     * Use the PaymentWarning relation PaymentWarning object
+     * Use the InvoiceWarning relation InvoiceWarning object
      *
      * @see useQuery()
      *
@@ -561,33 +561,33 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
      *                                   to be used as main alias in the secondary query
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
-     * @return \API\Models\Payment\PaymentWarningQuery A secondary query class using the current class as primary query
+     * @return \API\Models\Invoice\InvoiceWarningQuery A secondary query class using the current class as primary query
      */
-    public function usePaymentWarningQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useInvoiceWarningQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
-            ->joinPaymentWarning($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'PaymentWarning', '\API\Models\Payment\PaymentWarningQuery');
+            ->joinInvoiceWarning($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'InvoiceWarning', '\API\Models\Invoice\InvoiceWarningQuery');
     }
 
     /**
      * Exclude object from result
      *
-     * @param   ChildPaymentWarningType $paymentWarningType Object to remove from the list of results
+     * @param   ChildInvoiceWarningType $invoiceWarningType Object to remove from the list of results
      *
-     * @return $this|ChildPaymentWarningTypeQuery The current query, for fluid interface
+     * @return $this|ChildInvoiceWarningTypeQuery The current query, for fluid interface
      */
-    public function prune($paymentWarningType = null)
+    public function prune($invoiceWarningType = null)
     {
-        if ($paymentWarningType) {
-            $this->addUsingAlias(PaymentWarningTypeTableMap::COL_PAYMENT_WARNING_TYPEID, $paymentWarningType->getPaymentWarningTypeid(), Criteria::NOT_EQUAL);
+        if ($invoiceWarningType) {
+            $this->addUsingAlias(InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID, $invoiceWarningType->getInvoiceWarningTypeid(), Criteria::NOT_EQUAL);
         }
 
         return $this;
     }
 
     /**
-     * Deletes all rows from the payment_warning_type table.
+     * Deletes all rows from the invoice_warning_type table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
@@ -595,7 +595,7 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
     public function doDeleteAll(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PaymentWarningTypeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(InvoiceWarningTypeTableMap::DATABASE_NAME);
         }
 
         // use transaction because $criteria could contain info
@@ -606,8 +606,8 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
             // Because this db requires some delete cascade/set null emulation, we have to
             // clear the cached instance *after* the emulation has happened (since
             // instances get re-added by the select statement contained therein).
-            PaymentWarningTypeTableMap::clearInstancePool();
-            PaymentWarningTypeTableMap::clearRelatedInstancePool();
+            InvoiceWarningTypeTableMap::clearInstancePool();
+            InvoiceWarningTypeTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
@@ -625,26 +625,26 @@ abstract class PaymentWarningTypeQuery extends ModelCriteria
     public function delete(ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PaymentWarningTypeTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(InvoiceWarningTypeTableMap::DATABASE_NAME);
         }
 
         $criteria = $this;
 
         // Set the correct dbName
-        $criteria->setDbName(PaymentWarningTypeTableMap::DATABASE_NAME);
+        $criteria->setDbName(InvoiceWarningTypeTableMap::DATABASE_NAME);
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
 
-            PaymentWarningTypeTableMap::removeInstanceFromPool($criteria);
+            InvoiceWarningTypeTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
-            PaymentWarningTypeTableMap::clearRelatedInstancePool();
+            InvoiceWarningTypeTableMap::clearRelatedInstancePool();
 
             return $affectedRows;
         });
     }
 
-} // PaymentWarningTypeQuery
+} // InvoiceWarningTypeQuery

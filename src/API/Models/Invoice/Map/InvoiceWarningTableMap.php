@@ -1,9 +1,9 @@
 <?php
 
-namespace API\Models\Payment\Map;
+namespace API\Models\Invoice\Map;
 
-use API\Models\Payment\Payment;
-use API\Models\Payment\PaymentQuery;
+use API\Models\Invoice\InvoiceWarning;
+use API\Models\Invoice\InvoiceWarningQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\InstancePoolTrait;
@@ -16,7 +16,7 @@ use Propel\Runtime\Map\TableMapTrait;
 
 
 /**
- * This class defines the structure of the 'payment' table.
+ * This class defines the structure of the 'invoice_warning' table.
  *
  *
  *
@@ -26,7 +26,7 @@ use Propel\Runtime\Map\TableMapTrait;
  * (i.e. if it's a text column type).
  *
  */
-class PaymentTableMap extends TableMap
+class InvoiceWarningTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
@@ -34,7 +34,7 @@ class PaymentTableMap extends TableMap
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'API.Models.Payment.Map.PaymentTableMap';
+    const CLASS_NAME = 'API.Models.Invoice.Map.InvoiceWarningTableMap';
 
     /**
      * The default database name for this class
@@ -44,22 +44,22 @@ class PaymentTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'payment';
+    const TABLE_NAME = 'invoice_warning';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\API\\Models\\Payment\\Payment';
+    const OM_CLASS = '\\API\\Models\\Invoice\\InvoiceWarning';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'API.Models.Payment.Payment';
+    const CLASS_DEFAULT = 'API.Models.Invoice.InvoiceWarning';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 9;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -69,52 +69,37 @@ class PaymentTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 9;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
-     * the column name for the paymentid field
+     * the column name for the invoice_warningid field
      */
-    const COL_PAYMENTID = 'payment.paymentid';
-
-    /**
-     * the column name for the payment_typeid field
-     */
-    const COL_PAYMENT_TYPEID = 'payment.payment_typeid';
+    const COL_INVOICE_WARNINGID = 'invoice_warning.invoice_warningid';
 
     /**
      * the column name for the invoiceid field
      */
-    const COL_INVOICEID = 'payment.invoiceid';
+    const COL_INVOICEID = 'invoice_warning.invoiceid';
 
     /**
-     * the column name for the created field
+     * the column name for the invoice_warning_typeid field
      */
-    const COL_CREATED = 'payment.created';
+    const COL_INVOICE_WARNING_TYPEID = 'invoice_warning.invoice_warning_typeid';
 
     /**
-     * the column name for the amount field
+     * the column name for the warning_date field
      */
-    const COL_AMOUNT = 'payment.amount';
+    const COL_WARNING_DATE = 'invoice_warning.warning_date';
 
     /**
      * the column name for the maturity_date field
      */
-    const COL_MATURITY_DATE = 'payment.maturity_date';
+    const COL_MATURITY_DATE = 'invoice_warning.maturity_date';
 
     /**
-     * the column name for the canceled field
+     * the column name for the warning_value field
      */
-    const COL_CANCELED = 'payment.canceled';
-
-    /**
-     * the column name for the recieved field
-     */
-    const COL_RECIEVED = 'payment.recieved';
-
-    /**
-     * the column name for the amount_recieved field
-     */
-    const COL_AMOUNT_RECIEVED = 'payment.amount_recieved';
+    const COL_WARNING_VALUE = 'invoice_warning.warning_value';
 
     /**
      * The default string format for model objects of the related table
@@ -128,11 +113,11 @@ class PaymentTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Paymentid', 'PaymentTypeid', 'Invoiceid', 'Created', 'Amount', 'MaturityDate', 'Canceled', 'Recieved', 'AmountRecieved', ),
-        self::TYPE_CAMELNAME     => array('paymentid', 'paymentTypeid', 'invoiceid', 'created', 'amount', 'maturityDate', 'canceled', 'recieved', 'amountRecieved', ),
-        self::TYPE_COLNAME       => array(PaymentTableMap::COL_PAYMENTID, PaymentTableMap::COL_PAYMENT_TYPEID, PaymentTableMap::COL_INVOICEID, PaymentTableMap::COL_CREATED, PaymentTableMap::COL_AMOUNT, PaymentTableMap::COL_MATURITY_DATE, PaymentTableMap::COL_CANCELED, PaymentTableMap::COL_RECIEVED, PaymentTableMap::COL_AMOUNT_RECIEVED, ),
-        self::TYPE_FIELDNAME     => array('paymentid', 'payment_typeid', 'invoiceid', 'created', 'amount', 'maturity_date', 'canceled', 'recieved', 'amount_recieved', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('InvoiceWarningid', 'Invoiceid', 'InvoiceWarningTypeid', 'WarningDate', 'MaturityDate', 'WarningValue', ),
+        self::TYPE_CAMELNAME     => array('invoiceWarningid', 'invoiceid', 'invoiceWarningTypeid', 'warningDate', 'maturityDate', 'warningValue', ),
+        self::TYPE_COLNAME       => array(InvoiceWarningTableMap::COL_INVOICE_WARNINGID, InvoiceWarningTableMap::COL_INVOICEID, InvoiceWarningTableMap::COL_INVOICE_WARNING_TYPEID, InvoiceWarningTableMap::COL_WARNING_DATE, InvoiceWarningTableMap::COL_MATURITY_DATE, InvoiceWarningTableMap::COL_WARNING_VALUE, ),
+        self::TYPE_FIELDNAME     => array('invoice_warningid', 'invoiceid', 'invoice_warning_typeid', 'warning_date', 'maturity_date', 'warning_value', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -142,11 +127,11 @@ class PaymentTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Paymentid' => 0, 'PaymentTypeid' => 1, 'Invoiceid' => 2, 'Created' => 3, 'Amount' => 4, 'MaturityDate' => 5, 'Canceled' => 6, 'Recieved' => 7, 'AmountRecieved' => 8, ),
-        self::TYPE_CAMELNAME     => array('paymentid' => 0, 'paymentTypeid' => 1, 'invoiceid' => 2, 'created' => 3, 'amount' => 4, 'maturityDate' => 5, 'canceled' => 6, 'recieved' => 7, 'amountRecieved' => 8, ),
-        self::TYPE_COLNAME       => array(PaymentTableMap::COL_PAYMENTID => 0, PaymentTableMap::COL_PAYMENT_TYPEID => 1, PaymentTableMap::COL_INVOICEID => 2, PaymentTableMap::COL_CREATED => 3, PaymentTableMap::COL_AMOUNT => 4, PaymentTableMap::COL_MATURITY_DATE => 5, PaymentTableMap::COL_CANCELED => 6, PaymentTableMap::COL_RECIEVED => 7, PaymentTableMap::COL_AMOUNT_RECIEVED => 8, ),
-        self::TYPE_FIELDNAME     => array('paymentid' => 0, 'payment_typeid' => 1, 'invoiceid' => 2, 'created' => 3, 'amount' => 4, 'maturity_date' => 5, 'canceled' => 6, 'recieved' => 7, 'amount_recieved' => 8, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
+        self::TYPE_PHPNAME       => array('InvoiceWarningid' => 0, 'Invoiceid' => 1, 'InvoiceWarningTypeid' => 2, 'WarningDate' => 3, 'MaturityDate' => 4, 'WarningValue' => 5, ),
+        self::TYPE_CAMELNAME     => array('invoiceWarningid' => 0, 'invoiceid' => 1, 'invoiceWarningTypeid' => 2, 'warningDate' => 3, 'maturityDate' => 4, 'warningValue' => 5, ),
+        self::TYPE_COLNAME       => array(InvoiceWarningTableMap::COL_INVOICE_WARNINGID => 0, InvoiceWarningTableMap::COL_INVOICEID => 1, InvoiceWarningTableMap::COL_INVOICE_WARNING_TYPEID => 2, InvoiceWarningTableMap::COL_WARNING_DATE => 3, InvoiceWarningTableMap::COL_MATURITY_DATE => 4, InvoiceWarningTableMap::COL_WARNING_VALUE => 5, ),
+        self::TYPE_FIELDNAME     => array('invoice_warningid' => 0, 'invoiceid' => 1, 'invoice_warning_typeid' => 2, 'warning_date' => 3, 'maturity_date' => 4, 'warning_value' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -159,22 +144,19 @@ class PaymentTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('payment');
-        $this->setPhpName('Payment');
+        $this->setName('invoice_warning');
+        $this->setPhpName('InvoiceWarning');
         $this->setIdentifierQuoting(false);
-        $this->setClassName('\\API\\Models\\Payment\\Payment');
-        $this->setPackage('API.Models.Payment');
-        $this->setUseIdGenerator(false);
+        $this->setClassName('\\API\\Models\\Invoice\\InvoiceWarning');
+        $this->setPackage('API.Models.Invoice');
+        $this->setUseIdGenerator(true);
         // columns
-        $this->addPrimaryKey('paymentid', 'Paymentid', 'INTEGER', true, 10, null);
-        $this->addForeignKey('payment_typeid', 'PaymentTypeid', 'INTEGER', 'payment_type', 'payment_typeid', true, null, null);
+        $this->addPrimaryKey('invoice_warningid', 'InvoiceWarningid', 'INTEGER', true, null, null);
         $this->addForeignKey('invoiceid', 'Invoiceid', 'INTEGER', 'invoice', 'invoiceid', true, null, null);
-        $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
-        $this->addColumn('amount', 'Amount', 'DECIMAL', true, 7, null);
+        $this->addForeignKey('invoice_warning_typeid', 'InvoiceWarningTypeid', 'INTEGER', 'invoice_warning_type', 'invoice_warning_typeid', true, null, null);
+        $this->addColumn('warning_date', 'WarningDate', 'TIMESTAMP', true, null, null);
         $this->addColumn('maturity_date', 'MaturityDate', 'TIMESTAMP', true, null, null);
-        $this->addColumn('canceled', 'Canceled', 'TIMESTAMP', false, null, null);
-        $this->addColumn('recieved', 'Recieved', 'TIMESTAMP', false, null, null);
-        $this->addColumn('amount_recieved', 'AmountRecieved', 'DECIMAL', false, 7, null);
+        $this->addColumn('warning_value', 'WarningValue', 'DECIMAL', true, 7, null);
     } // initialize()
 
     /**
@@ -189,28 +171,13 @@ class PaymentTableMap extends TableMap
     1 => ':invoiceid',
   ),
 ), null, null, null, false);
-        $this->addRelation('PaymentType', '\\API\\Models\\Payment\\PaymentType', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('InvoiceWarningType', '\\API\\Models\\Invoice\\InvoiceWarningType', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
-    0 => ':payment_typeid',
-    1 => ':payment_typeid',
+    0 => ':invoice_warning_typeid',
+    1 => ':invoice_warning_typeid',
   ),
 ), null, null, null, false);
-        $this->addRelation('PaymentCoupon', '\\API\\Models\\Payment\\PaymentCoupon', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':paymentid',
-    1 => ':paymentid',
-  ),
-), null, null, 'PaymentCoupons', false);
-        $this->addRelation('PaymentWarning', '\\API\\Models\\Payment\\PaymentWarning', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':paymentid',
-    1 => ':paymentid',
-  ),
-), null, null, 'PaymentWarnings', false);
-        $this->addRelation('Coupon', '\\API\\Models\\Payment\\Coupon', RelationMap::MANY_TO_MANY, array(), null, null, 'Coupons');
     } // buildRelations()
 
     /**
@@ -229,11 +196,11 @@ class PaymentTableMap extends TableMap
     public static function getPrimaryKeyHashFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
         // If the PK cannot be derived from the row, return NULL.
-        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
+        if ($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('InvoiceWarningid', TableMap::TYPE_PHPNAME, $indexType)] === null) {
             return null;
         }
 
-        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)];
+        return null === $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('InvoiceWarningid', TableMap::TYPE_PHPNAME, $indexType)] || is_scalar($row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('InvoiceWarningid', TableMap::TYPE_PHPNAME, $indexType)]) || is_callable([$row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('InvoiceWarningid', TableMap::TYPE_PHPNAME, $indexType)], '__toString']) ? (string) $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('InvoiceWarningid', TableMap::TYPE_PHPNAME, $indexType)] : $row[TableMap::TYPE_NUM == $indexType ? 0 + $offset : static::translateFieldName('InvoiceWarningid', TableMap::TYPE_PHPNAME, $indexType)];
     }
 
     /**
@@ -253,7 +220,7 @@ class PaymentTableMap extends TableMap
         return (int) $row[
             $indexType == TableMap::TYPE_NUM
                 ? 0 + $offset
-                : self::translateFieldName('Paymentid', TableMap::TYPE_PHPNAME, $indexType)
+                : self::translateFieldName('InvoiceWarningid', TableMap::TYPE_PHPNAME, $indexType)
         ];
     }
 
@@ -270,7 +237,7 @@ class PaymentTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? PaymentTableMap::CLASS_DEFAULT : PaymentTableMap::OM_CLASS;
+        return $withPrefix ? InvoiceWarningTableMap::CLASS_DEFAULT : InvoiceWarningTableMap::OM_CLASS;
     }
 
     /**
@@ -284,22 +251,22 @@ class PaymentTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
-     * @return array           (Payment object, last column rank)
+     * @return array           (InvoiceWarning object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = PaymentTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = PaymentTableMap::getInstanceFromPool($key))) {
+        $key = InvoiceWarningTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = InvoiceWarningTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + PaymentTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + InvoiceWarningTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = PaymentTableMap::OM_CLASS;
-            /** @var Payment $obj */
+            $cls = InvoiceWarningTableMap::OM_CLASS;
+            /** @var InvoiceWarning $obj */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            PaymentTableMap::addInstanceToPool($obj, $key);
+            InvoiceWarningTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -322,18 +289,18 @@ class PaymentTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = PaymentTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = PaymentTableMap::getInstanceFromPool($key))) {
+            $key = InvoiceWarningTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = InvoiceWarningTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Payment $obj */
+                /** @var InvoiceWarning $obj */
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                PaymentTableMap::addInstanceToPool($obj, $key);
+                InvoiceWarningTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -354,25 +321,19 @@ class PaymentTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(PaymentTableMap::COL_PAYMENTID);
-            $criteria->addSelectColumn(PaymentTableMap::COL_PAYMENT_TYPEID);
-            $criteria->addSelectColumn(PaymentTableMap::COL_INVOICEID);
-            $criteria->addSelectColumn(PaymentTableMap::COL_CREATED);
-            $criteria->addSelectColumn(PaymentTableMap::COL_AMOUNT);
-            $criteria->addSelectColumn(PaymentTableMap::COL_MATURITY_DATE);
-            $criteria->addSelectColumn(PaymentTableMap::COL_CANCELED);
-            $criteria->addSelectColumn(PaymentTableMap::COL_RECIEVED);
-            $criteria->addSelectColumn(PaymentTableMap::COL_AMOUNT_RECIEVED);
+            $criteria->addSelectColumn(InvoiceWarningTableMap::COL_INVOICE_WARNINGID);
+            $criteria->addSelectColumn(InvoiceWarningTableMap::COL_INVOICEID);
+            $criteria->addSelectColumn(InvoiceWarningTableMap::COL_INVOICE_WARNING_TYPEID);
+            $criteria->addSelectColumn(InvoiceWarningTableMap::COL_WARNING_DATE);
+            $criteria->addSelectColumn(InvoiceWarningTableMap::COL_MATURITY_DATE);
+            $criteria->addSelectColumn(InvoiceWarningTableMap::COL_WARNING_VALUE);
         } else {
-            $criteria->addSelectColumn($alias . '.paymentid');
-            $criteria->addSelectColumn($alias . '.payment_typeid');
+            $criteria->addSelectColumn($alias . '.invoice_warningid');
             $criteria->addSelectColumn($alias . '.invoiceid');
-            $criteria->addSelectColumn($alias . '.created');
-            $criteria->addSelectColumn($alias . '.amount');
+            $criteria->addSelectColumn($alias . '.invoice_warning_typeid');
+            $criteria->addSelectColumn($alias . '.warning_date');
             $criteria->addSelectColumn($alias . '.maturity_date');
-            $criteria->addSelectColumn($alias . '.canceled');
-            $criteria->addSelectColumn($alias . '.recieved');
-            $criteria->addSelectColumn($alias . '.amount_recieved');
+            $criteria->addSelectColumn($alias . '.warning_value');
         }
     }
 
@@ -385,7 +346,7 @@ class PaymentTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(PaymentTableMap::DATABASE_NAME)->getTable(PaymentTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(InvoiceWarningTableMap::DATABASE_NAME)->getTable(InvoiceWarningTableMap::TABLE_NAME);
     }
 
     /**
@@ -393,16 +354,16 @@ class PaymentTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(PaymentTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(PaymentTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new PaymentTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(InvoiceWarningTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(InvoiceWarningTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new InvoiceWarningTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a Payment or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a InvoiceWarning or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Payment object or primary key or array of primary keys
+     * @param mixed               $values Criteria or InvoiceWarning object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -413,27 +374,27 @@ class PaymentTableMap extends TableMap
      public static function doDelete($values, ConnectionInterface $con = null)
      {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PaymentTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(InvoiceWarningTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \API\Models\Payment\Payment) { // it's a model object
+        } elseif ($values instanceof \API\Models\Invoice\InvoiceWarning) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(PaymentTableMap::DATABASE_NAME);
-            $criteria->add(PaymentTableMap::COL_PAYMENTID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(InvoiceWarningTableMap::DATABASE_NAME);
+            $criteria->add(InvoiceWarningTableMap::COL_INVOICE_WARNINGID, (array) $values, Criteria::IN);
         }
 
-        $query = PaymentQuery::create()->mergeWith($criteria);
+        $query = InvoiceWarningQuery::create()->mergeWith($criteria);
 
         if ($values instanceof Criteria) {
-            PaymentTableMap::clearInstancePool();
+            InvoiceWarningTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
             foreach ((array) $values as $singleval) {
-                PaymentTableMap::removeInstanceFromPool($singleval);
+                InvoiceWarningTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -441,20 +402,20 @@ class PaymentTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the payment table.
+     * Deletes all rows from the invoice_warning table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return PaymentQuery::create()->doDeleteAll($con);
+        return InvoiceWarningQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a Payment or Criteria object.
+     * Performs an INSERT on the database, given a InvoiceWarning or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Payment object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or InvoiceWarning object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -463,18 +424,22 @@ class PaymentTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(PaymentTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(InvoiceWarningTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from Payment object
+            $criteria = $criteria->buildCriteria(); // build Criteria from InvoiceWarning object
+        }
+
+        if ($criteria->containsKey(InvoiceWarningTableMap::COL_INVOICE_WARNINGID) && $criteria->keyContainsValue(InvoiceWarningTableMap::COL_INVOICE_WARNINGID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.InvoiceWarningTableMap::COL_INVOICE_WARNINGID.')');
         }
 
 
         // Set the correct dbName
-        $query = PaymentQuery::create()->mergeWith($criteria);
+        $query = InvoiceWarningQuery::create()->mergeWith($criteria);
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
@@ -483,7 +448,7 @@ class PaymentTableMap extends TableMap
         });
     }
 
-} // PaymentTableMap
+} // InvoiceWarningTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-PaymentTableMap::buildTableMap();
+InvoiceWarningTableMap::buildTableMap();

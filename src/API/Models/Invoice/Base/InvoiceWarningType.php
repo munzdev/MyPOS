@@ -6,12 +6,12 @@ use \Exception;
 use \PDO;
 use API\Models\Event\Event;
 use API\Models\Event\EventQuery;
-use API\Models\Invoice\Customer as ChildCustomer;
-use API\Models\Invoice\CustomerQuery as ChildCustomerQuery;
-use API\Models\Invoice\Invoice as ChildInvoice;
-use API\Models\Invoice\InvoiceQuery as ChildInvoiceQuery;
-use API\Models\Invoice\Map\CustomerTableMap;
-use API\Models\Invoice\Map\InvoiceTableMap;
+use API\Models\Invoice\InvoiceWarning as ChildInvoiceWarning;
+use API\Models\Invoice\InvoiceWarningQuery as ChildInvoiceWarningQuery;
+use API\Models\Invoice\InvoiceWarningType as ChildInvoiceWarningType;
+use API\Models\Invoice\InvoiceWarningTypeQuery as ChildInvoiceWarningTypeQuery;
+use API\Models\Invoice\Map\InvoiceWarningTableMap;
+use API\Models\Invoice\Map\InvoiceWarningTypeTableMap;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -26,18 +26,18 @@ use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
 
 /**
- * Base class that represents a row from the 'customer' table.
+ * Base class that represents a row from the 'invoice_warning_type' table.
  *
  *
  *
  * @package    propel.generator.API.Models.Invoice.Base
  */
-abstract class Customer implements ActiveRecordInterface
+abstract class InvoiceWarningType implements ActiveRecordInterface
 {
     /**
      * TableMap class name
      */
-    const TABLE_MAP = '\\API\\Models\\Invoice\\Map\\CustomerTableMap';
+    const TABLE_MAP = '\\API\\Models\\Invoice\\Map\\InvoiceWarningTypeTableMap';
 
 
     /**
@@ -67,11 +67,11 @@ abstract class Customer implements ActiveRecordInterface
     protected $virtualColumns = array();
 
     /**
-     * The value for the customerid field.
+     * The value for the invoice_warning_typeid field.
      *
      * @var        int
      */
-    protected $customerid;
+    protected $invoice_warning_typeid;
 
     /**
      * The value for the eventid field.
@@ -81,13 +81,6 @@ abstract class Customer implements ActiveRecordInterface
     protected $eventid;
 
     /**
-     * The value for the title field.
-     *
-     * @var        string
-     */
-    protected $title;
-
-    /**
      * The value for the name field.
      *
      * @var        string
@@ -95,74 +88,11 @@ abstract class Customer implements ActiveRecordInterface
     protected $name;
 
     /**
-     * The value for the contact_person field.
+     * The value for the extra_price field.
      *
      * @var        string
      */
-    protected $contact_person;
-
-    /**
-     * The value for the address field.
-     *
-     * @var        string
-     */
-    protected $address;
-
-    /**
-     * The value for the address2 field.
-     *
-     * @var        string
-     */
-    protected $address2;
-
-    /**
-     * The value for the city field.
-     *
-     * @var        string
-     */
-    protected $city;
-
-    /**
-     * The value for the zip field.
-     *
-     * @var        string
-     */
-    protected $zip;
-
-    /**
-     * The value for the tax_identification_nr field.
-     *
-     * @var        string
-     */
-    protected $tax_identification_nr;
-
-    /**
-     * The value for the telephon field.
-     *
-     * @var        string
-     */
-    protected $telephon;
-
-    /**
-     * The value for the fax field.
-     *
-     * @var        string
-     */
-    protected $fax;
-
-    /**
-     * The value for the email field.
-     *
-     * @var        string
-     */
-    protected $email;
-
-    /**
-     * The value for the active field.
-     *
-     * @var        boolean
-     */
-    protected $active;
+    protected $extra_price;
 
     /**
      * @var        Event
@@ -170,10 +100,10 @@ abstract class Customer implements ActiveRecordInterface
     protected $aEvent;
 
     /**
-     * @var        ObjectCollection|ChildInvoice[] Collection to store aggregation of ChildInvoice objects.
+     * @var        ObjectCollection|ChildInvoiceWarning[] Collection to store aggregation of ChildInvoiceWarning objects.
      */
-    protected $collInvoices;
-    protected $collInvoicesPartial;
+    protected $collInvoiceWarnings;
+    protected $collInvoiceWarningsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -185,12 +115,12 @@ abstract class Customer implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildInvoice[]
+     * @var ObjectCollection|ChildInvoiceWarning[]
      */
-    protected $invoicesScheduledForDeletion = null;
+    protected $invoiceWarningsScheduledForDeletion = null;
 
     /**
-     * Initializes internal state of API\Models\Invoice\Base\Customer object.
+     * Initializes internal state of API\Models\Invoice\Base\InvoiceWarningType object.
      */
     public function __construct()
     {
@@ -285,9 +215,9 @@ abstract class Customer implements ActiveRecordInterface
     }
 
     /**
-     * Compares this with another <code>Customer</code> instance.  If
-     * <code>obj</code> is an instance of <code>Customer</code>, delegates to
-     * <code>equals(Customer)</code>.  Otherwise, returns <code>false</code>.
+     * Compares this with another <code>InvoiceWarningType</code> instance.  If
+     * <code>obj</code> is an instance of <code>InvoiceWarningType</code>, delegates to
+     * <code>equals(InvoiceWarningType)</code>.  Otherwise, returns <code>false</code>.
      *
      * @param  mixed   $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
@@ -353,7 +283,7 @@ abstract class Customer implements ActiveRecordInterface
      * @param string $name  The virtual column name
      * @param mixed  $value The value to give to the virtual column
      *
-     * @return $this|Customer The current object, for fluid interface
+     * @return $this|InvoiceWarningType The current object, for fluid interface
      */
     public function setVirtualColumn($name, $value)
     {
@@ -415,13 +345,13 @@ abstract class Customer implements ActiveRecordInterface
     }
 
     /**
-     * Get the [customerid] column value.
+     * Get the [invoice_warning_typeid] column value.
      *
      * @return int
      */
-    public function getCustomerid()
+    public function getInvoiceWarningTypeid()
     {
-        return $this->customerid;
+        return $this->invoice_warning_typeid;
     }
 
     /**
@@ -435,16 +365,6 @@ abstract class Customer implements ActiveRecordInterface
     }
 
     /**
-     * Get the [title] column value.
-     *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
      * Get the [name] column value.
      *
      * @return string
@@ -455,140 +375,40 @@ abstract class Customer implements ActiveRecordInterface
     }
 
     /**
-     * Get the [contact_person] column value.
+     * Get the [extra_price] column value.
      *
      * @return string
      */
-    public function getContactPerson()
+    public function getExtraPrice()
     {
-        return $this->contact_person;
+        return $this->extra_price;
     }
 
     /**
-     * Get the [address] column value.
-     *
-     * @return string
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * Get the [address2] column value.
-     *
-     * @return string
-     */
-    public function getAddress2()
-    {
-        return $this->address2;
-    }
-
-    /**
-     * Get the [city] column value.
-     *
-     * @return string
-     */
-    public function getCity()
-    {
-        return $this->city;
-    }
-
-    /**
-     * Get the [zip] column value.
-     *
-     * @return string
-     */
-    public function getZip()
-    {
-        return $this->zip;
-    }
-
-    /**
-     * Get the [tax_identification_nr] column value.
-     *
-     * @return string
-     */
-    public function getTaxIdentificationNr()
-    {
-        return $this->tax_identification_nr;
-    }
-
-    /**
-     * Get the [telephon] column value.
-     *
-     * @return string
-     */
-    public function getTelephon()
-    {
-        return $this->telephon;
-    }
-
-    /**
-     * Get the [fax] column value.
-     *
-     * @return string
-     */
-    public function getFax()
-    {
-        return $this->fax;
-    }
-
-    /**
-     * Get the [email] column value.
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Get the [active] column value.
-     *
-     * @return boolean
-     */
-    public function getActive()
-    {
-        return $this->active;
-    }
-
-    /**
-     * Get the [active] column value.
-     *
-     * @return boolean
-     */
-    public function isActive()
-    {
-        return $this->getActive();
-    }
-
-    /**
-     * Set the value of [customerid] column.
+     * Set the value of [invoice_warning_typeid] column.
      *
      * @param int $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
+     * @return $this|\API\Models\Invoice\InvoiceWarningType The current object (for fluent API support)
      */
-    public function setCustomerid($v)
+    public function setInvoiceWarningTypeid($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->customerid !== $v) {
-            $this->customerid = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_CUSTOMERID] = true;
+        if ($this->invoice_warning_typeid !== $v) {
+            $this->invoice_warning_typeid = $v;
+            $this->modifiedColumns[InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID] = true;
         }
 
         return $this;
-    } // setCustomerid()
+    } // setInvoiceWarningTypeid()
 
     /**
      * Set the value of [eventid] column.
      *
      * @param int $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
+     * @return $this|\API\Models\Invoice\InvoiceWarningType The current object (for fluent API support)
      */
     public function setEventid($v)
     {
@@ -598,7 +418,7 @@ abstract class Customer implements ActiveRecordInterface
 
         if ($this->eventid !== $v) {
             $this->eventid = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_EVENTID] = true;
+            $this->modifiedColumns[InvoiceWarningTypeTableMap::COL_EVENTID] = true;
         }
 
         if ($this->aEvent !== null && $this->aEvent->getEventid() !== $v) {
@@ -609,30 +429,10 @@ abstract class Customer implements ActiveRecordInterface
     } // setEventid()
 
     /**
-     * Set the value of [title] column.
-     *
-     * @param string $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
-     */
-    public function setTitle($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->title !== $v) {
-            $this->title = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_TITLE] = true;
-        }
-
-        return $this;
-    } // setTitle()
-
-    /**
      * Set the value of [name] column.
      *
      * @param string $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
+     * @return $this|\API\Models\Invoice\InvoiceWarningType The current object (for fluent API support)
      */
     public function setName($v)
     {
@@ -642,219 +442,31 @@ abstract class Customer implements ActiveRecordInterface
 
         if ($this->name !== $v) {
             $this->name = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_NAME] = true;
+            $this->modifiedColumns[InvoiceWarningTypeTableMap::COL_NAME] = true;
         }
 
         return $this;
     } // setName()
 
     /**
-     * Set the value of [contact_person] column.
+     * Set the value of [extra_price] column.
      *
      * @param string $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
+     * @return $this|\API\Models\Invoice\InvoiceWarningType The current object (for fluent API support)
      */
-    public function setContactPerson($v)
+    public function setExtraPrice($v)
     {
         if ($v !== null) {
             $v = (string) $v;
         }
 
-        if ($this->contact_person !== $v) {
-            $this->contact_person = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_CONTACT_PERSON] = true;
+        if ($this->extra_price !== $v) {
+            $this->extra_price = $v;
+            $this->modifiedColumns[InvoiceWarningTypeTableMap::COL_EXTRA_PRICE] = true;
         }
 
         return $this;
-    } // setContactPerson()
-
-    /**
-     * Set the value of [address] column.
-     *
-     * @param string $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
-     */
-    public function setAddress($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->address !== $v) {
-            $this->address = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_ADDRESS] = true;
-        }
-
-        return $this;
-    } // setAddress()
-
-    /**
-     * Set the value of [address2] column.
-     *
-     * @param string $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
-     */
-    public function setAddress2($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->address2 !== $v) {
-            $this->address2 = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_ADDRESS2] = true;
-        }
-
-        return $this;
-    } // setAddress2()
-
-    /**
-     * Set the value of [city] column.
-     *
-     * @param string $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
-     */
-    public function setCity($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->city !== $v) {
-            $this->city = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_CITY] = true;
-        }
-
-        return $this;
-    } // setCity()
-
-    /**
-     * Set the value of [zip] column.
-     *
-     * @param string $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
-     */
-    public function setZip($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->zip !== $v) {
-            $this->zip = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_ZIP] = true;
-        }
-
-        return $this;
-    } // setZip()
-
-    /**
-     * Set the value of [tax_identification_nr] column.
-     *
-     * @param string $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
-     */
-    public function setTaxIdentificationNr($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->tax_identification_nr !== $v) {
-            $this->tax_identification_nr = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_TAX_IDENTIFICATION_NR] = true;
-        }
-
-        return $this;
-    } // setTaxIdentificationNr()
-
-    /**
-     * Set the value of [telephon] column.
-     *
-     * @param string $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
-     */
-    public function setTelephon($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->telephon !== $v) {
-            $this->telephon = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_TELEPHON] = true;
-        }
-
-        return $this;
-    } // setTelephon()
-
-    /**
-     * Set the value of [fax] column.
-     *
-     * @param string $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
-     */
-    public function setFax($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->fax !== $v) {
-            $this->fax = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_FAX] = true;
-        }
-
-        return $this;
-    } // setFax()
-
-    /**
-     * Set the value of [email] column.
-     *
-     * @param string $v new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
-     */
-    public function setEmail($v)
-    {
-        if ($v !== null) {
-            $v = (string) $v;
-        }
-
-        if ($this->email !== $v) {
-            $this->email = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_EMAIL] = true;
-        }
-
-        return $this;
-    } // setEmail()
-
-    /**
-     * Sets the value of the [active] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
-     * @param  boolean|integer|string $v The new value
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
-     */
-    public function setActive($v)
-    {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
-            }
-        }
-
-        if ($this->active !== $v) {
-            $this->active = $v;
-            $this->modifiedColumns[CustomerTableMap::COL_ACTIVE] = true;
-        }
-
-        return $this;
-    } // setActive()
+    } // setExtraPrice()
 
     /**
      * Indicates whether the columns in this object are only set to default values.
@@ -892,47 +504,17 @@ abstract class Customer implements ActiveRecordInterface
     {
         try {
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : CustomerTableMap::translateFieldName('Customerid', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->customerid = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : InvoiceWarningTypeTableMap::translateFieldName('InvoiceWarningTypeid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->invoice_warning_typeid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : CustomerTableMap::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : InvoiceWarningTypeTableMap::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->eventid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : CustomerTableMap::translateFieldName('Title', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->title = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : CustomerTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : InvoiceWarningTypeTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
             $this->name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : CustomerTableMap::translateFieldName('ContactPerson', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->contact_person = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CustomerTableMap::translateFieldName('Address', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->address = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CustomerTableMap::translateFieldName('Address2', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->address2 = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : CustomerTableMap::translateFieldName('City', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->city = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : CustomerTableMap::translateFieldName('Zip', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->zip = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : CustomerTableMap::translateFieldName('TaxIdentificationNr', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->tax_identification_nr = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : CustomerTableMap::translateFieldName('Telephon', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->telephon = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : CustomerTableMap::translateFieldName('Fax', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->fax = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : CustomerTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->email = (null !== $col) ? (string) $col : null;
-
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : CustomerTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->active = (null !== $col) ? (boolean) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : InvoiceWarningTypeTableMap::translateFieldName('ExtraPrice', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->extra_price = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -941,10 +523,10 @@ abstract class Customer implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 14; // 14 = CustomerTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = InvoiceWarningTypeTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
-            throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Invoice\\Customer'), 0, $e);
+            throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Invoice\\InvoiceWarningType'), 0, $e);
         }
     }
 
@@ -989,13 +571,13 @@ abstract class Customer implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getReadConnection(CustomerTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getReadConnection(InvoiceWarningTypeTableMap::DATABASE_NAME);
         }
 
         // We don't need to alter the object instance pool; we're just modifying this instance
         // already in the pool.
 
-        $dataFetcher = ChildCustomerQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
+        $dataFetcher = ChildInvoiceWarningTypeQuery::create(null, $this->buildPkeyCriteria())->setFormatter(ModelCriteria::FORMAT_STATEMENT)->find($con);
         $row = $dataFetcher->fetch();
         $dataFetcher->close();
         if (!$row) {
@@ -1006,7 +588,7 @@ abstract class Customer implements ActiveRecordInterface
         if ($deep) {  // also de-associate any related objects?
 
             $this->aEvent = null;
-            $this->collInvoices = null;
+            $this->collInvoiceWarnings = null;
 
         } // if (deep)
     }
@@ -1017,8 +599,8 @@ abstract class Customer implements ActiveRecordInterface
      * @param      ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Customer::setDeleted()
-     * @see Customer::isDeleted()
+     * @see InvoiceWarningType::setDeleted()
+     * @see InvoiceWarningType::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -1027,11 +609,11 @@ abstract class Customer implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CustomerTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(InvoiceWarningTypeTableMap::DATABASE_NAME);
         }
 
         $con->transaction(function () use ($con) {
-            $deleteQuery = ChildCustomerQuery::create()
+            $deleteQuery = ChildInvoiceWarningTypeQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
             $ret = $this->preDelete($con);
             if ($ret) {
@@ -1062,7 +644,7 @@ abstract class Customer implements ActiveRecordInterface
         }
 
         if ($con === null) {
-            $con = Propel::getServiceContainer()->getWriteConnection(CustomerTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(InvoiceWarningTypeTableMap::DATABASE_NAME);
         }
 
         return $con->transaction(function () use ($con) {
@@ -1081,7 +663,7 @@ abstract class Customer implements ActiveRecordInterface
                     $this->postUpdate($con);
                 }
                 $this->postSave($con);
-                CustomerTableMap::addInstanceToPool($this);
+                InvoiceWarningTypeTableMap::addInstanceToPool($this);
             } else {
                 $affectedRows = 0;
             }
@@ -1130,18 +712,17 @@ abstract class Customer implements ActiveRecordInterface
                 $this->resetModified();
             }
 
-            if ($this->invoicesScheduledForDeletion !== null) {
-                if (!$this->invoicesScheduledForDeletion->isEmpty()) {
-                    foreach ($this->invoicesScheduledForDeletion as $invoice) {
-                        // need to save related object because we set the relation to null
-                        $invoice->save($con);
-                    }
-                    $this->invoicesScheduledForDeletion = null;
+            if ($this->invoiceWarningsScheduledForDeletion !== null) {
+                if (!$this->invoiceWarningsScheduledForDeletion->isEmpty()) {
+                    \API\Models\Invoice\InvoiceWarningQuery::create()
+                        ->filterByPrimaryKeys($this->invoiceWarningsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->invoiceWarningsScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collInvoices !== null) {
-                foreach ($this->collInvoices as $referrerFK) {
+            if ($this->collInvoiceWarnings !== null) {
+                foreach ($this->collInvoiceWarnings as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1168,57 +749,27 @@ abstract class Customer implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
-        $this->modifiedColumns[CustomerTableMap::COL_CUSTOMERID] = true;
-        if (null !== $this->customerid) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key (' . CustomerTableMap::COL_CUSTOMERID . ')');
+        $this->modifiedColumns[InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID] = true;
+        if (null !== $this->invoice_warning_typeid) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID . ')');
         }
 
          // check the columns in natural order for more readable SQL queries
-        if ($this->isColumnModified(CustomerTableMap::COL_CUSTOMERID)) {
-            $modifiedColumns[':p' . $index++]  = 'customerid';
+        if ($this->isColumnModified(InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID)) {
+            $modifiedColumns[':p' . $index++]  = 'invoice_warning_typeid';
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_EVENTID)) {
+        if ($this->isColumnModified(InvoiceWarningTypeTableMap::COL_EVENTID)) {
             $modifiedColumns[':p' . $index++]  = 'eventid';
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_TITLE)) {
-            $modifiedColumns[':p' . $index++]  = 'title';
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_NAME)) {
+        if ($this->isColumnModified(InvoiceWarningTypeTableMap::COL_NAME)) {
             $modifiedColumns[':p' . $index++]  = 'name';
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_CONTACT_PERSON)) {
-            $modifiedColumns[':p' . $index++]  = 'contact_person';
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_ADDRESS)) {
-            $modifiedColumns[':p' . $index++]  = 'address';
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_ADDRESS2)) {
-            $modifiedColumns[':p' . $index++]  = 'address2';
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_CITY)) {
-            $modifiedColumns[':p' . $index++]  = 'city';
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_ZIP)) {
-            $modifiedColumns[':p' . $index++]  = 'zip';
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_TAX_IDENTIFICATION_NR)) {
-            $modifiedColumns[':p' . $index++]  = 'tax_identification_nr';
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_TELEPHON)) {
-            $modifiedColumns[':p' . $index++]  = 'telephon';
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_FAX)) {
-            $modifiedColumns[':p' . $index++]  = 'fax';
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_EMAIL)) {
-            $modifiedColumns[':p' . $index++]  = 'email';
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_ACTIVE)) {
-            $modifiedColumns[':p' . $index++]  = 'active';
+        if ($this->isColumnModified(InvoiceWarningTypeTableMap::COL_EXTRA_PRICE)) {
+            $modifiedColumns[':p' . $index++]  = 'extra_price';
         }
 
         $sql = sprintf(
-            'INSERT INTO customer (%s) VALUES (%s)',
+            'INSERT INTO invoice_warning_type (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -1227,47 +778,17 @@ abstract class Customer implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'customerid':
-                        $stmt->bindValue($identifier, $this->customerid, PDO::PARAM_INT);
+                    case 'invoice_warning_typeid':
+                        $stmt->bindValue($identifier, $this->invoice_warning_typeid, PDO::PARAM_INT);
                         break;
                     case 'eventid':
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'title':
-                        $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
-                        break;
                     case 'name':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'contact_person':
-                        $stmt->bindValue($identifier, $this->contact_person, PDO::PARAM_STR);
-                        break;
-                    case 'address':
-                        $stmt->bindValue($identifier, $this->address, PDO::PARAM_STR);
-                        break;
-                    case 'address2':
-                        $stmt->bindValue($identifier, $this->address2, PDO::PARAM_STR);
-                        break;
-                    case 'city':
-                        $stmt->bindValue($identifier, $this->city, PDO::PARAM_STR);
-                        break;
-                    case 'zip':
-                        $stmt->bindValue($identifier, $this->zip, PDO::PARAM_STR);
-                        break;
-                    case 'tax_identification_nr':
-                        $stmt->bindValue($identifier, $this->tax_identification_nr, PDO::PARAM_STR);
-                        break;
-                    case 'telephon':
-                        $stmt->bindValue($identifier, $this->telephon, PDO::PARAM_STR);
-                        break;
-                    case 'fax':
-                        $stmt->bindValue($identifier, $this->fax, PDO::PARAM_STR);
-                        break;
-                    case 'email':
-                        $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
-                        break;
-                    case 'active':
-                        $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
+                    case 'extra_price':
+                        $stmt->bindValue($identifier, $this->extra_price, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1282,7 +803,7 @@ abstract class Customer implements ActiveRecordInterface
         } catch (Exception $e) {
             throw new PropelException('Unable to get autoincrement id.', 0, $e);
         }
-        $this->setCustomerid($pk);
+        $this->setInvoiceWarningTypeid($pk);
 
         $this->setNew(false);
     }
@@ -1315,7 +836,7 @@ abstract class Customer implements ActiveRecordInterface
      */
     public function getByName($name, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = CustomerTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = InvoiceWarningTypeTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
         $field = $this->getByPosition($pos);
 
         return $field;
@@ -1332,46 +853,16 @@ abstract class Customer implements ActiveRecordInterface
     {
         switch ($pos) {
             case 0:
-                return $this->getCustomerid();
+                return $this->getInvoiceWarningTypeid();
                 break;
             case 1:
                 return $this->getEventid();
                 break;
             case 2:
-                return $this->getTitle();
-                break;
-            case 3:
                 return $this->getName();
                 break;
-            case 4:
-                return $this->getContactPerson();
-                break;
-            case 5:
-                return $this->getAddress();
-                break;
-            case 6:
-                return $this->getAddress2();
-                break;
-            case 7:
-                return $this->getCity();
-                break;
-            case 8:
-                return $this->getZip();
-                break;
-            case 9:
-                return $this->getTaxIdentificationNr();
-                break;
-            case 10:
-                return $this->getTelephon();
-                break;
-            case 11:
-                return $this->getFax();
-                break;
-            case 12:
-                return $this->getEmail();
-                break;
-            case 13:
-                return $this->getActive();
+            case 3:
+                return $this->getExtraPrice();
                 break;
             default:
                 return null;
@@ -1397,26 +888,16 @@ abstract class Customer implements ActiveRecordInterface
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
 
-        if (isset($alreadyDumpedObjects['Customer'][$this->hashCode()])) {
+        if (isset($alreadyDumpedObjects['InvoiceWarningType'][$this->hashCode()])) {
             return '*RECURSION*';
         }
-        $alreadyDumpedObjects['Customer'][$this->hashCode()] = true;
-        $keys = CustomerTableMap::getFieldNames($keyType);
+        $alreadyDumpedObjects['InvoiceWarningType'][$this->hashCode()] = true;
+        $keys = InvoiceWarningTypeTableMap::getFieldNames($keyType);
         $result = array(
-            $keys[0] => $this->getCustomerid(),
+            $keys[0] => $this->getInvoiceWarningTypeid(),
             $keys[1] => $this->getEventid(),
-            $keys[2] => $this->getTitle(),
-            $keys[3] => $this->getName(),
-            $keys[4] => $this->getContactPerson(),
-            $keys[5] => $this->getAddress(),
-            $keys[6] => $this->getAddress2(),
-            $keys[7] => $this->getCity(),
-            $keys[8] => $this->getZip(),
-            $keys[9] => $this->getTaxIdentificationNr(),
-            $keys[10] => $this->getTelephon(),
-            $keys[11] => $this->getFax(),
-            $keys[12] => $this->getEmail(),
-            $keys[13] => $this->getActive(),
+            $keys[2] => $this->getName(),
+            $keys[3] => $this->getExtraPrice(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1439,20 +920,20 @@ abstract class Customer implements ActiveRecordInterface
 
                 $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->collInvoices) {
+            if (null !== $this->collInvoiceWarnings) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
-                        $key = 'invoices';
+                        $key = 'invoiceWarnings';
                         break;
                     case TableMap::TYPE_FIELDNAME:
-                        $key = 'invoices';
+                        $key = 'invoice_warnings';
                         break;
                     default:
-                        $key = 'Invoices';
+                        $key = 'InvoiceWarnings';
                 }
 
-                $result[$key] = $this->collInvoices->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collInvoiceWarnings->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1468,11 +949,11 @@ abstract class Customer implements ActiveRecordInterface
      *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                Defaults to TableMap::TYPE_PHPNAME.
-     * @return $this|\API\Models\Invoice\Customer
+     * @return $this|\API\Models\Invoice\InvoiceWarningType
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
     {
-        $pos = CustomerTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
+        $pos = InvoiceWarningTypeTableMap::translateFieldName($name, $type, TableMap::TYPE_NUM);
 
         return $this->setByPosition($pos, $value);
     }
@@ -1483,52 +964,22 @@ abstract class Customer implements ActiveRecordInterface
      *
      * @param  int $pos position in xml schema
      * @param  mixed $value field value
-     * @return $this|\API\Models\Invoice\Customer
+     * @return $this|\API\Models\Invoice\InvoiceWarningType
      */
     public function setByPosition($pos, $value)
     {
         switch ($pos) {
             case 0:
-                $this->setCustomerid($value);
+                $this->setInvoiceWarningTypeid($value);
                 break;
             case 1:
                 $this->setEventid($value);
                 break;
             case 2:
-                $this->setTitle($value);
-                break;
-            case 3:
                 $this->setName($value);
                 break;
-            case 4:
-                $this->setContactPerson($value);
-                break;
-            case 5:
-                $this->setAddress($value);
-                break;
-            case 6:
-                $this->setAddress2($value);
-                break;
-            case 7:
-                $this->setCity($value);
-                break;
-            case 8:
-                $this->setZip($value);
-                break;
-            case 9:
-                $this->setTaxIdentificationNr($value);
-                break;
-            case 10:
-                $this->setTelephon($value);
-                break;
-            case 11:
-                $this->setFax($value);
-                break;
-            case 12:
-                $this->setEmail($value);
-                break;
-            case 13:
-                $this->setActive($value);
+            case 3:
+                $this->setExtraPrice($value);
                 break;
         } // switch()
 
@@ -1554,49 +1005,19 @@ abstract class Customer implements ActiveRecordInterface
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
     {
-        $keys = CustomerTableMap::getFieldNames($keyType);
+        $keys = InvoiceWarningTypeTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) {
-            $this->setCustomerid($arr[$keys[0]]);
+            $this->setInvoiceWarningTypeid($arr[$keys[0]]);
         }
         if (array_key_exists($keys[1], $arr)) {
             $this->setEventid($arr[$keys[1]]);
         }
         if (array_key_exists($keys[2], $arr)) {
-            $this->setTitle($arr[$keys[2]]);
+            $this->setName($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setName($arr[$keys[3]]);
-        }
-        if (array_key_exists($keys[4], $arr)) {
-            $this->setContactPerson($arr[$keys[4]]);
-        }
-        if (array_key_exists($keys[5], $arr)) {
-            $this->setAddress($arr[$keys[5]]);
-        }
-        if (array_key_exists($keys[6], $arr)) {
-            $this->setAddress2($arr[$keys[6]]);
-        }
-        if (array_key_exists($keys[7], $arr)) {
-            $this->setCity($arr[$keys[7]]);
-        }
-        if (array_key_exists($keys[8], $arr)) {
-            $this->setZip($arr[$keys[8]]);
-        }
-        if (array_key_exists($keys[9], $arr)) {
-            $this->setTaxIdentificationNr($arr[$keys[9]]);
-        }
-        if (array_key_exists($keys[10], $arr)) {
-            $this->setTelephon($arr[$keys[10]]);
-        }
-        if (array_key_exists($keys[11], $arr)) {
-            $this->setFax($arr[$keys[11]]);
-        }
-        if (array_key_exists($keys[12], $arr)) {
-            $this->setEmail($arr[$keys[12]]);
-        }
-        if (array_key_exists($keys[13], $arr)) {
-            $this->setActive($arr[$keys[13]]);
+            $this->setExtraPrice($arr[$keys[3]]);
         }
     }
 
@@ -1617,7 +1038,7 @@ abstract class Customer implements ActiveRecordInterface
      * @param string $data The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
-     * @return $this|\API\Models\Invoice\Customer The current object, for fluid interface
+     * @return $this|\API\Models\Invoice\InvoiceWarningType The current object, for fluid interface
      */
     public function importFrom($parser, $data, $keyType = TableMap::TYPE_PHPNAME)
     {
@@ -1637,49 +1058,19 @@ abstract class Customer implements ActiveRecordInterface
      */
     public function buildCriteria()
     {
-        $criteria = new Criteria(CustomerTableMap::DATABASE_NAME);
+        $criteria = new Criteria(InvoiceWarningTypeTableMap::DATABASE_NAME);
 
-        if ($this->isColumnModified(CustomerTableMap::COL_CUSTOMERID)) {
-            $criteria->add(CustomerTableMap::COL_CUSTOMERID, $this->customerid);
+        if ($this->isColumnModified(InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID)) {
+            $criteria->add(InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID, $this->invoice_warning_typeid);
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_EVENTID)) {
-            $criteria->add(CustomerTableMap::COL_EVENTID, $this->eventid);
+        if ($this->isColumnModified(InvoiceWarningTypeTableMap::COL_EVENTID)) {
+            $criteria->add(InvoiceWarningTypeTableMap::COL_EVENTID, $this->eventid);
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_TITLE)) {
-            $criteria->add(CustomerTableMap::COL_TITLE, $this->title);
+        if ($this->isColumnModified(InvoiceWarningTypeTableMap::COL_NAME)) {
+            $criteria->add(InvoiceWarningTypeTableMap::COL_NAME, $this->name);
         }
-        if ($this->isColumnModified(CustomerTableMap::COL_NAME)) {
-            $criteria->add(CustomerTableMap::COL_NAME, $this->name);
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_CONTACT_PERSON)) {
-            $criteria->add(CustomerTableMap::COL_CONTACT_PERSON, $this->contact_person);
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_ADDRESS)) {
-            $criteria->add(CustomerTableMap::COL_ADDRESS, $this->address);
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_ADDRESS2)) {
-            $criteria->add(CustomerTableMap::COL_ADDRESS2, $this->address2);
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_CITY)) {
-            $criteria->add(CustomerTableMap::COL_CITY, $this->city);
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_ZIP)) {
-            $criteria->add(CustomerTableMap::COL_ZIP, $this->zip);
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_TAX_IDENTIFICATION_NR)) {
-            $criteria->add(CustomerTableMap::COL_TAX_IDENTIFICATION_NR, $this->tax_identification_nr);
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_TELEPHON)) {
-            $criteria->add(CustomerTableMap::COL_TELEPHON, $this->telephon);
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_FAX)) {
-            $criteria->add(CustomerTableMap::COL_FAX, $this->fax);
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_EMAIL)) {
-            $criteria->add(CustomerTableMap::COL_EMAIL, $this->email);
-        }
-        if ($this->isColumnModified(CustomerTableMap::COL_ACTIVE)) {
-            $criteria->add(CustomerTableMap::COL_ACTIVE, $this->active);
+        if ($this->isColumnModified(InvoiceWarningTypeTableMap::COL_EXTRA_PRICE)) {
+            $criteria->add(InvoiceWarningTypeTableMap::COL_EXTRA_PRICE, $this->extra_price);
         }
 
         return $criteria;
@@ -1697,8 +1088,8 @@ abstract class Customer implements ActiveRecordInterface
      */
     public function buildPkeyCriteria()
     {
-        $criteria = ChildCustomerQuery::create();
-        $criteria->add(CustomerTableMap::COL_CUSTOMERID, $this->customerid);
+        $criteria = ChildInvoiceWarningTypeQuery::create();
+        $criteria->add(InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID, $this->invoice_warning_typeid);
 
         return $criteria;
     }
@@ -1711,7 +1102,7 @@ abstract class Customer implements ActiveRecordInterface
      */
     public function hashCode()
     {
-        $validPk = null !== $this->getCustomerid();
+        $validPk = null !== $this->getInvoiceWarningTypeid();
 
         $validPrimaryKeyFKs = 0;
         $primaryKeyFKs = [];
@@ -1731,18 +1122,18 @@ abstract class Customer implements ActiveRecordInterface
      */
     public function getPrimaryKey()
     {
-        return $this->getCustomerid();
+        return $this->getInvoiceWarningTypeid();
     }
 
     /**
-     * Generic method to set the primary key (customerid column).
+     * Generic method to set the primary key (invoice_warning_typeid column).
      *
      * @param       int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
     {
-        $this->setCustomerid($key);
+        $this->setInvoiceWarningTypeid($key);
     }
 
     /**
@@ -1751,7 +1142,7 @@ abstract class Customer implements ActiveRecordInterface
      */
     public function isPrimaryKeyNull()
     {
-        return null === $this->getCustomerid();
+        return null === $this->getInvoiceWarningTypeid();
     }
 
     /**
@@ -1760,7 +1151,7 @@ abstract class Customer implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \API\Models\Invoice\Customer (or compatible) type.
+     * @param      object $copyObj An object of \API\Models\Invoice\InvoiceWarningType (or compatible) type.
      * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
      * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
@@ -1768,27 +1159,17 @@ abstract class Customer implements ActiveRecordInterface
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
         $copyObj->setEventid($this->getEventid());
-        $copyObj->setTitle($this->getTitle());
         $copyObj->setName($this->getName());
-        $copyObj->setContactPerson($this->getContactPerson());
-        $copyObj->setAddress($this->getAddress());
-        $copyObj->setAddress2($this->getAddress2());
-        $copyObj->setCity($this->getCity());
-        $copyObj->setZip($this->getZip());
-        $copyObj->setTaxIdentificationNr($this->getTaxIdentificationNr());
-        $copyObj->setTelephon($this->getTelephon());
-        $copyObj->setFax($this->getFax());
-        $copyObj->setEmail($this->getEmail());
-        $copyObj->setActive($this->getActive());
+        $copyObj->setExtraPrice($this->getExtraPrice());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
             // the getter/setter methods for fkey referrer objects.
             $copyObj->setNew(false);
 
-            foreach ($this->getInvoices() as $relObj) {
+            foreach ($this->getInvoiceWarnings() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addInvoice($relObj->copy($deepCopy));
+                    $copyObj->addInvoiceWarning($relObj->copy($deepCopy));
                 }
             }
 
@@ -1796,7 +1177,7 @@ abstract class Customer implements ActiveRecordInterface
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setCustomerid(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setInvoiceWarningTypeid(NULL); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1809,7 +1190,7 @@ abstract class Customer implements ActiveRecordInterface
      * objects.
      *
      * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @return \API\Models\Invoice\Customer Clone of current object.
+     * @return \API\Models\Invoice\InvoiceWarningType Clone of current object.
      * @throws PropelException
      */
     public function copy($deepCopy = false)
@@ -1826,7 +1207,7 @@ abstract class Customer implements ActiveRecordInterface
      * Declares an association between this object and a Event object.
      *
      * @param  Event $v
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
+     * @return $this|\API\Models\Invoice\InvoiceWarningType The current object (for fluent API support)
      * @throws PropelException
      */
     public function setEvent(Event $v = null)
@@ -1842,7 +1223,7 @@ abstract class Customer implements ActiveRecordInterface
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the Event object, it will not be re-added.
         if ($v !== null) {
-            $v->addCustomer($this);
+            $v->addInvoiceWarningType($this);
         }
 
 
@@ -1866,7 +1247,7 @@ abstract class Customer implements ActiveRecordInterface
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aEvent->addCustomers($this);
+                $this->aEvent->addInvoiceWarningTypes($this);
              */
         }
 
@@ -1884,37 +1265,37 @@ abstract class Customer implements ActiveRecordInterface
      */
     public function initRelation($relationName)
     {
-        if ('Invoice' == $relationName) {
-            return $this->initInvoices();
+        if ('InvoiceWarning' == $relationName) {
+            return $this->initInvoiceWarnings();
         }
     }
 
     /**
-     * Clears out the collInvoices collection
+     * Clears out the collInvoiceWarnings collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addInvoices()
+     * @see        addInvoiceWarnings()
      */
-    public function clearInvoices()
+    public function clearInvoiceWarnings()
     {
-        $this->collInvoices = null; // important to set this to NULL since that means it is uninitialized
+        $this->collInvoiceWarnings = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collInvoices collection loaded partially.
+     * Reset is the collInvoiceWarnings collection loaded partially.
      */
-    public function resetPartialInvoices($v = true)
+    public function resetPartialInvoiceWarnings($v = true)
     {
-        $this->collInvoicesPartial = $v;
+        $this->collInvoiceWarningsPartial = $v;
     }
 
     /**
-     * Initializes the collInvoices collection.
+     * Initializes the collInvoiceWarnings collection.
      *
-     * By default this just sets the collInvoices collection to an empty array (like clearcollInvoices());
+     * By default this just sets the collInvoiceWarnings collection to an empty array (like clearcollInvoiceWarnings());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -1923,162 +1304,162 @@ abstract class Customer implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initInvoices($overrideExisting = true)
+    public function initInvoiceWarnings($overrideExisting = true)
     {
-        if (null !== $this->collInvoices && !$overrideExisting) {
+        if (null !== $this->collInvoiceWarnings && !$overrideExisting) {
             return;
         }
 
-        $collectionClassName = InvoiceTableMap::getTableMap()->getCollectionClassName();
+        $collectionClassName = InvoiceWarningTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collInvoices = new $collectionClassName;
-        $this->collInvoices->setModel('\API\Models\Invoice\Invoice');
+        $this->collInvoiceWarnings = new $collectionClassName;
+        $this->collInvoiceWarnings->setModel('\API\Models\Invoice\InvoiceWarning');
     }
 
     /**
-     * Gets an array of ChildInvoice objects which contain a foreign key that references this object.
+     * Gets an array of ChildInvoiceWarning objects which contain a foreign key that references this object.
      *
      * If the $criteria is not null, it is used to always fetch the results from the database.
      * Otherwise the results are fetched from the database the first time, then cached.
      * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildCustomer is new, it will return
+     * If this ChildInvoiceWarningType is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildInvoice[] List of ChildInvoice objects
+     * @return ObjectCollection|ChildInvoiceWarning[] List of ChildInvoiceWarning objects
      * @throws PropelException
      */
-    public function getInvoices(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getInvoiceWarnings(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collInvoicesPartial && !$this->isNew();
-        if (null === $this->collInvoices || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collInvoices) {
+        $partial = $this->collInvoiceWarningsPartial && !$this->isNew();
+        if (null === $this->collInvoiceWarnings || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collInvoiceWarnings) {
                 // return empty collection
-                $this->initInvoices();
+                $this->initInvoiceWarnings();
             } else {
-                $collInvoices = ChildInvoiceQuery::create(null, $criteria)
-                    ->filterByCustomer($this)
+                $collInvoiceWarnings = ChildInvoiceWarningQuery::create(null, $criteria)
+                    ->filterByInvoiceWarningType($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collInvoicesPartial && count($collInvoices)) {
-                        $this->initInvoices(false);
+                    if (false !== $this->collInvoiceWarningsPartial && count($collInvoiceWarnings)) {
+                        $this->initInvoiceWarnings(false);
 
-                        foreach ($collInvoices as $obj) {
-                            if (false == $this->collInvoices->contains($obj)) {
-                                $this->collInvoices->append($obj);
+                        foreach ($collInvoiceWarnings as $obj) {
+                            if (false == $this->collInvoiceWarnings->contains($obj)) {
+                                $this->collInvoiceWarnings->append($obj);
                             }
                         }
 
-                        $this->collInvoicesPartial = true;
+                        $this->collInvoiceWarningsPartial = true;
                     }
 
-                    return $collInvoices;
+                    return $collInvoiceWarnings;
                 }
 
-                if ($partial && $this->collInvoices) {
-                    foreach ($this->collInvoices as $obj) {
+                if ($partial && $this->collInvoiceWarnings) {
+                    foreach ($this->collInvoiceWarnings as $obj) {
                         if ($obj->isNew()) {
-                            $collInvoices[] = $obj;
+                            $collInvoiceWarnings[] = $obj;
                         }
                     }
                 }
 
-                $this->collInvoices = $collInvoices;
-                $this->collInvoicesPartial = false;
+                $this->collInvoiceWarnings = $collInvoiceWarnings;
+                $this->collInvoiceWarningsPartial = false;
             }
         }
 
-        return $this->collInvoices;
+        return $this->collInvoiceWarnings;
     }
 
     /**
-     * Sets a collection of ChildInvoice objects related by a one-to-many relationship
+     * Sets a collection of ChildInvoiceWarning objects related by a one-to-many relationship
      * to the current object.
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $invoices A Propel collection.
+     * @param      Collection $invoiceWarnings A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildCustomer The current object (for fluent API support)
+     * @return $this|ChildInvoiceWarningType The current object (for fluent API support)
      */
-    public function setInvoices(Collection $invoices, ConnectionInterface $con = null)
+    public function setInvoiceWarnings(Collection $invoiceWarnings, ConnectionInterface $con = null)
     {
-        /** @var ChildInvoice[] $invoicesToDelete */
-        $invoicesToDelete = $this->getInvoices(new Criteria(), $con)->diff($invoices);
+        /** @var ChildInvoiceWarning[] $invoiceWarningsToDelete */
+        $invoiceWarningsToDelete = $this->getInvoiceWarnings(new Criteria(), $con)->diff($invoiceWarnings);
 
 
-        $this->invoicesScheduledForDeletion = $invoicesToDelete;
+        $this->invoiceWarningsScheduledForDeletion = $invoiceWarningsToDelete;
 
-        foreach ($invoicesToDelete as $invoiceRemoved) {
-            $invoiceRemoved->setCustomer(null);
+        foreach ($invoiceWarningsToDelete as $invoiceWarningRemoved) {
+            $invoiceWarningRemoved->setInvoiceWarningType(null);
         }
 
-        $this->collInvoices = null;
-        foreach ($invoices as $invoice) {
-            $this->addInvoice($invoice);
+        $this->collInvoiceWarnings = null;
+        foreach ($invoiceWarnings as $invoiceWarning) {
+            $this->addInvoiceWarning($invoiceWarning);
         }
 
-        $this->collInvoices = $invoices;
-        $this->collInvoicesPartial = false;
+        $this->collInvoiceWarnings = $invoiceWarnings;
+        $this->collInvoiceWarningsPartial = false;
 
         return $this;
     }
 
     /**
-     * Returns the number of related Invoice objects.
+     * Returns the number of related InvoiceWarning objects.
      *
      * @param      Criteria $criteria
      * @param      boolean $distinct
      * @param      ConnectionInterface $con
-     * @return int             Count of related Invoice objects.
+     * @return int             Count of related InvoiceWarning objects.
      * @throws PropelException
      */
-    public function countInvoices(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countInvoiceWarnings(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collInvoicesPartial && !$this->isNew();
-        if (null === $this->collInvoices || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collInvoices) {
+        $partial = $this->collInvoiceWarningsPartial && !$this->isNew();
+        if (null === $this->collInvoiceWarnings || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collInvoiceWarnings) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getInvoices());
+                return count($this->getInvoiceWarnings());
             }
 
-            $query = ChildInvoiceQuery::create(null, $criteria);
+            $query = ChildInvoiceWarningQuery::create(null, $criteria);
             if ($distinct) {
                 $query->distinct();
             }
 
             return $query
-                ->filterByCustomer($this)
+                ->filterByInvoiceWarningType($this)
                 ->count($con);
         }
 
-        return count($this->collInvoices);
+        return count($this->collInvoiceWarnings);
     }
 
     /**
-     * Method called to associate a ChildInvoice object to this object
-     * through the ChildInvoice foreign key attribute.
+     * Method called to associate a ChildInvoiceWarning object to this object
+     * through the ChildInvoiceWarning foreign key attribute.
      *
-     * @param  ChildInvoice $l ChildInvoice
-     * @return $this|\API\Models\Invoice\Customer The current object (for fluent API support)
+     * @param  ChildInvoiceWarning $l ChildInvoiceWarning
+     * @return $this|\API\Models\Invoice\InvoiceWarningType The current object (for fluent API support)
      */
-    public function addInvoice(ChildInvoice $l)
+    public function addInvoiceWarning(ChildInvoiceWarning $l)
     {
-        if ($this->collInvoices === null) {
-            $this->initInvoices();
-            $this->collInvoicesPartial = true;
+        if ($this->collInvoiceWarnings === null) {
+            $this->initInvoiceWarnings();
+            $this->collInvoiceWarningsPartial = true;
         }
 
-        if (!$this->collInvoices->contains($l)) {
-            $this->doAddInvoice($l);
+        if (!$this->collInvoiceWarnings->contains($l)) {
+            $this->doAddInvoiceWarning($l);
 
-            if ($this->invoicesScheduledForDeletion and $this->invoicesScheduledForDeletion->contains($l)) {
-                $this->invoicesScheduledForDeletion->remove($this->invoicesScheduledForDeletion->search($l));
+            if ($this->invoiceWarningsScheduledForDeletion and $this->invoiceWarningsScheduledForDeletion->contains($l)) {
+                $this->invoiceWarningsScheduledForDeletion->remove($this->invoiceWarningsScheduledForDeletion->search($l));
             }
         }
 
@@ -2086,29 +1467,29 @@ abstract class Customer implements ActiveRecordInterface
     }
 
     /**
-     * @param ChildInvoice $invoice The ChildInvoice object to add.
+     * @param ChildInvoiceWarning $invoiceWarning The ChildInvoiceWarning object to add.
      */
-    protected function doAddInvoice(ChildInvoice $invoice)
+    protected function doAddInvoiceWarning(ChildInvoiceWarning $invoiceWarning)
     {
-        $this->collInvoices[]= $invoice;
-        $invoice->setCustomer($this);
+        $this->collInvoiceWarnings[]= $invoiceWarning;
+        $invoiceWarning->setInvoiceWarningType($this);
     }
 
     /**
-     * @param  ChildInvoice $invoice The ChildInvoice object to remove.
-     * @return $this|ChildCustomer The current object (for fluent API support)
+     * @param  ChildInvoiceWarning $invoiceWarning The ChildInvoiceWarning object to remove.
+     * @return $this|ChildInvoiceWarningType The current object (for fluent API support)
      */
-    public function removeInvoice(ChildInvoice $invoice)
+    public function removeInvoiceWarning(ChildInvoiceWarning $invoiceWarning)
     {
-        if ($this->getInvoices()->contains($invoice)) {
-            $pos = $this->collInvoices->search($invoice);
-            $this->collInvoices->remove($pos);
-            if (null === $this->invoicesScheduledForDeletion) {
-                $this->invoicesScheduledForDeletion = clone $this->collInvoices;
-                $this->invoicesScheduledForDeletion->clear();
+        if ($this->getInvoiceWarnings()->contains($invoiceWarning)) {
+            $pos = $this->collInvoiceWarnings->search($invoiceWarning);
+            $this->collInvoiceWarnings->remove($pos);
+            if (null === $this->invoiceWarningsScheduledForDeletion) {
+                $this->invoiceWarningsScheduledForDeletion = clone $this->collInvoiceWarnings;
+                $this->invoiceWarningsScheduledForDeletion->clear();
             }
-            $this->invoicesScheduledForDeletion[]= $invoice;
-            $invoice->setCustomer(null);
+            $this->invoiceWarningsScheduledForDeletion[]= clone $invoiceWarning;
+            $invoiceWarning->setInvoiceWarningType(null);
         }
 
         return $this;
@@ -2118,50 +1499,25 @@ abstract class Customer implements ActiveRecordInterface
     /**
      * If this collection has already been initialized with
      * an identical criteria, it returns the collection.
-     * Otherwise if this Customer is new, it will return
-     * an empty collection; or if this Customer has previously
-     * been saved, it will retrieve related Invoices from storage.
+     * Otherwise if this InvoiceWarningType is new, it will return
+     * an empty collection; or if this InvoiceWarningType has previously
+     * been saved, it will retrieve related InvoiceWarnings from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
-     * actually need in Customer.
+     * actually need in InvoiceWarningType.
      *
      * @param      Criteria $criteria optional Criteria object to narrow the query
      * @param      ConnectionInterface $con optional connection object
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildInvoice[] List of ChildInvoice objects
+     * @return ObjectCollection|ChildInvoiceWarning[] List of ChildInvoiceWarning objects
      */
-    public function getInvoicesJoinEvent(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getInvoiceWarningsJoinInvoice(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
-        $query = ChildInvoiceQuery::create(null, $criteria);
-        $query->joinWith('Event', $joinBehavior);
+        $query = ChildInvoiceWarningQuery::create(null, $criteria);
+        $query->joinWith('Invoice', $joinBehavior);
 
-        return $this->getInvoices($query, $con);
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Customer is new, it will return
-     * an empty collection; or if this Customer has previously
-     * been saved, it will retrieve related Invoices from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Customer.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildInvoice[] List of ChildInvoice objects
-     */
-    public function getInvoicesJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildInvoiceQuery::create(null, $criteria);
-        $query->joinWith('User', $joinBehavior);
-
-        return $this->getInvoices($query, $con);
+        return $this->getInvoiceWarnings($query, $con);
     }
 
     /**
@@ -2172,22 +1528,12 @@ abstract class Customer implements ActiveRecordInterface
     public function clear()
     {
         if (null !== $this->aEvent) {
-            $this->aEvent->removeCustomer($this);
+            $this->aEvent->removeInvoiceWarningType($this);
         }
-        $this->customerid = null;
+        $this->invoice_warning_typeid = null;
         $this->eventid = null;
-        $this->title = null;
         $this->name = null;
-        $this->contact_person = null;
-        $this->address = null;
-        $this->address2 = null;
-        $this->city = null;
-        $this->zip = null;
-        $this->tax_identification_nr = null;
-        $this->telephon = null;
-        $this->fax = null;
-        $this->email = null;
-        $this->active = null;
+        $this->extra_price = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -2206,14 +1552,14 @@ abstract class Customer implements ActiveRecordInterface
     public function clearAllReferences($deep = false)
     {
         if ($deep) {
-            if ($this->collInvoices) {
-                foreach ($this->collInvoices as $o) {
+            if ($this->collInvoiceWarnings) {
+                foreach ($this->collInvoiceWarnings as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
         } // if ($deep)
 
-        $this->collInvoices = null;
+        $this->collInvoiceWarnings = null;
         $this->aEvent = null;
     }
 
@@ -2224,7 +1570,7 @@ abstract class Customer implements ActiveRecordInterface
      */
     public function __toString()
     {
-        return (string) $this->exportTo(CustomerTableMap::DEFAULT_STRING_FORMAT);
+        return (string) $this->exportTo(InvoiceWarningTypeTableMap::DEFAULT_STRING_FORMAT);
     }
 
     /**

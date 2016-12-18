@@ -171,6 +171,13 @@ class EventBankinformationTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, null, false);
+        $this->addRelation('Invoice', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':event_bankinformationid',
+    1 => ':event_bankinformationid',
+  ),
+), null, null, 'Invoices', false);
     } // buildRelations()
 
     /**

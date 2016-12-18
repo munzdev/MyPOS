@@ -37,6 +37,18 @@ INSERT INTO `user_role` (`user_roleid`, `name`) VALUES (1073741824, 'USER_ROLE_D
 COMMIT;
 
 -- -----------------------------------------------------
+-- Data for table `invoice_type`
+-- -----------------------------------------------------
+START TRANSACTION;
+INSERT INTO `invoice_type` (`invoice_typeid`, `name`) VALUES (DEFAULT, 'INVOICE');
+INSERT INTO `invoice_type` (`invoice_typeid`, `name`) VALUES (DEFAULT, 'CANCELLATION');
+INSERT INTO `invoice_type` (`invoice_typeid`, `name`) VALUES (DEFAULT, 'DAY_DOCUMENT');
+INSERT INTO `invoice_type` (`invoice_typeid`, `name`) VALUES (DEFAULT, 'MONTH_DOCUMENT');
+INSERT INTO `invoice_type` (`invoice_typeid`, `name`) VALUES (DEFAULT, 'TRAINING');
+
+COMMIT;
+
+-- -----------------------------------------------------
 -- Data for table `payment_type`
 -- -----------------------------------------------------
 START TRANSACTION;

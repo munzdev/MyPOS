@@ -2,10 +2,10 @@
 
 namespace API\Models\Payment;
 
-use API\Models\Payment\Base\PaymentWarningType as BasePaymentWarningType;
+use API\Models\Payment\Base\PaymentRecieved as BasePaymentRecieved;
 
 /**
- * Skeleton subclass for representing a row from the 'payment_warning_type' table.
+ * Skeleton subclass for representing a row from the 'payment_recieved' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use API\Models\Payment\Base\PaymentWarningType as BasePaymentWarningType;
  * long as it does not already exist in the output directory.
  *
  */
-class PaymentWarningType extends BasePaymentWarningType
+class PaymentRecieved extends BasePaymentRecieved
 {
 
 }

@@ -2,10 +2,10 @@
 
 namespace API\Models\Payment;
 
-use API\Models\Payment\Base\PaymentQuery as BasePaymentQuery;
+use API\Models\Payment\Base\PaymentRecievedQuery as BasePaymentRecievedQuery;
 
 /**
- * Skeleton subclass for performing query and update operations on the 'payment' table.
+ * Skeleton subclass for performing query and update operations on the 'payment_recieved' table.
  *
  *
  *
@@ -14,7 +14,7 @@ use API\Models\Payment\Base\PaymentQuery as BasePaymentQuery;
  * long as it does not already exist in the output directory.
  *
  */
-class PaymentQuery extends BasePaymentQuery
+class PaymentRecievedQuery extends BasePaymentRecievedQuery
 {
 
 }

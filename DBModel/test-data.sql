@@ -339,18 +339,18 @@ COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `coupon`
+-- Data for table `event_bankinformation`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `coupon` (`couponid`, `eventid`, `created_by_userid`, `code`, `created`, `value`) VALUES (DEFAULT, 1, 1, '1234', 'NOW', 20);
+INSERT INTO `event_bankinformation` (`event_bankinformationid`, `eventid`, `name`, `iban`, `bic`, `active`) VALUES (DEFAULT, 1, 'Test Bank Int.', 'AT32123456', 'ATOO123454', 1);
 
 COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `event_bankinformation`
+-- Data for table `coupon`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `event_bankinformation` (`event_bankinformationid`, `eventid`, `name`, `iban`, `bic`, `active`) VALUES (DEFAULT, 1, 'Test Bank Int.', 'AT32123456', 'ATOO123454', 1);
+INSERT INTO `coupon` (`couponid`, `eventid`, `created_by_userid`, `code`, `created`, `value`) VALUES (DEFAULT, 1, 1, '1234', 'NOW', 20);
 
 COMMIT;

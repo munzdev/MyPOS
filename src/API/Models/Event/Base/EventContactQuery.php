@@ -71,15 +71,15 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventContactQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
  * @method     ChildEventContactQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
  *
- * @method     ChildEventContactQuery leftJoinInvoiceRelatedByCustomerid($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceRelatedByCustomerid relation
- * @method     ChildEventContactQuery rightJoinInvoiceRelatedByCustomerid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceRelatedByCustomerid relation
- * @method     ChildEventContactQuery innerJoinInvoiceRelatedByCustomerid($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceRelatedByCustomerid relation
+ * @method     ChildEventContactQuery leftJoinInvoiceRelatedByCustomerEventContactid($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceRelatedByCustomerEventContactid relation
+ * @method     ChildEventContactQuery rightJoinInvoiceRelatedByCustomerEventContactid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceRelatedByCustomerEventContactid relation
+ * @method     ChildEventContactQuery innerJoinInvoiceRelatedByCustomerEventContactid($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceRelatedByCustomerEventContactid relation
  *
- * @method     ChildEventContactQuery joinWithInvoiceRelatedByCustomerid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceRelatedByCustomerid relation
+ * @method     ChildEventContactQuery joinWithInvoiceRelatedByCustomerEventContactid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceRelatedByCustomerEventContactid relation
  *
- * @method     ChildEventContactQuery leftJoinWithInvoiceRelatedByCustomerid() Adds a LEFT JOIN clause and with to the query using the InvoiceRelatedByCustomerid relation
- * @method     ChildEventContactQuery rightJoinWithInvoiceRelatedByCustomerid() Adds a RIGHT JOIN clause and with to the query using the InvoiceRelatedByCustomerid relation
- * @method     ChildEventContactQuery innerJoinWithInvoiceRelatedByCustomerid() Adds a INNER JOIN clause and with to the query using the InvoiceRelatedByCustomerid relation
+ * @method     ChildEventContactQuery leftJoinWithInvoiceRelatedByCustomerEventContactid() Adds a LEFT JOIN clause and with to the query using the InvoiceRelatedByCustomerEventContactid relation
+ * @method     ChildEventContactQuery rightJoinWithInvoiceRelatedByCustomerEventContactid() Adds a RIGHT JOIN clause and with to the query using the InvoiceRelatedByCustomerEventContactid relation
+ * @method     ChildEventContactQuery innerJoinWithInvoiceRelatedByCustomerEventContactid() Adds a INNER JOIN clause and with to the query using the InvoiceRelatedByCustomerEventContactid relation
  *
  * @method     ChildEventContactQuery leftJoinInvoiceRelatedByEventContactid($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceRelatedByEventContactid relation
  * @method     ChildEventContactQuery rightJoinInvoiceRelatedByEventContactid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceRelatedByEventContactid relation
@@ -833,33 +833,33 @@ abstract class EventContactQuery extends ModelCriteria
      *
      * @return ChildEventContactQuery The current query, for fluid interface
      */
-    public function filterByInvoiceRelatedByCustomerid($invoice, $comparison = null)
+    public function filterByInvoiceRelatedByCustomerEventContactid($invoice, $comparison = null)
     {
         if ($invoice instanceof \API\Models\Invoice\Invoice) {
             return $this
-                ->addUsingAlias(EventContactTableMap::COL_EVENT_CONTACTID, $invoice->getCustomerid(), $comparison);
+                ->addUsingAlias(EventContactTableMap::COL_EVENT_CONTACTID, $invoice->getCustomerEventContactid(), $comparison);
         } elseif ($invoice instanceof ObjectCollection) {
             return $this
-                ->useInvoiceRelatedByCustomeridQuery()
+                ->useInvoiceRelatedByCustomerEventContactidQuery()
                 ->filterByPrimaryKeys($invoice->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByInvoiceRelatedByCustomerid() only accepts arguments of type \API\Models\Invoice\Invoice or Collection');
+            throw new PropelException('filterByInvoiceRelatedByCustomerEventContactid() only accepts arguments of type \API\Models\Invoice\Invoice or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the InvoiceRelatedByCustomerid relation
+     * Adds a JOIN clause to the query using the InvoiceRelatedByCustomerEventContactid relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildEventContactQuery The current query, for fluid interface
      */
-    public function joinInvoiceRelatedByCustomerid($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinInvoiceRelatedByCustomerEventContactid($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('InvoiceRelatedByCustomerid');
+        $relationMap = $tableMap->getRelation('InvoiceRelatedByCustomerEventContactid');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -874,14 +874,14 @@ abstract class EventContactQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'InvoiceRelatedByCustomerid');
+            $this->addJoinObject($join, 'InvoiceRelatedByCustomerEventContactid');
         }
 
         return $this;
     }
 
     /**
-     * Use the InvoiceRelatedByCustomerid relation Invoice object
+     * Use the InvoiceRelatedByCustomerEventContactid relation Invoice object
      *
      * @see useQuery()
      *
@@ -891,11 +891,11 @@ abstract class EventContactQuery extends ModelCriteria
      *
      * @return \API\Models\Invoice\InvoiceQuery A secondary query class using the current class as primary query
      */
-    public function useInvoiceRelatedByCustomeridQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useInvoiceRelatedByCustomerEventContactidQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
-            ->joinInvoiceRelatedByCustomerid($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'InvoiceRelatedByCustomerid', '\API\Models\Invoice\InvoiceQuery');
+            ->joinInvoiceRelatedByCustomerEventContactid($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'InvoiceRelatedByCustomerEventContactid', '\API\Models\Invoice\InvoiceQuery');
     }
 
     /**

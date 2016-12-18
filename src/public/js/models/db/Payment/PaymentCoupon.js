@@ -1,8 +1,8 @@
 define([
-    "models/db/Payment/Payment",
+    "models/db/Payment/PaymentRecieved",
     "models/db/Payment/Coupon",
-    
-], function(Payment,
+
+], function(PaymentRecieved,
             Coupon){
     "use strict";
 
@@ -10,22 +10,22 @@ define([
 
         defaults() {
             return {Couponid: null,
-                    Paymentid: null,
+                    PaymentRecievedid: null,
                     ValueUsed: 0};
         }
-        
+
         parse(response)
         {
             if('Coupon' in response)
             {
                 response.Coupon = new Coupon(response.Coupon, {parse: true});
             }
-            
-            if('Payment' in response)
+
+            if('PaymentRecieved' in response)
             {
-                response.Payment = new Payment(response.Payment, {parse: true});
+                response.PaymentRecieved = new PaymentRecieved(response.PaymentRecieved, {parse: true});
             }
-            
+
             return super.parse(response);
         }
     }

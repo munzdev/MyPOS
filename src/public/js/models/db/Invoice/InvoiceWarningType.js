@@ -2,12 +2,12 @@ define(["models/db/Event/Event"
 ], function(Event){
     "use strict";
 
-    return class PaymentWarningType extends app.BaseModel {
+    return class InvoiceWarningType extends app.BaseModel {
 
-        idAttribute() { return 'PaymentWarningTypeid'; }
+        idAttribute() { return 'InvoiceWarningTypeid'; }
 
         defaults() {
-            return {PaymentWarningTypeid: null,
+            return {InvoiceWarningTypeid: null,
                     Eventid: null,
                     Name: '',
                     ExtraPrice: 0};

@@ -159,13 +159,6 @@ class EventTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, 'Coupons', false);
-        $this->addRelation('EventContact', '\\API\\Models\\Event\\EventContact', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'EventContacts', false);
         $this->addRelation('EventBankinformation', '\\API\\Models\\Event\\EventBankinformation', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -173,6 +166,13 @@ class EventTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, 'EventBankinformations', false);
+        $this->addRelation('EventContact', '\\API\\Models\\Event\\EventContact', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':eventid',
+    1 => ':eventid',
+  ),
+), null, null, 'EventContacts', false);
         $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -222,13 +222,13 @@ class EventTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, 'MenuTypes', false);
-        $this->addRelation('PaymentWarningType', '\\API\\Models\\Payment\\PaymentWarningType', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('InvoiceWarningType', '\\API\\Models\\Invoice\\InvoiceWarningType', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':eventid',
     1 => ':eventid',
   ),
-), null, null, 'PaymentWarningTypes', false);
+), null, null, 'InvoiceWarningTypes', false);
     } // buildRelations()
 
     /**

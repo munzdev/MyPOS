@@ -140,13 +140,13 @@ class PaymentTypeTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Payment', '\\API\\Models\\Payment\\Payment', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('PaymentRecieved', '\\API\\Models\\Payment\\PaymentRecieved', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':payment_typeid',
     1 => ':payment_typeid',
   ),
-), null, null, 'Payments', false);
+), null, null, 'PaymentRecieveds', false);
     } // buildRelations()
 
     /**
