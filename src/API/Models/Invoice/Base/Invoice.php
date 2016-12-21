@@ -103,11 +103,11 @@ abstract class Invoice implements ActiveRecordInterface
     protected $event_contactid;
 
     /**
-     * The value for the cashier_userid field.
+     * The value for the userid field.
      *
      * @var        int
      */
-    protected $cashier_userid;
+    protected $userid;
 
     /**
      * The value for the event_bankinformationid field.
@@ -507,13 +507,13 @@ abstract class Invoice implements ActiveRecordInterface
     }
 
     /**
-     * Get the [cashier_userid] column value.
+     * Get the [userid] column value.
      *
      * @return int
      */
-    public function getCashierUserid()
+    public function getUserid()
     {
-        return $this->cashier_userid;
+        return $this->userid;
     }
 
     /**
@@ -695,20 +695,20 @@ abstract class Invoice implements ActiveRecordInterface
     } // setEventContactid()
 
     /**
-     * Set the value of [cashier_userid] column.
+     * Set the value of [userid] column.
      *
      * @param int $v new value
      * @return $this|\API\Models\Invoice\Invoice The current object (for fluent API support)
      */
-    public function setCashierUserid($v)
+    public function setUserid($v)
     {
         if ($v !== null) {
             $v = (int) $v;
         }
 
-        if ($this->cashier_userid !== $v) {
-            $this->cashier_userid = $v;
-            $this->modifiedColumns[InvoiceTableMap::COL_CASHIER_USERID] = true;
+        if ($this->userid !== $v) {
+            $this->userid = $v;
+            $this->modifiedColumns[InvoiceTableMap::COL_USERID] = true;
         }
 
         if ($this->aUser !== null && $this->aUser->getUserid() !== $v) {
@@ -716,7 +716,7 @@ abstract class Invoice implements ActiveRecordInterface
         }
 
         return $this;
-    } // setCashierUserid()
+    } // setUserid()
 
     /**
      * Set the value of [event_bankinformationid] column.
@@ -935,8 +935,8 @@ abstract class Invoice implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : InvoiceTableMap::translateFieldName('EventContactid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_contactid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : InvoiceTableMap::translateFieldName('CashierUserid', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->cashier_userid = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : InvoiceTableMap::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->userid = (null !== $col) ? (int) $col : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : InvoiceTableMap::translateFieldName('EventBankinformationid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->event_bankinformationid = (null !== $col) ? (int) $col : null;
@@ -1006,7 +1006,7 @@ abstract class Invoice implements ActiveRecordInterface
         if ($this->aEventContactRelatedByEventContactid !== null && $this->event_contactid !== $this->aEventContactRelatedByEventContactid->getEventContactid()) {
             $this->aEventContactRelatedByEventContactid = null;
         }
-        if ($this->aUser !== null && $this->cashier_userid !== $this->aUser->getUserid()) {
+        if ($this->aUser !== null && $this->userid !== $this->aUser->getUserid()) {
             $this->aUser = null;
         }
         if ($this->aEventBankinformation !== null && $this->event_bankinformationid !== $this->aEventBankinformation->getEventBankinformationid()) {
@@ -1332,8 +1332,8 @@ abstract class Invoice implements ActiveRecordInterface
         if ($this->isColumnModified(InvoiceTableMap::COL_EVENT_CONTACTID)) {
             $modifiedColumns[':p' . $index++]  = 'event_contactid';
         }
-        if ($this->isColumnModified(InvoiceTableMap::COL_CASHIER_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'cashier_userid';
+        if ($this->isColumnModified(InvoiceTableMap::COL_USERID)) {
+            $modifiedColumns[':p' . $index++]  = 'userid';
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_EVENT_BANKINFORMATIONID)) {
             $modifiedColumns[':p' . $index++]  = 'event_bankinformationid';
@@ -1379,8 +1379,8 @@ abstract class Invoice implements ActiveRecordInterface
                     case 'event_contactid':
                         $stmt->bindValue($identifier, $this->event_contactid, PDO::PARAM_INT);
                         break;
-                    case 'cashier_userid':
-                        $stmt->bindValue($identifier, $this->cashier_userid, PDO::PARAM_INT);
+                    case 'userid':
+                        $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
                     case 'event_bankinformationid':
                         $stmt->bindValue($identifier, $this->event_bankinformationid, PDO::PARAM_INT);
@@ -1478,7 +1478,7 @@ abstract class Invoice implements ActiveRecordInterface
                 return $this->getEventContactid();
                 break;
             case 3:
-                return $this->getCashierUserid();
+                return $this->getUserid();
                 break;
             case 4:
                 return $this->getEventBankinformationid();
@@ -1537,7 +1537,7 @@ abstract class Invoice implements ActiveRecordInterface
             $keys[0] => $this->getInvoiceid(),
             $keys[1] => $this->getInvoiceTypeid(),
             $keys[2] => $this->getEventContactid(),
-            $keys[3] => $this->getCashierUserid(),
+            $keys[3] => $this->getUserid(),
             $keys[4] => $this->getEventBankinformationid(),
             $keys[5] => $this->getCustomerEventContactid(),
             $keys[6] => $this->getCanceledInvoiceid(),
@@ -1759,7 +1759,7 @@ abstract class Invoice implements ActiveRecordInterface
                 $this->setEventContactid($value);
                 break;
             case 3:
-                $this->setCashierUserid($value);
+                $this->setUserid($value);
                 break;
             case 4:
                 $this->setEventBankinformationid($value);
@@ -1821,7 +1821,7 @@ abstract class Invoice implements ActiveRecordInterface
             $this->setEventContactid($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setCashierUserid($arr[$keys[3]]);
+            $this->setUserid($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
             $this->setEventBankinformationid($arr[$keys[4]]);
@@ -1897,8 +1897,8 @@ abstract class Invoice implements ActiveRecordInterface
         if ($this->isColumnModified(InvoiceTableMap::COL_EVENT_CONTACTID)) {
             $criteria->add(InvoiceTableMap::COL_EVENT_CONTACTID, $this->event_contactid);
         }
-        if ($this->isColumnModified(InvoiceTableMap::COL_CASHIER_USERID)) {
-            $criteria->add(InvoiceTableMap::COL_CASHIER_USERID, $this->cashier_userid);
+        if ($this->isColumnModified(InvoiceTableMap::COL_USERID)) {
+            $criteria->add(InvoiceTableMap::COL_USERID, $this->userid);
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_EVENT_BANKINFORMATIONID)) {
             $criteria->add(InvoiceTableMap::COL_EVENT_BANKINFORMATIONID, $this->event_bankinformationid);
@@ -2012,7 +2012,7 @@ abstract class Invoice implements ActiveRecordInterface
     {
         $copyObj->setInvoiceTypeid($this->getInvoiceTypeid());
         $copyObj->setEventContactid($this->getEventContactid());
-        $copyObj->setCashierUserid($this->getCashierUserid());
+        $copyObj->setUserid($this->getUserid());
         $copyObj->setEventBankinformationid($this->getEventBankinformationid());
         $copyObj->setCustomerEventContactid($this->getCustomerEventContactid());
         $copyObj->setCanceledInvoiceid($this->getCanceledInvoiceid());
@@ -2346,9 +2346,9 @@ abstract class Invoice implements ActiveRecordInterface
     public function setUser(User $v = null)
     {
         if ($v === null) {
-            $this->setCashierUserid(NULL);
+            $this->setUserid(NULL);
         } else {
-            $this->setCashierUserid($v->getUserid());
+            $this->setUserid($v->getUserid());
         }
 
         $this->aUser = $v;
@@ -2373,8 +2373,8 @@ abstract class Invoice implements ActiveRecordInterface
      */
     public function getUser(ConnectionInterface $con = null)
     {
-        if ($this->aUser === null && ($this->cashier_userid !== null)) {
-            $this->aUser = UserQuery::create()->findPk($this->cashier_userid, $con);
+        if ($this->aUser === null && ($this->userid !== null)) {
+            $this->aUser = UserQuery::create()->findPk($this->userid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
@@ -3262,6 +3262,31 @@ abstract class Invoice implements ActiveRecordInterface
         return $this->getPaymentRecieveds($query, $con);
     }
 
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Invoice is new, it will return
+     * an empty collection; or if this Invoice has previously
+     * been saved, it will retrieve related PaymentRecieveds from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Invoice.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|PaymentRecieved[] List of PaymentRecieved objects
+     */
+    public function getPaymentRecievedsJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = PaymentRecievedQuery::create(null, $criteria);
+        $query->joinWith('User', $joinBehavior);
+
+        return $this->getPaymentRecieveds($query, $con);
+    }
+
     /**
      * Clears out the collInvoiceWarnings collection
      *
@@ -3540,7 +3565,7 @@ abstract class Invoice implements ActiveRecordInterface
         $this->invoiceid = null;
         $this->invoice_typeid = null;
         $this->event_contactid = null;
-        $this->cashier_userid = null;
+        $this->userid = null;
         $this->event_bankinformationid = null;
         $this->customer_event_contactid = null;
         $this->canceled_invoiceid = null;

@@ -17,6 +17,8 @@ use API\Models\Payment\PaymentType as ChildPaymentType;
 use API\Models\Payment\PaymentTypeQuery as ChildPaymentTypeQuery;
 use API\Models\Payment\Map\PaymentCouponTableMap;
 use API\Models\Payment\Map\PaymentRecievedTableMap;
+use API\Models\User\User;
+use API\Models\User\UserQuery;
 use Propel\Runtime\Propel;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -94,6 +96,13 @@ abstract class PaymentRecieved implements ActiveRecordInterface
     protected $payment_typeid;
 
     /**
+     * The value for the userid field.
+     *
+     * @var        int
+     */
+    protected $userid;
+
+    /**
      * The value for the date field.
      *
      * @var        DateTime
@@ -116,6 +125,11 @@ abstract class PaymentRecieved implements ActiveRecordInterface
      * @var        ChildPaymentType
      */
     protected $aPaymentType;
+
+    /**
+     * @var        User
+     */
+    protected $aUser;
 
     /**
      * @var        ObjectCollection|ChildPaymentCoupon[] Collection to store aggregation of ChildPaymentCoupon objects.
@@ -409,6 +423,16 @@ abstract class PaymentRecieved implements ActiveRecordInterface
     }
 
     /**
+     * Get the [userid] column value.
+     *
+     * @return int
+     */
+    public function getUserid()
+    {
+        return $this->userid;
+    }
+
+    /**
      * Get the [optionally formatted] temporal [date] column value.
      *
      *
@@ -507,6 +531,30 @@ abstract class PaymentRecieved implements ActiveRecordInterface
     } // setPaymentTypeid()
 
     /**
+     * Set the value of [userid] column.
+     *
+     * @param int $v new value
+     * @return $this|\API\Models\Payment\PaymentRecieved The current object (for fluent API support)
+     */
+    public function setUserid($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->userid !== $v) {
+            $this->userid = $v;
+            $this->modifiedColumns[PaymentRecievedTableMap::COL_USERID] = true;
+        }
+
+        if ($this->aUser !== null && $this->aUser->getUserid() !== $v) {
+            $this->aUser = null;
+        }
+
+        return $this;
+    } // setUserid()
+
+    /**
      * Sets the value of [date] column to a normalized version of the date/time value specified.
      *
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
@@ -591,13 +639,16 @@ abstract class PaymentRecieved implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : PaymentRecievedTableMap::translateFieldName('PaymentTypeid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->payment_typeid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PaymentRecievedTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : PaymentRecievedTableMap::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->userid = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : PaymentRecievedTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : PaymentRecievedTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : PaymentRecievedTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->amount = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
@@ -607,7 +658,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 5; // 5 = PaymentRecievedTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = PaymentRecievedTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Payment\\PaymentRecieved'), 0, $e);
@@ -634,6 +685,9 @@ abstract class PaymentRecieved implements ActiveRecordInterface
         }
         if ($this->aPaymentType !== null && $this->payment_typeid !== $this->aPaymentType->getPaymentTypeid()) {
             $this->aPaymentType = null;
+        }
+        if ($this->aUser !== null && $this->userid !== $this->aUser->getUserid()) {
+            $this->aUser = null;
         }
     } // ensureConsistency
 
@@ -676,6 +730,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
             $this->aInvoice = null;
             $this->aPaymentType = null;
+            $this->aUser = null;
             $this->collPaymentCoupons = null;
 
             $this->collCoupons = null;
@@ -797,6 +852,13 @@ abstract class PaymentRecieved implements ActiveRecordInterface
                 $this->setPaymentType($this->aPaymentType);
             }
 
+            if ($this->aUser !== null) {
+                if ($this->aUser->isModified() || $this->aUser->isNew()) {
+                    $affectedRows += $this->aUser->save($con);
+                }
+                $this->setUser($this->aUser);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -889,6 +951,9 @@ abstract class PaymentRecieved implements ActiveRecordInterface
         if ($this->isColumnModified(PaymentRecievedTableMap::COL_PAYMENT_TYPEID)) {
             $modifiedColumns[':p' . $index++]  = 'payment_typeid';
         }
+        if ($this->isColumnModified(PaymentRecievedTableMap::COL_USERID)) {
+            $modifiedColumns[':p' . $index++]  = 'userid';
+        }
         if ($this->isColumnModified(PaymentRecievedTableMap::COL_DATE)) {
             $modifiedColumns[':p' . $index++]  = 'date';
         }
@@ -914,6 +979,9 @@ abstract class PaymentRecieved implements ActiveRecordInterface
                         break;
                     case 'payment_typeid':
                         $stmt->bindValue($identifier, $this->payment_typeid, PDO::PARAM_INT);
+                        break;
+                    case 'userid':
+                        $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
                     case 'date':
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -993,9 +1061,12 @@ abstract class PaymentRecieved implements ActiveRecordInterface
                 return $this->getPaymentTypeid();
                 break;
             case 3:
-                return $this->getDate();
+                return $this->getUserid();
                 break;
             case 4:
+                return $this->getDate();
+                break;
+            case 5:
                 return $this->getAmount();
                 break;
             default:
@@ -1031,11 +1102,12 @@ abstract class PaymentRecieved implements ActiveRecordInterface
             $keys[0] => $this->getPaymentRecievedid(),
             $keys[1] => $this->getInvoiceid(),
             $keys[2] => $this->getPaymentTypeid(),
-            $keys[3] => $this->getDate(),
-            $keys[4] => $this->getAmount(),
+            $keys[3] => $this->getUserid(),
+            $keys[4] => $this->getDate(),
+            $keys[5] => $this->getAmount(),
         );
-        if ($result[$keys[3]] instanceof \DateTime) {
-            $result[$keys[3]] = $result[$keys[3]]->format('c');
+        if ($result[$keys[4]] instanceof \DateTime) {
+            $result[$keys[4]] = $result[$keys[4]]->format('c');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1073,6 +1145,21 @@ abstract class PaymentRecieved implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aPaymentType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aUser) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'user';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collPaymentCoupons) {
 
@@ -1133,9 +1220,12 @@ abstract class PaymentRecieved implements ActiveRecordInterface
                 $this->setPaymentTypeid($value);
                 break;
             case 3:
-                $this->setDate($value);
+                $this->setUserid($value);
                 break;
             case 4:
+                $this->setDate($value);
+                break;
+            case 5:
                 $this->setAmount($value);
                 break;
         } // switch()
@@ -1174,10 +1264,13 @@ abstract class PaymentRecieved implements ActiveRecordInterface
             $this->setPaymentTypeid($arr[$keys[2]]);
         }
         if (array_key_exists($keys[3], $arr)) {
-            $this->setDate($arr[$keys[3]]);
+            $this->setUserid($arr[$keys[3]]);
         }
         if (array_key_exists($keys[4], $arr)) {
-            $this->setAmount($arr[$keys[4]]);
+            $this->setDate($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setAmount($arr[$keys[5]]);
         }
     }
 
@@ -1228,6 +1321,9 @@ abstract class PaymentRecieved implements ActiveRecordInterface
         }
         if ($this->isColumnModified(PaymentRecievedTableMap::COL_PAYMENT_TYPEID)) {
             $criteria->add(PaymentRecievedTableMap::COL_PAYMENT_TYPEID, $this->payment_typeid);
+        }
+        if ($this->isColumnModified(PaymentRecievedTableMap::COL_USERID)) {
+            $criteria->add(PaymentRecievedTableMap::COL_USERID, $this->userid);
         }
         if ($this->isColumnModified(PaymentRecievedTableMap::COL_DATE)) {
             $criteria->add(PaymentRecievedTableMap::COL_DATE, $this->date);
@@ -1323,6 +1419,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
     {
         $copyObj->setInvoiceid($this->getInvoiceid());
         $copyObj->setPaymentTypeid($this->getPaymentTypeid());
+        $copyObj->setUserid($this->getUserid());
         $copyObj->setDate($this->getDate());
         $copyObj->setAmount($this->getAmount());
 
@@ -1467,6 +1564,57 @@ abstract class PaymentRecieved implements ActiveRecordInterface
         }
 
         return $this->aPaymentType;
+    }
+
+    /**
+     * Declares an association between this object and a User object.
+     *
+     * @param  User $v
+     * @return $this|\API\Models\Payment\PaymentRecieved The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setUser(User $v = null)
+    {
+        if ($v === null) {
+            $this->setUserid(NULL);
+        } else {
+            $this->setUserid($v->getUserid());
+        }
+
+        $this->aUser = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the User object, it will not be re-added.
+        if ($v !== null) {
+            $v->addPaymentRecieved($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated User object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return User The associated User object.
+     * @throws PropelException
+     */
+    public function getUser(ConnectionInterface $con = null)
+    {
+        if ($this->aUser === null && ($this->userid !== null)) {
+            $this->aUser = UserQuery::create()->findPk($this->userid, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUser->addPaymentRecieveds($this);
+             */
+        }
+
+        return $this->aUser;
     }
 
 
@@ -1994,9 +2142,13 @@ abstract class PaymentRecieved implements ActiveRecordInterface
         if (null !== $this->aPaymentType) {
             $this->aPaymentType->removePaymentRecieved($this);
         }
+        if (null !== $this->aUser) {
+            $this->aUser->removePaymentRecieved($this);
+        }
         $this->payment_recievedid = null;
         $this->invoiceid = null;
         $this->payment_typeid = null;
+        $this->userid = null;
         $this->date = null;
         $this->amount = null;
         $this->alreadyInSave = false;
@@ -2033,6 +2185,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
         $this->collCoupons = null;
         $this->aInvoice = null;
         $this->aPaymentType = null;
+        $this->aUser = null;
     }
 
     /**

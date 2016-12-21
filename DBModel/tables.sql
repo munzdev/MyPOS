@@ -707,7 +707,7 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   `invoiceid` INT(11) NOT NULL AUTO_INCREMENT,
   `invoice_typeid` INT(11) NOT NULL,
   `event_contactid` INT(11) NOT NULL,
-  `cashier_userid` INT(11) NOT NULL,
+  `userid` INT(11) NOT NULL,
   `event_bankinformationid` INT(11) NOT NULL,
   `customer_event_contactid` INT(11) NULL,
   `canceled_invoiceid` INT(11) NULL,
@@ -718,7 +718,7 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   `amount_recieved` DECIMAL(7,2) NULL,
   PRIMARY KEY (`invoiceid`),
   UNIQUE INDEX `invoiceid_UNIQUE` (`invoiceid` ASC),
-  INDEX `fk_invoices_users1_idx` (`cashier_userid` ASC),
+  INDEX `fk_invoices_users1_idx` (`userid` ASC),
   INDEX `fk_invoice_customer1_idx` (`customer_event_contactid` ASC),
   INDEX `payment_finished` (`payment_finished` ASC),
   INDEX `fk_invoice_event_contact1_idx` (`event_contactid` ASC),
@@ -726,7 +726,7 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   INDEX `fk_invoice_invoice1_idx` (`canceled_invoiceid` ASC),
   INDEX `fk_invoice_event_bankinformation1_idx` (`event_bankinformationid` ASC),
   CONSTRAINT `fk_invoices_users1`
-    FOREIGN KEY (`cashier_userid`)
+    FOREIGN KEY (`userid`)
     REFERENCES `user` (`userid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -925,12 +925,14 @@ CREATE TABLE IF NOT EXISTS `payment_recieved` (
   `payment_recievedid` INT(11) NOT NULL AUTO_INCREMENT,
   `invoiceid` INT(11) NOT NULL,
   `payment_typeid` INT(11) NOT NULL,
+  `userid` INT(11) NOT NULL,
   `date` DATETIME NOT NULL,
   `amount` DECIMAL(7,2) NOT NULL,
   PRIMARY KEY (`payment_recievedid`),
   UNIQUE INDEX `payment_recievedid_UNIQUE` (`payment_recievedid` ASC),
   INDEX `fk_payment_recieved_payment_type1_idx` (`payment_typeid` ASC),
   INDEX `fk_payment_recieved_invoice1_idx` (`invoiceid` ASC),
+  INDEX `fk_payment_recieved_user1_idx` (`userid` ASC),
   CONSTRAINT `fk_payment_recieved_payment_type1`
     FOREIGN KEY (`payment_typeid`)
     REFERENCES `payment_type` (`payment_typeid`)
@@ -939,6 +941,11 @@ CREATE TABLE IF NOT EXISTS `payment_recieved` (
   CONSTRAINT `fk_payment_recieved_invoice1`
     FOREIGN KEY (`invoiceid`)
     REFERENCES `invoice` (`invoiceid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_payment_recieved_user1`
+    FOREIGN KEY (`userid`)
+    REFERENCES `user` (`userid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

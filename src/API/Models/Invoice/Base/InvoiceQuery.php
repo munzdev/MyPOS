@@ -27,7 +27,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
  * @method     ChildInvoiceQuery orderByInvoiceTypeid($order = Criteria::ASC) Order by the invoice_typeid column
  * @method     ChildInvoiceQuery orderByEventContactid($order = Criteria::ASC) Order by the event_contactid column
- * @method     ChildInvoiceQuery orderByCashierUserid($order = Criteria::ASC) Order by the cashier_userid column
+ * @method     ChildInvoiceQuery orderByUserid($order = Criteria::ASC) Order by the userid column
  * @method     ChildInvoiceQuery orderByEventBankinformationid($order = Criteria::ASC) Order by the event_bankinformationid column
  * @method     ChildInvoiceQuery orderByCustomerEventContactid($order = Criteria::ASC) Order by the customer_event_contactid column
  * @method     ChildInvoiceQuery orderByCanceledInvoiceid($order = Criteria::ASC) Order by the canceled_invoiceid column
@@ -40,7 +40,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery groupByInvoiceid() Group by the invoiceid column
  * @method     ChildInvoiceQuery groupByInvoiceTypeid() Group by the invoice_typeid column
  * @method     ChildInvoiceQuery groupByEventContactid() Group by the event_contactid column
- * @method     ChildInvoiceQuery groupByCashierUserid() Group by the cashier_userid column
+ * @method     ChildInvoiceQuery groupByUserid() Group by the userid column
  * @method     ChildInvoiceQuery groupByEventBankinformationid() Group by the event_bankinformationid column
  * @method     ChildInvoiceQuery groupByCustomerEventContactid() Group by the customer_event_contactid column
  * @method     ChildInvoiceQuery groupByCanceledInvoiceid() Group by the canceled_invoiceid column
@@ -166,7 +166,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoice findOneByInvoiceid(int $invoiceid) Return the first ChildInvoice filtered by the invoiceid column
  * @method     ChildInvoice findOneByInvoiceTypeid(int $invoice_typeid) Return the first ChildInvoice filtered by the invoice_typeid column
  * @method     ChildInvoice findOneByEventContactid(int $event_contactid) Return the first ChildInvoice filtered by the event_contactid column
- * @method     ChildInvoice findOneByCashierUserid(int $cashier_userid) Return the first ChildInvoice filtered by the cashier_userid column
+ * @method     ChildInvoice findOneByUserid(int $userid) Return the first ChildInvoice filtered by the userid column
  * @method     ChildInvoice findOneByEventBankinformationid(int $event_bankinformationid) Return the first ChildInvoice filtered by the event_bankinformationid column
  * @method     ChildInvoice findOneByCustomerEventContactid(int $customer_event_contactid) Return the first ChildInvoice filtered by the customer_event_contactid column
  * @method     ChildInvoice findOneByCanceledInvoiceid(int $canceled_invoiceid) Return the first ChildInvoice filtered by the canceled_invoiceid column
@@ -182,7 +182,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoice requireOneByInvoiceid(int $invoiceid) Return the first ChildInvoice filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByInvoiceTypeid(int $invoice_typeid) Return the first ChildInvoice filtered by the invoice_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByEventContactid(int $event_contactid) Return the first ChildInvoice filtered by the event_contactid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOneByCashierUserid(int $cashier_userid) Return the first ChildInvoice filtered by the cashier_userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoice requireOneByUserid(int $userid) Return the first ChildInvoice filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByEventBankinformationid(int $event_bankinformationid) Return the first ChildInvoice filtered by the event_bankinformationid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByCustomerEventContactid(int $customer_event_contactid) Return the first ChildInvoice filtered by the customer_event_contactid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByCanceledInvoiceid(int $canceled_invoiceid) Return the first ChildInvoice filtered by the canceled_invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -196,7 +196,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoice[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildInvoice objects filtered by the invoiceid column
  * @method     ChildInvoice[]|ObjectCollection findByInvoiceTypeid(int $invoice_typeid) Return ChildInvoice objects filtered by the invoice_typeid column
  * @method     ChildInvoice[]|ObjectCollection findByEventContactid(int $event_contactid) Return ChildInvoice objects filtered by the event_contactid column
- * @method     ChildInvoice[]|ObjectCollection findByCashierUserid(int $cashier_userid) Return ChildInvoice objects filtered by the cashier_userid column
+ * @method     ChildInvoice[]|ObjectCollection findByUserid(int $userid) Return ChildInvoice objects filtered by the userid column
  * @method     ChildInvoice[]|ObjectCollection findByEventBankinformationid(int $event_bankinformationid) Return ChildInvoice objects filtered by the event_bankinformationid column
  * @method     ChildInvoice[]|ObjectCollection findByCustomerEventContactid(int $customer_event_contactid) Return ChildInvoice objects filtered by the customer_event_contactid column
  * @method     ChildInvoice[]|ObjectCollection findByCanceledInvoiceid(int $canceled_invoiceid) Return ChildInvoice objects filtered by the canceled_invoiceid column
@@ -303,7 +303,7 @@ abstract class InvoiceQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT invoiceid, invoice_typeid, event_contactid, cashier_userid, event_bankinformationid, customer_event_contactid, canceled_invoiceid, date, amount, maturity_date, payment_finished, amount_recieved FROM invoice WHERE invoiceid = :p0';
+        $sql = 'SELECT invoiceid, invoice_typeid, event_contactid, userid, event_bankinformationid, customer_event_contactid, canceled_invoiceid, date, amount, maturity_date, payment_finished, amount_recieved FROM invoice WHERE invoiceid = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -521,18 +521,18 @@ abstract class InvoiceQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the cashier_userid column
+     * Filter the query on the userid column
      *
      * Example usage:
      * <code>
-     * $query->filterByCashierUserid(1234); // WHERE cashier_userid = 1234
-     * $query->filterByCashierUserid(array(12, 34)); // WHERE cashier_userid IN (12, 34)
-     * $query->filterByCashierUserid(array('min' => 12)); // WHERE cashier_userid > 12
+     * $query->filterByUserid(1234); // WHERE userid = 1234
+     * $query->filterByUserid(array(12, 34)); // WHERE userid IN (12, 34)
+     * $query->filterByUserid(array('min' => 12)); // WHERE userid > 12
      * </code>
      *
      * @see       filterByUser()
      *
-     * @param     mixed $cashierUserid The value to use as filter.
+     * @param     mixed $userid The value to use as filter.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -540,16 +540,16 @@ abstract class InvoiceQuery extends ModelCriteria
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
-    public function filterByCashierUserid($cashierUserid = null, $comparison = null)
+    public function filterByUserid($userid = null, $comparison = null)
     {
-        if (is_array($cashierUserid)) {
+        if (is_array($userid)) {
             $useMinMax = false;
-            if (isset($cashierUserid['min'])) {
-                $this->addUsingAlias(InvoiceTableMap::COL_CASHIER_USERID, $cashierUserid['min'], Criteria::GREATER_EQUAL);
+            if (isset($userid['min'])) {
+                $this->addUsingAlias(InvoiceTableMap::COL_USERID, $userid['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($cashierUserid['max'])) {
-                $this->addUsingAlias(InvoiceTableMap::COL_CASHIER_USERID, $cashierUserid['max'], Criteria::LESS_EQUAL);
+            if (isset($userid['max'])) {
+                $this->addUsingAlias(InvoiceTableMap::COL_USERID, $userid['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -560,7 +560,7 @@ abstract class InvoiceQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(InvoiceTableMap::COL_CASHIER_USERID, $cashierUserid, $comparison);
+        return $this->addUsingAlias(InvoiceTableMap::COL_USERID, $userid, $comparison);
     }
 
     /**
@@ -1302,14 +1302,14 @@ abstract class InvoiceQuery extends ModelCriteria
     {
         if ($user instanceof \API\Models\User\User) {
             return $this
-                ->addUsingAlias(InvoiceTableMap::COL_CASHIER_USERID, $user->getUserid(), $comparison);
+                ->addUsingAlias(InvoiceTableMap::COL_USERID, $user->getUserid(), $comparison);
         } elseif ($user instanceof ObjectCollection) {
             if (null === $comparison) {
                 $comparison = Criteria::IN;
             }
 
             return $this
-                ->addUsingAlias(InvoiceTableMap::COL_CASHIER_USERID, $user->toKeyValue('PrimaryKey', 'Userid'), $comparison);
+                ->addUsingAlias(InvoiceTableMap::COL_USERID, $user->toKeyValue('PrimaryKey', 'Userid'), $comparison);
         } else {
             throw new PropelException('filterByUser() only accepts arguments of type \API\Models\User\User or Collection');
         }

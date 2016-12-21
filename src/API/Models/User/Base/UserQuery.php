@@ -11,6 +11,7 @@ use API\Models\OIP\OrderInProgress;
 use API\Models\Ordering\Order;
 use API\Models\Ordering\OrderDetail;
 use API\Models\Payment\Coupon;
+use API\Models\Payment\PaymentRecieved;
 use API\Models\User\User as ChildUser;
 use API\Models\User\UserQuery as ChildUserQuery;
 use API\Models\User\Map\UserTableMap;
@@ -127,7 +128,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinWithOrderInProgress() Adds a RIGHT JOIN clause and with to the query using the OrderInProgress relation
  * @method     ChildUserQuery innerJoinWithOrderInProgress() Adds a INNER JOIN clause and with to the query using the OrderInProgress relation
  *
- * @method     \API\Models\Payment\CouponQuery|\API\Models\DistributionPlace\DistributionPlaceUserQuery|\API\Models\Event\EventUserQuery|\API\Models\Invoice\InvoiceQuery|\API\Models\Ordering\OrderQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildUserQuery leftJoinPaymentRecieved($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentRecieved relation
+ * @method     ChildUserQuery rightJoinPaymentRecieved($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentRecieved relation
+ * @method     ChildUserQuery innerJoinPaymentRecieved($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentRecieved relation
+ *
+ * @method     ChildUserQuery joinWithPaymentRecieved($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentRecieved relation
+ *
+ * @method     ChildUserQuery leftJoinWithPaymentRecieved() Adds a LEFT JOIN clause and with to the query using the PaymentRecieved relation
+ * @method     ChildUserQuery rightJoinWithPaymentRecieved() Adds a RIGHT JOIN clause and with to the query using the PaymentRecieved relation
+ * @method     ChildUserQuery innerJoinWithPaymentRecieved() Adds a INNER JOIN clause and with to the query using the PaymentRecieved relation
+ *
+ * @method     \API\Models\Payment\CouponQuery|\API\Models\DistributionPlace\DistributionPlaceUserQuery|\API\Models\Event\EventUserQuery|\API\Models\Invoice\InvoiceQuery|\API\Models\Ordering\OrderQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery|\API\Models\Payment\PaymentRecievedQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUser findOne(ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
@@ -889,7 +900,7 @@ abstract class UserQuery extends ModelCriteria
     {
         if ($invoice instanceof \API\Models\Invoice\Invoice) {
             return $this
-                ->addUsingAlias(UserTableMap::COL_USERID, $invoice->getCashierUserid(), $comparison);
+                ->addUsingAlias(UserTableMap::COL_USERID, $invoice->getUserid(), $comparison);
         } elseif ($invoice instanceof ObjectCollection) {
             return $this
                 ->useInvoiceQuery()
@@ -1167,6 +1178,79 @@ abstract class UserQuery extends ModelCriteria
         return $this
             ->joinOrderInProgress($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'OrderInProgress', '\API\Models\OIP\OrderInProgressQuery');
+    }
+
+    /**
+     * Filter the query by a related \API\Models\Payment\PaymentRecieved object
+     *
+     * @param \API\Models\Payment\PaymentRecieved|ObjectCollection $paymentRecieved the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByPaymentRecieved($paymentRecieved, $comparison = null)
+    {
+        if ($paymentRecieved instanceof \API\Models\Payment\PaymentRecieved) {
+            return $this
+                ->addUsingAlias(UserTableMap::COL_USERID, $paymentRecieved->getUserid(), $comparison);
+        } elseif ($paymentRecieved instanceof ObjectCollection) {
+            return $this
+                ->usePaymentRecievedQuery()
+                ->filterByPrimaryKeys($paymentRecieved->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByPaymentRecieved() only accepts arguments of type \API\Models\Payment\PaymentRecieved or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the PaymentRecieved relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function joinPaymentRecieved($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('PaymentRecieved');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'PaymentRecieved');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the PaymentRecieved relation PaymentRecieved object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\Payment\PaymentRecievedQuery A secondary query class using the current class as primary query
+     */
+    public function usePaymentRecievedQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinPaymentRecieved($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'PaymentRecieved', '\API\Models\Payment\PaymentRecievedQuery');
     }
 
     /**

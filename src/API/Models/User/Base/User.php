@@ -31,8 +31,12 @@ use API\Models\Ordering\Map\OrderDetailTableMap;
 use API\Models\Ordering\Map\OrderTableMap;
 use API\Models\Payment\Coupon;
 use API\Models\Payment\CouponQuery;
+use API\Models\Payment\PaymentRecieved;
+use API\Models\Payment\PaymentRecievedQuery;
 use API\Models\Payment\Base\Coupon as BaseCoupon;
+use API\Models\Payment\Base\PaymentRecieved as BasePaymentRecieved;
 use API\Models\Payment\Map\CouponTableMap;
+use API\Models\Payment\Map\PaymentRecievedTableMap;
 use API\Models\User\User as ChildUser;
 use API\Models\User\UserQuery as ChildUserQuery;
 use API\Models\User\Map\UserTableMap;
@@ -204,6 +208,12 @@ abstract class User implements ActiveRecordInterface
     protected $collOrderInProgressesPartial;
 
     /**
+     * @var        ObjectCollection|PaymentRecieved[] Collection to store aggregation of PaymentRecieved objects.
+     */
+    protected $collPaymentRecieveds;
+    protected $collPaymentRecievedsPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -252,6 +262,12 @@ abstract class User implements ActiveRecordInterface
      * @var ObjectCollection|OrderInProgress[]
      */
     protected $orderInProgressesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|PaymentRecieved[]
+     */
+    protected $paymentRecievedsScheduledForDeletion = null;
 
     /**
      * Initializes internal state of API\Models\User\Base\User object.
@@ -957,6 +973,8 @@ abstract class User implements ActiveRecordInterface
 
             $this->collOrderInProgresses = null;
 
+            $this->collPaymentRecieveds = null;
+
         } // if (deep)
     }
 
@@ -1181,6 +1199,23 @@ abstract class User implements ActiveRecordInterface
 
             if ($this->collOrderInProgresses !== null) {
                 foreach ($this->collOrderInProgresses as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->paymentRecievedsScheduledForDeletion !== null) {
+                if (!$this->paymentRecievedsScheduledForDeletion->isEmpty()) {
+                    \API\Models\Payment\PaymentRecievedQuery::create()
+                        ->filterByPrimaryKeys($this->paymentRecievedsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->paymentRecievedsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPaymentRecieveds !== null) {
+                foreach ($this->collPaymentRecieveds as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1532,6 +1567,21 @@ abstract class User implements ActiveRecordInterface
 
                 $result[$key] = $this->collOrderInProgresses->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collPaymentRecieveds) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'paymentRecieveds';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'payment_recieveds';
+                        break;
+                    default:
+                        $key = 'PaymentRecieveds';
+                }
+
+                $result[$key] = $this->collPaymentRecieveds->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
         }
 
         return $result;
@@ -1866,6 +1916,12 @@ abstract class User implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getPaymentRecieveds() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPaymentRecieved($relObj->copy($deepCopy));
+                }
+            }
+
         } // if ($deepCopy)
 
         if ($makeNew) {
@@ -1927,6 +1983,9 @@ abstract class User implements ActiveRecordInterface
         }
         if ('OrderInProgress' == $relationName) {
             return $this->initOrderInProgresses();
+        }
+        if ('PaymentRecieved' == $relationName) {
+            return $this->initPaymentRecieveds();
         }
     }
 
@@ -3934,6 +3993,281 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collPaymentRecieveds collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addPaymentRecieveds()
+     */
+    public function clearPaymentRecieveds()
+    {
+        $this->collPaymentRecieveds = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collPaymentRecieveds collection loaded partially.
+     */
+    public function resetPartialPaymentRecieveds($v = true)
+    {
+        $this->collPaymentRecievedsPartial = $v;
+    }
+
+    /**
+     * Initializes the collPaymentRecieveds collection.
+     *
+     * By default this just sets the collPaymentRecieveds collection to an empty array (like clearcollPaymentRecieveds());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initPaymentRecieveds($overrideExisting = true)
+    {
+        if (null !== $this->collPaymentRecieveds && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = PaymentRecievedTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collPaymentRecieveds = new $collectionClassName;
+        $this->collPaymentRecieveds->setModel('\API\Models\Payment\PaymentRecieved');
+    }
+
+    /**
+     * Gets an array of PaymentRecieved objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildUser is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|PaymentRecieved[] List of PaymentRecieved objects
+     * @throws PropelException
+     */
+    public function getPaymentRecieveds(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPaymentRecievedsPartial && !$this->isNew();
+        if (null === $this->collPaymentRecieveds || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collPaymentRecieveds) {
+                // return empty collection
+                $this->initPaymentRecieveds();
+            } else {
+                $collPaymentRecieveds = PaymentRecievedQuery::create(null, $criteria)
+                    ->filterByUser($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collPaymentRecievedsPartial && count($collPaymentRecieveds)) {
+                        $this->initPaymentRecieveds(false);
+
+                        foreach ($collPaymentRecieveds as $obj) {
+                            if (false == $this->collPaymentRecieveds->contains($obj)) {
+                                $this->collPaymentRecieveds->append($obj);
+                            }
+                        }
+
+                        $this->collPaymentRecievedsPartial = true;
+                    }
+
+                    return $collPaymentRecieveds;
+                }
+
+                if ($partial && $this->collPaymentRecieveds) {
+                    foreach ($this->collPaymentRecieveds as $obj) {
+                        if ($obj->isNew()) {
+                            $collPaymentRecieveds[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPaymentRecieveds = $collPaymentRecieveds;
+                $this->collPaymentRecievedsPartial = false;
+            }
+        }
+
+        return $this->collPaymentRecieveds;
+    }
+
+    /**
+     * Sets a collection of PaymentRecieved objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $paymentRecieveds A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildUser The current object (for fluent API support)
+     */
+    public function setPaymentRecieveds(Collection $paymentRecieveds, ConnectionInterface $con = null)
+    {
+        /** @var PaymentRecieved[] $paymentRecievedsToDelete */
+        $paymentRecievedsToDelete = $this->getPaymentRecieveds(new Criteria(), $con)->diff($paymentRecieveds);
+
+
+        $this->paymentRecievedsScheduledForDeletion = $paymentRecievedsToDelete;
+
+        foreach ($paymentRecievedsToDelete as $paymentRecievedRemoved) {
+            $paymentRecievedRemoved->setUser(null);
+        }
+
+        $this->collPaymentRecieveds = null;
+        foreach ($paymentRecieveds as $paymentRecieved) {
+            $this->addPaymentRecieved($paymentRecieved);
+        }
+
+        $this->collPaymentRecieveds = $paymentRecieveds;
+        $this->collPaymentRecievedsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related BasePaymentRecieved objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related BasePaymentRecieved objects.
+     * @throws PropelException
+     */
+    public function countPaymentRecieveds(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collPaymentRecievedsPartial && !$this->isNew();
+        if (null === $this->collPaymentRecieveds || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPaymentRecieveds) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getPaymentRecieveds());
+            }
+
+            $query = PaymentRecievedQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUser($this)
+                ->count($con);
+        }
+
+        return count($this->collPaymentRecieveds);
+    }
+
+    /**
+     * Method called to associate a PaymentRecieved object to this object
+     * through the PaymentRecieved foreign key attribute.
+     *
+     * @param  PaymentRecieved $l PaymentRecieved
+     * @return $this|\API\Models\User\User The current object (for fluent API support)
+     */
+    public function addPaymentRecieved(PaymentRecieved $l)
+    {
+        if ($this->collPaymentRecieveds === null) {
+            $this->initPaymentRecieveds();
+            $this->collPaymentRecievedsPartial = true;
+        }
+
+        if (!$this->collPaymentRecieveds->contains($l)) {
+            $this->doAddPaymentRecieved($l);
+
+            if ($this->paymentRecievedsScheduledForDeletion and $this->paymentRecievedsScheduledForDeletion->contains($l)) {
+                $this->paymentRecievedsScheduledForDeletion->remove($this->paymentRecievedsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param PaymentRecieved $paymentRecieved The PaymentRecieved object to add.
+     */
+    protected function doAddPaymentRecieved(PaymentRecieved $paymentRecieved)
+    {
+        $this->collPaymentRecieveds[]= $paymentRecieved;
+        $paymentRecieved->setUser($this);
+    }
+
+    /**
+     * @param  PaymentRecieved $paymentRecieved The PaymentRecieved object to remove.
+     * @return $this|ChildUser The current object (for fluent API support)
+     */
+    public function removePaymentRecieved(PaymentRecieved $paymentRecieved)
+    {
+        if ($this->getPaymentRecieveds()->contains($paymentRecieved)) {
+            $pos = $this->collPaymentRecieveds->search($paymentRecieved);
+            $this->collPaymentRecieveds->remove($pos);
+            if (null === $this->paymentRecievedsScheduledForDeletion) {
+                $this->paymentRecievedsScheduledForDeletion = clone $this->collPaymentRecieveds;
+                $this->paymentRecievedsScheduledForDeletion->clear();
+            }
+            $this->paymentRecievedsScheduledForDeletion[]= clone $paymentRecieved;
+            $paymentRecieved->setUser(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related PaymentRecieveds from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|PaymentRecieved[] List of PaymentRecieved objects
+     */
+    public function getPaymentRecievedsJoinInvoice(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = PaymentRecievedQuery::create(null, $criteria);
+        $query->joinWith('Invoice', $joinBehavior);
+
+        return $this->getPaymentRecieveds($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related PaymentRecieveds from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|PaymentRecieved[] List of PaymentRecieved objects
+     */
+    public function getPaymentRecievedsJoinPaymentType(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = PaymentRecievedQuery::create(null, $criteria);
+        $query->joinWith('PaymentType', $joinBehavior);
+
+        return $this->getPaymentRecieveds($query, $con);
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -4003,6 +4337,11 @@ abstract class User implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collPaymentRecieveds) {
+                foreach ($this->collPaymentRecieveds as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
         $this->collCoupons = null;
@@ -4012,6 +4351,7 @@ abstract class User implements ActiveRecordInterface
         $this->collOrders = null;
         $this->collOrderDetails = null;
         $this->collOrderInProgresses = null;
+        $this->collPaymentRecieveds = null;
     }
 
     /**

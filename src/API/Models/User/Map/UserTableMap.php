@@ -212,7 +212,7 @@ class UserTableMap extends TableMap
         $this->addRelation('Invoice', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
-    0 => ':cashier_userid',
+    0 => ':userid',
     1 => ':userid',
   ),
 ), null, null, 'Invoices', false);
@@ -237,6 +237,13 @@ class UserTableMap extends TableMap
     1 => ':userid',
   ),
 ), null, null, 'OrderInProgresses', false);
+        $this->addRelation('PaymentRecieved', '\\API\\Models\\Payment\\PaymentRecieved', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':userid',
+    1 => ':userid',
+  ),
+), null, null, 'PaymentRecieveds', false);
     } // buildRelations()
 
     /**

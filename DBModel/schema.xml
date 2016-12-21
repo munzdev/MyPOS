@@ -280,7 +280,7 @@
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="invoice_typeid" phpName="InvoiceTypeid" type="INTEGER" required="true"/>
     <column name="event_contactid" phpName="EventContactid" type="INTEGER" required="true"/>
-    <column name="cashier_userid" phpName="CashierUserid" type="INTEGER" required="true"/>
+    <column name="userid" phpName="Userid" type="INTEGER" required="true"/>
     <column name="event_bankinformationid" phpName="EventBankinformationid" type="INTEGER" required="true"/>
     <column name="customer_event_contactid" phpName="CustomerEventContactid" type="INTEGER"/>
     <column name="canceled_invoiceid" phpName="CanceledInvoiceid" type="INTEGER"/>
@@ -305,10 +305,10 @@
       <reference local="invoice_typeid" foreign="invoice_typeid"/>
     </foreign-key>
     <foreign-key foreignTable="user" name="fk_invoices_users1">
-      <reference local="cashier_userid" foreign="userid"/>
+      <reference local="userid" foreign="userid"/>
     </foreign-key>
     <index name="fk_invoices_users1_idx">
-      <index-column name="cashier_userid"/>
+      <index-column name="userid"/>
     </index>
     <index name="fk_invoice_customer1_idx">
       <index-column name="customer_event_contactid"/>
@@ -757,6 +757,7 @@
     <column name="payment_recievedid" phpName="PaymentRecievedid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="invoiceid" phpName="Invoiceid" type="INTEGER" required="true"/>
     <column name="payment_typeid" phpName="PaymentTypeid" type="INTEGER" required="true"/>
+    <column name="userid" phpName="Userid" type="INTEGER" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <column name="amount" phpName="Amount" type="DECIMAL" size="7" scale="2" required="true"/>
     <foreign-key foreignTable="invoice" name="fk_payment_recieved_invoice1">
@@ -765,11 +766,17 @@
     <foreign-key foreignTable="payment_type" name="fk_payment_recieved_payment_type1">
       <reference local="payment_typeid" foreign="payment_typeid"/>
     </foreign-key>
+    <foreign-key foreignTable="user" name="fk_payment_recieved_user1">
+      <reference local="userid" foreign="userid"/>
+    </foreign-key>
     <index name="fk_payment_recieved_payment_type1_idx">
       <index-column name="payment_typeid"/>
     </index>
     <index name="fk_payment_recieved_invoice1_idx">
       <index-column name="invoiceid"/>
+    </index>
+    <index name="fk_payment_recieved_user1_idx">
+      <index-column name="userid"/>
     </index>
     <unique name="payment_recievedid_UNIQUE">
       <unique-column name="payment_recievedid"/>
