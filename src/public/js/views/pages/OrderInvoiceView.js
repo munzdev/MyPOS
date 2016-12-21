@@ -20,7 +20,7 @@ define(['Webservice',
             Template,
             TemplateItem) {
     "use strict";
-    
+
     return class OrderInvoiceView extends app.PageView
     {
         events() {
@@ -33,11 +33,12 @@ define(['Webservice',
                     'click #customer-search': "customer_search",
                     'click #coupon-code-verify': 'verify_coupon',
                     'click #submit': 'finish',
+                    'change #paymentTypeList': 'change_payment_type',
                     'popupafterclose #select-customer-popup': 'select_customer_popup_close',
                     'popupafterclose #success-popup': 'success_popup_close',
                     'popupafterclose #add-coupon-popup': 'add_coupon_popup_close'};
         }
-                
+
         initialize(options) {
             _.bindAll(this, "renderOpenOrders",
                             "customer_save",
@@ -49,13 +50,13 @@ define(['Webservice',
             this.paymentTypes = new PaymentTypeCollection;
             this.printers = new PrinterCollection;
             this.customerSearch = new CustomerSearchCollection;
-            
+
             $.when(this.printers.fetch(),
                    this.paymentTypes.fetch())
              .then(() => {
                  this.render();
                  this.set_mode_all();
-             });            
+             });
         }
 
         set_mode_all() {
@@ -84,7 +85,7 @@ define(['Webservice',
 
         order_count_up(event) {
             if(DEBUG) console.log("Up");
-            
+
             let index = $(event.currentTarget).attr('data-index');
             let orderDetail = this.orderUnbilled.get('UnbilledOrderDetails').get({cid: index});
 
@@ -104,7 +105,7 @@ define(['Webservice',
 
         order_count_down(event) {
             if(DEBUG) console.log("Down");
-            
+
             let index = $(event.currentTarget).attr('data-index');
             let orderDetail = this.orderUnbilled.get('UnbilledOrderDetails').get({cid: index});
 
@@ -129,7 +130,13 @@ define(['Webservice',
                                     if(this.$('#print').prop('checked') == 1)
                                     {
                                         var webservice = new Webservice();
-                                        webservice.action = "Invoice/Printing/" + this.orderUnbilled.get('Invoiceid');
+
+                                        if(this.$('#paymentTypeList').val() == PAYMENT_TYPE_CASH) {
+                                            webservice.action = "Payment/Printing/" + this.orderUnbilled.get('PaymentRecievedid');
+                                        } else {
+                                            webservice.action = "Invoice/Printing/" + this.orderUnbilled.get('Invoiceid');
+                                        }
+
                                         webservice.formData = {EventPrinterid: this.$('#printer').val()};
                                         webservice.call();
                                     }
@@ -137,35 +144,44 @@ define(['Webservice',
                                     this.$('#success-popup').popup("open");
                                 });
         }
-        
+
         use_coupon() {
             this.$('#add-coupon-popup').popup("open");
         }
-        
+
         use_customer() {
             this.$('#select-customer-popup').popup("open");
         }
-        
+
         use_customer_add() {
             this.$('#select-customer-popup').popup("close");
             this.$('#add-customer-popup').popup("open");
         }
-        
+
+        change_payment_type() {
+            let t = this.i18n();
+
+            if(this.$('#paymentTypeList').val() == PAYMENT_TYPE_CASH)
+                this.$('#print-receipt-text').text(t.printReceipt);
+            else
+                this.$('#print-receipt-text').text(t.printInvoice);
+        }
+
         customer_search() {
             let name = $.trim(this.$('#customer-search-name').val());
-            
+
             if(name == '')
                 return;
-            
+
             this.customerSearch.name = name;
             this.customerSearch.fetch()
                                 .done(() => {
                                     this.$('#customer-search-result').empty();
                                     let t = this.i18n();
-                            
+
                                     let divider = $('<li/>').attr('data-role', 'list-divider').text(t.searchResult);
-                                    this.$('#customer-search-result').append(divider);   
-                                    
+                                    this.$('#customer-search-result').append(divider);
+
                                     if(this.customerSearch.length == 0) {
                                         this.$('#customer-search-result').append($('<li/>').text(t.noSearchResult));
                                     } else {
@@ -177,57 +193,61 @@ define(['Webservice',
                                             this.$('#customer-search-result').append($('<li/>').append(a));
                                         });
                                     }
-                                                                        
+
                                     this.$('.customer-search-result-btn').click((event) => {
                                         let cid = $(event.currentTarget).attr('data-customercid');
-                                        this.orderUnbilled.set('Customer', this.customerSearch.get({cid: cid}));                                        
+                                        this.orderUnbilled.set('Customer', this.customerSearch.get({cid: cid}));
                                         this.$('#select-customer-popup').popup("close");
                                         this.renderOpenOrders();
                                     });
                                     this.$('#customer-search-result').listview('refresh');
-                                });                               
-        }        
-        
+                                });
+        }
+
         customer_save() {
             if(this.$('#customer-form').valid()) {
                 let customer = new CustomerModel;
                 customer.set('Title', this.$('#customer-title').val());
                 customer.set('Name', this.$('#customer-name').val());
+                customer.set('ContactPerson', this.$('#customer-contact-person').val() == '' ? null : this.$('#customer-contact-person').val());
                 customer.set('Address', this.$('#customer-address').val());
                 customer.set('Address2', this.$('#customer-address2').val() == '' ? null : this.$('#customer-address2').val());
                 customer.set('City', this.$('#customer-city').val());
                 customer.set('Zip', this.$('#customer-zip').val());
                 customer.set('TaxIdentificationNr', this.$('#customer-tin').val() == '' ? null : this.$('#customer-tin').val());
+                customer.set('Telephon', this.$('#customer-telephone').val() == '' ? null : this.$('#customer-telephone').val());
+                customer.set('Fax', this.$('#customer-fax').val() == '' ? null : this.$('#customer-fax').val());
+                customer.set('Email', this.$('#customer-email').val() == '' ? null : this.$('#customer-email').val());
                 customer.save()
-                        .done(() => {                            
-                            this.orderUnbilled.set('Customer', customer);                                                                    
+                        .done(() => {
+                            this.orderUnbilled.set('Customer', customer);
                             this.$('#add-customer-popup').popup("close");
                             this.renderOpenOrders();
                         });
                 return false;
             }
         }
-        
+
         verify_coupon() {
             let code = $.trim(this.$('#coupon-code').val());
             let hasCode = false;
-           
+
             if(code == '')
                 return;
-            
+
             this.orderUnbilled.get('UsedCoupons').find((coupon) => {
                 if(code == coupon.get('Code')) {
                     hasCode = true;
                     return code;
                 }
             });
-                                   
+
             if(hasCode) {
                 this.$('#add-coupon-popup').popup("close");
                 app.error.showAlert('Fehler!', 'Gutschein wurde bereits hinzugefügt!');
                 return;
             }
-            
+
             let verifyCoupon = new VerifyCoupon();
             verifyCoupon.set('Code', code);
             verifyCoupon.fetch()
@@ -258,7 +278,7 @@ define(['Webservice',
             else
                 this.changeHash("order-overview");
         }
-        
+
         add_coupon_popup_close() {
             this.$('#coupon-code').val('');
         }
@@ -277,29 +297,29 @@ define(['Webservice',
             var totalProductsInInvoice = 0;
             let t = this.i18n();
             let currency = app.i18n.template.currency;
-                        
+
             // Presort the list by categorys
             this.orderUnbilled.get('UnbilledOrderDetails').each((orderDetail) => {
                 let menuid = orderDetail.get('Menuid');
                 let key = null;
-                
+
                 if(menuid === null && sortedCategorys.get(key) == null) {
                     sortedCategorys.set(key, {name: t.specialOrders,
                                               orders: new Set()});
                 } else if(menuid !== null) {
-                    let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});                    
+                    let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});
                     key = menuSearch.MenuTypeid;
-                                        
+
                     if(sortedCategorys.get(key) == null) {
                         let menuType = app.productList.findWhere({MenuTypeid: key});
                         sortedCategorys.set(key, {name: menuType.get('Name'),
                                                   orders: new Set()});
-                    }                                                            
+                    }
                 }
-                
+
                 sortedCategorys.get(key).orders.add(orderDetail);
             });
-            
+
             for(let[menuTypeid, val] of sortedCategorys.entries()) {
                 let divider = $('<li/>').attr('data-role', 'list-divider').text(val.name);
                 this.$('#open-orders-list').append(divider);
@@ -308,12 +328,12 @@ define(['Webservice',
                 for (let orderDetail of val.orders.values()) {
                     let menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetail.get('Menuid'); });
                     var extras = '';
-                    
+
                     let menuSize = orderDetail.get('MenuSize');
-                    
+
                     if(!isSpecialOrder && menuSearch.Menu.get('MenuPossibleSize').length > 1)
                         extras = menuSize.get('Name') + ", ";
-                    
+
                     if(orderDetail.get('OrderDetailMixedWiths').length > 0) {
                         extras += t.mixedWith + ": ";
 
@@ -324,7 +344,7 @@ define(['Webservice',
                         extras = extras.slice(0, -3);
                         extras += ", ";
                     }
-                    
+
                     orderDetail.get('OrderDetailExtras').each(function(extra) {
                         let menuPossibleExtra = menuSearch.Menu.get('MenuPossibleExtra')
                                                                 .findWhere({MenuPossibleExtraid: extra.get('MenuPossibleExtraid')});
@@ -333,16 +353,16 @@ define(['Webservice',
 
                     if(orderDetail.get('ExtraDetail') && orderDetail.get('ExtraDetail').length > 0)
                         extras += orderDetail.get('ExtraDetail') + ", ";
-                    
+
                     if(extras.length > 0)
                         extras = extras.slice(0, -2);
-                    
+
                     if(!orderDetail.get('AmountSelected'))
                         orderDetail.set('AmountSelected', 0);
-                    
+
                     let price = parseFloat(orderDetail.get('SinglePrice')) * parseFloat(orderDetail.get('AmountSelected'));
                     totalSumPrice += price;
-                    
+
                     totalOpenProducts += orderDetail.get('AmountLeft');
                     totalProductsInInvoice += parseFloat(orderDetail.get('AmountSelected'));
 
@@ -361,31 +381,31 @@ define(['Webservice',
                                 i18n: app.i18n.template};
 
                     this.$('#open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
-                }                
+                }
             }
 
             let totalSumPriceWithoutCoupon = totalSumPrice;
-            
+
             if(this.orderUnbilled.get('UsedCoupons').length > 0) {
                 let divider = $('<li/>').attr('data-role', 'list-divider').text(t.usedCoupons);
-                this.$('#coupons-list').append(divider);    
-                
+                this.$('#coupons-list').append(divider);
+
                 this.orderUnbilled.get('UsedCoupons').each((coupon) => {
-                    
+
                     let orgTotalSumPrice = totalSumPrice;
-                    totalSumPrice -= coupon.get('Value');                
-                    
+                    totalSumPrice -= coupon.get('Value');
+
                     if(totalSumPrice < 0)
                         totalSumPrice = 0;
-                    
+
                     let usedValue = totalSumPrice > 0 ? coupon.get('Value') : orgTotalSumPrice.toFixed(2);
-                    
+
                     let text = t.code + ": " + coupon.get('Code');
                     text +=  ", " + t.value + ": " + coupon.get('Value') + currency;
-                    text +=  ", " + t.consumed + ": " + usedValue + currency;                                      
-                    
+                    text +=  ", " + t.consumed + ": " + usedValue + currency;
+
                     let li = $('<li/>').text(text);
-                    
+
                     this.$('#coupons-list').append(li);
                 });
             }
@@ -393,10 +413,10 @@ define(['Webservice',
             if(totalOpenProducts == totalProductsInInvoice) {
                 this.$('#continue').prop("checked", false).checkboxradio('refresh');
             }
-            
+
             if(this.orderUnbilled.get('Customer') != null) {
                 let customer = this.orderUnbilled.get('Customer');
-                
+
                 this.$('#selected-customer-display').empty();
                 this.$('#selected-customer-display').append('<b>' + t.currentCustomer + ':</b> ' + customer.get('Title') + ' ' + customer.get('Name'));
             }
@@ -407,7 +427,7 @@ define(['Webservice',
             this.$('.order-item-up').click(this.order_count_up);
             this.$('.order-item-down').click(this.order_count_down);
             this.$('#open-orders-list').listview('refresh');
-            this.$('#coupons-list').listview('refresh');            
+            this.$('#coupons-list').listview('refresh');
         }
 
         // Renders all of the Category models on the UI
@@ -439,13 +459,13 @@ define(['Webservice',
                     city: {required: t.errorCity},
                     zip: {required: t.errorZip}
                 },
-                errorPlacement: function (error, element) {                    
+                errorPlacement: function (error, element) {
                     if(element.is('select'))
                         error.appendTo(element.parent().parent().prev());
                     else
                         error.appendTo(element.parent().prev());
                 }
-            });         
+            });
 
             this.changePage(this);
 
