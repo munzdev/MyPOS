@@ -191,7 +191,7 @@ class EventContactTableMap extends TableMap
         // attributes
         $this->setName('event_contact');
         $this->setPhpName('EventContact');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\Event\\EventContact');
         $this->setPackage('API.Models.Event');
         $this->setUseIdGenerator(true);

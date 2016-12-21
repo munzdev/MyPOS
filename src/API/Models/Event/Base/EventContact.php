@@ -1265,53 +1265,53 @@ abstract class EventContact implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(EventContactTableMap::COL_EVENT_CONTACTID)) {
-            $modifiedColumns[':p' . $index++]  = 'event_contactid';
+            $modifiedColumns[':p' . $index++]  = '`event_contactid`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventid';
+            $modifiedColumns[':p' . $index++]  = '`eventid`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_TITLE)) {
-            $modifiedColumns[':p' . $index++]  = 'title';
+            $modifiedColumns[':p' . $index++]  = '`title`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_CONTACT_PERSON)) {
-            $modifiedColumns[':p' . $index++]  = 'contact_person';
+            $modifiedColumns[':p' . $index++]  = '`contact_person`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_ADDRESS)) {
-            $modifiedColumns[':p' . $index++]  = 'address';
+            $modifiedColumns[':p' . $index++]  = '`address`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_ADDRESS2)) {
-            $modifiedColumns[':p' . $index++]  = 'address2';
+            $modifiedColumns[':p' . $index++]  = '`address2`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_CITY)) {
-            $modifiedColumns[':p' . $index++]  = 'city';
+            $modifiedColumns[':p' . $index++]  = '`city`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_ZIP)) {
-            $modifiedColumns[':p' . $index++]  = 'zip';
+            $modifiedColumns[':p' . $index++]  = '`zip`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_TAX_IDENTIFICATION_NR)) {
-            $modifiedColumns[':p' . $index++]  = 'tax_identification_nr';
+            $modifiedColumns[':p' . $index++]  = '`tax_identification_nr`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_TELEPHON)) {
-            $modifiedColumns[':p' . $index++]  = 'telephon';
+            $modifiedColumns[':p' . $index++]  = '`telephon`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_FAX)) {
-            $modifiedColumns[':p' . $index++]  = 'fax';
+            $modifiedColumns[':p' . $index++]  = '`fax`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_EMAIL)) {
-            $modifiedColumns[':p' . $index++]  = 'email';
+            $modifiedColumns[':p' . $index++]  = '`email`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_ACTIVE)) {
-            $modifiedColumns[':p' . $index++]  = 'active';
+            $modifiedColumns[':p' . $index++]  = '`active`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_DEFAULT)) {
-            $modifiedColumns[':p' . $index++]  = 'default';
+            $modifiedColumns[':p' . $index++]  = '`default`';
         }
 
         $sql = sprintf(
-            'INSERT INTO event_contact (%s) VALUES (%s)',
+            'INSERT INTO `event_contact` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -1320,49 +1320,49 @@ abstract class EventContact implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'event_contactid':
+                    case '`event_contactid`':
                         $stmt->bindValue($identifier, $this->event_contactid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':
+                    case '`eventid`':
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'title':
+                    case '`title`':
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
-                    case 'name':
+                    case '`name`':
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'contact_person':
+                    case '`contact_person`':
                         $stmt->bindValue($identifier, $this->contact_person, PDO::PARAM_STR);
                         break;
-                    case 'address':
+                    case '`address`':
                         $stmt->bindValue($identifier, $this->address, PDO::PARAM_STR);
                         break;
-                    case 'address2':
+                    case '`address2`':
                         $stmt->bindValue($identifier, $this->address2, PDO::PARAM_STR);
                         break;
-                    case 'city':
+                    case '`city`':
                         $stmt->bindValue($identifier, $this->city, PDO::PARAM_STR);
                         break;
-                    case 'zip':
+                    case '`zip`':
                         $stmt->bindValue($identifier, $this->zip, PDO::PARAM_STR);
                         break;
-                    case 'tax_identification_nr':
+                    case '`tax_identification_nr`':
                         $stmt->bindValue($identifier, $this->tax_identification_nr, PDO::PARAM_STR);
                         break;
-                    case 'telephon':
+                    case '`telephon`':
                         $stmt->bindValue($identifier, $this->telephon, PDO::PARAM_STR);
                         break;
-                    case 'fax':
+                    case '`fax`':
                         $stmt->bindValue($identifier, $this->fax, PDO::PARAM_STR);
                         break;
-                    case 'email':
+                    case '`email`':
                         $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
                         break;
-                    case 'active':
+                    case '`active`':
                         $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
                         break;
-                    case 'default':
+                    case '`default`':
                         $stmt->bindValue($identifier, (int) $this->default, PDO::PARAM_INT);
                         break;
                 }

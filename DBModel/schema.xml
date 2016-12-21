@@ -56,7 +56,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="event_contact" idMethod="native" phpName="EventContact" namespace="API\Models\Event">
+  <table name="event_contact" idMethod="native" phpName="EventContact" namespace="API\Models\Event" identifierQuoting="true">
     <column name="event_contactid" phpName="EventContactid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="title" phpName="Title" type="VARCHAR" size="32" required="true"/>

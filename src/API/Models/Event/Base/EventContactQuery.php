@@ -245,7 +245,7 @@ abstract class EventContactQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT event_contactid, eventid, title, name, contact_person, address, address2, city, zip, tax_identification_nr, telephon, fax, email, active, default FROM event_contact WHERE event_contactid = :p0';
+        $sql = 'SELECT `event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `active`, `default` FROM `event_contact` WHERE `event_contactid` = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
