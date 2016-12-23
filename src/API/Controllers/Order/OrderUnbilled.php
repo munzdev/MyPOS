@@ -13,7 +13,6 @@ use API\Models\Invoice\Invoice;
 use API\Models\Invoice\InvoiceItem;
 use API\Models\Ordering\OrderDetail;
 use API\Models\Ordering\OrderDetailQuery;
-use API\Models\Payment\Base\PaymentQuery;
 use API\Models\Payment\Coupon;
 use API\Models\Payment\CouponQuery;
 use API\Models\Payment\Map\CouponTableMap;
@@ -28,6 +27,7 @@ use Propel\Runtime\Propel;
 use Respect\Validation\Validator as v;
 use Slim\App;
 use const API\INVOICE_TYPE_INVOICE;
+use const API\PAYMENT_TYPE_BANK_TRANSFER;
 use const API\PAYMENT_TYPE_CASH;
 use const API\USER_ROLE_ORDER_ADD;
 use function mb_strlen;
@@ -63,6 +63,9 @@ class OrderUnbilled extends SecurityController
         if($o_unbilledOrderDetails->count() > 0) {
             foreach($o_unbilledOrderDetails as $a_order_detail) {
                 $str_index = $this->buildIndexFromOrderDetail($a_order_detail);
+
+                if($a_order_detail['AmountLeft'] == 0)
+                    continue;
 
                 if(!isset($a_unbilledOrderDetails[$str_index]))
                 {
@@ -139,10 +142,7 @@ class OrderUnbilled extends SecurityController
                 foreach($o_invoiceOrderDetails as $o_order_detail_json) {
                     $a_order_detail_json = $o_order_detail_json->toArray();
 
-                    if(!isset($a_order_detail_json['AmountSelected']))
-                        $a_order_detail_json['AmountSelected'] = 0;
-
-                    if($a_order_detail_json == 0)
+                    if(empty($a_order_detail_json['AmountSelected']))
                         continue;
 
                     $a_order_detail_json['OrderDetailExtras'] = $o_order_detail_json->getOrderDetailExtras()->toArray();
@@ -160,9 +160,11 @@ class OrderUnbilled extends SecurityController
 
                         if($a_order_detail['AmountLeft'] >= $a_order_detail_json['AmountSelected']) {
                             $i_amount = $a_order_detail_json['AmountSelected'];
+                            $o_order_detail_json->setVirtualColumn("AmountSelected", 0);
                         } else {
                             $i_amount = $a_order_detail['AmountLeft'];
                             $a_order_detail_json['AmountSelected'] -= $a_order_detail['AmountLeft'];
+                            $o_order_detail_json->setVirtualColumn("AmountSelected", $a_order_detail_json['AmountSelected']);
                         }
 
                         $o_invoiceItem = new InvoiceItem();
@@ -220,18 +222,11 @@ class OrderUnbilled extends SecurityController
                 }
             }
 
-
-
-            //$o_payment = new Payment();
-            //$o_payment->setPaymentTypeid($this->a_json['PaymentTypeid']);
-            //$o_payment->setInvoice($o_invoice);
-            //$o_payment->setCreated(new DateTime());
-
             $o_invoice->setAmount($i_payed);
 
             if($this->a_json['PaymentTypeid'] == PAYMENT_TYPE_CASH) {
-                $o_payment->setPaymentFinished(new DateTime());
-                $o_payment->setAmountRecieved($i_payed);
+                $o_invoice->setPaymentFinished(new DateTime());
+                $o_invoice->setAmountRecieved($i_payed);
 
                 $o_payment_recieved = new PaymentRecieved();
                 $o_payment_recieved->setInvoice($o_invoice);
@@ -240,10 +235,6 @@ class OrderUnbilled extends SecurityController
                 $o_payment_recieved->setDate(new DateTime());
                 $o_payment_recieved->setAmount($i_payed);
                 $o_payment_recieved->save();
-
-                // somehow $o_payment doesn't get updated with the correct id
-                // quick & dirty fix: fetch created entry
-                //$o_payment = PaymentQuery::create()->findPk($o_connection->lastInsertId());
 
                 foreach($o_usedCoupons as $o_usedCoupon) {
                     $o_coupon = CouponQuery::create()
@@ -269,9 +260,57 @@ class OrderUnbilled extends SecurityController
                     $o_paymentCoupon->setValueUsed($i_usedValue);
                     $o_paymentCoupon->save();
                 }
+            } elseif($this->a_json['PaymentTypeid'] == PAYMENT_TYPE_BANK_TRANSFER && !empty($o_usedCoupons)) {
+                $o_payment_recieved = new PaymentRecieved();
+                $o_payment_recieved->setInvoice($o_invoice);
+                $o_payment_recieved->setPaymentTypeid(PAYMENT_TYPE_CASH);
+                $o_payment_recieved->setUserid($o_user->getUserid());
+                $o_payment_recieved->setDate(new DateTime());
+                $o_payment_recieved->setAmount(0);
+                $o_payment_recieved->save();
+
+                $i_amountPayedViaCoupon = 0;
+
+                foreach($o_usedCoupons as $o_usedCoupon) {
+                    $o_coupon = CouponQuery::create()
+                                    ->leftJoinPaymentCoupon()
+                                    ->withColumn(CouponTableMap::COL_VALUE . ' - SUM(IFNULL(' . PaymentCouponTableMap::COL_VALUE_USED . ', 0))', 'Value')
+                                    ->filterByCouponid($o_usedCoupon->getCouponid())
+                                    ->groupBy(CouponTableMap::COL_COUPONID)
+                                    ->find()
+                                    ->getFirst();
+
+                    $i_orgPayed = $i_payed;
+                    $i_value = $o_coupon->getVirtualColumn('Value');
+                    $i_payed -= $i_value;
+
+                    if($i_payed < 0)
+                        $i_payed = 0;
+
+                    $i_usedValue = $i_payed > 0 ? $o_coupon->getValue() : $i_orgPayed;
+
+                    $i_amountPayedViaCoupon += $i_usedValue;
+
+                    $o_paymentCoupon = new PaymentCoupon();
+                    $o_paymentCoupon->setCoupon($o_coupon);
+                    $o_paymentCoupon->setPaymentRecieved($o_payment_recieved);
+                    $o_paymentCoupon->setValueUsed($i_usedValue);
+                    $o_paymentCoupon->save();
+                }
+
+                $o_payment_recieved->setAmount($i_amountPayedViaCoupon);
+                $o_payment_recieved->save();
+
+                $o_invoice->setAmountRecieved($i_amountPayedViaCoupon);
+
+                if($i_amountPayedViaCoupon == $i_payed)
+                    $o_invoice->setPaymentFinished(new DateTime());
             }
 
             $o_invoice->save();
+
+            if($o_payment_recieved)
+                $o_invoice->setVirtualColumn("PaymentRecievedid", $o_payment_recieved->getPaymentRecievedid());
 
             StatusCheck::verifyInvoice($o_invoice->getInvoiceid());
 

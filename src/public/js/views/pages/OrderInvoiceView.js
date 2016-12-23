@@ -270,7 +270,7 @@ define(['Webservice',
         success_popup_close() {
             if(this.$('#continue').prop('checked'))
             {
-                if(this.mode == 'all')
+                if(this.orderUnbilled.get('All') == true)
                     this.set_mode_all();
                 else
                     this.set_mode_single();
@@ -288,8 +288,6 @@ define(['Webservice',
 
             this.$('#open-orders-list').empty();
             this.$('#coupons-list').empty();
-
-            var sortedOrders = {};
 
             let sortedCategorys = new Map();
             var totalSumPrice = 0;
