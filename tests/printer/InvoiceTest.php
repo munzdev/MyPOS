@@ -17,7 +17,7 @@ $o_connector = new NetworkPrintConnector("192.168.0.50", 9100);
 $o_reciep = new ReciepPrint($o_connector, 48, $o_i18n->ReciepPrint);
 $o_reciep->SetLogo("resources/escpos-php.png", PRINTER_LOGO_BIT_IMAGE_COLUMN);
 $o_reciep->SetHeader("HEADER TOP LINE\nSECOND LINE\n THIRD LINE");
-$o_reciep->SetNr(587472);
+$o_reciep->SetInvoiceid(587472);
 $o_reciep->SetTableNr("B32");
 $o_reciep->SetName("Test Cashier");
 

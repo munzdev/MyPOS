@@ -2,9 +2,9 @@
 namespace API\Lib;
 
 use API\Models\Event\EventBankinformation;
+use API\Models\Event\EventContact;
 use API\Models\Event\EventPrinter;
-use API\Models\Invoice\Customer;
-use API\Models\Payment\Coupon;
+use API\Models\Payment\PaymentRecieved;
 use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\CupsPrintConnector;
 use Mike42\Escpos\PrintConnectors\DummyPrintConnector;
@@ -47,7 +47,11 @@ class ReciepPrint
 
     private $d_date_footer;
 
-    private $i_nr;
+    private $i_invoiceid;
+
+    private $i_orderNr;
+
+    private $i_paymentid;
 
     private $str_tableNr;
 
@@ -57,7 +61,7 @@ class ReciepPrint
 
     private $i_paper_row_length;
 
-    private $o_payment_recieved;
+    private $a_payment_recieved = array();
 
     private $o_event_bankinformation;
 
@@ -124,8 +128,16 @@ class ReciepPrint
         $this->d_date_footer = $d_date;
     }
 
-    public function SetNr($i_nr) {
-        $this->i_nr = $i_nr;
+    public function SetInvoiceid($i_invoiceid) {
+        $this->i_invoiceid = $i_invoiceid;
+    }
+
+    public function SetPaymentid($i_paymentid) {
+        $this->i_paymentid = $i_paymentid;
+    }
+
+    public function SetOrderNr($i_orderNr) {
+        $this->i_orderNr = $i_orderNr;
     }
 
     public function SetTableNr($str_tableNr) {
@@ -136,12 +148,12 @@ class ReciepPrint
         $this->str_header = $str_text;
     }
 
-    public function SetCustomer(Customer $o_customer)  {
-        $this->o_customer = $o_customer;
+    public function SetCustomer(EventContact $o_event_contact)  {
+        $this->o_customer = $o_event_contact;
     }
 
-    public function SetPaymentRecieved(\API\Models\Payment\PaymentRecieved $o_payment_recieved) {
-        $this->o_payment_recieved = $o_payment_recieved;
+    public function AddPaymentRecieved(PaymentRecieved $o_payment_recieved) {
+        $this->a_payment_recieved[] = $o_payment_recieved;
     }
 
     public function SetBankinformation(EventBankinformation $o_event_bankinformation) {
@@ -184,7 +196,7 @@ class ReciepPrint
 
         /* Title of receipt */
         $this->o_printer -> setEmphasis(true);
-        $this->o_printer -> text($this->o_i18n->orderNr . ": " . $this->i_nr  . "\n");
+        $this->o_printer -> text($this->o_i18n->orderNr . ": " . $this->i_orderNr  . "\n");
         $this->o_printer -> text($this->o_i18n->tableNr . ": ");
         $this->o_printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH | Printer::MODE_DOUBLE_HEIGHT);
         $this->o_printer -> text($this->str_tableNr  . "\n");
@@ -248,7 +260,7 @@ class ReciepPrint
 
         /* Footer */
         $this->o_printer -> feed(2);
-        $this->o_printer -> text($this->o_i18n->distributionTime . ": " . $this->d_date_footer);
+        $this->o_printer -> text($this->o_i18n->distributionTime . ": " . date_format($this->d_date_footer, DATE_PHP_TIMEFORMAT));
         $this->o_printer -> feed(2);
 
         /* Cut the receipt and open the cash drawer */
@@ -266,10 +278,15 @@ class ReciepPrint
         if($this->o_customer) {
             $this->PrintCustomer();
         }
+        $this->o_printer -> feed();
 
         /* Title of receipt */
         $this->o_printer -> setEmphasis(true);
-        $this->o_printer -> text($this->o_i18n->invoiceNr . ": " . $this->i_nr  . "\n");
+
+        if($this->i_paymentid)
+            $this->o_printer -> text($this->o_i18n->receiptNr . ": " . $this->i_paymentid . "\n");
+
+        $this->o_printer -> text($this->o_i18n->invoiceNr . ": " . $this->i_invoiceid  . "\n");
         $this->o_printer -> text($this->o_i18n->tableNr . ": " . $this->str_tableNr  . "\n");
         $this->o_printer -> text($this->o_i18n->cashier . ": " . $this->str_name  . "\n");
         $this->o_printer -> feed();
@@ -299,30 +316,12 @@ class ReciepPrint
         $this->o_printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
         $this->o_printer -> setEmphasis(true);
 
-        if($this->o_payment_recieved && count($this->o_payment_recieved->getPaymentCoupons()) > 0)
-            $str_totalText = $this->o_i18n->totalSum;
-        else
-            $str_totalText = $this->o_i18n->subTotal;
+        $str_totalText = $this->o_i18n->totalSum;
 
         $this->PrintItem($str_totalText, '', sprintf('%0.2f', $i_total), true, true);
         $this->o_printer -> setEmphasis(false);
         $this->o_printer -> selectPrintMode();
         $this->o_printer -> feed();
-
-        $i_subTotal = $i_total;
-
-        // Add Coupons if used
-        if($this->o_payment_recieved && count($this->o_payment_recieved->getPaymentCoupons()) > 0) {
-            $this->PrintCoupons($i_total);
-
-            $this->o_printer -> feed();
-            $this->o_printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-            $this->o_printer -> setEmphasis(true);
-            $this->PrintItem($this->o_i18n->totalSum, '', sprintf('%0.2f', $i_total), true, true);
-            $this->o_printer -> setEmphasis(false);
-            $this->o_printer -> selectPrintMode();
-            $this->o_printer -> feed();
-        }
 
         /* Tax and total */
         $this->o_printer->text($this->o_i18n->totalSumContainsTax . "\n");
@@ -331,15 +330,37 @@ class ReciepPrint
             $this->PrintItem($i_tax . $this->o_i18n->percentTaxOfCurrency . sprintf('%0.2f', $i_price), '', sprintf('%0.2f', $i_price * ($i_tax / 100)), true);
         }
 
-        // add payment type and bank information if given
-        if($this->o_payment_recieved) {
-            $this->PrintPaymentRecievedType($i_subTotal - $this->o_payment_recieved->getAmount());
+        // add payments if given
+        if(count($this->a_payment_recieved)) {
+            $this->o_printer->feed();
+            $this->o_printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+            $this->o_printer->text($this->o_i18n->payments);
+            $this->o_printer->selectPrintMode();
+            $this->o_printer->feed();
+
+            foreach($this->a_payment_recieved as $o_payment_recieved) {
+                // Add Coupons if used
+                if(count($o_payment_recieved->getPaymentCoupons()) > 0) {
+                    $this->PrintCoupons($o_payment_recieved, $i_total);
+                }
+
+                $i_total = bcsub($i_total, $o_payment_recieved->getAmount(), 2);
+
+                $this->PrintPaymentRecievedType($o_payment_recieved, $o_payment_recieved->getAmount());
+            }
+
+            $this->o_printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+            $this->o_printer -> setEmphasis(true);
+            $this->PrintItem($this->o_i18n->totalSumOpen, '', sprintf('%0.2f', $i_total), true, true);
+            $this->o_printer -> setEmphasis(false);
+            $this->o_printer -> selectPrintMode();
+            $this->o_printer -> feed();
         }
 
         // add a maturity date if given
         if($this->d_maturity_date) {
             $this->o_printer -> feed();
-            $this->o_printer -> text($this->o_i18n->maturityDate . ": " . date_format($this->d_maturity_date, DATE_PHP_DATEFORMAT));
+            $this->o_printer -> text($this->o_i18n->maturityDate . ": " . date_format($this->d_maturity_date, DATE_PHP_DATEFORMAT) . "\n");
         }
 
         // add bank information if given
@@ -362,6 +383,9 @@ class ReciepPrint
     }
 
     public function PrintPaymentRecieved() {
+        $o_payment_recieved = $this->a_payment_recieved[0];
+        $o_user = $o_payment_recieved->getUser();
+
         /* Print top logo and header */
         $this->PrintHeader();
 
@@ -369,29 +393,31 @@ class ReciepPrint
         if($this->o_customer) {
             $this->PrintCustomer();
         }
+        $this->o_printer -> feed();
 
         /* Title of receipt */
         $this->o_printer -> setEmphasis(true);
-        $this->o_printer -> text($this->o_i18n->receiptNr . ": " . $this->o_payment_recieved->getPaymentRecievedid() . "\n");
-        $this->o_printer -> text($this->o_i18n->invoiceNr . ": " . $this->i_nr  . "\n");
-        $this->o_printer -> text($this->o_i18n->tableNr . ": " . $this->str_tableNr  . "\n");
-        $this->o_printer -> text($this->o_i18n->cashier . ": " . $this->str_name  . "\n");
+        $this->o_printer -> text($this->o_i18n->receiptNr . ": " . $o_payment_recieved->getPaymentRecievedid() . "\n");
+        $this->o_printer -> text($this->o_i18n->invoiceNr . ": " . $this->i_invoiceid  . "\n");
+        $this->o_printer -> text($this->o_i18n->cashier . ": " . $o_user->getFirstname() . " " . $o_user->getLastname()  . "\n");
         $this->o_printer -> feed();
         $this->o_printer -> setEmphasis(false);
 
         // Add Coupons if used
-        $i_total = $this->o_payment_recieved->getAmount();
-        if(count($this->o_payment_recieved->getPaymentCoupons()) > 0) {
-            $this->PrintCoupons($i_total);
+        $i_total = $o_payment_recieved->getAmount();
+        if(count($o_payment_recieved->getPaymentCoupons()) > 0) {
+            $this->PrintCoupons($o_payment_recieved, $i_total);
         }
 
         // add payment type and bank information if given
-        $this->PrintPaymentRecievedType($i_total);
+        $this->PrintPaymentRecievedType($o_payment_recieved, $i_total);
 
         // add bank information if given
         if($this->o_event_bankinformation) {
             $this->PrintBankInformation();
         }
+
+        $this->o_printer -> feed();
 
         /* Cut the receipt and open the cash drawer */
         $this->o_printer -> cut();
@@ -407,26 +433,25 @@ class ReciepPrint
         $this->o_printer -> text($this->o_i18n->bic . ": " . $this->o_event_bankinformation->getBic() . "\n");
     }
 
-    private function PrintPaymentRecievedType($i_total) {
+    private function PrintPaymentRecievedType(PaymentRecieved $o_payment_recieved, $i_total) {
         $this->o_printer -> feed();
-        $this->o_printer -> text($this->o_i18n->paymentType . ": " . $i_total . $this->o_i18n->currency . " ");
 
-        if ($this->o_payment_recieved->getPaymentTypeid() == PAYMENT_TYPE_CASH) {
-            $this->o_printer -> text($this->o_i18n->paymentTypeCash . "\n");
-        } elseif ($this->i_payment_type == PAYMENT_TYPE_BANK_TRANSFER) {
-            $this->o_printer -> text($this->o_i18n->paymentTypeBankTransfer . "\n");
+        if ($o_payment_recieved->getPaymentTypeid() == PAYMENT_TYPE_CASH) {
+            $str_paymentType = $this->o_i18n->paymentTypeCash;
+        } elseif ($o_payment_recieved->getPaymentTypeid() == PAYMENT_TYPE_BANK_TRANSFER) {
+            $str_paymentType = $this->o_i18n->paymentTypeBankTransfer;
         }
 
-        $this->o_printer -> text($this->o_i18n->datePaymentRecieved . ": " . $this->o_payment_recieved->getDate() . "\n");
-        $this->o_printer -> feed();
+        $this->PrintItem($str_paymentType, '', sprintf('%0.2f', $i_total), true);
+        $this->PrintItem($this->o_i18n->datePaymentRecieved . ": " . date_format($o_payment_recieved->getDate(), DATE_PHP_DATEFORMAT), '', '', false);
     }
 
-    private function PrintCoupons(&$i_total) {
-        $this->o_printer->text($this->o_i18n->usedCoupons . "\n");
+    private function PrintCoupons(PaymentRecieved $o_payment_recieved, &$i_total) {
+        $this->PrintItem($this->o_i18n->usedCoupons, '', '', false);
 
-        foreach($this->o_payment_recieved->getPaymentCoupons() as $o_coupon) {
-            $i_total -= $o_coupon->getValue();
-            $this->PrintItem($this->o_i18n->couponCode . ": " . $o_coupon->getCode(), '', sprintf('%0.2f', $o_coupon->getValue()), true);
+        foreach($o_payment_recieved->getPaymentCoupons() as $o_payment_coupon) {
+            $i_total = bcsub($i_total, $o_payment_coupon->getValueUsed(), 2);
+            $this->PrintItem($this->o_i18n->couponCode . ": " . $o_payment_coupon->getCoupon()->getCode(), '', sprintf('%0.2f', $o_payment_coupon->getValueUsed()), true);
         }
     }
 
@@ -456,7 +481,7 @@ class ReciepPrint
         $this->o_printer -> setEmphasis(true);
         $this->o_printer -> text($this->o_i18n->customerData . ":\n");
         $this->o_printer -> setEmphasis(false);
-        $this->o_printer -> text($this->o_i18n->customerid . ": " . $this->o_customer->getCustomerid() . "\n");
+        $this->o_printer -> text($this->o_i18n->customerid . ": " . $this->o_customer->getEventContactid() . "\n");
         $this->o_printer -> text($this->o_customer->getTitle() . "\n");
         $this->o_printer -> text($this->o_customer->getName() . "\n");
 
@@ -481,8 +506,6 @@ class ReciepPrint
 
         if($this->o_customer->getEmail())
             $this->o_printer -> text($this->o_i18n->email . ": " . $this->o_customer->getEmail(). "\n");
-
-        $this->o_printer -> feed();
     }
 
     private function PrintItem($str_name, $i_amount = 0, $i_price = 0, $b_currencySign = false, $b_bold = false) {

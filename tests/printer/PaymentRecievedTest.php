@@ -6,7 +6,6 @@ require __DIR__ . '/../../src/API/functions.php';
 
 use API\Lib\ReciepPrint;
 use API\Models\Event\EventBankinformation;
-use API\Models\Event\EventContact;
 use API\Models\Payment\Coupon;
 use API\Models\Payment\PaymentCoupon;
 use API\Models\Payment\PaymentRecieved;
@@ -18,18 +17,6 @@ use const API\PRINTER_LOGO_BIT_IMAGE_COLUMN;
 
 $str_json = file_get_contents("../../src/public/js/i18n/de.json");
 $o_i18n = json_decode($str_json);
-
-$o_event_contact = new EventContact();
-$o_event_contact->setEventContactid(1);
-$o_event_contact->setAddress("Test street 1");
-$o_event_contact->setCity("City");
-$o_event_contact->setName("Asdf all GmbH");
-$o_event_contact->setTaxIdentificationNr("21234231");
-$o_event_contact->setTitle("Firma");
-$o_event_contact->setZip(1234);
-$o_event_contact->setTelephon("12354");
-$o_event_contact->setFax("FAX123");
-$o_event_contact->setEmail("asdf@sadf.de");
 
 $o_coupon = new Coupon();
 $o_coupon->setCode("1234");
@@ -51,13 +38,6 @@ $o_payment_recieved->setPaymentTypeid(PAYMENT_TYPE_BANK_TRANSFER);
 $o_payment_recieved->setUser($o_user);
 $o_payment_recieved->addPaymentCoupon($o_payment_coupon);
 
-$o_payment_recieved2 = new PaymentRecieved();
-$o_payment_recieved2->setPaymentRecievedid(5431);
-$o_payment_recieved2->setAmount(80.9);
-$o_payment_recieved2->setDate(new DateTime("+1 Day"));
-$o_payment_recieved2->setPaymentTypeid(PAYMENT_TYPE_CASH);
-$o_payment_recieved2->setUser($o_user);
-
 $o_event_bankinformation = new EventBankinformation();
 $o_event_bankinformation->setName("Test Bank Int.");
 $o_event_bankinformation->setIban("AT32123456");
@@ -69,26 +49,9 @@ $o_connector = new NetworkPrintConnector("192.168.0.50", 9100);
 $o_reciep = new ReciepPrint($o_connector, 48, $o_i18n->ReciepPrint);
 $o_reciep->SetLogo("resources/escpos-php.png", PRINTER_LOGO_BIT_IMAGE_COLUMN);
 $o_reciep->SetHeader("Company bon printed\nStreet whatever 1\nCity 1234\nTAX:1234567");
-$o_reciep->SetCustomer($o_event_contact);
-$o_reciep->SetPaymentid(5323);
 $o_reciep->SetInvoiceid(587472);
-$o_reciep->SetTableNr("B32");
-$o_reciep->SetName("Test Cashier");
 
 $o_reciep->AddPaymentRecieved($o_payment_recieved);
-$o_reciep->AddPaymentRecieved($o_payment_recieved2);
 $o_reciep->SetBankinformation($o_event_bankinformation);
-$o_reciep->SetMaturityDate(new DateTime("+2 Weeks"));
 
-$o_reciep->Add("Colla 0.5L", "2", "5.00", "20");
-$o_reciep->Add("Colla 0.5L mit Zitronne", "1", "5.20", "20");
-$o_reciep->Add("Mineral 0.25L", "2", "5.20", "20");
-
-
-$o_reciep->Add("Wiener Schnitzel", "1", "5.00", "10");
-$o_reciep->Add("Schweinsbratten ohne Knödel", "3", "10.20", "10");
-$o_reciep->Add("Schweinsbratten ohne Knödel, mit Wurstsemmel", "3", "10.20", "10");
-$o_reciep->Add("Wiener Schnitzel klein ohne Pommes, mit extra Ketchup, bla blalsaf bsadfsdafsda fsdasd ds", "1", "5.00", "10");
-$o_reciep->Add("Salat Klein", "1", "1.50", "10");
-
-$o_reciep->PrintInvoice();
+$o_reciep->PrintPaymentRecieved();
