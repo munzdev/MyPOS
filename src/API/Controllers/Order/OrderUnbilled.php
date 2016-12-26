@@ -91,13 +91,15 @@ class OrderUnbilled extends SecurityController
 
     function POST() : void{
         $o_user = Auth::GetCurrentUser();
+        $a_config = $this->o_app->getContainer()['settings'];
 
         $i_orderid = intval($this->a_args['id']);
         $b_all = filter_var($this->a_args['all'], FILTER_VALIDATE_BOOLEAN);
 
         $o_customer_event_contact = null;
         if($this->a_json['Customer'] !== null) {
-            $o_customer_event_contact = (new EventContact)->fromArray($this->a_json['Customer']);
+            $o_customer_event_contact = new EventContact();
+            $o_customer_event_contact->fromArray($this->a_json['Customer']);
         }
 
         $o_invoiceOrderDetails = new ObjectCollection();
@@ -128,6 +130,7 @@ class OrderUnbilled extends SecurityController
             $o_invoice->setUserid($o_user->getUserid());
             $o_invoice->setEventBankinformation($o_event_bankinformation);
             $o_invoice->setDate(new DateTime());
+            $o_invoice->setMaturityDate(new DateTime($a_config['Invoice']['MaturityDate']));
             $o_invoice->setAmount(0);
 
             if($o_customer_event_contact)

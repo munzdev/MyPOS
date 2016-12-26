@@ -130,13 +130,7 @@ define(['Webservice',
                                     if(this.$('#print').prop('checked') == 1)
                                     {
                                         var webservice = new Webservice();
-
-                                        if(this.$('#paymentTypeList').val() == PAYMENT_TYPE_CASH) {
-                                            webservice.action = "Payment/Printing/" + this.orderUnbilled.get('PaymentRecievedid');
-                                        } else {
-                                            webservice.action = "Invoice/Printing/" + this.orderUnbilled.get('Invoiceid');
-                                        }
-
+                                        webservice.action = "Invoice/Printing/WithPayments/" + this.orderUnbilled.get('Invoiceid');
                                         webservice.formData = {EventPrinterid: this.$('#printer').val()};
                                         webservice.call();
                                     }

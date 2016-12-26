@@ -30,9 +30,10 @@ return [
         'Auth' => [
             'RememberMe_PrivateKey' => 'MFswDQYJKoZIhvcNAQEBBQADSgAwRwJAfmBSwS0WmfKNW1Dq2N4MJ4gYDApG6lW19QhvDp2g80ajw74D2Xijm4rIuxaJPJ64GazdNWUHuc+1CL5eEkBopwIDAQAB'
         ],
-        
+
         'Invoice' => [
             'Header' => "HEADER TOP LINE\nSECOND LINE\nTHIRD LINE",
+            'MaturityDate' => "+2 Weeks",
 
             'Logo' => [
                 'Use' => false,

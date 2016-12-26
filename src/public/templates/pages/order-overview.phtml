@@ -29,7 +29,7 @@
                             }
                         %>
                         -
-                        <% if(order.get('open') == 0) { %>
+                        <% if(order.get('InvoiceFinished')) { %>
                             <span style="color: green;"><%= t.billed %></span>
                         <% } else { %>
                             <span style="color: red;"><%= t.unbilled %></span>
@@ -37,7 +37,7 @@
                     </td>
                     <td>
                         <a data-order-id="<%- order.get('Orderid') %>" class="info-btn ui-btn ui-icon-info ui-mini ui-btn-icon-left"><%= t.info %></a>
-                        <% if (order.get('open') != 0) { %>
+                        <% if (!order.get('InvoiceFinished')) { %>
                            <a data-order-id="<%- order.get('Orderid') %>" data-table-nr="<%- order.get('EventTable').get('Name') %>" class="pay-btn ui-btn ui-icon-shop ui-mini ui-btn-icon-left"><%= t.createInvoice %></a>
                         <% } %>
                         <% if (order.get('OrderInProgresses').length == 0) { %>
@@ -45,7 +45,7 @@
                            <a data-order-id="<%- order.get('Orderid') %>" class="cancel-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.cancel %></a>
                         <% } %>
                         <% if (userRoles & USER_ROLE_ORDER_MODIFY_PRIORITY && order.get('OrderInProgresses').length == 0) { %>
-                            <a data-order-id="<%- order.get('Orderid') %>" class="manage-priority-btn ui-btn ui-icon-alert ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.priority %></a>                            
+                            <a data-order-id="<%- order.get('Orderid') %>" class="manage-priority-btn ui-btn ui-icon-alert ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.priority %></a>
                         <% } %>
                         <% if (userRoles & USER_ROLE_ORDER_MODIFY_PRICE) { %>
                             <a data-order-id="<%- order.get('Orderid') %>" class="manage-price-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.editPrice %></a>

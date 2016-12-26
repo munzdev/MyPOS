@@ -5,6 +5,8 @@ $app->group('/Invoice', function () {
          ->setName('Invoice-Customer');
     $this->any('/Customer/{name}', new API\Controllers\Invoice\CustomerSearch($this))
          ->setName('Invoice-Customer-Search');
-    $this->any('/Printing/{Invoiceid}', new API\Controllers\Invoice\Printing($this))
+    $this->any('/Printing/{Invoiceid}', new API\Controllers\Invoice\Printing($this, false))
          ->setName('Invoice-Printing');
+    $this->any('/Printing/WithPayments/{Invoiceid}', new API\Controllers\Invoice\Printing($this, true))
+         ->setName('Invoice-WithPayments-Printing');
 });

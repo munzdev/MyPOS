@@ -57,6 +57,8 @@ class ReciepPrint
 
     private $str_header;
 
+    private $o_contact;
+
     private $o_customer;
 
     private $i_paper_row_length;
@@ -113,6 +115,13 @@ class ReciepPrint
         if(!isset($this->a_entries[$i_tax]))
             $this->a_entries[$i_tax] = array();
 
+        foreach($this->a_entries[$i_tax] as $i_key => $a_entrie) {
+            if($a_entrie['name'] == $str_name && $a_entrie['price'] == $i_price) {
+                $this->a_entries[$i_tax][$i_key]['amount'] += $i_amount;
+                return;
+            }
+        }
+
         $a_entrie = array('name' => $str_name,
                           'amount' => $i_amount,
                           'price' => $i_price);
@@ -146,6 +155,10 @@ class ReciepPrint
 
     public function SetHeader($str_text) {
         $this->str_header = $str_text;
+    }
+
+    public function SetContact(EventContact $o_event_contact)  {
+        $this->o_contact = $o_event_contact;
     }
 
     public function SetCustomer(EventContact $o_event_contact)  {
@@ -277,6 +290,7 @@ class ReciepPrint
         // Add customer data if set
         if($this->o_customer) {
             $this->PrintCustomer();
+            $this->o_printer -> feed();
         }
         $this->o_printer -> feed();
 
@@ -287,7 +301,10 @@ class ReciepPrint
             $this->o_printer -> text($this->o_i18n->receiptNr . ": " . $this->i_paymentid . "\n");
 
         $this->o_printer -> text($this->o_i18n->invoiceNr . ": " . $this->i_invoiceid  . "\n");
-        $this->o_printer -> text($this->o_i18n->tableNr . ": " . $this->str_tableNr  . "\n");
+
+        if($this->str_tableNr)
+            $this->o_printer -> text($this->o_i18n->tableNr . ": " . $this->str_tableNr  . "\n");
+
         $this->o_printer -> text($this->o_i18n->cashier . ": " . $this->str_name  . "\n");
         $this->o_printer -> feed();
         $this->o_printer -> setEmphasis(false);
@@ -339,14 +356,18 @@ class ReciepPrint
             $this->o_printer->feed();
 
             foreach($this->a_payment_recieved as $o_payment_recieved) {
+                $i_tmpTotal = $i_total;
+
                 // Add Coupons if used
                 if(count($o_payment_recieved->getPaymentCoupons()) > 0) {
-                    $this->PrintCoupons($o_payment_recieved, $i_total);
+                    $this->PrintCoupons($o_payment_recieved, $i_tmpTotal);
                 }
+
+                $i_payedByCoupons = bcsub($i_total, $i_tmpTotal, 2);
 
                 $i_total = bcsub($i_total, $o_payment_recieved->getAmount(), 2);
 
-                $this->PrintPaymentRecievedType($o_payment_recieved, $o_payment_recieved->getAmount());
+                $this->PrintPaymentRecievedType($o_payment_recieved, bcsub($o_payment_recieved->getAmount(), $i_payedByCoupons, 2));
             }
 
             $this->o_printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
@@ -405,12 +426,16 @@ class ReciepPrint
 
         // Add Coupons if used
         $i_total = $o_payment_recieved->getAmount();
+        $i_tmpTotal = $i_total;
         if(count($o_payment_recieved->getPaymentCoupons()) > 0) {
-            $this->PrintCoupons($o_payment_recieved, $i_total);
+            $this->PrintCoupons($o_payment_recieved, $i_tmpTotal);
         }
 
+        $i_payedByCoupons = bcsub($i_total, $i_tmpTotal, 2);
+        $i_total = bcsub($i_total, $o_payment_recieved->getAmount(), 2);
+
         // add payment type and bank information if given
-        $this->PrintPaymentRecievedType($o_payment_recieved, $i_total);
+        $this->PrintPaymentRecievedType($o_payment_recieved, bcsub($o_payment_recieved->getAmount(), $i_payedByCoupons, 2));
 
         // add bank information if given
         if($this->o_event_bankinformation) {
@@ -471,6 +496,10 @@ class ReciepPrint
 
         $this->o_printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
         $this->o_printer -> text($this->str_header);
+
+        if($this->o_contact)
+            $this->PrintEventContact($this->o_contact);
+
         $this->o_printer -> selectPrintMode();
         $this->o_printer -> feed();
         $this->o_printer -> setJustification(Printer::JUSTIFY_LEFT);
@@ -482,30 +511,37 @@ class ReciepPrint
         $this->o_printer -> text($this->o_i18n->customerData . ":\n");
         $this->o_printer -> setEmphasis(false);
         $this->o_printer -> text($this->o_i18n->customerid . ": " . $this->o_customer->getEventContactid() . "\n");
-        $this->o_printer -> text($this->o_customer->getTitle() . "\n");
-        $this->o_printer -> text($this->o_customer->getName() . "\n");
 
-        if($this->o_customer->getContactPerson())
-            $this->o_printer -> text($this->o_customer->getContactPerson() . "\n");
+        $this->PrintEventContact($this->o_customer);
+    }
 
-        $this->o_printer -> text($this->o_customer->getAddress() . "\n");
+    private function PrintEventContact(EventContact $o_event_contact) {
+        $str_text = $o_event_contact->getTitle() . "\n";
+        $str_text .= $o_event_contact->getName() . "\n";
 
-        if($this->o_customer->getAddress2())
-            $this->o_printer -> text($this->o_customer->getAddress2() . "\n");
+        if($o_event_contact->getContactPerson())
+            $str_text .= $o_event_contact->getContactPerson() . "\n";
 
-        $this->o_printer -> text($this->o_customer->getZip() . ' ' . $this->o_customer->getCity() . "\n");
+        $str_text .= $o_event_contact->getAddress() . "\n";
 
-        if($this->o_customer->getTaxIdentificationNr())
-            $this->o_printer -> text($this->o_i18n->tax . ": " . $this->o_customer->getTaxIdentificationNr() . "\n");
+        if($o_event_contact->getAddress2())
+            $str_text .= $o_event_contact->getAddress2() . "\n";
 
-        if($this->o_customer->getTelephon())
-            $this->o_printer -> text($this->o_i18n->tel . ": " . $this->o_customer->getTelephon(). "\n");
+        $str_text .= $o_event_contact->getZip() . ' ' . $o_event_contact->getCity() . "\n";
 
-        if($this->o_customer->getFax())
-            $this->o_printer -> text($this->o_i18n->fax . ": " . $this->o_customer->getFax(). "\n");
+        if($o_event_contact->getTaxIdentificationNr())
+            $str_text .= $this->o_i18n->tax . ": " . $o_event_contact->getTaxIdentificationNr() . "\n";
 
-        if($this->o_customer->getEmail())
-            $this->o_printer -> text($this->o_i18n->email . ": " . $this->o_customer->getEmail(). "\n");
+        if($o_event_contact->getTelephon())
+            $str_text .= $this->o_i18n->tel . ": " . $o_event_contact->getTelephon(). "\n";
+
+        if($o_event_contact->getFax())
+            $str_text .= $this->o_i18n->fax . ": " . $o_event_contact->getFax(). "\n";
+
+        if($o_event_contact->getEmail())
+            $str_text .= $this->o_i18n->email . ": " . $o_event_contact->getEmail();
+
+        $this->o_printer -> text(trim($str_text));
     }
 
     private function PrintItem($str_name, $i_amount = 0, $i_price = 0, $b_currencySign = false, $b_bold = false) {
