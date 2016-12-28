@@ -11,7 +11,7 @@ define([ "Webservice",
             HeaderView,
             Template ) {
     "use strict";
-    
+
     return class OrderOverviewView extends app.PageView
     {
         initialize(options) {
@@ -35,7 +35,7 @@ define([ "Webservice",
                 this.ordersList.fetch().done(this.render);
             }
         }
-        
+
         events() {
             return {
                 'click .cancel-btn': 'cancel_order_popup',
@@ -49,18 +49,18 @@ define([ "Webservice",
                 'popupafterclose #cancel-success-popup': 'success_popup_close'
             };
         }
-        
+
         cancel_order_popup(event) {
-            this.cancelOrderId = $(event.currentTarget).attr('data-order-id');
+            this.cancelOrderCid = $(event.currentTarget).attr('data-order-cid');
             this.dialogMode = 'cancel';
-            
+
             let i18n = this.i18n();
 
             $('#dialog-title').text(i18n.cancelOrder + '?');
             $('#dialog-text').text(i18n.cancelOrderText + '?');
             $('#dialog').popup('open');
         }
-        
+
         dialog_continue() {
             $('#dialog').popup('close')
 
@@ -69,11 +69,13 @@ define([ "Webservice",
             else if(this.dialogMode == 'priority')
                 this.set_priority();
         }
-        
+
         cancel_order() {
+            var order = this.ordersList.get({cid: this.cancelOrderCid});
+
             var webservice = new Webservice();
             webservice.action = "Orders/MakeCancel";
-            webservice.formData = {orderid: this.cancelOrderId};
+            webservice.formData = {orderid: this.cancelOrderCid};
 
             webservice.callback = {
                 success: function() {
@@ -82,31 +84,29 @@ define([ "Webservice",
             };
             webservice.call();
         }
-        
-        click_btn_pay(event) {
-            var orderid = $(event.currentTarget).attr('data-order-id');
-            var tableNr = $(event.currentTarget).attr('data-table-nr');
 
-            this.changeHash("order-invoice/id/" + orderid);
+        click_btn_pay(event) {
+            var order = this.ordersList.get({cid: $(event.currentTarget).attr('data-order-cid')});
+
+            this.changeHash("order-invoice/id/" + order.get('Orderid'));
         }
 
         click_btn_modify(event) {
-            var orderid = $(event.currentTarget).attr('data-order-id');
-            var tableNr = $(event.currentTarget).attr('data-table-nr');
+            var order = this.ordersList.get({cid: $(event.currentTarget).attr('data-order-cid')});
 
-            this.changeHash("order-modify/id/" + orderid);
+            this.changeHash("order-modify/id/" + order.get('Orderid'));
         }
 
         click_btn_info(event) {
-            var orderid = $(event.currentTarget).attr('data-order-id');
+            var order = this.ordersList.get({cid: $(event.currentTarget).attr('data-order-cid')});
 
-            this.changeHash("order-info/id/" + orderid);
+            this.changeHash("order-info/id/" + order.get('Orderid'));
         }
 
         click_btn_priority(event) {
-            this.priorityOrderId = $(event.currentTarget).attr('data-order-id');
+            this.priorityOrderCid = $(event.currentTarget).attr('data-order-cid');
             this.dialogMode = 'priority';
-            
+
             let i18n = this.i18n();
 
             $('#dialog-title').text(i18n.changePriority + "?");
@@ -115,16 +115,15 @@ define([ "Webservice",
         }
 
         click_btn_price(event) {
-            var orderid = $(event.currentTarget).attr('data-order-id');
+            var orderid = $(event.currentTarget).attr('data-order-cid');
 
             this.changeHash("order-modify-price/orderid/" + orderid);
         }
 
         set_priority() {
-            var webservice = new Webservice();
-            webservice.action = "Manager/SetPriority";
-            webservice.formData = {orderid: this.priorityOrderId};
-            webservice.call().done(this.reload);
+            var order = this.ordersList.get({cid: this.priorityOrderCid});
+            order.save({Priority: 1}, {patch: true})
+                 .done(this.reload);
         }
 
         click_btn_search() {
@@ -139,7 +138,7 @@ define([ "Webservice",
         render() {
             var header = new HeaderView();
             this.registerSubview(".nav-header", header);
-            
+
             this.renderTemplate(Template, {orders: this.ordersList,
                                            userRoles: app.auth.authUser.get('EventUser').get('UserRoles')});
 

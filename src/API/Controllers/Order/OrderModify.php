@@ -5,6 +5,7 @@ namespace API\Controllers\Order;
 use API\Lib\Auth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
+use API\Models\Ordering\Map\OrderTableMap;
 use API\Models\Ordering\Order;
 use API\Models\Ordering\OrderDetail;
 use API\Models\Ordering\OrderDetailExtra;
@@ -16,13 +17,17 @@ use Respect\Validation\Validator as v;
 use Slim\App;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use const API\USER_ROLE_ORDER_MODIFY;
+use const API\USER_ROLE_ORDER_MODIFY_PRICE;
+use const API\USER_ROLE_ORDER_MODIFY_PRIORITY;
 
 class OrderModify extends SecurityController
 {
     public function __construct(App $o_app) {
         parent::__construct($o_app);
 
-        $this->a_security = ['GET' => USER_ROLE_ORDER_MODIFY];
+        $this->a_security = ['GET' => USER_ROLE_ORDER_MODIFY,
+                             'PUT' => USER_ROLE_ORDER_MODIFY,
+                             'PATCH' => USER_ROLE_ORDER_MODIFY_PRICE | USER_ROLE_ORDER_MODIFY_PRIORITY];
 
         $o_app->getContainer()['db'];
     }
@@ -49,6 +54,34 @@ class OrderModify extends SecurityController
                                 ->findByOrderid($this->a_args['id']);
 
         $this->o_response->withJson($o_order->getFirst());
+    }
+
+    function PATCH() : void {
+        $o_user = Auth::GetCurrentUser();
+
+        if(isset($this->a_json['Priority'])) {
+            $o_connection = Propel::getConnection();
+
+            try {
+                $o_connection->beginTransaction();
+
+                $o_order = OrderQuery::create()
+                                        ->setFirstPriority($this->a_args['id'],
+                                                           $o_user->getEventUser()->getEventid());
+
+                $o_connection->commit();
+
+                $this->o_response->withJson($o_order->toArray());
+                return;
+            } catch(Exception $o_exception) {
+                $o_connection->rollBack();
+                throw $o_exception;
+            }
+        }
+
+        if(isset($this->a_json['Cancellation'])) {
+
+        }
     }
 
     function PUT() : void {
