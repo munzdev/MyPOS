@@ -28,38 +28,38 @@ class Order extends SecurityController
 {
     public function __construct(App $o_app) {
         parent::__construct($o_app);
-        
+
         $this->a_security = ['GET' => USER_ROLE_ORDER_OVERVIEW,
                              'POST' => USER_ROLE_ORDER_ADD];
-        
+
         $o_app->getContainer()['db'];
     }
-    
-    protected function GET() : void 
+
+    protected function GET() : void
     {
         $o_user = Auth::GetCurrentUser();
-        
+
         $str_status = 'open';
         $i_orderid = null;
         $str_tablenr = null;
         $str_from = null;
         $str_to = null;
         $i_userid = $o_user->getUserid();
-        
+
         if(isset($this->a_json['search']))
         {
             $a_validators = array(
                 ['search'] => [
                     'status' => v::alnum()->noWhitespace()->length(1),
                     'orderid' => v::intVal()->length(1)->positive(),
-                    'tablenr' => v::alnum()->noWhitespace()->length(1),            
+                    'tablenr' => v::alnum()->noWhitespace()->length(1),
                     'from' => v::date('H:i'),
                     'to' => v::date('H:i'),
                     'userid' => v::intVal()->length(1)->positive()]
-            );        
+            );
 
-            $this->validate($a_validators);             
-            
+            $this->validate($a_validators);
+
             $str_status = $this->a_json['search']['status'];
             $i_orderid = $this->a_json['search']['orderid'];
             $str_tablenr = $this->a_json['search']['tablenr'];
@@ -67,30 +67,59 @@ class Order extends SecurityController
             $str_to = $this->a_json['search']['to'];
             $i_userid = $this->a_json['search']['Userid'];
         }
-                
-        $o_order = OrderQuery::create()
-                ->useEventTableQuery()
-                    ->filterByEventid($o_user->getEventUser()->getEventid())
-                ->endUse()
-                ->joinOrderDetail()
-                ->leftJoinWithOrderInProgress()
-                ->with(EventTableTableMap::getTableMap()->getPhpName())
-                ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " * " . OrderDetailTableMap::COL_SINGLE_PRICE . ")", "price")
-                ->filterByDistributionFinished(null)
-                ->_or()
-                ->filterByInvoiceFinished(null)                
-                ->filterByUserid($i_userid)
-                ->groupByOrderid()
-                ->orderByPriority()                    
-                ->find();
-        
-        $this->o_response->withJson($o_order->toArray());
+
+        if(isset($_REQUEST['page']) && isset($_REQUEST['elementsPerPage'])) {
+            $a_validators = array(
+                'page' => v::intVal()->length(1)->positive(),
+                'elementsPerPage' => v::intVal()->length(1)->positive()
+            );
+
+            $this->validate($a_validators, $_REQUEST);
+
+            $o_ordersList = OrderQuery::create()
+                                        ->useEventTableQuery()
+                                            ->filterByEventid($o_user->getEventUser()->getEventid())
+                                        ->endUse()
+                                        ->filterByDistributionFinished(null)
+                                        ->_or()
+                                        ->filterByInvoiceFinished(null)
+                                        ->filterByUserid($i_userid)
+                                        ->offset(($_REQUEST['elementsPerPage'] * $_REQUEST['page']) - $_REQUEST['elementsPerPage'])
+                                        ->limit($_REQUEST['elementsPerPage'])
+                                        ->find();
+        }
+
+        $o_criteria = OrderQuery::create()
+                                ->useEventTableQuery()
+                                    ->filterByEventid($o_user->getEventUser()->getEventid())
+                                ->endUse()
+                                ->joinOrderDetail()
+                                ->leftJoinWithOrderInProgress()
+                                ->with(EventTableTableMap::getTableMap()->getPhpName())
+                                ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " * " . OrderDetailTableMap::COL_SINGLE_PRICE . ")", "price")
+                                ->filterByDistributionFinished(null)
+                                ->_or()
+                                ->filterByInvoiceFinished(null)
+                                ->filterByUserid($i_userid)
+                                ->groupByOrderid()
+                                ->orderByPriority();
+
+        $i_order_count = OrderQuery::create(null, $o_criteria)->count();
+
+        $o_order = OrderQuery::create(null, $o_criteria)
+                                ->_if(!empty($o_ordersList))
+                                    ->where(OrderTableMap::COL_ORDERID . " IN ?", $o_ordersList->getColumnValues())
+                                ->_endif()
+                                ->find();
+
+        $this->o_response->withJson(["Count" => $i_order_count,
+                                     "Order" => $o_order->toArray()]);
     }
-    
-    function POST() : void {               
-        $o_user = Auth::GetCurrentUser();                   
-        $o_connection = Propel::getConnection();       
-        
+
+    function POST() : void {
+        $o_user = Auth::GetCurrentUser();
+        $o_connection = Propel::getConnection();
+
         try {
             $o_connection->beginTransaction();
 
@@ -99,33 +128,33 @@ class Order extends SecurityController
                                             ->filterByName($this->a_json['EventTable']['Name'])
                                             ->findOneOrCreate();
 
-            $o_order_template = new ModelsOrder();   
-            $this->jsonToPropel($this->a_json, $o_order_template);             
-            
-            $o_order_detail_priority = OrderQuery::create()       
+            $o_order_template = new ModelsOrder();
+            $this->jsonToPropel($this->a_json, $o_order_template);
+
+            $o_order_detail_priority = OrderQuery::create()
                                                     ->useEventTableQuery()
                                                         ->filterByEventid($o_eventTable->getEventid())
-                                                    ->endUse()                                
+                                                    ->endUse()
                                                     ->addAsColumn('priority', 'MAX(' . OrderTableMap::COL_PRIORITY . ') + 1')
                                                     ->findOne();
-            
+
             $o_order = new ModelsOrder();
             $o_order->setEventTable($o_eventTable);
             $o_order->setUser($o_user);
             $o_order->setPriority($o_order_detail_priority->getVirtualColumn('priority'));
-            $o_order->setOrdertime(new DateTime());            
+            $o_order->setOrdertime(new DateTime());
             $o_order->save();
 
             foreach($o_order_template->getOrderDetails() as $o_order_detail_template)
-            {            
+            {
                 if($o_order_detail_template->getAmount() == 0)
                     continue;
-                
+
                 $o_order_detail = new OrderDetail();
                 $o_order_detail->fromArray($o_order_detail_template->toArray());
                 $o_order_detail->setOrder($o_order);
                 $o_order_detail->save();
-                
+
                 foreach($o_order_detail_template->getOrderDetailExtras() as $o_order_detail_extra_template)
                 {
                     $o_order_detail_extra = new OrderDetailExtra();
@@ -133,7 +162,7 @@ class Order extends SecurityController
                     $o_order_detail_extra->setOrderDetail($o_order_detail);
                     $o_order_detail_extra->save();
                 }
-                
+
                 foreach($o_order_detail_template->getOrderDetailMixedWiths() as $o_order_detail_mixed_with_template)
                 {
                     $o_order_detail_mixed_with = new OrderDetailMixedWith();
@@ -149,6 +178,6 @@ class Order extends SecurityController
         } catch(Exception $o_exception) {
             $o_connection->rollBack();
             throw $o_exception;
-        }               
+        }
     }
 }

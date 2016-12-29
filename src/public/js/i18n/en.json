@@ -180,5 +180,8 @@
         "email": "Email",
         "usedCoupons": "Used coupons",
         "couponCode": "Coupon code"
+    },
+    "PaginationView": {
+        "page": "Page"
     }
 }

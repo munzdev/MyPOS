@@ -180,5 +180,8 @@
         "email": "Email",
         "usedCoupons": "Verwendete Gutscheine",
         "couponCode": "Gutschein Code"
+    },
+    "PaginationView": {
+        "page": "Seite"
     }
 }

@@ -5,10 +5,12 @@
 define([ "Webservice",
          'collections/custom/order/OrderOverviewCollection',
          'views/helpers/HeaderView',
+         'views/helpers/PaginationView',
          'text!templates/pages/order-overview.phtml'],
  function(  Webservice,
             OrderOverviewCollection,
             HeaderView,
+            PaginationView,
             Template ) {
     "use strict";
 
@@ -16,24 +18,21 @@ define([ "Webservice",
     {
         initialize(options) {
             _.bindAll(this, "render",
+                            "refresh",
                             "cancel_order_popup",
                             "cancel_order",
                             "success_popup_close");
 
-            var search = null;
+            this.search = null;
+            this.pagination = new PaginationView(this.refresh);
+            this.elementsPerPage = 10;
 
             if(options)
-                search = options.search;
+                this.search = options.search;
 
             this.ordersList = new OrderOverviewCollection();
 
-            if(search)
-                this.ordersList.fetch({data: {search: search},
-                                       success: this.render});
-            else
-            {
-                this.ordersList.fetch().done(this.render);
-            }
+            this.refresh();
         }
 
         events() {
@@ -48,6 +47,18 @@ define([ "Webservice",
                 'click .manage-price-btn': 'click_btn_price',
                 'popupafterclose #cancel-success-popup': 'success_popup_close'
             };
+        }
+
+        refresh() {
+            if(this.search)
+                this.ordersList.fetch({data: {search: this.search,
+                                              page: this.pagination.currentPage,
+                                              elementsPerPage: this.elementsPerPage}})
+                               .done(this.render);
+            else
+                this.ordersList.fetch({data: {page: this.pagination.currentPage,
+                                              elementsPerPage: this.elementsPerPage}})
+                               .done(this.render);
         }
 
         cancel_order_popup(event) {
@@ -136,6 +147,9 @@ define([ "Webservice",
 
         // Renders all of the Category models on the UI
         render() {
+            this.pagination.setTotalPages(Math.ceil(this.ordersList.count / this.elementsPerPage));
+            this.registerSubview(".nav-pagination", this.pagination);
+
             var header = new HeaderView();
             this.registerSubview(".nav-header", header);
 
