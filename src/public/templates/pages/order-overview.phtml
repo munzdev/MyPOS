@@ -14,46 +14,7 @@
                 <th><%= t.options %></th>
             </tr>
         </thead>
-        <tbody>
-            <% orders.each(function(order){ %>
-                <tr>
-                    <th><%- order.get('EventTable').get('Name') %></th>
-                    <td><%- parseFloat(order.get('price')).toFixed(2) %> <%= i18n.currency %></td>
-                    <td>
-                        <%
-                            if(order.get('OrderInProgresses').length == 0) {
-                                print(t.waiting);
-                            } else if(order.get('Finished') == null) {
-                                print(t.inProgress);
-                            } else {
-                                print(t.finished);
-                            }
-                        %>
-                        -
-                        <% if(order.get('InvoiceFinished')) { %>
-                            <span style="color: green;"><%= t.billed %></span>
-                        <% } else { %>
-                            <span style="color: red;"><%= t.unbilled %></span>
-                        <% } %>
-                    </td>
-                    <td>
-                        <a data-order-cid="<%- order.cid %>" class="info-btn ui-btn ui-icon-info ui-mini ui-btn-icon-left"><%= t.info %></a>
-                        <% if (!order.get('InvoiceFinished')) { %>
-                           <a data-order-cid="<%- order.cid %>" class="pay-btn ui-btn ui-icon-shop ui-mini ui-btn-icon-left"><%= t.createInvoice %></a>
-                        <% } %>
-                        <% if (order.get('OrderInProgresses').length == 0) { %>
-                           <a data-order-cid="<%- order.cid %>" data-table-nr="<%- order.get('EventTable').get('Name') %>"  class="modify-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left"><%= t.edit %></a>
-                           <a data-order-cid="<%- order.cid %>" class="cancel-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.cancel %></a>
-                        <% } %>
-                        <% if (userRoles & USER_ROLE_ORDER_MODIFY_PRIORITY && order.get('OrderInProgresses').length == 0) { %>
-                            <a data-order-cid="<%- order.cid %>" class="manage-priority-btn ui-btn ui-icon-alert ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.priority %></a>
-                        <% } %>
-                        <% if (userRoles & USER_ROLE_ORDER_MODIFY_PRICE) { %>
-                            <a data-order-cid="<%- order.cid %>" class="manage-price-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.editPrice %></a>
-                        <% } %>
-                    </td>
-                </tr>
-            <% }); %>
+        <tbody id="order-list">
         </tbody>
     </table>
 </div>

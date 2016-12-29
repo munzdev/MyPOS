@@ -1,17 +1,15 @@
-// Login View
-// =============
-
-// Includes file dependencies
 define([ "Webservice",
          'collections/custom/order/OrderOverviewCollection',
          'views/helpers/HeaderView',
          'views/helpers/PaginationView',
-         'text!templates/pages/order-overview.phtml'],
- function(  Webservice,
+         'text!templates/pages/order-overview.phtml',
+         'text!templates/pages/order-overview-item.phtml'
+], function(Webservice,
             OrderOverviewCollection,
             HeaderView,
             PaginationView,
-            Template ) {
+            Template,
+            TemplateItem) {
     "use strict";
 
     return class OrderOverviewView extends app.PageView
@@ -19,6 +17,7 @@ define([ "Webservice",
         initialize(options) {
             _.bindAll(this, "render",
                             "refresh",
+                            "renderOrdersList",
                             "cancel_order_popup",
                             "cancel_order",
                             "success_popup_close");
@@ -50,15 +49,18 @@ define([ "Webservice",
         }
 
         refresh() {
+            this.$('#order-list').empty();
+            $.mobile.loading("show");
+
             if(this.search)
                 this.ordersList.fetch({data: {search: this.search,
                                               page: this.pagination.currentPage,
                                               elementsPerPage: this.elementsPerPage}})
-                               .done(this.render);
+                               .done(this.renderOrdersList);
             else
                 this.ordersList.fetch({data: {page: this.pagination.currentPage,
                                               elementsPerPage: this.elementsPerPage}})
-                               .done(this.render);
+                               .done(this.renderOrdersList);
         }
 
         cancel_order_popup(event) {
@@ -145,6 +147,25 @@ define([ "Webservice",
             this.reload();
         }
 
+        renderOrdersList() {
+            if(!this.rendered) {
+                this.render();
+                this.rendered = true;
+            }
+
+            $.mobile.loading("hide");
+            let template = _.template(TemplateItem);
+            let i18n = this.i18n();
+            let userRoles = app.auth.authUser.get('EventUser').get('UserRoles');
+
+            this.ordersList.each((order) => {
+                this.$('#order-list').append(template({order: order,
+                                                       userRoles: userRoles,
+                                                       t: i18n,
+                                                       i18n: app.i18n.template}));
+            });
+        }
+
         // Renders all of the Category models on the UI
         render() {
             this.pagination.setTotalPages(Math.ceil(this.ordersList.count / this.elementsPerPage));
@@ -153,8 +174,7 @@ define([ "Webservice",
             var header = new HeaderView();
             this.registerSubview(".nav-header", header);
 
-            this.renderTemplate(Template, {orders: this.ordersList,
-                                           userRoles: app.auth.authUser.get('EventUser').get('UserRoles')});
+            this.renderTemplate(Template);
 
             this.changePage(this);
 
