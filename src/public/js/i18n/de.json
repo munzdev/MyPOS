@@ -34,6 +34,21 @@
         "cancelOrder": "Bestellung stornieren",
         "cancelOrderText": "Sind sie sicher das die Bestellung storniert werden soll"
     },
+    "OrderOverviewSearchView": {
+        "orderStatus": "Bestellungsstatus",
+        "all": "Alle",
+        "completed": "Abgeschlossen",
+        "open": "Offen",
+        "orderid": "Bestellnummer",
+        "tableNr": "Tischnummer",
+        "orderPeriod": "Bestellungszeitraum",
+        "from": "Von",
+        "to": "Bis",
+        "setTime": "Zeit setzen",
+        "waiter": "Kellner",
+        "back": "Zurück",
+        "search": "Suchen"
+    },
     "OrderNewView": {
         "error": "Fehler!",
         "errorText": "Bitte gib eine Tischnummer an!",

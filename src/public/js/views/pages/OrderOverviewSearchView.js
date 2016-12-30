@@ -1,46 +1,34 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'views/headers/HeaderView',
-         'text!templates/pages/order-overview-search.phtml',
-         'jquerymobile-datebox'],
- function(  HeaderView,
-            Template ) {
+define(['views/helpers/HeaderView',
+        'text!templates/pages/order-overview-search.phtml',
+        'jquerymobile-datebox'
+], function(HeaderView,
+            Template) {
     "use strict";
 
-    // Extends Backbone.View
-    var OrderOverviewSearchView = Backbone.View.extend( {
-
-    	title: 'order-overview-search',
-    	el: 'body',
-
-        // The View Constructor
-        initialize: function() {
+    return class OrderOverviewSearchView extends app.PageView {
+        initialize() {
             this.searchStatus = 'all';
 
             this.render();
-        },
+        }
 
-        events: {
-            'click #order-overview-search-footer-back': 'click_btn_back',
-            'click #order-overview-search-status a': 'click_btn_status',
-            'click #order-overview-search-footer-search': 'click_btn_search'
-        },
+        events() {
+            return {'click #back': 'click_btn_back',
+                    'click #status a': 'click_btn_status',
+                    'click #search': 'click_btn_search'}
+        }
 
-        click_btn_back: function(event)
-        {
+        click_btn_back(event) {
             event.preventDefault();
-            window.history.back();
-        },
+            this.changeHash('order-overview');
+        }
 
-        click_btn_search: function()
-        {
-            var orderid = $.trim($('#order-overview-search-orderid').val());
-            var tableNr = $.trim($('#order-overview-search-tableNr').val());
-            var from = $.trim($('#order-overview-search-from').val());
-            var to = $.trim($('#order-overview-search-to').val());
-            var userid = $.trim($('#order-overview-search-userid').val());
+        click_btn_search() {
+            var orderid = $.trim(this.$('#orderid').val());
+            var tableNr = $.trim(this.$('#tableNr').val());
+            var from = $.trim(this.$('#from').val());
+            var to = $.trim(this.$('#to').val());
+            var userid = $.trim(this.$('#userid').val());
 
             // "order-overview/status/:status(/orderid/:orderid)(/tableNr/:tableNr)(/from/:from)(/to/:to)(/userid/:userid)": "order_overview",
             var searchString = '/status/' + this.searchStatus;
@@ -70,34 +58,25 @@ define([ 'views/headers/HeaderView',
                 searchString += '/userid/' + userid;
             }
 
-            MyPOS.ChangePage('order-overview' + searchString);
-        },
+            this.changeHash('order-overview' + searchString);
+        }
 
-        click_btn_status: function(event)
-        {
-            $('#order-overview-search-status a').removeClass('ui-btn-active');
+        click_btn_status(event) {
+            this.$('#status a').removeClass('ui-btn-active');
             $(event.currentTarget).addClass('ui-btn-active');
             this.searchStatus = $(event.currentTarget).attr('data-value');
-        },
+        }
 
         // Renders all of the Category models on the UI
-        render: function() {
+        render() {
             var header = new HeaderView();
+            this.registerSubview(".nav-header", header);
 
-            header.activeButton = 'order-overview';
+            this.renderTemplate(Template, {userList: app.userList});
 
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  userList: app.session.userList});
+            this.changePage(this);
 
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-
-            $.mobile.changePage( "#" + this.title);
             return this;
         }
-    } );
-
-    // Returns the View class
-    return OrderOverviewSearchView;
-
+    }
 } );

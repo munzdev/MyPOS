@@ -1,40 +1,39 @@
  <div data-role="content">
-    <div class="nav-header"><%= header %></div>
+    <div class="nav-header"></div>
     <div>
-
-        <fieldset id="order-overview-search-status" data-role="controlgroup" data-type="horizontal" data-mini="true">
-            <legend>Bestellungsstatus:</legend>
-            <a data-value="all" class="ui-btn ui-btn-active ui-corner-all">Alle</a>
-            <a data-value="done" class="ui-btn ui-corner-all">Abgeschlossen</a>
-            <a data-value="open" class="ui-btn ui-corner-all">Offen</a>
+        <fieldset id="status" data-role="controlgroup" data-type="horizontal" data-mini="true">
+            <legend><%= t.orderStatus %>:</legend>
+            <a data-value="all" class="ui-btn ui-btn-active ui-corner-all"><%= t.all %></a>
+            <a data-value="done" class="ui-btn ui-corner-all"><%= t.completed %></a>
+            <a data-value="open" class="ui-btn ui-corner-all"><%= t.open %></a>
         </fieldset>
 
-        <label for="order-overview-search-orderid">Bestellnummer:</label>
-        <input type="number" id="order-overview-search-orderid" data-mini="true" />
+        <label for="orderid"><%= t.orderid %>:</label>
+        <input type="number" id="orderid" data-mini="true" />
 
-        <label for="order-overview-search-tableNr">Tischnummer:</label>
-        <input type="search" id="order-overview-search-tableNr" data-mini="true" />
+        <label for="tableNr"><%= t.tableNr %>:</label>
+        <input type="search" id="tableNr" data-mini="true" />
 
         <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">
-            <legend>Bestellungszeitraum:</legend>
-            <label for="order-overview-search-from">Von</label>
-            <input class="form-control" id="order-overview-search-from" type="text" data-role="datebox" data-datebox-mode="timeflipbox" data-options='{"useFocus":true,"overrideSetTimeButtonLabel":"Zeit setzen"}'/>
-            <label for="order-overview-search-to">Bis</label>
-            <input class="form-control" id="order-overview-search-to" type="text" data-role="datebox"  data-datebox-mode="timeflipbox" data-options='{"useFocus":true,"overrideSetTimeButtonLabel":"Zeit setzen"}'/>
+            <legend><%= t.orderPeriod %>:</legend>
+            <label for="from"><%= t.from %></label>
+            <input class="form-control" id="from" type="text" data-role="datebox" data-datebox-mode="timeflipbox" data-options='{"useFocus":true,"overrideSetTimeButtonLabel":"<%= t.setTime %>"}'/>
+            <label for="to"><%= t.to %></label>
+            <input class="form-control" id="to" type="text" data-role="datebox"  data-datebox-mode="timeflipbox" data-options='{"useFocus":true,"overrideSetTimeButtonLabel":"<%= t.setTime %>"}'/>
         </fieldset>
 
 
-        <label for="order-overview-search-userid">Kellner:</label>
-        <select id="order-overview-search-userid" data-mini="true">
-            <option value="*">Alle</option>
+        <label for="userid"><%= t.waiter %>:</label>
+        <select id="userid" data-mini="true">
+            <option value="*"><%= t.all %></option>
             <% userList.each(function(user) { %>
-                <option value="<%- user.get('userid') %>"><%- user.get('firstname') %> <%- user.get('lastname') %></option>
+                <option value="<%- user.get('Userid') %>"><%- user.get('Firstname') %> <%- user.get('Lastname') %></option>
             <% }) %>
         </select>
 
     </div>
 </div>
 <div data-role="footer" data-theme="b" data-position="fixed" >
-    <a id="order-overview-search-footer-back" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-carat-l">Zurück</a>
-    <a id="order-overview-search-footer-search" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-search" style="float:right">Suchen</a>
+    <a id="back" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-carat-l"><%= t.back %></a>
+    <a id="search" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-search" style="float:right"><%= t.search %></a>
 </div>

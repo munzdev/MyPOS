@@ -34,6 +34,21 @@
         "cancelOrder": "Cancel Order",
         "cancelOrderText": "Are you sure to cancel the selected order"
     },
+    "OrderOverviewSearchView": {
+        "orderStatus": "Order Status",
+        "all": "All",
+        "completed": "Completed",
+        "open": "Open",
+        "orderid": "Orderid",
+        "tableNr": "Table Number",
+        "orderPeriod": "Order period",
+        "from": "From",
+        "to": "To",
+        "setTime": "Set time",
+        "waiter": "Waiter",
+        "back": "Back",
+        "search": "Search"
+    },
     "OrderNewView": {
         "error": "Error!",
         "errorText": "Please enter a Table number!",
