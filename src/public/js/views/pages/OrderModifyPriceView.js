@@ -9,7 +9,7 @@ define(['models/custom/order/OrderModify',
             TemplateItem) {
     "use strict";
 
-    return class OrderModifyView extends app.PageView
+    return class OrderModifyPriceView extends app.PageView
     {
         events() {
             return {'click #list .order-item-edit': 'item_edit',
