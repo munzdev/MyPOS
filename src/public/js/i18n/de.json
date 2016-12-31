@@ -198,5 +198,15 @@
     },
     "PaginationView": {
         "page": "Seite"
+    },
+    "OrderModifyPriceView": {
+        "editSinglePrice": "Einzelpreis bearbeiten",
+        "singlePrice": "Einzelpreis",
+        "abort": "Abbrechen",
+        "continue": "Fortfahren",
+        "save": "Speichern",
+        "saveSuccess": "Änderung erfolgreich",
+        "invalidPrice": "Gültigen Preis eingeben",
+        "chatMessageInfo": "Bei der Bestellung mit der Bestellungsnummer %(orderid)i wurden vom Manager %(name)s die Preise angepasst. Bitte die Bestellung/Preise prüfen!"
     }
 }

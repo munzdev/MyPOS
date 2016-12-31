@@ -7,10 +7,10 @@ define(["views/dialoges/LoginView",
         "views/pages/OrderOverviewSearchView",
         "views/pages/OrderNewView",
         "views/pages/OrderModifyView",
+        "views/pages/OrderModifyPriceView",
         "views/pages/OrderInfoView",
         "views/pages/OrderInvoiceView",
-        /*"views/pages/OrderModifyPriceView",
-        "views/pages/DistributionView",
+        /*"views/pages/DistributionView",
         "views/pages/ManagerView",
         "views/pages/ManagerCallbackView",
         "views/pages/ManagerCheckView",
@@ -44,9 +44,9 @@ define(["views/dialoges/LoginView",
             OrderOverviewSearchView,
             OrderNewView,
             OrderModifyView,
+            OrderModifyPriceView,
             OrderInfoView,
             OrderInvoiceView,
-            OrderModifyPriceView,
             DistributionView,
             ManagerView,
             ManagerCallbackView,
@@ -135,7 +135,7 @@ define(["views/dialoges/LoginView",
                     "manager-check(/verified/:verified)": "manager_check",
                     "manager-groupmessage": "manager_groupmessage",
                     "manager-statistic": "manager_statistic",
-                    "order-modify-price/orderid/:id": "order_modify_price",
+                    "order-modify-price/id/:id": "order_modify_price",
                 //</editor-fold>
 
                 //<editor-fold defaultstate="collapsed" desc="Admin Routing">
@@ -206,8 +206,8 @@ define(["views/dialoges/LoginView",
         }
 
         order_modify(orderid, tableNr) {
-            this.show(new OrderModifyView({ orderid: orderid,
-                                            tableNr: tableNr}));
+            this.show(new OrderModifyView({orderid: orderid,
+                                           tableNr: tableNr}));
         }
 
         order_invoice(orderid) {

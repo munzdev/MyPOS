@@ -198,5 +198,15 @@
     },
     "PaginationView": {
         "page": "Page"
+    },
+    "OrderModifyPriceView": {
+        "editSinglePrice": "Edit single price",
+        "singlePrice": "Single price",
+        "abort": "Abort",
+        "continue": "Continue",
+        "save": "Save",
+        "saveSuccess": "Save successfull",
+        "invalidPrice": "Enter valid price",
+        "chatMessageInfo": "The prices of the Order with the orderid  %(orderid)i got modified by the Manager %(name)s. Please check the order/prices!"
     }
 }

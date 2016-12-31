@@ -1,40 +1,24 @@
-/* global _, Backbone, parseFloat */
-
-// Login View
-// =============
-
-// Includes file dependencies
-define([ "Webservice",
-         'models/order/payments/PaymentModel',
-         'collections/order/payments/OrderCollection',
-         'collections/order/payments/ExtraCollection',
-         'views/headers/HeaderView',
-         'text!templates/pages/order-modify-price.phtml',
-         'text!templates/pages/order-item.phtml'],
-function(Webservice,
-         PaymentModel,
-         OrderCollection,
-         ExtraCollection,
-         HeaderView,
-         Template,
-         TemplateItem) {
+define(['models/custom/order/OrderModify',
+        'views/helpers/HeaderView',
+        'text!templates/pages/order-modify-price.phtml',
+        'text!templates/pages/order-item.phtml',
+        'sprintf'
+], function(OrderModify,
+            HeaderView,
+            Template,
+            TemplateItem) {
     "use strict";
 
-    // Extends Backbone.View
-    var OrderModifyPriceView = Backbone.View.extend( {
+    return class OrderModifyView extends app.PageView
+    {
+        events() {
+            return {'click #list .order-item-edit': 'item_edit',
+                    'click #submit': 'finish',
+                    'click #dialog-continue': 'click_btn_continue',
+                    'popupafterclose #success-popup': 'success_popup_close'}
+    	}
 
-    	title: 'order-modify-price',
-    	el: 'body',
-
-    	events: {
-            'click #order-modify-price-list .order-item-edit': 'item_edit',
-            'click #order-modify-price-submit': 'finish',
-            'click #order-modify-price-dialog-continue': 'click_btn_continue',
-            'popupafterclose #order-modify-price-success-popup': 'success_popup_close'
-    	},
-
-        // The View Constructor
-        initialize: function(options) {
+        initialize(options) {
             _.bindAll(this, "render",
                             "renderOpenOrders",
                             "finish",
@@ -42,208 +26,186 @@ function(Webservice,
 
             this.orderid = options.orderid;
 
-            this.payments = new PaymentModel();
+            this.orderModify = new OrderModify();
+            this.orderModify.set('Orderid', options.orderid);
+            this.orderModify.fetch()
+                            .done(this.renderOpenOrders);
+
             this.modifications = {};
 
             this.render();
+        }
 
-            this.payments.fetch({data: {orderid: this.orderid},
-                                 success: this.renderOpenOrders});
-        },
+        item_edit(event) {
+            let index = $(event.currentTarget).attr('data-index');
+            let orderDetail = this.orderModify.get('OrderDetails').get({cid: index});
 
-        item_edit: function(event)
-        {
-            var menu_typeid = $(event.currentTarget).attr('data-menu-typeid');
-            var index = $(event.currentTarget).attr('data-index');
+            this.$('#dialog-input').val(orderDetail.get('SinglePrice'));
+            this.$('#dialog-continue').attr('data-index', index);
 
-            if(menu_typeid > 0)
-                var order = this.payments.get('orders')
-                                         .at(index);
-            else
-                var order = this.payments.get('extras')
-                                         .at(index);
+            this.$('#dialog').popup('open');
+        }
 
-            $('#order-modify-price-dialog-input').val(order.get('single_price'));
-            $('#order-modify-price-dialog-continue').attr('data-menu-typeid', menu_typeid);
-            $('#order-modify-price-dialog-continue').attr('data-index', index);
-
-            $('#order-modify-price-dialog').popup('open');
-        },
-
-        click_btn_continue: function(event)
-        {
-            var menu_typeid = $(event.currentTarget).attr('data-menu-typeid');
-            var index = $(event.currentTarget).attr('data-index');
-            var value = parseFloat($('#order-modify-price-dialog-input').val());
+        click_btn_continue(event) {
+            let index = $(event.currentTarget).attr('data-index');
+            let orderDetail = this.orderModify.get('OrderDetails').get({cid: index});
+            var value = parseFloat(this.$('#dialog-input').val());
+            let i18n = this.i18n();
 
             if(isNaN(value) || value < 0)
             {
-                MyPOS.DisplayError("Gültigen Preis eingeben!");
+                app.error.showAlert(i18n.invalidPrice);
                 return;
             }
 
             value = value.toFixed(2);
 
-            if(menu_typeid > 0)
-                this.payments.get('orders')
-                             .at(index)
-                             .set('single_price', value);
-            else
-                this.payments.get('extras')
-                             .at(index)
-                             .set('single_price', value);
+            orderDetail.set('SinglePrice', value);
 
-            if(menu_typeid > 0)
-                var id = this.payments.get('orders')
-                                       .at(index)
-                                       .get('orders_detailid');
-            else
-                var id = this.payments.get('extras')
-                                       .at(index)
-                                       .get('orders_details_special_extraid');
+            this.modifications[index] = value;
 
-            if(this.modifications[menu_typeid] == undefined)
-                this.modifications[menu_typeid] = {};
-
-            this.modifications[menu_typeid][id] = value;
-
-            $('#order-modify-price-dialog').popup('close');
+            this.$('#dialog').popup('close');
             this.renderOpenOrders();
-        },
+        }
 
-        finish: function()
-        {
-            var self = this;
+        finish() {
+            let i18n = this.i18n();
+            let modifiedOrderDetails = new Set();
+            _.each(this.modifications, (index, value) => {
+                let orderDetail = this.orderModify.get('OrderDetails').get({cid: index}).clone();
+                orderDetail.set('SinglePrice', value);
+                modifiedOrderDetails.add(orderDetail);
+            });
 
-            var webservice = new Webservice();
-            webservice.action = "Manager/SetPrices";
-            webservice.formData = {orderid: this.orderid,
-                                   prices: JSON.stringify(this.modifications)};
+            this.orderModify.save({PriceModifications: modifiedOrderDetails.values()}, {patch: true})
+                            .done(() => {
+                                app.ws.chat.SystemMessage(this.orderModify.get('Userid'), sprintf(i18n.chatMessageInfo, {orderid: this.orderid,
+                                                                                                                        name: app.auth.authUser.get('Firstname') + ' ' + app.auth.authUser.get('Lastname')}));
+                                this.$('#popup').popup("open");
+                            });
+        }
 
-            webservice.callback = {
-                success: function(userid)
-                {
-                    app.ws.chat.SystemMessage(userid, 'Bei der Bestellung mit der Bestellungsnummer ' + self.orderid + ' wurden vom Manager ' + app.session.user.get('firstname') + ' ' + app.session.user.get('lastname') + ' die Preise angepasst. Bitte die Offenen Bezahlungen/Preise prüfen');
-                    $('#order-modify-price-success-popup').popup("open");
-                }
-            };
-            webservice.call();
-        },
+        success_popup_close() {
+            this.changeHash("order-overview");
+        }
 
-        success_popup_close: function()
-        {
-            MyPOS.ChangePage("#order-overview");
-        },
-
-        renderOpenOrders: function()
-        {
+        renderOpenOrders() {
             var itemTemplate = _.template(TemplateItem);
 
-            $('#order-modify-price-list').empty();
+            this.$('#list').empty();
 
-            var sortedOrders = {};
+            let counter = 0;
+            let totalSumPrice = 0;
+            let sortedCategorys = new Map();
+            let t = this.i18n();
+            let currency = app.i18n.template.currency;
 
-            this.payments.get('orders').each(function(order, index)
-            {
-                var menu_typeid = order.get('menu_typeid');
+            // Presort the list by categorys
+            this.orderModify.get('OrderDetails').each((orderDetail) => {
+                let menuid = orderDetail.get('Menuid');
+                let key = null;
 
-                if(!(menu_typeid in sortedOrders))
-                {
-                    sortedOrders[menu_typeid] = {name: order.get('typeName'),
-                                                 orders: new OrderCollection,
-                                                 extras: new ExtraCollection};
+                if(menuid === null && sortedCategorys.get(key) == null) {
+                    sortedCategorys.set(key, {name: t.specialOrders,
+                                              orders: new Set()});
+                } else if(menuid !== null) {
+                    let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});
+                    key = menuSearch.MenuTypeid;
+
+                    if(sortedCategorys.get(key) == null) {
+                        let menuType = app.productList.findWhere({MenuTypeid: key});
+                        sortedCategorys.set(key, {name: menuType.get('Name'),
+                                                  orders: new Set()});
+                    }
                 }
 
-                var extras = order.get('sizeName');
-
-                if(order.get('mixedWith'))
-                {
-                    extras += ', Gemischt mit: ' + order.get('mixedWith');
-                }
-
-                if(order.get('selectedExtras'))
-                {
-                    extras += ', ' + order.get('selectedExtras');
-                }
-
-                if(order.get('extra_detail'))
-                {
-                    extras += ', ' + order.get('extra_detail');
-                }
-
-                order.set('extra_fulltext', extras);
-                order.set('index', index);
-
-                sortedOrders[menu_typeid].orders.add(order);
-
+                sortedCategorys.get(key).orders.add(orderDetail);
             });
 
-            this.payments.get('extras').each(function(extra, index)
-            {
-                if(!(0 in sortedOrders))
-                {
-                    sortedOrders[0] = {name: "Sonderwünsche",
-                                       orders: new OrderCollection,
-                                       extras: new ExtraCollection};
-                }
+            for(let[menuTypeid, val] of sortedCategorys.entries()) {
+                let divider = $('<li/>').attr('data-role', 'list-divider').text(val.name);
+                this.$('#list').append(divider);
+                counter = 0;
+                let isSpecialOrder = (menuTypeid == null);
 
-                extra.set('index', index);
-                sortedOrders[0].extras.add(extra);
-            });
+                for (let orderDetail of val.orders.values()) {
+                    let menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetail.get('Menuid'); });
+                    let extras = '';
+                    let price = parseFloat(orderDetail.get('SinglePrice'));
 
-            _.each(sortedOrders, function(category){
-                $('#order-modify-price-list').append("<li data-role='list-divider'>" + category.name + "</li>");
-                category.orders.each(function(order){
+                    let menuSize = orderDetail.get('MenuSize');
 
-                    var datas = {mode: 'modify',
-                                name: order.get('menuName'),
-                                extras: order.get('extra_fulltext'),
-                                amount: order.get('amount'),
-                                isSpecialOrder: false,
-                                price: order.get('single_price'),
-                                totalPrice: order.get('single_price') * order.get('amount'),
-                                menu_typeid: order.get('menu_typeid'),
-                                index: order.get('index'),
+                    // Add size text if multible sizes are avaible for the product
+                    if(!isSpecialOrder && menuSearch.Menu.get('MenuPossibleSize').length > 1)
+                        extras = menuSize.get('Name') + ", ";
+
+                    if(orderDetail.get('OrderDetailMixedWiths').length > 0) {
+                        extras += t.mixedWith + ": ";
+
+                        orderDetail.get('OrderDetailMixedWiths').each((orderDetailMixedWith) => {
+                            let menuToMixWith = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetailMixedWith.get('Menuid'); });
+                            extras += menuToMixWith.Menu.get('Name') + " - ";
+                        });
+
+                        extras = extras.slice(0, -3);
+                        extras += ", ";
+                    }
+
+                    orderDetail.get('OrderDetailExtras').each(function(extra) {
+                        let menuPossibleExtra = menuSearch.Menu.get('MenuPossibleExtra')
+                                                                .findWhere({MenuPossibleExtraid: extra.get('MenuPossibleExtraid')});
+                        extras += menuPossibleExtra.get('MenuExtra').get('Name') + ", ";
+                    });
+
+                    if(orderDetail.get('ExtraDetail') && orderDetail.get('ExtraDetail').length > 0)
+                        extras += orderDetail.get('ExtraDetail') + ", ";
+
+                    if(extras.length > 0)
+                        extras = extras.slice(0, -2);
+
+                    let totalPrice = price * orderDetail.get('Amount');
+                    totalSumPrice += totalPrice;
+
+                    let datas = {name: isSpecialOrder ? t.specialOrder : menuSearch.Menu.get('Name'),
+                                extras: extras,
+                                mode: 'modify',
+                                amount: orderDetail.get('Amount'),
+                                price: price,
+                                totalPrice: totalPrice,
+                                menuTypeid: menuTypeid,
+                                index: orderDetail.cid,
+                                isSpecialOrder: isSpecialOrder,
                                 edit: true,
-                                skipCounts: true};
+                                skipCounts: true,
+                                t: app.i18n.template.OrderItem,
+                                i18n: app.i18n.template};
 
-                    $('#order-modify-price-list').append("<li>" + itemTemplate(datas) + "</li>");
-                });
-                category.extras.each(function(extra){
+                    this.$('#list').append("<li>" + itemTemplate(datas) + "</li>");
+                    counter++;
+                }
+            }
 
-                    var datas = {mode: 'modify',
-                                  name: 'Sonderwunsch',
-                                  extras: extra.get('extra_detail'),
-                                  amount: extra.get('amount'),
-                                  isSpecialOrder: extra.get('verified') == 0,
-                                  price: extra.get('single_price'),
-                                  totalPrice: extra.get('single_price') * extra.get('amount'),
-                                  menu_typeid: 0,
-                                  index: extra.get('index'),
-                                  edit: true,
-                                  skipCounts: true};
-                    $('#order-modify-price-list').append("<li>" + itemTemplate(datas) + "</li>");
-                });
-            });
+            if(this.oldPrice === undefined) {
+                this.oldPrice = parseFloat(totalSumPrice);
+                this.$('#total-old').text(this.oldPrice.toFixed(2) + ' ' + currency);
+            }
 
-            $('#order-modify-price-list').listview('refresh');
-        },
+            this.$('#total-new').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
+            this.$('#total-difference').text(parseFloat(totalSumPrice - this.oldPrice).toFixed(2) + ' ' + currency);
+
+            this.$('#list').listview('refresh');
+        }
 
         // Renders all of the Category models on the UI
-        render: function() {
-            var header = new HeaderView();
-            header.activeButton = 'order-overview';
+        render() {
+            let header = new HeaderView();
+            this.registerSubview(".nav-header", header);
 
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render()});
+            this.renderTemplate(Template);
 
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-
-            $.mobile.changePage( "#" + this.title);
+            this.changePage(this);
 
             return this;
         }
-    });
-
-    return OrderModifyPriceView;
+    }
 } );

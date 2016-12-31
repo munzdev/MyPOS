@@ -1,26 +1,34 @@
 <div data-role="content">
-    <div class="nav-header"><%= header %></div>
+    <div class="nav-header"></div>
     <div>
-        <ul data-role="listview" data-inset="true" id="order-modify-price-list">
-
+        <ul data-role="listview" data-inset="true" id="list">
         </ul>
+        <h3 class="ui-bar ui-bar-a ui-corner-all"><%= t.oldSum %></h3>
+        <div class="ui-body ui-body-a ui-corner-all">
+            <h1 style="margin: 0; padding: 0" id='total-old'>0,00<%= i18n.currency %></h1>
+        </div>
+        <h3 class="ui-bar ui-bar-a ui-corner-all"><%= t.newSum %></h3>
+        <div class="ui-body ui-body-a ui-corner-all">
+            <h1 style="margin: 0; padding: 0" id='total-new'>0,00<%= i18n.currency %></h1>
+            <%= t.difference %>: <span id="total-difference">0,00 <%= i18n.currency %></span>
+        </div>
     </div>
     <div class="ui-body ui-body-a ui-corner-all">
-        <input type="button" id="order-modify-price-submit" value="Speichern">
+        <input type="button" id="submit" value=" <%= t.save %>">
     </div>
 </div>
-<div data-role="popup" id="order-modify-price-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false">
+<div data-role="popup" id="dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false">
     <div data-role="header" data-theme="a">
-        <h1>Einzelpreis bearbeiten</h1>
+        <h1><%= t.editSinglePrice %></h1>
     </div>
     <div role="main" class="ui-content">
-        <label for="order-modify-price-dialog-input">Einzelpreis:</label>
-        <input type="number" id="order-modify-price-dialog-input"  />
+        <label for="dialog-input"><%= t.singlePrice %>:</label>
+        <input type="number" id="dialog-input" />
 
-        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Abbrechen</a>
-        <a id='order-modify-price-dialog-continue' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back"><%= t.abort %></a>
+        <a id='dialog-continue' class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.continue %></a>
     </div>
 </div>
-<div data-role="popup" data-overlay-theme="b" data-theme="b" data-position-to="window" id="order-modify-price-success-popup" class="ui-content">
-    <h3>Änderung erfolgreich!</h3>
+<div data-role="popup" data-overlay-theme="b" data-theme="b" data-position-to="window" id="success-popup" class="ui-content">
+    <h3><%= t.saveSuccess %>!</h3>
 </div>

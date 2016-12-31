@@ -130,9 +130,9 @@ define(['collections/custom/order/OrderOverviewCollection',
         }
 
         click_btn_price(event) {
-            var orderid = $(event.currentTarget).attr('data-order-cid');
+            var order = this.ordersList.get({cid: $(event.currentTarget).attr('data-order-cid')});
 
-            this.changeHash("order-modify-price/orderid/" + orderid);
+            this.changeHash("order-modify-price/id/" + order.get('Orderid'));
         }
 
         set_priority() {
