@@ -6,8 +6,6 @@ use API\Lib\Auth;
 use API\Lib\SecurityController;
 use API\Models\Event\EventTableQuery;
 use API\Models\Event\Map\EventTableTableMap;
-use API\Models\Invoice\Map\InvoiceItemTableMap;
-use API\Models\OIP\Map\OrderInProgressTableMap;
 use API\Models\Ordering\Map\OrderDetailTableMap;
 use API\Models\Ordering\Map\OrderTableMap;
 use API\Models\Ordering\Order as ModelsOrder;
@@ -16,7 +14,7 @@ use API\Models\Ordering\OrderDetailExtra;
 use API\Models\Ordering\OrderDetailMixedWith;
 use API\Models\Ordering\OrderQuery;
 use DateTime;
-use Propel\Runtime\ActiveQuery\ModelCriteria;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Propel;
 use Respect\Validation\Validator as v;
 use Slim\App;
@@ -46,27 +44,65 @@ class Order extends SecurityController
         $str_to = null;
         $i_userid = $o_user->getUserid();
 
-        if(isset($this->a_json['search']))
+        if(isset($_REQUEST['search']))
         {
             $a_validators = array(
-                ['search'] => [
+                'search' => [
                     'status' => v::alnum()->noWhitespace()->length(1),
-                    'orderid' => v::intVal()->length(1)->positive(),
-                    'tablenr' => v::alnum()->noWhitespace()->length(1),
-                    'from' => v::date('H:i'),
-                    'to' => v::date('H:i'),
-                    'userid' => v::intVal()->length(1)->positive()]
+                    'orderid' => v::optional(v::intVal()->length(1)->positive()),
+                    'tableNr' => v::optional(v::alnum()->noWhitespace()->length(1)),
+                    'from' => v::optional(v::date('H:i')),
+                    'to' => v::optional(v::date('H:i')),
+                    'userid' => v::oneOf(v::intVal()->length(1)->positive(),
+                                         v::equals('*'))]
             );
 
-            $this->validate($a_validators);
+            $this->validate($a_validators, $_REQUEST);
 
-            $str_status = $this->a_json['search']['status'];
-            $i_orderid = $this->a_json['search']['orderid'];
-            $str_tablenr = $this->a_json['search']['tablenr'];
-            $str_from = $this->a_json['search']['from'];
-            $str_to = $this->a_json['search']['to'];
-            $i_userid = $this->a_json['search']['Userid'];
+            $str_status = $_REQUEST['search']['status'];
+            $i_userid = $_REQUEST['search']['userid'];
+
+            if(isset($_REQUEST['search']['orderid']))
+                $i_orderid = $_REQUEST['search']['orderid'];
+
+            if(isset($_REQUEST['search']['tableNr']))
+                $str_tablenr = $_REQUEST['search']['tableNr'];
+
+            if(isset($_REQUEST['search']['from']))
+                $str_from = $_REQUEST['search']['from'];
+
+            if(isset($_REQUEST['search']['to']))
+                $str_to = $_REQUEST['search']['to'];
         }
+
+        $o_searchCriteria = OrderQuery::create()
+                                        ->useEventTableQuery()
+                                            ->filterByEventid($o_user->getEventUser()->getEventid())
+                                            ->_if($str_tablenr)
+                                                ->filterByName($str_tablenr)
+                                            ->_endif()
+                                        ->endUse()
+                                        ->_if($str_status == 'open')
+                                            ->filterByDistributionFinished(null)
+                                            ->_or()
+                                            ->filterByInvoiceFinished(null)
+                                        ->_elseif($str_status == 'completed')
+                                            ->filterByDistributionFinished(null, Criteria::NOT_EQUAL)
+                                            ->_and()
+                                            ->filterByInvoiceFinished(null, Criteria::NOT_EQUAL)
+                                        ->_endif()
+                                        ->_if($i_orderid)
+                                            ->filterByOrderid($i_orderid)
+                                        ->_endif()
+                                        ->_if($i_userid != '*')
+                                            ->filterByUserid($i_userid)
+                                        ->_endif()
+                                        ->_if($str_from)
+                                            ->filterByOrdertime(array('min' => DateTime::createFromFormat('H:i', $str_from)))
+                                        ->_endif()
+                                        ->_if($str_to)
+                                            ->filterByOrdertime(array('max' => DateTime::createFromFormat('H:i', $str_to)))
+                                        ->_endif();
 
         if(isset($_REQUEST['page']) && isset($_REQUEST['elementsPerPage'])) {
             $a_validators = array(
@@ -76,37 +112,23 @@ class Order extends SecurityController
 
             $this->validate($a_validators, $_REQUEST);
 
-            $o_ordersList = OrderQuery::create()
-                                        ->useEventTableQuery()
-                                            ->filterByEventid($o_user->getEventUser()->getEventid())
-                                        ->endUse()
-                                        ->filterByDistributionFinished(null)
-                                        ->_or()
-                                        ->filterByInvoiceFinished(null)
-                                        ->filterByUserid($i_userid)
+            $o_ordersList = OrderQuery::create(null, clone $o_searchCriteria)
                                         ->offset(($_REQUEST['elementsPerPage'] * $_REQUEST['page']) - $_REQUEST['elementsPerPage'])
                                         ->limit($_REQUEST['elementsPerPage'])
                                         ->find();
         }
 
-        $o_criteria = OrderQuery::create()
-                                ->useEventTableQuery()
-                                    ->filterByEventid($o_user->getEventUser()->getEventid())
-                                ->endUse()
-                                ->joinOrderDetail()
-                                ->leftJoinWithOrderInProgress()
-                                ->with(EventTableTableMap::getTableMap()->getPhpName())
-                                ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " * " . OrderDetailTableMap::COL_SINGLE_PRICE . ")", "price")
-                                ->filterByDistributionFinished(null)
-                                ->_or()
-                                ->filterByInvoiceFinished(null)
-                                ->filterByUserid($i_userid)
-                                ->groupByOrderid()
-                                ->orderByPriority();
+        $o_criteriaData = OrderQuery::create(null, $o_searchCriteria)
+                                    ->joinOrderDetail()
+                                    ->leftJoinWithOrderInProgress()
+                                    ->with(EventTableTableMap::getTableMap()->getPhpName())
+                                    ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " * " . OrderDetailTableMap::COL_SINGLE_PRICE . ")", "price")
+                                    ->groupByOrderid()
+                                    ->orderByPriority();
 
-        $i_order_count = OrderQuery::create(null, $o_criteria)->count();
+        $i_order_count = OrderQuery::create(null, clone $o_criteriaData)->count();
 
-        $o_order = OrderQuery::create(null, $o_criteria)
+        $o_order = OrderQuery::create(null, $o_criteriaData)
                                 ->_if(!empty($o_ordersList))
                                     ->where(OrderTableMap::COL_ORDERID . " IN ?", $o_ordersList->getColumnValues())
                                 ->_endif()

@@ -1,11 +1,9 @@
-define([ "Webservice",
-         'collections/custom/order/OrderOverviewCollection',
-         'views/helpers/HeaderView',
-         'views/helpers/PaginationView',
-         'text!templates/pages/order-overview.phtml',
-         'text!templates/pages/order-overview-item.phtml'
-], function(Webservice,
-            OrderOverviewCollection,
+define(['collections/custom/order/OrderOverviewCollection',
+        'views/helpers/HeaderView',
+        'views/helpers/PaginationView',
+        'text!templates/pages/order-overview.phtml',
+        'text!templates/pages/order-overview-item.phtml'
+], function(OrderOverviewCollection,
             HeaderView,
             PaginationView,
             Template,
@@ -27,7 +25,9 @@ define([ "Webservice",
             this.elementsPerPage = 10;
 
             if(options)
-                this.search = options.search;
+                this.search = _.extend(this.defaultSearch(), options.search);
+            else
+                this.search = this.defaultSearch();
 
             this.ordersList = new OrderOverviewCollection();
 
@@ -44,23 +44,34 @@ define([ "Webservice",
                 'click #search-btn': 'click_btn_search',
                 'click .manage-priority-btn': 'click_btn_priority',
                 'click .manage-price-btn': 'click_btn_price',
+                'change #tableNr-search': 'change_tableNr_search',
                 'popupafterclose #cancel-success-popup': 'success_popup_close'
             };
+        }
+
+        defaultSearch() {
+            return {status: 'open',
+                    orderid: null,
+                    tableNr: null,
+                    from: null,
+                    to: null,
+                    userid: app.auth.authUser.get('Userid')};
         }
 
         refresh() {
             this.$('#order-list').empty();
             $.mobile.loading("show");
 
-            if(this.search)
-                this.ordersList.fetch({data: {search: this.search,
-                                              page: this.pagination.currentPage,
-                                              elementsPerPage: this.elementsPerPage}})
-                               .done(this.renderOrdersList);
-            else
-                this.ordersList.fetch({data: {page: this.pagination.currentPage,
-                                              elementsPerPage: this.elementsPerPage}})
-                               .done(this.renderOrdersList);
+            this.ordersList.fetch({data: {search: this.search,
+                                          page: this.pagination.currentPage,
+                                          elementsPerPage: this.elementsPerPage}})
+                           .done(this.renderOrdersList);
+        }
+
+        change_tableNr_search(event) {
+            let tableNr = $(event.currentTarget).val();
+            this.search.tableNr = tableNr;
+            this.refresh();
         }
 
         cancel_order_popup(event) {
@@ -69,13 +80,13 @@ define([ "Webservice",
 
             let i18n = this.i18n();
 
-            $('#dialog-title').text(i18n.cancelOrder + '?');
-            $('#dialog-text').text(i18n.cancelOrderText + '?');
-            $('#dialog').popup('open');
+            this.$('#dialog-title').text(i18n.cancelOrder + '?');
+            this.$('#dialog-text').text(i18n.cancelOrderText + '?');
+            this.$('#dialog').popup('open');
         }
 
         dialog_continue() {
-            $('#dialog').popup('close')
+            this.$('#dialog').popup('close')
 
             if(this.dialogMode == 'cancel')
                 this.cancel_order();
@@ -85,17 +96,8 @@ define([ "Webservice",
 
         cancel_order() {
             var order = this.ordersList.get({cid: this.cancelOrderCid});
-
-            var webservice = new Webservice();
-            webservice.action = "Orders/MakeCancel";
-            webservice.formData = {orderid: this.cancelOrderCid};
-
-            webservice.callback = {
-                success: function() {
-                    $('#cancel-success-popup').popup("open");
-                }
-            };
-            webservice.call();
+            order.save({Cancellation: 1}, {patch: true})
+                 .done(this.reload);
         }
 
         click_btn_pay(event) {
@@ -122,9 +124,9 @@ define([ "Webservice",
 
             let i18n = this.i18n();
 
-            $('#dialog-title').text(i18n.changePriority + "?");
-            $('#dialog-text').text(i18n.changePriorityText + "?");
-            $('#dialog').popup('open');
+            this.$('#dialog-title').text(i18n.changePriority + "?");
+            this.$('#dialog-text').text(i18n.changePriorityText + "?");
+            this.$('#dialog').popup('open');
         }
 
         click_btn_price(event) {
@@ -140,7 +142,24 @@ define([ "Webservice",
         }
 
         click_btn_search() {
-            this.changeHash(Backbone.history.getFragment() + "/search/");
+            var searchString = '/status/' + this.search.status;
+
+            if(this.search.orderid)
+                searchString += '/orderid/' + this.search.orderid;
+
+            if(this.search.tableNr)
+                searchString += '/tableNr/' + this.search.tableNr;
+
+            if(this.search.from)
+                searchString += '/from/' + this.search.from;
+
+            if(this.search.to)
+                searchString += '/to/' + this.search.to;
+
+            if(this.search.userid)
+                searchString += '/userid/' + this.search.userid;
+
+            this.changeHash('order-overview/search' + searchString);
         }
 
         success_popup_close() {
@@ -174,7 +193,7 @@ define([ "Webservice",
             var header = new HeaderView();
             this.registerSubview(".nav-header", header);
 
-            this.renderTemplate(Template);
+            this.renderTemplate(Template, {tableNr: this.search.tableNr});
 
             this.changePage(this);
 

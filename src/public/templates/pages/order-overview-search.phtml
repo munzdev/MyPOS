@@ -2,10 +2,13 @@
     <div class="nav-header"></div>
     <div>
         <fieldset id="status" data-role="controlgroup" data-type="horizontal" data-mini="true">
-            <legend><%= t.orderStatus %>:</legend>
-            <a data-value="all" class="ui-btn ui-btn-active ui-corner-all"><%= t.all %></a>
-            <a data-value="done" class="ui-btn ui-corner-all"><%= t.completed %></a>
-            <a data-value="open" class="ui-btn ui-corner-all"><%= t.open %></a>
+            <legend><%= t.orderStatus %>:</legend>
+            <input type="radio" name="status" id="all" value="all">
+            <label for="all"><%= t.all %></label>
+            <input type="radio" name="status" id="completed" value="completed">
+            <label for="completed"><%= t.completed %></label>
+            <input type="radio" name="status" id="open" value="open">
+            <label for="open"><%= t.open %></label>
         </fieldset>
 
         <label for="orderid"><%= t.orderid %>:</label>
@@ -22,7 +25,6 @@
             <input class="form-control" id="to" type="text" data-role="datebox"  data-datebox-mode="timeflipbox" data-options='{"useFocus":true,"overrideSetTimeButtonLabel":"<%= t.setTime %>"}'/>
         </fieldset>
 
-
         <label for="userid"><%= t.waiter %>:</label>
         <select id="userid" data-mini="true">
             <option value="*"><%= t.all %></option>
@@ -30,7 +32,6 @@
                 <option value="<%- user.get('Userid') %>"><%- user.get('Firstname') %> <%- user.get('Lastname') %></option>
             <% }) %>
         </select>
-
     </div>
 </div>
 <div data-role="footer" data-theme="b" data-position="fixed" >

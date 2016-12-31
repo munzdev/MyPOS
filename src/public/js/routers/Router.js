@@ -125,7 +125,7 @@ define(["views/dialoges/LoginView",
                     "order-new": "order_new",
                     "order-overview": "order_overview",
                     "order-overview/status/:status(/orderid/:orderid)(/tableNr/:tableNr)(/from/:from)(/to/:to)(/userid/:userid)": "order_overview",
-                    "order-overview/search/": "order_search_overview",
+                    "order-overview/search/status/:status(/orderid/:orderid)(/tableNr/:tableNr)(/from/:from)(/to/:to)(/userid/:userid)": "order_search_overview",
                     "order-modify(/id/:orderid)(/tableNr/:tableNr)": "order_modify",
                     "order-invoice/id/:orderid": "order_invoice",
                     "order-info/id/:orderid": "order_info",
@@ -192,8 +192,13 @@ define(["views/dialoges/LoginView",
                 this.show(new OrderOverviewView());
         }
 
-        order_search_overview() {
-            this.show(new OrderOverviewSearchView());
+        order_search_overview(status, orderid, tableNr, from, to, userid) {
+            this.show(new OrderOverviewSearchView({status: status,
+                                                   orderid: orderid,
+                                                   tableNr: tableNr,
+                                                   from: from,
+                                                   to: to,
+                                                   userid: userid}));
         }
 
         order_new() {

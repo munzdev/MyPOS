@@ -6,65 +6,87 @@ define(['views/helpers/HeaderView',
     "use strict";
 
     return class OrderOverviewSearchView extends app.PageView {
-        initialize() {
-            this.searchStatus = 'all';
+        initialize(options) {
 
+            this.search = options;
             this.render();
+
+            this.$('#' + options.status).attr("checked", true).checkboxradio("refresh");
+
+            if(options.orderid)
+                this.$('#orderid').val(options.orderid);
+
+            if(options.tableNr)
+                this.$('#tableNr').val(options.tableNr);
+
+            if(options.from)
+                this.$('#from').val(options.from);
+
+            if(options.to)
+                this.$('#to').val(options.to);
+
+            if(options.userid)
+                this.$('#userid').val(options.userid).selectmenu('refresh');
+            else
+                this.$('#userid').val(app.auth.authUser.get('Userid')).selectmenu('refresh');
         }
 
         events() {
             return {'click #back': 'click_btn_back',
-                    'click #status a': 'click_btn_status',
                     'click #search': 'click_btn_search'}
         }
 
         click_btn_back(event) {
             event.preventDefault();
-            this.changeHash('order-overview');
+
+            this.showResult(this.search.status,
+                            this.search.orderid,
+                            this.search.tableNr,
+                            this.search.from,
+                            this.search.to,
+                            this.search.userid);
         }
 
         click_btn_search() {
+            var status = this.$('#status :radio:checked').val();
             var orderid = $.trim(this.$('#orderid').val());
             var tableNr = $.trim(this.$('#tableNr').val());
-            var from = $.trim(this.$('#from').val());
-            var to = $.trim(this.$('#to').val());
-            var userid = $.trim(this.$('#userid').val());
+            var from = this.$('#from').val();
+            var to = this.$('#to').val();
+            var userid = this.$('#userid').val();
 
-            // "order-overview/status/:status(/orderid/:orderid)(/tableNr/:tableNr)(/from/:from)(/to/:to)(/userid/:userid)": "order_overview",
-            var searchString = '/status/' + this.searchStatus;
+            this.showResult(status, orderid, tableNr, from, to, userid);
+        }
 
-            if(orderid !== '')
+        showResult(status, orderid, tableNr, from, to, userid) {
+            var searchString = '/status/' + status;
+
+            if(orderid)
             {
                 searchString += '/orderid/' + orderid;
             }
 
-            if(tableNr !== '')
+            if(tableNr)
             {
                 searchString += '/tableNr/' + tableNr;
             }
 
-            if(from !== '')
+            if(from)
             {
                 searchString += '/from/' + from;
             }
 
-            if(to !== '')
+            if(to)
             {
                 searchString += '/to/' + to;
             }
 
-            if(userid !== '*')
+            if(userid)
             {
                 searchString += '/userid/' + userid;
             }
 
             this.changeHash('order-overview' + searchString);
-        }
-
-        click_btn_status(event) {
-            this.$('#status a').removeClass('ui-btn-active');
-            $(event.currentTarget).addClass('ui-btn-active');
-            this.searchStatus = $(event.currentTarget).attr('data-value');
         }
 
         // Renders all of the Category models on the UI
