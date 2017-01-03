@@ -62,6 +62,7 @@ abstract class StatusCheck
                                                     ->filterByCanceledInvoiceid(null)
                                                 ->endUse()
                                             ->endUse()
+                                            ->joinWithOrder()
                                             ->with(InvoiceItemTableMap::getTableMap()->getPhpName())
                                             ->leftJoinWithOrderInProgressRecieved()
                                             ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " - IFNULL(" . OrderInProgressRecievedTableMap::COL_AMOUNT . ", 0))", "DistribtuionLeft")
@@ -90,6 +91,10 @@ abstract class StatusCheck
             $d_invoice = new DateTime();
         elseif($o_order_detail->getVirtualColumn('InvoiceLeft') != 0 && $d_invoice != null)
             $d_invoice = null;
+
+        if(!$d_distribution && $o_order_detail->getOrder()->getCancellation()) {
+            $d_distribution = $o_order_detail->getOrder()->getCancellation();
+        }
 
         $o_order_detail->setDistributionFinished($d_distribution);
         $o_order_detail->setInvoiceFinished($d_invoice);
@@ -130,6 +135,7 @@ abstract class StatusCheck
                                                         ->withColumn(OrderDetailTableMap::COL_AMOUNT . " - IFNULL(SUM(" . OrderInProgressRecievedTableMap::COL_AMOUNT . "), 0)" , "AmountLeft")
                                                         ->groupByOrderDetailid()
                                                     ->endUse()
+                                                    ->joinWithOrder()
                                                     ->with(OrderInProgressRecievedTableMap::getTableMap()->getPhpName())
                                                     ->findByOrderInProgressid($i_order_in_progressid)
                                                     ->getFirst();
@@ -145,6 +151,10 @@ abstract class StatusCheck
             $d_done = new DateTime();
         elseif($i_amount_left != 0 && $d_done != null)
             $d_done = null;
+
+        if(!$d_done && $o_order_detail->getOrder()->getCancellation()) {
+            $d_done = $o_order_detail->getOrder()->getCancellation();
+        }
 
         $o_order_in_progress->setDone($d_done);
         $o_order_in_progress->save();

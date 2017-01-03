@@ -216,13 +216,20 @@ class UserTableMap extends TableMap
     1 => ':userid',
   ),
 ), null, null, 'Invoices', false);
-        $this->addRelation('Order', '\\API\\Models\\Ordering\\Order', RelationMap::ONE_TO_MANY, array (
+        $this->addRelation('OrderRelatedByCancellationCreatedByUserid', '\\API\\Models\\Ordering\\Order', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':cancellation_created_by_userid',
+    1 => ':userid',
+  ),
+), null, null, 'OrdersRelatedByCancellationCreatedByUserid', false);
+        $this->addRelation('OrderRelatedByUserid', '\\API\\Models\\Ordering\\Order', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
     0 => ':userid',
     1 => ':userid',
   ),
-), null, null, 'Orders', false);
+), null, null, 'OrdersRelatedByUserid', false);
         $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

@@ -192,8 +192,14 @@ abstract class User implements ActiveRecordInterface
     /**
      * @var        ObjectCollection|Order[] Collection to store aggregation of Order objects.
      */
-    protected $collOrders;
-    protected $collOrdersPartial;
+    protected $collOrdersRelatedByCancellationCreatedByUserid;
+    protected $collOrdersRelatedByCancellationCreatedByUseridPartial;
+
+    /**
+     * @var        ObjectCollection|Order[] Collection to store aggregation of Order objects.
+     */
+    protected $collOrdersRelatedByUserid;
+    protected $collOrdersRelatedByUseridPartial;
 
     /**
      * @var        ObjectCollection|OrderDetail[] Collection to store aggregation of OrderDetail objects.
@@ -249,7 +255,13 @@ abstract class User implements ActiveRecordInterface
      * An array of objects scheduled for deletion.
      * @var ObjectCollection|Order[]
      */
-    protected $ordersScheduledForDeletion = null;
+    protected $ordersRelatedByCancellationCreatedByUseridScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|Order[]
+     */
+    protected $ordersRelatedByUseridScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -967,7 +979,9 @@ abstract class User implements ActiveRecordInterface
 
             $this->collInvoices = null;
 
-            $this->collOrders = null;
+            $this->collOrdersRelatedByCancellationCreatedByUserid = null;
+
+            $this->collOrdersRelatedByUserid = null;
 
             $this->collOrderDetails = null;
 
@@ -1153,17 +1167,35 @@ abstract class User implements ActiveRecordInterface
                 }
             }
 
-            if ($this->ordersScheduledForDeletion !== null) {
-                if (!$this->ordersScheduledForDeletion->isEmpty()) {
-                    \API\Models\Ordering\OrderQuery::create()
-                        ->filterByPrimaryKeys($this->ordersScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->ordersScheduledForDeletion = null;
+            if ($this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion !== null) {
+                if (!$this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion->isEmpty()) {
+                    foreach ($this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion as $orderRelatedByCancellationCreatedByUserid) {
+                        // need to save related object because we set the relation to null
+                        $orderRelatedByCancellationCreatedByUserid->save($con);
+                    }
+                    $this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion = null;
                 }
             }
 
-            if ($this->collOrders !== null) {
-                foreach ($this->collOrders as $referrerFK) {
+            if ($this->collOrdersRelatedByCancellationCreatedByUserid !== null) {
+                foreach ($this->collOrdersRelatedByCancellationCreatedByUserid as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->ordersRelatedByUseridScheduledForDeletion !== null) {
+                if (!$this->ordersRelatedByUseridScheduledForDeletion->isEmpty()) {
+                    \API\Models\Ordering\OrderQuery::create()
+                        ->filterByPrimaryKeys($this->ordersRelatedByUseridScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->ordersRelatedByUseridScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collOrdersRelatedByUserid !== null) {
+                foreach ($this->collOrdersRelatedByUserid as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1522,7 +1554,7 @@ abstract class User implements ActiveRecordInterface
 
                 $result[$key] = $this->collInvoices->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collOrders) {
+            if (null !== $this->collOrdersRelatedByCancellationCreatedByUserid) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
@@ -1535,7 +1567,22 @@ abstract class User implements ActiveRecordInterface
                         $key = 'Orders';
                 }
 
-                $result[$key] = $this->collOrders->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+                $result[$key] = $this->collOrdersRelatedByCancellationCreatedByUserid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collOrdersRelatedByUserid) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'orders';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'orders';
+                        break;
+                    default:
+                        $key = 'Orders';
+                }
+
+                $result[$key] = $this->collOrdersRelatedByUserid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderDetails) {
 
@@ -1898,9 +1945,15 @@ abstract class User implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getOrders() as $relObj) {
+            foreach ($this->getOrdersRelatedByCancellationCreatedByUserid() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addOrder($relObj->copy($deepCopy));
+                    $copyObj->addOrderRelatedByCancellationCreatedByUserid($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getOrdersRelatedByUserid() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addOrderRelatedByUserid($relObj->copy($deepCopy));
                 }
             }
 
@@ -1975,8 +2028,11 @@ abstract class User implements ActiveRecordInterface
         if ('Invoice' == $relationName) {
             return $this->initInvoices();
         }
-        if ('Order' == $relationName) {
-            return $this->initOrders();
+        if ('OrderRelatedByCancellationCreatedByUserid' == $relationName) {
+            return $this->initOrdersRelatedByCancellationCreatedByUserid();
+        }
+        if ('OrderRelatedByUserid' == $relationName) {
+            return $this->initOrdersRelatedByUserid();
         }
         if ('OrderDetail' == $relationName) {
             return $this->initOrderDetails();
@@ -3118,31 +3174,31 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collOrders collection
+     * Clears out the collOrdersRelatedByCancellationCreatedByUserid collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addOrders()
+     * @see        addOrdersRelatedByCancellationCreatedByUserid()
      */
-    public function clearOrders()
+    public function clearOrdersRelatedByCancellationCreatedByUserid()
     {
-        $this->collOrders = null; // important to set this to NULL since that means it is uninitialized
+        $this->collOrdersRelatedByCancellationCreatedByUserid = null; // important to set this to NULL since that means it is uninitialized
     }
 
     /**
-     * Reset is the collOrders collection loaded partially.
+     * Reset is the collOrdersRelatedByCancellationCreatedByUserid collection loaded partially.
      */
-    public function resetPartialOrders($v = true)
+    public function resetPartialOrdersRelatedByCancellationCreatedByUserid($v = true)
     {
-        $this->collOrdersPartial = $v;
+        $this->collOrdersRelatedByCancellationCreatedByUseridPartial = $v;
     }
 
     /**
-     * Initializes the collOrders collection.
+     * Initializes the collOrdersRelatedByCancellationCreatedByUserid collection.
      *
-     * By default this just sets the collOrders collection to an empty array (like clearcollOrders());
+     * By default this just sets the collOrdersRelatedByCancellationCreatedByUserid collection to an empty array (like clearcollOrdersRelatedByCancellationCreatedByUserid());
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
@@ -3151,16 +3207,16 @@ abstract class User implements ActiveRecordInterface
      *
      * @return void
      */
-    public function initOrders($overrideExisting = true)
+    public function initOrdersRelatedByCancellationCreatedByUserid($overrideExisting = true)
     {
-        if (null !== $this->collOrders && !$overrideExisting) {
+        if (null !== $this->collOrdersRelatedByCancellationCreatedByUserid && !$overrideExisting) {
             return;
         }
 
         $collectionClassName = OrderTableMap::getTableMap()->getCollectionClassName();
 
-        $this->collOrders = new $collectionClassName;
-        $this->collOrders->setModel('\API\Models\Ordering\Order');
+        $this->collOrdersRelatedByCancellationCreatedByUserid = new $collectionClassName;
+        $this->collOrdersRelatedByCancellationCreatedByUserid->setModel('\API\Models\Ordering\Order');
     }
 
     /**
@@ -3177,48 +3233,48 @@ abstract class User implements ActiveRecordInterface
      * @return ObjectCollection|Order[] List of Order objects
      * @throws PropelException
      */
-    public function getOrders(Criteria $criteria = null, ConnectionInterface $con = null)
+    public function getOrdersRelatedByCancellationCreatedByUserid(Criteria $criteria = null, ConnectionInterface $con = null)
     {
-        $partial = $this->collOrdersPartial && !$this->isNew();
-        if (null === $this->collOrders || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collOrders) {
+        $partial = $this->collOrdersRelatedByCancellationCreatedByUseridPartial && !$this->isNew();
+        if (null === $this->collOrdersRelatedByCancellationCreatedByUserid || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collOrdersRelatedByCancellationCreatedByUserid) {
                 // return empty collection
-                $this->initOrders();
+                $this->initOrdersRelatedByCancellationCreatedByUserid();
             } else {
-                $collOrders = OrderQuery::create(null, $criteria)
-                    ->filterByUser($this)
+                $collOrdersRelatedByCancellationCreatedByUserid = OrderQuery::create(null, $criteria)
+                    ->filterByUserRelatedByCancellationCreatedByUserid($this)
                     ->find($con);
 
                 if (null !== $criteria) {
-                    if (false !== $this->collOrdersPartial && count($collOrders)) {
-                        $this->initOrders(false);
+                    if (false !== $this->collOrdersRelatedByCancellationCreatedByUseridPartial && count($collOrdersRelatedByCancellationCreatedByUserid)) {
+                        $this->initOrdersRelatedByCancellationCreatedByUserid(false);
 
-                        foreach ($collOrders as $obj) {
-                            if (false == $this->collOrders->contains($obj)) {
-                                $this->collOrders->append($obj);
+                        foreach ($collOrdersRelatedByCancellationCreatedByUserid as $obj) {
+                            if (false == $this->collOrdersRelatedByCancellationCreatedByUserid->contains($obj)) {
+                                $this->collOrdersRelatedByCancellationCreatedByUserid->append($obj);
                             }
                         }
 
-                        $this->collOrdersPartial = true;
+                        $this->collOrdersRelatedByCancellationCreatedByUseridPartial = true;
                     }
 
-                    return $collOrders;
+                    return $collOrdersRelatedByCancellationCreatedByUserid;
                 }
 
-                if ($partial && $this->collOrders) {
-                    foreach ($this->collOrders as $obj) {
+                if ($partial && $this->collOrdersRelatedByCancellationCreatedByUserid) {
+                    foreach ($this->collOrdersRelatedByCancellationCreatedByUserid as $obj) {
                         if ($obj->isNew()) {
-                            $collOrders[] = $obj;
+                            $collOrdersRelatedByCancellationCreatedByUserid[] = $obj;
                         }
                     }
                 }
 
-                $this->collOrders = $collOrders;
-                $this->collOrdersPartial = false;
+                $this->collOrdersRelatedByCancellationCreatedByUserid = $collOrdersRelatedByCancellationCreatedByUserid;
+                $this->collOrdersRelatedByCancellationCreatedByUseridPartial = false;
             }
         }
 
-        return $this->collOrders;
+        return $this->collOrdersRelatedByCancellationCreatedByUserid;
     }
 
     /**
@@ -3227,29 +3283,29 @@ abstract class User implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $orders A Propel collection.
+     * @param      Collection $ordersRelatedByCancellationCreatedByUserid A Propel collection.
      * @param      ConnectionInterface $con Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
-    public function setOrders(Collection $orders, ConnectionInterface $con = null)
+    public function setOrdersRelatedByCancellationCreatedByUserid(Collection $ordersRelatedByCancellationCreatedByUserid, ConnectionInterface $con = null)
     {
-        /** @var Order[] $ordersToDelete */
-        $ordersToDelete = $this->getOrders(new Criteria(), $con)->diff($orders);
+        /** @var Order[] $ordersRelatedByCancellationCreatedByUseridToDelete */
+        $ordersRelatedByCancellationCreatedByUseridToDelete = $this->getOrdersRelatedByCancellationCreatedByUserid(new Criteria(), $con)->diff($ordersRelatedByCancellationCreatedByUserid);
 
 
-        $this->ordersScheduledForDeletion = $ordersToDelete;
+        $this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion = $ordersRelatedByCancellationCreatedByUseridToDelete;
 
-        foreach ($ordersToDelete as $orderRemoved) {
-            $orderRemoved->setUser(null);
+        foreach ($ordersRelatedByCancellationCreatedByUseridToDelete as $orderRelatedByCancellationCreatedByUseridRemoved) {
+            $orderRelatedByCancellationCreatedByUseridRemoved->setUserRelatedByCancellationCreatedByUserid(null);
         }
 
-        $this->collOrders = null;
-        foreach ($orders as $order) {
-            $this->addOrder($order);
+        $this->collOrdersRelatedByCancellationCreatedByUserid = null;
+        foreach ($ordersRelatedByCancellationCreatedByUserid as $orderRelatedByCancellationCreatedByUserid) {
+            $this->addOrderRelatedByCancellationCreatedByUserid($orderRelatedByCancellationCreatedByUserid);
         }
 
-        $this->collOrders = $orders;
-        $this->collOrdersPartial = false;
+        $this->collOrdersRelatedByCancellationCreatedByUserid = $ordersRelatedByCancellationCreatedByUserid;
+        $this->collOrdersRelatedByCancellationCreatedByUseridPartial = false;
 
         return $this;
     }
@@ -3263,16 +3319,16 @@ abstract class User implements ActiveRecordInterface
      * @return int             Count of related BaseOrder objects.
      * @throws PropelException
      */
-    public function countOrders(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    public function countOrdersRelatedByCancellationCreatedByUserid(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
     {
-        $partial = $this->collOrdersPartial && !$this->isNew();
-        if (null === $this->collOrders || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collOrders) {
+        $partial = $this->collOrdersRelatedByCancellationCreatedByUseridPartial && !$this->isNew();
+        if (null === $this->collOrdersRelatedByCancellationCreatedByUserid || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrdersRelatedByCancellationCreatedByUserid) {
                 return 0;
             }
 
             if ($partial && !$criteria) {
-                return count($this->getOrders());
+                return count($this->getOrdersRelatedByCancellationCreatedByUserid());
             }
 
             $query = OrderQuery::create(null, $criteria);
@@ -3281,11 +3337,11 @@ abstract class User implements ActiveRecordInterface
             }
 
             return $query
-                ->filterByUser($this)
+                ->filterByUserRelatedByCancellationCreatedByUserid($this)
                 ->count($con);
         }
 
-        return count($this->collOrders);
+        return count($this->collOrdersRelatedByCancellationCreatedByUserid);
     }
 
     /**
@@ -3295,18 +3351,18 @@ abstract class User implements ActiveRecordInterface
      * @param  Order $l Order
      * @return $this|\API\Models\User\User The current object (for fluent API support)
      */
-    public function addOrder(Order $l)
+    public function addOrderRelatedByCancellationCreatedByUserid(Order $l)
     {
-        if ($this->collOrders === null) {
-            $this->initOrders();
-            $this->collOrdersPartial = true;
+        if ($this->collOrdersRelatedByCancellationCreatedByUserid === null) {
+            $this->initOrdersRelatedByCancellationCreatedByUserid();
+            $this->collOrdersRelatedByCancellationCreatedByUseridPartial = true;
         }
 
-        if (!$this->collOrders->contains($l)) {
-            $this->doAddOrder($l);
+        if (!$this->collOrdersRelatedByCancellationCreatedByUserid->contains($l)) {
+            $this->doAddOrderRelatedByCancellationCreatedByUserid($l);
 
-            if ($this->ordersScheduledForDeletion and $this->ordersScheduledForDeletion->contains($l)) {
-                $this->ordersScheduledForDeletion->remove($this->ordersScheduledForDeletion->search($l));
+            if ($this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion and $this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion->contains($l)) {
+                $this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion->remove($this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion->search($l));
             }
         }
 
@@ -3314,29 +3370,29 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * @param Order $order The Order object to add.
+     * @param Order $orderRelatedByCancellationCreatedByUserid The Order object to add.
      */
-    protected function doAddOrder(Order $order)
+    protected function doAddOrderRelatedByCancellationCreatedByUserid(Order $orderRelatedByCancellationCreatedByUserid)
     {
-        $this->collOrders[]= $order;
-        $order->setUser($this);
+        $this->collOrdersRelatedByCancellationCreatedByUserid[]= $orderRelatedByCancellationCreatedByUserid;
+        $orderRelatedByCancellationCreatedByUserid->setUserRelatedByCancellationCreatedByUserid($this);
     }
 
     /**
-     * @param  Order $order The Order object to remove.
+     * @param  Order $orderRelatedByCancellationCreatedByUserid The Order object to remove.
      * @return $this|ChildUser The current object (for fluent API support)
      */
-    public function removeOrder(Order $order)
+    public function removeOrderRelatedByCancellationCreatedByUserid(Order $orderRelatedByCancellationCreatedByUserid)
     {
-        if ($this->getOrders()->contains($order)) {
-            $pos = $this->collOrders->search($order);
-            $this->collOrders->remove($pos);
-            if (null === $this->ordersScheduledForDeletion) {
-                $this->ordersScheduledForDeletion = clone $this->collOrders;
-                $this->ordersScheduledForDeletion->clear();
+        if ($this->getOrdersRelatedByCancellationCreatedByUserid()->contains($orderRelatedByCancellationCreatedByUserid)) {
+            $pos = $this->collOrdersRelatedByCancellationCreatedByUserid->search($orderRelatedByCancellationCreatedByUserid);
+            $this->collOrdersRelatedByCancellationCreatedByUserid->remove($pos);
+            if (null === $this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion) {
+                $this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion = clone $this->collOrdersRelatedByCancellationCreatedByUserid;
+                $this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion->clear();
             }
-            $this->ordersScheduledForDeletion[]= clone $order;
-            $order->setUser(null);
+            $this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion[]= $orderRelatedByCancellationCreatedByUserid;
+            $orderRelatedByCancellationCreatedByUserid->setUserRelatedByCancellationCreatedByUserid(null);
         }
 
         return $this;
@@ -3348,7 +3404,7 @@ abstract class User implements ActiveRecordInterface
      * an identical criteria, it returns the collection.
      * Otherwise if this User is new, it will return
      * an empty collection; or if this User has previously
-     * been saved, it will retrieve related Orders from storage.
+     * been saved, it will retrieve related OrdersRelatedByCancellationCreatedByUserid from storage.
      *
      * This method is protected by default in order to keep the public
      * api reasonable.  You can provide public methods for those you
@@ -3359,12 +3415,262 @@ abstract class User implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Order[] List of Order objects
      */
-    public function getOrdersJoinEventTable(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    public function getOrdersRelatedByCancellationCreatedByUseridJoinEventTable(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = OrderQuery::create(null, $criteria);
         $query->joinWith('EventTable', $joinBehavior);
 
-        return $this->getOrders($query, $con);
+        return $this->getOrdersRelatedByCancellationCreatedByUserid($query, $con);
+    }
+
+    /**
+     * Clears out the collOrdersRelatedByUserid collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addOrdersRelatedByUserid()
+     */
+    public function clearOrdersRelatedByUserid()
+    {
+        $this->collOrdersRelatedByUserid = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collOrdersRelatedByUserid collection loaded partially.
+     */
+    public function resetPartialOrdersRelatedByUserid($v = true)
+    {
+        $this->collOrdersRelatedByUseridPartial = $v;
+    }
+
+    /**
+     * Initializes the collOrdersRelatedByUserid collection.
+     *
+     * By default this just sets the collOrdersRelatedByUserid collection to an empty array (like clearcollOrdersRelatedByUserid());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initOrdersRelatedByUserid($overrideExisting = true)
+    {
+        if (null !== $this->collOrdersRelatedByUserid && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = OrderTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collOrdersRelatedByUserid = new $collectionClassName;
+        $this->collOrdersRelatedByUserid->setModel('\API\Models\Ordering\Order');
+    }
+
+    /**
+     * Gets an array of Order objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildUser is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|Order[] List of Order objects
+     * @throws PropelException
+     */
+    public function getOrdersRelatedByUserid(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collOrdersRelatedByUseridPartial && !$this->isNew();
+        if (null === $this->collOrdersRelatedByUserid || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collOrdersRelatedByUserid) {
+                // return empty collection
+                $this->initOrdersRelatedByUserid();
+            } else {
+                $collOrdersRelatedByUserid = OrderQuery::create(null, $criteria)
+                    ->filterByUserRelatedByUserid($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collOrdersRelatedByUseridPartial && count($collOrdersRelatedByUserid)) {
+                        $this->initOrdersRelatedByUserid(false);
+
+                        foreach ($collOrdersRelatedByUserid as $obj) {
+                            if (false == $this->collOrdersRelatedByUserid->contains($obj)) {
+                                $this->collOrdersRelatedByUserid->append($obj);
+                            }
+                        }
+
+                        $this->collOrdersRelatedByUseridPartial = true;
+                    }
+
+                    return $collOrdersRelatedByUserid;
+                }
+
+                if ($partial && $this->collOrdersRelatedByUserid) {
+                    foreach ($this->collOrdersRelatedByUserid as $obj) {
+                        if ($obj->isNew()) {
+                            $collOrdersRelatedByUserid[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collOrdersRelatedByUserid = $collOrdersRelatedByUserid;
+                $this->collOrdersRelatedByUseridPartial = false;
+            }
+        }
+
+        return $this->collOrdersRelatedByUserid;
+    }
+
+    /**
+     * Sets a collection of Order objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $ordersRelatedByUserid A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildUser The current object (for fluent API support)
+     */
+    public function setOrdersRelatedByUserid(Collection $ordersRelatedByUserid, ConnectionInterface $con = null)
+    {
+        /** @var Order[] $ordersRelatedByUseridToDelete */
+        $ordersRelatedByUseridToDelete = $this->getOrdersRelatedByUserid(new Criteria(), $con)->diff($ordersRelatedByUserid);
+
+
+        $this->ordersRelatedByUseridScheduledForDeletion = $ordersRelatedByUseridToDelete;
+
+        foreach ($ordersRelatedByUseridToDelete as $orderRelatedByUseridRemoved) {
+            $orderRelatedByUseridRemoved->setUserRelatedByUserid(null);
+        }
+
+        $this->collOrdersRelatedByUserid = null;
+        foreach ($ordersRelatedByUserid as $orderRelatedByUserid) {
+            $this->addOrderRelatedByUserid($orderRelatedByUserid);
+        }
+
+        $this->collOrdersRelatedByUserid = $ordersRelatedByUserid;
+        $this->collOrdersRelatedByUseridPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related BaseOrder objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related BaseOrder objects.
+     * @throws PropelException
+     */
+    public function countOrdersRelatedByUserid(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collOrdersRelatedByUseridPartial && !$this->isNew();
+        if (null === $this->collOrdersRelatedByUserid || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collOrdersRelatedByUserid) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getOrdersRelatedByUserid());
+            }
+
+            $query = OrderQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByUserRelatedByUserid($this)
+                ->count($con);
+        }
+
+        return count($this->collOrdersRelatedByUserid);
+    }
+
+    /**
+     * Method called to associate a Order object to this object
+     * through the Order foreign key attribute.
+     *
+     * @param  Order $l Order
+     * @return $this|\API\Models\User\User The current object (for fluent API support)
+     */
+    public function addOrderRelatedByUserid(Order $l)
+    {
+        if ($this->collOrdersRelatedByUserid === null) {
+            $this->initOrdersRelatedByUserid();
+            $this->collOrdersRelatedByUseridPartial = true;
+        }
+
+        if (!$this->collOrdersRelatedByUserid->contains($l)) {
+            $this->doAddOrderRelatedByUserid($l);
+
+            if ($this->ordersRelatedByUseridScheduledForDeletion and $this->ordersRelatedByUseridScheduledForDeletion->contains($l)) {
+                $this->ordersRelatedByUseridScheduledForDeletion->remove($this->ordersRelatedByUseridScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Order $orderRelatedByUserid The Order object to add.
+     */
+    protected function doAddOrderRelatedByUserid(Order $orderRelatedByUserid)
+    {
+        $this->collOrdersRelatedByUserid[]= $orderRelatedByUserid;
+        $orderRelatedByUserid->setUserRelatedByUserid($this);
+    }
+
+    /**
+     * @param  Order $orderRelatedByUserid The Order object to remove.
+     * @return $this|ChildUser The current object (for fluent API support)
+     */
+    public function removeOrderRelatedByUserid(Order $orderRelatedByUserid)
+    {
+        if ($this->getOrdersRelatedByUserid()->contains($orderRelatedByUserid)) {
+            $pos = $this->collOrdersRelatedByUserid->search($orderRelatedByUserid);
+            $this->collOrdersRelatedByUserid->remove($pos);
+            if (null === $this->ordersRelatedByUseridScheduledForDeletion) {
+                $this->ordersRelatedByUseridScheduledForDeletion = clone $this->collOrdersRelatedByUserid;
+                $this->ordersRelatedByUseridScheduledForDeletion->clear();
+            }
+            $this->ordersRelatedByUseridScheduledForDeletion[]= clone $orderRelatedByUserid;
+            $orderRelatedByUserid->setUserRelatedByUserid(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related OrdersRelatedByUserid from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|Order[] List of Order objects
+     */
+    public function getOrdersRelatedByUseridJoinEventTable(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = OrderQuery::create(null, $criteria);
+        $query->joinWith('EventTable', $joinBehavior);
+
+        return $this->getOrdersRelatedByUserid($query, $con);
     }
 
     /**
@@ -4322,8 +4628,13 @@ abstract class User implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collOrders) {
-                foreach ($this->collOrders as $o) {
+            if ($this->collOrdersRelatedByCancellationCreatedByUserid) {
+                foreach ($this->collOrdersRelatedByCancellationCreatedByUserid as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
+            if ($this->collOrdersRelatedByUserid) {
+                foreach ($this->collOrdersRelatedByUserid as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -4348,7 +4659,8 @@ abstract class User implements ActiveRecordInterface
         $this->collDistributionPlaceUsers = null;
         $this->collEventUsers = null;
         $this->collInvoices = null;
-        $this->collOrders = null;
+        $this->collOrdersRelatedByCancellationCreatedByUserid = null;
+        $this->collOrdersRelatedByUserid = null;
         $this->collOrderDetails = null;
         $this->collOrderInProgresses = null;
         $this->collPaymentRecieveds = null;

@@ -124,6 +124,25 @@ abstract class Order implements ActiveRecordInterface
     protected $invoice_finished;
 
     /**
+     * The value for the cancellation field.
+     *
+     * @var        DateTime
+     */
+    protected $cancellation;
+
+    /**
+     * The value for the cancellation_created_by_userid field.
+     *
+     * @var        int
+     */
+    protected $cancellation_created_by_userid;
+
+    /**
+     * @var        User
+     */
+    protected $aUserRelatedByCancellationCreatedByUserid;
+
+    /**
      * @var        EventTable
      */
     protected $aEventTable;
@@ -131,7 +150,7 @@ abstract class Order implements ActiveRecordInterface
     /**
      * @var        User
      */
-    protected $aUser;
+    protected $aUserRelatedByUserid;
 
     /**
      * @var        ObjectCollection|ChildOrderDetail[] Collection to store aggregation of ChildOrderDetail objects.
@@ -491,6 +510,36 @@ abstract class Order implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [cancellation] column value.
+     *
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getCancellation($format = NULL)
+    {
+        if ($format === null) {
+            return $this->cancellation;
+        } else {
+            return $this->cancellation instanceof \DateTimeInterface ? $this->cancellation->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [cancellation_created_by_userid] column value.
+     *
+     * @return int
+     */
+    public function getCancellationCreatedByUserid()
+    {
+        return $this->cancellation_created_by_userid;
+    }
+
+    /**
      * Set the value of [orderid] column.
      *
      * @param int $v new value
@@ -551,8 +600,8 @@ abstract class Order implements ActiveRecordInterface
             $this->modifiedColumns[OrderTableMap::COL_USERID] = true;
         }
 
-        if ($this->aUser !== null && $this->aUser->getUserid() !== $v) {
-            $this->aUser = null;
+        if ($this->aUserRelatedByUserid !== null && $this->aUserRelatedByUserid->getUserid() !== $v) {
+            $this->aUserRelatedByUserid = null;
         }
 
         return $this;
@@ -639,6 +688,50 @@ abstract class Order implements ActiveRecordInterface
     } // setInvoiceFinished()
 
     /**
+     * Sets the value of [cancellation] column to a normalized version of the date/time value specified.
+     *
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\Ordering\Order The current object (for fluent API support)
+     */
+    public function setCancellation($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->cancellation !== null || $dt !== null) {
+            if ($this->cancellation === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->cancellation->format("Y-m-d H:i:s.u")) {
+                $this->cancellation = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[OrderTableMap::COL_CANCELLATION] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setCancellation()
+
+    /**
+     * Set the value of [cancellation_created_by_userid] column.
+     *
+     * @param int $v new value
+     * @return $this|\API\Models\Ordering\Order The current object (for fluent API support)
+     */
+    public function setCancellationCreatedByUserid($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->cancellation_created_by_userid !== $v) {
+            $this->cancellation_created_by_userid = $v;
+            $this->modifiedColumns[OrderTableMap::COL_CANCELLATION_CREATED_BY_USERID] = true;
+        }
+
+        if ($this->aUserRelatedByCancellationCreatedByUserid !== null && $this->aUserRelatedByCancellationCreatedByUserid->getUserid() !== $v) {
+            $this->aUserRelatedByCancellationCreatedByUserid = null;
+        }
+
+        return $this;
+    } // setCancellationCreatedByUserid()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -703,6 +796,15 @@ abstract class Order implements ActiveRecordInterface
                 $col = null;
             }
             $this->invoice_finished = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : OrderTableMap::translateFieldName('Cancellation', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->cancellation = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : OrderTableMap::translateFieldName('CancellationCreatedByUserid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->cancellation_created_by_userid = (null !== $col) ? (int) $col : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -711,7 +813,7 @@ abstract class Order implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 7; // 7 = OrderTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 9; // 9 = OrderTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Ordering\\Order'), 0, $e);
@@ -736,8 +838,11 @@ abstract class Order implements ActiveRecordInterface
         if ($this->aEventTable !== null && $this->event_tableid !== $this->aEventTable->getEventTableid()) {
             $this->aEventTable = null;
         }
-        if ($this->aUser !== null && $this->userid !== $this->aUser->getUserid()) {
-            $this->aUser = null;
+        if ($this->aUserRelatedByUserid !== null && $this->userid !== $this->aUserRelatedByUserid->getUserid()) {
+            $this->aUserRelatedByUserid = null;
+        }
+        if ($this->aUserRelatedByCancellationCreatedByUserid !== null && $this->cancellation_created_by_userid !== $this->aUserRelatedByCancellationCreatedByUserid->getUserid()) {
+            $this->aUserRelatedByCancellationCreatedByUserid = null;
         }
     } // ensureConsistency
 
@@ -778,8 +883,9 @@ abstract class Order implements ActiveRecordInterface
 
         if ($deep) {  // also de-associate any related objects?
 
+            $this->aUserRelatedByCancellationCreatedByUserid = null;
             $this->aEventTable = null;
-            $this->aUser = null;
+            $this->aUserRelatedByUserid = null;
             $this->collOrderDetails = null;
 
             $this->collOrderInProgresses = null;
@@ -888,6 +994,13 @@ abstract class Order implements ActiveRecordInterface
             // method.  This object relates to these object(s) by a
             // foreign key reference.
 
+            if ($this->aUserRelatedByCancellationCreatedByUserid !== null) {
+                if ($this->aUserRelatedByCancellationCreatedByUserid->isModified() || $this->aUserRelatedByCancellationCreatedByUserid->isNew()) {
+                    $affectedRows += $this->aUserRelatedByCancellationCreatedByUserid->save($con);
+                }
+                $this->setUserRelatedByCancellationCreatedByUserid($this->aUserRelatedByCancellationCreatedByUserid);
+            }
+
             if ($this->aEventTable !== null) {
                 if ($this->aEventTable->isModified() || $this->aEventTable->isNew()) {
                     $affectedRows += $this->aEventTable->save($con);
@@ -895,11 +1008,11 @@ abstract class Order implements ActiveRecordInterface
                 $this->setEventTable($this->aEventTable);
             }
 
-            if ($this->aUser !== null) {
-                if ($this->aUser->isModified() || $this->aUser->isNew()) {
-                    $affectedRows += $this->aUser->save($con);
+            if ($this->aUserRelatedByUserid !== null) {
+                if ($this->aUserRelatedByUserid->isModified() || $this->aUserRelatedByUserid->isNew()) {
+                    $affectedRows += $this->aUserRelatedByUserid->save($con);
                 }
-                $this->setUser($this->aUser);
+                $this->setUserRelatedByUserid($this->aUserRelatedByUserid);
             }
 
             if ($this->isNew() || $this->isModified()) {
@@ -994,6 +1107,12 @@ abstract class Order implements ActiveRecordInterface
         if ($this->isColumnModified(OrderTableMap::COL_INVOICE_FINISHED)) {
             $modifiedColumns[':p' . $index++]  = '`invoice_finished`';
         }
+        if ($this->isColumnModified(OrderTableMap::COL_CANCELLATION)) {
+            $modifiedColumns[':p' . $index++]  = '`cancellation`';
+        }
+        if ($this->isColumnModified(OrderTableMap::COL_CANCELLATION_CREATED_BY_USERID)) {
+            $modifiedColumns[':p' . $index++]  = '`cancellation_created_by_userid`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `order` (%s) VALUES (%s)',
@@ -1025,6 +1144,12 @@ abstract class Order implements ActiveRecordInterface
                         break;
                     case '`invoice_finished`':
                         $stmt->bindValue($identifier, $this->invoice_finished ? $this->invoice_finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case '`cancellation`':
+                        $stmt->bindValue($identifier, $this->cancellation ? $this->cancellation->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+                        break;
+                    case '`cancellation_created_by_userid`':
+                        $stmt->bindValue($identifier, $this->cancellation_created_by_userid, PDO::PARAM_INT);
                         break;
                 }
             }
@@ -1109,6 +1234,12 @@ abstract class Order implements ActiveRecordInterface
             case 6:
                 return $this->getInvoiceFinished();
                 break;
+            case 7:
+                return $this->getCancellation();
+                break;
+            case 8:
+                return $this->getCancellationCreatedByUserid();
+                break;
             default:
                 return null;
                 break;
@@ -1146,6 +1277,8 @@ abstract class Order implements ActiveRecordInterface
             $keys[4] => $this->getPriority(),
             $keys[5] => $this->getDistributionFinished(),
             $keys[6] => $this->getInvoiceFinished(),
+            $keys[7] => $this->getCancellation(),
+            $keys[8] => $this->getCancellationCreatedByUserid(),
         );
         if ($result[$keys[3]] instanceof \DateTime) {
             $result[$keys[3]] = $result[$keys[3]]->format('c');
@@ -1159,12 +1292,31 @@ abstract class Order implements ActiveRecordInterface
             $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
 
+        if ($result[$keys[7]] instanceof \DateTime) {
+            $result[$keys[7]] = $result[$keys[7]]->format('c');
+        }
+
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
 
         if ($includeForeignObjects) {
+            if (null !== $this->aUserRelatedByCancellationCreatedByUserid) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'user';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'user';
+                        break;
+                    default:
+                        $key = 'User';
+                }
+
+                $result[$key] = $this->aUserRelatedByCancellationCreatedByUserid->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aEventTable) {
 
                 switch ($keyType) {
@@ -1180,7 +1332,7 @@ abstract class Order implements ActiveRecordInterface
 
                 $result[$key] = $this->aEventTable->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
-            if (null !== $this->aUser) {
+            if (null !== $this->aUserRelatedByUserid) {
 
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
@@ -1193,7 +1345,7 @@ abstract class Order implements ActiveRecordInterface
                         $key = 'User';
                 }
 
-                $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aUserRelatedByUserid->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collOrderDetails) {
 
@@ -1280,6 +1432,12 @@ abstract class Order implements ActiveRecordInterface
             case 6:
                 $this->setInvoiceFinished($value);
                 break;
+            case 7:
+                $this->setCancellation($value);
+                break;
+            case 8:
+                $this->setCancellationCreatedByUserid($value);
+                break;
         } // switch()
 
         return $this;
@@ -1326,6 +1484,12 @@ abstract class Order implements ActiveRecordInterface
         }
         if (array_key_exists($keys[6], $arr)) {
             $this->setInvoiceFinished($arr[$keys[6]]);
+        }
+        if (array_key_exists($keys[7], $arr)) {
+            $this->setCancellation($arr[$keys[7]]);
+        }
+        if (array_key_exists($keys[8], $arr)) {
+            $this->setCancellationCreatedByUserid($arr[$keys[8]]);
         }
     }
 
@@ -1388,6 +1552,12 @@ abstract class Order implements ActiveRecordInterface
         }
         if ($this->isColumnModified(OrderTableMap::COL_INVOICE_FINISHED)) {
             $criteria->add(OrderTableMap::COL_INVOICE_FINISHED, $this->invoice_finished);
+        }
+        if ($this->isColumnModified(OrderTableMap::COL_CANCELLATION)) {
+            $criteria->add(OrderTableMap::COL_CANCELLATION, $this->cancellation);
+        }
+        if ($this->isColumnModified(OrderTableMap::COL_CANCELLATION_CREATED_BY_USERID)) {
+            $criteria->add(OrderTableMap::COL_CANCELLATION_CREATED_BY_USERID, $this->cancellation_created_by_userid);
         }
 
         return $criteria;
@@ -1481,6 +1651,8 @@ abstract class Order implements ActiveRecordInterface
         $copyObj->setPriority($this->getPriority());
         $copyObj->setDistributionFinished($this->getDistributionFinished());
         $copyObj->setInvoiceFinished($this->getInvoiceFinished());
+        $copyObj->setCancellation($this->getCancellation());
+        $copyObj->setCancellationCreatedByUserid($this->getCancellationCreatedByUserid());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1527,6 +1699,57 @@ abstract class Order implements ActiveRecordInterface
         $this->copyInto($copyObj, $deepCopy);
 
         return $copyObj;
+    }
+
+    /**
+     * Declares an association between this object and a User object.
+     *
+     * @param  User $v
+     * @return $this|\API\Models\Ordering\Order The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setUserRelatedByCancellationCreatedByUserid(User $v = null)
+    {
+        if ($v === null) {
+            $this->setCancellationCreatedByUserid(NULL);
+        } else {
+            $this->setCancellationCreatedByUserid($v->getUserid());
+        }
+
+        $this->aUserRelatedByCancellationCreatedByUserid = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the User object, it will not be re-added.
+        if ($v !== null) {
+            $v->addOrderRelatedByCancellationCreatedByUserid($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated User object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return User The associated User object.
+     * @throws PropelException
+     */
+    public function getUserRelatedByCancellationCreatedByUserid(ConnectionInterface $con = null)
+    {
+        if ($this->aUserRelatedByCancellationCreatedByUserid === null && ($this->cancellation_created_by_userid !== null)) {
+            $this->aUserRelatedByCancellationCreatedByUserid = UserQuery::create()->findPk($this->cancellation_created_by_userid, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aUserRelatedByCancellationCreatedByUserid->addOrdersRelatedByCancellationCreatedByUserid($this);
+             */
+        }
+
+        return $this->aUserRelatedByCancellationCreatedByUserid;
     }
 
     /**
@@ -1587,7 +1810,7 @@ abstract class Order implements ActiveRecordInterface
      * @return $this|\API\Models\Ordering\Order The current object (for fluent API support)
      * @throws PropelException
      */
-    public function setUser(User $v = null)
+    public function setUserRelatedByUserid(User $v = null)
     {
         if ($v === null) {
             $this->setUserid(NULL);
@@ -1595,12 +1818,12 @@ abstract class Order implements ActiveRecordInterface
             $this->setUserid($v->getUserid());
         }
 
-        $this->aUser = $v;
+        $this->aUserRelatedByUserid = $v;
 
         // Add binding for other direction of this n:n relationship.
         // If this object has already been added to the User object, it will not be re-added.
         if ($v !== null) {
-            $v->addOrder($this);
+            $v->addOrderRelatedByUserid($this);
         }
 
 
@@ -1615,20 +1838,20 @@ abstract class Order implements ActiveRecordInterface
      * @return User The associated User object.
      * @throws PropelException
      */
-    public function getUser(ConnectionInterface $con = null)
+    public function getUserRelatedByUserid(ConnectionInterface $con = null)
     {
-        if ($this->aUser === null && ($this->userid !== null)) {
-            $this->aUser = UserQuery::create()->findPk($this->userid, $con);
+        if ($this->aUserRelatedByUserid === null && ($this->userid !== null)) {
+            $this->aUserRelatedByUserid = UserQuery::create()->findPk($this->userid, $con);
             /* The following can be used additionally to
                 guarantee the related object contains a reference
                 to this object.  This level of coupling may, however, be
                 undesirable since it could result in an only partially populated collection
                 in the referenced object.
-                $this->aUser->addOrders($this);
+                $this->aUserRelatedByUserid->addOrdersRelatedByUserid($this);
              */
         }
 
-        return $this->aUser;
+        return $this->aUserRelatedByUserid;
     }
 
 
@@ -2282,11 +2505,14 @@ abstract class Order implements ActiveRecordInterface
      */
     public function clear()
     {
+        if (null !== $this->aUserRelatedByCancellationCreatedByUserid) {
+            $this->aUserRelatedByCancellationCreatedByUserid->removeOrderRelatedByCancellationCreatedByUserid($this);
+        }
         if (null !== $this->aEventTable) {
             $this->aEventTable->removeOrder($this);
         }
-        if (null !== $this->aUser) {
-            $this->aUser->removeOrder($this);
+        if (null !== $this->aUserRelatedByUserid) {
+            $this->aUserRelatedByUserid->removeOrderRelatedByUserid($this);
         }
         $this->orderid = null;
         $this->event_tableid = null;
@@ -2295,6 +2521,8 @@ abstract class Order implements ActiveRecordInterface
         $this->priority = null;
         $this->distribution_finished = null;
         $this->invoice_finished = null;
+        $this->cancellation = null;
+        $this->cancellation_created_by_userid = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -2327,8 +2555,9 @@ abstract class Order implements ActiveRecordInterface
 
         $this->collOrderDetails = null;
         $this->collOrderInProgresses = null;
+        $this->aUserRelatedByCancellationCreatedByUserid = null;
         $this->aEventTable = null;
-        $this->aUser = null;
+        $this->aUserRelatedByUserid = null;
     }
 
     /**

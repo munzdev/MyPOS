@@ -97,7 +97,14 @@ define(['collections/custom/order/OrderOverviewCollection',
         cancel_order() {
             var order = this.ordersList.get({cid: this.cancelOrderCid});
             order.save({Cancellation: 1}, {patch: true})
-                 .done(this.reload);
+                 .done((result) => {
+                    if(result.OpenInvoice) {
+                        this.changeHash("order-invoice/id/" + order.get('Orderid'));
+                        return;
+                    }
+
+                    this.reload();
+                 });
         }
 
         click_btn_pay(event) {

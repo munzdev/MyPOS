@@ -98,15 +98,25 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
  * @method     ChildUserQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
  *
- * @method     ChildUserQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
- * @method     ChildUserQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
- * @method     ChildUserQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
+ * @method     ChildUserQuery leftJoinOrderRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderRelatedByCancellationCreatedByUserid relation
+ * @method     ChildUserQuery rightJoinOrderRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderRelatedByCancellationCreatedByUserid relation
+ * @method     ChildUserQuery innerJoinOrderRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderRelatedByCancellationCreatedByUserid relation
  *
- * @method     ChildUserQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
+ * @method     ChildUserQuery joinWithOrderRelatedByCancellationCreatedByUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderRelatedByCancellationCreatedByUserid relation
  *
- * @method     ChildUserQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
- * @method     ChildUserQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
- * @method     ChildUserQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
+ * @method     ChildUserQuery leftJoinWithOrderRelatedByCancellationCreatedByUserid() Adds a LEFT JOIN clause and with to the query using the OrderRelatedByCancellationCreatedByUserid relation
+ * @method     ChildUserQuery rightJoinWithOrderRelatedByCancellationCreatedByUserid() Adds a RIGHT JOIN clause and with to the query using the OrderRelatedByCancellationCreatedByUserid relation
+ * @method     ChildUserQuery innerJoinWithOrderRelatedByCancellationCreatedByUserid() Adds a INNER JOIN clause and with to the query using the OrderRelatedByCancellationCreatedByUserid relation
+ *
+ * @method     ChildUserQuery leftJoinOrderRelatedByUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderRelatedByUserid relation
+ * @method     ChildUserQuery rightJoinOrderRelatedByUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderRelatedByUserid relation
+ * @method     ChildUserQuery innerJoinOrderRelatedByUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderRelatedByUserid relation
+ *
+ * @method     ChildUserQuery joinWithOrderRelatedByUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderRelatedByUserid relation
+ *
+ * @method     ChildUserQuery leftJoinWithOrderRelatedByUserid() Adds a LEFT JOIN clause and with to the query using the OrderRelatedByUserid relation
+ * @method     ChildUserQuery rightJoinWithOrderRelatedByUserid() Adds a RIGHT JOIN clause and with to the query using the OrderRelatedByUserid relation
+ * @method     ChildUserQuery innerJoinWithOrderRelatedByUserid() Adds a INNER JOIN clause and with to the query using the OrderRelatedByUserid relation
  *
  * @method     ChildUserQuery leftJoinOrderDetail($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderDetail relation
  * @method     ChildUserQuery rightJoinOrderDetail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderDetail relation
@@ -969,33 +979,33 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
-    public function filterByOrder($order, $comparison = null)
+    public function filterByOrderRelatedByCancellationCreatedByUserid($order, $comparison = null)
     {
         if ($order instanceof \API\Models\Ordering\Order) {
             return $this
-                ->addUsingAlias(UserTableMap::COL_USERID, $order->getUserid(), $comparison);
+                ->addUsingAlias(UserTableMap::COL_USERID, $order->getCancellationCreatedByUserid(), $comparison);
         } elseif ($order instanceof ObjectCollection) {
             return $this
-                ->useOrderQuery()
+                ->useOrderRelatedByCancellationCreatedByUseridQuery()
                 ->filterByPrimaryKeys($order->getPrimaryKeys())
                 ->endUse();
         } else {
-            throw new PropelException('filterByOrder() only accepts arguments of type \API\Models\Ordering\Order or Collection');
+            throw new PropelException('filterByOrderRelatedByCancellationCreatedByUserid() only accepts arguments of type \API\Models\Ordering\Order or Collection');
         }
     }
 
     /**
-     * Adds a JOIN clause to the query using the Order relation
+     * Adds a JOIN clause to the query using the OrderRelatedByCancellationCreatedByUserid relation
      *
      * @param     string $relationAlias optional alias for the relation
      * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function joinOrder($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function joinOrderRelatedByCancellationCreatedByUserid($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Order');
+        $relationMap = $tableMap->getRelation('OrderRelatedByCancellationCreatedByUserid');
 
         // create a ModelJoin object for this join
         $join = new ModelJoin();
@@ -1010,14 +1020,14 @@ abstract class UserQuery extends ModelCriteria
             $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
             $this->addJoinObject($join, $relationAlias);
         } else {
-            $this->addJoinObject($join, 'Order');
+            $this->addJoinObject($join, 'OrderRelatedByCancellationCreatedByUserid');
         }
 
         return $this;
     }
 
     /**
-     * Use the Order relation Order object
+     * Use the OrderRelatedByCancellationCreatedByUserid relation Order object
      *
      * @see useQuery()
      *
@@ -1027,11 +1037,84 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return \API\Models\Ordering\OrderQuery A secondary query class using the current class as primary query
      */
-    public function useOrderQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useOrderRelatedByCancellationCreatedByUseridQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
-            ->joinOrder($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Order', '\API\Models\Ordering\OrderQuery');
+            ->joinOrderRelatedByCancellationCreatedByUserid($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'OrderRelatedByCancellationCreatedByUserid', '\API\Models\Ordering\OrderQuery');
+    }
+
+    /**
+     * Filter the query by a related \API\Models\Ordering\Order object
+     *
+     * @param \API\Models\Ordering\Order|ObjectCollection $order the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildUserQuery The current query, for fluid interface
+     */
+    public function filterByOrderRelatedByUserid($order, $comparison = null)
+    {
+        if ($order instanceof \API\Models\Ordering\Order) {
+            return $this
+                ->addUsingAlias(UserTableMap::COL_USERID, $order->getUserid(), $comparison);
+        } elseif ($order instanceof ObjectCollection) {
+            return $this
+                ->useOrderRelatedByUseridQuery()
+                ->filterByPrimaryKeys($order->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByOrderRelatedByUserid() only accepts arguments of type \API\Models\Ordering\Order or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the OrderRelatedByUserid relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildUserQuery The current query, for fluid interface
+     */
+    public function joinOrderRelatedByUserid($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('OrderRelatedByUserid');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'OrderRelatedByUserid');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the OrderRelatedByUserid relation Order object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\Ordering\OrderQuery A secondary query class using the current class as primary query
+     */
+    public function useOrderRelatedByUseridQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinOrderRelatedByUserid($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'OrderRelatedByUserid', '\API\Models\Ordering\OrderQuery');
     }
 
     /**

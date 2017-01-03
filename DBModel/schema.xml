@@ -536,6 +536,11 @@
     <column name="priority" phpName="Priority" type="INTEGER" required="true"/>
     <column name="distribution_finished" phpName="DistributionFinished" type="TIMESTAMP"/>
     <column name="invoice_finished" phpName="InvoiceFinished" type="TIMESTAMP"/>
+    <column name="cancellation" phpName="Cancellation" type="TIMESTAMP"/>
+    <column name="cancellation_created_by_userid" phpName="CancellationCreatedByUserid" type="INTEGER"/>
+    <foreign-key foreignTable="user" name="fk_order_user1">
+      <reference local="cancellation_created_by_userid" foreign="userid"/>
+    </foreign-key>
     <foreign-key foreignTable="event_table" name="fk_orders_tables">
       <reference local="event_tableid" foreign="event_tableid"/>
     </foreign-key>
@@ -559,6 +564,9 @@
     </index>
     <index name="invoice_finished">
       <index-column name="invoice_finished"/>
+    </index>
+    <index name="fk_order_user1_idx">
+      <index-column name="cancellation_created_by_userid"/>
     </index>
     <unique name="oder_id_UNIQUE">
       <unique-column name="orderid"/>

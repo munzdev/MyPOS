@@ -85,6 +85,8 @@ CREATE TABLE IF NOT EXISTS `order` (
   `priority` INT NOT NULL,
   `distribution_finished` DATETIME NULL,
   `invoice_finished` DATETIME NULL,
+  `cancellation` DATETIME NULL,
+  `cancellation_created_by_userid` INT(11) NULL,
   PRIMARY KEY (`orderid`),
   UNIQUE INDEX `oder_id_UNIQUE` (`orderid` ASC),
   INDEX `ordertime` (`ordertime` ASC),
@@ -93,6 +95,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   INDEX `priority` (`priority` ASC),
   INDEX `distribution_finished` (`distribution_finished` ASC),
   INDEX `invoice_finished` (`invoice_finished` ASC),
+  INDEX `fk_order_user1_idx` (`cancellation_created_by_userid` ASC),
   CONSTRAINT `fk_orders_tables`
     FOREIGN KEY (`event_tableid`)
     REFERENCES `event_table` (`event_tableid`)
@@ -100,6 +103,11 @@ CREATE TABLE IF NOT EXISTS `order` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_orders_users1`
     FOREIGN KEY (`userid`)
+    REFERENCES `user` (`userid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_order_user1`
+    FOREIGN KEY (`cancellation_created_by_userid`)
     REFERENCES `user` (`userid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)

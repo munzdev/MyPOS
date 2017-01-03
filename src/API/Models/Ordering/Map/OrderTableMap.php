@@ -59,7 +59,7 @@ class OrderTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 7;
+    const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class OrderTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 7;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /**
      * the column name for the orderid field
@@ -107,6 +107,16 @@ class OrderTableMap extends TableMap
     const COL_INVOICE_FINISHED = 'order.invoice_finished';
 
     /**
+     * the column name for the cancellation field
+     */
+    const COL_CANCELLATION = 'order.cancellation';
+
+    /**
+     * the column name for the cancellation_created_by_userid field
+     */
+    const COL_CANCELLATION_CREATED_BY_USERID = 'order.cancellation_created_by_userid';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -118,11 +128,11 @@ class OrderTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Orderid', 'EventTableid', 'Userid', 'Ordertime', 'Priority', 'DistributionFinished', 'InvoiceFinished', ),
-        self::TYPE_CAMELNAME     => array('orderid', 'eventTableid', 'userid', 'ordertime', 'priority', 'distributionFinished', 'invoiceFinished', ),
-        self::TYPE_COLNAME       => array(OrderTableMap::COL_ORDERID, OrderTableMap::COL_EVENT_TABLEID, OrderTableMap::COL_USERID, OrderTableMap::COL_ORDERTIME, OrderTableMap::COL_PRIORITY, OrderTableMap::COL_DISTRIBUTION_FINISHED, OrderTableMap::COL_INVOICE_FINISHED, ),
-        self::TYPE_FIELDNAME     => array('orderid', 'event_tableid', 'userid', 'ordertime', 'priority', 'distribution_finished', 'invoice_finished', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Orderid', 'EventTableid', 'Userid', 'Ordertime', 'Priority', 'DistributionFinished', 'InvoiceFinished', 'Cancellation', 'CancellationCreatedByUserid', ),
+        self::TYPE_CAMELNAME     => array('orderid', 'eventTableid', 'userid', 'ordertime', 'priority', 'distributionFinished', 'invoiceFinished', 'cancellation', 'cancellationCreatedByUserid', ),
+        self::TYPE_COLNAME       => array(OrderTableMap::COL_ORDERID, OrderTableMap::COL_EVENT_TABLEID, OrderTableMap::COL_USERID, OrderTableMap::COL_ORDERTIME, OrderTableMap::COL_PRIORITY, OrderTableMap::COL_DISTRIBUTION_FINISHED, OrderTableMap::COL_INVOICE_FINISHED, OrderTableMap::COL_CANCELLATION, OrderTableMap::COL_CANCELLATION_CREATED_BY_USERID, ),
+        self::TYPE_FIELDNAME     => array('orderid', 'event_tableid', 'userid', 'ordertime', 'priority', 'distribution_finished', 'invoice_finished', 'cancellation', 'cancellation_created_by_userid', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -132,11 +142,11 @@ class OrderTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Orderid' => 0, 'EventTableid' => 1, 'Userid' => 2, 'Ordertime' => 3, 'Priority' => 4, 'DistributionFinished' => 5, 'InvoiceFinished' => 6, ),
-        self::TYPE_CAMELNAME     => array('orderid' => 0, 'eventTableid' => 1, 'userid' => 2, 'ordertime' => 3, 'priority' => 4, 'distributionFinished' => 5, 'invoiceFinished' => 6, ),
-        self::TYPE_COLNAME       => array(OrderTableMap::COL_ORDERID => 0, OrderTableMap::COL_EVENT_TABLEID => 1, OrderTableMap::COL_USERID => 2, OrderTableMap::COL_ORDERTIME => 3, OrderTableMap::COL_PRIORITY => 4, OrderTableMap::COL_DISTRIBUTION_FINISHED => 5, OrderTableMap::COL_INVOICE_FINISHED => 6, ),
-        self::TYPE_FIELDNAME     => array('orderid' => 0, 'event_tableid' => 1, 'userid' => 2, 'ordertime' => 3, 'priority' => 4, 'distribution_finished' => 5, 'invoice_finished' => 6, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
+        self::TYPE_PHPNAME       => array('Orderid' => 0, 'EventTableid' => 1, 'Userid' => 2, 'Ordertime' => 3, 'Priority' => 4, 'DistributionFinished' => 5, 'InvoiceFinished' => 6, 'Cancellation' => 7, 'CancellationCreatedByUserid' => 8, ),
+        self::TYPE_CAMELNAME     => array('orderid' => 0, 'eventTableid' => 1, 'userid' => 2, 'ordertime' => 3, 'priority' => 4, 'distributionFinished' => 5, 'invoiceFinished' => 6, 'cancellation' => 7, 'cancellationCreatedByUserid' => 8, ),
+        self::TYPE_COLNAME       => array(OrderTableMap::COL_ORDERID => 0, OrderTableMap::COL_EVENT_TABLEID => 1, OrderTableMap::COL_USERID => 2, OrderTableMap::COL_ORDERTIME => 3, OrderTableMap::COL_PRIORITY => 4, OrderTableMap::COL_DISTRIBUTION_FINISHED => 5, OrderTableMap::COL_INVOICE_FINISHED => 6, OrderTableMap::COL_CANCELLATION => 7, OrderTableMap::COL_CANCELLATION_CREATED_BY_USERID => 8, ),
+        self::TYPE_FIELDNAME     => array('orderid' => 0, 'event_tableid' => 1, 'userid' => 2, 'ordertime' => 3, 'priority' => 4, 'distribution_finished' => 5, 'invoice_finished' => 6, 'cancellation' => 7, 'cancellation_created_by_userid' => 8, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -163,6 +173,8 @@ class OrderTableMap extends TableMap
         $this->addColumn('priority', 'Priority', 'INTEGER', true, null, null);
         $this->addColumn('distribution_finished', 'DistributionFinished', 'TIMESTAMP', false, null, null);
         $this->addColumn('invoice_finished', 'InvoiceFinished', 'TIMESTAMP', false, null, null);
+        $this->addColumn('cancellation', 'Cancellation', 'TIMESTAMP', false, null, null);
+        $this->addForeignKey('cancellation_created_by_userid', 'CancellationCreatedByUserid', 'INTEGER', 'user', 'userid', false, null, null);
     } // initialize()
 
     /**
@@ -170,6 +182,13 @@ class OrderTableMap extends TableMap
      */
     public function buildRelations()
     {
+        $this->addRelation('UserRelatedByCancellationCreatedByUserid', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
+  0 =>
+  array (
+    0 => ':cancellation_created_by_userid',
+    1 => ':userid',
+  ),
+), null, null, null, false);
         $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
@@ -177,7 +196,7 @@ class OrderTableMap extends TableMap
     1 => ':event_tableid',
   ),
 ), null, null, null, false);
-        $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
+        $this->addRelation('UserRelatedByUserid', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
   0 =>
   array (
     0 => ':userid',
@@ -348,6 +367,8 @@ class OrderTableMap extends TableMap
             $criteria->addSelectColumn(OrderTableMap::COL_PRIORITY);
             $criteria->addSelectColumn(OrderTableMap::COL_DISTRIBUTION_FINISHED);
             $criteria->addSelectColumn(OrderTableMap::COL_INVOICE_FINISHED);
+            $criteria->addSelectColumn(OrderTableMap::COL_CANCELLATION);
+            $criteria->addSelectColumn(OrderTableMap::COL_CANCELLATION_CREATED_BY_USERID);
         } else {
             $criteria->addSelectColumn($alias . '.orderid');
             $criteria->addSelectColumn($alias . '.event_tableid');
@@ -356,6 +377,8 @@ class OrderTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.priority');
             $criteria->addSelectColumn($alias . '.distribution_finished');
             $criteria->addSelectColumn($alias . '.invoice_finished');
+            $criteria->addSelectColumn($alias . '.cancellation');
+            $criteria->addSelectColumn($alias . '.cancellation_created_by_userid');
         }
     }
 
