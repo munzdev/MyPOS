@@ -19,21 +19,20 @@ define(['models/custom/order/OrderModify',
     	}
 
         initialize(options) {
-            _.bindAll(this, "render",
-                            "renderOpenOrders",
-                            "finish",
-                            "success_popup_close");
-
             this.orderid = options.orderid;
-
+                        
+            $.mobile.loading("show");
+            
             this.orderModify = new OrderModify();
-            this.orderModify.set('Orderid', options.orderid);
+            this.orderModify.set('Orderid', options.orderid);                        
             this.orderModify.fetch()
-                            .done(this.renderOpenOrders);
+                            .done(() => {                     
+                                $.mobile.loading("hide");
+                                this.render();
+                                this.renderOpenOrders();
+                            });
 
             this.modifications = {};
-
-            this.render();
         }
 
         item_edit(event) {
@@ -70,19 +69,21 @@ define(['models/custom/order/OrderModify',
 
         finish() {
             let i18n = this.i18n();
-            let modifiedOrderDetails = new Set();
-            _.each(this.modifications, (index, value) => {
+            let modifiedOrders = new Set();
+            
+            _.each(this.modifications, (value, index) => {
                 let orderDetail = this.orderModify.get('OrderDetails').get({cid: index}).clone();
                 orderDetail.set('SinglePrice', value);
-                modifiedOrderDetails.add(orderDetail);
+                modifiedOrders.add(orderDetail);
             });
 
-            this.orderModify.save({PriceModifications: modifiedOrderDetails.values()}, {patch: true})
-                            .done(() => {
-                                app.ws.chat.SystemMessage(this.orderModify.get('Userid'), sprintf(i18n.chatMessageInfo, {orderid: this.orderid,
-                                                                                                                        name: app.auth.authUser.get('Firstname') + ' ' + app.auth.authUser.get('Lastname')}));
-                                this.$('#popup').popup("open");
-                            });
+            this.orderModify.save({PriceModifications: 1,
+                                   Modifications: Array.from(modifiedOrders)}, {patch: true})
+                                    .done(() => {
+                                        app.ws.chat.SystemMessage(this.orderModify.get('Userid'), sprintf(i18n.chatMessageInfo, {orderid: this.orderid,
+                                                                                                                                name: app.auth.authUser.get('Firstname') + ' ' + app.auth.authUser.get('Lastname')}));
+                                        this.$('#success-popup').popup("open");
+                                    });
         }
 
         success_popup_close() {
@@ -104,6 +105,9 @@ define(['models/custom/order/OrderModify',
             this.orderModify.get('OrderDetails').each((orderDetail) => {
                 let menuid = orderDetail.get('Menuid');
                 let key = null;
+                
+                if(menuid === null && !orderDetail.get('Verified'))
+                    return;
 
                 if(menuid === null && sortedCategorys.get(key) == null) {
                     sortedCategorys.set(key, {name: t.specialOrders,

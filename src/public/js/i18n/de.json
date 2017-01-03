@@ -210,6 +210,8 @@
         "chatMessageInfo": "Bei der Bestellung mit der Bestellungsnummer %(orderid)i wurden vom Manager %(name)s die Preise angepasst. Bitte die Bestellung/Preise prüfen!",
         "oldSum": "Alte Summe",
         "newSum": "Neue Summe",
-        "difference": "Differenz"
+        "difference": "Differenz",
+        "specialOrders": "Sonderwünsche",
+        "specialOrder": "Sonderwunsch"
     }
 }

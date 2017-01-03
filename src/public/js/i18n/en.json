@@ -210,6 +210,8 @@
         "chatMessageInfo": "The prices of the Order with the orderid  %(orderid)i got modified by the Manager %(name)s. Please check the order/prices!",
         "oldSum": "Old Summe",
         "newSum": "New Summe",
-        "difference": "Difference"
+        "difference": "Difference",
+        "specialOrders": "Special Orders",
+        "specialOrder": "Special Order"
     }
 }

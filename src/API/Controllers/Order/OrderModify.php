@@ -5,7 +5,7 @@ namespace API\Controllers\Order;
 use API\Lib\Auth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
-use API\Models\Ordering\Map\OrderTableMap;
+use API\Models\Ordering\Base\OrderDetailQuery;
 use API\Models\Ordering\Order;
 use API\Models\Ordering\OrderDetail;
 use API\Models\Ordering\OrderDetailExtra;
@@ -81,6 +81,32 @@ class OrderModify extends SecurityController
 
         if(isset($this->a_json['Cancellation'])) {
 
+        }
+        
+        if(isset($this->a_json['PriceModifications']) && !empty($this->a_json['Modifications'])) {
+            $o_connection = Propel::getConnection();
+
+            try {
+                $o_connection->beginTransaction();
+                
+                foreach($this->a_json['Modifications'] as $a_orderDetail) {
+                    $o_orderDetailTemplate = new OrderDetail();
+                    $this->jsonToPropel($a_orderDetail, $o_orderDetailTemplate);
+
+                    $o_orderDetail = OrderDetailQuery::create()
+                                                        ->findPk($o_orderDetailTemplate->getOrderDetailid());
+                    
+                    $o_orderDetail->setSinglePrice($o_orderDetailTemplate->getSinglePrice())
+                                  ->setSinglePriceModifiedByUserid($o_user->getUserid())
+                                  ->save();
+                }
+                
+                $this->o_response->withJson($o_orderDetail->getOrder()->toArray());
+                $o_connection->commit();
+            } catch(Exception $o_exception) {
+                $o_connection->rollBack();
+                throw $o_exception;
+            }
         }
     }
 

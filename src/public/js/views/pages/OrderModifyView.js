@@ -51,15 +51,18 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                 this.orderModify.set('EventTable', new EventTable({Name: options.tableNr}));
             } else {
                 this.mode = 'edit';
+                
+                $.mobile.loading("show");
+                
                 this.orderModify.set('Orderid', options.orderid);
                 this.orderModify.fetch()
                                 .done(() => {
+                                    $.mobile.loading("hide");
+                                    this.render();
                                     this.renderOrder();
                                     this.showOverview();
                                 });
-            }
-
-            this.render();
+            }            
         }
 
         hideTabs() {
