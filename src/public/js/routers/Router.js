@@ -10,6 +10,7 @@ define(["views/dialoges/LoginView",
         "views/pages/OrderModifyPriceView",
         "views/pages/OrderInfoView",
         "views/pages/OrderInvoiceView",
+        "views/pages/InvoiceOverviewView"
         /*"views/pages/DistributionView",
         "views/pages/ManagerView",
         "views/pages/ManagerCallbackView",
@@ -47,6 +48,7 @@ define(["views/dialoges/LoginView",
             OrderModifyPriceView,
             OrderInfoView,
             OrderInvoiceView,
+            InvoiceOverviewView,
             DistributionView,
             ManagerView,
             ManagerCallbackView,
@@ -129,6 +131,9 @@ define(["views/dialoges/LoginView",
                     "order-modify(/id/:orderid)(/tableNr/:tableNr)": "order_modify",
                     "order-invoice/id/:orderid": "order_invoice",
                     "order-info/id/:orderid": "order_info",
+                    "invoice": "invoice_overview",
+                    "invoice/status/:status(/invoiceid/:invoiceid)(/customerid/:customerid)(/canceled/:canceled)(/typeid/:typeid)(/from/:from)(/to/:to)(/userid/:userid)": "invoice_overview",
+                    "invoice/search/status/:status(/invoiceid/:invoiceid)(/customerid/:customerid)(/canceled/:canceled)(/typeid/:typeid)(/from/:from)(/to/:to)(/userid/:userid)": "invoice_search_overview",
                     "distribution": "distribution",
                     "manager": "manager",
                     "manager-callback": "manager_callback",
@@ -216,6 +221,21 @@ define(["views/dialoges/LoginView",
 
         order_info(orderid) {
             this.show(new OrderInfoView({orderid: orderid}));
+        }
+
+        invoice_overview(status, invoiceid, customerid, canceled, typeid, from, to, userid) {
+            if(status)
+                this.show(new InvoiceOverviewView({search: {status: status,
+                                                            invoiceid: invoiceid,
+                                                            customerid: customerid,
+                                                            canceled: canceled,
+                                                            typeid: typeid,
+                                                            from: from,
+                                                            to: to,
+                                                            userid: userid}
+                }));
+            else
+                this.show(new InvoiceOverviewView());
         }
 
         distribution() {

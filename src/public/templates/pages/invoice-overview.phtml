@@ -1,0 +1,35 @@
+ <div data-role="content">
+    <div class="nav-header"></div>
+    <div data-role="controlgroup" data-type="horizontal" data-mini="true">
+        <input type="text" id="invoiceid-search" data-type="search" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important" value="<%- invoiceid %>">
+        <button id='search-btn'><%= t.advancedSearch %></button>
+    </div>
+    <div class="nav-pagination"></div>
+    <table data-role="table" id="table" class="ui-responsive table-stroke table-stripe">
+        <thead>
+            <tr>
+                <th><%= t.invoiceid %></th>
+                <th><%= t.type %></th>
+                <th><%= t.date %></th>
+                <th><%= t.amount %></th>
+                <th><%= t.status %></th>
+                <th><%= t.options %></th>
+            </tr>
+        </thead>
+        <tbody id="invoice-list">
+        </tbody>
+    </table>
+</div>
+<div data-role="popup" id="dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+    <div data-role="header" data-theme="a">
+        <h1 id="dialog-title"></h1>
+    </div>
+    <div role="main" class="ui-content">
+        <h3 class="ui-title" id="dialog-text"></h3>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back"><%= t.abort %></a>
+        <a id='dialog-continue' class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.continue %></a>
+    </div>
+</div>
+<div data-role="popup" data-overlay-theme="b" data-theme="b" data-position-to="window" id="cancel-success-popup" class="ui-content">
+    <h3><%= t.cancellationSuccessful %>!</h3>
+</div>

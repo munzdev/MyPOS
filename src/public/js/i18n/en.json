@@ -213,5 +213,26 @@
         "difference": "Difference",
         "specialOrders": "Special Orders",
         "specialOrder": "Special Order"
+    },
+    "InvoiceOverviewView": {
+        "canceled": "Canceled",
+        "entry": "Entry",
+        "payed": "Payed",
+        "unpayed": "Unpayed",
+        "invoiceid": "Invoiceid",
+        "date": "Date",
+        "amount": "Amount",
+        "type": "Type",
+        "status": "Status",
+        "options": "Options",
+        "advancedSearch": "EAdvanced Search",
+        "info": "Info",
+        "cancel": "Cancel",
+        "warnings": "Warnings",
+        "abort": "Abort",
+        "continue": "Continue",
+        "cancellationSuccessful": "Cancellation erfolgreich",
+        "cancelInvoice": "Cancel Invoice",
+        "cancelInvoiceText": "Are you sure to cancel the selected invoice"
     }
 }

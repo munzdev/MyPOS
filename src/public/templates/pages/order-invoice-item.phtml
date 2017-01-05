@@ -1,0 +1,28 @@
+<tr>
+    <th><%- invoice.get('Invoiceid') %></th>
+    <td><%- invoice.get('InvoiceType').get('Name') %></td>
+    <td><%- invoice.get('Date') %></td>
+    <td><%- parseFloat(invoice.get('amount')).toFixed(2) %> <%= i18n.currency %></td>
+    <td>
+        <%
+            if(invoice.get('CanceledInvoiceid')) {
+                print(t.canceled);
+            } else {
+                print(t.entry);
+            }
+        %>
+        -
+        <% if(invoice.get('PaymentFinished')) { %>
+            <span style="color: green;"><%= t.payed %></span>
+        <% } else { %>
+            <span style="color: red;"><%= t.unpayed %></span>
+        <% } %>
+    </td>
+    <td>
+        <a data-invoice-cid="<%- invoice.cid %>" class="info-btn ui-btn ui-icon-info ui-mini ui-btn-icon-left"><%= t.info %></a>
+        <% if (!invoice.get('CanceledInvoiceid')) { %>
+           <a data-invoice-cid="<%- invoice.cid %>" class="cancel-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.cancel %></a>
+        <% } %>
+        <a data-invoice-cid="<%- invoice.cid %>" class="cancel-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.warnings %></a>
+    </td>
+</tr>

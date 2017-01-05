@@ -213,5 +213,26 @@
         "difference": "Differenz",
         "specialOrders": "Sonderwünsche",
         "specialOrder": "Sonderwunsch"
+    },
+    "InvoiceOverviewView": {
+        "canceled": "Storniert",
+        "entry": "Gebucht",
+        "payed": "Bezahlt",
+        "unpayed": "Unbezahlt",
+        "invoiceid": "Rechnungsnr",
+        "date": "Datum",
+        "amount": "Summe",
+        "type": "Typ",
+        "status": "Status",
+        "options": "Optionen",
+        "advancedSearch": "Erweiterte Suche",
+        "info": "Info",
+        "cancel": "Storno",
+        "warnings": "Mahnungen",
+        "abort": "Abbrechen",
+        "continue": "Fortfahren",
+        "cancellationSuccessful": "Storno erfolgreich",
+        "cancelInvoice": "Rechnung stornieren",
+        "cancelInvoiceText": "Sind sie sicher das die Rechnung storniert werden soll"
     }
 }
