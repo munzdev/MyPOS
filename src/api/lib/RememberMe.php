@@ -118,9 +118,9 @@ class RememberMe
     private function getRand($length)
     {
         switch (true) {
-            case function_exists("mcrypt_create_iv") :
-                $r = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
-                break;
+//            case function_exists("mcrypt_create_iv") :
+//                $r = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
+//                break;
             case function_exists("openssl_random_pseudo_bytes") :
                 $r = openssl_random_pseudo_bytes($length);
                 break;

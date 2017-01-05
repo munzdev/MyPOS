@@ -18,7 +18,7 @@ class Utility extends Controller
 
         foreach ($a_defined_constants as $str_name => $value)
         {
-            $str_namespace = "mypos\\";
+            $str_namespace = "MyPOS\\";
             $i_start = strlen($str_namespace);
 
             if (0 === strpos($str_name, $str_namespace))
