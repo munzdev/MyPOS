@@ -68,7 +68,7 @@ class Invoice extends SecurityController
                 $i_customerid = $_REQUEST['search']['customerid'];
 
             if(isset($_REQUEST['search']['canceled']))
-                $b_canceled = $_REQUEST['search']['canceled'] == null ? null : boolval($_REQUEST['search']['canceled']);
+                $b_canceled = filter_var($_REQUEST['search']['canceled'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
             if(isset($_REQUEST['search']['typeid']))
                 $i_typeid = $_REQUEST['search']['typeid'];
@@ -90,7 +90,7 @@ class Invoice extends SecurityController
                                             ->filterByPaymentFinished(null)
                                         ->_endif()
                                         ->_if($i_invoiceid)
-                                            ->filterByInvoice($i_invoiceid)
+                                            ->filterByInvoiceid($i_invoiceid)
                                         ->_endif()
                                         ->_if($i_customerid)
                                             ->filterByCustomerEventContactid($i_customerid)

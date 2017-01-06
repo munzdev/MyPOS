@@ -3,6 +3,13 @@
     "errorLoadingAppRouteText": "Es wurde keine Startseite gefunden. Haben Sie irgendeine Berechtigung bekommen?",
     "errorLoadingAppText": "Bitte laden Sie die App neu",
     "currency": "€",
+    "InvoiceType": {
+        "INVOICE": "Rechnung",
+        "CANCELLATION": "Stornobuchung",
+        "TRAINING": "Übungsbuchung",
+        "DAY_DOCUMENT": "Tagesabrechnung",
+        "MONTH_DOCUMENT": "Monatsabrechnung"
+    },
     "LoginView": {
         "username": "Benutzername",
         "password": "Passwort",
@@ -233,6 +240,25 @@
         "continue": "Fortfahren",
         "cancellationSuccessful": "Storno erfolgreich",
         "cancelInvoice": "Rechnung stornieren",
-        "cancelInvoiceText": "Sind sie sicher das die Rechnung storniert werden soll"
+        "cancelInvoiceText": "Sind sie sicher das die Rechnung storniert werden soll",
+        "bookPayment": "Zahlung buchen"
+    },
+    "InvoiceOverviewSearchView": {
+        "type": "Typ",
+        "status": "Status",
+        "all": "Alle",
+        "paid": "Bezahlt",
+        "unpaid": "Unbezahlt",
+        "canceled": "Stornierungstatus",
+        "yes": "Ja",
+        "no": "Nein",
+        "invoiceid": "Rechnungsnr",
+        "customerid": "Kundennr",
+        "type": "Buchungstyp",
+        "invoicePeriod": "Rechnungszeitraum",
+        "from": "Von",
+        "to": "Bis",
+        "back": "Zurück",
+        "search": "Suchen"
     }
 }

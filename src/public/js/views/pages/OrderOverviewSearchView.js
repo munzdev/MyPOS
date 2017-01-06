@@ -1,6 +1,5 @@
 define(['views/helpers/HeaderView',
-        'text!templates/pages/order-overview-search.phtml',
-        'jquerymobile-datebox'
+        'text!templates/pages/order-overview-search.phtml'
 ], function(HeaderView,
             Template) {
     "use strict";

@@ -10,7 +10,8 @@ define(["views/dialoges/LoginView",
         "views/pages/OrderModifyPriceView",
         "views/pages/OrderInfoView",
         "views/pages/OrderInvoiceView",
-        "views/pages/InvoiceOverviewView"
+        "views/pages/InvoiceOverviewView",
+        "views/pages/InvoiceOverviewSearchView"
         /*"views/pages/DistributionView",
         "views/pages/ManagerView",
         "views/pages/ManagerCallbackView",
@@ -49,6 +50,7 @@ define(["views/dialoges/LoginView",
             OrderInfoView,
             OrderInvoiceView,
             InvoiceOverviewView,
+            InvoiceOverviewSearchView,
             DistributionView,
             ManagerView,
             ManagerCallbackView,
@@ -236,6 +238,17 @@ define(["views/dialoges/LoginView",
                 }));
             else
                 this.show(new InvoiceOverviewView());
+        }
+
+        invoice_search_overview(status, invoiceid, customerid, canceled, typeid, from, to, userid) {
+            this.show(new InvoiceOverviewSearchView({status: status,
+                                                     invoiceid: invoiceid,
+                                                     customerid: customerid,
+                                                     canceled: canceled,
+                                                     typeid: typeid,
+                                                     from: from,
+                                                     to: to,
+                                                     userid: userid}));
         }
 
         distribution() {

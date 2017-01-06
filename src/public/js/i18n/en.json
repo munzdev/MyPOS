@@ -3,6 +3,13 @@
     "errorLoadingAppRouteText": "There was no initial route found! Do you have any permission set?",
     "errorLoadingAppText": "Please reload the App",
     "currency": "$",
+    "InvoiceType": {
+        "INVOICE": "Invoice",
+        "CANCELLATION": "Cancellation",
+        "TRAINING": "Training",
+        "DAY_DOCUMENT": "Day document",
+        "MONTH_DOCUMENT": "Month document"
+    },
     "LoginView": {
         "username": "Username",
         "password": "Password",
@@ -233,6 +240,25 @@
         "continue": "Continue",
         "cancellationSuccessful": "Cancellation erfolgreich",
         "cancelInvoice": "Cancel Invoice",
-        "cancelInvoiceText": "Are you sure to cancel the selected invoice"
+        "cancelInvoiceText": "Are you sure to cancel the selected invoice",
+        "bookPayment": "Add Payment"
+    },
+    "InvoiceOverviewSearchView": {
+        "type": "Type",
+        "status": "Status",
+        "all": "All",
+        "paid": "Paid",
+        "unpaid": "Unpaid",
+        "canceled": "Cancellationstatus",
+        "yes": "Yes",
+        "no": "No",
+        "invoiceid": "Invoicenr",
+        "customerid": "Customerid",
+        "type": "Invoicetype",
+        "invoicePeriod": "Invoiceperiod",
+        "from": "From",
+        "to": "To",
+        "back": "Back",
+        "search": "Search"
     }
 }
