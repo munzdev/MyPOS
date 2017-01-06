@@ -11,6 +11,7 @@ require.config( {
         "jquery-validate": "libs/jquery/jquery.validate",
         "jquerymobile": "libs/jqueryMobile/jquery.mobile-1.4.5",
         "jquerymobile-datebox": "libs/jqueryMobile/jtsage-datebox",
+        "jquerymobile-datebox-lang": "libs/jqueryMobile/jtsage-datebox.lang",
         "underscore": "libs/underscore/underscore",
         "backbone": "libs/backbone/backbone",
         "text": "libs/require/text",
@@ -34,6 +35,15 @@ require.config( {
         "backbone": {
             "deps": [ "underscore", "jquery" ],
             "exports": "Backbone"  //attaches "Backbone" to the window object
+        },
+        "jquerymobile": {
+            "deps": [ "jquery" ]
+        },
+        "jquerymobile-datebox": {
+            "deps": [ "jquerymobile" ]
+        },
+        "jquerymobile-datebox-lang": {
+            "deps": [ "jquerymobile-datebox" ]
         }
     } // end Shim Configuration
 
@@ -44,7 +54,8 @@ require([ "I18n",
           "jquery",
           "underscore",
           "backbone",
-          "jquerymobile"],
+          "jquerymobile",
+          "jquerymobile-datebox-lang"],
 function(I18n) {
 
     // Disabling this will prevent jQuery Mobile from handling hash changes
@@ -57,11 +68,15 @@ function(I18n) {
 
     var app = window.app = {
         URL : "/",                      // Base application URL
-        API : "API/",                   // Base API URL (used by models & collections)
+        API : "API/"                    // Base API URL (used by models & collections)
     };
 
     // Enable Multi Language module
     app.i18n = new I18n(() => {
+        $.extend($.mobile.widgets.datebox.prototype.options, {
+                useLang: app.i18n.shortLanguage
+        });
+
         require(["loadBaseClasses"]);
     });
 } );
