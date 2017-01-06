@@ -259,6 +259,11 @@
         "from": "Von",
         "to": "Bis",
         "back": "Zurück",
-        "search": "Suchen"
+        "search": "Suchen",
+        "selectCustomer": "Kunde auswählen",
+        "searchResult": "Suchergebnisse",
+        "noSearchResult": "Kein Suchergebniss",
+        "name": "Name",
+        "abort": "Abbrechen"
     }
 }
