@@ -1,5 +1,5 @@
 define(["models/db/Invoice/InvoiceWarning"
-], function(InvoiceWarning,){
+], function(InvoiceWarning){
     "use strict";
 
     return class InvoiceWarningCollection extends app.BaseCollection

@@ -1,5 +1,5 @@
 "use strict";
-    
+
 // Includes File Dependencies
 define(["views/AbstractView",
         "views/PageView",
@@ -25,11 +25,12 @@ function(AbstractView,
     app.DialogView = DialogView;
     app.PopupView = PopupView;
     app.PanelView = PanelView;
-    
+
     // Define collections and models
     app.BaseCollection = BaseCollection;
     app.BaseModel = BaseModel;
-       
+
     require(["collections/db/Menu/MenuTypeCollection", // Verify that the Menu model/collection structures and depencies are loaded correctly by loading it first
+             "collections/db/Invoice/InvoiceCollection", // Verify that Invoice model/collection structures and depencies are loaded correctly by loading it first
              "app"]);
 } );

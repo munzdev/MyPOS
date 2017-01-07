@@ -1,0 +1,147 @@
+<div data-role="content">
+    <div class="nav-header"></div>
+    <ul data-role="listview" data-inset="true">
+        <li data-role="list-divider" style="white-space: normal;">Informationen</li>
+        <li style="white-space: normal;">Rechnungsnr: <%- invoiceInfo.get('Invoiceid') %></li>
+        <li style="white-space: normal;">Rechnungstyp: <%- invoiceInfo.get('InvoiceType').get('Name') %></li>
+        <li style="white-space: normal;">Datum: <%- invoiceInfo.get('Date') %></li>
+        <li style="white-space: normal;">Ersteller: <%- invoiceInfo.get('User').get('Firstname') %> <%- invoiceInfo.get('User').get('Lastname') %></li>
+        <li style="white-space: normal;">Summe: <%- invoiceInfo.get('Amount') %></li>
+        <li style="white-space: normal;">Zahlbar bis: <%- invoiceInfo.get('MaturityDate') %></li>
+        <li style="white-space: normal;">Bisher bezahlt: <%- invoiceInfo.get('AmountRecieved') %></li>
+        <li style="white-space: normal;">Status:
+            <%
+                if(invoiceInfo.get('CanceledInvoiceid')) {
+                    print(t.canceled);
+                } else {
+                    print(t.entry);
+                }
+            %>
+            -
+            <% if(invoiceInfo.get('PaymentFinished')) { %>
+                <span style="color: green;"><%= t.payed %></span>
+            <% } else { %>
+                <span style="color: red;"><%= t.unpayed %></span>
+            <% } %>
+        </li>
+        <li style="white-space: normal;">
+            Verwendete Kontaktinformationen:<br/>
+            <% let contact = invoiceInfo.get('EventContactRelatedByEventContactid'); %>
+            <%- contact.get('Title') %><br/>
+            <%- contact.get('Name') %><br/>
+            <% if(contact.get('ContactPerson')) { print(contact.get('ContactPerson') + '<br/>') } %>
+            <%- contact.get('Address') %><br/>
+            <% if(contact.get('Address2')) { print(contact.get('Adress2') + '<br/>') } %>
+            <%- contact.get('Zip') %> <%- contact.get('City') %>
+            <% if(contact.get('TaxIdentificationNr')) { print('<br/>UID: ' + contact.get('TaxIdentificationNr')) } %>
+            <% if(contact.get('Telephon')) { print('<br/>Telefon: ' + contact.get('Telephon')) } %>
+            <% if(contact.get('Fax')) { print('<br/>Fax: ' + contact.get('Fax')) } %>
+            <% if(contact.get('Email')) { print('<br/>Email: ' + contact.get('Email')) } %>
+        </li>
+        <li style="white-space: normal;">
+            Verwendete Bankinformationen:<br/>
+            <% let bank = invoiceInfo.get('EventBankinformation'); %>
+            Name: <%- bank.get('Name') %><br/>
+            IBAN: <%- bank.get('Iban') %><br/>
+            BIC: <%- bank.get('Bic') %>
+        </li>
+        <li style="white-space: normal;">
+            Kunde:
+            <% if(invoiceInfo.get('CustomerEventContactid')) { %>
+                <br/>
+                <% let customer = invoiceInfo.get('EventContactRelatedByCustomerEventContactid'); %>
+                <%- customer.get('Title') %><br/>
+                <%- customer.get('Name') %><br/>
+                <% if(customer.get('ContactPerson')) { print(customer.get('ContactPerson') + '<br/>') } %>
+                <%- customer.get('Address') %><br/>
+                <% if(customer.get('Address2')) { print(customer.get('Adress2') + '<br/>') } %>
+                <%- customer.get('Zip') %> <%- customer.get('City') %>
+                <% if(customer.get('TaxIdentificationNr')) { print('<br/>UID: ' + customer.get('TaxIdentificationNr')) } %>
+                <% if(customer.get('Telephon')) { print('<br/>Telefon: ' + customer.get('Telephon')) } %>
+                <% if(customer.get('Fax')) { print('<br/>Fax: ' + customer.get('Fax')) } %>
+                <% if(customer.get('Email')) { print('<br/>Email: ' + customer.get('Email')) } %>
+            <% } %>
+        </li>
+    </ul>
+    <div>
+        <h4>Rechnungspositionen</h4>
+        <table data-role="table" class="ui-responsive table-stroke">
+            <thead>
+                <tr>
+                    <th>Bezeichnung</th>
+                    <th>Anzahl</th>
+                    <th>Preis</th>
+                    <th>Summe</th>
+                    <th>MwSt</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% invoiceInfo.get('InvoiceItems').each(function(invoiceItem) { %>
+                    <tr>
+                        <th><%- invoiceItem.get('Description') %></th>
+                        <td><%- invoiceItem.get('Amount') %></td>
+                        <td><%- invoiceItem.get('Price') %></td>
+                        <td><%- invoiceItem.get('Amount') * invoiceItem.get('Price') %></td>
+                        <td><%- invoiceItem.get('Tax') %>%</td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h4>Zahlungseingänge</h4>
+        <table data-role="table" class="ui-responsive table-stroke">
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Zahlungsart</th>
+                    <th>Verbucht von</th>
+                    <th>Summe</th>
+                    <th>Verwendete Gutscheine</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% invoiceInfo.get('PaymentRecieveds').each(function(paymentRecieved) { %>
+                    <tr>
+                        <th><%- paymentRecieved.get('Date') %></th>
+                        <td><%- paymentRecieved.get('PaymentType').get('Name') %></td>
+                        <td><%- paymentRecieved.get('User').get('Firstname') %> <%- paymentRecieved.get('User').get('Lastname') %></td>
+                        <td><%- paymentRecieved.get('Amount') %></td>
+                        <td>
+                            <% paymentRecieved.get('PaymentCoupons').each(function(paymentCoupon) { %>
+                                Gutschein: <%- paymentCoupon.get('Coupon').get('Code') %>,
+                                Wert: <%- paymentCoupon.get('ValueUsed') %><br/>
+                            <% }); %>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h4>Mahnungen</h4>
+        <table data-role="table" class="ui-responsive table-stroke">
+            <thead>
+                <tr>
+                    <th>Datum</th>
+                    <th>Mahnungstyp</th>
+                    <th>Zahlbar bis</th>
+                    <th>Mahnungswert</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% invoiceInfo.get('InvoiceWarnings').each(function(invoiceWarning) { %>
+                    <tr>
+                        <th><%- invoiceWarning.get('WarningDate') %></th>
+                        <td><%- invoiceWarning.get('InvoiceWarningType').get('Name') %></td>
+                        <td><%- invoiceWarning.get('MaturityDate') %></td>
+                        <td><%- invoiceWarning.get('WarningValue') %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div data-role="footer" data-theme="b" data-position="fixed" >
+    <a data-rel="back" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-carat-l">Zurück</a>
+</div>

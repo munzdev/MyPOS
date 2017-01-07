@@ -1,8 +1,11 @@
-define([
-    "models/db/Payment/PaymentType",
-    "models/db/Invoice/Invoice"
+define(["models/db/Payment/PaymentType",
+        "models/db/Invoice/Invoice",
+        "models/db/User/User",
+        "collections/db/Payment/PaymentCouponCollection"
 ], function(PaymentType,
-            Invoice){
+            Invoice,
+            User,
+            PaymentCouponCollection){
     "use strict";
 
     return class PaymentRecieved extends app.BaseModel {
@@ -27,6 +30,19 @@ define([
             if('Invoice' in response)
             {
                 response.Invoice = new Invoice(response.Invoice, {parse: true});
+            }
+
+            if('User' in response)
+            {
+                response.User = new User(response.User, {parse: true});
+            }
+
+            if('PaymentCoupons' in response)
+            {
+                if(response.PaymentCoupons.toString() == '')
+                    response.PaymentCoupons = new PaymentCouponCollection();
+                else
+                    response.PaymentCoupons = new PaymentCouponCollection(response.PaymentCoupons, {parse: true});
             }
 
             return super.parse(response);

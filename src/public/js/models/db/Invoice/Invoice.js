@@ -2,12 +2,16 @@ define(["models/db/User/User",
         "models/db/Event/EventContact",
         "models/db/Invoice/InvoiceType",
         "models/db/Event/EventBankinformation",
-        "collections/db/Invoice/InvoiceCollection"
+        "collections/db/Invoice/InvoiceItemCollection",
+        "collections/db/Payment/PaymentRecievedCollection",
+        "collections/db/Invoice/InvoiceWarningCollection"
 ], function(User,
             EventContact,
             InvoiceType,
             EventBankinformation,
-            InvoiceCollection) {
+            InvoiceItemCollection,
+            PaymentRecievedCollection,
+            InvoiceWarningCollection) {
     "use strict";
 
     return class Invoice extends app.BaseModel {
@@ -36,14 +40,14 @@ define(["models/db/User/User",
                 response.InvoiceType = new InvoiceType(response.InvoiceType, {parse: true});
             }
 
-            if('CashierUser' in response)
+            if('User' in response)
             {
-                response.CashierUser = new User(response.CashierUser, {parse: true});
+                response.User = new User(response.User, {parse: true});
             }
 
-            if('EventContact' in response)
+            if('EventContactRelatedByEventContactid' in response)
             {
-                response.EventContact = new EventContact(response.EventContact, {parse: true});
+                response.EventContactRelatedByEventContactid = new EventContact(response.EventContactRelatedByEventContactid, {parse: true});
             }
 
             if('EventBankinformation' in response)
@@ -51,9 +55,9 @@ define(["models/db/User/User",
                 response.EventBankinformation = new EventBankinformation(response.EventBankinformation, {parse: true});
             }
 
-            if('CustomerEventContact' in response)
+            if('EventContactRelatedByCustomerEventContactid' in response)
             {
-                response.CustomerEventContact = new EventContact(response.CustomerEventContact, {parse: true});
+                response.EventContactRelatedByCustomerEventContactid = new EventContact(response.EventContactRelatedByCustomerEventContactid, {parse: true});
             }
 
             if('CanceledInvoice' in response)
@@ -64,9 +68,25 @@ define(["models/db/User/User",
             if('InvoiceItems' in response)
             {
                 if(response.InvoiceItems.toString() == '')
-                    response.InvoiceItems = new InvoiceCollection();
+                    response.InvoiceItems = new InvoiceItemCollection();
                 else
-                    response.InvoiceItems = new InvoiceCollection(response.InvoiceItems, {parse: true});
+                    response.InvoiceItems = new InvoiceItemCollection(response.InvoiceItems, {parse: true});
+            }
+
+            if('PaymentRecieveds' in response)
+            {
+                if(response.PaymentRecieveds.toString() == '')
+                    response.PaymentRecieveds = new PaymentRecievedCollection();
+                else
+                    response.PaymentRecieveds = new PaymentRecievedCollection(response.PaymentRecieveds, {parse: true});
+            }
+
+            if('InvoiceWarnings' in response)
+            {
+                if(response.InvoiceWarnings.toString() == '')
+                    response.InvoiceWarnings = new InvoiceWarningCollection();
+                else
+                    response.InvoiceWarnings = new InvoiceWarningCollection(response.InvoiceWarnings, {parse: true});
             }
 
             return super.parse(response);

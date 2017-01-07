@@ -11,7 +11,8 @@ define(["views/dialoges/LoginView",
         "views/pages/OrderInfoView",
         "views/pages/OrderInvoiceView",
         "views/pages/InvoiceOverviewView",
-        "views/pages/InvoiceOverviewSearchView"
+        "views/pages/InvoiceOverviewSearchView",
+        "views/pages/InvoiceInfoView"
         /*"views/pages/DistributionView",
         "views/pages/ManagerView",
         "views/pages/ManagerCallbackView",
@@ -51,6 +52,7 @@ define(["views/dialoges/LoginView",
             OrderInvoiceView,
             InvoiceOverviewView,
             InvoiceOverviewSearchView,
+            InvoiceInfoView,
             DistributionView,
             ManagerView,
             ManagerCallbackView,
@@ -136,6 +138,7 @@ define(["views/dialoges/LoginView",
                     "invoice": "invoice_overview",
                     "invoice/status/:status(/invoiceid/:invoiceid)(/customerid/:customerid)(/canceled/:canceled)(/typeid/:typeid)(/from/:from)(/to/:to)(/userid/:userid)": "invoice_overview",
                     "invoice/search/status/:status(/invoiceid/:invoiceid)(/customerid/:customerid)(/canceled/:canceled)(/typeid/:typeid)(/from/:from)(/to/:to)(/userid/:userid)": "invoice_search_overview",
+                    "invoice/id/:invoiceid": "invoice_info",
                     "distribution": "distribution",
                     "manager": "manager",
                     "manager-callback": "manager_callback",
@@ -249,6 +252,10 @@ define(["views/dialoges/LoginView",
                                                      from: from,
                                                      to: to,
                                                      userid: userid}));
+        }
+
+        invoice_info(invoiceid) {
+            this.show(new InvoiceInfoView({invoiceid: invoiceid}));
         }
 
         distribution() {
