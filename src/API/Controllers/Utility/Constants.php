@@ -5,11 +5,11 @@ namespace API\Controllers\Utility;
 use API\Lib\Controller;
 
 class Constants extends Controller
-{    
-    protected function ANY() : void            
+{
+    protected function ANY() : void
     {
         $a_defined_constants = get_defined_constants(TRUE)['user'];
-        
+
         $a_js_constants = array();
 
         foreach ($a_defined_constants as $str_name => $value)
@@ -28,6 +28,6 @@ class Constants extends Controller
             }
         }
 
-        $this->o_response->withJson($a_js_constants);
+        $this->withJson($a_js_constants);
     }
 }

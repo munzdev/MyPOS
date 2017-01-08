@@ -24,7 +24,7 @@ class Customer extends SecurityController
                         ->setEventid($o_user->getEventUser()->getEventid())
                         ->save();
 
-        $this->o_response->withJson($o_event_contact->toArray());
+        $this->withJson($o_event_contact->toArray());
     }
 
 }

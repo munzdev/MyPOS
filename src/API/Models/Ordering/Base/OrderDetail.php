@@ -1236,6 +1236,10 @@ abstract class OrderDetail implements ActiveRecordInterface
             throw new PropelException("You cannot save an object that has been deleted.");
         }
 
+        if ($this->alreadyInSave) {
+            return 0;
+        }
+
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderDetailTableMap::DATABASE_NAME);
         }
@@ -3837,8 +3841,8 @@ abstract class OrderDetail implements ActiveRecordInterface
      */
     public function removeMenuPossibleExtra(MenuPossibleExtra $menuPossibleExtra)
     {
-        if ($this->getMenuPossibleExtras()->contains($menuPossibleExtra)) { $orderDetailExtra = new ChildOrderDetailExtra();
-
+        if ($this->getMenuPossibleExtras()->contains($menuPossibleExtra)) {
+            $orderDetailExtra = new ChildOrderDetailExtra();
             $orderDetailExtra->setMenuPossibleExtra($menuPossibleExtra);
             if ($menuPossibleExtra->isOrderDetailsLoaded()) {
                 //remove the back reference if available

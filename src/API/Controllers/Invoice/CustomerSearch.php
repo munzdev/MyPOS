@@ -34,7 +34,7 @@ class CustomerSearch extends SecurityController
                                                 ->filterByName('%'.$this->a_args['name'].'%', Criteria::LIKE)
                                                 ->find();
 
-        $this->o_response->withJson($o_event_contacts->toArray());
+        $this->withJson($o_event_contacts->toArray());
     }
 
 }

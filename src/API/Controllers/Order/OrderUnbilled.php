@@ -86,7 +86,7 @@ class OrderUnbilled extends SecurityController
                           'UnbilledOrderDetails' => $a_unbilledOrderDetails,
                           'UsedCoupons' => null);
 
-        $this->o_response->withJson($a_return);
+        $this->withJson($a_return);
     }
 
     function POST() : void{
@@ -322,7 +322,7 @@ class OrderUnbilled extends SecurityController
                 StatusCheck::verifyOrder($i_orderid);
             }
 
-            $this->o_response->withJson($o_invoice->toArray());
+            $this->withJson($o_invoice->toArray());
 
             $o_connection->commit();
         } catch(Exception $o_exception) {

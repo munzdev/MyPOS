@@ -119,7 +119,7 @@ class Printing extends SecurityController
         try {
             $o_reciepPrint->PrintInvoice();
 
-            $this->o_response->withJson(true);
+            $this->withJson(true);
         } catch(Exception $o_exception) {
             throw new Exception("Rechnungsdruck fehlgeschlagen! Bitte Vorgang wiederhollen! Rechnungsnummer: $a_params[invoiceid]", $o_exception->getCode(), $o_exception);
         }

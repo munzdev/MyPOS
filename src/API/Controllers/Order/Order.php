@@ -134,8 +134,8 @@ class Order extends SecurityController
                                 ->_endif()
                                 ->find();
 
-        $this->o_response->withJson(["Count" => $i_order_count,
-                                     "Order" => $o_order->toArray()]);
+        $this->withJson(["Count" => $i_order_count,
+                         "Order" => $o_order->toArray()]);
     }
 
     function POST() : void {
@@ -196,7 +196,7 @@ class Order extends SecurityController
 
             $o_connection->commit();
 
-            $this->o_response->withJson($o_order->toArray());
+            $this->withJson($o_order->toArray());
         } catch(Exception $o_exception) {
             $o_connection->rollBack();
             throw $o_exception;

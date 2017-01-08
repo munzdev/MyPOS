@@ -18,23 +18,23 @@ class OrderInfo extends SecurityController
 {
     public function __construct(App $o_app) {
         parent::__construct($o_app);
-        
+
         $this->a_security = ['GET' => USER_ROLE_ORDER_OVERVIEW];
-        
+
         $o_app->getContainer()['db'];
     }
-    
+
     function ANY() : void {
         $a_validators = array(
             'id' => v::intVal()->positive()
         );
-        
-        $this->validate($a_validators, $this->a_args);       
+
+        $this->validate($a_validators, $this->a_args);
     }
-    
-    protected function GET() : void  {                
-        $o_user = Auth::GetCurrentUser();      
-        
+
+    protected function GET() : void  {
+        $o_user = Auth::GetCurrentUser();
+
         $o_order_info = OrderQuery::create()
                         ->useOrderDetailQuery()
                             ->useInvoiceItemQuery(null, ModelCriteria::LEFT_JOIN)
@@ -46,10 +46,10 @@ class OrderInfo extends SecurityController
                         ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " * " . OrderDetailTableMap::COL_SINGLE_PRICE . ")", "price")
                         ->withColumn("COUNT(" . OrderDetailTableMap::COL_ORDER_DETAILID . ") - COUNT(" . InvoiceItemTableMap::COL_INVOICE_ITEMID . ")", "open")
                         ->withColumn("SUM(" . InvoiceItemTableMap::COL_AMOUNT . " * " . InvoiceItemTableMap::COL_PRICE . ")", "amountBilled")
-                        ->groupByOrderid()        
+                        ->groupByOrderid()
                         ->findByOrderid($this->a_args['id'])
                         ->getFirst();
-        
+
         $o_order_detail_info = OrderQuery::create()
                                 ->joinWithEventTable()
                                 ->joinWithOrderDetail()
@@ -60,25 +60,25 @@ class OrderInfo extends SecurityController
                                         ->leftJoinWithDistributionGivingOut()
                                     ->endUse()
                                     ->leftJoinWithMenuSize()
-                                    ->leftJoinWithOrderDetailExtra()                                    
+                                    ->leftJoinWithOrderDetailExtra()
                                     ->leftJoinWithOrderDetailMixedWith()
                                     ->with(OrderInProgressRecievedTableMap::getTableMap()->getPhpName())
-                                ->endUse()                                   
+                                ->endUse()
                                 ->setFormatter(ModelCriteria::FORMAT_ARRAY)
                                 ->findByOrderid($this->a_args['id'])
-                                ->getFirst();               
+                                ->getFirst();
 
         $o_order_detail_info['price'] = $o_order_info->getVirtualColumn('price');
         $o_order_detail_info['open'] = $o_order_info->getVirtualColumn('open');
         $o_order_detail_info['amountBilled'] = $o_order_info->getVirtualColumn('amountBilled');
-        
+
         // Dont send secure critical datas
         $o_order_detail_info['User']['Password'] = null;
         $o_order_detail_info['User']['AutologinHash'] = null;
         $o_order_detail_info['User']['IsAdmin'] = null;
-        $o_order_detail_info['User']['CallRequest'] = null;   
-        
-        $this->o_response->withJson($o_order_detail_info);
-    }        
-    
+        $o_order_detail_info['User']['CallRequest'] = null;
+
+        $this->withJson($o_order_detail_info);
+    }
+
 }

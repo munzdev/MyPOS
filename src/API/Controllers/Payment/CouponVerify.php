@@ -14,35 +14,35 @@ use Slim\App;
 class CouponVerify extends SecurityController
 {
     public function __construct(App $o_app) {
-        parent::__construct($o_app);        
-        
+        parent::__construct($o_app);
+
         $o_app->getContainer()['db'];
     }
-    
+
     function ANY() : void {
         $a_validators = array(
             'code' => v::alnum()->length(1),
         );
-        
-        $this->validate($a_validators, $this->a_args);       
+
+        $this->validate($a_validators, $this->a_args);
     }
-    
-    protected function GET() : void  {            
-        $o_user = Auth::GetCurrentUser();      
-        
+
+    protected function GET() : void  {
+        $o_user = Auth::GetCurrentUser();
+
         $o_coupon = CouponQuery::create()
                                 ->leftJoinPaymentCoupon()
                                 ->withColumn(CouponTableMap::COL_VALUE . ' - SUM(IFNULL(' . PaymentCouponTableMap::COL_VALUE_USED . ', 0))', 'Value')
                                 ->filterByEventid($o_user->getEventUser()->getEventid())
                                 ->filterByCode($this->a_args['code'])
                                 ->groupBy(CouponTableMap::COL_COUPONID)
-                                ->find();        
+                                ->find();
 
-        if($o_coupon->count() == 0 || 
+        if($o_coupon->count() == 0 ||
            $o_coupon->getFirst()->getVirtualColumn('Value') == 0)
             return;
-        
-        $this->o_response->withJson($o_coupon->getFirst()->toArray());
-    }        
-    
+
+        $this->withJson($o_coupon->getFirst()->toArray());
+    }
+
 }

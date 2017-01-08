@@ -19,7 +19,7 @@ class InvoiceType extends SecurityController
     protected function GET() : void {
         $o_invoiceTypes = InvoiceTypeQuery::create()->find();
 
-        $this->o_response->withJson($o_invoiceTypes->toArray());
+        $this->withJson($o_invoiceTypes->toArray());
     }
 
 }

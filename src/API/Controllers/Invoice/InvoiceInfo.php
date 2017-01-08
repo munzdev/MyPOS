@@ -60,6 +60,6 @@ class InvoiceInfo extends SecurityController
                                     ->findByInvoiceid($this->a_args['id'])
                                     ->getFirst();
 
-        $this->o_response->withJson($a_invoice);
+        $this->withJson($a_invoice);
     }
 }

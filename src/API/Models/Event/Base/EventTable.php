@@ -681,6 +681,10 @@ abstract class EventTable implements ActiveRecordInterface
             throw new PropelException("You cannot save an object that has been deleted.");
         }
 
+        if ($this->alreadyInSave) {
+            return 0;
+        }
+
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventTableTableMap::DATABASE_NAME);
         }
@@ -2123,8 +2127,8 @@ abstract class EventTable implements ActiveRecordInterface
      */
     public function removeDistributionPlaceGroup(DistributionPlaceGroup $distributionPlaceGroup)
     {
-        if ($this->getDistributionPlaceGroups()->contains($distributionPlaceGroup)) { $distributionPlaceTable = new DistributionPlaceTable();
-
+        if ($this->getDistributionPlaceGroups()->contains($distributionPlaceGroup)) {
+            $distributionPlaceTable = new DistributionPlaceTable();
             $distributionPlaceTable->setDistributionPlaceGroup($distributionPlaceGroup);
             if ($distributionPlaceGroup->isEventTablesLoaded()) {
                 //remove the back reference if available

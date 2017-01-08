@@ -772,6 +772,10 @@ abstract class Coupon implements ActiveRecordInterface
             throw new PropelException("You cannot save an object that has been deleted.");
         }
 
+        if ($this->alreadyInSave) {
+            return 0;
+        }
+
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(CouponTableMap::DATABASE_NAME);
         }
@@ -2015,8 +2019,8 @@ abstract class Coupon implements ActiveRecordInterface
      */
     public function removePaymentRecieved(ChildPaymentRecieved $paymentRecieved)
     {
-        if ($this->getPaymentRecieveds()->contains($paymentRecieved)) { $paymentCoupon = new ChildPaymentCoupon();
-
+        if ($this->getPaymentRecieveds()->contains($paymentRecieved)) {
+            $paymentCoupon = new ChildPaymentCoupon();
             $paymentCoupon->setPaymentRecieved($paymentRecieved);
             if ($paymentRecieved->isCouponsLoaded()) {
                 //remove the back reference if available

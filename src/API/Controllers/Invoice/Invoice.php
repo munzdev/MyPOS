@@ -139,8 +139,8 @@ class Invoice extends SecurityController
                                     ->_endif()
                                     ->find();
 
-        $this->o_response->withJson(["Count" => $i_invoice_count,
-                                     "Invoice" => $o_invoice->toArray()]);
+        $this->withJson(["Count" => $i_invoice_count,
+                         "Invoice" => $o_invoice->toArray()]);
     }
 
     function POST() : void {

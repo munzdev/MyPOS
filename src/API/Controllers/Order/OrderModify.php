@@ -54,7 +54,7 @@ class OrderModify extends SecurityController
                                 ->setFormatter(ModelCriteria::FORMAT_ARRAY)
                                 ->findByOrderid($this->a_args['id']);
 
-        $this->o_response->withJson($o_order->getFirst());
+        $this->withJson($o_order->getFirst());
     }
 
     function PATCH() : void {
@@ -143,7 +143,7 @@ class OrderModify extends SecurityController
 
             $o_connection->commit();
 
-            $this->o_response->withJson($o_order->toArray());
+            $this->withJson($o_order->toArray());
         } catch(Exception $o_exception) {
             $o_connection->rollBack();
             throw $o_exception;
@@ -190,7 +190,7 @@ class OrderModify extends SecurityController
 
             $o_connection->commit();
 
-            $this->o_response->withJson(['OpenInvoice' => $o_order->getInvoiceFinished() == null]);
+            $this->withJson(['OpenInvoice' => $o_order->getInvoiceFinished() == null]);
         } catch (Exception $ex) {
             $o_connection->rollBack();
             throw $o_exception;
@@ -210,7 +210,7 @@ class OrderModify extends SecurityController
 
             $o_connection->commit();
 
-            $this->o_response->withJson($o_order->toArray());
+            $this->withJson($o_order->toArray());
         } catch(Exception $o_exception) {
             $o_connection->rollBack();
             throw $o_exception;
@@ -236,7 +236,7 @@ class OrderModify extends SecurityController
                               ->save();
             }
 
-            $this->o_response->withJson($o_orderDetail->getOrder()->toArray());
+            $this->withJson($o_orderDetail->getOrder()->toArray());
             $o_connection->commit();
         } catch(Exception $o_exception) {
             $o_connection->rollBack();
