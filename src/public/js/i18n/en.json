@@ -10,6 +10,14 @@
         "DAY_DOCUMENT": "Day document",
         "MONTH_DOCUMENT": "Month document"
     },
+    "PaymentType": {
+        "CASH": "Cash",
+        "BANK_TRANSFER": "Invoice/Bank Transfer"
+    },
+    "IntlCurrency": {
+        "style": "currency",
+        "currency": "USD"
+    },
     "LoginView": {
         "username": "Username",
         "password": "Password",
@@ -66,8 +74,8 @@
         "overview": "Overview",
         "addSpecialOrder": "Add special order",
         "sum": "Sum",
-        "oldSum": "Old Summe",
-        "newSum": "New Summe",
+        "oldSum": "Old Sum",
+        "newSum": "New Sum",
         "difference": "Difference",
         "extras": "Extras",
         "add": "Add",
@@ -215,8 +223,8 @@
         "saveSuccess": "Save successfull",
         "invalidPrice": "Enter valid price",
         "chatMessageInfo": "The prices of the Order with the orderid  %(orderid)i got modified by the Manager %(name)s. Please check the order/prices!",
-        "oldSum": "Old Summe",
-        "newSum": "New Summe",
+        "oldSum": "Old Sum",
+        "newSum": "New Sum",
         "difference": "Difference",
         "specialOrders": "Special Orders",
         "specialOrder": "Special Order"
@@ -265,5 +273,44 @@
         "searchResult": "Search result",
         "noSearchResult": "No search result",
         "abort": "Abort"
+    },
+    "InvoiceInfoView": {
+        "informations": "Informations",
+        "canceled": "Canceled",
+        "entry": "Entry",
+        "payed": "Payed",
+        "unpayed": "Unpayed",
+        "invoiceid": "Invoiceid",
+        "invoiceType": "Invoicetype",
+        "date": "Date",
+        "creator": "Creator",
+        "sum": "Sum",
+        "maturityDate": "Maturity date",
+        "amountPayed": "Amount payed",
+        "status": "Status",
+        "contactInformation": "Used contact informations",
+        "bankInformation": "used bank informationens",
+        "customer": "Customer",
+        "noCustomer": "No customer used",
+        "invoiceItem": "Invoice items",
+        "description": "Description",
+        "amount": "Amount",
+        "price": "Price",
+        "tax": "Tax",
+        "payments": "Payments",
+        "paymentType": "Paymenttype",
+        "entryCreator": "Entry creator",
+        "usedCoupons": "Used coupons",
+        "warnings": "Warnings",
+        "warningType": "Warningtype",
+        "warningValue": "Warning value",
+        "back": "Back",
+        "coupon": "Coupon",
+        "value": "Value",
+        "bookPayment": "Add Payment",
+        "cancelInvoice": "Cancel Invoice",
+        "abort": "Abort",
+        "continue": "Continue",
+        "cancelInvoiceText": "Are you sure to cancel the selected invoice"
     }
 }

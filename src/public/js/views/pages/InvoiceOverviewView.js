@@ -39,7 +39,6 @@ define(['collections/custom/invoice/InvoiceOverviewCollection',
                 'click .info-btn': 'click_btn_info',
                 'click .cancel-btn': 'cancel_invoice_popup',
                 'click .payment-btn': 'click_btn_payment',
-                'click .warnings-btn': 'click_btn_warnings',
                 'click #dialog-continue': 'dialog_continue',
                 'change #invoiceid-search': 'change_invoiceid_search',
                 'popupafterclose #cancel-success-popup': 'success_popup_close'
@@ -103,13 +102,7 @@ define(['collections/custom/invoice/InvoiceOverviewCollection',
         click_btn_payment(event) {
             var invoice = this.invoiceList.get({cid: $(event.currentTarget).attr('data-invoice-cid')});
 
-            this.changeHash("invoice/payment/" + invoice.get('Invoiceid'));
-        }
-
-        click_btn_warnings(event) {
-            var invoice = this.invoiceList.get({cid: $(event.currentTarget).attr('data-invoice-cid')});
-
-            this.changeHash("invoice/warnings/" + invoice.get('Invoiceid'));
+            this.changeHash("invoice/id/" + invoice.get('Invoiceid') + '/payment');
         }
 
         click_btn_search() {

@@ -1,7 +1,7 @@
 <tr>
     <th><%- invoice.get('Invoiceid') %></th>
     <td><%- i18n.InvoiceType[invoice.get('InvoiceType').get('Name')] %></td>
-    <td><%- $.format.date(invoice.get('Date'), DATE_JS_TIMEFORMAT) %></td>
+    <td><%- app.i18n.toDateTime(invoice.get('Date')) %></td>
     <td><%- parseFloat(invoice.get('Amount')).toFixed(2) %> <%= i18n.currency %></td>
     <td>
         <%
@@ -23,7 +23,6 @@
         <% if (!invoice.get('CanceledInvoiceid')) { %>
            <a data-invoice-cid="<%- invoice.cid %>" class="cancel-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.cancel %></a>
         <% } %>
-        <a data-invoice-cid="<%- invoice.cid %>" class="payment-btn ui-btn ui-icon-euro ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.bookPayment %></a>
-        <a data-invoice-cid="<%- invoice.cid %>" class="warnings-btn ui-btn ui-icon-mail ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.warnings %></a>
+        <a data-invoice-cid="<%- invoice.cid %>" class="add-payment-btn ui-btn ui-icon-euro ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.bookPayment %></a>
     </td>
 </tr>

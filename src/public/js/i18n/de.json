@@ -10,6 +10,14 @@
         "DAY_DOCUMENT": "Tagesabrechnung",
         "MONTH_DOCUMENT": "Monatsabrechnung"
     },
+    "PaymentType": {
+        "CASH": "Bar",
+        "BANK_TRANSFER": "Rechnung/Überweisung"
+    },
+    "IntlCurrency": {
+        "style": "currency",
+        "currency": "EUR"
+    },
     "LoginView": {
         "username": "Benutzername",
         "password": "Passwort",
@@ -235,13 +243,13 @@
         "advancedSearch": "Erweiterte Suche",
         "info": "Info",
         "cancel": "Storno",
-        "warnings": "Mahnungen",
         "abort": "Abbrechen",
         "continue": "Fortfahren",
         "cancellationSuccessful": "Storno erfolgreich",
         "cancelInvoice": "Rechnung stornieren",
         "cancelInvoiceText": "Sind sie sicher das die Rechnung storniert werden soll",
-        "bookPayment": "Zahlung buchen"
+        "bookPayment": "Zahlung buchen",
+        "createInvoice": "Rechnung erstellen"
     },
     "InvoiceOverviewSearchView": {
         "type": "Typ",
@@ -265,5 +273,45 @@
         "noSearchResult": "Kein Suchergebniss",
         "name": "Name",
         "abort": "Abbrechen"
+    },
+    "InvoiceInfoView": {
+        "informations": "Informationen",
+        "canceled": "Storniert",
+        "entry": "Gebucht",
+        "payed": "Bezahlt",
+        "unpayed": "Unbezahlt",
+        "invoiceid": "Rechnungsnr",
+        "invoiceType": "Rechnungstyp",
+        "date": "Datum",
+        "creator": "Ersteller",
+        "sum": "Summe",
+        "maturityDate": "Zahlbar bis",
+        "amountPayed": "Bisher bezahlt",
+        "status": "Status",
+        "contactInformation": "Verwendete Kontaktinformationen",
+        "bankInformation": "Verwendete Bankinformationen",
+        "customer": "Kunde",
+        "noCustomer": "Kein Kunde angegeben",
+        "invoiceItem": "Rechnungspositionen",
+        "description": "Bezeichnung",
+        "amount": "Anzahl",
+        "price": "Preis",
+        "tax": "MwSt",
+        "payments": "Zahlungseingänge",
+        "paymentType": "Zahlungsart",
+        "entryCreator": "Verbucht von",
+        "usedCoupons": "Verwendete Gutscheine",
+        "warnings": "Mahnungen",
+        "warningType": "Mahnungstyp",
+        "warningValue": "Mahnungswert",
+        "back": "Zurück",
+        "coupon": "Gutschein",
+        "value": "Wert",
+        "bookPayment": "Zahlung buchen",
+        "cancelInvoice": "Rechnung stornieren",
+        "abort": "Abbrechen",
+        "continue": "Fortfahren",
+        "cancelInvoice": "Rechnung stornieren",
+        "cancelInvoiceText": "Sind sie sicher das die Rechnung storniert werden soll"
     }
 }

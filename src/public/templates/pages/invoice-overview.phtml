@@ -2,7 +2,8 @@
     <div class="nav-header"></div>
     <div data-role="controlgroup" data-type="horizontal" data-mini="true">
         <input type="text" id="invoiceid-search" data-type="search" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important" value="<%- invoiceid %>">
-        <button id='search-btn'><%= t.advancedSearch %></button>
+        <a id='search-btn' class="ui-btn"><%= t.advancedSearch %></a>
+        <a id='add-btn' class="ui-btn ui-icon-plus ui-btn-icon-right"><%= t.createInvoice %></a>
     </div>
     <div class="nav-pagination"></div>
     <table data-role="table" id="table" class="ui-responsive table-stroke table-stripe">
