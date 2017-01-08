@@ -40,6 +40,7 @@ define(['collections/custom/invoice/InvoiceOverviewCollection',
                 'click .cancel-btn': 'cancel_invoice_popup',
                 'click .payment-btn': 'click_btn_payment',
                 'click #dialog-continue': 'dialog_continue',
+                'click #add-btn': 'click_btn_add',
                 'change #invoiceid-search': 'change_invoiceid_search',
                 'popupafterclose #cancel-success-popup': 'success_popup_close'
             };
@@ -91,6 +92,10 @@ define(['collections/custom/invoice/InvoiceOverviewCollection',
             var invoice = this.invoiceList.get({cid: this.cancelInvoiceCid});
             invoice.save({Cancellation: 1}, {patch: true})
                    .done(this.reload);
+        }
+
+        click_btn_add() {
+            this.changeHash("invoice/add");
         }
 
         click_btn_info(event) {
