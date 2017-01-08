@@ -7,7 +7,8 @@ define(function() {
 
     return class I18n {
         constructor(externalDoneCallback) {
-            _.bindAll(this, "storeTemplate");
+            _.bindAll(this, "storeTemplate",
+                            "toCurrency");
 
             this.externalDoneCallback = externalDoneCallback;
             this.language = window.navigator.userLanguage || window.navigator.language;
@@ -47,6 +48,26 @@ define(function() {
                     {
                         alert("Language file couldnt' be loaded! Please reload the App! Error: " + error);
                     });
+        }
+
+        toCurrency(number) {
+            return new Intl.NumberFormat(undefined, this.template.IntlCurrency).format(number);
+        }
+
+        toDecimal(number) {
+            return new Intl.NumberFormat().format(number);
+        }
+
+        toDateTime(date) {
+            return new Date(date).toLocaleString();
+        }
+
+        toDate(date) {
+            return new Date(date).toLocaleDateString();
+        }
+
+        toTime(date) {
+            return new Date(date).toLocaleTimeString();
         }
     }
 } );
