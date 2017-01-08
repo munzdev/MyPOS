@@ -83,7 +83,7 @@ define(["models/db/User/User",
 
             if('InvoiceWarnings' in response)
             {
-                if(response.InvoiceWarnings.toString() == '')
+                if(response.InvoiceWarnings.toString() == '' || JSON.stringify(response.InvoiceWarnings) == '[{"InvoiceWarningType":[]}]')
                     response.InvoiceWarnings = new InvoiceWarningCollection();
                 else
                     response.InvoiceWarnings = new InvoiceWarningCollection(response.InvoiceWarnings, {parse: true});

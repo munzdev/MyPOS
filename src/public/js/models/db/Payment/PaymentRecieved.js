@@ -39,7 +39,7 @@ define(["models/db/Payment/PaymentType",
 
             if('PaymentCoupons' in response)
             {
-                if(response.PaymentCoupons.toString() == '')
+                if(response.PaymentCoupons.toString() == '' || JSON.stringify(response.PaymentCoupons) == '[{"Coupon":[]}]')
                     response.PaymentCoupons = new PaymentCouponCollection();
                 else
                     response.PaymentCoupons = new PaymentCouponCollection(response.PaymentCoupons, {parse: true});
