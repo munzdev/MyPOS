@@ -12,7 +12,9 @@ define(["views/dialoges/LoginView",
         "views/pages/OrderInvoiceView",
         "views/pages/InvoiceOverviewView",
         "views/pages/InvoiceOverviewSearchView",
-        "views/pages/InvoiceInfoView"
+        "views/pages/InvoiceInfoView",
+        "views/pages/InvoiceAddView",
+        "views/pages/InvoicePaymentView",
         /*"views/pages/DistributionView",
         "views/pages/ManagerView",
         "views/pages/ManagerCallbackView",
@@ -53,6 +55,8 @@ define(["views/dialoges/LoginView",
             InvoiceOverviewView,
             InvoiceOverviewSearchView,
             InvoiceInfoView,
+            InvoiceAddView,
+            InvoicePaymentView,
             DistributionView,
             ManagerView,
             ManagerCallbackView,
@@ -138,7 +142,9 @@ define(["views/dialoges/LoginView",
                     "invoice": "invoice_overview",
                     "invoice/status/:status(/invoiceid/:invoiceid)(/customerid/:customerid)(/canceled/:canceled)(/typeid/:typeid)(/from/:from)(/to/:to)(/userid/:userid)": "invoice_overview",
                     "invoice/search/status/:status(/invoiceid/:invoiceid)(/customerid/:customerid)(/canceled/:canceled)(/typeid/:typeid)(/from/:from)(/to/:to)(/userid/:userid)": "invoice_search_overview",
+                    "invoice/add": "invoice_add",
                     "invoice/id/:invoiceid": "invoice_info",
+                    "invoice/id/:invoiceid/payment": "invoice_add_payment",
                     "distribution": "distribution",
                     "manager": "manager",
                     "manager-callback": "manager_callback",
@@ -256,6 +262,14 @@ define(["views/dialoges/LoginView",
 
         invoice_info(invoiceid) {
             this.show(new InvoiceInfoView({invoiceid: invoiceid}));
+        }
+
+        invoice_add() {
+            this.show(new InvoiceAddView());
+        }
+
+        invoice_add_payment(invoiceid) {
+            this.show(new InvoicePaymentView({invoiceid: invoiceid}));
         }
 
         distribution() {
