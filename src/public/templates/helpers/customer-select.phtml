@@ -1,0 +1,80 @@
+<div data-role="popup" data-position-to="window" id="select-customer-popup" data-overlay-theme="b" data-theme="b">
+     <div data-role="header">
+        <h1><%= t.selectCustomer %></h1>
+    </div>
+    <div role="main" class="ui-content">
+        <label for="customer-search-name"><%= t.name %>:</label>
+        <input type="text" id="customer-search-name" />
+
+        <ul data-role="listview" data-inset="true" id="customer-search-result"></ul>
+
+        <a id='customer-search' class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.search %></a>
+        <% if(allowAdd) { %>
+            <a id='customer-add' class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.createPlant %></a>
+        <% } %>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back"><%= t.abort %></a>
+    </div>
+</div>
+<% if(allowAdd) { %>
+    <div data-role="popup" data-position-to="window" id="add-customer-popup" data-overlay-theme="b" data-theme="b">
+        <div data-role="header">
+            <h1><%= t.createCustomer %></h1>
+        </div>
+        <div role="main" class="ui-content">
+            <form id="customer-form">
+                <div data-role="fieldcontain">
+                    <label for="customer-title"><%= t.title %>:</label>
+                    <select id="customer-title" name="title" data-mini="true">
+                        <option value="" disabled="disabled" selected=""><%= t.select %></option>
+                        <option><%= t.mr %></option>
+                        <option><%= t.ms %></option>
+                        <option><%= t.company %></option>
+                    </select>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-name"><%= t.name %>:</label>
+                    <input type="text" id="customer-name" name="name" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-contact-person"><%= t.contactPerson %>:</label>
+                    <input type="text" id="customer-contact-person" name="contact_person" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-address"><%= t.address %>:</label>
+                    <input type="text" id="customer-address" name="address" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-address2"><%= t.address2 %>:</label>
+                    <input type="text" id="customer-address2" name="address2" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-city"><%= t.city %>:</label>
+                    <input type="text" id="customer-city" name="city" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-zip"><%= t.zip %>:</label>
+                    <input type="text" id="customer-zip" name="zip" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-tin"><%= t.tin %>:</label>
+                    <input type="text" id="customer-tin" name="tin" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-telephone"><%= t.telephone %>:</label>
+                    <input type="text" id="customer-telephone" name="telephone" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-fax"><%= t.fax %>:</label>
+                    <input type="text" id="customer-fax" name="fax" data-mini="true"/>
+                </div>
+                <div data-role="fieldcontain">
+                    <label for="customer-email"><%= t.email %>:</label>
+                    <input type="text" id="customer-email" name="email" data-mini="true"/>
+                </div>
+
+                <a id="customer-save" class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.save %></a>
+                <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" ><%= t.abort %></a>
+            </form>
+        </div>
+    </div>
+<% } %>

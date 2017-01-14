@@ -1,19 +1,5 @@
  <div data-role="content">
     <div class="nav-header"></div>
-    <div data-role="popup" data-position-to="window" id="select-customer-popup" data-overlay-theme="b" data-theme="b">
-         <div data-role="header">
-            <h1><%= t.selectCustomer %></h1>
-        </div>
-        <div role="main" class="ui-content">
-            <label for="customer-search-name"><%= t.name %>:</label>
-            <input type="text" id="customer-search-name" />
-
-            <ul data-role="listview" data-inset="true" id="customer-search-result"></ul>
-
-            <a id='customer-search' class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.search %></a>
-            <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back"><%= t.abort %></a>
-        </div>
-    </div>
     <div>
         <fieldset id="status" data-role="controlgroup" data-type="horizontal" data-mini="true">
             <legend><%= t.status %>:</legend>

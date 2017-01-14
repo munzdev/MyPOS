@@ -1,9 +1,9 @@
 define(['collections/db/Invoice/InvoiceTypeCollection',
-        'collections/custom/invoice/CustomerSearchCollection',
+        'views/helpers/CustomerSelectView',
         'views/helpers/HeaderView',
         'text!templates/pages/invoice-overview-search.phtml'
 ], function(InvoiceTypeCollection,
-            CustomerSearchCollection,
+            CustomerSelectView,
             HeaderView,
             Template) {
     "use strict";
@@ -13,7 +13,8 @@ define(['collections/db/Invoice/InvoiceTypeCollection',
 
             this.search = options;
             this.invoiceTypeCollection = new InvoiceTypeCollection();
-            this.customerSearch = new CustomerSearchCollection;
+            this.customerSelectView = new CustomerSelectView({selectCallback: this.select_customer,
+                                                              allowAdd: false});
 
             $.mobile.loading("show");
             this.invoiceTypeCollection.fetch()
@@ -49,54 +50,15 @@ define(['collections/db/Invoice/InvoiceTypeCollection',
         events() {
             return {'click #back': 'click_btn_back',
                     'click #search': 'click_btn_search',
-                    'click #select-customer': "click_select_customer",
-                    'click #customer-search': "click_customer_search",
-                    'popupafterclose #select-customer-popup': 'close_select_customer_popup'}
+                    'click #select-customer': "click_select_customer"}
         }
 
         click_select_customer() {
-            this.$('#select-customer-popup').popup("open");
+            this.customerSelectView.show();
         }
 
-        click_customer_search() {
-            let name = $.trim(this.$('#customer-search-name').val());
-
-            if(name == '')
-                return;
-
-            this.customerSearch.name = name;
-            this.customerSearch.fetch()
-                                .done(() => {
-                                    this.$('#customer-search-result').empty();
-                                    let t = this.i18n();
-
-                                    let divider = $('<li/>').attr('data-role', 'list-divider').text(t.searchResult);
-                                    this.$('#customer-search-result').append(divider);
-
-                                    if(this.customerSearch.length == 0) {
-                                        this.$('#customer-search-result').append($('<li/>').text(t.noSearchResult));
-                                    } else {
-                                        this.customerSearch.each((customer) => {
-                                            let a = $('<a/>').attr('class', "customer-search-result-btn ui-btn ui-corner-all ui-shadow ui-btn-b ui-mini ui-icon-check ui-btn-icon-right")
-                                                             .attr('data-customercid', customer.cid)
-                                                             .text(customer.get('Name'));
-
-                                            this.$('#customer-search-result').append($('<li/>').append(a));
-                                        });
-                                    }
-
-                                    this.$('.customer-search-result-btn').click((event) => {
-                                        let customer = this.customerSearch.get({cid: $(event.currentTarget).attr('data-customercid')});
-                                        this.$('#customerid').val(customer.get('EventContactid'));
-                                        this.$('#select-customer-popup').popup("close");
-                                    });
-                                    this.$('#customer-search-result').listview('refresh');
-                                });
-        }
-
-        close_select_customer_popup() {
-            this.$('#customer-search-name').val('');
-            this.$('#customer-search-result').empty();
+        select_customer(customer) {
+            this.$('#customerid').val(customer.get('EventContactid'));
         }
 
         click_btn_back(event) {
@@ -166,6 +128,7 @@ define(['collections/db/Invoice/InvoiceTypeCollection',
         render() {
             var header = new HeaderView();
             this.registerSubview(".nav-header", header);
+            this.registerAppendview(this.customerSelectView);
 
             this.renderTemplate(Template, {userList: app.userList,
                                            invoiceTypeList: this.invoiceTypeCollection});

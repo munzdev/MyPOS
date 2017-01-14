@@ -7,6 +7,7 @@ define(["views/AbstractView",
         "views/DialogView",
         "views/PopupView",
         "views/PanelView",
+        "views/RenderView",
         "collections/BaseCollection",
         "models/BaseModel"],
 function(AbstractView,
@@ -15,6 +16,7 @@ function(AbstractView,
          DialogView,
          PopupView,
          PanelView,
+         RenderView,
          BaseCollection,
          BaseModel) {
 
@@ -25,6 +27,7 @@ function(AbstractView,
     app.DialogView = DialogView;
     app.PopupView = PopupView;
     app.PanelView = PanelView;
+    app.RenderView = RenderView;
 
     // Define collections and models
     app.BaseCollection = BaseCollection;

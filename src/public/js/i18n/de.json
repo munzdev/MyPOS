@@ -313,5 +313,43 @@
         "continue": "Fortfahren",
         "cancelInvoice": "Rechnung stornieren",
         "cancelInvoiceText": "Sind sie sicher das die Rechnung storniert werden soll"
+    },
+    "CustomerSelectView": {
+        "selectCustomer": "Kunde auswählen",
+        "back": "Zurück",
+        "save": "Speichern",
+        "name": "Name",
+        "search": "Suchen",
+        "createPlant": "Neuanlage",
+        "abort": "Abbrechen",
+        "createCustomer": "Kunde anlegen",
+        "title": "Titel",
+        "mr": "Herr",
+        "ms": "Frau",
+        "company": "Firma",
+        "contactPerson": "Kontaktperson",
+        "address": "Adresse",
+        "address2": "Adressenzusatz",
+        "city": "Ort",
+        "zip": "PLZ",
+        "tin": "UID",
+        "telephone": "Telefon",
+        "fax": "Fax",
+        "email": "E-Mail",
+        "fillInAllFields": "Bitte alle Felder ausfüllen!",
+        "select": "Auswählen",
+        "searchResult": "Suchergebnisse",
+        "noSearchResult": "Kein Suchergebniss",
+        "errorTitle": "Titel auswählen!",
+        "errorName": "Name eingeben!",
+        "errorAddress": "Adresse eingeben!",
+        "errorCity": "Ort eingeben!",
+        "errorZip": "PLZ eingeben!"
+    },
+    "InvoiceAddView": {
+        "maturityDate": "Zahlbar bis",
+        "customerid": "Kunden-Nr",
+        "selectCustomer": "Kunde auswählen",
+        "type": "Rechnungstyp"
     }
 }

@@ -2,7 +2,7 @@ define(['text!templates/helpers/pagination.phtml'],
 function(Template) {
     "use strict";
 
-    return class PaginationView extends app.HeaderView
+    return class PaginationView extends app.RenderView
     {
         initialize(pageChangeCallback) {
             this.orgel = this.$el;
