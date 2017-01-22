@@ -350,6 +350,25 @@
         "maturityDate": "Zahlbar bis",
         "customerid": "Kunden-Nr",
         "selectCustomer": "Kunde auswählen",
-        "type": "Rechnungstyp"
+        "type": "Rechnungstyp",
+        "back": "Zurück",
+        "save": "Speichern",
+        "addEntry": "Eintrag Hinzufügen",
+        "description": "Beschreibung",
+        "amount": "Anzahl",
+        "price": "Preis",
+        "tax": "MwSt",
+        "sum": "Summe",
+        "options": "Optionen",
+        "cancel": "Abbrechen",
+        "errorDescription": "Bitte Beschreibung eingeben",
+        "errorPrice": "Bitte einen gültigen Preis eingeben",
+        "errorAmount": "Bitte eine gültige Anzahl eingeben",
+        "errorTax": "Bitte eine gültige MwSt eingeben",
+        "edit": "Bearbeiten",
+        "remove": "Entfernen",
+        "continue": "Fortfahren",
+        "invoiceFinished": "Rechnung fertig?",
+        "invoiceFinishedVerifyText": "Sind Sie sicher das die Rechnung fertig ist?"
     }
 }

@@ -1,0 +1,11 @@
+<tr>
+    <th><%- invoiceItem.get('Description') %></th>
+    <td><%- invoiceItem.get('Amount') %></td>
+    <td><%- app.i18n.toCurrency(invoiceItem.get('Price')) %></td>
+    <td><%- invoiceItem.get('Tax') %></td>
+    <td><%- app.i18n.toCurrency(invoiceItem.get('Amount') * invoiceItem.get('Price')) %></td>
+    <td>
+        <a data-item-cid="<%- invoiceItem.cid %>" class="edit-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.edit %></a>
+        <a data-item-cid="<%- invoiceItem.cid %>" class="remove-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.remove %></a>
+    </td>
+</tr>

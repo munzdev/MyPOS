@@ -39,6 +39,7 @@ define(['collections/custom/invoice/CustomerSearchCollection',
             if(name == '')
                 return;
 
+            $.mobile.loading("show");
             this.customerSearch.name = name;
             this.customerSearch.fetch()
                                 .done(() => {
@@ -67,6 +68,7 @@ define(['collections/custom/invoice/CustomerSearchCollection',
                                         this.$('#select-customer-popup').popup("close");
                                     });
                                     this.$('#customer-search-result').listview('refresh');
+                                    $.mobile.loading("hide");
                                 });
         }
 
@@ -103,7 +105,7 @@ define(['collections/custom/invoice/CustomerSearchCollection',
         render() {
             let t = this.i18n();
             this.renderTemplate(Template, {allowAdd: this.allowAdd});
-            
+
             // Register new customer form validation
             this.$('#customer-form').validate({
                 rules: {
