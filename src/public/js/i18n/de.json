@@ -370,5 +370,29 @@
         "continue": "Fortfahren",
         "invoiceFinished": "Rechnung fertig?",
         "invoiceFinishedVerifyText": "Sind Sie sicher das die Rechnung fertig ist?"
+    },
+    "InvoicePaymentView": {
+        "addCoupon": "Gutschein hinzufügen",
+        "save": "Speichern",
+        "back": "Zurück",
+        "paymentValue": "Einzahlungswert",
+        "type": "Zahlungstyp",
+        "code": "Code",
+        "abort": "Abbrechen",
+        "verify": "Prüfen",
+        "value": "Wert",
+        "consumed": "Verbraucht",
+        "options": "Optionen",
+        "edit": "Bearbeiten",
+        "remove": "Entfernen",
+        "editCoupon": "Gutschein bearbeiten",
+        "valueToUse": "Wert der verwendet werden soll",
+        "continue": "Fortfahren",
+        "sum": "Summe",
+        "couponsValue": "Gutscheinewert",
+        "paymentFinished": "Einzahlung fertig?",
+        "paymentFinishedVerifyText": "Sind Sie sicher das die Einzahlung fertig ist?",
+        "cancel": "Abbrechen",
+        "errorPaymentValue": "Bitte einen gültigen Einzahlungswert eingeben!"
     }
 }

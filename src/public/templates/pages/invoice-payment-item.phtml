@@ -1,0 +1,9 @@
+<tr>
+    <th><%- paymentCoupon.get('Coupon').get('Code') %></th>
+    <td><%- app.i18n.toCurrency(paymentCoupon.get('Coupon').get('Value')) %></td>
+    <td><%- app.i18n.toCurrency(paymentCoupon.get('ValueUsed')) %></td>
+    <td>
+        <a data-item-cid="<%- paymentCoupon.cid %>" class="edit-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left ui-mini" data-rel="popup" data-position-to="window"><%= t.edit %></a>
+        <a data-item-cid="<%- paymentCoupon.cid %>" class="remove-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left ui-mini"><%= t.remove %></a>
+    </td>
+</tr>

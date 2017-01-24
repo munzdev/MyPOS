@@ -16,8 +16,8 @@ define(["models/db/Payment/PaymentType",
             return {PaymentRecievedid: null,
                     Invoiceid: null,
                     PaymentTypeid: null,
-                    date: null,
-                    amount: 0};
+                    Date: null,
+                    Amount: 0};
         }
 
         parse(response)

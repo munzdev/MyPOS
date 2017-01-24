@@ -369,5 +369,29 @@
         "continue": "Continue",
         "invoiceFinished": "Invoice finished?",
         "invoiceFinishedVerifyText": "Are your sure, that the invoice is finished?"
+    },
+    "InvoicePaymentView": {
+        "addCoupon": "Add coupon",
+        "save": "Save",
+        "back": "Back",
+        "paymentValue": "Paymentvalue",
+        "type": "Paymenttype",
+        "code": "Code",
+        "abort": "Abort",
+        "verify": "Verify",
+        "value": "Value",
+        "consumed": "Consumed",
+        "options": "Options",
+        "edit": "Edit",
+        "remove": "Remove",
+        "editCoupon": "Edit coupon",
+        "valueToUse": "Value to use",
+        "continue": "Continue",
+        "sum": "Sum",
+        "couponsValue": "Couponsvalue",
+        "paymentFinished": "Payment finished?",
+        "paymentFinishedVerifyText": "Are you sure that the payment is finished?",
+        "cancel": "Cancel",
+        "errorPaymentValue": "Please enter a valid payment value!"
     }
 }
