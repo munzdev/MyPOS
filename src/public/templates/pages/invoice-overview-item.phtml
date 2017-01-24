@@ -20,9 +20,9 @@
     </td>
     <td>
         <a data-invoice-cid="<%- invoice.cid %>" class="info-btn ui-btn ui-icon-info ui-mini ui-btn-icon-left"><%= t.info %></a>
-        <% if (!invoice.get('CanceledInvoiceid')) { %>
+        <% if (!invoice.get('CanceledInvoiceid') && invoice.get('InvoiceTypeid') != INVOICE_TYPE_CANCELLATION) { %>
            <a data-invoice-cid="<%- invoice.cid %>" class="cancel-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.cancel %></a>
+           <a data-invoice-cid="<%- invoice.cid %>" class="add-payment-btn ui-btn ui-icon-euro ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.bookPayment %></a>
         <% } %>
-        <a data-invoice-cid="<%- invoice.cid %>" class="add-payment-btn ui-btn ui-icon-euro ui-mini ui-btn-icon-left" data-rel="popup" data-position-to="window"><%= t.bookPayment %></a>
     </td>
 </tr>

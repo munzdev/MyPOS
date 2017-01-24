@@ -4,15 +4,18 @@ namespace API\Controllers\Invoice;
 
 use API\Lib\Auth;
 use API\Lib\SecurityController;
-use API\Models\Event\Map\EventTableTableMap;
+use API\Models\Event\EventBankinformationQuery;
+use API\Models\Event\EventContactQuery;
+use API\Models\Invoice\Invoice as InvoiceModel;
+use API\Models\Invoice\InvoiceItem;
 use API\Models\Invoice\InvoiceQuery;
 use API\Models\Invoice\Map\InvoiceTableMap;
-use API\Models\Ordering\Map\OrderDetailTableMap;
-use API\Models\Ordering\OrderQuery;
 use DateTime;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Propel;
 use Respect\Validation\Validator as v;
 use Slim\App;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use const API\USER_ROLE_INVOICE_ADD;
 use const API\USER_ROLE_INVOICE_OVERVIEW;
 
@@ -67,7 +70,7 @@ class Invoice extends SecurityController
             if(isset($_REQUEST['search']['customerid']))
                 $i_customerid = $_REQUEST['search']['customerid'];
 
-            if(isset($_REQUEST['search']['canceled']))
+            if(isset($_REQUEST['search']['canceled']) && $_REQUEST['search']['canceled'] !== "")
                 $b_canceled = filter_var($_REQUEST['search']['canceled'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
             if(isset($_REQUEST['search']['typeid']))
@@ -144,5 +147,63 @@ class Invoice extends SecurityController
     }
 
     function POST() : void {
+        $o_user = Auth::GetCurrentUser();
+        $o_connection = Propel::getConnection();
+
+        try {
+            $o_connection->beginTransaction();
+
+            $o_invoice_template = new InvoiceModel();
+            $this->jsonToPropel($this->a_json, $o_invoice_template);
+
+            // fix given ISO Date
+            $o_invoice_template->setMaturityDate(date("c", strtotime($this->a_json['MaturityDate'])));
+
+            $o_event_contact = EventContactQuery::create()
+                                                ->filterByEventid($o_user->getEventUser()->getEventid())
+                                                ->filterByDefault(true)
+                                                ->findOne();
+
+            $o_event_bankinformation = EventBankinformationQuery::create()
+                                                                ->findOneByActive(true);
+
+            $o_invoice = new InvoiceModel();
+            $o_invoice->setEventContactRelatedByEventContactid($o_event_contact);
+            $o_invoice->setUser($o_user);
+            $o_invoice->setEventBankinformation($o_event_bankinformation);
+            $o_invoice->setDate(new DateTime());
+
+            $o_invoice->setInvoiceTypeid($o_invoice_template->getInvoiceTypeid());
+            $o_invoice->setMaturityDate($o_invoice_template->getMaturityDate());
+
+            if($o_invoice_template->getCustomerEventContactid())
+                $o_invoice->setCustomerEventContactid ($o_invoice_template->getCustomerEventContactid());
+
+            $o_invoice->save();
+
+            $i_amount = 0;
+
+            foreach($o_invoice_template->getInvoiceItems() as $o_invoiceItem_template) {
+                $o_invoiceItem = new InvoiceItem();
+                $o_invoiceItem->setInvoice($o_invoice);
+                $o_invoiceItem->setAmount($o_invoiceItem_template->getAmount());
+                $o_invoiceItem->setPrice($o_invoiceItem_template->getPrice());
+                $o_invoiceItem->setDescription($o_invoiceItem_template->getDescription());
+                $o_invoiceItem->setTax($o_invoiceItem_template->getTax());
+                $o_invoiceItem->save();
+
+                $i_amount += $o_invoiceItem->getPrice() * $o_invoiceItem->getAmount();
+            }
+
+            $o_invoice->setAmount($i_amount);
+            $o_invoice->save();
+
+            $o_connection->commit();
+
+            $this->withJson($o_invoice_template->toArray());
+        } catch(Exception $o_exception) {
+            $o_connection->rollBack();
+            throw $o_exception;
+        }
     }
 }

@@ -75,7 +75,7 @@ define(["models/db/User/User",
 
             if('PaymentRecieveds' in response)
             {
-                if(response.PaymentRecieveds.toString() == '')
+                if(response.PaymentRecieveds.toString() == '' || JSON.stringify(response.PaymentRecieveds) == '[{"PaymentType":[],"User":[],"PaymentCoupons":[{"Coupon":[]}]}]')
                     response.PaymentRecieveds = new PaymentRecievedCollection();
                 else
                     response.PaymentRecieveds = new PaymentRecievedCollection(response.PaymentRecieveds, {parse: true});
