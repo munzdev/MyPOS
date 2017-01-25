@@ -1,63 +1,24 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'Webservice',
-         'views/headers/HeaderView',
-         'collections/distribution/TodoListCollection',
-         'models/distribution/DistributionOrderSetModel',
-         'models/distribution/OrderDoneInformationModel',
-         'models/distribution/ProductsAvailabilitySetModel',
-         'text!templates/pages/distribution.phtml',
-         "jquery-dateFormat"],
-function( Webservice,
-          HeaderView,
-          TodoListCollection,
-          DistributionOrderSetModel,
-          OrderDoneInformationModel,
-          ProductsAvailabilitySetModel,
-          Template ) {
+define(['Webservice',
+        'views/helpers/HeaderView',
+        //'collections/distribution/TodoListCollection',
+        //'models/distribution/DistributionOrderSetModel',
+        //'models/distribution/OrderDoneInformationModel',
+        //'models/distribution/ProductsAvailabilitySetModel',
+        'text!templates/pages/distribution.phtml'
+], function(Webservice,
+            HeaderView,
+            //TodoListCollection,
+            //DistributionOrderSetModel,
+            //OrderDoneInformationModel,
+            //ProductsAvailabilitySetModel,
+            Template) {
     "use strict";
 
-    // Extends Backbone.View
-    var DistributionView = Backbone.View.extend( {
-
-    	title: 'distribution',
-    	el: 'body',
-        events: {
-            "click .distribution-order": "markOrder",
-            "click #distribution-btn-verify-dialog": "showVerifyDialog",
-            "click #distribution-finished": "finished",
-            "change input[name='distribution-order-details-special-extra-amount']": "amountChanged",
-            "change select[name='distribution-order-details-special-extra-status']": "avaibilityChanged",
-            "change #distribution-availability-menues-list input": "amountChanged",
-            "change #distribution-availability-menues-list select": "avaibilityChanged",
-            "change #distribution-availability-extras-list input": "amountChanged",
-            "change #distribution-availability-extras-list select": "avaibilityChanged",
-            "change #distribution-availability-special-extras-list input": "amountChanged",
-            "change #distribution-availability-special-extras-list select": "avaibilityChanged"
-        },
-
-        // The View Constructor
-        initialize: function() {
+    return class DistributionView extends app.PageView {
+        initialize() {
             _.bindAll(this, "finished");
 
-
-            var self = this;
-
-            // Broken Tabs widget with Backbone pushstate enabled  - manual fix it
-            $(document).on('pagecreate', '#' + this.title, function(createEvent) {
-                self.hideTabs();
-                $('#distribution-tab-current-order').show();
-                $('#distribution-tab-btn-current-order').addClass('ui-btn-active');
-
-                $("#distribution-tabs a[data-role='tab']").click(function(event) {
-                    self.hideTabs();
-                    $($(event.currentTarget).attr('href')).show();
-                });
-            });
-
-            var webservice = new Webservice();
+            /*var webservice = new Webservice();
             webservice.action = "Distribution/GetDistributionOrderDatas";
             webservice.callback = {
                 success: function(result) {
@@ -69,11 +30,25 @@ function( Webservice,
                     self.render();
                 }
             };
-            webservice.call();
-        },
+            webservice.call();*/
+            this.render();
+        }
 
-        amountChanged: function(event)
-        {
+        events() {
+            return {"click .order": "markOrder",
+                    "click #btn-verify-dialog": "showVerifyDialog",
+                    "click #finished": "finished",
+                    "change input[name='order-details-special-extra-amount']": "amountChanged",
+                    "change select[name='order-details-special-extra-status']": "avaibilityChanged",
+                    "change #availability-menues-list input": "amountChanged",
+                    "change #availability-menues-list select": "avaibilityChanged",
+                    "change #availability-extras-list input": "amountChanged",
+                    "change #availability-extras-list select": "avaibilityChanged",
+                    "change #availability-special-extras-list input": "amountChanged",
+                    "change #availability-special-extras-list select": "avaibilityChanged"}
+        }
+
+        amountChanged(event) {
             var target = $(event.currentTarget);
             var id = target.attr('data-id');
             var type = target.attr('data-type');
@@ -94,10 +69,9 @@ function( Webservice,
                 }
             };
             webservice.call();
-        },
+        }
 
-        avaibilityChanged: function(event)
-        {
+        avaibilityChanged(event) {
             var target = $(event.currentTarget);
             var id = target.attr('data-id');
             var type = target.attr('data-type');
@@ -115,22 +89,20 @@ function( Webservice,
                 }
             };
             webservice.call();
-        },
+        }
 
-        markOrder: function(event)
-        {
+        markOrder(event) {
             $( event.currentTarget ).toggleClass('green-background');
-        },
+        }
 
-        finished: function()
-        {
+        finished() {
             var self = this;
 
             var orders_finished = {order_in_progressids: this.orderDatas.GetOrder.get('orders_in_progressids'),
                                    order_details: [],
                                    order_details_special_extras: []};
 
-            $('.distribution-order').each(function() {
+            $('.order').each(function() {
                 var type = $(this).attr('data-order-type');
 
                 if(type == 'order-detail')
@@ -160,13 +132,12 @@ function( Webservice,
                 }
             };
             webservice.call();
-        },
+        }
 
-        showVerifyDialog: function()
-        {
+        showVerifyDialog() {
             var allOrdersMarked = true;
 
-            $('.distribution-order').each(function(index) {
+            $('.order').each(function(index) {
                 if(!$(this).hasClass('green-background'))
                 {
                     allOrdersMarked = false;
@@ -179,57 +150,55 @@ function( Webservice,
                 return;
             }
 
-            $('#distribution-verify-dialog').popup('open');
-        },
+            $('#verify-dialog').popup('open');
+        }
 
-        hideTabs: function()
-        {
-            $('#distribution-tab-current-order').hide();
-            $('#distribution-tab-set-avaibility').hide();
-        },
+        hideTabs() {
+            this.$('#tab-order').hide();
+            this.$('#tab-avaibility').hide();
+        }
 
-        apiCommandReciever: function(command)
-        {
-            if(command == 'distribution-update' && this.orderDatas.GetOrder.get('orders_details').length == 0)
+        apiCommandReciever(command) {
+            if(command == 'update' && this.orderDatas.GetOrder.get('orders_details').length == 0)
             {
                 MyPOS.ReloadPage();
             }
-        },
+        }
 
-        // Renders all of the Category models on the UI
-        render: function() {
+        render() {
             var header = new HeaderView();
-
-            header.activeButton = 'distribution';
+            this.registerSubview(".nav-header", header);
 
             var menuesArray = {};
 
-            this.orderDatas.GetProductsAvailability.get('menues').each(function(menu) {
+            /*this.orderDatas.GetProductsAvailability.get('menues').each(function(menu) {
                 if(!(menu.get('Group_Name') in menuesArray))
                 {
                     menuesArray[menu.get('Group_Name')] = [];
                 }
 
                 menuesArray[menu.get('Group_Name')].push(menu);
+            });*/
+
+            this.renderTemplate(Template, {ordersSet: /*this.orderDatas.GetOrder*/ new Backbone.Model(),
+                                           ordersInTodoList: /*this.orderDatas.GetOrdersInTodoList*/ new Backbone.Collection(),
+                                           orderDoneInformation: /*this.orderDatas.GetOrderDoneInformation*/ new Backbone.Model(),
+                                           productsAvailability: /*this.orderDatas.GetProductsAvailability*/ new Backbone.Model({extras: new Backbone.Collection(),
+                                                                                                                                 special_extras: new Backbone.Collection()}),
+                                           MyPOSConfig: {Distribution: {}},
+                                           menuesArray: menuesArray});
+
+            // Broken Tabs widget with Backbone pushstate enabled  - manual fix it
+            this.hideTabs();
+            this.$('#tab-order').show();
+            this.$("#tabs a[data-role='tab']").click((event) => {
+                this.hideTabs();
+                this.$($(event.currentTarget).attr('href')).show();
             });
 
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  ordersSet: this.orderDatas.GetOrder,
-                                                                  ordersInTodoList: this.orderDatas.GetOrdersInTodoList,
-                                                                  orderDoneInformation: this.orderDatas.GetOrderDoneInformation,
-                                                                  productsAvailability: this.orderDatas.GetProductsAvailability,
-                                                                  menuesArray: menuesArray});
+            this.changePage(this);
 
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-
-            $.mobile.changePage( "#" + this.title);
             return this;
         }
-
-    } );
-
-    // Returns the View class
-    return DistributionView;
-
+    }
 } );

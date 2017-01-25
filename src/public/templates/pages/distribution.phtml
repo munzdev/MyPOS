@@ -1,22 +1,22 @@
 <div data-role="content">
-    <div class="nav-header"><%= header %></div>
-    <div data-role="tabs" id="distribution-tabs">
+    <div class="nav-header"></div>
+    <div data-role="tabs" id="tabs">
         <div data-role="navbar">
             <ul>
-                <li><a data-role="tab" id="distribution-tab-btn-current-order" href="#distribution-tab-current-order">Aktuelle Bestellung</a></li>
-                <li><a data-role="tab" id="distribution-tab-btn-set-avaibility" href="#distribution-tab-set-avaibility">Verfügbarkeiten einstellen</a></li>
+                <li><a data-role="tab" id="tab-btn-order" href="#tab-order">Aktuelle Bestellung</a></li>
+                <li><a data-role="tab" id="tab-btn-avaibility" href="#tab-avaibility">Verfügbarkeiten einstellen</a></li>
             </ul>
         </div>
-        <div id="distribution-tab-current-order" class="ui-body-d ui-content">
-            <div role="main" class="ui-content" id='distribution-current-menu'>
-                <% if(ordersSet.get('orders_details').length == 0 &&
-                      ordersSet.get('order_details_special_extra').length == 0) { %>
+        <div id="tab-order" class="ui-body-d ui-content">
+            <div role="main" class="ui-content" id='current-menu'>
+                <% if(true/*ordersSet.get('orders_details').length == 0 &&
+                      ordersSet.get('order_details_special_extra').length == 0*/) { %>
                       <h2 style="text-align: center">Zurzeit keine offenen Bestellungen für diese Ausgabestelle vorhanden!</h2>
                 <% } else { %>
                     <fieldset style="border: lightgrey solid thin ; border-radius: 10px; padding: 10px">
                         <legend><strong>Bestellung</strong></legend>
                         <% ordersSet.get('orders_details').each(function(order) { %>
-                            <div data-order-type="order-detail" data-amount="<%- order.get('amount') %>" data-id="<%- order.get('orders_detailid') %>" class="distribution-order ui-grid-a ui-body-a ui-corner-all">
+                            <div data-order-type="order-detail" data-amount="<%- order.get('amount') %>" data-id="<%- order.get('orders_detailid') %>" class="order ui-grid-a ui-body-a ui-corner-all">
                                 <h2><%- order.get('amount') %>x <%- order.get('name') %></h2>
                                 <p>
                                     <strong style="white-space: normal;">
@@ -36,14 +36,14 @@
                             </div>
                         <% }) %>
                         <% ordersSet.get('order_details_special_extra').each(function(order) { %>
-                            <div data-order-type="order-detail-special-extra" data-amount="<%- order.get('amount') %>" data-id="<%- order.get('orders_details_special_extraid') %>" class="distribution-order ui-grid-a ui-body-a ui-corner-all">
+                            <div data-order-type="order-detail-special-extra" data-amount="<%- order.get('amount') %>" data-id="<%- order.get('orders_details_special_extraid') %>" class="order ui-grid-a ui-body-a ui-corner-all">
                                 <h2><%- order.get('amount') %>x Sonderwunsch</h2>
                                 <p>
                                     <strong style="white-space: normal;">
                                         <p><%- order.get('extra_detail') %></p>
                                         <div data-role="controlgroup" data-type="horizontal"  data-mini="true">
-                                            <input type="number" data-type="special-extra" value="<%- order.get('availability_amount') %>" data-id="<%- order.get('orders_details_special_extraid') %>" name="distribution-order-details-special-extra-amount" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
-                                            <select  data-type="special-extra" data-id="<%- order.get('orders_details_special_extraid') %>"  name="distribution-order-details-special-extra-status" id="select-native-2">
+                                            <input type="number" data-type="special-extra" value="<%- order.get('availability_amount') %>" data-id="<%- order.get('orders_details_special_extraid') %>" name="order-details-special-extra-amount" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
+                                            <select  data-type="special-extra" data-id="<%- order.get('orders_details_special_extraid') %>"  name="order-details-special-extra-status" id="select-native-2">
                                                 <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>">Verfügbar</option>
                                                 <option value="<%- ORDER_AVAILABILITY_DELAYED %>">Verspätet</option>
                                                 <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>">Ausverkauft</option>
@@ -73,21 +73,21 @@
                         <li style="white-space: normal;">Neue Bestellungen letzten <%- MyPOSConfig['Distribution']['OrderProgressTimeRangeMinutes'] %> min: <%- orderDoneInformation.get('new_orders') %></li>
                         <li style="white-space: normal;">Tisch: <strong><%- ordersSet.get('tableNr') %></strong></li>
                         <li style="white-space: normal;">Bestellnummer: <%- ordersSet.get('orderid') %></li>
-                        <li style="white-space: normal;">Bestellzeit: <%- $.format.date(MyPOS.DateFromMysql(ordersSet.get('ordertime')), DATE_JS_TIMEFORMAT) %></li>
+                        <li style="white-space: normal;">Bestellzeit: <%- ordersSet.get('ordertime') %></li>
                         <li style="white-space: normal;">Kellner: <%- ordersSet.get('waitress') %></li>
                     </ul>
                 </div>
             </div>
             <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
-                <a id="distribution-btn-verify-dialog" style="float:right" id='distribution-order-finished' class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-check">Bestellung fertig</a>
+                <a id="btn-verify-dialog" style="float:right" id='order-finished' class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-check">Bestellung fertig</a>
             </div>
         </div>
-        <div id="distribution-tab-set-avaibility">
+        <div id="tab-avaibility">
             <div data-role="collapsible-set">
                 <div data-role="collapsible">
                     <h3>Menüs</h3>
                     <p>
-                        <ul data-role="listview" id="distribution-availability-menues-list">
+                        <ul data-role="listview" id="availability-menues-list">
                             <% _.each(menuesArray, function(menues, typeName) { %>
                                 <li data-role="list-divider"><%- typeName %></li>
                                 <% _.each(menues, function(menu) { %>
@@ -110,7 +110,7 @@
                 <div data-role="collapsible">
                     <h3>Extras</h3>
                     <p>
-                        <ul data-role="listview" id="distribution-availability-extras-list">
+                        <ul data-role="listview" id="availability-extras-list">
                             <% productsAvailability.get('extras').each(function(extra) { %>
                                 <li>
                                     <div style="float: left; padding-top: .5em;"><h2><%- extra.get('name') %></h2></div>
@@ -130,7 +130,7 @@
                 <div data-role="collapsible">
                     <h3>Spezial Extras</h3>
                     <p>
-                        <ul data-role="listview" id="distribution-availability-special-extras-list">
+                        <ul data-role="listview" id="availability-special-extras-list">
                             <% productsAvailability.get('special_extras').each(function(specialExtra) { %>
                                 <li>
                                     <div style="float: left; padding-top: .5em;"><h2><%- specialExtra.get('extra_detail') %></h2></div>
@@ -151,13 +151,13 @@
         </div>
     </div>
 </div>
-<div data-role="popup" id="distribution-verify-dialog" data-dismissible="false" data-theme="b" data-overlay-theme="b">
+<div data-role="popup" id="verify-dialog" data-dismissible="false" data-theme="b" data-overlay-theme="b">
     <div data-role="header" data-theme="b">
         <h1>Bestellung fertig?</h1>
     </div>
     <div role="main" class="ui-content">
         <h3 class="ui-title">Sind sie sicher das die Bestellung fertig ist?</h3>
         <a class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Abbrechen</a>
-        <a id='distribution-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Fortfahren</a>
+        <a id='finished' class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Fortfahren</a>
     </div>
 </div>
