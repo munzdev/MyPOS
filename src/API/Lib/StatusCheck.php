@@ -79,6 +79,9 @@ abstract class StatusCheck
             self::verifyOrderInProgress($o_order_in_progress_recieved->getOrderInProgressid());
         }
 
+        if($o_order_detail->getMenuid())
+            self::verifyAvailability($i_order_detailid);
+
         $d_distribution = $o_order_detail->getDistributionFinished();
         $d_invoice = $o_order_detail->getInvoiceFinished();
 
@@ -158,5 +161,51 @@ abstract class StatusCheck
 
         $o_order_in_progress->setDone($d_done);
         $o_order_in_progress->save();
+    }
+
+    /**
+     * Checks for menu availability of given order_detailid and sets correct status in order_detail
+     *
+     * @param int $i_order_detailid
+     */
+    public static function verifyAvailability(int $i_order_detailid) : void {
+        $o_order_detail = OrderDetailQuery::create()
+                                            ->joinWithMenu()
+                                            ->leftJoinWithOrderDetailExtra()
+                                            ->leftJoinWithOrderDetailMixedWith()
+                                            ->filterByOrderDetailid($i_order_detailid)
+                                            ->find();
+
+        if(!$o_order_detail->count())
+            return;
+
+        $o_order_detail = $o_order_detail->getFirst();
+
+        $o_menu = $o_order_detail->getMenu();
+        $o_order_detail->setAvailabilityid($o_menu->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE);
+        $o_order_detail->save();
+
+        $i_availbilityid = $o_order_detail->getAvailabilityid();
+
+        foreach($o_order_detail->getOrderDetailExtras() as $o_order_detail_extra)
+        {
+            if($i_availbilityid == ORDER_AVAILABILITY_AVAILABLE) {
+                $o_menu = $o_order_detail_extra->getMenuPossibleExtra()->getMenu();
+                $i_availbilityid = ($o_menu->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER) ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE;
+            }
+        }
+
+        foreach($o_order_detail->getOrderDetailMixedWiths() as $o_order_detail_mixed_with)
+        {
+            if($i_availbilityid == ORDER_AVAILABILITY_AVAILABLE) {
+                $o_menu = $o_order_detail_mixed_with->getMenu();
+                $i_availbilityid = ($o_menu->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER) ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE;
+            }
+        }
+
+        if($i_availbilityid != $o_order_detail->getAvailabilityid()) {
+            $o_order_detail->setAvailabilityid($i_availbilityid);
+            $o_order_detail->save();
+        }
     }
 }

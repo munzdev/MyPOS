@@ -4,6 +4,7 @@ namespace API\Controllers\Order;
 
 use API\Lib\Auth;
 use API\Lib\SecurityController;
+use API\Lib\StatusCheck;
 use API\Models\Event\EventTableQuery;
 use API\Models\Event\Map\EventTableTableMap;
 use API\Models\Ordering\Map\OrderDetailTableMap;
@@ -19,6 +20,7 @@ use Propel\Runtime\Propel;
 use Respect\Validation\Validator as v;
 use Slim\App;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use const API\ORDER_AVAILABILITY_AVAILABLE;
 use const API\USER_ROLE_ORDER_ADD;
 use const API\USER_ROLE_ORDER_OVERVIEW;
 
@@ -175,6 +177,11 @@ class Order extends SecurityController
                 $o_order_detail = new OrderDetail();
                 $o_order_detail->fromArray($o_order_detail_template->toArray());
                 $o_order_detail->setOrder($o_order);
+
+                if($o_order_detail->getMenuid()) {
+                    $o_order_detail->setAvailabilityid(ORDER_AVAILABILITY_AVAILABLE);
+                }
+
                 $o_order_detail->save();
 
                 foreach($o_order_detail_template->getOrderDetailExtras() as $o_order_detail_extra_template)
@@ -192,6 +199,8 @@ class Order extends SecurityController
                     $o_order_detail_mixed_with->setOrderDetail($o_order_detail);
                     $o_order_detail_mixed_with->save();
                 }
+
+                StatusCheck::verifyAvailability($o_order_detail->getOrderDetailid());
             }
 
             $o_connection->commit();
