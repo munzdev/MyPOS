@@ -680,10 +680,9 @@ abstract class Availability implements ActiveRecordInterface
 
             if ($this->orderDetailsScheduledForDeletion !== null) {
                 if (!$this->orderDetailsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->orderDetailsScheduledForDeletion as $orderDetail) {
-                        // need to save related object because we set the relation to null
-                        $orderDetail->save($con);
-                    }
+                    \API\Models\Ordering\OrderDetailQuery::create()
+                        ->filterByPrimaryKeys($this->orderDetailsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
                     $this->orderDetailsScheduledForDeletion = null;
                 }
             }
@@ -1897,7 +1896,7 @@ abstract class Availability implements ActiveRecordInterface
                 $this->orderDetailsScheduledForDeletion = clone $this->collOrderDetails;
                 $this->orderDetailsScheduledForDeletion->clear();
             }
-            $this->orderDetailsScheduledForDeletion[]= $orderDetail;
+            $this->orderDetailsScheduledForDeletion[]= clone $orderDetail;
             $orderDetail->setAvailability(null);
         }
 

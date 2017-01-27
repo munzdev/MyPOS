@@ -513,7 +513,7 @@ abstract class AvailabilityQuery extends ModelCriteria
      *
      * @return $this|ChildAvailabilityQuery The current query, for fluid interface
      */
-    public function joinOrderDetail($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function joinOrderDetail($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('OrderDetail');
@@ -548,7 +548,7 @@ abstract class AvailabilityQuery extends ModelCriteria
      *
      * @return \API\Models\Ordering\OrderDetailQuery A secondary query class using the current class as primary query
      */
-    public function useOrderDetailQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useOrderDetailQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
     {
         return $this
             ->joinOrderDetail($relationAlias, $joinType)

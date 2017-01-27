@@ -200,7 +200,7 @@ class OrderDetailTableMap extends TableMap
         $this->addColumn('single_price', 'SinglePrice', 'DECIMAL', true, 7, null);
         $this->addForeignKey('single_price_modified_by_userid', 'SinglePriceModifiedByUserid', 'INTEGER', 'user', 'userid', false, null, null);
         $this->addColumn('extra_detail', 'ExtraDetail', 'VARCHAR', false, 255, null);
-        $this->addForeignKey('availabilityid', 'Availabilityid', 'INTEGER', 'availability', 'availabilityid', false, null, null);
+        $this->addForeignKey('availabilityid', 'Availabilityid', 'INTEGER', 'availability', 'availabilityid', true, null, null);
         $this->addColumn('availability_amount', 'AvailabilityAmount', 'SMALLINT', false, null, null);
         $this->addColumn('verified', 'Verified', 'BOOLEAN', true, 1, null);
         $this->addColumn('distribution_finished', 'DistributionFinished', 'TIMESTAMP', false, null, null);

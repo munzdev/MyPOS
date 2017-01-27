@@ -585,7 +585,7 @@
     <column name="single_price" phpName="SinglePrice" type="DECIMAL" size="7" scale="2" required="true"/>
     <column name="single_price_modified_by_userid" phpName="SinglePriceModifiedByUserid" type="INTEGER"/>
     <column name="extra_detail" phpName="ExtraDetail" type="VARCHAR" size="255"/>
-    <column name="availabilityid" phpName="Availabilityid" type="INTEGER"/>
+    <column name="availabilityid" phpName="Availabilityid" type="INTEGER" required="true"/>
     <column name="availability_amount" phpName="AvailabilityAmount" type="SMALLINT"/>
     <column name="verified" phpName="Verified" type="BOOLEAN" size="1" required="true"/>
     <column name="distribution_finished" phpName="DistributionFinished" type="TIMESTAMP"/>

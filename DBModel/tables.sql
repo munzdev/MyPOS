@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `order_detail` (
   `single_price` DECIMAL(7,2) NOT NULL,
   `single_price_modified_by_userid` INT(11) NULL,
   `extra_detail` VARCHAR(255) NULL,
-  `availabilityid` INT NULL,
+  `availabilityid` INT NOT NULL,
   `availability_amount` SMALLINT NULL,
   `verified` TINYINT(1) NOT NULL,
   `distribution_finished` DATETIME NULL,
