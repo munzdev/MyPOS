@@ -1,16 +1,10 @@
 define(['Webservice',
         'views/helpers/HeaderView',
-        //'collections/distribution/TodoListCollection',
-        //'models/distribution/DistributionOrderSetModel',
-        //'models/distribution/OrderDoneInformationModel',
-        //'models/distribution/ProductsAvailabilitySetModel',
+        'models/custom/distributionPlace/DistributionOrderDetail',
         'text!templates/pages/distribution.phtml'
 ], function(Webservice,
             HeaderView,
-            //TodoListCollection,
-            //DistributionOrderSetModel,
-            //OrderDoneInformationModel,
-            //ProductsAvailabilitySetModel,
+            DistributionOrderDetail,
             Template) {
     "use strict";
 
@@ -18,20 +12,11 @@ define(['Webservice',
         initialize() {
             _.bindAll(this, "finished");
 
-            /*var webservice = new Webservice();
-            webservice.action = "Distribution/GetDistributionOrderDatas";
-            webservice.callback = {
-                success: function(result) {
-                    self.orderDatas = result;
-                    self.orderDatas.GetOrder = new DistributionOrderSetModel(self.orderDatas.GetOrder, {parse: true});
-                    self.orderDatas.GetOrdersInTodoList = new TodoListCollection(self.orderDatas.GetOrdersInTodoList, {parse: true});
-                    self.orderDatas.GetOrderDoneInformation = new OrderDoneInformationModel(self.orderDatas.GetOrderDoneInformation, {parse: true});
-                    self.orderDatas.GetProductsAvailability = new ProductsAvailabilitySetModel(self.orderDatas.GetProductsAvailability, {parse: true});
-                    self.render();
-                }
-            };
-            webservice.call();*/
-            this.render();
+            this.distributionOrderDetail = new DistributionOrderDetail();
+            this.distributionOrderDetail.fetch()
+                                        .done(() => {
+                                            this.render();
+                                        });
         }
 
         events() {
@@ -180,7 +165,8 @@ define(['Webservice',
                 menuesArray[menu.get('Group_Name')].push(menu);
             });*/
 
-            this.renderTemplate(Template, {ordersSet: /*this.orderDatas.GetOrder*/ new Backbone.Model(),
+            this.renderTemplate(Template, {distributionOrderDetail: this.distributionOrderDetail,
+                                           ordersSet: /*this.orderDatas.GetOrder*/ new Backbone.Model(),
                                            ordersInTodoList: /*this.orderDatas.GetOrdersInTodoList*/ new Backbone.Collection(),
                                            orderDoneInformation: /*this.orderDatas.GetOrderDoneInformation*/ new Backbone.Model(),
                                            productsAvailability: /*this.orderDatas.GetProductsAvailability*/ new Backbone.Model({extras: new Backbone.Collection(),

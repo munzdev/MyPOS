@@ -9,8 +9,7 @@
         </div>
         <div id="tab-order" class="ui-body-d ui-content">
             <div role="main" class="ui-content" id='current-menu'>
-                <% if(true/*ordersSet.get('orders_details').length == 0 &&
-                      ordersSet.get('order_details_special_extra').length == 0*/) { %>
+                <% if(distributionOrderDetail.get('Order') == null) { %>
                       <h2 style="text-align: center">Zurzeit keine offenen Bestellungen für diese Ausgabestelle vorhanden!</h2>
                 <% } else { %>
                     <fieldset style="border: lightgrey solid thin ; border-radius: 10px; padding: 10px">
