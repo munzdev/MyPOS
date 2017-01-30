@@ -154,25 +154,8 @@ define(['Webservice',
             var header = new HeaderView();
             this.registerSubview(".nav-header", header);
 
-            var menuesArray = {};
-
-            /*this.orderDatas.GetProductsAvailability.get('menues').each(function(menu) {
-                if(!(menu.get('Group_Name') in menuesArray))
-                {
-                    menuesArray[menu.get('Group_Name')] = [];
-                }
-
-                menuesArray[menu.get('Group_Name')].push(menu);
-            });*/
-
             this.renderTemplate(Template, {distributionOrderDetail: this.distributionOrderDetail,
-                                           ordersSet: /*this.orderDatas.GetOrder*/ new Backbone.Model(),
-                                           ordersInTodoList: /*this.orderDatas.GetOrdersInTodoList*/ new Backbone.Collection(),
-                                           orderDoneInformation: /*this.orderDatas.GetOrderDoneInformation*/ new Backbone.Model(),
-                                           productsAvailability: /*this.orderDatas.GetProductsAvailability*/ new Backbone.Model({extras: new Backbone.Collection(),
-                                                                                                                                 special_extras: new Backbone.Collection()}),
-                                           MyPOSConfig: {Distribution: {}},
-                                           menuesArray: menuesArray});
+                                           products: app.productList});
 
             // Broken Tabs widget with Backbone pushstate enabled  - manual fix it
             this.hideTabs();

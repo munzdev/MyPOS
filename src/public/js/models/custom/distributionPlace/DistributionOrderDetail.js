@@ -1,9 +1,11 @@
 define(['models/db/Ordering/Order',
         'collections/db/Ordering/OrderCollection',
-        'collections/db/Ordering/OrderDetailCollection'
+        'collections/db/Ordering/OrderDetailCollection',
+        'collections/db/Menu/MenuExtraCollection'
 ], function(Order,
             OrderCollection,
-            OrderDetailCollection){
+            OrderDetailCollection,
+            MenuExtraCollection){
     "use strict";
 
     return class DistributionOrderDetail extends app.BaseModel {
@@ -12,9 +14,11 @@ define(['models/db/Ordering/Order',
             return {Order: new Order(),
                     OrdersInTodo: new OrderCollection(),
                     OrderDetailWithSpecialExtra: new OrderDetailCollection(),
+                    MenuExtras: new MenuExtraCollection(),
                     OpenOrders: 0,
                     DoneOrders: 0,
-                    NewOrders: 0};
+                    NewOrders: 0,
+                    Minutes: 0};
         }
 
         parse(response)
@@ -32,6 +36,11 @@ define(['models/db/Ordering/Order',
             if('OrderDetailWithSpecialExtra' in response && response.OrderDetailWithSpecialExtra)
             {
                 response.OrderDetailWithSpecialExtra = new OrderDetailCollection(response.OrderDetailWithSpecialExtra, {parse: true});
+            }
+
+            if('MenuExtras' in response && response.MenuExtras)
+            {
+                response.MenuExtras = new MenuExtraCollection(response.MenuExtras, {parse: true});
             }
 
             return super.parse(response);

@@ -65,10 +65,10 @@ class OrderQuery extends BaseOrderQuery
                     INNER JOIN order_detail od ON od.orderid = o.orderid
                     INNER JOIN event_table et ON et.event_tableid = o.event_tableid
                                                  AND et.eventid = :eventid
-
                     LEFT JOIN menu m ON m.menuid = od.menuid
                     INNER JOIN menu_group mg ON mg.menu_groupid = m.menu_groupid
                                                 OR mg.menu_groupid = od.menu_groupid
+                    LEFT JOIN order_in_progress oip ON oip.orderid = o.orderid AND oip.menu_groupid = mg.menu_groupid
                     INNER JOIN distribution_place_group dpg ON dpg.menu_groupid = mg.menu_groupid
                     INNER JOIN distribution_place_user dpu ON dpu.distribution_placeid = dpg.distribution_placeid
                                                               AND dpu.userid = :userid\n";
@@ -80,6 +80,7 @@ class OrderQuery extends BaseOrderQuery
         $str_sql .= "WHERE od.distribution_finished IS NULL
                            AND od.verified = 1
                            AND od.availabilityid <> :availbilityid
+                           AND oip.order_in_progressid IS NULL
                      ORDER BY o.priority ASC
                      LIMIT $i_limit";
 

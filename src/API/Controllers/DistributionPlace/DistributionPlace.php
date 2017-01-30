@@ -5,6 +5,7 @@ namespace API\Controllers\DistributionPlace;
 use API\Lib\Auth;
 use API\Lib\SecurityController;
 use API\Models\DistributionPlace\DistributionPlaceGroupQuery;
+use API\Models\Menu\MenuExtraQuery;
 use API\Models\OIP\Base\OrderInProgressQuery;
 use API\Models\OIP\DistributionGivingOutQuery;
 use API\Models\OIP\OrderInProgress;
@@ -36,19 +37,23 @@ class DistributionPlace extends SecurityController
         try {
             $o_connection->beginTransaction();
 
-            $o_order = $this->getCurrentOrder();
-            $o_ordersInTodo = $this->getOrdersInTodo();
-            $o_orderDetailwithSpecialExtra = $this->getOrderDetailWithSpecialExtra();
+            $a_order = $this->getCurrentOrder();
+            $a_ordersInTodo = $this->getOrdersInTodo();
+            $a_orderDetailwithSpecialExtra = $this->getOrderDetailWithSpecialExtra();
+            $a_menuExtras = $this->getMenuExtras();
+
             $a_orderStatistic = $this->getOrderStatisic();
 
             $o_connection->commit();
 
-            $this->withJson(['Order' => $o_order,
-                             'OrdersInTodo' => $o_ordersInTodo,
-                             'OrderDetailWithSpecialExtra'=> $o_orderDetailwithSpecialExtra,
+            $this->withJson(['Order' => $a_order,
+                             'OrdersInTodo' => $a_ordersInTodo,
+                             'OrderDetailWithSpecialExtra'=> $a_orderDetailwithSpecialExtra,
+                             'MenuExtras' => $a_menuExtras,
                              'OpenOrders' => $a_orderStatistic['OpenOrders'],
                              'DoneOrders' => $a_orderStatistic['DoneOrders'],
-                             'NewOrders' => $a_orderStatistic['NewOrders']]);
+                             'NewOrders' => $a_orderStatistic['NewOrders'],
+                             'Minutes' => $a_orderStatistic['Minutes']]);
         } catch(Exception $o_exception) {
             $o_connection->rollBack();
             throw $o_exception;
@@ -140,13 +145,26 @@ class DistributionPlace extends SecurityController
             $a_menuGroupids[] = $o_orderInProgress->getMenuGroupid();
         }
 
-        $o_orderToReturn = OrderQuery::create()
+        $a_orderToReturn = OrderQuery::create()
                                         ->filterByOrderid($o_order->getOrderid())
                                         ->useOrderDetailQuery()
                                             ->useMenuQuery()
                                                 ->filterByMenuGroupid($a_menuGroupids)
                                             ->endUse()
                                             ->filterByMenuGroupid(array_merge([null], $a_menuGroupids))
+                                            ->useOrderDetailExtraQuery(null, Criteria::LEFT_JOIN)
+                                                ->useMenuPossibleExtraQuery(null, Criteria::LEFT_JOIN)
+                                                    ->leftJoinWithMenu()
+                                                ->endUse()
+                                                ->leftJoinWithMenuPossibleExtra()
+                                            ->endUse()
+                                            ->useOrderDetailMixedWithQuery(null, Criteria::LEFT_JOIN)
+                                                ->leftJoinWithMenu()
+                                            ->endUse()
+                                            ->leftJoinWithOrderDetailExtra()
+                                            ->leftJoinWithOrderDetailMixedWith()
+                                            ->leftJoinWithMenuSize()
+                                            ->leftJoinWithMenu()
                                         ->endUse()
                                         ->joinWithOrderDetail()
                                         ->joinOrderInProgress()
@@ -154,7 +172,7 @@ class DistributionPlace extends SecurityController
                                         ->find()
                                         ->getFirst();
 
-        return $o_orderToReturn;
+        return $a_orderToReturn;
     }
 
     private function getOpenOrderInProgress() {
@@ -315,6 +333,17 @@ class DistributionPlace extends SecurityController
 
         return ['OpenOrders' => $i_openOrder,
                 'DoneOrders' => $i_doneOrder,
-                'NewOrders' => $i_newOrder];
+                'NewOrders' => $i_newOrder,
+                'Minutes' => $i_minutes];
+    }
+
+    private function getMenuExtras() {
+        $o_user = Auth::GetCurrentUser();
+
+        $o_menuExtras = MenuExtraQuery::create()
+                                        ->filterByEventid($o_user->getEventUser()->getEventid())
+                                        ->find();
+
+        return $o_menuExtras->toArray();
     }
 }
