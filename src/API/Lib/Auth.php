@@ -24,7 +24,7 @@ class Auth
         {
             $o_user->setAutologinHash(null);
             $o_user->setPassword(null);
-        
+
             $this->SetLogin($o_user);
 
             return true;
@@ -38,7 +38,7 @@ class Auth
     public function CheckLogin(string $str_username, string $str_password) : bool
     {
         $o_user = $this->FindUserObject($str_username);
-        
+
         if($o_user)
         {
             if(password_verify($str_password, $o_user->getPassword()))
@@ -46,60 +46,67 @@ class Auth
                 return $this->DoLogin($str_username);
             }
         }
-        
+
         return false;
     }
-    
+
     /**
-     * 
+     *
      * @param string $str_username
      * @return User|null
      */
     private function FindUserObject(string $str_username) // : ?User
-    {                                    
+    {
         $o_user = $this->o_queryClass->create()->useEventUserQuery()
                                                   ->useEventQuery()
                                                       ->filterByActive(true)
                                                   ->endUse()
-                                               ->endUse()         
+                                               ->endUse()
                                                ->filterByUsername($str_username)
                                                ->filterByActive(true)
                                                ->with(EventUserTableMap::getTableMap()->getPhpName())
                                                ->find();
-        
+
         if(!$o_user->isEmpty())
             return $o_user->getFirst();
-                        
+
         return $this->o_queryClass->create()->filterByUsername($str_username)
                                             ->filterByIsAdmin(true)
                                             ->filterByActive(true)
-                                            ->findOne();        
+                                            ->findOne();
     }
 
     public function SetLogin(User $o_user) : void
     {
         $_SESSION['Auth'][UserTableMap::getTableMap()->getPhpName()] = serialize($o_user);
         $_SESSION['Auth'][EventUserTableMap::getTableMap()->getPhpName()] = serialize($o_user->getEventUser());
-    }    
+    }
 
     /**
-     * 
+     *
      * @return User|null
      */
     public static function GetCurrentUser() // : ?User
     {
+        static $o_unserializedUser = null;
+
         if(isset($_SESSION['Auth']))
         {
+            if($o_unserializedUser)
+                return $o_unserializedUser;
+
             $o_user = unserialize($_SESSION['Auth'][UserTableMap::getTableMap()->getPhpName()]);
             $o_eventUser = unserialize($_SESSION['Auth'][EventUserTableMap::getTableMap()->getPhpName()]);
-            
+
             $o_collection = new Collection([$o_eventUser]);
-            
+
             $o_user->setEventUsers($o_collection);
-            
+
+            $o_unserializedUser = $o_user;
+
             return $o_user;
        }
-        
+
         return null;
     }
 
@@ -109,7 +116,7 @@ class Auth
     }
 
     public function Logout() : void
-    {        
+    {
         $_SESSION['Auth'] = null;
         unset($_SESSION['Auth']);
     }
