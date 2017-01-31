@@ -149,7 +149,7 @@ class OrderInProgressTableMap extends TableMap
         $this->setIdentifierQuoting(false);
         $this->setClassName('\\API\\Models\\OIP\\OrderInProgress');
         $this->setPackage('API.Models.OIP');
-        $this->setUseIdGenerator(false);
+        $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('order_in_progressid', 'OrderInProgressid', 'INTEGER', true, null, null);
         $this->addForeignKey('orderid', 'Orderid', 'INTEGER', 'order', 'orderid', true, null, null);
@@ -445,6 +445,10 @@ class OrderInProgressTableMap extends TableMap
             $criteria = clone $criteria; // rename for clarity
         } else {
             $criteria = $criteria->buildCriteria(); // build Criteria from OrderInProgress object
+        }
+
+        if ($criteria->containsKey(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID) && $criteria->keyContainsValue(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID.')');
         }
 
 

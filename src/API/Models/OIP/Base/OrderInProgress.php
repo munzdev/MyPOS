@@ -905,6 +905,10 @@ abstract class OrderInProgress implements ActiveRecordInterface
         $modifiedColumns = array();
         $index = 0;
 
+        $this->modifiedColumns[OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID] = true;
+        if (null !== $this->order_in_progressid) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key (' . OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID . ')');
+        }
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID)) {
@@ -961,6 +965,13 @@ abstract class OrderInProgress implements ActiveRecordInterface
             Propel::log($e->getMessage(), Propel::LOG_ERR);
             throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), 0, $e);
         }
+
+        try {
+            $pk = $con->lastInsertId();
+        } catch (Exception $e) {
+            throw new PropelException('Unable to get autoincrement id.', 0, $e);
+        }
+        $this->setOrderInProgressid($pk);
 
         $this->setNew(false);
     }
@@ -1379,7 +1390,6 @@ abstract class OrderInProgress implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
-        $copyObj->setOrderInProgressid($this->getOrderInProgressid());
         $copyObj->setOrderid($this->getOrderid());
         $copyObj->setUserid($this->getUserid());
         $copyObj->setMenuGroupid($this->getMenuGroupid());
@@ -1401,6 +1411,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
         if ($makeNew) {
             $copyObj->setNew(true);
+            $copyObj->setOrderInProgressid(NULL); // this is a auto-increment column, so set to default value
         }
     }
 

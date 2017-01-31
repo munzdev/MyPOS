@@ -443,7 +443,7 @@ COMMENT = 'Enthält die Zugriffsrechte, die Benutzer haben können';
 DROP TABLE IF EXISTS `order_in_progress` ;
 
 CREATE TABLE IF NOT EXISTS `order_in_progress` (
-  `order_in_progressid` INT(11) NOT NULL,
+  `order_in_progressid` INT(11) NOT NULL AUTO_INCREMENT,
   `orderid` INT(11) NOT NULL,
   `userid` INT(11) NOT NULL,
   `menu_groupid` INT(11) NOT NULL,
