@@ -179,6 +179,7 @@ class Order extends SecurityController
                 $o_order_detail->setOrder($o_order);
 
                 if($o_order_detail->getMenuid()) {
+                    $o_order_detail->setVerified(true);
                     $o_order_detail->setAvailabilityid(ORDER_AVAILABILITY_AVAILABLE);
                 }
 
