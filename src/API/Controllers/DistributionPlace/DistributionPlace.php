@@ -106,7 +106,7 @@ class DistributionPlace extends SecurityController
             foreach($o_order->getOrderDetails() as $o_orderDetail) {
                 if($o_orderDetail->getMenuid())
                     $a_menuGroupids[] = $o_orderDetail->getMenu()->getMenuGroupid();
-                else
+                elseif($o_orderDetail->getVerified())
                     $a_menuGroupids[] = $o_orderDetail->getMenuGroupid();
             }
 
@@ -151,7 +151,8 @@ class DistributionPlace extends SecurityController
                                             ->useMenuQuery()
                                                 ->filterByMenuGroupid($a_menuGroupids)
                                             ->endUse()
-                                            ->filterByMenuGroupid(array_merge([null], $a_menuGroupids))
+                                            ->_or()
+                                            ->filterByMenuGroupid($a_menuGroupids)
                                             ->useOrderDetailExtraQuery(null, Criteria::LEFT_JOIN)
                                                 ->useMenuPossibleExtraQuery(null, Criteria::LEFT_JOIN)
                                                     ->leftJoinWithMenu()
