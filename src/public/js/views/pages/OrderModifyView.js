@@ -1,7 +1,7 @@
 // Includes file dependencies
 define(["collections/db/Ordering/OrderDetailExtraCollection",
         "collections/db/Ordering/OrderDetailMixedWithCollection",
-        "models/custom/order/OrderModify", 
+        "models/custom/order/OrderModify",
         "models/db/Ordering/OrderDetail",
         "models/db/Event/EventTable",
         'views/helpers/HeaderView',
@@ -25,7 +25,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
         events() {
             return {'panelbeforeclose #panel-special': 'order_special_close',
 
-                    // Manually handle events. Ensures that the close event is called after the task                    
+                    // Manually handle events. Ensures that the close event is called after the task
                     'click #panel-close': 'order_close',
                     'click #panel-add': 'order_add',
                     'click #panel-mixing': 'order_mixing',
@@ -49,11 +49,12 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             if(options.orderid === null) {
                 this.mode = 'new';
                 this.orderModify.set('EventTable', new EventTable({Name: options.tableNr}));
+                this.render();
             } else {
                 this.mode = 'edit';
-                
+
                 $.mobile.loading("show");
-                
+
                 this.orderModify.set('Orderid', options.orderid);
                 this.orderModify.fetch()
                                 .done(() => {
@@ -62,7 +63,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                                     this.renderOrder();
                                     this.showOverview();
                                 });
-            }            
+            }
         }
 
         hideTabs() {
@@ -142,7 +143,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             this.renderOrder();
             this.$('#panel-order').panel("close");
         }
-        
+
         order_close() {
             this.$('#panel-order').panel("close");
         }
@@ -186,9 +187,9 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             this.$('#panel-order').panel("close");
         }
 
-        menu_item(event) {            
+        menu_item(event) {
             let menuItem = $(event.currentTarget);
-            
+
             if(this.isMixing !== null) {
                 let mixing_menuid = this.isMixing;
                 let menuid = parseInt(menuItem.attr('data-menuid'));
@@ -214,12 +215,12 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                 }
 
                 this.isMixing = null;
-                
+
                 let currentMixing = this.$('#panel-mixing-text');
-                
+
                 if($.trim(currentMixing.html()) == '')
                     currentMixing.html($('<b/>').text('Gemixt mit:'));
-                
+
                 currentMixing.append($('<div/>').attr('data-menuid', menuid).text(menuSearch.Menu.get('Name')));
 
                 this.$('#panel-mixing-text').html(currentMixing.html());
@@ -227,13 +228,13 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                 this.$('#panel-order').panel("open");
             } else {
                 this.$('#panel-order').empty();
-                
-                let menuid = parseInt(menuItem.attr('data-menuid'));                
+
+                let menuid = parseInt(menuItem.attr('data-menuid'));
                 this.currentMenuid = menuid;
-                        
+
                 let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});
                 let type = app.productList.findWhere({MenuTypeid: menuSearch.MenuTypeid});
-                
+
                 let templatePanel = _.template(TemplatePanel);
                 this.$('#panel-order').html(templatePanel({menu: menuSearch.Menu,
                                                            type: type,
@@ -242,7 +243,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
                 this.$('#panel-order').enhanceWithin()
                                       .trigger("updatelayout")
-                                      .panel("open");                
+                                      .panel("open");
             }
         }
 
@@ -257,7 +258,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
         order_count_down(event) {
             let index = $(event.currentTarget).attr('data-index');
-            
+
             let orderDetail = this.orderModify.get('OrderDetails').get({cid: index});
             let newAmount = orderDetail.get('Amount') - 1;
 
@@ -311,26 +312,26 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             let sortedCategorys = new Map();
             let t = this.i18n();
             let currency = app.i18n.template.currency;
-            
+
             // Presort the list by categorys
             this.orderModify.get('OrderDetails').each((orderDetail) => {
                 let menuid = orderDetail.get('Menuid');
                 let key = null;
-                
+
                 if(menuid === null && sortedCategorys.get(key) == null) {
                     sortedCategorys.set(key, {name: t.specialOrders,
                                               orders: new Set()});
                 } else if(menuid !== null) {
-                    let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});                    
+                    let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});
                     key = menuSearch.MenuTypeid;
-                                        
+
                     if(sortedCategorys.get(key) == null) {
                         let menuType = app.productList.findWhere({MenuTypeid: key});
                         sortedCategorys.set(key, {name: menuType.get('Name'),
                                                   orders: new Set()});
-                    }                                                            
+                    }
                 }
-                
+
                 sortedCategorys.get(key).orders.add(orderDetail);
             });
 
@@ -351,8 +352,8 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
                     // Add size text if multible sizes are avaible for the product
                     if(!isSpecialOrder && menuSearch.Menu.get('MenuPossibleSize').length > 1)
                         extras = menuSize.get('Name') + ", ";
-                    
-                    if(isNew && !isSpecialOrder) 
+
+                    if(isNew && !isSpecialOrder)
                         price += parseFloat(menuSearch.Menu.get('MenuPossibleSize')
                                                             .findWhere({MenuSizeid: menuSize.get('MenuSizeid')})
                                                             .get('Price'));
@@ -438,7 +439,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
                     this.$('#selected').append("<li>" + itemTemplate(datas) + "</li>");
                     counter++;
-                }             
+                }
             }
 
             if(this.mode == 'edit' && this.oldPrice === undefined) {
@@ -462,13 +463,13 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
         render() {
             let header = new HeaderView();
             this.registerSubview(".nav-header", header);
-            
+
             this.renderTemplate(Template, { mode: this.mode,
                                             order: this.orderModify,
                                             products: app.productList});
-                                        
+
             // Broken Tabs widget with Backbone pushstate enabled  - manual fix it
-            this.hideTabs();            
+            this.hideTabs();
             this.$("#tabs a[data-role='tab']").click((event) => {
                 this.hideTabs();
                 this.$($(event.currentTarget).attr('href')).show();
@@ -478,5 +479,5 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
             return this;
         }
-    }    
+    }
 } );
