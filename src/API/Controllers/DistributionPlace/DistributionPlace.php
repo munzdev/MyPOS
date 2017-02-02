@@ -168,11 +168,14 @@ class DistributionPlace extends SecurityController
                                             ->leftJoinWithMenu()
                                         ->endUse()
                                         ->joinWithOrderDetail()
+                                        ->joinWithEventTable()
+                                        ->joinWithUserRelatedByUserid()
                                         ->joinOrderInProgress()
                                         ->setFormatter(ModelCriteria::FORMAT_ARRAY)
                                         ->find()
                                         ->getFirst();
 
+        $a_orderToReturn['UserRelatedByUserid'] = $this->cleanupUserData($a_orderToReturn['UserRelatedByUserid']);
         return $a_orderToReturn;
     }
 
@@ -237,6 +240,8 @@ class DistributionPlace extends SecurityController
                                                              true,
                                                              $a_config['App']['Distribution']['AmountDisplayedInTodoList'] + 1)
                                     ->where('`order`.orderid <> ' . $o_inProgressOrder->getOrderid())
+                                    ->joinWithOrderDetail()
+                                    ->joinWithEventTable()
                                     ->useOrderDetailQuery()
                                         ->leftJoinWithMenu()
                                     ->endUse()
@@ -251,8 +256,9 @@ class DistributionPlace extends SecurityController
                                                                  $o_user->getEventUser()->getEventid(),
                                                                  false,
                                                                  $a_config['App']['Distribution']['AmountDisplayedInTodoList'] + 1)
-                                        ->joinWithOrderDetail()
                                         ->where('`order`.orderid <> ' . $o_inProgressOrder->getOrderid())
+                                        ->joinWithOrderDetail()
+                                        ->joinWithEventTable()
                                         ->useOrderDetailQuery()
                                             ->leftJoinWithMenu()
                                         ->endUse()
@@ -273,7 +279,7 @@ class DistributionPlace extends SecurityController
                 $o_order->setVirtualColumn("OrderDetailCount", $i_count);
             }
 
-            return $o_orders->toArray();
+            return $this->cleanupRecursionData($o_orders->toArray());
         }
     }
 
