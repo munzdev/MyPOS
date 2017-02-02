@@ -211,6 +211,39 @@ abstract class Controller
         //exit;
     }
 
+    protected function cleanupRecursionData(array $a_array) {
+        $a_relationsFound = [];
+        foreach ($a_array as $str_key => $a_item) {
+            if ($a_item === ["*RECURSION*"] || $a_item == "*RECURSION*") {
+                unset($a_array[$str_key]);
+            } elseif (is_array($a_item)) {
+                $a_array[$str_key] = $this->cleanupRecursionData($a_item);
+                $a_relationsFound[] = $str_key;
+            }
+        }
+
+        /*foreach ($a_relationsFound as $relation) {
+            $str_key = $relation . 'Id';
+            if (isset($a_array[$str_key])) {
+                unset($a_array[$str_key]);
+            }
+        }*/
+
+        return $a_array;
+    }
+
+    protected function cleanupUserData(array $a_user) {
+        $a_user['Password'] = null;
+        $a_user['AutologinHash'] = null;
+        $a_user['IsAdmin'] = null;
+        $a_user['CallRequest'] = null;
+
+        if(isset($a_user['EventUser']))
+            $a_user['EventUser']['BeginMoney'] = null;
+
+        return $a_user;
+    }
+
     protected function withJson($a_json) {
         $this->o_response = $this->o_response->withJson($a_json);
     }
