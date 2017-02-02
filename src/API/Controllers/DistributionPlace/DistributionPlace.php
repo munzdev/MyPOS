@@ -148,26 +148,20 @@ class DistributionPlace extends SecurityController
         $a_orderToReturn = OrderQuery::create()
                                         ->filterByOrderid($o_order->getOrderid())
                                         ->useOrderDetailQuery()
-                                            ->useMenuQuery()
+                                            ->useMenuQuery(null, Criteria::LEFT_JOIN)
                                                 ->filterByMenuGroupid($a_menuGroupids)
                                             ->endUse()
                                             ->_or()
                                             ->filterByMenuGroupid($a_menuGroupids)
-                                            ->useOrderDetailExtraQuery(null, Criteria::LEFT_JOIN)
-                                                ->useMenuPossibleExtraQuery(null, Criteria::LEFT_JOIN)
-                                                    ->leftJoinWithMenu()
-                                                ->endUse()
-                                                ->leftJoinWithMenuPossibleExtra()
-                                            ->endUse()
-                                            ->useOrderDetailMixedWithQuery(null, Criteria::LEFT_JOIN)
-                                                ->leftJoinWithMenu()
-                                            ->endUse()
-                                            ->leftJoinWithOrderDetailExtra()
-                                            ->leftJoinWithOrderDetailMixedWith()
-                                            ->leftJoinWithMenuSize()
-                                            ->leftJoinWithMenu()
                                         ->endUse()
                                         ->joinWithOrderDetail()
+                                        ->leftJoinWith('OrderDetail.Menu')
+                                        ->leftJoinWith('OrderDetail.MenuSize')
+                                        ->leftJoinWith('OrderDetail.OrderDetailExtra')
+                                        ->leftJoinWith('OrderDetailExtra.MenuPossibleExtra')
+                                        //->leftJoinWith('MenuPossibleExtra.Menu')
+                                        ->leftJoinWith('OrderDetail.OrderDetailMixedWith')
+                                        //->leftJoinWith('OrderDetailMixedWith.Menu')
                                         ->joinWithEventTable()
                                         ->joinWithUserRelatedByUserid()
                                         ->joinOrderInProgress()
@@ -176,6 +170,7 @@ class DistributionPlace extends SecurityController
                                         ->getFirst();
 
         $a_orderToReturn['UserRelatedByUserid'] = $this->cleanupUserData($a_orderToReturn['UserRelatedByUserid']);
+
         return $a_orderToReturn;
     }
 
