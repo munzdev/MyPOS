@@ -6,6 +6,7 @@ use API\Lib\Auth;
 use API\Lib\SecurityController;
 use API\Models\Event\Map\EventUserTableMap;
 use API\Models\User\UserQuery;
+use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Slim\App;
 
 class User extends SecurityController
@@ -21,31 +22,24 @@ class User extends SecurityController
     protected function GET() : void {
         $o_currentUser = Auth::GetCurrentUser();
 
-        $o_users = UserQuery::create()
+        $a_users = UserQuery::create()
                     ->useEventUserQuery()
                         ->filterByEventid($o_currentUser->getEventUser()->getEventid())
                     ->endUse()
-                    ->with(EventUserTableMap::getTableMap()->getPhpName())
-                    ->find();
+                    ->joinWithEventUser()
+                    ->setFormatter(ModelCriteria::FORMAT_ARRAY)
+                    ->find()
+                    ->toArray();
 
         $a_return = [];
 
-        foreach($o_users as $o_user)
+        foreach($a_users as &$a_user)
         {
-            $o_user->setPassword(null)
-                   ->setAutologinHash(null)
-                   ->setIsAdmin(null)
-                   ->setCallRequest(null);
-
-            $a_user = $o_user->toArray();
-            $a_user[EventUserTableMap::getTableMap()->getPhpName()] = $o_user->getEventUsers()
-                                                                             ->getFirst()
-                                                                             ->setBeginMoney(null)
-                                                                             ->toArray();
-
-            $a_return[] = $a_user;
+            $a_user['EventUser'] = $a_user['EventUsers'][0];
+            unset($a_user['EventUsers']);
+            $a_user = $this->cleanupUserData($a_user);
         }
 
-        $this->withJson($a_return);
+        $this->withJson($a_users);
     }
 }
