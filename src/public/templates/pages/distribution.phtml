@@ -83,7 +83,7 @@
                             <li style="white-space: normal;">Tisch: <strong><%- distributionOrderDetail.get('Order').get('EventTable').get('Name') %></strong></li>
                             <li style="white-space: normal;">Bestellnummer: <%- distributionOrderDetail.get('Order').get('Orderid') %></li>
                             <li style="white-space: normal;">Bestellzeit: <%- app.i18n.toDateTime(distributionOrderDetail.get('Order').get('Ordertime')) %></li>
-                            <li style="white-space: normal;">Kellner: <%- distributionOrderDetail.get('Order').get('User').get('Firstname') %> <%- distributionOrderDetail.get('Order').get('User').get('Lastname') %></li>
+                            <li style="white-space: normal;">Kellner: <%- distributionOrderDetail.get('Order').get('UserRelatedByUserid').get('Firstname') %> <%- distributionOrderDetail.get('Order').get('UserRelatedByUserid').get('Lastname') %></li>
                         <% } %>
                     </ul>
                 </div>
