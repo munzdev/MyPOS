@@ -12,11 +12,11 @@ use API\Models\OIP\OrderInProgress;
 use API\Models\Ordering\OrderDetailQuery;
 use API\Models\Ordering\OrderQuery;
 use DateTime;
+use Exception;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\Propel;
 use Slim\App;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use const API\ORDER_AVAILABILITY_OUT_OF_ORDER;
 use const API\USER_ROLE_DISTRIBUTION_OVERVIEW;
 
@@ -147,21 +147,20 @@ class DistributionPlace extends SecurityController
 
         $a_orderToReturn = OrderQuery::create()
                                         ->filterByOrderid($o_order->getOrderid())
+                                        ->joinWithOrderDetail()
+                                        ->leftJoinWith('OrderDetail.Menu')
+                                        ->leftJoinWith('OrderDetail.MenuSize')
+                                        ->leftJoinWith('OrderDetail.OrderDetailExtra')
+                                        ->leftJoinWith('OrderDetailExtra.MenuPossibleExtra')
+                                        ->leftJoinWith('MenuPossibleExtra.MenuExtra')
                                         ->useOrderDetailQuery()
                                             ->useMenuQuery(null, Criteria::LEFT_JOIN)
                                                 ->filterByMenuGroupid($a_menuGroupids)
                                             ->endUse()
                                             ->_or()
                                             ->filterByMenuGroupid($a_menuGroupids)
+                                            ->leftJoinWithOrderDetailMixedWith()
                                         ->endUse()
-                                        ->joinWithOrderDetail()
-                                        ->leftJoinWith('OrderDetail.Menu')
-                                        ->leftJoinWith('OrderDetail.MenuSize')
-                                        ->leftJoinWith('OrderDetail.OrderDetailExtra')
-                                        ->leftJoinWith('OrderDetailExtra.MenuPossibleExtra')
-                                        //->leftJoinWith('MenuPossibleExtra.Menu')
-                                        ->leftJoinWith('OrderDetail.OrderDetailMixedWith')
-                                        //->leftJoinWith('OrderDetailMixedWith.Menu')
                                         ->joinWithEventTable()
                                         ->joinWithUserRelatedByUserid()
                                         ->joinOrderInProgress()
