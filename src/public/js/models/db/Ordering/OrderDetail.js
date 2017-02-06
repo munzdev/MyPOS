@@ -65,7 +65,7 @@ define(["models/BaseModel"
 
             if('OrderDetailExtras' in response)
             {
-                if(response.OrderDetailExtras.toString() == '')
+                if(response.OrderDetailExtras.toString() == '' || JSON.stringify(response.OrderDetailExtras) == '[{"MenuPossibleExtra":{"MenuExtra":[]}}]')
                     response.OrderDetailExtras = new app.collections.Ordering.OrderDetailExtraCollection();
                 else
                     response.OrderDetailExtras = new app.collections.Ordering.OrderDetailExtraCollection(response.OrderDetailExtras, {parse: true});
