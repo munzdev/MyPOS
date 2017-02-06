@@ -15,7 +15,7 @@
                     <fieldset style="border: lightgrey solid thin ; border-radius: 10px; padding: 10px">
                         <legend><strong>Bestellung</strong></legend>
                         <% distributionOrderDetail.get('Order').get('OrderDetails').each(function(orderDetail) { %>
-                            <div data-order-type="order-detail" data-amount="<%- orderDetail.get('Amount') %>" data-id="<%- orderDetail.get('OrderDetailid') %>" class="order ui-grid-a ui-body-a ui-corner-all">
+                            <div data-order-type="order-detail" data-amount="<%- orderDetail.get('Amount') %>" data-id="<%- orderDetail.get('OrderDetailid') %>" class="distribution-order ui-grid-a ui-body-a ui-corner-all">
                                 <h2>
                                     <%- orderDetail.get('Amount') %>x
                                     <% if(orderDetail.get('Menuid')) { %>
@@ -29,19 +29,18 @@
                                         <% if(orderDetail.get('MenuSizeid') != ORDER_DEFAULT_SIZEID) { %>
                                             <%- orderDetail.get('MenuSize').get('Name') %>
                                         <% } %>
-                                        <% if(orderDetail.get('OrderDetailMixedWiths')) { %>
+                                        <% if(orderDetail.get('OrderDetailMixedWiths').length) { %>
                                             Gemischt mit:
                                             <% orderDetail.get('OrderDetailMixedWiths').each(function(orderDetailMixedWith) { %>
                                                 <%- orderDetailMixedWith.get('Menu').get('Name') %> -
                                             <% }) %>
-                                            <% if(orderDetail.get('OrderDetailExtras') || orderDetail.get('ExtraDetail')) { %>
+                                            <% if(orderDetail.get('OrderDetailExtras').length || orderDetail.get('ExtraDetail').length) { %>
                                                 ;
                                             <% } %>
                                         <% } %>
-                                        <% if( orderDetail.get('OrderDetailExtras')) { %>
-                                            mit
-                                            <% orderDetail.get('OrderDetailExtras').each(function(orderDetailExtra) { %>
-                                                <%- orderDetailExtra.get('MenuPossibleExtra').get('Menu').get('Name') %>,
+                                        <% if( orderDetail.get('OrderDetailExtras').length) { %>
+                                            <% orderDetail.get('OrderDetailExtras').each(function(orderDetailExtra, index) { %>
+                                                <%- orderDetailExtra.get('MenuPossibleExtra').get('MenuExtra').get('Name') %><% if(index < orderDetail.get('OrderDetailExtras').length - 1) { %>,<% } %>
                                             <% }) %>
                                         <% } %>
                                         <p><%- orderDetail.get('ExtraDetail') %></p>
@@ -68,7 +67,7 @@
                         <li data-role="list-divider" style="white-space: normal;">Bestellungen in Warteliste</li>
                         <% if(distributionOrderDetail.get('OrdersInTodo')) { %>
                             <% distributionOrderDetail.get('OrdersInTodo').each(function(order) { %>
-                                <li style="white-space: normal;"><%- order.get('EventTable').get('Name') %> - app.i18n.toDateTime(order.get('Ordertime')) <span class="ui-li-count"><%- order.get('OrderDetailCount') %></span></li>
+                                <li style="white-space: normal;"><%- order.get('EventTable').get('Name') %> - <%- app.i18n.toDateTime(order.get('Ordertime')) %> <span class="ui-li-count"><%- order.get('OrderDetailCount') %></span></li>
                             <% }) %>
                         <% } %>
                     </ul>

@@ -5,6 +5,7 @@ namespace API\Controllers\DistributionPlace;
 use API\Lib\Auth;
 use API\Lib\SecurityController;
 use API\Models\DistributionPlace\DistributionPlaceGroupQuery;
+use API\Models\Menu\Base\MenuQuery;
 use API\Models\Menu\MenuExtraQuery;
 use API\Models\OIP\Base\OrderInProgressQuery;
 use API\Models\OIP\DistributionGivingOutQuery;
@@ -170,6 +171,21 @@ class DistributionPlace extends SecurityController
 
         $a_orderToReturn['UserRelatedByUserid'] = $this->cleanupUserData($a_orderToReturn['UserRelatedByUserid']);
 
+        // :TODO: fix hydration problem. This datas should be included directly in the abouve query but this doesn't work yet
+        foreach($a_orderToReturn['OrderDetails'] as &$a_orderDetail) {
+            foreach($a_orderDetail['OrderDetailMixedWiths'] as &$a_orderDetailMixedWith) {
+
+                if(empty($a_orderDetailMixedWith['Menuid']))
+                    continue;
+
+                $a_menu = MenuQuery::create()
+                                    ->setFormatter(ModelCriteria::FORMAT_ARRAY)
+                                    ->findPk($a_orderDetailMixedWith['Menuid']);
+
+                $a_orderDetailMixedWith['Menu'] = $a_menu;
+            }
+        }
+
         return $a_orderToReturn;
     }
 
@@ -267,7 +283,7 @@ class DistributionPlace extends SecurityController
                     if( ($o_orderDetail->getMenuid() && in_array($o_orderDetail->getMenu()->getMenuGroupid(), $i_menuGroupids))
                         ||
                         in_array($o_orderDetail->getMenuGroupid(), $i_menuGroupids)) {
-                        $i_count++;
+                        $i_count += $o_orderDetail->getAmount();
                     }
                 }
                 $o_order->setVirtualColumn("OrderDetailCount", $i_count);

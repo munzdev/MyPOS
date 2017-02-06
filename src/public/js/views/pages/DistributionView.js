@@ -20,7 +20,7 @@ define(['Webservice',
         }
 
         events() {
-            return {"click .order": "markOrder",
+            return {"click .distribution-order": "markOrder",
                     "click #btn-verify-dialog": "showVerifyDialog",
                     "click #finished": "finished",
                     "change input[name='order-details-special-extra-amount']": "amountChanged",
@@ -50,7 +50,7 @@ define(['Webservice',
             webservice.callback = {
                 success: function(){
                     app.ws.api.Trigger('global:product-update');
-                    MyPOS.ReloadPage();
+                    this.reload();
                 }
             };
             webservice.call();
@@ -70,7 +70,7 @@ define(['Webservice',
             webservice.callback = {
                 success: function(){
                     app.ws.api.Trigger('global:product-update');
-                    MyPOS.ReloadPage();
+                    this.reload();
                 }
             };
             webservice.call();
@@ -113,7 +113,7 @@ define(['Webservice',
                                            events_printerid: self.orderDatas.GetOrder.get('events_printerid')};
                     webservice.call();
 
-                    MyPOS.ReloadPage();
+                    this.reload();
                 }
             };
             webservice.call();
@@ -122,7 +122,7 @@ define(['Webservice',
         showVerifyDialog() {
             var allOrdersMarked = true;
 
-            $('.order').each(function(index) {
+            this.$('.distribution-order').each(function(index) {
                 if(!$(this).hasClass('green-background'))
                 {
                     allOrdersMarked = false;
@@ -131,7 +131,7 @@ define(['Webservice',
 
             if(!allOrdersMarked)
             {
-                MyPOS.DisplayError('Es müssen zuerst alle Bestellungen markiert werden!');
+                app.error.showAlert('Fehler!', 'Es müssen zuerst alle Bestellungen markiert werden!');
                 return;
             }
 
@@ -144,9 +144,9 @@ define(['Webservice',
         }
 
         apiCommandReciever(command) {
-            if(command == 'update' && this.orderDatas.GetOrder.get('orders_details').length == 0)
+            if(command == 'update' && this.distributionOrderDetail.get('Order') == null)
             {
-                MyPOS.ReloadPage();
+                this.reload();
             }
         }
 
