@@ -16,6 +16,7 @@ use API\Models\Ordering\OrderDetailMixedWith;
 use API\Models\Ordering\OrderQuery;
 use DateTime;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\Propel;
 use Respect\Validation\Validator as v;
 use Slim\App;
@@ -134,6 +135,7 @@ class Order extends SecurityController
                                 ->_if(!empty($o_ordersList))
                                     ->where(OrderTableMap::COL_ORDERID . " IN ?", $o_ordersList->getColumnValues())
                                 ->_endif()
+                                ->setFormatter(ModelCriteria::FORMAT_ARRAY)
                                 ->find();
 
         $this->withJson(["Count" => $i_order_count,
