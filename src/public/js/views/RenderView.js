@@ -1,5 +1,5 @@
-define(["views/AbstractView"],
-function(AbstractView ) {
+define(["views/AbstractView"
+], function(AbstractView) {
     "use strict";
 
     return class RenderView extends AbstractView {

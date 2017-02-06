@@ -1,7 +1,3 @@
-// Login View
-// =============
-
-// Includes file dependencies
 define(function() {
     "use strict";
 

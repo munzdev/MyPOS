@@ -1,21 +1,17 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ "views/AbstractView"],
-function( AbstractView ) {
+define(["views/AbstractView"
+], function(AbstractView) {
     "use strict";
-    
-    return class PopupView extends AbstractView {        
+
+    return class PopupView extends AbstractView {
         jqmAttributes() {
             return {'data-role': 'popup',
                     'data-theme': 'a'};
-        }       
-        
+        }
+
         renderTemplate(Template, Datas) {
-            super.renderTemplate(Template, Datas);            
+            super.renderTemplate(Template, Datas);
             this.$el.popup().enhanceWithin();
         }
-        
+
     }
 } );
