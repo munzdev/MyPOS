@@ -1,10 +1,10 @@
-define(["models/db/Invoice/InvoiceWarning"
-], function(InvoiceWarning){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
 
-    return class InvoiceWarningCollection extends app.BaseCollection
+    return class InvoiceWarningCollection extends BaseCollection
     {
-        getModel() { return InvoiceWarning; }
+        getModel() { return app.models.Invoice.InvoiceWarning; }
         url() {return app.API + "DB/Invoice/InvoiceWarning";}
     }
 });

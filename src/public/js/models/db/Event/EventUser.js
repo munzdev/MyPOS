@@ -1,13 +1,9 @@
-define([
-    "models/db/Event/Event",
-    "models/db/User/User",
-    
-], function(Event,
-            User){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class EventUser extends app.BaseModel {
-        
+    return class EventUser extends BaseModel {
+
         idAttribute() { return 'EventUserid'; }
 
         defaults() {
@@ -17,19 +13,19 @@ define([
                     UserRoles: 0,
                     BeginMoney: 0};
         }
-        
+
         parse(response)
         {
             if('Event' in response)
             {
-                response.Event = new Event(response.Event, {parse: true});
+                response.Event = new app.models.Event.Event(response.Event, {parse: true});
             }
-            
+
             if('User' in response)
             {
-                response.User = new User(response.User, {parse: true});
+                response.User = new app.models.User.User(response.User, {parse: true});
             }
-            
+
             return super.parse(response);
         }
 

@@ -1,20 +1,14 @@
-define(['models/db/Ordering/Order',
-        'collections/db/Ordering/OrderCollection',
-        'collections/db/Ordering/OrderDetailCollection',
-        'collections/db/Menu/MenuExtraCollection'
-], function(Order,
-            OrderCollection,
-            OrderDetailCollection,
-            MenuExtraCollection){
+define(["models/BaseModel"
+], function(BaseModel) {
     "use strict";
 
-    return class DistributionOrderDetail extends app.BaseModel {
+    return class DistributionOrderDetail extends BaseModel {
         urlRoot() { return app.API + "DistributionPlace"; }
         defaults() {
-            return {Order: new Order(),
-                    OrdersInTodo: new OrderCollection(),
-                    OrderDetailWithSpecialExtra: new OrderDetailCollection(),
-                    MenuExtras: new MenuExtraCollection(),
+            return {Order: new app.models.Ordering.Order(),
+                    OrdersInTodo: new app.collections.Ordering.OrderCollection(),
+                    OrderDetailWithSpecialExtra: new app.collections.Ordering.OrderDetailCollection(),
+                    MenuExtras: new app.collections.Menu.MenuExtraCollection(),
                     OpenOrders: 0,
                     DoneOrders: 0,
                     NewOrders: 0,
@@ -25,22 +19,22 @@ define(['models/db/Ordering/Order',
         {
             if('Order' in response && response.Order)
             {
-                response.Order = new Order(response.Order, {parse: true});
+                response.Order = new app.models.Ordering.Order(response.Order, {parse: true});
             }
 
             if('OrdersInTodo' in response && response.OrdersInTodo)
             {
-                response.OrdersInTodo = new OrderCollection(response.OrdersInTodo, {parse: true});
+                response.OrdersInTodo = new app.collections.Ordering.OrderCollection(response.OrdersInTodo, {parse: true});
             }
 
             if('OrderDetailWithSpecialExtra' in response && response.OrderDetailWithSpecialExtra)
             {
-                response.OrderDetailWithSpecialExtra = new OrderDetailCollection(response.OrderDetailWithSpecialExtra, {parse: true});
+                response.OrderDetailWithSpecialExtra = new app.collections.Ordering.OrderDetailCollection(response.OrderDetailWithSpecialExtra, {parse: true});
             }
 
             if('MenuExtras' in response && response.MenuExtras)
             {
-                response.MenuExtras = new MenuExtraCollection(response.MenuExtras, {parse: true});
+                response.MenuExtras = new app.collections.Menu.MenuExtraCollection(response.MenuExtras, {parse: true});
             }
 
             return super.parse(response);

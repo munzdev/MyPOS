@@ -1,11 +1,10 @@
-define([
-    "models/db/Payment/PaymentCoupon"
-], function(PaymentCoupon){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class PaymentCouponCollection extends app.BaseCollection
+
+    return class PaymentCouponCollection extends BaseCollection
     {
-        getModel() { return PaymentCoupon; }
+        getModel() { return app.models.Payment.PaymentCoupon; }
         url() {return app.API + "DB/Payment/PaymentCoupon";}
     }
 });

@@ -1,6 +1,5 @@
 define(['Webservice',
         'collections/custom/event/PrinterCollection',
-        'collections/db/Payment/PaymentTypeCollection',
         'collections/custom/invoice/CustomerSearchCollection',
         'models/custom/order/OrderUnbilled',
         'models/custom/payment/VerifyCoupon',
@@ -11,7 +10,6 @@ define(['Webservice',
         'jquery-validate'
 ], function(Webservice,
             PrinterCollection,
-            PaymentTypeCollection,
             CustomerSearchCollection,
             OrderUnbilled,
             VerifyCoupon,
@@ -47,7 +45,7 @@ define(['Webservice',
 
             this.orderUnbilled = new OrderUnbilled();
             this.orderUnbilled.set('Orderid', options.orderid);
-            this.paymentTypes = new PaymentTypeCollection;
+            this.paymentTypes = new app.collections.Payment.PaymentTypeCollection;
             this.printers = new PrinterCollection;
             this.customerSearch = new CustomerSearchCollection;
 

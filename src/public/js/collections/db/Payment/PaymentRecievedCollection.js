@@ -1,11 +1,10 @@
-define([
-    "models/db/Payment/PaymentRecieved"
-], function(PaymentRecieved){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
 
-    return class PaymentRecievedCollection extends app.BaseCollection
+    return class PaymentRecievedCollection extends BaseCollection
     {
-        getModel() { return PaymentRecieved; }
+        getModel() { return app.models.Payment.PaymentRecieved; }
         url() {return app.API + "DB/PaymentRecieved";}
     }
 });

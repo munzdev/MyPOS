@@ -1,12 +1,9 @@
-define([
-    "models/db/Event/Event",
-    "collections/db/Menu/MenuGroupCollection"
-], function(Event,
-            MenuGroupCollection){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class MenuType extends app.BaseModel {
-        
+    return class MenuType extends BaseModel {
+
         idAttribute() { return 'MenuTypeid'; }
 
         defaults() {
@@ -16,19 +13,19 @@ define([
                     Tax: 0,
                     Allowmixing: false};
         }
-        
+
         parse(response)
         {
             if('Event' in response)
             {
-                response.Event = new Event(response.Event, {parse: true});
+                response.Event = new app.models.Event.Event(response.Event, {parse: true});
             }
-            
+
             if('MenuGroup' in response)
             {
-                response.MenuGroup = new MenuGroupCollection(response.MenuGroup, {parse: true});
+                response.MenuGroup = new app.collections.Menu.MenuGroupCollection(response.MenuGroup, {parse: true});
             }
-            
+
             return super.parse(response);
         }
 

@@ -1,11 +1,10 @@
-define([
-    "models/db/User/Message/UserMessage"
-], function(UserMessage){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class UserMessageCollection extends app.BaseCollection
+
+    return class UserMessageCollection extends BaseCollection
     {
-        getModel() { return UserMessage; }
+        getModel() { return app.models.User.Message.UserMessage; }
         url() {return app.API + "DB/User/Message/UserMessage";}
     }
 });

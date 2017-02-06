@@ -1,15 +1,9 @@
-define([
-    "models/db/Ordering/Order",
-    "models/db/User/User",
-    "models/db/Menu/MenuGroup",
-    
-], function(Order,
-            User,
-            MenuGroup){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class OrderInProgress extends app.BaseModel {
-        
+    return class OrderInProgress extends BaseModel {
+
         idAttribute() { return 'OrderInProgressid'; }
 
         defaults() {
@@ -25,19 +19,19 @@ define([
         {
             if('Order' in response)
             {
-                response.Order = new Order(response.Order, {parse: true});
+                response.Order = new app.models.Ordering.Order(response.Order, {parse: true});
             }
-            
+
             if('User' in response)
             {
-                response.User = new User(response.User, {parse: true});
+                response.User = new app.models.User.User(response.User, {parse: true});
             }
-            
+
             if('MenuGroup' in response)
             {
-                response.MenuGroup = new MenuGroup(response.MenuGroup, {parse: true});
+                response.MenuGroup = new app.models.Menu.MenuGroup(response.MenuGroup, {parse: true});
             }
-            
+
             return super.parse(response);
         }
     }

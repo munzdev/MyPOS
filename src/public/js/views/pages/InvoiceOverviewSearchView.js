@@ -1,9 +1,7 @@
-define(['collections/db/Invoice/InvoiceTypeCollection',
-        'views/helpers/CustomerSelectView',
+define(['views/helpers/CustomerSelectView',
         'views/helpers/HeaderView',
         'text!templates/pages/invoice-overview-search.phtml'
-], function(InvoiceTypeCollection,
-            CustomerSelectView,
+], function(CustomerSelectView,
             HeaderView,
             Template) {
     "use strict";
@@ -12,7 +10,7 @@ define(['collections/db/Invoice/InvoiceTypeCollection',
         initialize(options) {
 
             this.search = options;
-            this.invoiceTypeCollection = new InvoiceTypeCollection();
+            this.invoiceTypeCollection = new app.collections.Invoice.InvoiceTypeCollection();
             this.customerSelectView = new CustomerSelectView({selectCallback: this.select_customer,
                                                               allowAdd: false});
 

@@ -1,11 +1,10 @@
-define([
-    "models/db/OIP/DistributionGivingOut"
-], function(DistributionGivingOut){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class DistributionGivingOutCollection extends app.BaseCollection
+
+    return class DistributionGivingOutCollection extends BaseCollection
     {
-        getModel() { return DistributionGivingOut; }
+        getModel() { return app.models.OIP.DistributionGivingOut; }
         url() {return app.API + "DB/OIP/DistributionGivingOut";}
     }
 });

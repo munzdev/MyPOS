@@ -1,10 +1,9 @@
-define([
-    
-], function(){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class UserRole extends app.BaseModel {
-        
+    return class UserRole extends BaseModel {
+
         idAttribute() { return 'UserRoleid'; }
 
         defaults() {

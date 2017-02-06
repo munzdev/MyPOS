@@ -1,12 +1,8 @@
-define([
-    "models/db/Ordering/OrderDetail",
-    "models/db/Menu/MenuPossibleExtra",
-    
-], function(OrderDetail,
-            MenuPossibleExtra){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class OrderDetailExtra extends app.BaseModel {
+    return class OrderDetailExtra extends BaseModel {
 
         defaults() {
             return {OrderDetailid: null,
@@ -17,14 +13,14 @@ define([
         {
             if('OrderDetail' in response)
             {
-                response.OrderDetail = new OrderDetail(response.OrderDetail, {parse: true});
+                response.OrderDetail = new app.models.Ordering.OrderDetail(response.OrderDetail, {parse: true});
             }
-            
+
             if('MenuPossibleExtra' in response)
             {
-                response.MenuPossibleExtra = new MenuPossibleExtra(response.MenuPossibleExtra, {parse: true});
+                response.MenuPossibleExtra = new app.models.Menu.MenuPossibleExtra(response.MenuPossibleExtra, {parse: true});
             }
-            
+
             return super.parse(response);
         }
     }

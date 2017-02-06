@@ -1,5 +1,5 @@
 define(["collections/db/Event/EventContactCollection"
-], function(EventContactCollection ){
+], function(EventContactCollection){
     "use strict";
 
     return class CustomerSearchCollection extends EventContactCollection

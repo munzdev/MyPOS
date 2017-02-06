@@ -1,11 +1,10 @@
-define([
-    "models/db/DistributionPlace/DistributionPlaceUser"
-], function(DistributionPlaceUser){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class DistributionPlaceUserCollection extends app.BaseCollection
+
+    return class DistributionPlaceUserCollection extends BaseCollection
     {
-        getModel() { return DistributionPlaceUser; }
+        getModel() { return app.models.DistributionPlace.DistributionPlaceUser; }
         url() {return app.API + "DB/DistributionPlace/DistributionPlaceUser"}
     }
 });

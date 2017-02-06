@@ -1,30 +1,26 @@
-define([
-    "models/db/DistributionPlace/DistributionPlace",
-    "models/db/Menu/MenuGroup",
-    
-], function(DistributionPlace,
-            MenuGroup){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class DistributionPlaceGroup extends app.BaseModel {
-        
+    return class DistributionPlaceGroup extends BaseModel {
+
         defaults() {
             return {DistributionPlaceid: null,
                     MenuGroupid: null};
         }
-        
+
         parse(response)
         {
             if('DistributionPlace' in response)
             {
-                response.DistributionPlace = new DistributionPlace(response.DistributionPlace, {parse: true});
+                response.DistributionPlace = new app.models.DistributionPlace.DistributionPlace(response.DistributionPlace, {parse: true});
             }
-            
+
             if('MenuGroup' in response)
             {
-                response.MenuGroup = new MenuGroup(response.MenuGroup, {parse: true});
+                response.MenuGroup = new app.models.Menu.MenuGroup(response.MenuGroup, {parse: true});
             }
-            
+
             return super.parse(response);
         }
 

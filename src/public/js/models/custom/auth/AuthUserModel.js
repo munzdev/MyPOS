@@ -1,17 +1,14 @@
-define([
-    "models/db/User/User",
-    "models/db/Event/EventUser"
-], function(User,
-            EventUser){
+define(["models/db/User/User",
+], function(User){
     "use strict";
-    
+
     return class AuthUserModel extends User
     {
         urlRoot() { return app.API + "Login/User"; }
-        
+
         defaults()
         {
-            return _.extend(super.defaults(), {EventUser: new EventUser});
-        }               
+            return _.extend(super.defaults(), {EventUser: new app.models.Event.EventUser});
+        }
     }
 });

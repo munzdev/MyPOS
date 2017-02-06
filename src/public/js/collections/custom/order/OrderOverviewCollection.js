@@ -1,11 +1,10 @@
-define([
-    "models/db/Ordering/Order"
-], function(Order){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
 
-    return class OrderOverviewCollection extends app.BaseCollection
+    return class OrderOverviewCollection extends BaseCollection
     {
-        getModel() { return Order; }
+        getModel() { return app.models.Ordering.Order; }
         url() {return app.API + "Order";}
         parse(response) {
             this.count = response.Count;

@@ -1,7 +1,8 @@
-define([], function() {
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class InvoiceType extends app.BaseModel {
+    return class InvoiceType extends BaseModel {
 
         idAttribute() { return 'InvoiceTypeid'; }
 

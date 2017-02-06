@@ -1,15 +1,9 @@
-define([
-    "models/db/DistributionPlace/DistributionPlace",
-    "models/db/Menu/MenuGroup",
-    "models/db/Event/EventTable",
-    
-], function(DistributionPlace,
-            MenuGroup,
-            EventTable){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class DistributionPlaceTable extends app.BaseModel {
-        
+    return class DistributionPlaceTable extends BaseModel {
+
         idAttribute() { return 'EventTableid'; }
 
         defaults() {
@@ -17,24 +11,24 @@ define([
                     DistributionPlaceid: null,
                     MenuGroupid: null};
         }
-        
+
         parse(response)
         {
             if('EventTable' in response)
             {
-                response.EventTable = new EventTable(response.EventTable, {parse: true});
+                response.EventTable = new app.models.Event.EventTable(response.EventTable, {parse: true});
             }
-            
+
             if('DistributionPlace' in response)
             {
-                response.DistributionPlace = new DistributionPlace(response.DistributionPlace, {parse: true});
+                response.DistributionPlace = new app.models.DistributionPlace.DistributionPlace(response.DistributionPlace, {parse: true});
             }
-            
+
             if('MenuGroup' in response)
             {
-                response.MenuGroup = new MenuGroup(response.MenuGroup, {parse: true});
+                response.MenuGroup = new app.models.Menu.MenuGroup(response.MenuGroup, {parse: true});
             }
-            
+
             return super.parse(response);
         }
 

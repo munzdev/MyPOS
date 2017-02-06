@@ -1,14 +1,8 @@
-define(["models/db/Payment/PaymentType",
-        "models/db/Invoice/Invoice",
-        "models/db/User/User",
-        "collections/db/Payment/PaymentCouponCollection"
-], function(PaymentType,
-            Invoice,
-            User,
-            PaymentCouponCollection){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class PaymentRecieved extends app.BaseModel {
+    return class PaymentRecieved extends BaseModel {
 
         idAttribute() { return 'PaymentRecievedid'; }
 
@@ -24,25 +18,25 @@ define(["models/db/Payment/PaymentType",
         {
             if('PaymentType' in response)
             {
-                response.PaymentType = new PaymentType(response.PaymentType, {parse: true});
+                response.PaymentType = new app.models.Payment.PaymentType(response.PaymentType, {parse: true});
             }
 
             if('Invoice' in response)
             {
-                response.Invoice = new Invoice(response.Invoice, {parse: true});
+                response.Invoice = new app.models.Invoice.Invoice(response.Invoice, {parse: true});
             }
 
             if('User' in response)
             {
-                response.User = new User(response.User, {parse: true});
+                response.User = new app.models.User.User(response.User, {parse: true});
             }
 
             if('PaymentCoupons' in response)
             {
                 if(response.PaymentCoupons.toString() == '' || JSON.stringify(response.PaymentCoupons) == '[{"Coupon":[]}]')
-                    response.PaymentCoupons = new PaymentCouponCollection();
+                    response.PaymentCoupons = new app.collections.Payment.PaymentCouponCollection();
                 else
-                    response.PaymentCoupons = new PaymentCouponCollection(response.PaymentCoupons, {parse: true});
+                    response.PaymentCoupons = new app.collections.Payment.PaymentCouponCollection(response.PaymentCoupons, {parse: true});
             }
 
             return super.parse(response);

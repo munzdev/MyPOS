@@ -1,17 +1,9 @@
-define(['collections/db/Payment/PaymentTypeCollection',
-        'collections/db/Payment/PaymentCouponCollection',
-        'models/db/Payment/Coupon',
-        'models/custom/payment/PaymentRecievedModel',
-        'models/db/Payment/PaymentCoupon',
+define(['models/custom/payment/PaymentRecievedModel',
         'models/custom/payment/VerifyCoupon',
         'views/helpers/HeaderView',
         'text!templates/pages/invoice-payment.phtml',
         'text!templates/pages/invoice-payment-item.phtml'
-], function(PaymentTypeCollection,
-            PaymentCouponCollection,
-            Coupon,
-            PaymentRecievedModel,
-            PaymentCoupon,
+], function(PaymentRecievedModel,
             VerifyCoupon,
             HeaderView,
             Template,
@@ -24,9 +16,9 @@ define(['collections/db/Payment/PaymentTypeCollection',
             this.invoiceid = options.invoiceid;
             this.amount = 0;
 
-            this.paymentTypes = new PaymentTypeCollection();
+            this.paymentTypes = new app.collections.Payment.PaymentTypeCollection();
             this.paymentRecieved = new PaymentRecievedModel();
-            this.paymentRecieved.set('PaymentCoupons', new PaymentCouponCollection());
+            this.paymentRecieved.set('PaymentCoupons', new app.collections.Payment.PaymentCouponCollection());
 
             this.paymentTypes.fetch()
                              .done(() => {
@@ -73,8 +65,8 @@ define(['collections/db/Payment/PaymentTypeCollection',
             verifyCoupon.set('Code', code);
             verifyCoupon.fetch()
                         .done((couponData) => {
-                            let coupon = new Coupon(couponData);
-                            let paymentCoupon = new PaymentCoupon();
+                            let coupon = new app.models.Payment.Coupon(couponData);
+                            let paymentCoupon = new app.models.Payment.PaymentCoupon();
 
                             paymentCoupon.set('Coupon', coupon);
                             paymentCoupon.set('Couponid', coupon.get('Couponid'));

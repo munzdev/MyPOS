@@ -1,10 +1,8 @@
-define(["models/db/Invoice/Invoice",
-        "models/db/Invoice/InvoiceWarningType"
-], function(Invoice,
-            InvoiceWarningType){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class InvoiceWarning extends app.BaseModel {
+    return class InvoiceWarning extends BaseModel {
 
         idAttribute() { return 'InvoiceWarningid'; }
 
@@ -21,12 +19,12 @@ define(["models/db/Invoice/Invoice",
         {
             if('Invoice' in response)
             {
-                response.Invoice = new Invoice(response.Invoice, {parse: true});
+                response.Invoice = new app.models.Invoice.Invoice(response.Invoice, {parse: true});
             }
 
             if('InvoiceWarningType' in response)
             {
-                response.InvoiceWarningType = new InvoiceWarningType(response.InvoiceWarningType, {parse: true});
+                response.InvoiceWarningType = new app.models.Invoice.InvoiceWarningType(response.InvoiceWarningType, {parse: true});
             }
 
             return super.parse(response);

@@ -1,18 +1,11 @@
-// Includes file dependencies
-define(["collections/db/Ordering/OrderDetailExtraCollection",
-        "collections/db/Ordering/OrderDetailMixedWithCollection",
-        "models/custom/order/OrderModify",
+define(["models/custom/order/OrderModify",
         "models/db/Ordering/OrderDetail",
-        "models/db/Event/EventTable",
         'views/helpers/HeaderView',
         'text!templates/pages/order-modify.phtml',
         'text!templates/pages/order-modify-panel.phtml',
         'text!templates/pages/order-item.phtml'
-], function(OrderDetailExtraCollection,
-            OrderDetailMixedWithCollection,
-            OrderModify,
+], function(OrderModify,
             OrderDetail,
-            EventTable,
             HeaderView,
             Template,
             TemplatePanel,
@@ -48,7 +41,7 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
 
             if(options.orderid === null) {
                 this.mode = 'new';
-                this.orderModify.set('EventTable', new EventTable({Name: options.tableNr}));
+                this.orderModify.set('EventTable', new app.models.Event.EventTable({Name: options.tableNr}));
                 this.render();
             } else {
                 this.mode = 'edit';
@@ -79,8 +72,8 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});
 
             let orderDetail = new OrderDetail();
-            orderDetail.set("OrderDetailExtras", new OrderDetailExtraCollection());
-            orderDetail.set("OrderDetailMixedWiths", new OrderDetailMixedWithCollection());
+            orderDetail.set("OrderDetailExtras", new app.collections.Ordering.OrderDetailExtraCollection());
+            orderDetail.set("OrderDetailMixedWiths", new app.collections.Ordering.OrderDetailMixedWithCollection());
 
             let extrasSelected = this.$('input[name=extra-' + menuid + ']:checked');
 
@@ -167,8 +160,8 @@ define(["collections/db/Ordering/OrderDetailExtraCollection",
             }
 
             let orderDetail = new OrderDetail();
-            orderDetail.set("OrderDetailExtras", new OrderDetailExtraCollection());
-            orderDetail.set("OrderDetailMixedWiths", new OrderDetailMixedWithCollection());
+            orderDetail.set("OrderDetailExtras", new app.collections.Ordering.OrderDetailExtraCollection());
+            orderDetail.set("OrderDetailMixedWiths", new app.collections.Ordering.OrderDetailMixedWithCollection());
             orderDetail.set('Amount', 1);
             orderDetail.set('ExtraDetail', specialOrderText);
 

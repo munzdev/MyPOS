@@ -1,12 +1,8 @@
-define([
-    "models/db/Ordering/OrderDetail",
-    "models/db/Menu/Menu",
-    
-], function(OrderDetail,
-            Menu){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class OrderDetailMixedWith extends app.BaseModel {
+    return class OrderDetailMixedWith extends BaseModel {
 
         defaults() {
             return {OrderDetailid: null,
@@ -17,14 +13,14 @@ define([
         {
             if('OrderDetail' in response)
             {
-                response.OrderDetail = new OrderDetail(response.OrderDetail, {parse: true});
+                response.OrderDetail = new app.models.Ordering.OrderDetail(response.OrderDetail, {parse: true});
             }
-            
+
             if('Menu' in response)
             {
-                response.Menu = new Menu(response.Menu, {parse: true});
+                response.Menu = new app.models.Menu.Menu(response.Menu, {parse: true});
             }
-            
+
             return super.parse(response);
         }
     }

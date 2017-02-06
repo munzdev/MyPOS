@@ -1,21 +1,20 @@
-define([
-    "models/db/Menu/MenuType"
-], function(MenuType ){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class ProductCollection extends app.BaseCollection
-    {                
-        getModel() { return MenuType; }
-  
+
+    return class ProductCollection extends BaseCollection
+    {
+        getModel() { return app.models.Menu.MenuType; }
+
         url() {return app.API + "Product";}
-        
-        initialize() {            
+
+        initialize() {
             this.searchHelper = [];
         }
-        
+
         fetch(options)
         {
-            return super.fetch(options).done(() => {                
+            return super.fetch(options).done(() => {
                 this.each((type) => {
                     type.get('MenuGroup').each((group) =>  {
                         group.get('Menu').each((menu) => {
@@ -26,8 +25,8 @@ define([
                                                     Menu: menu});
                         });
                     });
-                });               
-            });                                  
-        }                
+                });
+            });
+        }
     }
 });

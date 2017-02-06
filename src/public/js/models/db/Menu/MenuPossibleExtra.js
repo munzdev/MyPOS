@@ -1,13 +1,9 @@
-define([
-    "models/db/Menu/Menu",
-    "models/db/Menu/MenuExtra",
-    
-], function(Menu,
-            MenuExtra){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class MenuPossibleExtra extends app.BaseModel {
-        
+    return class MenuPossibleExtra extends BaseModel {
+
         idAttribute() { return 'MenuPossibleExtraid'; }
 
         defaults() {
@@ -21,14 +17,14 @@ define([
         {
             if('MenuExtra' in response)
             {
-                response.MenuExtra = new MenuExtra(response.MenuExtra, {parse: true});
+                response.MenuExtra = new app.models.Menu.MenuExtra(response.MenuExtra, {parse: true});
             }
-            
+
             if('Menu' in response)
             {
-                response.Menu = new Menu(response.Menu, {parse: true});
+                response.Menu = new app.models.Menu.Menu(response.Menu, {parse: true});
             }
-            
+
             return super.parse(response);
         }
     }

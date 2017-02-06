@@ -1,16 +1,9 @@
-define([
-    "models/db/Menu/MenuGroup",
-    "models/db/Menu/Availability",
-    "collections/db/Menu/MenuPossibleExtraCollection",
-    "collections/db/Menu/MenuPossibleSizeCollection"
-], function(MenuGroup,
-            Availability,
-            MenuPossibleExtraCollection,
-            MenuPossibleSizeCollection){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class Menu extends app.BaseModel {
-        
+    return class Menu extends BaseModel {
+
         idAttribute() { return 'Menuid'; }
 
         defaults() {
@@ -26,24 +19,24 @@ define([
         {
             if('MenuGroup' in response)
             {
-                response.MenuGroup = new MenuGroup(response.MenuGroup, {parse: true});
+                response.MenuGroup = new app.models.Menu.MenuGroup(response.MenuGroup, {parse: true});
             }
-            
+
             if('Availability' in response)
             {
-                response.Availability = new Availability(response.Availability, {parse: true});
+                response.Availability = new app.models.Menu.Availability(response.Availability, {parse: true});
             }
-            
+
             if('MenuPossibleExtra' in response)
             {
-                response.MenuPossibleExtra = new MenuPossibleExtraCollection(response.MenuPossibleExtra, {parse: true});
+                response.MenuPossibleExtra = new app.collections.Menu.MenuPossibleExtraCollection(response.MenuPossibleExtra, {parse: true});
             }
-            
+
             if('MenuPossibleSize' in response)
             {
-                response.MenuPossibleSize = new MenuPossibleSizeCollection(response.MenuPossibleSize, {parse: true});
+                response.MenuPossibleSize = new app.collections.Menu.MenuPossibleSizeCollection(response.MenuPossibleSize, {parse: true});
             }
-           
+
             return super.parse(response);
         }
     }

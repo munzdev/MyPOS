@@ -1,11 +1,10 @@
-define([
-    "models/db/Event/EventTable"
-], function(EventTable){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class EventTableCollection extends app.BaseCollection
+
+    return class EventTableCollection extends BaseCollection
     {
-        getModel() { return EventTable; }
+        getModel() { return app.models.Event.EventTable; }
         url() {return app.API + "DB/Event/EventTable"}
     }
 });

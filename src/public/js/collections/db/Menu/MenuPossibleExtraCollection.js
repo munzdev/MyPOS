@@ -1,11 +1,10 @@
-define([
-    "models/db/Menu/MenuPossibleExtra"
-], function(MenuPossibleExtra){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class MenuPossibleExtraCollection extends app.BaseCollection
+
+    return class MenuPossibleExtraCollection extends BaseCollection
     {
-        getModel() { return MenuPossibleExtra; }
+        getModel() { return app.models.Menu.MenuPossibleExtra; }
         url() {return app.API + "DB/Menu/MenuPossibleExtra"}
     }
 });

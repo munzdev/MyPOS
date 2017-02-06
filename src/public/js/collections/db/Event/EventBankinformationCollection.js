@@ -1,11 +1,10 @@
-define([
-    "models/db/Event/EventBankinformation"
-], function(EventBankinformation){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
 
-    return class EventBankinformationCollection extends app.BaseCollection
+    return class EventBankinformationCollection extends BaseCollection
     {
-        getModel() { return EventBankinformation; }
+        getModel() { return app.models.Event.EventBankinformation; }
         url() {return app.API + "DB/Event/EventBankinformation"}
     }
 });

@@ -1,11 +1,10 @@
-define([
-    "models/db/Invoice/Invoice"
-], function(Invoice){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class InvoiceCollection extends app.BaseCollection
+
+    return class InvoiceCollection extends BaseCollection
     {
-        getModel() { return Invoice; }
+        getModel() { return app.models.Invoice.Invoice; }
         url() {return app.API + "DB/Invoice"}
     }
 });

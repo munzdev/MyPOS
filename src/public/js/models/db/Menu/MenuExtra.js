@@ -1,13 +1,9 @@
-define([
-    "models/db/Event/Event",
-    "models/db/Menu/Availability",
-    
-], function(Event,
-            Availability){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class MenuExtra extends app.BaseModel {
-        
+    return class MenuExtra extends BaseModel {
+
         idAttribute() { return 'MenuExtraid'; }
 
         defaults() {
@@ -22,14 +18,14 @@ define([
         {
             if('Event' in response)
             {
-                response.Event = new Event(response.Event, {parse: true});
+                response.Event = new app.models.Event.Event(response.Event, {parse: true});
             }
-            
+
             if('Availability' in response)
             {
-                response.Availability = new Availability(response.Availability, {parse: true});
+                response.Availability = new app.models.Menu.Availability(response.Availability, {parse: true});
             }
-            
+
             return super.parse(response);
         }
     }

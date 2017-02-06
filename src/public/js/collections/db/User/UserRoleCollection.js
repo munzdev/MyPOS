@@ -1,11 +1,10 @@
-define([
-    "models/db/User/UserRole"
-], function(UserRole){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class UserRoleCollection extends app.BaseCollection
+
+    return class UserRoleCollection extends BaseCollection
     {
-        getModel() { return UserRole; }
+        getModel() { return app.models.User.UserRole; }
         url() {return app.API + "DB/User/UserRole";}
     }
 });

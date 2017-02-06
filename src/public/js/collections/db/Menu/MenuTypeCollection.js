@@ -1,11 +1,10 @@
-define([
-    "models/db/Menu/MenuType"
-], function(MenuType){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class MenuTypeCollection extends app.BaseCollection
+
+    return class MenuTypeCollection extends BaseCollection
     {
-        getModel() { return MenuType; }
+        getModel() { return app.models.Menu.MenuType; }
         url() {return app.API + "DB/Menu/MenuType";}
     }
 });

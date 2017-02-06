@@ -1,11 +1,10 @@
-define([
-   "models/db/Menu/Availability"
-], function(Availability){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class AvailabilityCollection extends app.BaseCollection
+
+    return class AvailabilityCollection extends BaseCollection
     {
-        getModel() { return Availability; }
+        getModel() { return app.models.Menu.Availability; }
         url() {return app.API + "DB/Menu/Availability"}
     }
 });

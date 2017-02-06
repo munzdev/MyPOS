@@ -1,11 +1,10 @@
-define([
-    "models/db/OIP/OrderInProgressRecieved"
-], function(OrderInProgressRecieved){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class OrderInProgressRecievedCollection extends app.BaseCollection
+
+    return class OrderInProgressRecievedCollection extends BaseCollection
     {
-        getModel() { return OrderInProgressRecieved; }
+        getModel() { return app.models.OIP.OrderInProgressRecieved; }
         url() {return app.API + "DB/OIP/OrderInProgressRecieved";}
     }
 });

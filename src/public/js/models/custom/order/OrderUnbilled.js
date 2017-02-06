@@ -1,19 +1,15 @@
-define(["collections/db/Ordering/OrderDetailCollection",
-        "collections/db/Payment/CouponCollection",
-        "models/db/Event/EventContact"
-], function(OrderDetailCollection,
-            CouponCollection,
-            EventContact){
+define(["models/BaseModel"
+], function(BaseModel) {
     "use strict";
 
-    return class OrderUnbilled extends app.BaseModel {
+    return class OrderUnbilled extends BaseModel {
 
         defaults() {
             return {Orderid: null,
                     All: false,
                     Customer: null,
-                    UnbilledOrderDetails: new OrderDetailCollection(),
-                    UsedCoupons: new CouponCollection()};
+                    UnbilledOrderDetails: new app.collections.Ordering.OrderDetailCollection(),
+                    UsedCoupons: new app.collections.Payment.CouponCollection()};
         }
 
         url() {return app.API + "Order/Unbilled/" + this.get('Orderid') + '/' + this.get('All');}
@@ -22,12 +18,12 @@ define(["collections/db/Ordering/OrderDetailCollection",
         {
             if('UnbilledOrderDetails' in response)
             {
-                response.UnbilledOrderDetails = new OrderDetailCollection(response.UnbilledOrderDetails, {parse: true});
+                response.UnbilledOrderDetails = new app.collections.Ordering.OrderDetailCollection(response.UnbilledOrderDetails, {parse: true});
             }
 
             if('UsedCoupons' in response)
             {
-                response.UsedCoupons = new CouponCollection(response.UsedCoupons, {parse: true});
+                response.UsedCoupons = new app.collections.Payment.CouponCollection(response.UsedCoupons, {parse: true});
             }
 
             return super.parse(response);

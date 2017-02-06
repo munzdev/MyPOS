@@ -1,20 +1,8 @@
-define(["models/db/User/User",
-        "models/db/Event/EventContact",
-        "models/db/Invoice/InvoiceType",
-        "models/db/Event/EventBankinformation",
-        "collections/db/Invoice/InvoiceItemCollection",
-        "collections/db/Payment/PaymentRecievedCollection",
-        "collections/db/Invoice/InvoiceWarningCollection"
-], function(User,
-            EventContact,
-            InvoiceType,
-            EventBankinformation,
-            InvoiceItemCollection,
-            PaymentRecievedCollection,
-            InvoiceWarningCollection) {
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class Invoice extends app.BaseModel {
+    return class Invoice extends BaseModel {
 
         idAttribute() { return 'Invoiceid'; }
 
@@ -37,56 +25,56 @@ define(["models/db/User/User",
         {
             if('InvoiceType' in response)
             {
-                response.InvoiceType = new InvoiceType(response.InvoiceType, {parse: true});
+                response.InvoiceType = new app.models.Invoice.InvoiceType(response.InvoiceType, {parse: true});
             }
 
             if('User' in response)
             {
-                response.User = new User(response.User, {parse: true});
+                response.User = new app.models.User.User(response.User, {parse: true});
             }
 
             if('EventContactRelatedByEventContactid' in response)
             {
-                response.EventContactRelatedByEventContactid = new EventContact(response.EventContactRelatedByEventContactid, {parse: true});
+                response.EventContactRelatedByEventContactid = new app.models.Event.EventContact(response.EventContactRelatedByEventContactid, {parse: true});
             }
 
             if('EventBankinformation' in response)
             {
-                response.EventBankinformation = new EventBankinformation(response.EventBankinformation, {parse: true});
+                response.EventBankinformation = new app.models.Event.EventBankinformation(response.EventBankinformation, {parse: true});
             }
 
             if('EventContactRelatedByCustomerEventContactid' in response)
             {
-                response.EventContactRelatedByCustomerEventContactid = new EventContact(response.EventContactRelatedByCustomerEventContactid, {parse: true});
+                response.EventContactRelatedByCustomerEventContactid = new app.models.Event.EventContact(response.EventContactRelatedByCustomerEventContactid, {parse: true});
             }
 
             if('CanceledInvoice' in response)
             {
-                response.CanceledInvoice = new Invoice(response.CanceledInvoice, {parse: true});
+                response.CanceledInvoice = new app.models.Invoice.Invoice(response.CanceledInvoice, {parse: true});
             }
 
             if('InvoiceItems' in response)
             {
                 if(response.InvoiceItems.toString() == '')
-                    response.InvoiceItems = new InvoiceItemCollection();
+                    response.InvoiceItems = new app.collections.Invoice.InvoiceItemCollection();
                 else
-                    response.InvoiceItems = new InvoiceItemCollection(response.InvoiceItems, {parse: true});
+                    response.InvoiceItems = new app.collections.Invoice.InvoiceItemCollection(response.InvoiceItems, {parse: true});
             }
 
             if('PaymentRecieveds' in response)
             {
                 if(response.PaymentRecieveds.toString() == '' || JSON.stringify(response.PaymentRecieveds) == '[{"PaymentType":[],"User":[],"PaymentCoupons":[{"Coupon":[]}]}]')
-                    response.PaymentRecieveds = new PaymentRecievedCollection();
+                    response.PaymentRecieveds = new app.collections.Payment.PaymentRecievedCollection();
                 else
-                    response.PaymentRecieveds = new PaymentRecievedCollection(response.PaymentRecieveds, {parse: true});
+                    response.PaymentRecieveds = new app.collections.Payment.PaymentRecievedCollection(response.PaymentRecieveds, {parse: true});
             }
 
             if('InvoiceWarnings' in response)
             {
                 if(response.InvoiceWarnings.toString() == '' || JSON.stringify(response.InvoiceWarnings) == '[{"InvoiceWarningType":[]}]')
-                    response.InvoiceWarnings = new InvoiceWarningCollection();
+                    response.InvoiceWarnings = new app.collections.Invoice.InvoiceWarningCollection();
                 else
-                    response.InvoiceWarnings = new InvoiceWarningCollection(response.InvoiceWarnings, {parse: true});
+                    response.InvoiceWarnings = new app.collections.Invoice.InvoiceWarningCollection(response.InvoiceWarnings, {parse: true});
             }
 
             return super.parse(response);

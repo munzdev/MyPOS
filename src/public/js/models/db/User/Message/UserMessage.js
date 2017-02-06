@@ -1,11 +1,9 @@
-define([
-    "models/db/User/User",
-    
-], function(User){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class UserMessage extends app.BaseModel {
-        
+    return class UserMessage extends BaseModel {
+
         idAttribute() { return 'UserMessageid'; }
 
         defaults() {
@@ -21,14 +19,14 @@ define([
         {
             if('FromEventUser' in response)
             {
-                response.FromEventUser = new User(response.FromEventUser, {parse: true});
+                response.FromEventUser = new app.models.User.User(response.FromEventUser, {parse: true});
             }
-            
+
             if('ToEventUser' in response)
             {
-                response.ToEventUser = new User(response.ToEventUser, {parse: true});
+                response.ToEventUser = new app.models.User.User(response.ToEventUser, {parse: true});
             }
-            
+
             return super.parse(response);
         }
     }

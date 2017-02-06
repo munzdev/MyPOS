@@ -1,13 +1,9 @@
-define([
-    "models/db/Menu/Menu",
-    "models/db/Menu/MenuSize",
-    
-], function(Menu,
-            MenuSize){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class MenuPossibleSize extends app.BaseModel {
-        
+    return class MenuPossibleSize extends BaseModel {
+
         idAttribute() { return 'MenuPossibleSizeid'; }
 
         defaults() {
@@ -21,14 +17,14 @@ define([
         {
             if('MenuSize' in response)
             {
-                response.MenuSize = new MenuSize(response.MenuSize, {parse: true});
+                response.MenuSize = new app.models.Menu.MenuSize(response.MenuSize, {parse: true});
             }
-            
+
             if('Menu' in response)
             {
-                response.Menu = new Menu(response.Menu, {parse: true});
+                response.Menu = new app.models.Menu.Menu(response.Menu, {parse: true});
             }
-            
+
             return super.parse(response);
         }
     }

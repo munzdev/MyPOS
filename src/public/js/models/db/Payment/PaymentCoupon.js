@@ -1,12 +1,8 @@
-define([
-    "models/db/Payment/PaymentRecieved",
-    "models/db/Payment/Coupon",
-
-], function(PaymentRecieved,
-            Coupon){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class PaymentCoupon extends app.BaseModel {
+    return class PaymentCoupon extends BaseModel {
 
         defaults() {
             return {Couponid: null,
@@ -18,12 +14,12 @@ define([
         {
             if('Coupon' in response)
             {
-                response.Coupon = new Coupon(response.Coupon, {parse: true});
+                response.Coupon = new app.models.Payment.Coupon(response.Coupon, {parse: true});
             }
 
             if('PaymentRecieved' in response)
             {
-                response.PaymentRecieved = new PaymentRecieved(response.PaymentRecieved, {parse: true});
+                response.PaymentRecieved = new app.models.Payment.PaymentRecieved(response.PaymentRecieved, {parse: true});
             }
 
             return super.parse(response);

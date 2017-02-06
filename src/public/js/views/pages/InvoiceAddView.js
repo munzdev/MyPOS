@@ -1,17 +1,11 @@
 define(['Webservice',
         'models/custom/invoice/InvoiceModel',
-        'models/db/Invoice/InvoiceItem',
-        'collections/db/Invoice/InvoiceItemCollection',
-        'collections/db/Invoice/InvoiceTypeCollection',
         'views/helpers/HeaderView',
         'views/helpers/CustomerSelectView',
         'text!templates/pages/invoice-add.phtml',
         'text!templates/pages/invoice-add-item.phtml'
 ], function(Webservice,
             InvoiceModel,
-            InvoiceItem,
-            InvoiceItemCollection,
-            InvoiceTypeCollection,
             HeaderView,
             CustomerSelectView,
             Template,
@@ -22,10 +16,10 @@ define(['Webservice',
     {
         initialize() {
             this.invoice = new InvoiceModel();
-            this.invoice.set('InvoiceItems', new InvoiceItemCollection());
+            this.invoice.set('InvoiceItems', new app.collections.Invoice.InvoiceItemCollection());
 
             this.customerSelectView = new CustomerSelectView({selectCallback: this.click_btn_select_customer});
-            this.invoiceTypeCollection = new InvoiceTypeCollection();
+            this.invoiceTypeCollection = new app.collections.Invoice.InvoiceTypeCollection();
 
             let webserviceMaturityDate = new Webservice('Utility/MaturityDate');
 
@@ -74,7 +68,7 @@ define(['Webservice',
                 if(this.editCid) {
                     var invoiceItem = this.invoice.get('InvoiceItems').get({cid: this.editCid});
                 } else {
-                    var invoiceItem = new InvoiceItem();
+                    var invoiceItem = new app.models.Invoice.InvoiceItem();
                 }
                 invoiceItem.set('Description', this.$('#description').val());
                 invoiceItem.set('Price', this.$('#price').val());

@@ -1,11 +1,10 @@
-define([
-    "models/db/Event/EventPrinter"
-], function(EventPrinter){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class EventPrinterCollection extends app.BaseCollection
+
+    return class EventPrinterCollection extends BaseCollection
     {
-        getModel() { return EventPrinter; }
+        getModel() { return app.models.Event.EventPrinter; }
         url() {return app.API + "DB/Event/EventPrinter"}
     }
 });

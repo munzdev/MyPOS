@@ -1,10 +1,9 @@
-define([
-    
-], function(){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class Event extends app.BaseModel {
-        
+    return class Event extends BaseModel {
+
         idAttribute() { return 'Eventid'; }
 
         defaults() {

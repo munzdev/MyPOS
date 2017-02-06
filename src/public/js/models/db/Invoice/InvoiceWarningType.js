@@ -1,8 +1,8 @@
-define(["models/db/Event/Event"
-], function(Event){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class InvoiceWarningType extends app.BaseModel {
+    return class InvoiceWarningType extends BaseModel {
 
         idAttribute() { return 'InvoiceWarningTypeid'; }
 
@@ -17,7 +17,7 @@ define(["models/db/Event/Event"
         {
             if('Event' in response)
             {
-                response.Event = new Event(response.Event, {parse: true});
+                response.Event = new app.models.Event.Event(response.Event, {parse: true});
             }
 
             return super.parse(response);

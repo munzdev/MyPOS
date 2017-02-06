@@ -1,14 +1,13 @@
-define([
-    "models/db/Ordering/OrderDetail"
-], function(OrderDetail){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class OrderDetailCollection extends app.BaseCollection
+
+    return class OrderDetailCollection extends BaseCollection
     {
-        getModel() { return OrderDetail; }
+        getModel() { return app.models.Ordering.OrderDetail; }
         url() {return app.API + "DB/Ordering/OrderDetail";}
-        
-        
+
+
         addOnce(newOrderDetail) {
             var sameOrder = this.find( function(orderDetail){
                 //-- only difference is the amount if equal. Fix this

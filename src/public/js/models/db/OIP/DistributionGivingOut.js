@@ -1,10 +1,9 @@
-define([
-    
-], function(){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class DistributionGivingOut extends app.BaseModel {
-        
+    return class DistributionGivingOut extends BaseModel {
+
         idAttribute() { return 'DistributionGivingOutid'; }
 
         defaults() {

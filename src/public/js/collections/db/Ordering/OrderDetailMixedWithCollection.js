@@ -1,11 +1,10 @@
-define([
-    "models/db/Ordering/OrderDetailMixedWith"
-], function(OrderDetailMixedWith){
+define(["collections/BaseCollection"
+], function(BaseCollection){
     "use strict";
-    
-    return class OrderDetailMixedWithCollection extends app.BaseCollection
+
+    return class OrderDetailMixedWithCollection extends BaseCollection
     {
-        getModel() { return OrderDetailMixedWith; }
+        getModel() { return app.models.Ordering.OrderDetailMixedWith; }
         url() {return app.API + "DB/Ordering/OrderDetailMixedWith";}
     }
 });

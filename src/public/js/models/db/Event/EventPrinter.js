@@ -1,11 +1,9 @@
-define([
-    "models/db/Event/Event",
-    
-], function(Event){
+define(["models/BaseModel"
+], function(BaseModel){
     "use strict";
 
-    return class EventPrinter extends app.BaseModel {
-        
+    return class EventPrinter extends BaseModel {
+
         idAttribute() { return 'EventPrinterid'; }
 
         defaults() {
@@ -18,14 +16,14 @@ define([
                     Default: false,
                     CharactersPerRow: 0};
         }
-        
+
         parse(response)
         {
             if('Event' in response)
             {
-                response.Event = new Event(response.Event, {parse: true});
+                response.Event = new app.models.Event.Event(response.Event, {parse: true});
             }
-            
+
             return super.parse(response);
         }
 
