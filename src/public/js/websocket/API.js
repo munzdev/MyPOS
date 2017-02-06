@@ -1,9 +1,9 @@
-define(["websocket/WebsocketClient", 
+define(["websocket/WebsocketClient",
         "collections/db/User/UserRoleCollection"
-], function(WebsocketClient, 
+], function(WebsocketClient,
             UserRoleCollection) {
     "use strict";
-    
+
     return class API extends WebsocketClient
     {
         constructor()
@@ -11,7 +11,7 @@ define(["websocket/WebsocketClient",
             super("API");
             this.rolesSubscribed = [];
         }
-        
+
         _registerChanel()
         {
             var userRolesCollection = new UserRoleCollection();
@@ -35,16 +35,16 @@ define(["websocket/WebsocketClient",
                         });
                     });
         }
-        
+
         _unregisterChanel()
         {
             _.each(this.rolesSubscribed, (chanelName) => {
                 if(DEBUG) console.log("UNREGISTERED TO API ROLE: " + chanelName);
 
                 this.ws.unsubscribe(chanelName);
-            }); 
+            });
         }
-        
+
         _commandRecieved(data)
         {
             if(DEBUG) console.log("API DATA RECIEVED: " + data);
@@ -67,15 +67,15 @@ define(["websocket/WebsocketClient",
 
                 if(command == 'product-update')
                 {
-                    app.products.fetch({});
+                    app.productList.fetch({});
                 }
             }
         }
-        
+
         Trigger(command, callback)
         {
             this.ws.call.apply(this.ws, arguments);
-        }        
+        }
     }
 
 } );
