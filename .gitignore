@@ -2,5 +2,5 @@
 /nbproject/
 /DBModel/Model.mwb.bak
 /src/vendor/*
-/src/settings.php
 /build/*
+/src/API/settings.php
