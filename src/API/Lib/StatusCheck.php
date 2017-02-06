@@ -4,12 +4,14 @@ namespace API\Lib;
 use API\Models\Invoice\Base\InvoiceQuery;
 use API\Models\Invoice\Map\InvoiceItemTableMap;
 use API\Models\OIP\Map\OrderInProgressRecievedTableMap;
+use API\Models\OIP\OrderInProgressQuery;
 use API\Models\Ordering\Map\OrderDetailTableMap;
 use API\Models\Ordering\OrderDetailQuery;
 use API\Models\Ordering\OrderQuery;
-use API\Models\Payment\Map\PaymentTableMap;
 use DateTime;
 use Propel\Runtime\ActiveQuery\Criteria;
+use const API\ORDER_AVAILABILITY_AVAILABLE;
+use const API\ORDER_AVAILABILITY_OUT_OF_ORDER;
 
 /**
  * Checks status of different DB Table fields that depend on sub-tables.
@@ -170,7 +172,7 @@ abstract class StatusCheck
      */
     public static function verifyAvailability(int $i_order_detailid) : void {
         $o_order_detail = OrderDetailQuery::create()
-                                            ->joinWithMenu()
+                                            ->leftJoinWithMenu()
                                             ->leftJoinWithOrderDetailExtra()
                                             ->leftJoinWithOrderDetailMixedWith()
                                             ->filterByOrderDetailid($i_order_detailid)
@@ -182,8 +184,11 @@ abstract class StatusCheck
         $o_order_detail = $o_order_detail->getFirst();
 
         $o_menu = $o_order_detail->getMenu();
-        $o_order_detail->setAvailabilityid($o_menu->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE);
-        $o_order_detail->save();
+
+        if($o_menu) {
+            $o_order_detail->setAvailabilityid($o_menu->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE);
+            $o_order_detail->save();
+        }
 
         $i_availbilityid = $o_order_detail->getAvailabilityid();
 

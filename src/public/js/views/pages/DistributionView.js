@@ -43,17 +43,19 @@ define(['Webservice',
                 value = 0;
 
             var webservice = new Webservice();
-            webservice.action = "Distribution/SetAvailabilityAmount";
+            webservice.action = "DistributionPlace/Amount";
             webservice.formData = {type: type,
                                    id: id,
                                    amount: value};
-            webservice.callback = {
-                success: function(){
-                    app.ws.api.Trigger('global:product-update');
-                    this.reload();
-                }
-            };
-            webservice.call();
+            webservice.call()
+                        .done(() => {
+                            app.productList.fetch()
+                                            .done(() => {
+                                                this.reload();
+                                            });
+                            app.ws.api.Trigger('global:product-update');
+                            }
+                        );
         }
 
         avaibilityChanged(event) {
@@ -63,17 +65,19 @@ define(['Webservice',
             var value = target.val();
 
             var webservice = new Webservice();
-            webservice.action = "Distribution/SetAvailabilityStatus";
+            webservice.action = "DistributionPlace/Availability";
             webservice.formData = {type: type,
                                    id: id,
                                    status: value};
-            webservice.callback = {
-                success: function(){
-                    app.ws.api.Trigger('global:product-update');
-                    this.reload();
-                }
-            };
-            webservice.call();
+            webservice.call()
+                        .done(() => {
+                            app.productList.fetch()
+                                            .done(() => {
+                                                this.reload();
+                                            });
+                            app.ws.api.Trigger('global:product-update');
+                            }
+                        );
         }
 
         markOrder(event) {
