@@ -42,6 +42,9 @@ define(['Webservice',
             if(value == '' || value < 0)
                 value = 0;
 
+            $.mobile.loading("show");
+
+            // TODO use models instead of webservice
             var webservice = new Webservice();
             webservice.action = "DistributionPlace/Amount";
             webservice.formData = {type: type,
@@ -51,11 +54,11 @@ define(['Webservice',
                         .done(() => {
                             app.productList.fetch()
                                             .done(() => {
+                                                $.mobile.loading("hide");
                                                 this.reload();
                                             });
                             app.ws.api.Trigger('global:product-update');
-                            }
-                        );
+                        });
         }
 
         avaibilityChanged(event) {
@@ -64,6 +67,9 @@ define(['Webservice',
             var type = target.attr('data-type');
             var value = target.val();
 
+            $.mobile.loading("show");
+
+            // TODO use models instead of webservice
             var webservice = new Webservice();
             webservice.action = "DistributionPlace/Availability";
             webservice.formData = {type: type,
@@ -73,11 +79,11 @@ define(['Webservice',
                         .done(() => {
                             app.productList.fetch()
                                             .done(() => {
+                                                $.mobile.loading("hide");
                                                 this.reload();
                                             });
                             app.ws.api.Trigger('global:product-update');
-                            }
-                        );
+                        });
         }
 
         markOrder(event) {

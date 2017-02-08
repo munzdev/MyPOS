@@ -187,29 +187,42 @@ abstract class StatusCheck
 
         if($o_menu) {
             $o_order_detail->setAvailabilityid($o_menu->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE);
+            $o_order_detail->setAvailabilityAmount($o_menu->getAvailabilityAmount());
             $o_order_detail->save();
         }
 
         $i_availbilityid = $o_order_detail->getAvailabilityid();
+        $i_availbilityAmount = $o_order_detail->getAvailabilityAmount();
 
         foreach($o_order_detail->getOrderDetailExtras() as $o_order_detail_extra)
         {
+            $o_menuExtra = $o_order_detail_extra->getMenuPossibleExtra()->getMenu();
+
             if($i_availbilityid == ORDER_AVAILABILITY_AVAILABLE) {
-                $o_menu = $o_order_detail_extra->getMenuPossibleExtra()->getMenu();
-                $i_availbilityid = ($o_menu->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER) ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE;
+                $i_availbilityid = ($o_menuExtra->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER) ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE;
+            }
+
+            if($i_availbilityAmount == null || $i_availbilityAmount > $o_menuExtra->getAvailabilityAmount()) {
+                $i_availbilityAmount = $o_menuExtra->getAvailabilityAmount();
             }
         }
 
         foreach($o_order_detail->getOrderDetailMixedWiths() as $o_order_detail_mixed_with)
         {
+            $o_menu = $o_order_detail_mixed_with->getMenu();
+
             if($i_availbilityid == ORDER_AVAILABILITY_AVAILABLE) {
-                $o_menu = $o_order_detail_mixed_with->getMenu();
                 $i_availbilityid = ($o_menu->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER) ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE;
+            }
+
+            if($i_availbilityAmount == null || $i_availbilityAmount > $o_menu->getAvailabilityAmount()) {
+                $i_availbilityAmount = $o_menu->getAvailabilityAmount();
             }
         }
 
-        if($i_availbilityid != $o_order_detail->getAvailabilityid()) {
+        if($i_availbilityid != $o_order_detail->getAvailabilityid() || $i_availbilityAmount != $o_order_detail->getAvailabilityAmount()) {
             $o_order_detail->setAvailabilityid($i_availbilityid);
+            $o_order_detail->setAvailabilityAmount($i_availbilityAmount);
             $o_order_detail->save();
         }
     }

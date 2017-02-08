@@ -18,6 +18,7 @@ use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\Propel;
 use Slim\App;
+use const API\ORDER_AVAILABILITY_AVAILABLE;
 use const API\ORDER_AVAILABILITY_OUT_OF_ORDER;
 use const API\USER_ROLE_DISTRIBUTION_OVERVIEW;
 
@@ -155,6 +156,7 @@ class DistributionPlace extends SecurityController
                                         ->leftJoinWith('OrderDetailExtra.MenuPossibleExtra')
                                         ->leftJoinWith('MenuPossibleExtra.MenuExtra')
                                         ->useOrderDetailQuery()
+                                            ->filterByAvailabilityid(ORDER_AVAILABILITY_AVAILABLE)
                                             ->useMenuQuery(null, Criteria::LEFT_JOIN)
                                                 ->filterByMenuGroupid($a_menuGroupids)
                                             ->endUse()

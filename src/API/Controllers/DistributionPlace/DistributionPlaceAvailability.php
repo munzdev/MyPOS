@@ -5,8 +5,8 @@ namespace API\Controllers\DistributionPlace;
 use API\Lib\Auth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
+use API\Models\Menu\MenuExtraQuery;
 use API\Models\Menu\MenuQuery;
-use API\Models\Ordering\Map\OrderDetailTableMap;
 use API\Models\Ordering\OrderDetailQuery;
 use Exception;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -29,8 +29,8 @@ class DistributionPlaceAvailability extends SecurityController
     function ANY() : void {
         $a_validators = array(
             'type' => v::alnum()->length(1),
-            'id' => v::alnum()->length(1),
-            'status' => v::alnum()->length(1),
+            'id' => v::intVal()->length(1),
+            'status' => v::intVal()->length(1),
         );
 
         $this->validate($a_validators, $this->a_json);
@@ -50,7 +50,7 @@ class DistributionPlaceAvailability extends SecurityController
                 $this->setExtra();
             }
 
-            if($this->a_json['type'] == 'special-extra') {
+            if($this->a_json['type'] == 'specialExtra') {
                 $this->setSpecialExtra();
             }
 
@@ -79,6 +79,7 @@ class DistributionPlaceAvailability extends SecurityController
             $o_menu->setAvailabilityid($this->a_json['status']);
             $o_menu->save();
 
+            // TODO Optimize performance
             $o_orderDetailFilter = OrderDetailQuery::create()
                                                     ->filterByDistributionFinished()
                                                     ->useMenuQuery()
@@ -116,24 +117,59 @@ class DistributionPlaceAvailability extends SecurityController
     private function setExtra() {
         $o_user = Auth::GetCurrentUser();
 
-        $o_menu = MenuQuery::create()
-                             ->useMenuGroupQuery()
-                                ->useMenuTypeQuery()
-                                    ->filterByEventid($o_user->getEventUser()->getEventid())
-                                ->endUse()
-                             ->endUse()
-                             ->filterByMenuid($this->a_json['id'])
-                             ->findOne();
+        $o_menuExtra = MenuExtraQuery::create()
+                                        ->filterByEventid($o_user->getEventUser()->getEventid())
+                                        ->filterByMenuExtraid($this->a_json['id'])
+                                        ->findOne();
 
-        if($o_menu) {
-            $o_menu->setAvailabilityid($this->a_json['status']);
-            $o_menu->save();
+        if($o_menuExtra) {
+            $o_menuExtra->setAvailabilityid($this->a_json['status']);
+            $o_menuExtra->save();
 
-            $this->withJson($o_menu->toArray());
+            // TODO Optimize performance
+            $o_orderDetailFilter = OrderDetailQuery::create()
+                                                    ->filterByDistributionFinished()
+                                                    ->useOrderDetailExtraQuery()
+                                                        ->useMenuPossibleExtraQuery()
+                                                            ->filterByMenuExtraid($o_menuExtra->getMenuExtraid())
+                                                        ->endUse()
+                                                    ->endUse();
+
+            $o_orderDetails = $o_orderDetailFilter->find();
+
+            if($o_menuExtra->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER) {
+
+                $a_ids = [];
+                foreach($o_orderDetails as $o_orderDetail) {
+                    $a_ids[] = $o_orderDetail->getOrderDetailid();
+                }
+
+                if(!empty($a_ids))
+                    OrderDetailQuery::create()
+                                        ->filterByOrderDetailid($a_ids)
+                                        ->update(['Availabilityid' => $this->a_json['status']]);
+            } else {
+                foreach($o_orderDetails as $o_orderDetail) {
+                    StatusCheck::verifyAvailability($o_orderDetail->getOrderDetailid());
+                }
+            }
         }
     }
 
     private function setSpecialExtra() {
+        $o_user = Auth::GetCurrentUser();
 
+        $o_orderDetail = OrderDetailQuery::create()
+                                            ->useOrderQuery()
+                                                ->useEventTableQuery()
+                                                    ->filterByEventid($o_user->getEventUser()->getEventid())
+                                                ->endUse()
+                                            ->endUse()
+                                            ->filterByOrderDetailid($this->a_json['id'])
+                                            ->findOne();
+        if($o_orderDetail) {
+            $o_orderDetail->setAvailabilityid($this->a_json['status']);
+            $o_orderDetail->save();
+        }
     }
 }
