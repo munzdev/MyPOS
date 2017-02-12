@@ -52,6 +52,7 @@ define(['Webservice',
                                    amount: value};
             webservice.call()
                         .done(() => {
+                            // TODO multiple ProductList fetches will be done. Fix this
                             app.productList.fetch()
                                             .done(() => {
                                                 $.mobile.loading("hide");
@@ -77,6 +78,7 @@ define(['Webservice',
                                    status: value};
             webservice.call()
                         .done(() => {
+                            // TODO multiple ProductList fetches will be done. Fix this
                             app.productList.fetch()
                                             .done(() => {
                                                 $.mobile.loading("hide");
@@ -91,42 +93,15 @@ define(['Webservice',
         }
 
         finished() {
-            var self = this;
+            this.distributionOrderDetail.save()
+                                        .done((result) => {
+                                            var webservice = new Webservice();
+                                            webservice.action = "DistributionPlace/Printing/" + result;
+                                            webservice.formData = {EventPrinterid: this.distributionOrderDetail.get('EventPrinterid')};
+                                            webservice.call();
 
-            var orders_finished = {order_in_progressids: this.orderDatas.GetOrder.get('orders_in_progressids'),
-                                   order_details: [],
-                                   order_details_special_extras: []};
-
-            $('.order').each(function() {
-                var type = $(this).attr('data-order-type');
-
-                if(type == 'order-detail')
-                {
-                    orders_finished.order_details.push({id: $(this).attr('data-id'),
-                                                        amount: $(this).attr('data-amount')});
-                }
-                else
-                {
-                    orders_finished.order_details_special_extras.push({id: $(this).attr('data-id'),
-                                                                       amount: $(this).attr('data-amount')});
-                }
-            });
-
-            var webservice = new Webservice();
-            webservice.action = "Distribution/FinishOrder";
-            webservice.formData = orders_finished;
-            webservice.callback = {
-                success: function(result) {
-                    var webservice = new Webservice();
-                    webservice.action = "Distribution/PrintOrder";
-                    webservice.formData = {distributions_giving_outid: result,
-                                           events_printerid: self.orderDatas.GetOrder.get('events_printerid')};
-                    webservice.call();
-
-                    this.reload();
-                }
-            };
-            webservice.call();
+                                            this.reload();
+                                        });
         }
 
         showVerifyDialog() {
@@ -145,7 +120,7 @@ define(['Webservice',
                 return;
             }
 
-            $('#verify-dialog').popup('open');
+            this.$('#verify-dialog').popup('open');
         }
 
         hideTabs() {

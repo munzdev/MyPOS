@@ -5,6 +5,7 @@ namespace API\Controllers\DistributionPlace;
 use API\Lib\Auth;
 use API\Lib\SecurityController;
 use API\Models\DistributionPlace\DistributionPlaceGroupQuery;
+use API\Models\DistributionPlace\DistributionPlaceUserQuery;
 use API\Models\Menu\Base\MenuQuery;
 use API\Models\Menu\MenuExtraQuery;
 use API\Models\OIP\Base\OrderInProgressQuery;
@@ -43,6 +44,7 @@ class DistributionPlace extends SecurityController
             $a_ordersInTodo = $this->getOrdersInTodo();
             $a_orderDetailwithSpecialExtra = $this->getOrderDetailWithSpecialExtra();
             $a_menuExtras = $this->getMenuExtras();
+            $i_eventPrinterid = $this->getPrinterid();
 
             $a_orderStatistic = $this->getOrderStatisic();
 
@@ -55,7 +57,8 @@ class DistributionPlace extends SecurityController
                              'OpenOrders' => $a_orderStatistic['OpenOrders'],
                              'DoneOrders' => $a_orderStatistic['DoneOrders'],
                              'NewOrders' => $a_orderStatistic['NewOrders'],
-                             'Minutes' => $a_orderStatistic['Minutes']]);
+                             'Minutes' => $a_orderStatistic['Minutes'],
+                             'EventPrinterid' => $i_eventPrinterid]);
         } catch(Exception $o_exception) {
             $o_connection->rollBack();
             throw $o_exception;
@@ -175,6 +178,11 @@ class DistributionPlace extends SecurityController
 
         // :TODO: fix hydration problem. This datas should be included directly in the abouve query but this doesn't work yet
         foreach($a_orderToReturn['OrderDetails'] as &$a_orderDetail) {
+
+            // verify that only availably amount is displayed
+            if($a_orderDetail['AvailabilityAmount'] && $a_orderDetail['AvailabilityAmount'] < $a_orderDetail['Amount'])
+                $a_orderDetail['Amount'] = $a_orderDetail['AvailabilityAmount'];
+
             foreach($a_orderDetail['OrderDetailMixedWiths'] as &$a_orderDetailMixedWith) {
 
                 if(empty($a_orderDetailMixedWith['Menuid']))
@@ -364,5 +372,18 @@ class DistributionPlace extends SecurityController
                                         ->find();
 
         return $o_menuExtras->toArray();
+    }
+
+    private function getPrinterid() {
+        $o_user = Auth::GetCurrentUser();
+
+        $o_distributionPlaceUser = DistributionPlaceUserQuery::create()
+                                                                ->filterByUserid($o_user->getUserid())
+                                                                ->useDistributionPlaceQuery()
+                                                                    ->filterByEventid($o_user->getEventUser()->getEventid())
+                                                                ->endUse()
+                                                                ->findOne();
+
+        return $o_distributionPlaceUser->getEventPrinterid();
     }
 }

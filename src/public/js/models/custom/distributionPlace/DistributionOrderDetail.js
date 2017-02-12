@@ -12,7 +12,8 @@ define(["models/BaseModel"
                     OpenOrders: 0,
                     DoneOrders: 0,
                     NewOrders: 0,
-                    Minutes: 0};
+                    Minutes: 0,
+                    EventPrinterid: 0};
         }
 
         parse(response)
