@@ -265,6 +265,7 @@ class DistributionPlace extends SecurityController
                                     ->useOrderDetailQuery()
                                         ->leftJoinWithMenu()
                                     ->endUse()
+                                    ->setFormatter(ModelCriteria::FORMAT_ARRAY)
                                     ->find();
 
             //-- Secondly try to find an order, which belongs to an other distribution place tables but
@@ -282,24 +283,27 @@ class DistributionPlace extends SecurityController
                                         ->useOrderDetailQuery()
                                             ->leftJoinWithMenu()
                                         ->endUse()
+                                        ->setFormatter(ModelCriteria::FORMAT_ARRAY)
                                         ->find();
 
             if(!$o_orders)
                 return null;
 
-            foreach($o_orders as $o_order) {
+            $a_orders = $o_orders->toArray();
+
+            foreach($a_orders as &$a_order) {
                 $i_count = 0;
-                foreach($o_order->getOrderDetails() as $o_orderDetail) {
-                    if( ($o_orderDetail->getMenuid() && in_array($o_orderDetail->getMenu()->getMenuGroupid(), $i_menuGroupids))
+                foreach($a_order['OrderDetails'] as $a_orderDetail) {
+                    if( ($a_orderDetail['Menuid'] && in_array($a_orderDetail['Menu']['MenuGroupid'], $i_menuGroupids))
                         ||
-                        in_array($o_orderDetail->getMenuGroupid(), $i_menuGroupids)) {
-                        $i_count += $o_orderDetail->getAmount();
+                        in_array($a_orderDetail['MenuGroupid'], $i_menuGroupids)) {
+                        $i_count += $a_orderDetail['Amount'];
                     }
                 }
-                $o_order->setVirtualColumn("OrderDetailCount", $i_count);
+                $a_order["OrderDetailCount"] = $i_count;
             }
 
-            return $this->cleanupRecursionData($o_orders->toArray());
+            return $a_orders;
         }
     }
 
@@ -308,6 +312,7 @@ class DistributionPlace extends SecurityController
                                             ->filterByMenuid()
                                             ->filterByDistributionFinished()
                                             ->filterByVerified(true)
+                                            ->setFormatter(ModelCriteria::FORMAT_ARRAY)
                                             ->find();
 
         return $o_orderDetail->toArray();
