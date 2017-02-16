@@ -24,6 +24,7 @@ use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\Propel;
 use Slim\App;
 use const API\ORDER_AVAILABILITY_AVAILABLE;
+use const API\ORDER_AVAILABILITY_DELAYED;
 use const API\ORDER_AVAILABILITY_OUT_OF_ORDER;
 use const API\USER_ROLE_DISTRIBUTION_OVERVIEW;
 
@@ -32,7 +33,8 @@ class DistributionPlace extends SecurityController
     public function __construct(App $o_app) {
         parent::__construct($o_app);
 
-        $this->a_security = ['GET' => USER_ROLE_DISTRIBUTION_OVERVIEW];
+        $this->a_security = ['GET' => USER_ROLE_DISTRIBUTION_OVERVIEW,
+                             'PUT' => USER_ROLE_DISTRIBUTION_OVERVIEW];
 
         $o_app->getContainer()['db'];
     }
@@ -50,6 +52,14 @@ class DistributionPlace extends SecurityController
                                    ->joinWithOrderDetail()
                                    ->useOrderDetailQuery()
                                         ->leftJoinWithMenu()
+                                        ->leftJoinWithOrderDetailExtra()
+                                        ->useOrderDetailExtraQuery(null, Criteria::LEFT_JOIN)
+                                            ->leftJoinWithMenuPossibleExtra()
+                                            ->useMenuPossibleExtraQuery(null, Criteria::LEFT_JOIN)
+                                                ->leftJoinWithMenuExtra()
+                                            ->endUse()
+                                        ->endUse()
+                                        ->leftJoinWithOrderDetailMixedWith()
                                    ->endUse()
                                    ->findPk($o_order_template->getOrderid());
 
@@ -72,9 +82,128 @@ class DistributionPlace extends SecurityController
                         $o_orderInProgressRecieved->setOrderDetail($o_orderDetail);
 
                         if($o_orderDetail->getMenuid()) {
-                            $i_menu_groupid = $o_orderDetail->getMenu()->getMenuGroupid();
+                            $o_menu = $o_orderDetail->getMenu();
+                            $i_menu_groupid = $o_menu->getMenuGroupid();
+
+                            if($o_menu->getAvailabilityAmount() != null) {
+                                $o_menu->setAvailabilityAmount($o_menu->getAvailabilityAmount() - $o_orderDetail_template->getAmount());
+
+                                if($o_menu->getAvailabilityAmount() == 0) {
+                                    $o_menu->setAvailabilityAmount(null);
+                                    $o_menu->setAvailabilityid(ORDER_AVAILABILITY_DELAYED);
+                                }
+
+                                $o_menu->save();
+
+                                // TODO Optimize performance
+                                $o_orderDetailFilter = OrderDetailQuery::create()
+                                                                        ->filterByDistributionFinished()
+                                                                        ->useMenuQuery()
+                                                                            ->filterByMenuid($o_menu->getMenuid())
+                                                                        ->endUse()
+                                                                        ->_or()
+                                                                        ->useOrderDetailMixedWithQuery(null, Criteria::LEFT_JOIN)
+                                                                            ->useMenuQuery('re', Criteria::LEFT_JOIN)
+                                                                                ->filterByMenuid($o_menu->getMenuid())
+                                                                            ->endUse()
+                                                                        ->endUse();
+
+                                $o_orderDetails = $o_orderDetailFilter->find();
+
+                                foreach($o_orderDetails as $o_orderDetail) {
+                                    StatusCheck::verifyAvailability($o_orderDetail->getOrderDetailid());
+                                }
+                            }
+
+                            foreach($o_orderDetail->getOrderDetailExtras() as $o_orderDetailExtra) {
+                                $o_menuExtra = $o_orderDetailExtra->getMenuPossibleExtra()->getMenuExtra();
+
+                                if($o_menuExtra->getAvailabilityAmount() != null) {
+                                    $o_menuExtra->setAvailabilityAmount($o_menuExtra->getAvailabilityAmount() - $o_orderDetail_template->getAmount());
+
+                                    if($o_menuExtra->getAvailabilityAmount() == 0) {
+                                        $o_menuExtra->setAvailabilityAmount(null);
+                                        $o_menuExtra->setAvailabilityid(ORDER_AVAILABILITY_DELAYED);
+                                    }
+
+                                    $o_menuExtra->save();
+
+                                    // TODO Optimize performance
+                                    $o_orderDetailFilter = OrderDetailQuery::create()
+                                                                            ->filterByDistributionFinished()
+                                                                            ->useOrderDetailExtraQuery()
+                                                                                ->useMenuPossibleExtraQuery()
+                                                                                    ->filterByMenuExtraid($o_menuExtra->getMenuExtraid())
+                                                                                ->endUse()
+                                                                            ->endUse();
+
+                                    $o_orderDetails = $o_orderDetailFilter->find();
+
+                                    if($o_menuExtra->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER) {
+
+                                        $a_ids = [];
+                                        foreach($o_orderDetails as $o_orderDetail) {
+                                            $a_ids[] = $o_orderDetail->getOrderDetailid();
+                                        }
+
+                                        if(!empty($a_ids))
+                                            OrderDetailQuery::create()
+                                                                ->filterByOrderDetailid($a_ids)
+                                                                ->update(['Availabilityid' => $o_menuExtra->getAvailabilityid()]);
+                                    } else {
+                                        foreach($o_orderDetails as $o_orderDetail) {
+                                            StatusCheck::verifyAvailability($o_orderDetail->getOrderDetailid());
+                                        }
+                                    }
+                                }
+                            }
+
+                            foreach($o_orderDetail->getOrderDetailMixedWiths() as $o_orderDetailMixedwith) {
+                                $o_menu = $o_orderDetailMixedwith->getMenu();
+
+                                if($o_menu->getAvailabilityAmount() != null) {
+                                    $o_menu->setAvailabilityAmount($o_menu->getAvailabilityAmount() - $o_orderDetail_template->getAmount());
+
+                                    if($o_menu->getAvailabilityAmount() == 0) {
+                                        $o_menu->setAvailabilityAmount(null);
+                                        $o_menu->setAvailabilityid(ORDER_AVAILABILITY_DELAYED);
+                                    }
+
+                                    $o_menu->save();
+
+                                    // TODO Optimize performance
+                                    $o_orderDetailFilter = OrderDetailQuery::create()
+                                                                            ->filterByDistributionFinished()
+                                                                            ->useMenuQuery()
+                                                                                ->filterByMenuid($o_menu->getMenuid())
+                                                                            ->endUse()
+                                                                            ->_or()
+                                                                            ->useOrderDetailMixedWithQuery(null, Criteria::LEFT_JOIN)
+                                                                                ->useMenuQuery('re', Criteria::LEFT_JOIN)
+                                                                                    ->filterByMenuid($o_menu->getMenuid())
+                                                                                ->endUse()
+                                                                            ->endUse();
+
+                                    $o_orderDetails = $o_orderDetailFilter->find();
+
+                                    foreach($o_orderDetails as $o_orderDetail) {
+                                        StatusCheck::verifyAvailability($o_orderDetail->getOrderDetailid());
+                                    }
+                                }
+                            }
                         } else {
                             $i_menu_groupid = $o_orderDetail->getMenuGroupid();
+
+                            if($o_orderDetail->getAvailabilityAmount() != null) {
+                                $o_orderDetail->setAvailabilityAmount($o_orderDetail->getAvailabilityAmount() - $o_orderDetail_template->getAmount());
+
+                                if($o_orderDetail->getAvailabilityAmount() == 0) {
+                                    $o_orderDetail->setAvailabilityAmount(null);
+                                    $o_orderDetail->setAvailabilityid(ORDER_AVAILABILITY_DELAYED);
+                                }
+
+                                $o_orderDetail->save();
+                            }
                         }
 
                         $i_orderInProgressid = null;
@@ -294,7 +423,7 @@ class DistributionPlace extends SecurityController
                                                             ->filterByEventid($o_user->getEventUser()->getEventid())
                                                         ->endUse()
                                                         ->useOrderDetailQuery()
-                                                            ->filterByAvailabilityid(ORDER_AVAILABILITY_OUT_OF_ORDER, Criteria::NOT_EQUAL)
+                                                            ->filterByAvailabilityid(ORDER_AVAILABILITY_AVAILABLE)
                                                         ->endUse()
                                                         ->orderByPriority()
                                                     ->endUse()
