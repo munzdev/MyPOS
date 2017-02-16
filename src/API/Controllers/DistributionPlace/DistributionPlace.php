@@ -4,13 +4,17 @@ namespace API\Controllers\DistributionPlace;
 
 use API\Lib\Auth;
 use API\Lib\SecurityController;
+use API\Lib\StatusCheck;
 use API\Models\DistributionPlace\DistributionPlaceGroupQuery;
 use API\Models\DistributionPlace\DistributionPlaceUserQuery;
 use API\Models\Menu\Base\MenuQuery;
 use API\Models\Menu\MenuExtraQuery;
 use API\Models\OIP\Base\OrderInProgressQuery;
+use API\Models\OIP\DistributionGivingOut;
 use API\Models\OIP\DistributionGivingOutQuery;
 use API\Models\OIP\OrderInProgress;
+use API\Models\OIP\OrderInProgressRecieved;
+use API\Models\Ordering\Order;
 use API\Models\Ordering\OrderDetailQuery;
 use API\Models\Ordering\OrderQuery;
 use DateTime;
@@ -33,8 +37,76 @@ class DistributionPlace extends SecurityController
         $o_app->getContainer()['db'];
     }
 
-    protected function GET() : void
-    {
+    protected function PUT() : void {
+        $o_user = Auth::GetCurrentUser();
+        $o_connection = Propel::getConnection();
+
+        try {
+            $o_connection->beginTransaction();
+            $o_order_template = new Order();
+            $this->jsonToPropel($this->a_json, $o_order_template);
+
+            $o_order = OrderQuery::create()
+                                   ->joinWithOrderDetail()
+                                   ->useOrderDetailQuery()
+                                        ->leftJoinWithMenu()
+                                   ->endUse()
+                                   ->findPk($o_order_template->getOrderid());
+
+            $o_orderInProgresses = OrderInProgressQuery::create()
+                                        ->filterByUser($o_user)
+                                        ->filterByOrder($o_order)
+                                        ->filterByDone()
+                                        ->find();
+
+            $o_distributionGibingOut = new DistributionGivingOut();
+            $o_distributionGibingOut->setDate(new DateTime());
+            $o_distributionGibingOut->save();
+
+            foreach($o_order_template->getOrderDetails() as $o_orderDetail_template) {
+                foreach($o_order->getOrderDetails() as $o_orderDetail) {
+                    if($o_orderDetail_template->getOrderDetailid() == $o_orderDetail->getOrderDetailid()) {
+                        $o_orderInProgressRecieved = new OrderInProgressRecieved();
+                        $o_orderInProgressRecieved->setDistributionGivingOut($o_distributionGibingOut);
+                        $o_orderInProgressRecieved->setAmount($o_orderDetail_template->getAmount());
+                        $o_orderInProgressRecieved->setOrderDetail($o_orderDetail);
+
+                        if($o_orderDetail->getMenuid()) {
+                            $i_menu_groupid = $o_orderDetail->getMenu()->getMenuGroupid();
+                        } else {
+                            $i_menu_groupid = $o_orderDetail->getMenuGroupid();
+                        }
+
+                        $i_orderInProgressid = null;
+                        foreach($o_orderInProgresses as $o_orderInProgress) {
+                            if($o_orderInProgress->getMenuGroupid() == $i_menu_groupid) {
+                                $i_orderInProgressid = $o_orderInProgress->getOrderInProgressid();
+                                break;
+                            }
+                        }
+
+                        if (!$i_orderInProgressid) {
+                            throw new Exception("No order in progress found for MenuGroupid $i_menu_groupid");
+                        }
+
+                        $o_orderInProgressRecieved->setOrderInProgressid($i_orderInProgressid);
+                        $o_orderInProgressRecieved->save();
+                    }
+                }
+            }
+
+            StatusCheck::verifyOrder($o_order->getOrderid());
+
+            $o_connection->commit();
+
+            $this->withJson(true);
+        } catch(Exception $o_exception) {
+            $o_connection->rollBack();
+            throw $o_exception;
+        }
+    }
+
+    protected function GET() : void {
         $o_connection = Propel::getConnection();
 
         try {
@@ -166,6 +238,7 @@ class DistributionPlace extends SecurityController
                                             ->_or()
                                             ->filterByMenuGroupid($a_menuGroupids)
                                             ->leftJoinWithOrderDetailMixedWith()
+                                            ->leftJoinWithOrderInProgressRecieved()
                                         ->endUse()
                                         ->joinWithEventTable()
                                         ->joinWithUserRelatedByUserid()
@@ -177,7 +250,18 @@ class DistributionPlace extends SecurityController
         $a_orderToReturn['UserRelatedByUserid'] = $this->cleanupUserData($a_orderToReturn['UserRelatedByUserid']);
 
         // :TODO: fix hydration problem. This datas should be included directly in the abouve query but this doesn't work yet
-        foreach($a_orderToReturn['OrderDetails'] as &$a_orderDetail) {
+        foreach($a_orderToReturn['OrderDetails'] as $i_key => &$a_orderDetail) {
+
+            foreach($a_orderDetail['OrderInProgressRecieveds'] as $a_orderInProgressRecieved) {
+                if(isset($a_orderInProgressRecieved['Amount'])) {
+                    $a_orderDetail['Amount'] -= $a_orderInProgressRecieved['Amount'];
+                }
+            }
+
+            if($a_orderDetail['Amount'] == 0) {
+                unset($a_orderToReturn['OrderDetails'][$i_key]);
+                continue;
+            }
 
             // verify that only availably amount is displayed
             if($a_orderDetail['AvailabilityAmount'] && $a_orderDetail['AvailabilityAmount'] < $a_orderDetail['Amount'])
@@ -263,6 +347,7 @@ class DistributionPlace extends SecurityController
                                     ->joinWithOrderDetail()
                                     ->joinWithEventTable()
                                     ->useOrderDetailQuery()
+                                        ->leftJoinWithOrderInProgressRecieved()
                                         ->leftJoinWithMenu()
                                     ->endUse()
                                     ->setFormatter(ModelCriteria::FORMAT_ARRAY)
@@ -281,6 +366,7 @@ class DistributionPlace extends SecurityController
                                         ->joinWithOrderDetail()
                                         ->joinWithEventTable()
                                         ->useOrderDetailQuery()
+                                            ->leftJoinWithOrderInProgressRecieved()
                                             ->leftJoinWithMenu()
                                         ->endUse()
                                         ->setFormatter(ModelCriteria::FORMAT_ARRAY)
@@ -298,6 +384,12 @@ class DistributionPlace extends SecurityController
                         ||
                         in_array($a_orderDetail['MenuGroupid'], $i_menuGroupids)) {
                         $i_count += $a_orderDetail['Amount'];
+
+                        foreach($a_orderDetail['OrderInProgressRecieveds'] as $a_orderInProgressRecieved) {
+                            if(isset($a_orderInProgressRecieved['Amount'])) {
+                                $i_count -= $a_orderInProgressRecieved['Amount'];
+                            }
+                        }
                     }
                 }
                 $a_order["OrderDetailCount"] = $i_count;

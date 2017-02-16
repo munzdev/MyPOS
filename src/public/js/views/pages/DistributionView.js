@@ -93,15 +93,15 @@ define(['Webservice',
         }
 
         finished() {
-            this.distributionOrderDetail.save()
-                                        .done((result) => {
-                                            var webservice = new Webservice();
-                                            webservice.action = "DistributionPlace/Printing/" + result;
-                                            webservice.formData = {EventPrinterid: this.distributionOrderDetail.get('EventPrinterid')};
-                                            webservice.call();
+            this.distributionOrderDetail.get('Order').save(null, {url: app.API + 'DistributionPlace'})
+                                                    .done((result) => {
+                                                        var webservice = new Webservice();
+                                                        webservice.action = "DistributionPlace/Printing/" + result;
+                                                        webservice.formData = {EventPrinterid: this.distributionOrderDetail.get('EventPrinterid')};
+                                                        webservice.call();
 
-                                            this.reload();
-                                        });
+                                                        this.reload();
+                                                    });
         }
 
         showVerifyDialog() {
