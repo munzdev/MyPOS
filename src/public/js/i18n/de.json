@@ -209,7 +209,8 @@
         "tel": "Tel",
         "email": "Email",
         "usedCoupons": "Verwendete Gutscheine",
-        "couponCode": "Gutschein Code"
+        "couponCode": "Gutschein Code",
+        "mixedWith": "Gemischt mit"
     },
     "PaginationView": {
         "page": "Seite"
