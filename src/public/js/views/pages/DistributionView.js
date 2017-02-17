@@ -93,7 +93,8 @@ define(['Webservice',
         }
 
         finished() {
-            this.distributionOrderDetail.get('Order').save(null, {url: app.API + 'DistributionPlace'})
+            this.distributionOrderDetail.get('Order').save(null, {url: app.API + 'DistributionPlace',
+                                                                  parse: false})
                                                     .done((result) => {
                                                         var webservice = new Webservice();
                                                         webservice.action = "DistributionPlace/Printing/" + result;
