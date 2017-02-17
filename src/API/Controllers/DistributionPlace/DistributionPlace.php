@@ -69,15 +69,15 @@ class DistributionPlace extends SecurityController
                                         ->filterByDone()
                                         ->find();
 
-            $o_distributionGibingOut = new DistributionGivingOut();
-            $o_distributionGibingOut->setDate(new DateTime());
-            $o_distributionGibingOut->save();
+            $o_distributionGivingOut = new DistributionGivingOut();
+            $o_distributionGivingOut->setDate(new DateTime());
+            $o_distributionGivingOut->save();
 
             foreach($o_order_template->getOrderDetails() as $o_orderDetail_template) {
                 foreach($o_order->getOrderDetails() as $o_orderDetail) {
                     if($o_orderDetail_template->getOrderDetailid() == $o_orderDetail->getOrderDetailid()) {
                         $o_orderInProgressRecieved = new OrderInProgressRecieved();
-                        $o_orderInProgressRecieved->setDistributionGivingOut($o_distributionGibingOut);
+                        $o_orderInProgressRecieved->setDistributionGivingOut($o_distributionGivingOut);
                         $o_orderInProgressRecieved->setAmount($o_orderDetail_template->getAmount());
                         $o_orderInProgressRecieved->setOrderDetail($o_orderDetail);
 
@@ -228,7 +228,7 @@ class DistributionPlace extends SecurityController
 
             $o_connection->commit();
 
-            $this->withJson(true);
+            $this->withJson($o_distributionGivingOut->getDistributionGivingOutid());
         } catch(Exception $o_exception) {
             $o_connection->rollBack();
             throw $o_exception;
