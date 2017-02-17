@@ -209,7 +209,8 @@
         "tel": "Tel",
         "email": "Email",
         "usedCoupons": "Used coupons",
-        "couponCode": "Coupon code"
+        "couponCode": "Coupon code",
+        "mixedWith": "Mixed with"
     },
     "PaginationView": {
         "page": "Page"
