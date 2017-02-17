@@ -10,6 +10,7 @@ use API\Models\Ordering\OrderDetailQuery;
 use API\Models\Ordering\OrderQuery;
 use DateTime;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Propel;
 use const API\ORDER_AVAILABILITY_AVAILABLE;
 use const API\ORDER_AVAILABILITY_OUT_OF_ORDER;
 
@@ -134,23 +135,33 @@ abstract class StatusCheck
      * @param int $i_order_in_progressid
      */
     public static function verifyOrderInProgress(int $i_order_in_progressid) : void {
+        // TODO make use of SQL group by and SUM to retrieve amount left. But propel somehow creates a problem here
         $o_order_in_progress = OrderInProgressQuery::create()
+                                                    ->joinWithOrderInProgressRecieved()
                                                     ->useOrderInProgressRecievedQuery()
-                                                        ->joinOrderDetail()
-                                                        ->withColumn(OrderDetailTableMap::COL_AMOUNT . " - IFNULL(SUM(" . OrderInProgressRecievedTableMap::COL_AMOUNT . "), 0)" , "AmountLeft")
-                                                        ->groupByOrderDetailid()
+                                                        ->joinWithOrderDetail()
+                                                        //->withColumn(OrderDetailTableMap::COL_AMOUNT . " - IFNULL(SUM(" . OrderInProgressRecievedTableMap::COL_AMOUNT . "), 0)" , "AmountLeft")
+                                                        //->groupByOrderDetailid()
                                                     ->endUse()
                                                     ->joinWithOrder()
-                                                    ->with(OrderInProgressRecievedTableMap::getTableMap()->getPhpName())
                                                     ->findByOrderInProgressid($i_order_in_progressid)
                                                     ->getFirst();
 
         $d_done = $o_order_in_progress->getDone();
-        $i_amount_left = 0;
+        $i_amount_left = null;
+        $a_amount = [];
 
         foreach($o_order_in_progress->getOrderInProgressRecieveds() as $o_order_in_progress_recieved) {
-            $i_amount_left += ($o_order_in_progress_recieved->getVirtualColumn('AmountLeft') == 0) ? 0 : 1;
+
+            if(!isset($a_amount[$o_order_in_progress_recieved->getOrderDetailid()])) {
+                $a_amount[$o_order_in_progress_recieved->getOrderDetailid()] = $o_order_in_progress_recieved->getOrderDetail()->getAmount();
+            }
+
+            $a_amount[$o_order_in_progress_recieved->getOrderDetailid()] -= $o_order_in_progress_recieved->getAmount();
         }
+
+        if(!empty($a_amount))
+            $i_amount_left = array_sum($a_amount);
 
         if($i_amount_left == 0 && $d_done == null)
             $d_done = new DateTime();
