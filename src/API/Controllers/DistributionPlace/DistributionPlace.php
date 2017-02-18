@@ -220,6 +220,8 @@ class DistributionPlace extends SecurityController
 
                         $o_orderInProgressRecieved->setOrderInProgressid($i_orderInProgressid);
                         $o_orderInProgressRecieved->save();
+                        
+                        continue 2;
                     }
                 }
             }

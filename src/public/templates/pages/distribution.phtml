@@ -3,17 +3,17 @@
     <div data-role="tabs" id="tabs">
         <div data-role="navbar">
             <ul>
-                <li><a data-role="tab" id="tab-btn-order" href="#tab-order">Aktuelle Bestellung</a></li>
-                <li><a data-role="tab" id="tab-btn-avaibility" href="#tab-avaibility">Verfügbarkeiten einstellen</a></li>
+                <li><a data-role="tab" id="tab-btn-order" href="#tab-order"><%= t.currentOrder %></a></li>
+                <li><a data-role="tab" id="tab-btn-avaibility" href="#tab-avaibility"><%= t.setAvailabilitys %></a></li>
             </ul>
         </div>
         <div id="tab-order" class="ui-body-d ui-content">
             <div role="main" class="ui-content" id='current-menu'>
                 <% if(distributionOrderDetail.get('Order') == null) { %>
-                      <h2 style="text-align: center">Zurzeit keine offenen Bestellungen für diese Ausgabestelle vorhanden!</h2>
+                      <h2 style="text-align: center"><%= t.noOrder %></h2>
                 <% } else { %>
                     <fieldset style="border: lightgrey solid thin ; border-radius: 10px; padding: 10px">
-                        <legend><strong>Bestellung</strong></legend>
+                        <legend><strong><%= t.order %></strong></legend>
                         <% distributionOrderDetail.get('Order').get('OrderDetails').each(function(orderDetail) { %>
                             <div data-order-type="order-detail" data-amount="<%- orderDetail.get('Amount') %>" data-id="<%- orderDetail.get('OrderDetailid') %>" class="distribution-order ui-grid-a ui-body-a ui-corner-all">
                                 <h2>
@@ -21,7 +21,7 @@
                                     <% if(orderDetail.get('Menuid')) { %>
                                         <%- orderDetail.get('Menu').get('Name') %>
                                     <% } else { %>
-                                        Sonderwunsch
+                                        <%= t.specialOrder %>
                                     <% } %>
                                 </h2>
                                 <p>
@@ -30,7 +30,7 @@
                                             <%- orderDetail.get('MenuSize').get('Name') %>
                                         <% } %>
                                         <% if(orderDetail.get('OrderDetailMixedWiths').length) { %>
-                                            Gemischt mit:
+                                            <%= t.mixedWith %>:
                                             <% orderDetail.get('OrderDetailMixedWiths').each(function(orderDetailMixedWith) { %>
                                                 <%- orderDetailMixedWith.get('Menu').get('Name') %> -
                                             <% }) %>
@@ -46,11 +46,11 @@
                                         <p><%- orderDetail.get('ExtraDetail') %></p>
                                         <% if(!orderDetail.get('Menuid')) { %>
                                             <div data-role="controlgroup" data-type="horizontal"  data-mini="true">
-                                                <input type="number" data-type="specialExtra" value="<%- orderDetail.get('AvailabilityAmount') %>" data-id="<%- orderDetail.get('OrderDetailid') %>" name="order-details-special-extra-amount" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
+                                                <input type="number" data-type="specialExtra" value="<%- orderDetail.get('AvailabilityAmount') %>" data-id="<%- orderDetail.get('OrderDetailid') %>" name="order-details-special-extra-amount" placeholder="<%= t.withoutLimit %>" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
                                                 <select  data-type="specialExtra" data-id="<%- orderDetail.get('OrderDetailid') %>"  name="order-details-special-extra-status" id="select-native-2">
-                                                    <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>">Verfügbar</option>
-                                                    <option value="<%- ORDER_AVAILABILITY_DELAYED %>">Verspätet</option>
-                                                    <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>">Ausverkauft</option>
+                                                    <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>"><%= i18n.Availability.AVAILABLE %></option>
+                                                    <option value="<%- ORDER_AVAILABILITY_DELAYED %>"><%= i18n.Availability.DELAYED %></option>
+                                                    <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>"><%= i18n.Availability.OUT_OF_ORDER %></option>
                                                 </select>
                                             </div>
                                         <% } %>
@@ -64,7 +64,7 @@
             <div class="ui-grid-a">
                 <div class="ui-block-a" style="padding: 5px">
                     <ul data-role="listview" data-inset="true">
-                        <li data-role="list-divider" style="white-space: normal;">Bestellungen in Warteliste</li>
+                        <li data-role="list-divider" style="white-space: normal;"><%= t.ordersInTodo %></li>
                         <% if(distributionOrderDetail.get('OrdersInTodo')) { %>
                             <% distributionOrderDetail.get('OrdersInTodo').each(function(order) { %>
                                 <li style="white-space: normal;"><%- order.get('EventTable').get('Name') %> - <%- app.i18n.toDateTime(order.get('Ordertime')) %> <span class="ui-li-count"><%- order.get('OrderDetailCount') %></span></li>
@@ -74,27 +74,27 @@
                 </div>
                 <div class="ui-block-b" style="padding: 5px">
                     <ul data-role="listview" data-inset="true">
-                        <li data-role="list-divider" style="white-space: normal;">Informationen</li>
-                        <li style="white-space: normal;">Offene Bestellungen: <%- distributionOrderDetail.get('OpenOrders') %></li>
-                        <li style="white-space: normal;">Getätigte fertigstellungen letzten <%- distributionOrderDetail.get('Minutes') %> min: <%- distributionOrderDetail.get('DoneOrders') %></li>
-                        <li style="white-space: normal;">Neue Bestellungen letzten <%- distributionOrderDetail.get('Minutes') %> min: <%- distributionOrderDetail.get('NewOrders') %></li>
+                        <li data-role="list-divider" style="white-space: normal;"><%= t.informations %></li>
+                        <li style="white-space: normal;"><%= t.openOrders %>: <%- distributionOrderDetail.get('OpenOrders') %></li>
+                        <li style="white-space: normal;"><%= sprintf(t.doneOrders, {minutes: distributionOrderDetail.get('Minutes')}) %>: <%- distributionOrderDetail.get('DoneOrders') %></li>
+                        <li style="white-space: normal;"><%= sprintf(t.newOrders, {minutes: distributionOrderDetail.get('Minutes')}) %>: <%- distributionOrderDetail.get('NewOrders') %></li>
                         <% if(distributionOrderDetail.get('Order')) { %>
-                            <li style="white-space: normal;">Tisch: <strong><%- distributionOrderDetail.get('Order').get('EventTable').get('Name') %></strong></li>
-                            <li style="white-space: normal;">Bestellnummer: <%- distributionOrderDetail.get('Order').get('Orderid') %></li>
-                            <li style="white-space: normal;">Bestellzeit: <%- app.i18n.toDateTime(distributionOrderDetail.get('Order').get('Ordertime')) %></li>
-                            <li style="white-space: normal;">Kellner: <%- distributionOrderDetail.get('Order').get('UserRelatedByUserid').get('Firstname') %> <%- distributionOrderDetail.get('Order').get('UserRelatedByUserid').get('Lastname') %></li>
+                            <li style="white-space: normal;"><%= t.tableNr %>: <strong><%- distributionOrderDetail.get('Order').get('EventTable').get('Name') %></strong></li>
+                            <li style="white-space: normal;"><%= t.orderid %>: <%- distributionOrderDetail.get('Order').get('Orderid') %></li>
+                            <li style="white-space: normal;"><%= t.ordertime %>: <%- app.i18n.toDateTime(distributionOrderDetail.get('Order').get('Ordertime')) %></li>
+                            <li style="white-space: normal;"><%= t.waiter %>: <%- distributionOrderDetail.get('Order').get('UserRelatedByUserid').get('Firstname') %> <%- distributionOrderDetail.get('Order').get('UserRelatedByUserid').get('Lastname') %></li>
                         <% } %>
                     </ul>
                 </div>
             </div>
             <div data-role="footer" data-theme="b" data-position="fixed" data-tap-toggle="false">
-                <a id="btn-verify-dialog" style="float:right" id='order-finished' class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-check">Bestellung fertig</a>
+                <a id="btn-verify-dialog" style="float:right" id='order-finished' class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-right ui-icon-check"><%= t.orderDone %></a>
             </div>
         </div>
         <div id="tab-avaibility">
             <div data-role="collapsible-set">
                 <div data-role="collapsible">
-                    <h3>Menüs</h3>
+                    <h3><%= t.menues %></h3>
                     <p>
                         <ul data-role="listview" id="availability-menues-list">
                             <% products.each(function(type){ %>
@@ -104,11 +104,11 @@
                                         <li>
                                             <div style="float: left; padding-top: .5em;"><h2><%- menu.get('Name') %></h2></div>
                                             <div data-role="controlgroup" data-type="horizontal" data-mini="true" style="float: right">
-                                                <input type="number" data-type="menu" data-id="<%- menu.get('Menuid') %>" value="<%- menu.get('AvailabilityAmount') %>" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
+                                                <input type="number" data-type="menu" data-id="<%- menu.get('Menuid') %>" value="<%- menu.get('AvailabilityAmount') %>" data-clear-btn="true" placeholder="<%= t.withoutLimit %>" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
                                                 <select type="number" data-type="menu" data-id="<%- menu.get('Menuid') %>">
-                                                    <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(menu.get('Availabilityid') == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>>Verfügbar</option>
-                                                    <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(menu.get('Availabilityid') == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>>Verspätet</option>
-                                                    <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(menu.get('Availabilityid') == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>>Ausverkauft</option>
+                                                    <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(menu.get('Availabilityid') == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>><%= i18n.Availability.AVAILABLE %></option>
+                                                    <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(menu.get('Availabilityid') == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>><%= i18n.Availability.DELAYED %></option>
+                                                    <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(menu.get('Availabilityid') == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>><%= i18n.Availability.OUT_OF_ORDER %></option>
                                                 </select>
                                             </div>
                                         </li>
@@ -119,18 +119,18 @@
                     </p>
                 </div>
                 <div data-role="collapsible">
-                    <h3>Extras</h3>
+                    <h3><%= t.extras %></h3>
                     <p>
                         <ul data-role="listview" id="availability-extras-list">
                             <% distributionOrderDetail.get('MenuExtras').each(function(extra) { %>
                                 <li>
                                     <div style="float: left; padding-top: .5em;"><h2><%- extra.get('Name') %></h2></div>
                                     <div data-role="controlgroup" data-type="horizontal" data-mini="true" style="float: right">
-                                        <input data-type="extra" type="number" data-id="<%- extra.get('MenuExtraid') %>" value="<%- extra.get('AvailabilityAmount') %>" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
+                                        <input data-type="extra" type="number" data-id="<%- extra.get('MenuExtraid') %>" value="<%- extra.get('AvailabilityAmount') %>" data-clear-btn="true" placeholder="<%= t.withoutLimit %>" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
                                         <select data-type="extra" data-id="<%- extra.get('MenuExtraid') %>">
-                                            <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(extra.get('Availabilityid') == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>>Verfügbar</option>
-                                            <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(extra.get('Availabilityid') == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>>Verspätet</option>
-                                            <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(extra.get('Availabilityid') == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>>Ausverkauft</option>
+                                            <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(extra.get('Availabilityid') == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>><%= i18n.Availability.AVAILABLE %></option>
+                                            <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(extra.get('Availabilityid') == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>><%= i18n.Availability.DELAYED %></option>
+                                            <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(extra.get('Availabilityid') == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>><%= i18n.Availability.OUT_OF_ORDER %></option>
                                         </select>
                                     </div>
                                 </li>
@@ -139,18 +139,18 @@
                     </p>
                 </div>
                 <div data-role="collapsible">
-                    <h3>Spezial Extras</h3>
+                    <h3><%= t.specialExtras %></h3>
                     <p>
                         <ul data-role="listview" id="availability-special-extras-list">
                             <% distributionOrderDetail.get('OrderDetailWithSpecialExtra').each(function(orderDetail) { %>
                                 <li>
                                     <div style="float: left; padding-top: .5em;"><h2><%- orderDetail.get('ExtraDetail') %></h2></div>
                                     <div data-role="controlgroup" data-type="horizontal" data-mini="true" style="float: right">
-                                        <input type="number" data-type="specialExtra" data-id="<%- orderDetail.get('OrderDetailid') %>" value="<%- orderDetail.get('AvailabilityAmount') %>" data-clear-btn="true" placeholder="Ohne Limit" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
+                                        <input type="number" data-type="specialExtra" data-id="<%- orderDetail.get('OrderDetailid') %>" value="<%- orderDetail.get('AvailabilityAmount') %>" data-clear-btn="true" placeholder="<%= t.withoutLimit %>" data-wrapper-class="controlgroup-textinput-mini ui-btn" style="width: 100px !important;">
                                         <select data-type="specialExtra" data-id="<%- orderDetail.get('OrderDetailid') %>">
-                                            <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(orderDetail.get('Availabilityid') == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>>Verfügbar</option>
-                                            <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(orderDetail.get('Availabilityid') == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>>Verspätet</option>
-                                            <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(orderDetail.get('Availabilityid') == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>>Ausverkauft</option>
+                                            <option value="<%- ORDER_AVAILABILITY_AVAILABLE %>" <% if(orderDetail.get('Availabilityid') == ORDER_AVAILABILITY_AVAILABLE) { print('selected="true"')} %>><%= i18n.Availability.AVAILABLE %></option>
+                                            <option value="<%- ORDER_AVAILABILITY_DELAYED %>" <% if(orderDetail.get('Availabilityid') == ORDER_AVAILABILITY_DELAYED) { print('selected="true"')} %>><%= i18n.Availability.DELAYED %></option>
+                                            <option value="<%- ORDER_AVAILABILITY_OUT_OF_ORDER %>" <% if(orderDetail.get('Availabilityid') == ORDER_AVAILABILITY_OUT_OF_ORDER) { print('selected="true"')} %>><%= i18n.Availability.OUT_OF_ORDER %></option>
                                         </select>
                                     </div>
                                 </li>
@@ -164,11 +164,11 @@
 </div>
 <div data-role="popup" id="verify-dialog" data-dismissible="false" data-theme="b" data-overlay-theme="b">
     <div data-role="header" data-theme="b">
-        <h1>Bestellung fertig?</h1>
+        <h1><%= t.orderDone %>?</h1>
     </div>
     <div role="main" class="ui-content">
-        <h3 class="ui-title">Sind sie sicher das die Bestellung fertig ist?</h3>
-        <a class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Abbrechen</a>
-        <a id='finished' class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back">Fortfahren</a>
+        <h3 class="ui-title"><%= t.orderDoneVerifyText %></h3>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back"><%= t.abort %></a>
+        <a id='finished' class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back"><%= t.continue %></a>
     </div>
 </div>

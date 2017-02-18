@@ -10,6 +10,11 @@
         "DAY_DOCUMENT": "Tagesabrechnung",
         "MONTH_DOCUMENT": "Monatsabrechnung"
     },
+    "Availability": {
+        "AVAILABLE": "Verfügbar",
+        "DELAYED": "Verspätet",
+        "OUT_OF_ORDER": "Ausverkauft"
+    },
     "PaymentType": {
         "CASH": "Bar",
         "BANK_TRANSFER": "Rechnung/Überweisung"
@@ -395,5 +400,30 @@
         "paymentFinishedVerifyText": "Sind Sie sicher das die Einzahlung fertig ist?",
         "cancel": "Abbrechen",
         "errorPaymentValue": "Bitte einen gültigen Einzahlungswert eingeben!"
+    },
+    "DistributionView": {
+        "currentOrder": "Aktuelle Bestellung",
+        "setAvailabilitys": "Verfügbarkeiten einstellen",
+        "noOrder": "Zurzeit keine offenen Bestellungen für diese Ausgabestelle vorhanden!",
+        "order": "Bestellung",
+        "specialOrder": "Sonderwunsch",
+        "mixedWith": "Gemischt mit",
+        "withoutLimit": "Ohne Limit",
+        "ordersInTodo": "Bestellungen in Warteliste",
+        "informations": "Informationen",
+        "openOrders": "Offene Bestellungen",
+        "doneOrders": "Getätigte fertigstellungen letzten %(minutes)i min",
+        "newOrders": "Neue Bestellungen letzten (minutes)i min",
+        "orderid": "Bestellnummer",
+        "tableNr": "Tischnummer",
+        "ordertime": "Bestellzeit",
+        "waiter": "Kellner",
+        "orderDone": "Bestellung fertig",
+        "menues": "Menüs",
+        "extras": "Extras",
+        "specialExtras": "Spezial Extras",
+        "orderDoneVerifyText": "Sind sie sicher das die Bestellung fertig ist?",
+        "abort": "Abbrechen",
+        "continue": "Fortfahren"
     }
 }

@@ -394,5 +394,30 @@
         "paymentFinishedVerifyText": "Are you sure that the payment is finished?",
         "cancel": "Cancel",
         "errorPaymentValue": "Please enter a valid payment value!"
+    },
+    "DistributionView": {
+        "currentOrder": "Current Order",
+        "setAvailabilitys": "Set Availabilitys",
+        "noOrder": "No open order at the moment for this distribution place!",
+        "order": "Order",
+        "specialOrder": "Specialorder",
+        "mixedWith": "Mixed with",
+        "withoutLimit": "Without limit",
+        "ordersInTodo": "Orders in Todo list",
+        "informations": "Informations",
+        "openOrders": "Open Orders",
+        "doneOrders": "Finished orders in last %(minutes)i min",
+        "newOrders": "New orders in last %(minutes)i min",
+        "orderid": "Orderid",
+        "tableNr": "Table Number",
+        "ordertime": "Ordertime",
+        "waiter": "Waiter",
+        "orderDone": "Order done",
+        "menues": "Menues",
+        "extras": "Extras",
+        "specialExtras": "Spezial extras",
+        "orderDoneVerifyText": "Are you sure that this order is finished?",
+        "abort": "Abort",
+        "continue": "Continue"
     }
 }
