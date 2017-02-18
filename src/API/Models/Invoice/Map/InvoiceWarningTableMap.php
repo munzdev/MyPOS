@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'invoice_warning' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class InvoiceWarningTableMap extends TableMap
 {
@@ -112,7 +108,7 @@ class InvoiceWarningTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('InvoiceWarningid', 'Invoiceid', 'InvoiceWarningTypeid', 'WarningDate', 'MaturityDate', 'WarningValue', ),
         self::TYPE_CAMELNAME     => array('invoiceWarningid', 'invoiceid', 'invoiceWarningTypeid', 'warningDate', 'maturityDate', 'warningValue', ),
         self::TYPE_COLNAME       => array(InvoiceWarningTableMap::COL_INVOICE_WARNINGID, InvoiceWarningTableMap::COL_INVOICEID, InvoiceWarningTableMap::COL_INVOICE_WARNING_TYPEID, InvoiceWarningTableMap::COL_WARNING_DATE, InvoiceWarningTableMap::COL_MATURITY_DATE, InvoiceWarningTableMap::COL_WARNING_VALUE, ),
@@ -126,7 +122,7 @@ class InvoiceWarningTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('InvoiceWarningid' => 0, 'Invoiceid' => 1, 'InvoiceWarningTypeid' => 2, 'WarningDate' => 3, 'MaturityDate' => 4, 'WarningValue' => 5, ),
         self::TYPE_CAMELNAME     => array('invoiceWarningid' => 0, 'invoiceid' => 1, 'invoiceWarningTypeid' => 2, 'warningDate' => 3, 'maturityDate' => 4, 'warningValue' => 5, ),
         self::TYPE_COLNAME       => array(InvoiceWarningTableMap::COL_INVOICE_WARNINGID => 0, InvoiceWarningTableMap::COL_INVOICEID => 1, InvoiceWarningTableMap::COL_INVOICE_WARNING_TYPEID => 2, InvoiceWarningTableMap::COL_WARNING_DATE => 3, InvoiceWarningTableMap::COL_MATURITY_DATE => 4, InvoiceWarningTableMap::COL_WARNING_VALUE => 5, ),
@@ -164,20 +160,38 @@ class InvoiceWarningTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Invoice', '\\API\\Models\\Invoice\\Invoice', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':invoiceid',
-    1 => ':invoiceid',
-  ),
-), null, null, null, false);
-        $this->addRelation('InvoiceWarningType', '\\API\\Models\\Invoice\\InvoiceWarningType', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':invoice_warning_typeid',
-    1 => ':invoice_warning_typeid',
-  ),
-), null, null, null, false);
+        $this->addRelation(
+            'Invoice',
+            '\\API\\Models\\Invoice\\Invoice',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':invoiceid',
+            1 => ':invoiceid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'InvoiceWarningType',
+            '\\API\\Models\\Invoice\\InvoiceWarningType',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':invoice_warning_typeid',
+            1 => ':invoice_warning_typeid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
     } // buildRelations()
 
     /**
@@ -232,7 +246,7 @@ class InvoiceWarningTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -263,7 +277,9 @@ class InvoiceWarningTableMap extends TableMap
             $col = $offset + InvoiceWarningTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = InvoiceWarningTableMap::OM_CLASS;
-            /** @var InvoiceWarning $obj */
+            /**
+            * @var InvoiceWarning $obj
+            */
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             InvoiceWarningTableMap::addInstanceToPool($obj, $key);
@@ -276,7 +292,7 @@ class InvoiceWarningTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -296,7 +312,9 @@ class InvoiceWarningTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var InvoiceWarning $obj */
+                /**
+ * @var InvoiceWarning $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -313,8 +331,8 @@ class InvoiceWarningTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -340,6 +358,7 @@ class InvoiceWarningTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -363,16 +382,16 @@ class InvoiceWarningTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a InvoiceWarning or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or InvoiceWarning object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or InvoiceWarning object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(InvoiceWarningTableMap::DATABASE_NAME);
         }
@@ -404,7 +423,7 @@ class InvoiceWarningTableMap extends TableMap
     /**
      * Deletes all rows from the invoice_warning table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -415,8 +434,8 @@ class InvoiceWarningTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a InvoiceWarning or Criteria object.
      *
-     * @param mixed               $criteria Criteria or InvoiceWarning object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or InvoiceWarning object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -433,7 +452,7 @@ class InvoiceWarningTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from InvoiceWarning object
         }
 
-        if ($criteria->containsKey(InvoiceWarningTableMap::COL_INVOICE_WARNINGID) && $criteria->keyContainsValue(InvoiceWarningTableMap::COL_INVOICE_WARNINGID) ) {
+        if ($criteria->containsKey(InvoiceWarningTableMap::COL_INVOICE_WARNINGID) && $criteria->keyContainsValue(InvoiceWarningTableMap::COL_INVOICE_WARNINGID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.InvoiceWarningTableMap::COL_INVOICE_WARNINGID.')');
         }
 
@@ -443,11 +462,12 @@ class InvoiceWarningTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // InvoiceWarningTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

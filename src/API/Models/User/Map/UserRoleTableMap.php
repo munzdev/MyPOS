@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'user_role' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class UserRoleTableMap extends TableMap
 {
@@ -92,7 +88,7 @@ class UserRoleTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('UserRoleid', 'Name', ),
         self::TYPE_CAMELNAME     => array('userRoleid', 'name', ),
         self::TYPE_COLNAME       => array(UserRoleTableMap::COL_USER_ROLEID, UserRoleTableMap::COL_NAME, ),
@@ -106,7 +102,7 @@ class UserRoleTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('UserRoleid' => 0, 'Name' => 1, ),
         self::TYPE_CAMELNAME     => array('userRoleid' => 0, 'name' => 1, ),
         self::TYPE_COLNAME       => array(UserRoleTableMap::COL_USER_ROLEID => 0, UserRoleTableMap::COL_NAME => 1, ),
@@ -194,7 +190,7 @@ class UserRoleTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -225,7 +221,9 @@ class UserRoleTableMap extends TableMap
             $col = $offset + UserRoleTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = UserRoleTableMap::OM_CLASS;
-            /** @var UserRole $obj */
+            /**
+ * @var UserRole $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             UserRoleTableMap::addInstanceToPool($obj, $key);
@@ -238,7 +236,7 @@ class UserRoleTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -258,7 +256,9 @@ class UserRoleTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var UserRole $obj */
+                /**
+ * @var UserRole $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -275,8 +275,8 @@ class UserRoleTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -294,6 +294,7 @@ class UserRoleTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -317,16 +318,16 @@ class UserRoleTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a UserRole or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or UserRole object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or UserRole object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(UserRoleTableMap::DATABASE_NAME);
         }
@@ -358,7 +359,7 @@ class UserRoleTableMap extends TableMap
     /**
      * Deletes all rows from the user_role table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -369,8 +370,8 @@ class UserRoleTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a UserRole or Criteria object.
      *
-     * @param mixed               $criteria Criteria or UserRole object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or UserRole object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -393,11 +394,12 @@ class UserRoleTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // UserRoleTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

@@ -1,14 +1,15 @@
 <?php
 // Routes
 
-$o_directory = new RecursiveDirectoryIterator(__DIR__ . "/Routes/", FilesystemIterator::KEY_AS_PATHNAME | 
-                                                                    FilesystemIterator::CURRENT_AS_FILEINFO |
-                                                                    FilesystemIterator::SKIP_DOTS);
+$directory = new RecursiveDirectoryIterator(
+    __DIR__ . "/Routes/",
+    FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::SKIP_DOTS
+);
 
-$o_iterator = new RecursiveIteratorIterator($o_directory);
+$iterator = new RecursiveIteratorIterator($directory);
 
-foreach($o_iterator as $str_filename => $o_file)
-{
-    if ($o_file->isFile())
-        require $str_filename;
+foreach ($iterator as $filename => $file) {
+    if ($file->isFile()) {
+        include $filename;
+    }
 }

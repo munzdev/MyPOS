@@ -26,171 +26,168 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'user' table.
  *
+ * @method ChildUserQuery orderByUserid($order = Criteria::ASC) Order by the userid column
+ * @method ChildUserQuery orderByUsername($order = Criteria::ASC) Order by the username column
+ * @method ChildUserQuery orderByPassword($order = Criteria::ASC) Order by the password column
+ * @method ChildUserQuery orderByFirstname($order = Criteria::ASC) Order by the firstname column
+ * @method ChildUserQuery orderByLastname($order = Criteria::ASC) Order by the lastname column
+ * @method ChildUserQuery orderByAutologinHash($order = Criteria::ASC) Order by the autologin_hash column
+ * @method ChildUserQuery orderByActive($order = Criteria::ASC) Order by the active column
+ * @method ChildUserQuery orderByPhonenumber($order = Criteria::ASC) Order by the phonenumber column
+ * @method ChildUserQuery orderByCallRequest($order = Criteria::ASC) Order by the call_request column
+ * @method ChildUserQuery orderByIsAdmin($order = Criteria::ASC) Order by the is_admin column
  *
+ * @method ChildUserQuery groupByUserid() Group by the userid column
+ * @method ChildUserQuery groupByUsername() Group by the username column
+ * @method ChildUserQuery groupByPassword() Group by the password column
+ * @method ChildUserQuery groupByFirstname() Group by the firstname column
+ * @method ChildUserQuery groupByLastname() Group by the lastname column
+ * @method ChildUserQuery groupByAutologinHash() Group by the autologin_hash column
+ * @method ChildUserQuery groupByActive() Group by the active column
+ * @method ChildUserQuery groupByPhonenumber() Group by the phonenumber column
+ * @method ChildUserQuery groupByCallRequest() Group by the call_request column
+ * @method ChildUserQuery groupByIsAdmin() Group by the is_admin column
  *
- * @method     ChildUserQuery orderByUserid($order = Criteria::ASC) Order by the userid column
- * @method     ChildUserQuery orderByUsername($order = Criteria::ASC) Order by the username column
- * @method     ChildUserQuery orderByPassword($order = Criteria::ASC) Order by the password column
- * @method     ChildUserQuery orderByFirstname($order = Criteria::ASC) Order by the firstname column
- * @method     ChildUserQuery orderByLastname($order = Criteria::ASC) Order by the lastname column
- * @method     ChildUserQuery orderByAutologinHash($order = Criteria::ASC) Order by the autologin_hash column
- * @method     ChildUserQuery orderByActive($order = Criteria::ASC) Order by the active column
- * @method     ChildUserQuery orderByPhonenumber($order = Criteria::ASC) Order by the phonenumber column
- * @method     ChildUserQuery orderByCallRequest($order = Criteria::ASC) Order by the call_request column
- * @method     ChildUserQuery orderByIsAdmin($order = Criteria::ASC) Order by the is_admin column
+ * @method ChildUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildUserQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildUserQuery groupByUserid() Group by the userid column
- * @method     ChildUserQuery groupByUsername() Group by the username column
- * @method     ChildUserQuery groupByPassword() Group by the password column
- * @method     ChildUserQuery groupByFirstname() Group by the firstname column
- * @method     ChildUserQuery groupByLastname() Group by the lastname column
- * @method     ChildUserQuery groupByAutologinHash() Group by the autologin_hash column
- * @method     ChildUserQuery groupByActive() Group by the active column
- * @method     ChildUserQuery groupByPhonenumber() Group by the phonenumber column
- * @method     ChildUserQuery groupByCallRequest() Group by the call_request column
- * @method     ChildUserQuery groupByIsAdmin() Group by the is_admin column
+ * @method ChildUserQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildUserQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildUserQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildUserQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildUserQuery leftJoinCoupon($relationAlias = null) Adds a LEFT JOIN clause to the query using the Coupon relation
+ * @method ChildUserQuery rightJoinCoupon($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Coupon relation
+ * @method ChildUserQuery innerJoinCoupon($relationAlias = null) Adds a INNER JOIN clause to the query using the Coupon relation
  *
- * @method     ChildUserQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildUserQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildUserQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildUserQuery joinWithCoupon($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Coupon relation
  *
- * @method     ChildUserQuery leftJoinCoupon($relationAlias = null) Adds a LEFT JOIN clause to the query using the Coupon relation
- * @method     ChildUserQuery rightJoinCoupon($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Coupon relation
- * @method     ChildUserQuery innerJoinCoupon($relationAlias = null) Adds a INNER JOIN clause to the query using the Coupon relation
+ * @method ChildUserQuery leftJoinWithCoupon() Adds a LEFT JOIN clause and with to the query using the Coupon relation
+ * @method ChildUserQuery rightJoinWithCoupon() Adds a RIGHT JOIN clause and with to the query using the Coupon relation
+ * @method ChildUserQuery innerJoinWithCoupon() Adds a INNER JOIN clause and with to the query using the Coupon relation
  *
- * @method     ChildUserQuery joinWithCoupon($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Coupon relation
+ * @method ChildUserQuery leftJoinDistributionPlaceUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceUser relation
+ * @method ChildUserQuery rightJoinDistributionPlaceUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceUser relation
+ * @method ChildUserQuery innerJoinDistributionPlaceUser($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlaceUser relation
  *
- * @method     ChildUserQuery leftJoinWithCoupon() Adds a LEFT JOIN clause and with to the query using the Coupon relation
- * @method     ChildUserQuery rightJoinWithCoupon() Adds a RIGHT JOIN clause and with to the query using the Coupon relation
- * @method     ChildUserQuery innerJoinWithCoupon() Adds a INNER JOIN clause and with to the query using the Coupon relation
+ * @method ChildUserQuery joinWithDistributionPlaceUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlaceUser relation
  *
- * @method     ChildUserQuery leftJoinDistributionPlaceUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceUser relation
- * @method     ChildUserQuery rightJoinDistributionPlaceUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceUser relation
- * @method     ChildUserQuery innerJoinDistributionPlaceUser($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlaceUser relation
+ * @method ChildUserQuery leftJoinWithDistributionPlaceUser() Adds a LEFT JOIN clause and with to the query using the DistributionPlaceUser relation
+ * @method ChildUserQuery rightJoinWithDistributionPlaceUser() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceUser relation
+ * @method ChildUserQuery innerJoinWithDistributionPlaceUser() Adds a INNER JOIN clause and with to the query using the DistributionPlaceUser relation
  *
- * @method     ChildUserQuery joinWithDistributionPlaceUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlaceUser relation
+ * @method ChildUserQuery leftJoinEventUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventUser relation
+ * @method ChildUserQuery rightJoinEventUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventUser relation
+ * @method ChildUserQuery innerJoinEventUser($relationAlias = null) Adds a INNER JOIN clause to the query using the EventUser relation
  *
- * @method     ChildUserQuery leftJoinWithDistributionPlaceUser() Adds a LEFT JOIN clause and with to the query using the DistributionPlaceUser relation
- * @method     ChildUserQuery rightJoinWithDistributionPlaceUser() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceUser relation
- * @method     ChildUserQuery innerJoinWithDistributionPlaceUser() Adds a INNER JOIN clause and with to the query using the DistributionPlaceUser relation
+ * @method ChildUserQuery joinWithEventUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the EventUser relation
  *
- * @method     ChildUserQuery leftJoinEventUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventUser relation
- * @method     ChildUserQuery rightJoinEventUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventUser relation
- * @method     ChildUserQuery innerJoinEventUser($relationAlias = null) Adds a INNER JOIN clause to the query using the EventUser relation
+ * @method ChildUserQuery leftJoinWithEventUser() Adds a LEFT JOIN clause and with to the query using the EventUser relation
+ * @method ChildUserQuery rightJoinWithEventUser() Adds a RIGHT JOIN clause and with to the query using the EventUser relation
+ * @method ChildUserQuery innerJoinWithEventUser() Adds a INNER JOIN clause and with to the query using the EventUser relation
  *
- * @method     ChildUserQuery joinWithEventUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the EventUser relation
+ * @method ChildUserQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
+ * @method ChildUserQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
+ * @method ChildUserQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
  *
- * @method     ChildUserQuery leftJoinWithEventUser() Adds a LEFT JOIN clause and with to the query using the EventUser relation
- * @method     ChildUserQuery rightJoinWithEventUser() Adds a RIGHT JOIN clause and with to the query using the EventUser relation
- * @method     ChildUserQuery innerJoinWithEventUser() Adds a INNER JOIN clause and with to the query using the EventUser relation
+ * @method ChildUserQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
  *
- * @method     ChildUserQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
- * @method     ChildUserQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
- * @method     ChildUserQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
+ * @method ChildUserQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
+ * @method ChildUserQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
+ * @method ChildUserQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
  *
- * @method     ChildUserQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
+ * @method ChildUserQuery leftJoinOrderRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderRelatedByCancellationCreatedByUserid relation
+ * @method ChildUserQuery rightJoinOrderRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderRelatedByCancellationCreatedByUserid relation
+ * @method ChildUserQuery innerJoinOrderRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderRelatedByCancellationCreatedByUserid relation
  *
- * @method     ChildUserQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
- * @method     ChildUserQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
- * @method     ChildUserQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
+ * @method ChildUserQuery joinWithOrderRelatedByCancellationCreatedByUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderRelatedByCancellationCreatedByUserid relation
  *
- * @method     ChildUserQuery leftJoinOrderRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderRelatedByCancellationCreatedByUserid relation
- * @method     ChildUserQuery rightJoinOrderRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderRelatedByCancellationCreatedByUserid relation
- * @method     ChildUserQuery innerJoinOrderRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderRelatedByCancellationCreatedByUserid relation
+ * @method ChildUserQuery leftJoinWithOrderRelatedByCancellationCreatedByUserid() Adds a LEFT JOIN clause and with to the query using the OrderRelatedByCancellationCreatedByUserid relation
+ * @method ChildUserQuery rightJoinWithOrderRelatedByCancellationCreatedByUserid() Adds a RIGHT JOIN clause and with to the query using the OrderRelatedByCancellationCreatedByUserid relation
+ * @method ChildUserQuery innerJoinWithOrderRelatedByCancellationCreatedByUserid() Adds a INNER JOIN clause and with to the query using the OrderRelatedByCancellationCreatedByUserid relation
  *
- * @method     ChildUserQuery joinWithOrderRelatedByCancellationCreatedByUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderRelatedByCancellationCreatedByUserid relation
+ * @method ChildUserQuery leftJoinOrderRelatedByUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderRelatedByUserid relation
+ * @method ChildUserQuery rightJoinOrderRelatedByUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderRelatedByUserid relation
+ * @method ChildUserQuery innerJoinOrderRelatedByUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderRelatedByUserid relation
  *
- * @method     ChildUserQuery leftJoinWithOrderRelatedByCancellationCreatedByUserid() Adds a LEFT JOIN clause and with to the query using the OrderRelatedByCancellationCreatedByUserid relation
- * @method     ChildUserQuery rightJoinWithOrderRelatedByCancellationCreatedByUserid() Adds a RIGHT JOIN clause and with to the query using the OrderRelatedByCancellationCreatedByUserid relation
- * @method     ChildUserQuery innerJoinWithOrderRelatedByCancellationCreatedByUserid() Adds a INNER JOIN clause and with to the query using the OrderRelatedByCancellationCreatedByUserid relation
+ * @method ChildUserQuery joinWithOrderRelatedByUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderRelatedByUserid relation
  *
- * @method     ChildUserQuery leftJoinOrderRelatedByUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderRelatedByUserid relation
- * @method     ChildUserQuery rightJoinOrderRelatedByUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderRelatedByUserid relation
- * @method     ChildUserQuery innerJoinOrderRelatedByUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderRelatedByUserid relation
+ * @method ChildUserQuery leftJoinWithOrderRelatedByUserid() Adds a LEFT JOIN clause and with to the query using the OrderRelatedByUserid relation
+ * @method ChildUserQuery rightJoinWithOrderRelatedByUserid() Adds a RIGHT JOIN clause and with to the query using the OrderRelatedByUserid relation
+ * @method ChildUserQuery innerJoinWithOrderRelatedByUserid() Adds a INNER JOIN clause and with to the query using the OrderRelatedByUserid relation
  *
- * @method     ChildUserQuery joinWithOrderRelatedByUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderRelatedByUserid relation
+ * @method ChildUserQuery leftJoinOrderDetail($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderDetail relation
+ * @method ChildUserQuery rightJoinOrderDetail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderDetail relation
+ * @method ChildUserQuery innerJoinOrderDetail($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderDetail relation
  *
- * @method     ChildUserQuery leftJoinWithOrderRelatedByUserid() Adds a LEFT JOIN clause and with to the query using the OrderRelatedByUserid relation
- * @method     ChildUserQuery rightJoinWithOrderRelatedByUserid() Adds a RIGHT JOIN clause and with to the query using the OrderRelatedByUserid relation
- * @method     ChildUserQuery innerJoinWithOrderRelatedByUserid() Adds a INNER JOIN clause and with to the query using the OrderRelatedByUserid relation
+ * @method ChildUserQuery joinWithOrderDetail($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderDetail relation
  *
- * @method     ChildUserQuery leftJoinOrderDetail($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderDetail relation
- * @method     ChildUserQuery rightJoinOrderDetail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderDetail relation
- * @method     ChildUserQuery innerJoinOrderDetail($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderDetail relation
+ * @method ChildUserQuery leftJoinWithOrderDetail() Adds a LEFT JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildUserQuery rightJoinWithOrderDetail() Adds a RIGHT JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildUserQuery innerJoinWithOrderDetail() Adds a INNER JOIN clause and with to the query using the OrderDetail relation
  *
- * @method     ChildUserQuery joinWithOrderDetail($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderDetail relation
+ * @method ChildUserQuery leftJoinOrderInProgress($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderInProgress relation
+ * @method ChildUserQuery rightJoinOrderInProgress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderInProgress relation
+ * @method ChildUserQuery innerJoinOrderInProgress($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderInProgress relation
  *
- * @method     ChildUserQuery leftJoinWithOrderDetail() Adds a LEFT JOIN clause and with to the query using the OrderDetail relation
- * @method     ChildUserQuery rightJoinWithOrderDetail() Adds a RIGHT JOIN clause and with to the query using the OrderDetail relation
- * @method     ChildUserQuery innerJoinWithOrderDetail() Adds a INNER JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildUserQuery joinWithOrderInProgress($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderInProgress relation
  *
- * @method     ChildUserQuery leftJoinOrderInProgress($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderInProgress relation
- * @method     ChildUserQuery rightJoinOrderInProgress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderInProgress relation
- * @method     ChildUserQuery innerJoinOrderInProgress($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderInProgress relation
+ * @method ChildUserQuery leftJoinWithOrderInProgress() Adds a LEFT JOIN clause and with to the query using the OrderInProgress relation
+ * @method ChildUserQuery rightJoinWithOrderInProgress() Adds a RIGHT JOIN clause and with to the query using the OrderInProgress relation
+ * @method ChildUserQuery innerJoinWithOrderInProgress() Adds a INNER JOIN clause and with to the query using the OrderInProgress relation
  *
- * @method     ChildUserQuery joinWithOrderInProgress($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderInProgress relation
+ * @method ChildUserQuery leftJoinPaymentRecieved($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentRecieved relation
+ * @method ChildUserQuery rightJoinPaymentRecieved($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentRecieved relation
+ * @method ChildUserQuery innerJoinPaymentRecieved($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentRecieved relation
  *
- * @method     ChildUserQuery leftJoinWithOrderInProgress() Adds a LEFT JOIN clause and with to the query using the OrderInProgress relation
- * @method     ChildUserQuery rightJoinWithOrderInProgress() Adds a RIGHT JOIN clause and with to the query using the OrderInProgress relation
- * @method     ChildUserQuery innerJoinWithOrderInProgress() Adds a INNER JOIN clause and with to the query using the OrderInProgress relation
+ * @method ChildUserQuery joinWithPaymentRecieved($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentRecieved relation
  *
- * @method     ChildUserQuery leftJoinPaymentRecieved($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentRecieved relation
- * @method     ChildUserQuery rightJoinPaymentRecieved($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentRecieved relation
- * @method     ChildUserQuery innerJoinPaymentRecieved($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentRecieved relation
+ * @method ChildUserQuery leftJoinWithPaymentRecieved() Adds a LEFT JOIN clause and with to the query using the PaymentRecieved relation
+ * @method ChildUserQuery rightJoinWithPaymentRecieved() Adds a RIGHT JOIN clause and with to the query using the PaymentRecieved relation
+ * @method ChildUserQuery innerJoinWithPaymentRecieved() Adds a INNER JOIN clause and with to the query using the PaymentRecieved relation
  *
- * @method     ChildUserQuery joinWithPaymentRecieved($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentRecieved relation
+ * @method \API\Models\Payment\CouponQuery|\API\Models\DistributionPlace\DistributionPlaceUserQuery|\API\Models\Event\EventUserQuery|\API\Models\Invoice\InvoiceQuery|\API\Models\Ordering\OrderQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery|\API\Models\Payment\PaymentRecievedQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildUserQuery leftJoinWithPaymentRecieved() Adds a LEFT JOIN clause and with to the query using the PaymentRecieved relation
- * @method     ChildUserQuery rightJoinWithPaymentRecieved() Adds a RIGHT JOIN clause and with to the query using the PaymentRecieved relation
- * @method     ChildUserQuery innerJoinWithPaymentRecieved() Adds a INNER JOIN clause and with to the query using the PaymentRecieved relation
+ * @method ChildUser findOne(ConnectionInterface $con = null) Return the first ChildUser matching the query
+ * @method ChildUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Payment\CouponQuery|\API\Models\DistributionPlace\DistributionPlaceUserQuery|\API\Models\Event\EventUserQuery|\API\Models\Invoice\InvoiceQuery|\API\Models\Ordering\OrderQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery|\API\Models\Payment\PaymentRecievedQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildUser findOne(ConnectionInterface $con = null) Return the first ChildUser matching the query
- * @method     ChildUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
- *
- * @method     ChildUser findOneByUserid(int $userid) Return the first ChildUser filtered by the userid column
- * @method     ChildUser findOneByUsername(string $username) Return the first ChildUser filtered by the username column
- * @method     ChildUser findOneByPassword(string $password) Return the first ChildUser filtered by the password column
- * @method     ChildUser findOneByFirstname(string $firstname) Return the first ChildUser filtered by the firstname column
- * @method     ChildUser findOneByLastname(string $lastname) Return the first ChildUser filtered by the lastname column
- * @method     ChildUser findOneByAutologinHash(string $autologin_hash) Return the first ChildUser filtered by the autologin_hash column
- * @method     ChildUser findOneByActive(int $active) Return the first ChildUser filtered by the active column
- * @method     ChildUser findOneByPhonenumber(string $phonenumber) Return the first ChildUser filtered by the phonenumber column
- * @method     ChildUser findOneByCallRequest(string $call_request) Return the first ChildUser filtered by the call_request column
- * @method     ChildUser findOneByIsAdmin(boolean $is_admin) Return the first ChildUser filtered by the is_admin column *
+ * @method ChildUser findOneByUserid(int $userid) Return the first ChildUser filtered by the userid column
+ * @method ChildUser findOneByUsername(string $username) Return the first ChildUser filtered by the username column
+ * @method ChildUser findOneByPassword(string $password) Return the first ChildUser filtered by the password column
+ * @method ChildUser findOneByFirstname(string $firstname) Return the first ChildUser filtered by the firstname column
+ * @method ChildUser findOneByLastname(string $lastname) Return the first ChildUser filtered by the lastname column
+ * @method ChildUser findOneByAutologinHash(string $autologin_hash) Return the first ChildUser filtered by the autologin_hash column
+ * @method ChildUser findOneByActive(int $active) Return the first ChildUser filtered by the active column
+ * @method ChildUser findOneByPhonenumber(string $phonenumber) Return the first ChildUser filtered by the phonenumber column
+ * @method ChildUser findOneByCallRequest(string $call_request) Return the first ChildUser filtered by the call_request column
+ * @method ChildUser findOneByIsAdmin(boolean $is_admin) Return the first ChildUser filtered by the is_admin column *
 
- * @method     ChildUser requirePk($key, ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOne(ConnectionInterface $con = null) Return the first ChildUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildUser requirePk($key, ConnectionInterface $con = null) Return the ChildUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildUser requireOne(ConnectionInterface $con = null) Return the first ChildUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildUser requireOneByUserid(int $userid) Return the first ChildUser filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByUsername(string $username) Return the first ChildUser filtered by the username column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByPassword(string $password) Return the first ChildUser filtered by the password column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByFirstname(string $firstname) Return the first ChildUser filtered by the firstname column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByLastname(string $lastname) Return the first ChildUser filtered by the lastname column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByAutologinHash(string $autologin_hash) Return the first ChildUser filtered by the autologin_hash column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByActive(int $active) Return the first ChildUser filtered by the active column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByPhonenumber(string $phonenumber) Return the first ChildUser filtered by the phonenumber column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByCallRequest(string $call_request) Return the first ChildUser filtered by the call_request column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByIsAdmin(boolean $is_admin) Return the first ChildUser filtered by the is_admin column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildUser requireOneByUserid(int $userid) Return the first ChildUser filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildUser requireOneByUsername(string $username) Return the first ChildUser filtered by the username column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildUser requireOneByPassword(string $password) Return the first ChildUser filtered by the password column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildUser requireOneByFirstname(string $firstname) Return the first ChildUser filtered by the firstname column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildUser requireOneByLastname(string $lastname) Return the first ChildUser filtered by the lastname column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildUser requireOneByAutologinHash(string $autologin_hash) Return the first ChildUser filtered by the autologin_hash column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildUser requireOneByActive(int $active) Return the first ChildUser filtered by the active column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildUser requireOneByPhonenumber(string $phonenumber) Return the first ChildUser filtered by the phonenumber column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildUser requireOneByCallRequest(string $call_request) Return the first ChildUser filtered by the call_request column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildUser requireOneByIsAdmin(boolean $is_admin) Return the first ChildUser filtered by the is_admin column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
- * @method     ChildUser[]|ObjectCollection findByUserid(int $userid) Return ChildUser objects filtered by the userid column
- * @method     ChildUser[]|ObjectCollection findByUsername(string $username) Return ChildUser objects filtered by the username column
- * @method     ChildUser[]|ObjectCollection findByPassword(string $password) Return ChildUser objects filtered by the password column
- * @method     ChildUser[]|ObjectCollection findByFirstname(string $firstname) Return ChildUser objects filtered by the firstname column
- * @method     ChildUser[]|ObjectCollection findByLastname(string $lastname) Return ChildUser objects filtered by the lastname column
- * @method     ChildUser[]|ObjectCollection findByAutologinHash(string $autologin_hash) Return ChildUser objects filtered by the autologin_hash column
- * @method     ChildUser[]|ObjectCollection findByActive(int $active) Return ChildUser objects filtered by the active column
- * @method     ChildUser[]|ObjectCollection findByPhonenumber(string $phonenumber) Return ChildUser objects filtered by the phonenumber column
- * @method     ChildUser[]|ObjectCollection findByCallRequest(string $call_request) Return ChildUser objects filtered by the call_request column
- * @method     ChildUser[]|ObjectCollection findByIsAdmin(boolean $is_admin) Return ChildUser objects filtered by the is_admin column
- * @method     ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildUser objects based on current ModelCriteria
+ * @method ChildUser[]|ObjectCollection findByUserid(int $userid) Return ChildUser objects filtered by the userid column
+ * @method ChildUser[]|ObjectCollection findByUsername(string $username) Return ChildUser objects filtered by the username column
+ * @method ChildUser[]|ObjectCollection findByPassword(string $password) Return ChildUser objects filtered by the password column
+ * @method ChildUser[]|ObjectCollection findByFirstname(string $firstname) Return ChildUser objects filtered by the firstname column
+ * @method ChildUser[]|ObjectCollection findByLastname(string $lastname) Return ChildUser objects filtered by the lastname column
+ * @method ChildUser[]|ObjectCollection findByAutologinHash(string $autologin_hash) Return ChildUser objects filtered by the autologin_hash column
+ * @method ChildUser[]|ObjectCollection findByActive(int $active) Return ChildUser objects filtered by the active column
+ * @method ChildUser[]|ObjectCollection findByPhonenumber(string $phonenumber) Return ChildUser objects filtered by the phonenumber column
+ * @method ChildUser[]|ObjectCollection findByCallRequest(string $call_request) Return ChildUser objects filtered by the call_request column
+ * @method ChildUser[]|ObjectCollection findByIsAdmin(boolean $is_admin) Return ChildUser objects filtered by the is_admin column
+ * @method ChildUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class UserQuery extends ModelCriteria
 {
@@ -199,9 +196,9 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\User\Base\UserQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\User\\User', $modelAlias = null)
     {
@@ -211,8 +208,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Returns a new ChildUserQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildUserQuery
      */
@@ -241,7 +238,7 @@ abstract class UserQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildUser|array|mixed the result, formatted by the current formatter
@@ -258,8 +255,7 @@ abstract class UserQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -278,8 +274,8 @@ abstract class UserQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -298,7 +294,9 @@ abstract class UserQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildUser $obj */
+            /**
+ * @var ChildUser $obj
+*/
             $obj = new ChildUser();
             $obj->hydrate($row);
             UserTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -311,8 +309,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildUser|array|mixed the result, formatted by the current formatter
      */
@@ -332,8 +330,9 @@ abstract class UserQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -354,26 +353,24 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(UserTableMap::COL_USERID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(UserTableMap::COL_USERID, $keys, Criteria::IN);
     }
 
@@ -387,11 +384,14 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByUserid(array('min' => 12)); // WHERE userid > 12
      * </code>
      *
-     * @param     mixed $userid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $userid     The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -427,8 +427,8 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByUsername('%fooValue%', Criteria::LIKE); // WHERE username LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $username The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $username   The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -452,8 +452,8 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByPassword('%fooValue%', Criteria::LIKE); // WHERE password LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $password The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $password   The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -477,8 +477,8 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByFirstname('%fooValue%', Criteria::LIKE); // WHERE firstname LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $firstname The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $firstname  The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -502,8 +502,8 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByLastname('%fooValue%', Criteria::LIKE); // WHERE lastname LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $lastname The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $lastname   The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -527,8 +527,8 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByAutologinHash('%fooValue%', Criteria::LIKE); // WHERE autologin_hash LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $autologinHash The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $autologinHash The value to use as filter.
+     * @param string $comparison    Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -553,11 +553,14 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByActive(array('min' => 12)); // WHERE active > 12
      * </code>
      *
-     * @param     mixed $active The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $active     The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -593,8 +596,8 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByPhonenumber('%fooValue%', Criteria::LIKE); // WHERE phonenumber LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $phonenumber The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $phonenumber The value to use as filter.
+     * @param string $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -619,13 +622,18 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByCallRequest(array('max' => 'yesterday')); // WHERE call_request > '2011-03-13'
      * </code>
      *
-     * @param     mixed $callRequest The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $callRequest The value to use as filter.
+     *                                Values can be integers
+     *                                (unix timestamps), DateTime
+     *                                objects, or strings. Empty
+     *                                strings are treated as
+     *                                NULL. Use scalar values for
+     *                                equality. Use array values
+     *                                for in_array() equivalent.
+     *                                Use associative array('min'
+     *                                => $minValue, 'max' =>
+     *                                $maxValue) for intervals.
+     * @param string $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -661,12 +669,20 @@ abstract class UserQuery extends ModelCriteria
      * $query->filterByIsAdmin('yes'); // WHERE is_admin = true
      * </code>
      *
-     * @param     boolean|string $isAdmin The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param boolean|string $isAdmin    The value to use as filter.
+     *                                       Non-boolean arguments are
+     *                                       converted using the
+     *                                       following rules: * 1, '1',
+     *                                       'true',  'on',  and 'yes'
+     *                                       are converted to boolean
+     *                                       true * 0, '0', 'false',
+     *                                       'off', and 'no'  are
+     *                                       converted to boolean false
+     *                                       Check on string values is
+     *                                       case insensitive (so
+     *                                       'FaLsE' is seen as
+     *                                       'false').
+     * @param string         $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -682,8 +698,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Payment\Coupon object
      *
-     * @param \API\Models\Payment\Coupon|ObjectCollection $coupon the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Payment\Coupon|ObjectCollection $coupon     the related object to use as filter
+     * @param string                                      $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
@@ -705,8 +721,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Coupon relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -739,9 +755,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Payment\CouponQuery A secondary query class using the current class as primary query
      */
@@ -756,7 +772,7 @@ abstract class UserQuery extends ModelCriteria
      * Filter the query by a related \API\Models\DistributionPlace\DistributionPlaceUser object
      *
      * @param \API\Models\DistributionPlace\DistributionPlaceUser|ObjectCollection $distributionPlaceUser the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                                               $comparison            Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
@@ -778,8 +794,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the DistributionPlaceUser relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -812,9 +828,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\DistributionPlace\DistributionPlaceUserQuery A secondary query class using the current class as primary query
      */
@@ -828,8 +844,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Event\EventUser object
      *
-     * @param \API\Models\Event\EventUser|ObjectCollection $eventUser the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Event\EventUser|ObjectCollection $eventUser  the related object to use as filter
+     * @param string                                       $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
@@ -851,8 +867,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the EventUser relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -885,9 +901,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Event\EventUserQuery A secondary query class using the current class as primary query
      */
@@ -901,8 +917,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Invoice\Invoice object
      *
-     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice    the related object to use as filter
+     * @param string                                       $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
@@ -924,8 +940,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Invoice relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -958,9 +974,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Invoice\InvoiceQuery A secondary query class using the current class as primary query
      */
@@ -974,8 +990,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Ordering\Order object
      *
-     * @param \API\Models\Ordering\Order|ObjectCollection $order the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Ordering\Order|ObjectCollection $order      the related object to use as filter
+     * @param string                                      $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
@@ -997,8 +1013,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the OrderRelatedByCancellationCreatedByUserid relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -1031,9 +1047,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Ordering\OrderQuery A secondary query class using the current class as primary query
      */
@@ -1047,8 +1063,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Ordering\Order object
      *
-     * @param \API\Models\Ordering\Order|ObjectCollection $order the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Ordering\Order|ObjectCollection $order      the related object to use as filter
+     * @param string                                      $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
@@ -1070,8 +1086,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the OrderRelatedByUserid relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -1104,9 +1120,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Ordering\OrderQuery A secondary query class using the current class as primary query
      */
@@ -1121,7 +1137,7 @@ abstract class UserQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Ordering\OrderDetail object
      *
      * @param \API\Models\Ordering\OrderDetail|ObjectCollection $orderDetail the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                            $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
@@ -1143,8 +1159,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the OrderDetail relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -1177,9 +1193,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Ordering\OrderDetailQuery A secondary query class using the current class as primary query
      */
@@ -1194,7 +1210,7 @@ abstract class UserQuery extends ModelCriteria
      * Filter the query by a related \API\Models\OIP\OrderInProgress object
      *
      * @param \API\Models\OIP\OrderInProgress|ObjectCollection $orderInProgress the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                           $comparison      Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
@@ -1216,8 +1232,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the OrderInProgress relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -1250,9 +1266,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\OIP\OrderInProgressQuery A secondary query class using the current class as primary query
      */
@@ -1267,7 +1283,7 @@ abstract class UserQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Payment\PaymentRecieved object
      *
      * @param \API\Models\Payment\PaymentRecieved|ObjectCollection $paymentRecieved the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                               $comparison      Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildUserQuery The current query, for fluid interface
      */
@@ -1289,8 +1305,8 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the PaymentRecieved relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -1323,9 +1339,9 @@ abstract class UserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Payment\PaymentRecievedQuery A secondary query class using the current class as primary query
      */
@@ -1339,7 +1355,7 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildUser $user Object to remove from the list of results
+     * @param ChildUser $user Object to remove from the list of results
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
@@ -1355,7 +1371,7 @@ abstract class UserQuery extends ModelCriteria
     /**
      * Deletes all rows from the user table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -1366,23 +1382,25 @@ abstract class UserQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            UserTableMap::clearInstancePool();
-            UserTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                UserTableMap::clearInstancePool();
+                UserTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -1401,16 +1419,17 @@ abstract class UserQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            UserTableMap::removeInstanceFromPool($criteria);
+                UserTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            UserTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                UserTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // UserQuery

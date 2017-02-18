@@ -14,11 +14,12 @@ require 'functions.php';
 
 // Enable Session and set script running time to infinite in Debug mode
 session_start();
-if(API\DEBUG) 
+if (API\DEBUG) {
     set_time_limit(0);
+}
 
 // Instantiate the app
-$settings = require 'settings.php';
+$settings = include 'settings.php';
 $app = new \Slim\App($settings);
 
 // Set up dependencies

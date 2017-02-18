@@ -21,96 +21,93 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'menu_group' table.
  *
+ * @method ChildMenuGroupQuery orderByMenuGroupid($order = Criteria::ASC) Order by the menu_groupid column
+ * @method ChildMenuGroupQuery orderByMenuTypeid($order = Criteria::ASC) Order by the menu_typeid column
+ * @method ChildMenuGroupQuery orderByName($order = Criteria::ASC) Order by the name column
  *
+ * @method ChildMenuGroupQuery groupByMenuGroupid() Group by the menu_groupid column
+ * @method ChildMenuGroupQuery groupByMenuTypeid() Group by the menu_typeid column
+ * @method ChildMenuGroupQuery groupByName() Group by the name column
  *
- * @method     ChildMenuGroupQuery orderByMenuGroupid($order = Criteria::ASC) Order by the menu_groupid column
- * @method     ChildMenuGroupQuery orderByMenuTypeid($order = Criteria::ASC) Order by the menu_typeid column
- * @method     ChildMenuGroupQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method ChildMenuGroupQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildMenuGroupQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildMenuGroupQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildMenuGroupQuery groupByMenuGroupid() Group by the menu_groupid column
- * @method     ChildMenuGroupQuery groupByMenuTypeid() Group by the menu_typeid column
- * @method     ChildMenuGroupQuery groupByName() Group by the name column
+ * @method ChildMenuGroupQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildMenuGroupQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildMenuGroupQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildMenuGroupQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildMenuGroupQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildMenuGroupQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildMenuGroupQuery leftJoinMenuType($relationAlias = null) Adds a LEFT JOIN clause to the query using the MenuType relation
+ * @method ChildMenuGroupQuery rightJoinMenuType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MenuType relation
+ * @method ChildMenuGroupQuery innerJoinMenuType($relationAlias = null) Adds a INNER JOIN clause to the query using the MenuType relation
  *
- * @method     ChildMenuGroupQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildMenuGroupQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildMenuGroupQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildMenuGroupQuery joinWithMenuType($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the MenuType relation
  *
- * @method     ChildMenuGroupQuery leftJoinMenuType($relationAlias = null) Adds a LEFT JOIN clause to the query using the MenuType relation
- * @method     ChildMenuGroupQuery rightJoinMenuType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MenuType relation
- * @method     ChildMenuGroupQuery innerJoinMenuType($relationAlias = null) Adds a INNER JOIN clause to the query using the MenuType relation
+ * @method ChildMenuGroupQuery leftJoinWithMenuType() Adds a LEFT JOIN clause and with to the query using the MenuType relation
+ * @method ChildMenuGroupQuery rightJoinWithMenuType() Adds a RIGHT JOIN clause and with to the query using the MenuType relation
+ * @method ChildMenuGroupQuery innerJoinWithMenuType() Adds a INNER JOIN clause and with to the query using the MenuType relation
  *
- * @method     ChildMenuGroupQuery joinWithMenuType($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the MenuType relation
+ * @method ChildMenuGroupQuery leftJoinDistributionPlaceGroup($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceGroup relation
+ * @method ChildMenuGroupQuery rightJoinDistributionPlaceGroup($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceGroup relation
+ * @method ChildMenuGroupQuery innerJoinDistributionPlaceGroup($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlaceGroup relation
  *
- * @method     ChildMenuGroupQuery leftJoinWithMenuType() Adds a LEFT JOIN clause and with to the query using the MenuType relation
- * @method     ChildMenuGroupQuery rightJoinWithMenuType() Adds a RIGHT JOIN clause and with to the query using the MenuType relation
- * @method     ChildMenuGroupQuery innerJoinWithMenuType() Adds a INNER JOIN clause and with to the query using the MenuType relation
+ * @method ChildMenuGroupQuery joinWithDistributionPlaceGroup($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlaceGroup relation
  *
- * @method     ChildMenuGroupQuery leftJoinDistributionPlaceGroup($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceGroup relation
- * @method     ChildMenuGroupQuery rightJoinDistributionPlaceGroup($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceGroup relation
- * @method     ChildMenuGroupQuery innerJoinDistributionPlaceGroup($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlaceGroup relation
+ * @method ChildMenuGroupQuery leftJoinWithDistributionPlaceGroup() Adds a LEFT JOIN clause and with to the query using the DistributionPlaceGroup relation
+ * @method ChildMenuGroupQuery rightJoinWithDistributionPlaceGroup() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceGroup relation
+ * @method ChildMenuGroupQuery innerJoinWithDistributionPlaceGroup() Adds a INNER JOIN clause and with to the query using the DistributionPlaceGroup relation
  *
- * @method     ChildMenuGroupQuery joinWithDistributionPlaceGroup($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlaceGroup relation
+ * @method ChildMenuGroupQuery leftJoinMenu($relationAlias = null) Adds a LEFT JOIN clause to the query using the Menu relation
+ * @method ChildMenuGroupQuery rightJoinMenu($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Menu relation
+ * @method ChildMenuGroupQuery innerJoinMenu($relationAlias = null) Adds a INNER JOIN clause to the query using the Menu relation
  *
- * @method     ChildMenuGroupQuery leftJoinWithDistributionPlaceGroup() Adds a LEFT JOIN clause and with to the query using the DistributionPlaceGroup relation
- * @method     ChildMenuGroupQuery rightJoinWithDistributionPlaceGroup() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceGroup relation
- * @method     ChildMenuGroupQuery innerJoinWithDistributionPlaceGroup() Adds a INNER JOIN clause and with to the query using the DistributionPlaceGroup relation
+ * @method ChildMenuGroupQuery joinWithMenu($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Menu relation
  *
- * @method     ChildMenuGroupQuery leftJoinMenu($relationAlias = null) Adds a LEFT JOIN clause to the query using the Menu relation
- * @method     ChildMenuGroupQuery rightJoinMenu($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Menu relation
- * @method     ChildMenuGroupQuery innerJoinMenu($relationAlias = null) Adds a INNER JOIN clause to the query using the Menu relation
+ * @method ChildMenuGroupQuery leftJoinWithMenu() Adds a LEFT JOIN clause and with to the query using the Menu relation
+ * @method ChildMenuGroupQuery rightJoinWithMenu() Adds a RIGHT JOIN clause and with to the query using the Menu relation
+ * @method ChildMenuGroupQuery innerJoinWithMenu() Adds a INNER JOIN clause and with to the query using the Menu relation
  *
- * @method     ChildMenuGroupQuery joinWithMenu($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Menu relation
+ * @method ChildMenuGroupQuery leftJoinOrderDetail($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderDetail relation
+ * @method ChildMenuGroupQuery rightJoinOrderDetail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderDetail relation
+ * @method ChildMenuGroupQuery innerJoinOrderDetail($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderDetail relation
  *
- * @method     ChildMenuGroupQuery leftJoinWithMenu() Adds a LEFT JOIN clause and with to the query using the Menu relation
- * @method     ChildMenuGroupQuery rightJoinWithMenu() Adds a RIGHT JOIN clause and with to the query using the Menu relation
- * @method     ChildMenuGroupQuery innerJoinWithMenu() Adds a INNER JOIN clause and with to the query using the Menu relation
+ * @method ChildMenuGroupQuery joinWithOrderDetail($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderDetail relation
  *
- * @method     ChildMenuGroupQuery leftJoinOrderDetail($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderDetail relation
- * @method     ChildMenuGroupQuery rightJoinOrderDetail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderDetail relation
- * @method     ChildMenuGroupQuery innerJoinOrderDetail($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderDetail relation
+ * @method ChildMenuGroupQuery leftJoinWithOrderDetail() Adds a LEFT JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildMenuGroupQuery rightJoinWithOrderDetail() Adds a RIGHT JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildMenuGroupQuery innerJoinWithOrderDetail() Adds a INNER JOIN clause and with to the query using the OrderDetail relation
  *
- * @method     ChildMenuGroupQuery joinWithOrderDetail($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderDetail relation
+ * @method ChildMenuGroupQuery leftJoinOrderInProgress($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderInProgress relation
+ * @method ChildMenuGroupQuery rightJoinOrderInProgress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderInProgress relation
+ * @method ChildMenuGroupQuery innerJoinOrderInProgress($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderInProgress relation
  *
- * @method     ChildMenuGroupQuery leftJoinWithOrderDetail() Adds a LEFT JOIN clause and with to the query using the OrderDetail relation
- * @method     ChildMenuGroupQuery rightJoinWithOrderDetail() Adds a RIGHT JOIN clause and with to the query using the OrderDetail relation
- * @method     ChildMenuGroupQuery innerJoinWithOrderDetail() Adds a INNER JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildMenuGroupQuery joinWithOrderInProgress($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderInProgress relation
  *
- * @method     ChildMenuGroupQuery leftJoinOrderInProgress($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderInProgress relation
- * @method     ChildMenuGroupQuery rightJoinOrderInProgress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderInProgress relation
- * @method     ChildMenuGroupQuery innerJoinOrderInProgress($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderInProgress relation
+ * @method ChildMenuGroupQuery leftJoinWithOrderInProgress() Adds a LEFT JOIN clause and with to the query using the OrderInProgress relation
+ * @method ChildMenuGroupQuery rightJoinWithOrderInProgress() Adds a RIGHT JOIN clause and with to the query using the OrderInProgress relation
+ * @method ChildMenuGroupQuery innerJoinWithOrderInProgress() Adds a INNER JOIN clause and with to the query using the OrderInProgress relation
  *
- * @method     ChildMenuGroupQuery joinWithOrderInProgress($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderInProgress relation
+ * @method \API\Models\Menu\MenuTypeQuery|\API\Models\DistributionPlace\DistributionPlaceGroupQuery|\API\Models\Menu\MenuQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildMenuGroupQuery leftJoinWithOrderInProgress() Adds a LEFT JOIN clause and with to the query using the OrderInProgress relation
- * @method     ChildMenuGroupQuery rightJoinWithOrderInProgress() Adds a RIGHT JOIN clause and with to the query using the OrderInProgress relation
- * @method     ChildMenuGroupQuery innerJoinWithOrderInProgress() Adds a INNER JOIN clause and with to the query using the OrderInProgress relation
+ * @method ChildMenuGroup findOne(ConnectionInterface $con = null) Return the first ChildMenuGroup matching the query
+ * @method ChildMenuGroup findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMenuGroup matching the query, or a new ChildMenuGroup object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Menu\MenuTypeQuery|\API\Models\DistributionPlace\DistributionPlaceGroupQuery|\API\Models\Menu\MenuQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildMenuGroup findOne(ConnectionInterface $con = null) Return the first ChildMenuGroup matching the query
- * @method     ChildMenuGroup findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMenuGroup matching the query, or a new ChildMenuGroup object populated from the query conditions when no match is found
- *
- * @method     ChildMenuGroup findOneByMenuGroupid(int $menu_groupid) Return the first ChildMenuGroup filtered by the menu_groupid column
- * @method     ChildMenuGroup findOneByMenuTypeid(int $menu_typeid) Return the first ChildMenuGroup filtered by the menu_typeid column
- * @method     ChildMenuGroup findOneByName(string $name) Return the first ChildMenuGroup filtered by the name column *
+ * @method ChildMenuGroup findOneByMenuGroupid(int $menu_groupid) Return the first ChildMenuGroup filtered by the menu_groupid column
+ * @method ChildMenuGroup findOneByMenuTypeid(int $menu_typeid) Return the first ChildMenuGroup filtered by the menu_typeid column
+ * @method ChildMenuGroup findOneByName(string $name) Return the first ChildMenuGroup filtered by the name column *
 
- * @method     ChildMenuGroup requirePk($key, ConnectionInterface $con = null) Return the ChildMenuGroup by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMenuGroup requireOne(ConnectionInterface $con = null) Return the first ChildMenuGroup matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildMenuGroup requirePk($key, ConnectionInterface $con = null) Return the ChildMenuGroup by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildMenuGroup requireOne(ConnectionInterface $con = null) Return the first ChildMenuGroup matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildMenuGroup requireOneByMenuGroupid(int $menu_groupid) Return the first ChildMenuGroup filtered by the menu_groupid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMenuGroup requireOneByMenuTypeid(int $menu_typeid) Return the first ChildMenuGroup filtered by the menu_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMenuGroup requireOneByName(string $name) Return the first ChildMenuGroup filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildMenuGroup requireOneByMenuGroupid(int $menu_groupid) Return the first ChildMenuGroup filtered by the menu_groupid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildMenuGroup requireOneByMenuTypeid(int $menu_typeid) Return the first ChildMenuGroup filtered by the menu_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildMenuGroup requireOneByName(string $name) Return the first ChildMenuGroup filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildMenuGroup[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMenuGroup objects based on current ModelCriteria
- * @method     ChildMenuGroup[]|ObjectCollection findByMenuGroupid(int $menu_groupid) Return ChildMenuGroup objects filtered by the menu_groupid column
- * @method     ChildMenuGroup[]|ObjectCollection findByMenuTypeid(int $menu_typeid) Return ChildMenuGroup objects filtered by the menu_typeid column
- * @method     ChildMenuGroup[]|ObjectCollection findByName(string $name) Return ChildMenuGroup objects filtered by the name column
- * @method     ChildMenuGroup[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildMenuGroup[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMenuGroup objects based on current ModelCriteria
+ * @method ChildMenuGroup[]|ObjectCollection findByMenuGroupid(int $menu_groupid) Return ChildMenuGroup objects filtered by the menu_groupid column
+ * @method ChildMenuGroup[]|ObjectCollection findByMenuTypeid(int $menu_typeid) Return ChildMenuGroup objects filtered by the menu_typeid column
+ * @method ChildMenuGroup[]|ObjectCollection findByName(string $name) Return ChildMenuGroup objects filtered by the name column
+ * @method ChildMenuGroup[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class MenuGroupQuery extends ModelCriteria
 {
@@ -119,9 +116,9 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Menu\Base\MenuGroupQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Menu\\MenuGroup', $modelAlias = null)
     {
@@ -131,8 +128,8 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Returns a new ChildMenuGroupQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildMenuGroupQuery
      */
@@ -161,7 +158,7 @@ abstract class MenuGroupQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildMenuGroup|array|mixed the result, formatted by the current formatter
@@ -178,8 +175,7 @@ abstract class MenuGroupQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -198,8 +194,8 @@ abstract class MenuGroupQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -218,7 +214,9 @@ abstract class MenuGroupQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildMenuGroup $obj */
+            /**
+ * @var ChildMenuGroup $obj
+*/
             $obj = new ChildMenuGroup();
             $obj->hydrate($row);
             MenuGroupTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -231,8 +229,8 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildMenuGroup|array|mixed the result, formatted by the current formatter
      */
@@ -252,8 +250,9 @@ abstract class MenuGroupQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -274,26 +273,24 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildMenuGroupQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(MenuGroupTableMap::COL_MENU_GROUPID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildMenuGroupQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(MenuGroupTableMap::COL_MENU_GROUPID, $keys, Criteria::IN);
     }
 
@@ -307,11 +304,14 @@ abstract class MenuGroupQuery extends ModelCriteria
      * $query->filterByMenuGroupid(array('min' => 12)); // WHERE menu_groupid > 12
      * </code>
      *
-     * @param     mixed $menuGroupid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $menuGroupid The value to use as filter.
+     *                                Use scalar values for
+     *                                equality. Use array values
+     *                                for in_array() equivalent.
+     *                                Use associative array('min'
+     *                                => $minValue, 'max' =>
+     *                                $maxValue) for intervals.
+     * @param string $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -348,13 +348,16 @@ abstract class MenuGroupQuery extends ModelCriteria
      * $query->filterByMenuTypeid(array('min' => 12)); // WHERE menu_typeid > 12
      * </code>
      *
-     * @see       filterByMenuType()
+     * @see filterByMenuType()
      *
-     * @param     mixed $menuTypeid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $menuTypeid The value to use as filter.
+     *                               Use scalar values for
+     *                               equality. Use array values
+     *                               for in_array() equivalent.
+     *                               Use associative array('min'
+     *                               => $minValue, 'max' =>
+     *                               $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -390,8 +393,8 @@ abstract class MenuGroupQuery extends ModelCriteria
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE name LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $name       The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -409,8 +412,8 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Menu\MenuType object
      *
-     * @param \API\Models\Menu\MenuType|ObjectCollection $menuType The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Menu\MenuType|ObjectCollection $menuType   The related object(s) to use as filter
+     * @param string                                     $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -436,8 +439,8 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the MenuType relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -470,9 +473,9 @@ abstract class MenuGroupQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Menu\MenuTypeQuery A secondary query class using the current class as primary query
      */
@@ -487,7 +490,7 @@ abstract class MenuGroupQuery extends ModelCriteria
      * Filter the query by a related \API\Models\DistributionPlace\DistributionPlaceGroup object
      *
      * @param \API\Models\DistributionPlace\DistributionPlaceGroup|ObjectCollection $distributionPlaceGroup the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                                                $comparison             Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -509,8 +512,8 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the DistributionPlaceGroup relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -543,9 +546,9 @@ abstract class MenuGroupQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\DistributionPlace\DistributionPlaceGroupQuery A secondary query class using the current class as primary query
      */
@@ -559,8 +562,8 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Menu\Menu object
      *
-     * @param \API\Models\Menu\Menu|ObjectCollection $menu the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Menu\Menu|ObjectCollection $menu       the related object to use as filter
+     * @param string                                 $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -582,8 +585,8 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Menu relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -616,9 +619,9 @@ abstract class MenuGroupQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Menu\MenuQuery A secondary query class using the current class as primary query
      */
@@ -633,7 +636,7 @@ abstract class MenuGroupQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Ordering\OrderDetail object
      *
      * @param \API\Models\Ordering\OrderDetail|ObjectCollection $orderDetail the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                            $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -655,8 +658,8 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the OrderDetail relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -689,9 +692,9 @@ abstract class MenuGroupQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Ordering\OrderDetailQuery A secondary query class using the current class as primary query
      */
@@ -706,7 +709,7 @@ abstract class MenuGroupQuery extends ModelCriteria
      * Filter the query by a related \API\Models\OIP\OrderInProgress object
      *
      * @param \API\Models\OIP\OrderInProgress|ObjectCollection $orderInProgress the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                           $comparison      Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -728,8 +731,8 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the OrderInProgress relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -762,9 +765,9 @@ abstract class MenuGroupQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\OIP\OrderInProgressQuery A secondary query class using the current class as primary query
      */
@@ -778,7 +781,7 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildMenuGroup $menuGroup Object to remove from the list of results
+     * @param ChildMenuGroup $menuGroup Object to remove from the list of results
      *
      * @return $this|ChildMenuGroupQuery The current query, for fluid interface
      */
@@ -794,7 +797,7 @@ abstract class MenuGroupQuery extends ModelCriteria
     /**
      * Deletes all rows from the menu_group table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -805,23 +808,25 @@ abstract class MenuGroupQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            MenuGroupTableMap::clearInstancePool();
-            MenuGroupTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                MenuGroupTableMap::clearInstancePool();
+                MenuGroupTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -840,16 +845,17 @@ abstract class MenuGroupQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            MenuGroupTableMap::removeInstanceFromPool($criteria);
+                MenuGroupTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            MenuGroupTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                MenuGroupTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // MenuGroupQuery

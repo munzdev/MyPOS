@@ -47,11 +47,11 @@ $o_connector = new NetworkPrintConnector("192.168.0.50", 9100);
 //$o_connector = new FilePrintConnector("php://stdout");
 
 $o_reciep = new ReciepPrint($o_connector, 48, $o_i18n->ReciepPrint);
-$o_reciep->SetLogo("resources/escpos-php.png", PRINTER_LOGO_BIT_IMAGE_COLUMN);
-$o_reciep->SetHeader("Company bon printed\nStreet whatever 1\nCity 1234\nTAX:1234567");
-$o_reciep->SetInvoiceid(587472);
+$o_reciep->setLogo("resources/escpos-php.png", PRINTER_LOGO_BIT_IMAGE_COLUMN);
+$o_reciep->setHeader("Company bon printed\nStreet whatever 1\nCity 1234\nTAX:1234567");
+$o_reciep->setInvoiceid(587472);
 
-$o_reciep->AddPaymentRecieved($o_payment_recieved);
-$o_reciep->SetBankinformation($o_event_bankinformation);
+$o_reciep->addPaymentRecieved($o_payment_recieved);
+$o_reciep->setBankinformation($o_event_bankinformation);
 
-$o_reciep->PrintPaymentRecieved();
+$o_reciep->printPaymentRecieved();

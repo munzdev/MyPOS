@@ -18,51 +18,48 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'distribution_giving_out' table.
  *
+ * @method ChildDistributionGivingOutQuery orderByDistributionGivingOutid($order = Criteria::ASC) Order by the distribution_giving_outid column
+ * @method ChildDistributionGivingOutQuery orderByDate($order = Criteria::ASC) Order by the date column
  *
+ * @method ChildDistributionGivingOutQuery groupByDistributionGivingOutid() Group by the distribution_giving_outid column
+ * @method ChildDistributionGivingOutQuery groupByDate() Group by the date column
  *
- * @method     ChildDistributionGivingOutQuery orderByDistributionGivingOutid($order = Criteria::ASC) Order by the distribution_giving_outid column
- * @method     ChildDistributionGivingOutQuery orderByDate($order = Criteria::ASC) Order by the date column
+ * @method ChildDistributionGivingOutQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildDistributionGivingOutQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildDistributionGivingOutQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildDistributionGivingOutQuery groupByDistributionGivingOutid() Group by the distribution_giving_outid column
- * @method     ChildDistributionGivingOutQuery groupByDate() Group by the date column
+ * @method ChildDistributionGivingOutQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildDistributionGivingOutQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildDistributionGivingOutQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildDistributionGivingOutQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildDistributionGivingOutQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildDistributionGivingOutQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildDistributionGivingOutQuery leftJoinOrderInProgressRecieved($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderInProgressRecieved relation
+ * @method ChildDistributionGivingOutQuery rightJoinOrderInProgressRecieved($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderInProgressRecieved relation
+ * @method ChildDistributionGivingOutQuery innerJoinOrderInProgressRecieved($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderInProgressRecieved relation
  *
- * @method     ChildDistributionGivingOutQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildDistributionGivingOutQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildDistributionGivingOutQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildDistributionGivingOutQuery joinWithOrderInProgressRecieved($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderInProgressRecieved relation
  *
- * @method     ChildDistributionGivingOutQuery leftJoinOrderInProgressRecieved($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderInProgressRecieved relation
- * @method     ChildDistributionGivingOutQuery rightJoinOrderInProgressRecieved($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderInProgressRecieved relation
- * @method     ChildDistributionGivingOutQuery innerJoinOrderInProgressRecieved($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderInProgressRecieved relation
+ * @method ChildDistributionGivingOutQuery leftJoinWithOrderInProgressRecieved() Adds a LEFT JOIN clause and with to the query using the OrderInProgressRecieved relation
+ * @method ChildDistributionGivingOutQuery rightJoinWithOrderInProgressRecieved() Adds a RIGHT JOIN clause and with to the query using the OrderInProgressRecieved relation
+ * @method ChildDistributionGivingOutQuery innerJoinWithOrderInProgressRecieved() Adds a INNER JOIN clause and with to the query using the OrderInProgressRecieved relation
  *
- * @method     ChildDistributionGivingOutQuery joinWithOrderInProgressRecieved($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderInProgressRecieved relation
+ * @method \API\Models\OIP\OrderInProgressRecievedQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildDistributionGivingOutQuery leftJoinWithOrderInProgressRecieved() Adds a LEFT JOIN clause and with to the query using the OrderInProgressRecieved relation
- * @method     ChildDistributionGivingOutQuery rightJoinWithOrderInProgressRecieved() Adds a RIGHT JOIN clause and with to the query using the OrderInProgressRecieved relation
- * @method     ChildDistributionGivingOutQuery innerJoinWithOrderInProgressRecieved() Adds a INNER JOIN clause and with to the query using the OrderInProgressRecieved relation
+ * @method ChildDistributionGivingOut findOne(ConnectionInterface $con = null) Return the first ChildDistributionGivingOut matching the query
+ * @method ChildDistributionGivingOut findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDistributionGivingOut matching the query, or a new ChildDistributionGivingOut object populated from the query conditions when no match is found
  *
- * @method     \API\Models\OIP\OrderInProgressRecievedQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildDistributionGivingOut findOne(ConnectionInterface $con = null) Return the first ChildDistributionGivingOut matching the query
- * @method     ChildDistributionGivingOut findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDistributionGivingOut matching the query, or a new ChildDistributionGivingOut object populated from the query conditions when no match is found
- *
- * @method     ChildDistributionGivingOut findOneByDistributionGivingOutid(int $distribution_giving_outid) Return the first ChildDistributionGivingOut filtered by the distribution_giving_outid column
- * @method     ChildDistributionGivingOut findOneByDate(string $date) Return the first ChildDistributionGivingOut filtered by the date column *
+ * @method ChildDistributionGivingOut findOneByDistributionGivingOutid(int $distribution_giving_outid) Return the first ChildDistributionGivingOut filtered by the distribution_giving_outid column
+ * @method ChildDistributionGivingOut findOneByDate(string $date) Return the first ChildDistributionGivingOut filtered by the date column *
 
- * @method     ChildDistributionGivingOut requirePk($key, ConnectionInterface $con = null) Return the ChildDistributionGivingOut by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDistributionGivingOut requireOne(ConnectionInterface $con = null) Return the first ChildDistributionGivingOut matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildDistributionGivingOut requirePk($key, ConnectionInterface $con = null) Return the ChildDistributionGivingOut by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildDistributionGivingOut requireOne(ConnectionInterface $con = null) Return the first ChildDistributionGivingOut matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildDistributionGivingOut requireOneByDistributionGivingOutid(int $distribution_giving_outid) Return the first ChildDistributionGivingOut filtered by the distribution_giving_outid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDistributionGivingOut requireOneByDate(string $date) Return the first ChildDistributionGivingOut filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildDistributionGivingOut requireOneByDistributionGivingOutid(int $distribution_giving_outid) Return the first ChildDistributionGivingOut filtered by the distribution_giving_outid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildDistributionGivingOut requireOneByDate(string $date) Return the first ChildDistributionGivingOut filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildDistributionGivingOut[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildDistributionGivingOut objects based on current ModelCriteria
- * @method     ChildDistributionGivingOut[]|ObjectCollection findByDistributionGivingOutid(int $distribution_giving_outid) Return ChildDistributionGivingOut objects filtered by the distribution_giving_outid column
- * @method     ChildDistributionGivingOut[]|ObjectCollection findByDate(string $date) Return ChildDistributionGivingOut objects filtered by the date column
- * @method     ChildDistributionGivingOut[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildDistributionGivingOut[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildDistributionGivingOut objects based on current ModelCriteria
+ * @method ChildDistributionGivingOut[]|ObjectCollection findByDistributionGivingOutid(int $distribution_giving_outid) Return ChildDistributionGivingOut objects filtered by the distribution_giving_outid column
+ * @method ChildDistributionGivingOut[]|ObjectCollection findByDate(string $date) Return ChildDistributionGivingOut objects filtered by the date column
+ * @method ChildDistributionGivingOut[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class DistributionGivingOutQuery extends ModelCriteria
 {
@@ -71,9 +68,9 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\OIP\Base\DistributionGivingOutQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\OIP\\DistributionGivingOut', $modelAlias = null)
     {
@@ -83,8 +80,8 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
     /**
      * Returns a new ChildDistributionGivingOutQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildDistributionGivingOutQuery
      */
@@ -113,7 +110,7 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildDistributionGivingOut|array|mixed the result, formatted by the current formatter
@@ -130,8 +127,7 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -150,8 +146,8 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -170,7 +166,9 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildDistributionGivingOut $obj */
+            /**
+ * @var ChildDistributionGivingOut $obj
+*/
             $obj = new ChildDistributionGivingOut();
             $obj->hydrate($row);
             DistributionGivingOutTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -183,8 +181,8 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildDistributionGivingOut|array|mixed the result, formatted by the current formatter
      */
@@ -204,8 +202,9 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -226,26 +225,24 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildDistributionGivingOutQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(DistributionGivingOutTableMap::COL_DISTRIBUTION_GIVING_OUTID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildDistributionGivingOutQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(DistributionGivingOutTableMap::COL_DISTRIBUTION_GIVING_OUTID, $keys, Criteria::IN);
     }
 
@@ -259,11 +256,14 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
      * $query->filterByDistributionGivingOutid(array('min' => 12)); // WHERE distribution_giving_outid > 12
      * </code>
      *
-     * @param     mixed $distributionGivingOutid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $distributionGivingOutid The value to use as filter.
+     *                                            Use scalar values for
+     *                                            equality. Use array values
+     *                                            for in_array() equivalent.
+     *                                            Use associative array('min'
+     *                                            => $minValue, 'max' =>
+     *                                            $maxValue) for intervals.
+     * @param string $comparison              Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildDistributionGivingOutQuery The current query, for fluid interface
      */
@@ -300,13 +300,18 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $date       The value to use as filter.
+     *                           Values can be integers
+     *                           (unix timestamps), DateTime
+     *                           objects, or strings. Empty
+     *                           strings are treated as
+     *                           NULL. Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildDistributionGivingOutQuery The current query, for fluid interface
      */
@@ -337,7 +342,7 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
      * Filter the query by a related \API\Models\OIP\OrderInProgressRecieved object
      *
      * @param \API\Models\OIP\OrderInProgressRecieved|ObjectCollection $orderInProgressRecieved the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                                   $comparison              Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildDistributionGivingOutQuery The current query, for fluid interface
      */
@@ -359,8 +364,8 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the OrderInProgressRecieved relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildDistributionGivingOutQuery The current query, for fluid interface
      */
@@ -393,9 +398,9 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\OIP\OrderInProgressRecievedQuery A secondary query class using the current class as primary query
      */
@@ -409,7 +414,7 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildDistributionGivingOut $distributionGivingOut Object to remove from the list of results
+     * @param ChildDistributionGivingOut $distributionGivingOut Object to remove from the list of results
      *
      * @return $this|ChildDistributionGivingOutQuery The current query, for fluid interface
      */
@@ -425,7 +430,7 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
     /**
      * Deletes all rows from the distribution_giving_out table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -436,23 +441,25 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            DistributionGivingOutTableMap::clearInstancePool();
-            DistributionGivingOutTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                DistributionGivingOutTableMap::clearInstancePool();
+                DistributionGivingOutTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -471,16 +478,17 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            DistributionGivingOutTableMap::removeInstanceFromPool($criteria);
+                DistributionGivingOutTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            DistributionGivingOutTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                DistributionGivingOutTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // DistributionGivingOutQuery

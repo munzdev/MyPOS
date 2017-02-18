@@ -22,191 +22,188 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'invoice' table.
  *
+ * @method ChildInvoiceQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
+ * @method ChildInvoiceQuery orderByInvoiceTypeid($order = Criteria::ASC) Order by the invoice_typeid column
+ * @method ChildInvoiceQuery orderByEventContactid($order = Criteria::ASC) Order by the event_contactid column
+ * @method ChildInvoiceQuery orderByUserid($order = Criteria::ASC) Order by the userid column
+ * @method ChildInvoiceQuery orderByEventBankinformationid($order = Criteria::ASC) Order by the event_bankinformationid column
+ * @method ChildInvoiceQuery orderByCustomerEventContactid($order = Criteria::ASC) Order by the customer_event_contactid column
+ * @method ChildInvoiceQuery orderByCanceledInvoiceid($order = Criteria::ASC) Order by the canceled_invoiceid column
+ * @method ChildInvoiceQuery orderByDate($order = Criteria::ASC) Order by the date column
+ * @method ChildInvoiceQuery orderByAmount($order = Criteria::ASC) Order by the amount column
+ * @method ChildInvoiceQuery orderByMaturityDate($order = Criteria::ASC) Order by the maturity_date column
+ * @method ChildInvoiceQuery orderByPaymentFinished($order = Criteria::ASC) Order by the payment_finished column
+ * @method ChildInvoiceQuery orderByAmountRecieved($order = Criteria::ASC) Order by the amount_recieved column
  *
+ * @method ChildInvoiceQuery groupByInvoiceid() Group by the invoiceid column
+ * @method ChildInvoiceQuery groupByInvoiceTypeid() Group by the invoice_typeid column
+ * @method ChildInvoiceQuery groupByEventContactid() Group by the event_contactid column
+ * @method ChildInvoiceQuery groupByUserid() Group by the userid column
+ * @method ChildInvoiceQuery groupByEventBankinformationid() Group by the event_bankinformationid column
+ * @method ChildInvoiceQuery groupByCustomerEventContactid() Group by the customer_event_contactid column
+ * @method ChildInvoiceQuery groupByCanceledInvoiceid() Group by the canceled_invoiceid column
+ * @method ChildInvoiceQuery groupByDate() Group by the date column
+ * @method ChildInvoiceQuery groupByAmount() Group by the amount column
+ * @method ChildInvoiceQuery groupByMaturityDate() Group by the maturity_date column
+ * @method ChildInvoiceQuery groupByPaymentFinished() Group by the payment_finished column
+ * @method ChildInvoiceQuery groupByAmountRecieved() Group by the amount_recieved column
  *
- * @method     ChildInvoiceQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
- * @method     ChildInvoiceQuery orderByInvoiceTypeid($order = Criteria::ASC) Order by the invoice_typeid column
- * @method     ChildInvoiceQuery orderByEventContactid($order = Criteria::ASC) Order by the event_contactid column
- * @method     ChildInvoiceQuery orderByUserid($order = Criteria::ASC) Order by the userid column
- * @method     ChildInvoiceQuery orderByEventBankinformationid($order = Criteria::ASC) Order by the event_bankinformationid column
- * @method     ChildInvoiceQuery orderByCustomerEventContactid($order = Criteria::ASC) Order by the customer_event_contactid column
- * @method     ChildInvoiceQuery orderByCanceledInvoiceid($order = Criteria::ASC) Order by the canceled_invoiceid column
- * @method     ChildInvoiceQuery orderByDate($order = Criteria::ASC) Order by the date column
- * @method     ChildInvoiceQuery orderByAmount($order = Criteria::ASC) Order by the amount column
- * @method     ChildInvoiceQuery orderByMaturityDate($order = Criteria::ASC) Order by the maturity_date column
- * @method     ChildInvoiceQuery orderByPaymentFinished($order = Criteria::ASC) Order by the payment_finished column
- * @method     ChildInvoiceQuery orderByAmountRecieved($order = Criteria::ASC) Order by the amount_recieved column
+ * @method ChildInvoiceQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildInvoiceQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildInvoiceQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildInvoiceQuery groupByInvoiceid() Group by the invoiceid column
- * @method     ChildInvoiceQuery groupByInvoiceTypeid() Group by the invoice_typeid column
- * @method     ChildInvoiceQuery groupByEventContactid() Group by the event_contactid column
- * @method     ChildInvoiceQuery groupByUserid() Group by the userid column
- * @method     ChildInvoiceQuery groupByEventBankinformationid() Group by the event_bankinformationid column
- * @method     ChildInvoiceQuery groupByCustomerEventContactid() Group by the customer_event_contactid column
- * @method     ChildInvoiceQuery groupByCanceledInvoiceid() Group by the canceled_invoiceid column
- * @method     ChildInvoiceQuery groupByDate() Group by the date column
- * @method     ChildInvoiceQuery groupByAmount() Group by the amount column
- * @method     ChildInvoiceQuery groupByMaturityDate() Group by the maturity_date column
- * @method     ChildInvoiceQuery groupByPaymentFinished() Group by the payment_finished column
- * @method     ChildInvoiceQuery groupByAmountRecieved() Group by the amount_recieved column
+ * @method ChildInvoiceQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildInvoiceQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildInvoiceQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildInvoiceQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildInvoiceQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildInvoiceQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildInvoiceQuery leftJoinEventContactRelatedByCustomerEventContactid($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventContactRelatedByCustomerEventContactid relation
+ * @method ChildInvoiceQuery rightJoinEventContactRelatedByCustomerEventContactid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventContactRelatedByCustomerEventContactid relation
+ * @method ChildInvoiceQuery innerJoinEventContactRelatedByCustomerEventContactid($relationAlias = null) Adds a INNER JOIN clause to the query using the EventContactRelatedByCustomerEventContactid relation
  *
- * @method     ChildInvoiceQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildInvoiceQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildInvoiceQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildInvoiceQuery joinWithEventContactRelatedByCustomerEventContactid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the EventContactRelatedByCustomerEventContactid relation
  *
- * @method     ChildInvoiceQuery leftJoinEventContactRelatedByCustomerEventContactid($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventContactRelatedByCustomerEventContactid relation
- * @method     ChildInvoiceQuery rightJoinEventContactRelatedByCustomerEventContactid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventContactRelatedByCustomerEventContactid relation
- * @method     ChildInvoiceQuery innerJoinEventContactRelatedByCustomerEventContactid($relationAlias = null) Adds a INNER JOIN clause to the query using the EventContactRelatedByCustomerEventContactid relation
+ * @method ChildInvoiceQuery leftJoinWithEventContactRelatedByCustomerEventContactid() Adds a LEFT JOIN clause and with to the query using the EventContactRelatedByCustomerEventContactid relation
+ * @method ChildInvoiceQuery rightJoinWithEventContactRelatedByCustomerEventContactid() Adds a RIGHT JOIN clause and with to the query using the EventContactRelatedByCustomerEventContactid relation
+ * @method ChildInvoiceQuery innerJoinWithEventContactRelatedByCustomerEventContactid() Adds a INNER JOIN clause and with to the query using the EventContactRelatedByCustomerEventContactid relation
  *
- * @method     ChildInvoiceQuery joinWithEventContactRelatedByCustomerEventContactid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the EventContactRelatedByCustomerEventContactid relation
+ * @method ChildInvoiceQuery leftJoinEventBankinformation($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventBankinformation relation
+ * @method ChildInvoiceQuery rightJoinEventBankinformation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventBankinformation relation
+ * @method ChildInvoiceQuery innerJoinEventBankinformation($relationAlias = null) Adds a INNER JOIN clause to the query using the EventBankinformation relation
  *
- * @method     ChildInvoiceQuery leftJoinWithEventContactRelatedByCustomerEventContactid() Adds a LEFT JOIN clause and with to the query using the EventContactRelatedByCustomerEventContactid relation
- * @method     ChildInvoiceQuery rightJoinWithEventContactRelatedByCustomerEventContactid() Adds a RIGHT JOIN clause and with to the query using the EventContactRelatedByCustomerEventContactid relation
- * @method     ChildInvoiceQuery innerJoinWithEventContactRelatedByCustomerEventContactid() Adds a INNER JOIN clause and with to the query using the EventContactRelatedByCustomerEventContactid relation
+ * @method ChildInvoiceQuery joinWithEventBankinformation($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the EventBankinformation relation
  *
- * @method     ChildInvoiceQuery leftJoinEventBankinformation($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventBankinformation relation
- * @method     ChildInvoiceQuery rightJoinEventBankinformation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventBankinformation relation
- * @method     ChildInvoiceQuery innerJoinEventBankinformation($relationAlias = null) Adds a INNER JOIN clause to the query using the EventBankinformation relation
+ * @method ChildInvoiceQuery leftJoinWithEventBankinformation() Adds a LEFT JOIN clause and with to the query using the EventBankinformation relation
+ * @method ChildInvoiceQuery rightJoinWithEventBankinformation() Adds a RIGHT JOIN clause and with to the query using the EventBankinformation relation
+ * @method ChildInvoiceQuery innerJoinWithEventBankinformation() Adds a INNER JOIN clause and with to the query using the EventBankinformation relation
  *
- * @method     ChildInvoiceQuery joinWithEventBankinformation($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the EventBankinformation relation
+ * @method ChildInvoiceQuery leftJoinEventContactRelatedByEventContactid($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventContactRelatedByEventContactid relation
+ * @method ChildInvoiceQuery rightJoinEventContactRelatedByEventContactid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventContactRelatedByEventContactid relation
+ * @method ChildInvoiceQuery innerJoinEventContactRelatedByEventContactid($relationAlias = null) Adds a INNER JOIN clause to the query using the EventContactRelatedByEventContactid relation
  *
- * @method     ChildInvoiceQuery leftJoinWithEventBankinformation() Adds a LEFT JOIN clause and with to the query using the EventBankinformation relation
- * @method     ChildInvoiceQuery rightJoinWithEventBankinformation() Adds a RIGHT JOIN clause and with to the query using the EventBankinformation relation
- * @method     ChildInvoiceQuery innerJoinWithEventBankinformation() Adds a INNER JOIN clause and with to the query using the EventBankinformation relation
+ * @method ChildInvoiceQuery joinWithEventContactRelatedByEventContactid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the EventContactRelatedByEventContactid relation
  *
- * @method     ChildInvoiceQuery leftJoinEventContactRelatedByEventContactid($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventContactRelatedByEventContactid relation
- * @method     ChildInvoiceQuery rightJoinEventContactRelatedByEventContactid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventContactRelatedByEventContactid relation
- * @method     ChildInvoiceQuery innerJoinEventContactRelatedByEventContactid($relationAlias = null) Adds a INNER JOIN clause to the query using the EventContactRelatedByEventContactid relation
+ * @method ChildInvoiceQuery leftJoinWithEventContactRelatedByEventContactid() Adds a LEFT JOIN clause and with to the query using the EventContactRelatedByEventContactid relation
+ * @method ChildInvoiceQuery rightJoinWithEventContactRelatedByEventContactid() Adds a RIGHT JOIN clause and with to the query using the EventContactRelatedByEventContactid relation
+ * @method ChildInvoiceQuery innerJoinWithEventContactRelatedByEventContactid() Adds a INNER JOIN clause and with to the query using the EventContactRelatedByEventContactid relation
  *
- * @method     ChildInvoiceQuery joinWithEventContactRelatedByEventContactid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the EventContactRelatedByEventContactid relation
+ * @method ChildInvoiceQuery leftJoinInvoiceRelatedByCanceledInvoiceid($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceRelatedByCanceledInvoiceid relation
+ * @method ChildInvoiceQuery rightJoinInvoiceRelatedByCanceledInvoiceid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceRelatedByCanceledInvoiceid relation
+ * @method ChildInvoiceQuery innerJoinInvoiceRelatedByCanceledInvoiceid($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceRelatedByCanceledInvoiceid relation
  *
- * @method     ChildInvoiceQuery leftJoinWithEventContactRelatedByEventContactid() Adds a LEFT JOIN clause and with to the query using the EventContactRelatedByEventContactid relation
- * @method     ChildInvoiceQuery rightJoinWithEventContactRelatedByEventContactid() Adds a RIGHT JOIN clause and with to the query using the EventContactRelatedByEventContactid relation
- * @method     ChildInvoiceQuery innerJoinWithEventContactRelatedByEventContactid() Adds a INNER JOIN clause and with to the query using the EventContactRelatedByEventContactid relation
+ * @method ChildInvoiceQuery joinWithInvoiceRelatedByCanceledInvoiceid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceRelatedByCanceledInvoiceid relation
  *
- * @method     ChildInvoiceQuery leftJoinInvoiceRelatedByCanceledInvoiceid($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceRelatedByCanceledInvoiceid relation
- * @method     ChildInvoiceQuery rightJoinInvoiceRelatedByCanceledInvoiceid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceRelatedByCanceledInvoiceid relation
- * @method     ChildInvoiceQuery innerJoinInvoiceRelatedByCanceledInvoiceid($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceRelatedByCanceledInvoiceid relation
+ * @method ChildInvoiceQuery leftJoinWithInvoiceRelatedByCanceledInvoiceid() Adds a LEFT JOIN clause and with to the query using the InvoiceRelatedByCanceledInvoiceid relation
+ * @method ChildInvoiceQuery rightJoinWithInvoiceRelatedByCanceledInvoiceid() Adds a RIGHT JOIN clause and with to the query using the InvoiceRelatedByCanceledInvoiceid relation
+ * @method ChildInvoiceQuery innerJoinWithInvoiceRelatedByCanceledInvoiceid() Adds a INNER JOIN clause and with to the query using the InvoiceRelatedByCanceledInvoiceid relation
  *
- * @method     ChildInvoiceQuery joinWithInvoiceRelatedByCanceledInvoiceid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceRelatedByCanceledInvoiceid relation
+ * @method ChildInvoiceQuery leftJoinInvoiceType($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceType relation
+ * @method ChildInvoiceQuery rightJoinInvoiceType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceType relation
+ * @method ChildInvoiceQuery innerJoinInvoiceType($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceType relation
  *
- * @method     ChildInvoiceQuery leftJoinWithInvoiceRelatedByCanceledInvoiceid() Adds a LEFT JOIN clause and with to the query using the InvoiceRelatedByCanceledInvoiceid relation
- * @method     ChildInvoiceQuery rightJoinWithInvoiceRelatedByCanceledInvoiceid() Adds a RIGHT JOIN clause and with to the query using the InvoiceRelatedByCanceledInvoiceid relation
- * @method     ChildInvoiceQuery innerJoinWithInvoiceRelatedByCanceledInvoiceid() Adds a INNER JOIN clause and with to the query using the InvoiceRelatedByCanceledInvoiceid relation
+ * @method ChildInvoiceQuery joinWithInvoiceType($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceType relation
  *
- * @method     ChildInvoiceQuery leftJoinInvoiceType($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceType relation
- * @method     ChildInvoiceQuery rightJoinInvoiceType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceType relation
- * @method     ChildInvoiceQuery innerJoinInvoiceType($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceType relation
+ * @method ChildInvoiceQuery leftJoinWithInvoiceType() Adds a LEFT JOIN clause and with to the query using the InvoiceType relation
+ * @method ChildInvoiceQuery rightJoinWithInvoiceType() Adds a RIGHT JOIN clause and with to the query using the InvoiceType relation
+ * @method ChildInvoiceQuery innerJoinWithInvoiceType() Adds a INNER JOIN clause and with to the query using the InvoiceType relation
  *
- * @method     ChildInvoiceQuery joinWithInvoiceType($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceType relation
+ * @method ChildInvoiceQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
+ * @method ChildInvoiceQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
+ * @method ChildInvoiceQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
  *
- * @method     ChildInvoiceQuery leftJoinWithInvoiceType() Adds a LEFT JOIN clause and with to the query using the InvoiceType relation
- * @method     ChildInvoiceQuery rightJoinWithInvoiceType() Adds a RIGHT JOIN clause and with to the query using the InvoiceType relation
- * @method     ChildInvoiceQuery innerJoinWithInvoiceType() Adds a INNER JOIN clause and with to the query using the InvoiceType relation
+ * @method ChildInvoiceQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
  *
- * @method     ChildInvoiceQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
- * @method     ChildInvoiceQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
- * @method     ChildInvoiceQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
+ * @method ChildInvoiceQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
+ * @method ChildInvoiceQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
+ * @method ChildInvoiceQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     ChildInvoiceQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
+ * @method ChildInvoiceQuery leftJoinInvoiceRelatedByInvoiceid($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceRelatedByInvoiceid relation
+ * @method ChildInvoiceQuery rightJoinInvoiceRelatedByInvoiceid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceRelatedByInvoiceid relation
+ * @method ChildInvoiceQuery innerJoinInvoiceRelatedByInvoiceid($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceRelatedByInvoiceid relation
  *
- * @method     ChildInvoiceQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
- * @method     ChildInvoiceQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
- * @method     ChildInvoiceQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
+ * @method ChildInvoiceQuery joinWithInvoiceRelatedByInvoiceid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceRelatedByInvoiceid relation
  *
- * @method     ChildInvoiceQuery leftJoinInvoiceRelatedByInvoiceid($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceRelatedByInvoiceid relation
- * @method     ChildInvoiceQuery rightJoinInvoiceRelatedByInvoiceid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceRelatedByInvoiceid relation
- * @method     ChildInvoiceQuery innerJoinInvoiceRelatedByInvoiceid($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceRelatedByInvoiceid relation
+ * @method ChildInvoiceQuery leftJoinWithInvoiceRelatedByInvoiceid() Adds a LEFT JOIN clause and with to the query using the InvoiceRelatedByInvoiceid relation
+ * @method ChildInvoiceQuery rightJoinWithInvoiceRelatedByInvoiceid() Adds a RIGHT JOIN clause and with to the query using the InvoiceRelatedByInvoiceid relation
+ * @method ChildInvoiceQuery innerJoinWithInvoiceRelatedByInvoiceid() Adds a INNER JOIN clause and with to the query using the InvoiceRelatedByInvoiceid relation
  *
- * @method     ChildInvoiceQuery joinWithInvoiceRelatedByInvoiceid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceRelatedByInvoiceid relation
+ * @method ChildInvoiceQuery leftJoinInvoiceItem($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceItem relation
+ * @method ChildInvoiceQuery rightJoinInvoiceItem($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceItem relation
+ * @method ChildInvoiceQuery innerJoinInvoiceItem($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceItem relation
  *
- * @method     ChildInvoiceQuery leftJoinWithInvoiceRelatedByInvoiceid() Adds a LEFT JOIN clause and with to the query using the InvoiceRelatedByInvoiceid relation
- * @method     ChildInvoiceQuery rightJoinWithInvoiceRelatedByInvoiceid() Adds a RIGHT JOIN clause and with to the query using the InvoiceRelatedByInvoiceid relation
- * @method     ChildInvoiceQuery innerJoinWithInvoiceRelatedByInvoiceid() Adds a INNER JOIN clause and with to the query using the InvoiceRelatedByInvoiceid relation
+ * @method ChildInvoiceQuery joinWithInvoiceItem($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceItem relation
  *
- * @method     ChildInvoiceQuery leftJoinInvoiceItem($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceItem relation
- * @method     ChildInvoiceQuery rightJoinInvoiceItem($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceItem relation
- * @method     ChildInvoiceQuery innerJoinInvoiceItem($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceItem relation
+ * @method ChildInvoiceQuery leftJoinWithInvoiceItem() Adds a LEFT JOIN clause and with to the query using the InvoiceItem relation
+ * @method ChildInvoiceQuery rightJoinWithInvoiceItem() Adds a RIGHT JOIN clause and with to the query using the InvoiceItem relation
+ * @method ChildInvoiceQuery innerJoinWithInvoiceItem() Adds a INNER JOIN clause and with to the query using the InvoiceItem relation
  *
- * @method     ChildInvoiceQuery joinWithInvoiceItem($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceItem relation
+ * @method ChildInvoiceQuery leftJoinPaymentRecieved($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentRecieved relation
+ * @method ChildInvoiceQuery rightJoinPaymentRecieved($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentRecieved relation
+ * @method ChildInvoiceQuery innerJoinPaymentRecieved($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentRecieved relation
  *
- * @method     ChildInvoiceQuery leftJoinWithInvoiceItem() Adds a LEFT JOIN clause and with to the query using the InvoiceItem relation
- * @method     ChildInvoiceQuery rightJoinWithInvoiceItem() Adds a RIGHT JOIN clause and with to the query using the InvoiceItem relation
- * @method     ChildInvoiceQuery innerJoinWithInvoiceItem() Adds a INNER JOIN clause and with to the query using the InvoiceItem relation
+ * @method ChildInvoiceQuery joinWithPaymentRecieved($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentRecieved relation
  *
- * @method     ChildInvoiceQuery leftJoinPaymentRecieved($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentRecieved relation
- * @method     ChildInvoiceQuery rightJoinPaymentRecieved($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentRecieved relation
- * @method     ChildInvoiceQuery innerJoinPaymentRecieved($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentRecieved relation
+ * @method ChildInvoiceQuery leftJoinWithPaymentRecieved() Adds a LEFT JOIN clause and with to the query using the PaymentRecieved relation
+ * @method ChildInvoiceQuery rightJoinWithPaymentRecieved() Adds a RIGHT JOIN clause and with to the query using the PaymentRecieved relation
+ * @method ChildInvoiceQuery innerJoinWithPaymentRecieved() Adds a INNER JOIN clause and with to the query using the PaymentRecieved relation
  *
- * @method     ChildInvoiceQuery joinWithPaymentRecieved($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentRecieved relation
+ * @method ChildInvoiceQuery leftJoinInvoiceWarning($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceWarning relation
+ * @method ChildInvoiceQuery rightJoinInvoiceWarning($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceWarning relation
+ * @method ChildInvoiceQuery innerJoinInvoiceWarning($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceWarning relation
  *
- * @method     ChildInvoiceQuery leftJoinWithPaymentRecieved() Adds a LEFT JOIN clause and with to the query using the PaymentRecieved relation
- * @method     ChildInvoiceQuery rightJoinWithPaymentRecieved() Adds a RIGHT JOIN clause and with to the query using the PaymentRecieved relation
- * @method     ChildInvoiceQuery innerJoinWithPaymentRecieved() Adds a INNER JOIN clause and with to the query using the PaymentRecieved relation
+ * @method ChildInvoiceQuery joinWithInvoiceWarning($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceWarning relation
  *
- * @method     ChildInvoiceQuery leftJoinInvoiceWarning($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceWarning relation
- * @method     ChildInvoiceQuery rightJoinInvoiceWarning($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceWarning relation
- * @method     ChildInvoiceQuery innerJoinInvoiceWarning($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceWarning relation
+ * @method ChildInvoiceQuery leftJoinWithInvoiceWarning() Adds a LEFT JOIN clause and with to the query using the InvoiceWarning relation
+ * @method ChildInvoiceQuery rightJoinWithInvoiceWarning() Adds a RIGHT JOIN clause and with to the query using the InvoiceWarning relation
+ * @method ChildInvoiceQuery innerJoinWithInvoiceWarning() Adds a INNER JOIN clause and with to the query using the InvoiceWarning relation
  *
- * @method     ChildInvoiceQuery joinWithInvoiceWarning($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceWarning relation
+ * @method \API\Models\Event\EventContactQuery|\API\Models\Event\EventBankinformationQuery|\API\Models\Invoice\InvoiceQuery|\API\Models\Invoice\InvoiceTypeQuery|\API\Models\User\UserQuery|\API\Models\Invoice\InvoiceItemQuery|\API\Models\Payment\PaymentRecievedQuery|\API\Models\Invoice\InvoiceWarningQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildInvoiceQuery leftJoinWithInvoiceWarning() Adds a LEFT JOIN clause and with to the query using the InvoiceWarning relation
- * @method     ChildInvoiceQuery rightJoinWithInvoiceWarning() Adds a RIGHT JOIN clause and with to the query using the InvoiceWarning relation
- * @method     ChildInvoiceQuery innerJoinWithInvoiceWarning() Adds a INNER JOIN clause and with to the query using the InvoiceWarning relation
+ * @method ChildInvoice findOne(ConnectionInterface $con = null) Return the first ChildInvoice matching the query
+ * @method ChildInvoice findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoice matching the query, or a new ChildInvoice object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Event\EventContactQuery|\API\Models\Event\EventBankinformationQuery|\API\Models\Invoice\InvoiceQuery|\API\Models\Invoice\InvoiceTypeQuery|\API\Models\User\UserQuery|\API\Models\Invoice\InvoiceItemQuery|\API\Models\Payment\PaymentRecievedQuery|\API\Models\Invoice\InvoiceWarningQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildInvoice findOne(ConnectionInterface $con = null) Return the first ChildInvoice matching the query
- * @method     ChildInvoice findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoice matching the query, or a new ChildInvoice object populated from the query conditions when no match is found
- *
- * @method     ChildInvoice findOneByInvoiceid(int $invoiceid) Return the first ChildInvoice filtered by the invoiceid column
- * @method     ChildInvoice findOneByInvoiceTypeid(int $invoice_typeid) Return the first ChildInvoice filtered by the invoice_typeid column
- * @method     ChildInvoice findOneByEventContactid(int $event_contactid) Return the first ChildInvoice filtered by the event_contactid column
- * @method     ChildInvoice findOneByUserid(int $userid) Return the first ChildInvoice filtered by the userid column
- * @method     ChildInvoice findOneByEventBankinformationid(int $event_bankinformationid) Return the first ChildInvoice filtered by the event_bankinformationid column
- * @method     ChildInvoice findOneByCustomerEventContactid(int $customer_event_contactid) Return the first ChildInvoice filtered by the customer_event_contactid column
- * @method     ChildInvoice findOneByCanceledInvoiceid(int $canceled_invoiceid) Return the first ChildInvoice filtered by the canceled_invoiceid column
- * @method     ChildInvoice findOneByDate(string $date) Return the first ChildInvoice filtered by the date column
- * @method     ChildInvoice findOneByAmount(string $amount) Return the first ChildInvoice filtered by the amount column
- * @method     ChildInvoice findOneByMaturityDate(string $maturity_date) Return the first ChildInvoice filtered by the maturity_date column
- * @method     ChildInvoice findOneByPaymentFinished(string $payment_finished) Return the first ChildInvoice filtered by the payment_finished column
- * @method     ChildInvoice findOneByAmountRecieved(string $amount_recieved) Return the first ChildInvoice filtered by the amount_recieved column *
+ * @method ChildInvoice findOneByInvoiceid(int $invoiceid) Return the first ChildInvoice filtered by the invoiceid column
+ * @method ChildInvoice findOneByInvoiceTypeid(int $invoice_typeid) Return the first ChildInvoice filtered by the invoice_typeid column
+ * @method ChildInvoice findOneByEventContactid(int $event_contactid) Return the first ChildInvoice filtered by the event_contactid column
+ * @method ChildInvoice findOneByUserid(int $userid) Return the first ChildInvoice filtered by the userid column
+ * @method ChildInvoice findOneByEventBankinformationid(int $event_bankinformationid) Return the first ChildInvoice filtered by the event_bankinformationid column
+ * @method ChildInvoice findOneByCustomerEventContactid(int $customer_event_contactid) Return the first ChildInvoice filtered by the customer_event_contactid column
+ * @method ChildInvoice findOneByCanceledInvoiceid(int $canceled_invoiceid) Return the first ChildInvoice filtered by the canceled_invoiceid column
+ * @method ChildInvoice findOneByDate(string $date) Return the first ChildInvoice filtered by the date column
+ * @method ChildInvoice findOneByAmount(string $amount) Return the first ChildInvoice filtered by the amount column
+ * @method ChildInvoice findOneByMaturityDate(string $maturity_date) Return the first ChildInvoice filtered by the maturity_date column
+ * @method ChildInvoice findOneByPaymentFinished(string $payment_finished) Return the first ChildInvoice filtered by the payment_finished column
+ * @method ChildInvoice findOneByAmountRecieved(string $amount_recieved) Return the first ChildInvoice filtered by the amount_recieved column *
 
- * @method     ChildInvoice requirePk($key, ConnectionInterface $con = null) Return the ChildInvoice by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOne(ConnectionInterface $con = null) Return the first ChildInvoice matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requirePk($key, ConnectionInterface $con = null) Return the ChildInvoice by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOne(ConnectionInterface $con = null) Return the first ChildInvoice matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildInvoice requireOneByInvoiceid(int $invoiceid) Return the first ChildInvoice filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOneByInvoiceTypeid(int $invoice_typeid) Return the first ChildInvoice filtered by the invoice_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOneByEventContactid(int $event_contactid) Return the first ChildInvoice filtered by the event_contactid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOneByUserid(int $userid) Return the first ChildInvoice filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOneByEventBankinformationid(int $event_bankinformationid) Return the first ChildInvoice filtered by the event_bankinformationid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOneByCustomerEventContactid(int $customer_event_contactid) Return the first ChildInvoice filtered by the customer_event_contactid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOneByCanceledInvoiceid(int $canceled_invoiceid) Return the first ChildInvoice filtered by the canceled_invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOneByDate(string $date) Return the first ChildInvoice filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOneByAmount(string $amount) Return the first ChildInvoice filtered by the amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOneByMaturityDate(string $maturity_date) Return the first ChildInvoice filtered by the maturity_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOneByPaymentFinished(string $payment_finished) Return the first ChildInvoice filtered by the payment_finished column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoice requireOneByAmountRecieved(string $amount_recieved) Return the first ChildInvoice filtered by the amount_recieved column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOneByInvoiceid(int $invoiceid) Return the first ChildInvoice filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOneByInvoiceTypeid(int $invoice_typeid) Return the first ChildInvoice filtered by the invoice_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOneByEventContactid(int $event_contactid) Return the first ChildInvoice filtered by the event_contactid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOneByUserid(int $userid) Return the first ChildInvoice filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOneByEventBankinformationid(int $event_bankinformationid) Return the first ChildInvoice filtered by the event_bankinformationid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOneByCustomerEventContactid(int $customer_event_contactid) Return the first ChildInvoice filtered by the customer_event_contactid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOneByCanceledInvoiceid(int $canceled_invoiceid) Return the first ChildInvoice filtered by the canceled_invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOneByDate(string $date) Return the first ChildInvoice filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOneByAmount(string $amount) Return the first ChildInvoice filtered by the amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOneByMaturityDate(string $maturity_date) Return the first ChildInvoice filtered by the maturity_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOneByPaymentFinished(string $payment_finished) Return the first ChildInvoice filtered by the payment_finished column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoice requireOneByAmountRecieved(string $amount_recieved) Return the first ChildInvoice filtered by the amount_recieved column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildInvoice[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoice objects based on current ModelCriteria
- * @method     ChildInvoice[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildInvoice objects filtered by the invoiceid column
- * @method     ChildInvoice[]|ObjectCollection findByInvoiceTypeid(int $invoice_typeid) Return ChildInvoice objects filtered by the invoice_typeid column
- * @method     ChildInvoice[]|ObjectCollection findByEventContactid(int $event_contactid) Return ChildInvoice objects filtered by the event_contactid column
- * @method     ChildInvoice[]|ObjectCollection findByUserid(int $userid) Return ChildInvoice objects filtered by the userid column
- * @method     ChildInvoice[]|ObjectCollection findByEventBankinformationid(int $event_bankinformationid) Return ChildInvoice objects filtered by the event_bankinformationid column
- * @method     ChildInvoice[]|ObjectCollection findByCustomerEventContactid(int $customer_event_contactid) Return ChildInvoice objects filtered by the customer_event_contactid column
- * @method     ChildInvoice[]|ObjectCollection findByCanceledInvoiceid(int $canceled_invoiceid) Return ChildInvoice objects filtered by the canceled_invoiceid column
- * @method     ChildInvoice[]|ObjectCollection findByDate(string $date) Return ChildInvoice objects filtered by the date column
- * @method     ChildInvoice[]|ObjectCollection findByAmount(string $amount) Return ChildInvoice objects filtered by the amount column
- * @method     ChildInvoice[]|ObjectCollection findByMaturityDate(string $maturity_date) Return ChildInvoice objects filtered by the maturity_date column
- * @method     ChildInvoice[]|ObjectCollection findByPaymentFinished(string $payment_finished) Return ChildInvoice objects filtered by the payment_finished column
- * @method     ChildInvoice[]|ObjectCollection findByAmountRecieved(string $amount_recieved) Return ChildInvoice objects filtered by the amount_recieved column
- * @method     ChildInvoice[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildInvoice[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoice objects based on current ModelCriteria
+ * @method ChildInvoice[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildInvoice objects filtered by the invoiceid column
+ * @method ChildInvoice[]|ObjectCollection findByInvoiceTypeid(int $invoice_typeid) Return ChildInvoice objects filtered by the invoice_typeid column
+ * @method ChildInvoice[]|ObjectCollection findByEventContactid(int $event_contactid) Return ChildInvoice objects filtered by the event_contactid column
+ * @method ChildInvoice[]|ObjectCollection findByUserid(int $userid) Return ChildInvoice objects filtered by the userid column
+ * @method ChildInvoice[]|ObjectCollection findByEventBankinformationid(int $event_bankinformationid) Return ChildInvoice objects filtered by the event_bankinformationid column
+ * @method ChildInvoice[]|ObjectCollection findByCustomerEventContactid(int $customer_event_contactid) Return ChildInvoice objects filtered by the customer_event_contactid column
+ * @method ChildInvoice[]|ObjectCollection findByCanceledInvoiceid(int $canceled_invoiceid) Return ChildInvoice objects filtered by the canceled_invoiceid column
+ * @method ChildInvoice[]|ObjectCollection findByDate(string $date) Return ChildInvoice objects filtered by the date column
+ * @method ChildInvoice[]|ObjectCollection findByAmount(string $amount) Return ChildInvoice objects filtered by the amount column
+ * @method ChildInvoice[]|ObjectCollection findByMaturityDate(string $maturity_date) Return ChildInvoice objects filtered by the maturity_date column
+ * @method ChildInvoice[]|ObjectCollection findByPaymentFinished(string $payment_finished) Return ChildInvoice objects filtered by the payment_finished column
+ * @method ChildInvoice[]|ObjectCollection findByAmountRecieved(string $amount_recieved) Return ChildInvoice objects filtered by the amount_recieved column
+ * @method ChildInvoice[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class InvoiceQuery extends ModelCriteria
 {
@@ -215,9 +212,9 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Invoice\Base\InvoiceQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Invoice\\Invoice', $modelAlias = null)
     {
@@ -227,8 +224,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Returns a new ChildInvoiceQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildInvoiceQuery
      */
@@ -257,7 +254,7 @@ abstract class InvoiceQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildInvoice|array|mixed the result, formatted by the current formatter
@@ -274,8 +271,7 @@ abstract class InvoiceQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -294,8 +290,8 @@ abstract class InvoiceQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -314,7 +310,9 @@ abstract class InvoiceQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildInvoice $obj */
+            /**
+ * @var ChildInvoice $obj
+*/
             $obj = new ChildInvoice();
             $obj->hydrate($row);
             InvoiceTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -327,8 +325,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildInvoice|array|mixed the result, formatted by the current formatter
      */
@@ -348,8 +346,9 @@ abstract class InvoiceQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -370,26 +369,24 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(InvoiceTableMap::COL_INVOICEID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(InvoiceTableMap::COL_INVOICEID, $keys, Criteria::IN);
     }
 
@@ -403,11 +400,14 @@ abstract class InvoiceQuery extends ModelCriteria
      * $query->filterByInvoiceid(array('min' => 12)); // WHERE invoiceid > 12
      * </code>
      *
-     * @param     mixed $invoiceid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $invoiceid  The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -444,13 +444,16 @@ abstract class InvoiceQuery extends ModelCriteria
      * $query->filterByInvoiceTypeid(array('min' => 12)); // WHERE invoice_typeid > 12
      * </code>
      *
-     * @see       filterByInvoiceType()
+     * @see filterByInvoiceType()
      *
-     * @param     mixed $invoiceTypeid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $invoiceTypeid The value to use as filter.
+     *                                  Use scalar values for
+     *                                  equality. Use array values
+     *                                  for in_array() equivalent.
+     *                                  Use associative array('min'
+     *                                  => $minValue, 'max' =>
+     *                                  $maxValue) for intervals.
+     * @param string $comparison    Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -487,13 +490,16 @@ abstract class InvoiceQuery extends ModelCriteria
      * $query->filterByEventContactid(array('min' => 12)); // WHERE event_contactid > 12
      * </code>
      *
-     * @see       filterByEventContactRelatedByEventContactid()
+     * @see filterByEventContactRelatedByEventContactid()
      *
-     * @param     mixed $eventContactid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $eventContactid The value to use as filter.
+     *                                   Use scalar values for
+     *                                   equality. Use array values
+     *                                   for in_array() equivalent.
+     *                                   Use associative array('min'
+     *                                   => $minValue, 'max' =>
+     *                                   $maxValue) for intervals.
+     * @param string $comparison     Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -530,13 +536,16 @@ abstract class InvoiceQuery extends ModelCriteria
      * $query->filterByUserid(array('min' => 12)); // WHERE userid > 12
      * </code>
      *
-     * @see       filterByUser()
+     * @see filterByUser()
      *
-     * @param     mixed $userid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $userid     The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -573,13 +582,16 @@ abstract class InvoiceQuery extends ModelCriteria
      * $query->filterByEventBankinformationid(array('min' => 12)); // WHERE event_bankinformationid > 12
      * </code>
      *
-     * @see       filterByEventBankinformation()
+     * @see filterByEventBankinformation()
      *
-     * @param     mixed $eventBankinformationid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $eventBankinformationid The value to use as filter.
+     *                                           Use scalar values for
+     *                                           equality. Use array values
+     *                                           for in_array() equivalent.
+     *                                           Use associative array('min'
+     *                                           => $minValue, 'max' =>
+     *                                           $maxValue) for intervals.
+     * @param string $comparison             Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -616,13 +628,16 @@ abstract class InvoiceQuery extends ModelCriteria
      * $query->filterByCustomerEventContactid(array('min' => 12)); // WHERE customer_event_contactid > 12
      * </code>
      *
-     * @see       filterByEventContactRelatedByCustomerEventContactid()
+     * @see filterByEventContactRelatedByCustomerEventContactid()
      *
-     * @param     mixed $customerEventContactid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $customerEventContactid The value to use as filter.
+     *                                           Use scalar values for
+     *                                           equality. Use array values
+     *                                           for in_array() equivalent.
+     *                                           Use associative array('min'
+     *                                           => $minValue, 'max' =>
+     *                                           $maxValue) for intervals.
+     * @param string $comparison             Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -659,13 +674,16 @@ abstract class InvoiceQuery extends ModelCriteria
      * $query->filterByCanceledInvoiceid(array('min' => 12)); // WHERE canceled_invoiceid > 12
      * </code>
      *
-     * @see       filterByInvoiceRelatedByCanceledInvoiceid()
+     * @see filterByInvoiceRelatedByCanceledInvoiceid()
      *
-     * @param     mixed $canceledInvoiceid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $canceledInvoiceid The value to use as filter.
+     *                                      Use scalar values for
+     *                                      equality. Use array values
+     *                                      for in_array() equivalent.
+     *                                      Use associative array('min'
+     *                                      => $minValue, 'max' =>
+     *                                      $maxValue) for intervals.
+     * @param string $comparison        Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -702,13 +720,18 @@ abstract class InvoiceQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $date       The value to use as filter.
+     *                           Values can be integers
+     *                           (unix timestamps), DateTime
+     *                           objects, or strings. Empty
+     *                           strings are treated as
+     *                           NULL. Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -745,11 +768,14 @@ abstract class InvoiceQuery extends ModelCriteria
      * $query->filterByAmount(array('min' => 12)); // WHERE amount > 12
      * </code>
      *
-     * @param     mixed $amount The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $amount     The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -786,13 +812,18 @@ abstract class InvoiceQuery extends ModelCriteria
      * $query->filterByMaturityDate(array('max' => 'yesterday')); // WHERE maturity_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $maturityDate The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $maturityDate The value to use as filter.
+     *                                 Values can be integers
+     *                                 (unix timestamps), DateTime
+     *                                 objects, or strings. Empty
+     *                                 strings are treated as
+     *                                 NULL. Use scalar values for
+     *                                 equality. Use array values
+     *                                 for in_array() equivalent.
+     *                                 Use associative array('min'
+     *                                 => $minValue, 'max' =>
+     *                                 $maxValue) for intervals.
+     * @param string $comparison   Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -829,13 +860,18 @@ abstract class InvoiceQuery extends ModelCriteria
      * $query->filterByPaymentFinished(array('max' => 'yesterday')); // WHERE payment_finished > '2011-03-13'
      * </code>
      *
-     * @param     mixed $paymentFinished The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $paymentFinished The value to use as filter.
+     *                                    Values can be integers
+     *                                    (unix timestamps), DateTime
+     *                                    objects, or strings. Empty
+     *                                    strings are treated as
+     *                                    NULL. Use scalar values for
+     *                                    equality. Use array values
+     *                                    for in_array() equivalent.
+     *                                    Use associative array('min'
+     *                                    => $minValue, 'max' =>
+     *                                    $maxValue) for intervals.
+     * @param string $comparison      Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -872,11 +908,14 @@ abstract class InvoiceQuery extends ModelCriteria
      * $query->filterByAmountRecieved(array('min' => 12)); // WHERE amount_recieved > 12
      * </code>
      *
-     * @param     mixed $amountRecieved The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $amountRecieved The value to use as filter.
+     *                                   Use scalar values for
+     *                                   equality. Use array values
+     *                                   for in_array() equivalent.
+     *                                   Use associative array('min'
+     *                                   => $minValue, 'max' =>
+     *                                   $maxValue) for intervals.
+     * @param string $comparison     Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -907,7 +946,7 @@ abstract class InvoiceQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Event\EventContact object
      *
      * @param \API\Models\Event\EventContact|ObjectCollection $eventContact The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                          $comparison   Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -933,8 +972,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the EventContactRelatedByCustomerEventContactid relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -967,9 +1006,9 @@ abstract class InvoiceQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Event\EventContactQuery A secondary query class using the current class as primary query
      */
@@ -984,7 +1023,7 @@ abstract class InvoiceQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Event\EventBankinformation object
      *
      * @param \API\Models\Event\EventBankinformation|ObjectCollection $eventBankinformation The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                                  $comparison           Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -1010,8 +1049,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the EventBankinformation relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1044,9 +1083,9 @@ abstract class InvoiceQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Event\EventBankinformationQuery A secondary query class using the current class as primary query
      */
@@ -1061,7 +1100,7 @@ abstract class InvoiceQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Event\EventContact object
      *
      * @param \API\Models\Event\EventContact|ObjectCollection $eventContact The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                          $comparison   Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -1087,8 +1126,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the EventContactRelatedByEventContactid relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1121,9 +1160,9 @@ abstract class InvoiceQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Event\EventContactQuery A secondary query class using the current class as primary query
      */
@@ -1137,8 +1176,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Invoice\Invoice object
      *
-     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice    The related object(s) to use as filter
+     * @param string                                       $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -1164,8 +1203,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the InvoiceRelatedByCanceledInvoiceid relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1198,9 +1237,9 @@ abstract class InvoiceQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Invoice\InvoiceQuery A secondary query class using the current class as primary query
      */
@@ -1215,7 +1254,7 @@ abstract class InvoiceQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Invoice\InvoiceType object
      *
      * @param \API\Models\Invoice\InvoiceType|ObjectCollection $invoiceType The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                           $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -1241,8 +1280,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the InvoiceType relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1275,9 +1314,9 @@ abstract class InvoiceQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Invoice\InvoiceTypeQuery A secondary query class using the current class as primary query
      */
@@ -1291,8 +1330,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\User\User object
      *
-     * @param \API\Models\User\User|ObjectCollection $user The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\User\User|ObjectCollection $user       The related object(s) to use as filter
+     * @param string                                 $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -1318,8 +1357,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the User relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1352,9 +1391,9 @@ abstract class InvoiceQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\User\UserQuery A secondary query class using the current class as primary query
      */
@@ -1368,8 +1407,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Invoice\Invoice object
      *
-     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice    the related object to use as filter
+     * @param string                                       $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1391,8 +1430,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the InvoiceRelatedByInvoiceid relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1425,9 +1464,9 @@ abstract class InvoiceQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Invoice\InvoiceQuery A secondary query class using the current class as primary query
      */
@@ -1442,7 +1481,7 @@ abstract class InvoiceQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Invoice\InvoiceItem object
      *
      * @param \API\Models\Invoice\InvoiceItem|ObjectCollection $invoiceItem the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                           $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1464,8 +1503,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the InvoiceItem relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1498,9 +1537,9 @@ abstract class InvoiceQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Invoice\InvoiceItemQuery A secondary query class using the current class as primary query
      */
@@ -1515,7 +1554,7 @@ abstract class InvoiceQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Payment\PaymentRecieved object
      *
      * @param \API\Models\Payment\PaymentRecieved|ObjectCollection $paymentRecieved the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                               $comparison      Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1537,8 +1576,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the PaymentRecieved relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1571,9 +1610,9 @@ abstract class InvoiceQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Payment\PaymentRecievedQuery A secondary query class using the current class as primary query
      */
@@ -1588,7 +1627,7 @@ abstract class InvoiceQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Invoice\InvoiceWarning object
      *
      * @param \API\Models\Invoice\InvoiceWarning|ObjectCollection $invoiceWarning the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                              $comparison     Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1610,8 +1649,8 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the InvoiceWarning relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1644,9 +1683,9 @@ abstract class InvoiceQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Invoice\InvoiceWarningQuery A secondary query class using the current class as primary query
      */
@@ -1660,7 +1699,7 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildInvoice $invoice Object to remove from the list of results
+     * @param ChildInvoice $invoice Object to remove from the list of results
      *
      * @return $this|ChildInvoiceQuery The current query, for fluid interface
      */
@@ -1676,7 +1715,7 @@ abstract class InvoiceQuery extends ModelCriteria
     /**
      * Deletes all rows from the invoice table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -1687,23 +1726,25 @@ abstract class InvoiceQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            InvoiceTableMap::clearInstancePool();
-            InvoiceTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                InvoiceTableMap::clearInstancePool();
+                InvoiceTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -1722,16 +1763,17 @@ abstract class InvoiceQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            InvoiceTableMap::removeInstanceFromPool($criteria);
+                InvoiceTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            InvoiceTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                InvoiceTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // InvoiceQuery

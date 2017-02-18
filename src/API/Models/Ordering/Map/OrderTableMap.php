@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'order' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class OrderTableMap extends TableMap
 {
@@ -127,7 +123,7 @@ class OrderTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('Orderid', 'EventTableid', 'Userid', 'Ordertime', 'Priority', 'DistributionFinished', 'InvoiceFinished', 'Cancellation', 'CancellationCreatedByUserid', ),
         self::TYPE_CAMELNAME     => array('orderid', 'eventTableid', 'userid', 'ordertime', 'priority', 'distributionFinished', 'invoiceFinished', 'cancellation', 'cancellationCreatedByUserid', ),
         self::TYPE_COLNAME       => array(OrderTableMap::COL_ORDERID, OrderTableMap::COL_EVENT_TABLEID, OrderTableMap::COL_USERID, OrderTableMap::COL_ORDERTIME, OrderTableMap::COL_PRIORITY, OrderTableMap::COL_DISTRIBUTION_FINISHED, OrderTableMap::COL_INVOICE_FINISHED, OrderTableMap::COL_CANCELLATION, OrderTableMap::COL_CANCELLATION_CREATED_BY_USERID, ),
@@ -141,7 +137,7 @@ class OrderTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('Orderid' => 0, 'EventTableid' => 1, 'Userid' => 2, 'Ordertime' => 3, 'Priority' => 4, 'DistributionFinished' => 5, 'InvoiceFinished' => 6, 'Cancellation' => 7, 'CancellationCreatedByUserid' => 8, ),
         self::TYPE_CAMELNAME     => array('orderid' => 0, 'eventTableid' => 1, 'userid' => 2, 'ordertime' => 3, 'priority' => 4, 'distributionFinished' => 5, 'invoiceFinished' => 6, 'cancellation' => 7, 'cancellationCreatedByUserid' => 8, ),
         self::TYPE_COLNAME       => array(OrderTableMap::COL_ORDERID => 0, OrderTableMap::COL_EVENT_TABLEID => 1, OrderTableMap::COL_USERID => 2, OrderTableMap::COL_ORDERTIME => 3, OrderTableMap::COL_PRIORITY => 4, OrderTableMap::COL_DISTRIBUTION_FINISHED => 5, OrderTableMap::COL_INVOICE_FINISHED => 6, OrderTableMap::COL_CANCELLATION => 7, OrderTableMap::COL_CANCELLATION_CREATED_BY_USERID => 8, ),
@@ -182,41 +178,86 @@ class OrderTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('UserRelatedByCancellationCreatedByUserid', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':cancellation_created_by_userid',
-    1 => ':userid',
-  ),
-), null, null, null, false);
-        $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':event_tableid',
-    1 => ':event_tableid',
-  ),
-), null, null, null, false);
-        $this->addRelation('UserRelatedByUserid', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':userid',
-    1 => ':userid',
-  ),
-), null, null, null, false);
-        $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':orderid',
-    1 => ':orderid',
-  ),
-), null, null, 'OrderDetails', false);
-        $this->addRelation('OrderInProgress', '\\API\\Models\\OIP\\OrderInProgress', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':orderid',
-    1 => ':orderid',
-  ),
-), null, null, 'OrderInProgresses', false);
+        $this->addRelation(
+            'UserRelatedByCancellationCreatedByUserid',
+            '\\API\\Models\\User\\User',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':cancellation_created_by_userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'EventTable',
+            '\\API\\Models\\Event\\EventTable',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':event_tableid',
+            1 => ':event_tableid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'UserRelatedByUserid',
+            '\\API\\Models\\User\\User',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'OrderDetail',
+            '\\API\\Models\\Ordering\\OrderDetail',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':orderid',
+            1 => ':orderid',
+            ),
+            ),
+            null,
+            null,
+            'OrderDetails',
+            false
+        );
+        $this->addRelation(
+            'OrderInProgress',
+            '\\API\\Models\\OIP\\OrderInProgress',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':orderid',
+            1 => ':orderid',
+            ),
+            ),
+            null,
+            null,
+            'OrderInProgresses',
+            false
+        );
     } // buildRelations()
 
     /**
@@ -271,7 +312,7 @@ class OrderTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -302,7 +343,9 @@ class OrderTableMap extends TableMap
             $col = $offset + OrderTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = OrderTableMap::OM_CLASS;
-            /** @var Order $obj */
+            /**
+ * @var Order $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             OrderTableMap::addInstanceToPool($obj, $key);
@@ -315,7 +358,7 @@ class OrderTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -335,7 +378,9 @@ class OrderTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Order $obj */
+                /**
+ * @var Order $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -352,8 +397,8 @@ class OrderTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -385,6 +430,7 @@ class OrderTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -408,16 +454,16 @@ class OrderTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Order or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Order object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or Order object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderTableMap::DATABASE_NAME);
         }
@@ -449,7 +495,7 @@ class OrderTableMap extends TableMap
     /**
      * Deletes all rows from the order table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -460,8 +506,8 @@ class OrderTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Order or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Order object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or Order object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -478,7 +524,7 @@ class OrderTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from Order object
         }
 
-        if ($criteria->containsKey(OrderTableMap::COL_ORDERID) && $criteria->keyContainsValue(OrderTableMap::COL_ORDERID) ) {
+        if ($criteria->containsKey(OrderTableMap::COL_ORDERID) && $criteria->keyContainsValue(OrderTableMap::COL_ORDERID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.OrderTableMap::COL_ORDERID.')');
         }
 
@@ -488,11 +534,12 @@ class OrderTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // OrderTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

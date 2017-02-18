@@ -35,360 +35,377 @@ use function mb_substr;
 
 class OrderUnbilled extends SecurityController
 {
-    public function __construct(App $o_app) {
-        parent::__construct($o_app);
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
 
-        $this->a_security = ['GET' => USER_ROLE_ORDER_ADD];
+        $this->security = ['GET' => USER_ROLE_ORDER_ADD];
 
-        $o_app->getContainer()['db'];
+        $app->getContainer()['db'];
     }
 
-    function ANY() : void {
-        $a_validators = array(
+    public function any() : void
+    {
+        $validators = array(
             'id' => v::intVal()->positive(),
             'all' => v::boolVal()
         );
 
-        $this->validate($a_validators, $this->a_args);
+        $this->validate($validators, $this->args);
     }
 
-    protected function GET() : void  {
-        $i_orderid = intval($this->a_args['id']);
-        $b_all = filter_var($this->a_args['all'], FILTER_VALIDATE_BOOLEAN);
+    protected function get() : void
+    {
+        $orderid = intval($this->args['id']);
+        $all = filter_var($this->args['all'], FILTER_VALIDATE_BOOLEAN);
 
-        $o_unbilledOrderDetails = $this->getUnbilledOrderDetails($i_orderid, $b_all);
-        $a_unbilledOrderDetails = array();
+        $unbilledOrderDetails = $this->getUnbilledOrderDetails($orderid, $all);
+        $unbilledOrderDetailsArray = array();
 
         // if all order from table are returned, merge same order types
-        if($o_unbilledOrderDetails->count() > 0) {
-            foreach($o_unbilledOrderDetails as $a_order_detail) {
-                $str_index = $this->buildIndexFromOrderDetail($a_order_detail);
+        if ($unbilledOrderDetails->count() > 0) {
+            foreach ($unbilledOrderDetails as $orderDetail) {
+                $index = $this->buildIndexFromOrderDetail($orderDetail);
 
-                if($a_order_detail['AmountLeft'] == 0)
+                if ($orderDetail['AmountLeft'] == 0) {
                     continue;
-
-                if(!isset($a_unbilledOrderDetails[$str_index]))
-                {
-                    $a_unbilledOrderDetails[$str_index] = $a_order_detail;
                 }
-                else
-                {
-                    $a_unbilledOrderDetails[$str_index]['Amount'] += $a_order_detail['Amount'];
-                    $a_unbilledOrderDetails[$str_index]['AmountLeft'] += $a_order_detail['AmountLeft'];
+
+                if (!isset($unbilledOrderDetailsArray[$index])) {
+                    $unbilledOrderDetailsArray[$index] = $orderDetail;
+                } else {
+                    $unbilledOrderDetailsArray[$index]['Amount'] += $orderDetail['Amount'];
+                    $unbilledOrderDetailsArray[$index]['AmountLeft'] += $orderDetail['AmountLeft'];
                 }
             }
 
-            $a_unbilledOrderDetails = array_values($a_unbilledOrderDetails);
+            $unbilledOrderDetailsArray = array_values($unbilledOrderDetailsArray);
         }
 
-        $a_return = array('Orderid' => $i_orderid,
-                          'All' => $b_all,
-                          'UnbilledOrderDetails' => $a_unbilledOrderDetails,
-                          'UsedCoupons' => null);
+        $return = array('Orderid' => $orderid,
+                        'All' => $all,
+                        'UnbilledOrderDetails' => $unbilledOrderDetailsArray,
+                        'UsedCoupons' => null);
 
-        $this->withJson($a_return);
+        $this->withJson($return);
     }
 
-    function POST() : void{
-        $o_user = Auth::GetCurrentUser();
-        $a_config = $this->o_app->getContainer()['settings'];
+    public function post() : void
+    {
+        $auth = $this->app->getContainer()->get('Auth');
+        $user = $auth->getCurrentUser();
+        $config = $this->app->getContainer()['settings'];
 
-        $i_orderid = intval($this->a_args['id']);
-        $b_all = filter_var($this->a_args['all'], FILTER_VALIDATE_BOOLEAN);
+        $orderid = intval($this->args['id']);
+        $all = filter_var($this->args['all'], FILTER_VALIDATE_BOOLEAN);
 
-        $o_customer_event_contact = null;
-        if($this->a_json['Customer'] !== null) {
-            $o_customer_event_contact = new EventContact();
-            $o_customer_event_contact->fromArray($this->a_json['Customer']);
+        $customerEventContact = null;
+        if ($this->json['Customer'] !== null) {
+            $customerEventContact = new EventContact();
+            $customerEventContact->fromArray($this->json['Customer']);
         }
 
-        $o_invoiceOrderDetails = new ObjectCollection();
-        $o_invoiceOrderDetails->setModel(OrderDetail::class);
-        $this->jsonToPropel($this->a_json['UnbilledOrderDetails'], $o_invoiceOrderDetails);
+        $invoiceOrderDetails = new ObjectCollection();
+        $invoiceOrderDetails->setModel(OrderDetail::class);
+        $this->jsonToPropel($this->json['UnbilledOrderDetails'], $invoiceOrderDetails);
 
-        $o_usedCoupons = new ObjectCollection();
-        $o_usedCoupons->setModel(Coupon::class);
-        $this->jsonToPropel($this->a_json['UsedCoupons'], $o_usedCoupons);
+        $usedCoupons = new ObjectCollection();
+        $usedCoupons->setModel(Coupon::class);
+        $this->jsonToPropel($this->json['UsedCoupons'], $usedCoupons);
 
-        $o_unbilledOrderDetails = $this->getUnbilledOrderDetails($i_orderid, $b_all);
+        $unbilledOrderDetails = $this->getUnbilledOrderDetails($orderid, $all);
 
-        $o_connection = Propel::getConnection();
-        $o_connection->beginTransaction();
+        $connection = Propel::getConnection();
+        $connection->beginTransaction();
 
         try {
-            $o_event_contact = EventContactQuery::create()
-                                                ->filterByEventid($o_user->getEventUser()->getEventid())
+            $eventContact = EventContactQuery::create()
+                                                ->filterByEventid($user->getEventUser()->getEventid())
                                                 ->filterByDefault(true)
                                                 ->findOne();
 
-            $o_event_bankinformation = EventBankinformationQuery::create()
+            $eventBankinformation = EventBankinformationQuery::create()
                                                                 ->findOneByActive(true);
 
-            $o_invoice = new Invoice();
-            $o_invoice->setInvoiceTypeid(INVOICE_TYPE_INVOICE);
-            $o_invoice->setEventContactid($o_event_contact->getEventContactid());
-            $o_invoice->setUserid($o_user->getUserid());
-            $o_invoice->setEventBankinformation($o_event_bankinformation);
-            $o_invoice->setDate(new DateTime());
-            $o_invoice->setMaturityDate(new DateTime($a_config['Invoice']['MaturityDate']));
-            $o_invoice->setAmount(0);
+            $invoice = new Invoice();
+            $invoice->setInvoiceTypeid(INVOICE_TYPE_INVOICE);
+            $invoice->setEventContactid($eventContact->getEventContactid());
+            $invoice->setUserid($user->getUserid());
+            $invoice->setEventBankinformation($eventBankinformation);
+            $invoice->setDate(new DateTime());
+            $invoice->setMaturityDate(new DateTime($config['Invoice']['MaturityDate']));
+            $invoice->setAmount(0);
 
-            if($o_customer_event_contact)
-                $o_invoice->setCustomerEventContactid($o_customer_event_contact->getEventContactid());
+            if ($customerEventContact) {
+                $invoice->setCustomerEventContactid($customerEventContact->getEventContactid());
+            }
 
-            $o_invoice->save();
+            $invoice->save();
 
-            $i_payed = 0;
-            $a_orderids_to_verify = [];
+            $payed = 0;
+            $orderidsToVerify = [];
 
-            foreach($o_unbilledOrderDetails as $a_order_detail) {
-                foreach($o_invoiceOrderDetails as $o_order_detail_json) {
-                    $a_order_detail_json = $o_order_detail_json->toArray();
+            foreach ($unbilledOrderDetails as $orderDetail) {
+                foreach ($invoiceOrderDetails as $orderDetailJson) {
+                    $orderDetailJsonArray = $orderDetailJson->toArray();
 
-                    if(empty($a_order_detail_json['AmountSelected']))
+                    if (empty($orderDetailJsonArray['AmountSelected'])) {
                         continue;
+                    }
 
-                    $a_order_detail_json['OrderDetailExtras'] = $o_order_detail_json->getOrderDetailExtras()->toArray();
-                    $a_order_detail_json['OrderDetailMixedWiths'] = $o_order_detail_json->getOrderDetailMixedWiths()->toArray();
-                    $a_order_detail_json['InvoiceItems'] = $o_order_detail_json->getInvoiceItems()->toArray();
+                    $orderDetailJsonArray['OrderDetailExtras'] = $orderDetailJson->getOrderDetailExtras()->toArray();
+                    $orderDetailJsonArray['OrderDetailMixedWiths'] = $orderDetailJson->getOrderDetailMixedWiths()->toArray();
+                    $orderDetailJsonArray['InvoiceItems'] = $orderDetailJson->getInvoiceItems()->toArray();
 
-                    $str_index = $this->buildIndexFromOrderDetail($a_order_detail);
-                    $str_index_json = $this->buildIndexFromOrderDetail($a_order_detail_json);
+                    $index = $this->buildIndexFromOrderDetail($orderDetail);
+                    $indexJson = $this->buildIndexFromOrderDetail($orderDetailJsonArray);
 
-                    if($str_index == $str_index_json) {
-                        $o_order_detail = OrderDetailQuery::create()->findPk($a_order_detail['OrderDetailid']);
+                    if ($index == $indexJson) {
+                        $orderDetailObject = OrderDetailQuery::create()->findPk($orderDetail['OrderDetailid']);
 
-                        if($o_order_detail->getMenuid() == null && $o_order_detail->getMenuGroupid() == null)
+                        if ($orderDetailObject->getMenuid() == null && $orderDetailObject->getMenuGroupid() == null) {
                             continue;
-
-                        if($a_order_detail['AmountLeft'] >= $a_order_detail_json['AmountSelected']) {
-                            $i_amount = $a_order_detail_json['AmountSelected'];
-                            $o_order_detail_json->setVirtualColumn("AmountSelected", 0);
-                        } else {
-                            $i_amount = $a_order_detail['AmountLeft'];
-                            $a_order_detail_json['AmountSelected'] -= $a_order_detail['AmountLeft'];
-                            $o_order_detail_json->setVirtualColumn("AmountSelected", $a_order_detail_json['AmountSelected']);
                         }
 
-                        $o_invoiceItem = new InvoiceItem();
-                        $o_invoiceItem->setInvoice($o_invoice);
-                        $o_invoiceItem->setOrderDetail($o_order_detail);
-                        $o_invoiceItem->setAmount($i_amount);
-                        $o_invoiceItem->setPrice($o_order_detail->getSinglePrice());
-
-                        $i_payed += $o_order_detail->getSinglePrice() * $i_amount;
-
-                        if($o_order_detail->getMenuid() == null) {
-                            $o_invoiceItem->setDescription($o_order_detail->getExtraDetail());
-                            $o_invoiceItem->setTax($o_order_detail->getMenuGroup()
-                                                                  ->getMenuType()
-                                                                  ->getTax());
+                        if ($orderDetail['AmountLeft'] >= $orderDetailJsonArray['AmountSelected']) {
+                            $amount = $orderDetailJsonArray['AmountSelected'];
+                            $orderDetailJson->setVirtualColumn("AmountSelected", 0);
                         } else {
-                            $str_description = '';
+                            $amount = $orderDetail['AmountLeft'];
+                            $orderDetailJsonArray['AmountSelected'] -= $orderDetail['AmountLeft'];
+                            $orderDetailJson->setVirtualColumn("AmountSelected", $orderDetailJsonArray['AmountSelected']);
+                        }
 
-                            if($o_order_detail->getMenu()->getMenuPossibleSizes()->count() > 1)
-                                $str_description = $o_order_detail->getMenu()->getName() . ", ";
+                        $invoiceItem = new InvoiceItem();
+                        $invoiceItem->setInvoice($invoice);
+                        $invoiceItem->setOrderDetail($orderDetailObject);
+                        $invoiceItem->setAmount($amount);
+                        $invoiceItem->setPrice($orderDetailObject->getSinglePrice());
 
-                            if($o_order_detail->getOrderDetailMixedWiths()->count() > 1) {
-                                $str_description .= "Gemischt mit: ";
+                        $payed += $orderDetailObject->getSinglePrice() * $amount;
 
-                                foreach($o_order_detail->getOrderDetailMixedWiths() as $o_orderDetailMixedWith) {
-                                    $str_description .= $o_orderDetailMixedWith->getMenu()->getName() . " - ";
+                        if ($orderDetailObject->getMenuid() == null) {
+                            $invoiceItem->setDescription($orderDetailObject->getExtraDetail());
+                            $invoiceItem->setTax(
+                                $orderDetailObject->getMenuGroup()
+                                    ->getMenuType()
+                                    ->getTax()
+                            );
+                        } else {
+                            $description = '';
+
+                            if ($orderDetailObject->getMenu()->getMenuPossibleSizes()->count() > 1) {
+                                $description = $orderDetailObject->getMenu()->getName() . ", ";
+                            }
+
+                            if ($orderDetailObject->getOrderDetailMixedWiths()->count() > 1) {
+                                $description .= "Gemischt mit: ";
+
+                                foreach ($orderDetailObject->getOrderDetailMixedWiths() as $orderDetailMixedWith) {
+                                    $description .= $orderDetailMixedWith->getMenu()->getName() . " - ";
                                 }
 
-                                $str_description = mb_substr($str_description, 0, -3);
-                                $str_description .= ', ';
+                                $description = mb_substr($description, 0, -3);
+                                $description .= ', ';
                             }
 
-                            foreach($o_order_detail->getOrderDetailExtras() as $o_orderDetailExtra) {
-                                $str_description .= $o_orderDetailExtra->getMenuPossibleExtra()->getMenuExtra()->getName() . ', ';
+                            foreach ($orderDetailObject->getOrderDetailExtras() as $orderDetailExtra) {
+                                $description .= $orderDetailExtra->getMenuPossibleExtra()->getMenuExtra()->getName() . ', ';
                             }
 
-                            if(!empty($o_order_detail->getExtraDetail()))
-                                $str_description .= $o_orderDetailExtra->getExtraDetail() . ', ';
-
-                            if(mb_strlen($str_description) > 0) {
-                                $str_description = mb_substr($str_description, 0, -2);
+                            if (!empty($orderDetailObject->getExtraDetail())) {
+                                $description .= $orderDetailExtra->getExtraDetail() . ', ';
                             }
 
-                            $o_invoiceItem->setDescription($str_description);
-                            $o_invoiceItem->setTax($o_order_detail->getMenu()
-                                                                  ->getMenuGroup()
-                                                                  ->getMenuType()
-                                                                  ->getTax());
+                            if (mb_strlen($description) > 0) {
+                                $description = mb_substr($description, 0, -2);
+                            }
+
+                            $invoiceItem->setDescription($description);
+                            $invoiceItem->setTax(
+                                $orderDetailObject->getMenu()
+                                    ->getMenuGroup()
+                                    ->getMenuType()
+                                    ->getTax()
+                            );
                         }
 
-                        $o_invoiceItem->save();
+                        $invoiceItem->save();
 
-                        $a_orderids_to_verify[] = $o_order_detail->getOrderid();
+                        $orderidsToVerify[] = $orderDetailObject->getOrderid();
                     }
                 }
             }
 
-            $o_invoice->setAmount($i_payed);
+            $invoice->setAmount($payed);
 
-            if($this->a_json['PaymentTypeid'] == PAYMENT_TYPE_CASH) {
-                $o_invoice->setPaymentFinished(new DateTime());
-                $o_invoice->setAmountRecieved($i_payed);
+            if ($this->json['PaymentTypeid'] == PAYMENT_TYPE_CASH) {
+                $invoice->setPaymentFinished(new DateTime());
+                $invoice->setAmountRecieved($payed);
 
-                $o_payment_recieved = new PaymentRecieved();
-                $o_payment_recieved->setInvoice($o_invoice);
-                $o_payment_recieved->setPaymentTypeid(PAYMENT_TYPE_CASH);
-                $o_payment_recieved->setUserid($o_user->getUserid());
-                $o_payment_recieved->setDate(new DateTime());
-                $o_payment_recieved->setAmount($i_payed);
-                $o_payment_recieved->save();
+                $paymentRecieved = new PaymentRecieved();
+                $paymentRecieved->setInvoice($invoice);
+                $paymentRecieved->setPaymentTypeid(PAYMENT_TYPE_CASH);
+                $paymentRecieved->setUserid($user->getUserid());
+                $paymentRecieved->setDate(new DateTime());
+                $paymentRecieved->setAmount($payed);
+                $paymentRecieved->save();
 
-                foreach($o_usedCoupons as $o_usedCoupon) {
-                    $o_coupon = CouponQuery::create()
+                foreach ($usedCoupons as $usedCoupon) {
+                    $coupon = CouponQuery::create()
+                                            ->leftJoinPaymentCoupon()
+                                            ->withColumn(CouponTableMap::COL_VALUE . ' - SUM(IFNULL(' . PaymentCouponTableMap::COL_VALUE_USED . ', 0))', 'Value')
+                                            ->filterByCouponid($usedCoupon->getCouponid())
+                                            ->groupBy(CouponTableMap::COL_COUPONID)
+                                            ->find()
+                                            ->getFirst();
+
+                    $orgPayed = $payed;
+                    $value = $coupon->getVirtualColumn('Value');
+                    $payed -= $value;
+
+                    if ($payed < 0) {
+                        $payed = 0;
+                    }
+
+                    $usedValue = $payed > 0 ? $coupon->getValue() : $orgPayed;
+
+                    $paymentCoupon = new PaymentCoupon();
+                    $paymentCoupon->setCoupon($coupon);
+                    $paymentCoupon->setPaymentRecieved($paymentRecieved);
+                    $paymentCoupon->setValueUsed($usedValue);
+                    $paymentCoupon->save();
+                }
+            } elseif ($this->json['PaymentTypeid'] == PAYMENT_TYPE_BANK_TRANSFER && !empty($usedCoupons)) {
+                $paymentRecieved = new PaymentRecieved();
+                $paymentRecieved->setInvoice($invoice);
+                $paymentRecieved->setPaymentTypeid(PAYMENT_TYPE_CASH);
+                $paymentRecieved->setUserid($user->getUserid());
+                $paymentRecieved->setDate(new DateTime());
+                $paymentRecieved->setAmount(0);
+                $paymentRecieved->save();
+
+                $amountPayedViaCoupon = 0;
+
+                foreach ($usedCoupons as $usedCoupon) {
+                    $coupon = CouponQuery::create()
                                     ->leftJoinPaymentCoupon()
                                     ->withColumn(CouponTableMap::COL_VALUE . ' - SUM(IFNULL(' . PaymentCouponTableMap::COL_VALUE_USED . ', 0))', 'Value')
-                                    ->filterByCouponid($o_usedCoupon->getCouponid())
+                                    ->filterByCouponid($usedCoupon->getCouponid())
                                     ->groupBy(CouponTableMap::COL_COUPONID)
                                     ->find()
                                     ->getFirst();
 
-                    $i_orgPayed = $i_payed;
-                    $i_value = $o_coupon->getVirtualColumn('Value');
-                    $i_payed -= $i_value;
+                    $orgPayed = $payed;
+                    $value = $coupon->getVirtualColumn('Value');
+                    $payed -= $value;
 
-                    if($i_payed < 0)
-                        $i_payed = 0;
+                    if ($payed < 0) {
+                        $payed = 0;
+                    }
 
-                    $i_usedValue = $i_payed > 0 ? $o_coupon->getValue() : $i_orgPayed;
+                    $usedValue = $payed > 0 ? $coupon->getValue() : $orgPayed;
 
-                    $o_paymentCoupon = new PaymentCoupon();
-                    $o_paymentCoupon->setCoupon($o_coupon);
-                    $o_paymentCoupon->setPaymentRecieved($o_payment_recieved);
-                    $o_paymentCoupon->setValueUsed($i_usedValue);
-                    $o_paymentCoupon->save();
-                }
-            } elseif($this->a_json['PaymentTypeid'] == PAYMENT_TYPE_BANK_TRANSFER && !empty($o_usedCoupons)) {
-                $o_payment_recieved = new PaymentRecieved();
-                $o_payment_recieved->setInvoice($o_invoice);
-                $o_payment_recieved->setPaymentTypeid(PAYMENT_TYPE_CASH);
-                $o_payment_recieved->setUserid($o_user->getUserid());
-                $o_payment_recieved->setDate(new DateTime());
-                $o_payment_recieved->setAmount(0);
-                $o_payment_recieved->save();
+                    $amountPayedViaCoupon += $usedValue;
 
-                $i_amountPayedViaCoupon = 0;
-
-                foreach($o_usedCoupons as $o_usedCoupon) {
-                    $o_coupon = CouponQuery::create()
-                                    ->leftJoinPaymentCoupon()
-                                    ->withColumn(CouponTableMap::COL_VALUE . ' - SUM(IFNULL(' . PaymentCouponTableMap::COL_VALUE_USED . ', 0))', 'Value')
-                                    ->filterByCouponid($o_usedCoupon->getCouponid())
-                                    ->groupBy(CouponTableMap::COL_COUPONID)
-                                    ->find()
-                                    ->getFirst();
-
-                    $i_orgPayed = $i_payed;
-                    $i_value = $o_coupon->getVirtualColumn('Value');
-                    $i_payed -= $i_value;
-
-                    if($i_payed < 0)
-                        $i_payed = 0;
-
-                    $i_usedValue = $i_payed > 0 ? $o_coupon->getValue() : $i_orgPayed;
-
-                    $i_amountPayedViaCoupon += $i_usedValue;
-
-                    $o_paymentCoupon = new PaymentCoupon();
-                    $o_paymentCoupon->setCoupon($o_coupon);
-                    $o_paymentCoupon->setPaymentRecieved($o_payment_recieved);
-                    $o_paymentCoupon->setValueUsed($i_usedValue);
-                    $o_paymentCoupon->save();
+                    $paymentCoupon = new PaymentCoupon();
+                    $paymentCoupon->setCoupon($coupon);
+                    $paymentCoupon->setPaymentRecieved($paymentRecieved);
+                    $paymentCoupon->setValueUsed($usedValue);
+                    $paymentCoupon->save();
                 }
 
-                $o_payment_recieved->setAmount($i_amountPayedViaCoupon);
-                $o_payment_recieved->save();
+                $paymentRecieved->setAmount($amountPayedViaCoupon);
+                $paymentRecieved->save();
 
-                $o_invoice->setAmountRecieved($i_amountPayedViaCoupon);
+                $invoice->setAmountRecieved($amountPayedViaCoupon);
 
-                if($i_amountPayedViaCoupon == $i_payed)
-                    $o_invoice->setPaymentFinished(new DateTime());
+                if ($amountPayedViaCoupon == $payed) {
+                    $invoice->setPaymentFinished(new DateTime());
+                }
             }
 
-            $o_invoice->save();
+            $invoice->save();
 
-            if($o_payment_recieved)
-                $o_invoice->setVirtualColumn("PaymentRecievedid", $o_payment_recieved->getPaymentRecievedid());
-
-            StatusCheck::verifyInvoice($o_invoice->getInvoiceid());
-
-            $a_orderids_to_verify = array_unique($a_orderids_to_verify);
-            foreach($a_orderids_to_verify as $i_orderid) {
-                StatusCheck::verifyOrder($i_orderid);
+            if ($paymentRecieved) {
+                $invoice->setVirtualColumn("PaymentRecievedid", $paymentRecieved->getPaymentRecievedid());
             }
 
-            $this->withJson($o_invoice->toArray());
+            StatusCheck::verifyInvoice($invoice->getInvoiceid());
 
-            $o_connection->commit();
-        } catch(Exception $o_exception) {
-            $o_connection->rollBack();
-            throw $o_exception;
+            $orderidsToVerify = array_unique($orderidsToVerify);
+            foreach ($orderidsToVerify as $orderid) {
+                StatusCheck::verifyOrder($orderid);
+            }
+
+            $this->withJson($invoice->toArray());
+
+            $connection->commit();
+        } catch (Exception $exception) {
+            $connection->rollBack();
+            throw $exception;
         }
     }
 
-    private function buildIndexFromOrderDetail(&$a_order_detail) : string {
-        $str_index = $a_order_detail['Menuid'] . '-' .
-                     $a_order_detail['SinglePrice'] . '-' .
-                     $a_order_detail['ExtraDetail'] . '-' .
-                     $a_order_detail['MenuSizeid'] . '-';
-
-        foreach($a_order_detail['OrderDetailExtras'] as $i_key => $a_order_detail_extra) {
-            if(empty($a_order_detail_extra)) {
-                unset($a_order_detail['OrderDetailExtras'][$i_key]);
-                continue;
-            }
-
-            $str_index .= $a_order_detail_extra['MenuPossibleExtraid'];
-        }
-
-        $str_index .= '-';
-
-        foreach($a_order_detail['OrderDetailMixedWiths'] as $i_key => $a_order_detail_mixed_with) {
-            if(empty($a_order_detail_mixed_with)) {
-                unset($a_order_detail['OrderDetailMixedWiths'][$i_key]);
-                continue;
-            }
-            $str_index .= $a_order_detail_mixed_with['Menuid'];
-        }
-
-        $i_allready_in_invoice = 0;
-
-        foreach($a_order_detail['InvoiceItems'] as $i_key => $a_invoice_item) {
-            if(empty($a_invoice_item)) {
-                unset($a_order_detail['InvoiceItems'][$i_key]);
-                continue;
-            }
-            $i_allready_in_invoice += $a_invoice_item['Amount'];
-        }
-
-        $a_order_detail['AmountLeft'] = $a_order_detail['Amount'] - $i_allready_in_invoice;
-
-        return $str_index;
-    }
-
-    private function getUnbilledOrderDetails($i_orderid, $b_all)
+    private function buildIndexFromOrderDetail(&$orderDetail) : string
     {
-        $o_eventTable = null;
-        if($b_all) {
-            $o_eventTable = EventTableQuery::create()
+        $index = $orderDetail['Menuid'] . '-' .
+                $orderDetail['SinglePrice'] . '-' .
+                $orderDetail['ExtraDetail'] . '-' .
+                $orderDetail['MenuSizeid'] . '-';
+
+        foreach ($orderDetail['OrderDetailExtras'] as $key => $orderDetailExtra) {
+            if (empty($orderDetailExtra)) {
+                unset($orderDetail['OrderDetailExtras'][$key]);
+                continue;
+            }
+
+            $index .= $orderDetailExtra['MenuPossibleExtraid'];
+        }
+
+        $index .= '-';
+
+        foreach ($orderDetail['OrderDetailMixedWiths'] as $key => $orderDetailMixedWith) {
+            if (empty($orderDetailMixedWith)) {
+                unset($orderDetail['OrderDetailMixedWiths'][$key]);
+                continue;
+            }
+            $index .= $orderDetailMixedWith['Menuid'];
+        }
+
+        $allreadyInInvoice = 0;
+
+        foreach ($orderDetail['InvoiceItems'] as $key => $invoiceItem) {
+            if (empty($invoiceItem)) {
+                unset($orderDetail['InvoiceItems'][$key]);
+                continue;
+            }
+            $allreadyInInvoice += $invoiceItem['Amount'];
+        }
+
+        $orderDetail['AmountLeft'] = $orderDetail['Amount'] - $allreadyInInvoice;
+
+        return $index;
+    }
+
+    private function getUnbilledOrderDetails($orderid, $all)
+    {
+        $eventTable = null;
+        if ($all) {
+            $eventTable = EventTableQuery::create()
                                             ->useOrderQuery()
-                                               ->filterByOrderid($i_orderid)
+                                               ->filterByOrderid($orderid)
                                             ->endUse()
                                             ->findOne();
         }
 
-        $o_unbilledOrderDetails = OrderDetailQuery::create()
-                                                    ->_if($b_all)
+        $unbilledOrderDetails = OrderDetailQuery::create()
+                                                    ->_if($all)
                                                         ->useOrderQuery()
-                                                            ->filterByEventTable($o_eventTable)
+                                                            ->filterByEventTable($eventTable)
                                                         ->endUse()
                                                     ->_else()
-                                                        ->filterByOrderid($i_orderid)
+                                                        ->filterByOrderid($orderid)
                                                     ->_endIf()
                                                     ->leftJoinWithMenuSize()
                                                     ->leftJoinWithOrderDetailExtra()
@@ -398,7 +415,6 @@ class OrderUnbilled extends SecurityController
                                                     ->setFormatter(ModelCriteria::FORMAT_ARRAY)
                                                     ->find();
 
-        return $o_unbilledOrderDetails;
+        return $unbilledOrderDetails;
     }
-
 }

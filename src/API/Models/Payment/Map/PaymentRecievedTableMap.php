@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'payment_recieved' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class PaymentRecievedTableMap extends TableMap
 {
@@ -112,7 +108,7 @@ class PaymentRecievedTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('PaymentRecievedid', 'Invoiceid', 'PaymentTypeid', 'Userid', 'Date', 'Amount', ),
         self::TYPE_CAMELNAME     => array('paymentRecievedid', 'invoiceid', 'paymentTypeid', 'userid', 'date', 'amount', ),
         self::TYPE_COLNAME       => array(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID, PaymentRecievedTableMap::COL_INVOICEID, PaymentRecievedTableMap::COL_PAYMENT_TYPEID, PaymentRecievedTableMap::COL_USERID, PaymentRecievedTableMap::COL_DATE, PaymentRecievedTableMap::COL_AMOUNT, ),
@@ -126,7 +122,7 @@ class PaymentRecievedTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('PaymentRecievedid' => 0, 'Invoiceid' => 1, 'PaymentTypeid' => 2, 'Userid' => 3, 'Date' => 4, 'Amount' => 5, ),
         self::TYPE_CAMELNAME     => array('paymentRecievedid' => 0, 'invoiceid' => 1, 'paymentTypeid' => 2, 'userid' => 3, 'date' => 4, 'amount' => 5, ),
         self::TYPE_COLNAME       => array(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID => 0, PaymentRecievedTableMap::COL_INVOICEID => 1, PaymentRecievedTableMap::COL_PAYMENT_TYPEID => 2, PaymentRecievedTableMap::COL_USERID => 3, PaymentRecievedTableMap::COL_DATE => 4, PaymentRecievedTableMap::COL_AMOUNT => 5, ),
@@ -164,34 +160,70 @@ class PaymentRecievedTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Invoice', '\\API\\Models\\Invoice\\Invoice', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':invoiceid',
-    1 => ':invoiceid',
-  ),
-), null, null, null, false);
-        $this->addRelation('PaymentType', '\\API\\Models\\Payment\\PaymentType', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':payment_typeid',
-    1 => ':payment_typeid',
-  ),
-), null, null, null, false);
-        $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':userid',
-    1 => ':userid',
-  ),
-), null, null, null, false);
-        $this->addRelation('PaymentCoupon', '\\API\\Models\\Payment\\PaymentCoupon', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':payment_recievedid',
-    1 => ':payment_recievedid',
-  ),
-), null, null, 'PaymentCoupons', false);
+        $this->addRelation(
+            'Invoice',
+            '\\API\\Models\\Invoice\\Invoice',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':invoiceid',
+            1 => ':invoiceid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'PaymentType',
+            '\\API\\Models\\Payment\\PaymentType',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':payment_typeid',
+            1 => ':payment_typeid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'User',
+            '\\API\\Models\\User\\User',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'PaymentCoupon',
+            '\\API\\Models\\Payment\\PaymentCoupon',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':payment_recievedid',
+            1 => ':payment_recievedid',
+            ),
+            ),
+            null,
+            null,
+            'PaymentCoupons',
+            false
+        );
         $this->addRelation('Coupon', '\\API\\Models\\Payment\\Coupon', RelationMap::MANY_TO_MANY, array(), null, null, 'Coupons');
     } // buildRelations()
 
@@ -247,7 +279,7 @@ class PaymentRecievedTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -278,7 +310,9 @@ class PaymentRecievedTableMap extends TableMap
             $col = $offset + PaymentRecievedTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = PaymentRecievedTableMap::OM_CLASS;
-            /** @var PaymentRecieved $obj */
+            /**
+ * @var PaymentRecieved $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             PaymentRecievedTableMap::addInstanceToPool($obj, $key);
@@ -291,7 +325,7 @@ class PaymentRecievedTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -311,7 +345,9 @@ class PaymentRecievedTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var PaymentRecieved $obj */
+                /**
+ * @var PaymentRecieved $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -328,8 +364,8 @@ class PaymentRecievedTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -355,6 +391,7 @@ class PaymentRecievedTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -378,16 +415,16 @@ class PaymentRecievedTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a PaymentRecieved or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or PaymentRecieved object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or PaymentRecieved object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(PaymentRecievedTableMap::DATABASE_NAME);
         }
@@ -419,7 +456,7 @@ class PaymentRecievedTableMap extends TableMap
     /**
      * Deletes all rows from the payment_recieved table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -430,8 +467,8 @@ class PaymentRecievedTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a PaymentRecieved or Criteria object.
      *
-     * @param mixed               $criteria Criteria or PaymentRecieved object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or PaymentRecieved object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -448,7 +485,7 @@ class PaymentRecievedTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from PaymentRecieved object
         }
 
-        if ($criteria->containsKey(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID) && $criteria->keyContainsValue(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID) ) {
+        if ($criteria->containsKey(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID) && $criteria->keyContainsValue(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID.')');
         }
 
@@ -458,11 +495,12 @@ class PaymentRecievedTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // PaymentRecievedTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

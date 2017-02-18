@@ -9,33 +9,39 @@ use Slim\Http\Response;
 
 abstract class SecurityController extends Controller
 {
-    protected $a_security = array();
+    protected $security = array();
 
-    public function __invoke(Request $o_request, Response $o_response, $a_args) : Response {
-        if(!Auth::IsLoggedIn())
-        {
+    public function __invoke(Request $request, Response $response, $args) : Response
+    {
+        $auth = $this->app->getContainer()->get('Auth');
+        
+        if (!$auth->isLoggedIn()) {
             throw new SecurityException("Access Denied!");
         }
 
-        $this->CheckAccess($o_request);
+        $this->checkAccess($request);
 
-        return parent::__invoke($o_request, $o_response, $a_args);
+        return parent::__invoke($request, $response, $args);
     }
 
-    private function CheckAccess(Request $o_request) {
-        if(empty($this->a_security))
+    private function checkAccess(Request $request)
+    {
+        if (empty($this->security)) {
             return true;
+        }
 
-        $str_method = $o_request->getMethod();
+        $method = $request->getMethod();
 
-        if(!isset($this->a_security[$str_method]))
+        if (!isset($this->security[$method])) {
             return true;
+        }
+        
+        $auth = $this->app->getContainer()->get('Auth');
 
-        $o_user = Auth::GetCurrentUser();
-        $i_userRoles = $o_user->getEventUser()->getUserRoles();
+        $user = $auth->getCurrentUser();
+        $userRoles = $user->getEventUser()->getUserRoles();
 
-        if($i_userRoles & $this->a_security[$str_method])
-        {
+        if ($userRoles & $this->security[$method]) {
             return true;
         }
 

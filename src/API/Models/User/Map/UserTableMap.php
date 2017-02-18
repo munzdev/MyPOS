@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'user' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class UserTableMap extends TableMap
 {
@@ -132,7 +128,7 @@ class UserTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('Userid', 'Username', 'Password', 'Firstname', 'Lastname', 'AutologinHash', 'Active', 'Phonenumber', 'CallRequest', 'IsAdmin', ),
         self::TYPE_CAMELNAME     => array('userid', 'username', 'password', 'firstname', 'lastname', 'autologinHash', 'active', 'phonenumber', 'callRequest', 'isAdmin', ),
         self::TYPE_COLNAME       => array(UserTableMap::COL_USERID, UserTableMap::COL_USERNAME, UserTableMap::COL_PASSWORD, UserTableMap::COL_FIRSTNAME, UserTableMap::COL_LASTNAME, UserTableMap::COL_AUTOLOGIN_HASH, UserTableMap::COL_ACTIVE, UserTableMap::COL_PHONENUMBER, UserTableMap::COL_CALL_REQUEST, UserTableMap::COL_IS_ADMIN, ),
@@ -146,7 +142,7 @@ class UserTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('Userid' => 0, 'Username' => 1, 'Password' => 2, 'Firstname' => 3, 'Lastname' => 4, 'AutologinHash' => 5, 'Active' => 6, 'Phonenumber' => 7, 'CallRequest' => 8, 'IsAdmin' => 9, ),
         self::TYPE_CAMELNAME     => array('userid' => 0, 'username' => 1, 'password' => 2, 'firstname' => 3, 'lastname' => 4, 'autologinHash' => 5, 'active' => 6, 'phonenumber' => 7, 'callRequest' => 8, 'isAdmin' => 9, ),
         self::TYPE_COLNAME       => array(UserTableMap::COL_USERID => 0, UserTableMap::COL_USERNAME => 1, UserTableMap::COL_PASSWORD => 2, UserTableMap::COL_FIRSTNAME => 3, UserTableMap::COL_LASTNAME => 4, UserTableMap::COL_AUTOLOGIN_HASH => 5, UserTableMap::COL_ACTIVE => 6, UserTableMap::COL_PHONENUMBER => 7, UserTableMap::COL_CALL_REQUEST => 8, UserTableMap::COL_IS_ADMIN => 9, ),
@@ -188,69 +184,150 @@ class UserTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Coupon', '\\API\\Models\\Payment\\Coupon', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':created_by_userid',
-    1 => ':userid',
-  ),
-), null, null, 'Coupons', false);
-        $this->addRelation('DistributionPlaceUser', '\\API\\Models\\DistributionPlace\\DistributionPlaceUser', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':userid',
-    1 => ':userid',
-  ),
-), null, null, 'DistributionPlaceUsers', false);
-        $this->addRelation('EventUser', '\\API\\Models\\Event\\EventUser', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':userid',
-    1 => ':userid',
-  ),
-), null, null, 'EventUsers', false);
-        $this->addRelation('Invoice', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':userid',
-    1 => ':userid',
-  ),
-), null, null, 'Invoices', false);
-        $this->addRelation('OrderRelatedByCancellationCreatedByUserid', '\\API\\Models\\Ordering\\Order', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':cancellation_created_by_userid',
-    1 => ':userid',
-  ),
-), null, null, 'OrdersRelatedByCancellationCreatedByUserid', false);
-        $this->addRelation('OrderRelatedByUserid', '\\API\\Models\\Ordering\\Order', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':userid',
-    1 => ':userid',
-  ),
-), null, null, 'OrdersRelatedByUserid', false);
-        $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':single_price_modified_by_userid',
-    1 => ':userid',
-  ),
-), null, null, 'OrderDetails', false);
-        $this->addRelation('OrderInProgress', '\\API\\Models\\OIP\\OrderInProgress', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':userid',
-    1 => ':userid',
-  ),
-), null, null, 'OrderInProgresses', false);
-        $this->addRelation('PaymentRecieved', '\\API\\Models\\Payment\\PaymentRecieved', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':userid',
-    1 => ':userid',
-  ),
-), null, null, 'PaymentRecieveds', false);
+        $this->addRelation(
+            'Coupon',
+            '\\API\\Models\\Payment\\Coupon',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':created_by_userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            'Coupons',
+            false
+        );
+        $this->addRelation(
+            'DistributionPlaceUser',
+            '\\API\\Models\\DistributionPlace\\DistributionPlaceUser',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            'DistributionPlaceUsers',
+            false
+        );
+        $this->addRelation(
+            'EventUser',
+            '\\API\\Models\\Event\\EventUser',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            'EventUsers',
+            false
+        );
+        $this->addRelation(
+            'Invoice',
+            '\\API\\Models\\Invoice\\Invoice',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            'Invoices',
+            false
+        );
+        $this->addRelation(
+            'OrderRelatedByCancellationCreatedByUserid',
+            '\\API\\Models\\Ordering\\Order',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':cancellation_created_by_userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            'OrdersRelatedByCancellationCreatedByUserid',
+            false
+        );
+        $this->addRelation(
+            'OrderRelatedByUserid',
+            '\\API\\Models\\Ordering\\Order',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            'OrdersRelatedByUserid',
+            false
+        );
+        $this->addRelation(
+            'OrderDetail',
+            '\\API\\Models\\Ordering\\OrderDetail',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':single_price_modified_by_userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            'OrderDetails',
+            false
+        );
+        $this->addRelation(
+            'OrderInProgress',
+            '\\API\\Models\\OIP\\OrderInProgress',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            'OrderInProgresses',
+            false
+        );
+        $this->addRelation(
+            'PaymentRecieved',
+            '\\API\\Models\\Payment\\PaymentRecieved',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            'PaymentRecieveds',
+            false
+        );
     } // buildRelations()
 
     /**
@@ -305,7 +382,7 @@ class UserTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -336,7 +413,9 @@ class UserTableMap extends TableMap
             $col = $offset + UserTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = UserTableMap::OM_CLASS;
-            /** @var User $obj */
+            /**
+ * @var User $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             UserTableMap::addInstanceToPool($obj, $key);
@@ -349,7 +428,7 @@ class UserTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -369,7 +448,9 @@ class UserTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var User $obj */
+                /**
+ * @var User $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -386,8 +467,8 @@ class UserTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -421,6 +502,7 @@ class UserTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -444,16 +526,16 @@ class UserTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a User or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or User object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or User object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
         }
@@ -485,7 +567,7 @@ class UserTableMap extends TableMap
     /**
      * Deletes all rows from the user table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -496,8 +578,8 @@ class UserTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a User or Criteria object.
      *
-     * @param mixed               $criteria Criteria or User object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or User object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -514,7 +596,7 @@ class UserTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from User object
         }
 
-        if ($criteria->containsKey(UserTableMap::COL_USERID) && $criteria->keyContainsValue(UserTableMap::COL_USERID) ) {
+        if ($criteria->containsKey(UserTableMap::COL_USERID) && $criteria->keyContainsValue(UserTableMap::COL_USERID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.UserTableMap::COL_USERID.')');
         }
 
@@ -524,11 +606,12 @@ class UserTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // UserTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

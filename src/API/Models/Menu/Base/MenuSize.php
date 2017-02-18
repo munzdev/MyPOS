@@ -32,9 +32,7 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'menu_size' table.
  *
- *
- *
- * @package    propel.generator.API.Models.Menu.Base
+ * @package propel.generator.API.Models.Menu.Base
  */
 abstract class MenuSize implements ActiveRecordInterface
 {
@@ -46,12 +44,14 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * attribute to determine if this object has previously been saved.
+     *
      * @var boolean
      */
     protected $new = true;
 
     /**
      * attribute to determine whether this object has been deleted.
+     *
      * @var boolean
      */
     protected $deleted = false;
@@ -59,6 +59,7 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * The columns that have been modified in current object.
      * Tracking modified columns allows us to only update modified columns.
+     *
      * @var array
      */
     protected $modifiedColumns = array();
@@ -66,6 +67,7 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * The (virtual) columns that are added at runtime
      * The formatters can add supplementary columns based on a resultset
+     *
      * @var array
      */
     protected $virtualColumns = array();
@@ -73,28 +75,28 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * The value for the menu_sizeid field.
      *
-     * @var        int
+     * @var int
      */
     protected $menu_sizeid;
 
     /**
      * The value for the eventid field.
      *
-     * @var        int
+     * @var int
      */
     protected $eventid;
 
     /**
      * The value for the name field.
      *
-     * @var        string
+     * @var string
      */
     protected $name;
 
     /**
      * The value for the factor field.
      *
-     * @var        string
+     * @var string
      */
     protected $factor;
 
@@ -125,12 +127,14 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|ChildMenuPossibleSize[]
      */
     protected $menuPossibleSizesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|OrderDetail[]
      */
     protected $orderDetailsScheduledForDeletion = null;
@@ -155,7 +159,7 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Has specified column been modified?
      *
-     * @param  string  $col column fully qualified name (TableMap::TYPE_COLNAME), e.g. Book::AUTHOR_ID
+     * @param  string $col column fully qualified name (TableMap::TYPE_COLNAME), e.g. Book::AUTHOR_ID
      * @return boolean True if $col has been modified.
      */
     public function isColumnModified($col)
@@ -165,6 +169,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Get the columns that have been modified in this object.
+     *
      * @return array A unique list of the modified column names for this object.
      */
     public function getModifiedColumns()
@@ -197,6 +202,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Whether this object has been deleted.
+     *
      * @return boolean The deleted state of this object.
      */
     public function isDeleted()
@@ -206,6 +212,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Specify whether this object has been deleted.
+     *
      * @param  boolean $b The deleted state of this object.
      * @return void
      */
@@ -216,6 +223,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Sets the modified state for the object to be false.
+     *
      * @param  string $col If supplied, only the specified column is reset.
      * @return void
      */
@@ -235,7 +243,7 @@ abstract class MenuSize implements ActiveRecordInterface
      * <code>obj</code> is an instance of <code>MenuSize</code>, delegates to
      * <code>equals(MenuSize)</code>.  Otherwise, returns <code>false</code>.
      *
-     * @param  mixed   $obj The object to compare to.
+     * @param  mixed $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
      */
     public function equals($obj)
@@ -268,7 +276,7 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Checks the existence of a virtual column in this object
      *
-     * @param  string  $name The virtual column name
+     * @param  string $name The virtual column name
      * @return boolean
      */
     public function hasVirtualColumn($name)
@@ -311,8 +319,8 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Logs a message using Propel::log().
      *
-     * @param  string  $msg
-     * @param  int     $priority One of the Propel::LOG_* logging levels
+     * @param  string $msg
+     * @param  int    $priority One of the Propel::LOG_* logging levels
      * @return boolean
      */
     protected function log($msg, $priority = Propel::LOG_INFO)
@@ -353,7 +361,7 @@ abstract class MenuSize implements ActiveRecordInterface
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
 
-        foreach($serializableProperties as $property) {
+        foreach ($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
 
@@ -403,7 +411,7 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Set the value of [menu_sizeid] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return $this|\API\Models\Menu\MenuSize The current object (for fluent API support)
      */
     public function setMenuSizeid($v)
@@ -423,7 +431,7 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Set the value of [eventid] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return $this|\API\Models\Menu\MenuSize The current object (for fluent API support)
      */
     public function setEventid($v)
@@ -447,7 +455,7 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Set the value of [name] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return $this|\API\Models\Menu\MenuSize The current object (for fluent API support)
      */
     public function setName($v)
@@ -467,7 +475,7 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Set the value of [factor] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return $this|\API\Models\Menu\MenuSize The current object (for fluent API support)
      */
     public function setFactor($v)
@@ -519,7 +527,6 @@ abstract class MenuSize implements ActiveRecordInterface
     public function hydrate($row, $startcol = 0, $rehydrate = false, $indexType = TableMap::TYPE_NUM)
     {
         try {
-
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : MenuSizeTableMap::translateFieldName('MenuSizeid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->menu_sizeid = (null !== $col) ? (int) $col : null;
 
@@ -540,7 +547,6 @@ abstract class MenuSize implements ActiveRecordInterface
             }
 
             return $startcol + 4; // 4 = MenuSizeTableMap::NUM_HYDRATE_COLUMNS.
-
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Menu\\MenuSize'), 0, $e);
         }
@@ -571,8 +577,8 @@ abstract class MenuSize implements ActiveRecordInterface
      *
      * This will only work if the object has been saved and has a valid primary key set.
      *
-     * @param      boolean $deep (optional) Whether to also de-associated any related objects.
-     * @param      ConnectionInterface $con (optional) The ConnectionInterface connection to use.
+     * @param  boolean             $deep (optional) Whether to also de-associated any related objects.
+     * @param  ConnectionInterface $con  (optional) The ConnectionInterface connection to use.
      * @return void
      * @throws PropelException - if this object is deleted, unsaved or doesn't have pk match in db
      */
@@ -607,18 +613,17 @@ abstract class MenuSize implements ActiveRecordInterface
             $this->collMenuPossibleSizes = null;
 
             $this->collOrderDetails = null;
-
         } // if (deep)
     }
 
     /**
      * Removes this object from datastore and sets delete attribute.
      *
-     * @param      ConnectionInterface $con
+     * @param  ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see MenuSize::setDeleted()
-     * @see MenuSize::isDeleted()
+     * @see    MenuSize::setDeleted()
+     * @see    MenuSize::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -630,16 +635,18 @@ abstract class MenuSize implements ActiveRecordInterface
             $con = Propel::getServiceContainer()->getWriteConnection(MenuSizeTableMap::DATABASE_NAME);
         }
 
-        $con->transaction(function () use ($con) {
-            $deleteQuery = ChildMenuSizeQuery::create()
+        $con->transaction(
+            function () use ($con) {
+                $deleteQuery = ChildMenuSizeQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
-            $ret = $this->preDelete($con);
-            if ($ret) {
-                $deleteQuery->delete($con);
-                $this->postDelete($con);
-                $this->setDeleted(true);
+                $ret = $this->preDelete($con);
+                if ($ret) {
+                    $deleteQuery->delete($con);
+                    $this->postDelete($con);
+                    $this->setDeleted(true);
+                }
             }
-        });
+        );
     }
 
     /**
@@ -650,10 +657,10 @@ abstract class MenuSize implements ActiveRecordInterface
      * method.  This method wraps all precipitate database operations in a
      * single transaction.
      *
-     * @param      ConnectionInterface $con
+     * @param  ConnectionInterface $con
      * @return int             The number of rows affected by this insert/update and any referring fk objects' save() operations.
      * @throws PropelException
-     * @see doSave()
+     * @see    doSave()
      */
     public function save(ConnectionInterface $con = null)
     {
@@ -669,29 +676,31 @@ abstract class MenuSize implements ActiveRecordInterface
             $con = Propel::getServiceContainer()->getWriteConnection(MenuSizeTableMap::DATABASE_NAME);
         }
 
-        return $con->transaction(function () use ($con) {
-            $ret = $this->preSave($con);
-            $isInsert = $this->isNew();
-            if ($isInsert) {
-                $ret = $ret && $this->preInsert($con);
-            } else {
-                $ret = $ret && $this->preUpdate($con);
-            }
-            if ($ret) {
-                $affectedRows = $this->doSave($con);
+        return $con->transaction(
+            function () use ($con) {
+                $ret = $this->preSave($con);
+                $isInsert = $this->isNew();
                 if ($isInsert) {
-                    $this->postInsert($con);
+                    $ret = $ret && $this->preInsert($con);
                 } else {
-                    $this->postUpdate($con);
+                    $ret = $ret && $this->preUpdate($con);
                 }
-                $this->postSave($con);
-                MenuSizeTableMap::addInstanceToPool($this);
-            } else {
-                $affectedRows = 0;
-            }
+                if ($ret) {
+                    $affectedRows = $this->doSave($con);
+                    if ($isInsert) {
+                        $this->postInsert($con);
+                    } else {
+                        $this->postUpdate($con);
+                    }
+                    $this->postSave($con);
+                    MenuSizeTableMap::addInstanceToPool($this);
+                } else {
+                    $affectedRows = 0;
+                }
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
@@ -700,10 +709,10 @@ abstract class MenuSize implements ActiveRecordInterface
      * If the object is new, it inserts it; otherwise an update is performed.
      * All related objects are also updated in this method.
      *
-     * @param      ConnectionInterface $con
+     * @param  ConnectionInterface $con
      * @return int             The number of rows affected by this insert/update and any referring fk objects' save() operations.
      * @throws PropelException
-     * @see save()
+     * @see    save()
      */
     protected function doSave(ConnectionInterface $con)
     {
@@ -770,7 +779,6 @@ abstract class MenuSize implements ActiveRecordInterface
             }
 
             $this->alreadyInSave = false;
-
         }
 
         return $affectedRows;
@@ -779,10 +787,10 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Insert the row in the database.
      *
-     * @param      ConnectionInterface $con
+     * @param ConnectionInterface $con
      *
      * @throws PropelException
-     * @see doSave()
+     * @see    doSave()
      */
     protected function doInsert(ConnectionInterface $con)
     {
@@ -851,10 +859,10 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Update the row in the database.
      *
-     * @param      ConnectionInterface $con
+     * @param ConnectionInterface $con
      *
      * @return Integer Number of updated rows
-     * @see doSave()
+     * @see    doSave()
      */
     protected function doUpdate(ConnectionInterface $con)
     {
@@ -867,8 +875,8 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Retrieves a field from the object by name passed in as a string.
      *
-     * @param      string $name name
-     * @param      string $type The type of fieldname the $name is of:
+     * @param  string $name name
+     * @param  string $type The type of fieldname the $name is of:
      *                     one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                     TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                     Defaults to TableMap::TYPE_PHPNAME.
@@ -886,7 +894,7 @@ abstract class MenuSize implements ActiveRecordInterface
      * Retrieves a field from the object by Position as specified in the xml schema.
      * Zero-based.
      *
-     * @param      int $pos position in xml schema
+     * @param  int $pos position in xml schema
      * @return mixed Value of field at $pos
      */
     public function getByPosition($pos)
@@ -916,18 +924,17 @@ abstract class MenuSize implements ActiveRecordInterface
      * You can specify the key type of the array by passing one of the class
      * type constants.
      *
-     * @param     string  $keyType (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME,
-     *                    TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                    Defaults to TableMap::TYPE_PHPNAME.
-     * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
-     * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
-     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
+     * @param string  $keyType                (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME,
+     *                                            TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM. Defaults to
+     *                                            TableMap::TYPE_PHPNAME.
+     * @param boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+     * @param array   $alreadyDumpedObjects   List of objects to skip to avoid recursion
+     * @param boolean $includeForeignObjects  (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-
         if (isset($alreadyDumpedObjects['MenuSize'][$this->hashCode()])) {
             return '*RECURSION*';
         }
@@ -946,7 +953,6 @@ abstract class MenuSize implements ActiveRecordInterface
 
         if ($includeForeignObjects) {
             if (null !== $this->aEvent) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'event';
@@ -958,10 +964,9 @@ abstract class MenuSize implements ActiveRecordInterface
                         $key = 'Event';
                 }
 
-                $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns, $alreadyDumpedObjects, true);
             }
             if (null !== $this->collMenuPossibleSizes) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuPossibleSizes';
@@ -976,7 +981,6 @@ abstract class MenuSize implements ActiveRecordInterface
                 $result[$key] = $this->collMenuPossibleSizes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderDetails) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetails';
@@ -1000,10 +1004,14 @@ abstract class MenuSize implements ActiveRecordInterface
      *
      * @param  string $name
      * @param  mixed  $value field value
-     * @param  string $type The type of fieldname the $name is of:
-     *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
-     *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                Defaults to TableMap::TYPE_PHPNAME.
+     * @param  string $type  The type of fieldname the $name is of:
+     *                       one of the class type constants
+     *                       TableMap::TYPE_PHPNAME,
+     *                       TableMap::TYPE_CAMELNAME
+     *                       TableMap::TYPE_COLNAME,
+     *                       TableMap::TYPE_FIELDNAME,
+     *                       TableMap::TYPE_NUM. Defaults to
+     *                       TableMap::TYPE_PHPNAME.
      * @return $this|\API\Models\Menu\MenuSize
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
@@ -1017,7 +1025,7 @@ abstract class MenuSize implements ActiveRecordInterface
      * Sets a field from the object by Position as specified in the xml schema.
      * Zero-based.
      *
-     * @param  int $pos position in xml schema
+     * @param  int   $pos   position in xml schema
      * @param  mixed $value field value
      * @return $this|\API\Models\Menu\MenuSize
      */
@@ -1054,8 +1062,8 @@ abstract class MenuSize implements ActiveRecordInterface
      * TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      * The default key type is the column's TableMap::TYPE_PHPNAME.
      *
-     * @param      array  $arr     An array to populate the object from.
-     * @param      string $keyType The type of keys the array uses.
+     * @param  array  $arr     An array to populate the object from.
+     * @param  string $keyType The type of keys the array uses.
      * @return void
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
@@ -1088,9 +1096,10 @@ abstract class MenuSize implements ActiveRecordInterface
      * TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      * The default key type is the column's TableMap::TYPE_PHPNAME.
      *
-     * @param mixed $parser A AbstractParser instance,
-     *                       or a format name ('XML', 'YAML', 'JSON', 'CSV')
-     * @param string $data The source data to import from
+     * @param mixed  $parser  A AbstractParser instance,
+     *                        or a format name ('XML',
+     *                        'YAML', 'JSON', 'CSV')
+     * @param string $data    The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
      * @return $this|\API\Models\Menu\MenuSize The current object, for fluid interface
@@ -1173,6 +1182,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Returns the primary key for this object (row).
+     *
      * @return int
      */
     public function getPrimaryKey()
@@ -1183,7 +1193,7 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Generic method to set the primary key (menu_sizeid column).
      *
-     * @param       int $key Primary key.
+     * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
@@ -1193,6 +1203,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Returns true if the primary key for this object is null.
+     *
      * @return boolean
      */
     public function isPrimaryKeyNull()
@@ -1206,9 +1217,9 @@ abstract class MenuSize implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \API\Models\Menu\MenuSize (or compatible) type.
-     * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
+     * @param  object  $copyObj  An object of \API\Models\Menu\MenuSize (or compatible) type.
+     * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+     * @param  boolean $makeNew  Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
@@ -1233,12 +1244,11 @@ abstract class MenuSize implements ActiveRecordInterface
                     $copyObj->addOrderDetail($relObj->copy($deepCopy));
                 }
             }
-
         } // if ($deepCopy)
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setMenuSizeid(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setMenuSizeid(null); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1274,7 +1284,7 @@ abstract class MenuSize implements ActiveRecordInterface
     public function setEvent(Event $v = null)
     {
         if ($v === null) {
-            $this->setEventid(NULL);
+            $this->setEventid(null);
         } else {
             $this->setEventid($v->getEventid());
         }
@@ -1321,7 +1331,7 @@ abstract class MenuSize implements ActiveRecordInterface
      * Avoids crafting an 'init[$relationName]s' method name
      * that wouldn't work when StandardEnglishPluralizer is used.
      *
-     * @param      string $relationName The name of the relation to initialize
+     * @param  string $relationName The name of the relation to initialize
      * @return void
      */
     public function initRelation($relationName)
@@ -1341,7 +1351,7 @@ abstract class MenuSize implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addMenuPossibleSizes()
+     * @see    addMenuPossibleSizes()
      */
     public function clearMenuPossibleSizes()
     {
@@ -1363,7 +1373,7 @@ abstract class MenuSize implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -1389,8 +1399,8 @@ abstract class MenuSize implements ActiveRecordInterface
      * If this ChildMenuSize is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|ChildMenuPossibleSize[] List of ChildMenuPossibleSize objects
      * @throws PropelException
      */
@@ -1444,13 +1454,15 @@ abstract class MenuSize implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $menuPossibleSizes A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $menuPossibleSizes A Propel collection.
+     * @param  ConnectionInterface $con               Optional connection object
      * @return $this|ChildMenuSize The current object (for fluent API support)
      */
     public function setMenuPossibleSizes(Collection $menuPossibleSizes, ConnectionInterface $con = null)
     {
-        /** @var ChildMenuPossibleSize[] $menuPossibleSizesToDelete */
+        /**
+ * @var ChildMenuPossibleSize[] $menuPossibleSizesToDelete
+*/
         $menuPossibleSizesToDelete = $this->getMenuPossibleSizes(new Criteria(), $con)->diff($menuPossibleSizes);
 
 
@@ -1474,9 +1486,9 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Returns the number of related MenuPossibleSize objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related MenuPossibleSize objects.
      * @throws PropelException
      */
@@ -1571,9 +1583,9 @@ abstract class MenuSize implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in MenuSize.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildMenuPossibleSize[] List of ChildMenuPossibleSize objects
      */
     public function getMenuPossibleSizesJoinMenu(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -1591,7 +1603,7 @@ abstract class MenuSize implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addOrderDetails()
+     * @see    addOrderDetails()
      */
     public function clearOrderDetails()
     {
@@ -1613,7 +1625,7 @@ abstract class MenuSize implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -1639,8 +1651,8 @@ abstract class MenuSize implements ActiveRecordInterface
      * If this ChildMenuSize is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
      * @throws PropelException
      */
@@ -1694,13 +1706,15 @@ abstract class MenuSize implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $orderDetails A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $orderDetails A Propel collection.
+     * @param  ConnectionInterface $con          Optional connection object
      * @return $this|ChildMenuSize The current object (for fluent API support)
      */
     public function setOrderDetails(Collection $orderDetails, ConnectionInterface $con = null)
     {
-        /** @var OrderDetail[] $orderDetailsToDelete */
+        /**
+ * @var OrderDetail[] $orderDetailsToDelete
+*/
         $orderDetailsToDelete = $this->getOrderDetails(new Criteria(), $con)->diff($orderDetails);
 
 
@@ -1724,9 +1738,9 @@ abstract class MenuSize implements ActiveRecordInterface
     /**
      * Returns the number of related BaseOrderDetail objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseOrderDetail objects.
      * @throws PropelException
      */
@@ -1821,9 +1835,9 @@ abstract class MenuSize implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in MenuSize.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
      */
     public function getOrderDetailsJoinAvailability(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -1846,9 +1860,9 @@ abstract class MenuSize implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in MenuSize.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
      */
     public function getOrderDetailsJoinMenuGroup(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -1871,9 +1885,9 @@ abstract class MenuSize implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in MenuSize.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
      */
     public function getOrderDetailsJoinMenu(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -1896,9 +1910,9 @@ abstract class MenuSize implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in MenuSize.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
      */
     public function getOrderDetailsJoinOrder(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -1921,9 +1935,9 @@ abstract class MenuSize implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in MenuSize.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
      */
     public function getOrderDetailsJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -1961,7 +1975,7 @@ abstract class MenuSize implements ActiveRecordInterface
      * This method is used to reset all php object references (not the actual reference in the database).
      * Necessary for object serialisation.
      *
-     * @param      boolean $deep Whether to also clear the references on all referrer objects.
+     * @param boolean $deep Whether to also clear the references on all referrer objects.
      */
     public function clearAllReferences($deep = false)
     {
@@ -1995,6 +2009,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Code to be run before persisting the object
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -2008,6 +2023,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Code to be run after persisting the object
+     *
      * @param ConnectionInterface $con
      */
     public function postSave(ConnectionInterface $con = null)
@@ -2019,6 +2035,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Code to be run before inserting to database
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -2032,6 +2049,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Code to be run after inserting to database
+     *
      * @param ConnectionInterface $con
      */
     public function postInsert(ConnectionInterface $con = null)
@@ -2043,6 +2061,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Code to be run before updating the object in database
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -2056,6 +2075,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Code to be run after updating the object in database
+     *
      * @param ConnectionInterface $con
      */
     public function postUpdate(ConnectionInterface $con = null)
@@ -2067,6 +2087,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Code to be run before deleting the object in database
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -2080,6 +2101,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Code to be run after deleting the object in database
+     *
      * @param ConnectionInterface $con
      */
     public function postDelete(ConnectionInterface $con = null)
@@ -2130,5 +2152,4 @@ abstract class MenuSize implements ActiveRecordInterface
 
         throw new BadMethodCallException(sprintf('Call to undefined method: %s.', $name));
     }
-
 }

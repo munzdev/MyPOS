@@ -19,71 +19,68 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'availability' table.
  *
+ * @method ChildAvailabilityQuery orderByAvailabilityid($order = Criteria::ASC) Order by the availabilityid column
+ * @method ChildAvailabilityQuery orderByName($order = Criteria::ASC) Order by the name column
  *
+ * @method ChildAvailabilityQuery groupByAvailabilityid() Group by the availabilityid column
+ * @method ChildAvailabilityQuery groupByName() Group by the name column
  *
- * @method     ChildAvailabilityQuery orderByAvailabilityid($order = Criteria::ASC) Order by the availabilityid column
- * @method     ChildAvailabilityQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method ChildAvailabilityQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildAvailabilityQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildAvailabilityQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildAvailabilityQuery groupByAvailabilityid() Group by the availabilityid column
- * @method     ChildAvailabilityQuery groupByName() Group by the name column
+ * @method ChildAvailabilityQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildAvailabilityQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildAvailabilityQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildAvailabilityQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildAvailabilityQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildAvailabilityQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildAvailabilityQuery leftJoinMenu($relationAlias = null) Adds a LEFT JOIN clause to the query using the Menu relation
+ * @method ChildAvailabilityQuery rightJoinMenu($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Menu relation
+ * @method ChildAvailabilityQuery innerJoinMenu($relationAlias = null) Adds a INNER JOIN clause to the query using the Menu relation
  *
- * @method     ChildAvailabilityQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildAvailabilityQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildAvailabilityQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildAvailabilityQuery joinWithMenu($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Menu relation
  *
- * @method     ChildAvailabilityQuery leftJoinMenu($relationAlias = null) Adds a LEFT JOIN clause to the query using the Menu relation
- * @method     ChildAvailabilityQuery rightJoinMenu($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Menu relation
- * @method     ChildAvailabilityQuery innerJoinMenu($relationAlias = null) Adds a INNER JOIN clause to the query using the Menu relation
+ * @method ChildAvailabilityQuery leftJoinWithMenu() Adds a LEFT JOIN clause and with to the query using the Menu relation
+ * @method ChildAvailabilityQuery rightJoinWithMenu() Adds a RIGHT JOIN clause and with to the query using the Menu relation
+ * @method ChildAvailabilityQuery innerJoinWithMenu() Adds a INNER JOIN clause and with to the query using the Menu relation
  *
- * @method     ChildAvailabilityQuery joinWithMenu($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Menu relation
+ * @method ChildAvailabilityQuery leftJoinMenuExtra($relationAlias = null) Adds a LEFT JOIN clause to the query using the MenuExtra relation
+ * @method ChildAvailabilityQuery rightJoinMenuExtra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MenuExtra relation
+ * @method ChildAvailabilityQuery innerJoinMenuExtra($relationAlias = null) Adds a INNER JOIN clause to the query using the MenuExtra relation
  *
- * @method     ChildAvailabilityQuery leftJoinWithMenu() Adds a LEFT JOIN clause and with to the query using the Menu relation
- * @method     ChildAvailabilityQuery rightJoinWithMenu() Adds a RIGHT JOIN clause and with to the query using the Menu relation
- * @method     ChildAvailabilityQuery innerJoinWithMenu() Adds a INNER JOIN clause and with to the query using the Menu relation
+ * @method ChildAvailabilityQuery joinWithMenuExtra($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the MenuExtra relation
  *
- * @method     ChildAvailabilityQuery leftJoinMenuExtra($relationAlias = null) Adds a LEFT JOIN clause to the query using the MenuExtra relation
- * @method     ChildAvailabilityQuery rightJoinMenuExtra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MenuExtra relation
- * @method     ChildAvailabilityQuery innerJoinMenuExtra($relationAlias = null) Adds a INNER JOIN clause to the query using the MenuExtra relation
+ * @method ChildAvailabilityQuery leftJoinWithMenuExtra() Adds a LEFT JOIN clause and with to the query using the MenuExtra relation
+ * @method ChildAvailabilityQuery rightJoinWithMenuExtra() Adds a RIGHT JOIN clause and with to the query using the MenuExtra relation
+ * @method ChildAvailabilityQuery innerJoinWithMenuExtra() Adds a INNER JOIN clause and with to the query using the MenuExtra relation
  *
- * @method     ChildAvailabilityQuery joinWithMenuExtra($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the MenuExtra relation
+ * @method ChildAvailabilityQuery leftJoinOrderDetail($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderDetail relation
+ * @method ChildAvailabilityQuery rightJoinOrderDetail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderDetail relation
+ * @method ChildAvailabilityQuery innerJoinOrderDetail($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderDetail relation
  *
- * @method     ChildAvailabilityQuery leftJoinWithMenuExtra() Adds a LEFT JOIN clause and with to the query using the MenuExtra relation
- * @method     ChildAvailabilityQuery rightJoinWithMenuExtra() Adds a RIGHT JOIN clause and with to the query using the MenuExtra relation
- * @method     ChildAvailabilityQuery innerJoinWithMenuExtra() Adds a INNER JOIN clause and with to the query using the MenuExtra relation
+ * @method ChildAvailabilityQuery joinWithOrderDetail($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderDetail relation
  *
- * @method     ChildAvailabilityQuery leftJoinOrderDetail($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderDetail relation
- * @method     ChildAvailabilityQuery rightJoinOrderDetail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderDetail relation
- * @method     ChildAvailabilityQuery innerJoinOrderDetail($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderDetail relation
+ * @method ChildAvailabilityQuery leftJoinWithOrderDetail() Adds a LEFT JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildAvailabilityQuery rightJoinWithOrderDetail() Adds a RIGHT JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildAvailabilityQuery innerJoinWithOrderDetail() Adds a INNER JOIN clause and with to the query using the OrderDetail relation
  *
- * @method     ChildAvailabilityQuery joinWithOrderDetail($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderDetail relation
+ * @method \API\Models\Menu\MenuQuery|\API\Models\Menu\MenuExtraQuery|\API\Models\Ordering\OrderDetailQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildAvailabilityQuery leftJoinWithOrderDetail() Adds a LEFT JOIN clause and with to the query using the OrderDetail relation
- * @method     ChildAvailabilityQuery rightJoinWithOrderDetail() Adds a RIGHT JOIN clause and with to the query using the OrderDetail relation
- * @method     ChildAvailabilityQuery innerJoinWithOrderDetail() Adds a INNER JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildAvailability findOne(ConnectionInterface $con = null) Return the first ChildAvailability matching the query
+ * @method ChildAvailability findOneOrCreate(ConnectionInterface $con = null) Return the first ChildAvailability matching the query, or a new ChildAvailability object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Menu\MenuQuery|\API\Models\Menu\MenuExtraQuery|\API\Models\Ordering\OrderDetailQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildAvailability findOne(ConnectionInterface $con = null) Return the first ChildAvailability matching the query
- * @method     ChildAvailability findOneOrCreate(ConnectionInterface $con = null) Return the first ChildAvailability matching the query, or a new ChildAvailability object populated from the query conditions when no match is found
- *
- * @method     ChildAvailability findOneByAvailabilityid(int $availabilityid) Return the first ChildAvailability filtered by the availabilityid column
- * @method     ChildAvailability findOneByName(string $name) Return the first ChildAvailability filtered by the name column *
+ * @method ChildAvailability findOneByAvailabilityid(int $availabilityid) Return the first ChildAvailability filtered by the availabilityid column
+ * @method ChildAvailability findOneByName(string $name) Return the first ChildAvailability filtered by the name column *
 
- * @method     ChildAvailability requirePk($key, ConnectionInterface $con = null) Return the ChildAvailability by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAvailability requireOne(ConnectionInterface $con = null) Return the first ChildAvailability matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildAvailability requirePk($key, ConnectionInterface $con = null) Return the ChildAvailability by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildAvailability requireOne(ConnectionInterface $con = null) Return the first ChildAvailability matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildAvailability requireOneByAvailabilityid(int $availabilityid) Return the first ChildAvailability filtered by the availabilityid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildAvailability requireOneByName(string $name) Return the first ChildAvailability filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildAvailability requireOneByAvailabilityid(int $availabilityid) Return the first ChildAvailability filtered by the availabilityid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildAvailability requireOneByName(string $name) Return the first ChildAvailability filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildAvailability[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAvailability objects based on current ModelCriteria
- * @method     ChildAvailability[]|ObjectCollection findByAvailabilityid(int $availabilityid) Return ChildAvailability objects filtered by the availabilityid column
- * @method     ChildAvailability[]|ObjectCollection findByName(string $name) Return ChildAvailability objects filtered by the name column
- * @method     ChildAvailability[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildAvailability[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildAvailability objects based on current ModelCriteria
+ * @method ChildAvailability[]|ObjectCollection findByAvailabilityid(int $availabilityid) Return ChildAvailability objects filtered by the availabilityid column
+ * @method ChildAvailability[]|ObjectCollection findByName(string $name) Return ChildAvailability objects filtered by the name column
+ * @method ChildAvailability[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class AvailabilityQuery extends ModelCriteria
 {
@@ -92,9 +89,9 @@ abstract class AvailabilityQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Menu\Base\AvailabilityQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Menu\\Availability', $modelAlias = null)
     {
@@ -104,8 +101,8 @@ abstract class AvailabilityQuery extends ModelCriteria
     /**
      * Returns a new ChildAvailabilityQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildAvailabilityQuery
      */
@@ -134,7 +131,7 @@ abstract class AvailabilityQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildAvailability|array|mixed the result, formatted by the current formatter
@@ -151,8 +148,7 @@ abstract class AvailabilityQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -171,8 +167,8 @@ abstract class AvailabilityQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -191,7 +187,9 @@ abstract class AvailabilityQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildAvailability $obj */
+            /**
+ * @var ChildAvailability $obj
+*/
             $obj = new ChildAvailability();
             $obj->hydrate($row);
             AvailabilityTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -204,8 +202,8 @@ abstract class AvailabilityQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildAvailability|array|mixed the result, formatted by the current formatter
      */
@@ -225,8 +223,9 @@ abstract class AvailabilityQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -247,26 +246,24 @@ abstract class AvailabilityQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildAvailabilityQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(AvailabilityTableMap::COL_AVAILABILITYID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildAvailabilityQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(AvailabilityTableMap::COL_AVAILABILITYID, $keys, Criteria::IN);
     }
 
@@ -280,11 +277,14 @@ abstract class AvailabilityQuery extends ModelCriteria
      * $query->filterByAvailabilityid(array('min' => 12)); // WHERE availabilityid > 12
      * </code>
      *
-     * @param     mixed $availabilityid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $availabilityid The value to use as filter.
+     *                                   Use scalar values for
+     *                                   equality. Use array values
+     *                                   for in_array() equivalent.
+     *                                   Use associative array('min'
+     *                                   => $minValue, 'max' =>
+     *                                   $maxValue) for intervals.
+     * @param string $comparison     Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildAvailabilityQuery The current query, for fluid interface
      */
@@ -320,8 +320,8 @@ abstract class AvailabilityQuery extends ModelCriteria
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE name LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $name       The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildAvailabilityQuery The current query, for fluid interface
      */
@@ -339,8 +339,8 @@ abstract class AvailabilityQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Menu\Menu object
      *
-     * @param \API\Models\Menu\Menu|ObjectCollection $menu the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Menu\Menu|ObjectCollection $menu       the related object to use as filter
+     * @param string                                 $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildAvailabilityQuery The current query, for fluid interface
      */
@@ -362,8 +362,8 @@ abstract class AvailabilityQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Menu relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildAvailabilityQuery The current query, for fluid interface
      */
@@ -396,9 +396,9 @@ abstract class AvailabilityQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Menu\MenuQuery A secondary query class using the current class as primary query
      */
@@ -412,8 +412,8 @@ abstract class AvailabilityQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Menu\MenuExtra object
      *
-     * @param \API\Models\Menu\MenuExtra|ObjectCollection $menuExtra the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Menu\MenuExtra|ObjectCollection $menuExtra  the related object to use as filter
+     * @param string                                      $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildAvailabilityQuery The current query, for fluid interface
      */
@@ -435,8 +435,8 @@ abstract class AvailabilityQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the MenuExtra relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildAvailabilityQuery The current query, for fluid interface
      */
@@ -469,9 +469,9 @@ abstract class AvailabilityQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Menu\MenuExtraQuery A secondary query class using the current class as primary query
      */
@@ -486,7 +486,7 @@ abstract class AvailabilityQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Ordering\OrderDetail object
      *
      * @param \API\Models\Ordering\OrderDetail|ObjectCollection $orderDetail the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                            $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildAvailabilityQuery The current query, for fluid interface
      */
@@ -508,8 +508,8 @@ abstract class AvailabilityQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the OrderDetail relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildAvailabilityQuery The current query, for fluid interface
      */
@@ -542,9 +542,9 @@ abstract class AvailabilityQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Ordering\OrderDetailQuery A secondary query class using the current class as primary query
      */
@@ -558,7 +558,7 @@ abstract class AvailabilityQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildAvailability $availability Object to remove from the list of results
+     * @param ChildAvailability $availability Object to remove from the list of results
      *
      * @return $this|ChildAvailabilityQuery The current query, for fluid interface
      */
@@ -574,7 +574,7 @@ abstract class AvailabilityQuery extends ModelCriteria
     /**
      * Deletes all rows from the availability table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -585,23 +585,25 @@ abstract class AvailabilityQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            AvailabilityTableMap::clearInstancePool();
-            AvailabilityTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                AvailabilityTableMap::clearInstancePool();
+                AvailabilityTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -620,16 +622,17 @@ abstract class AvailabilityQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            AvailabilityTableMap::removeInstanceFromPool($criteria);
+                AvailabilityTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            AvailabilityTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                AvailabilityTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // AvailabilityQuery

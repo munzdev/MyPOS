@@ -1,12 +1,15 @@
 <?php
 
+use API\Lib\Auth;
+use API\Models\User\UserQuery;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
 use const API\PUBLIC_ROOT;
+
 // DIC configuration
 
-$o_container = $app->getContainer();
+$container = $app->getContainer();
 
 // -----------------------------------------------------------------------------
 // Service providers
@@ -16,8 +19,8 @@ $o_container = $app->getContainer();
 // -----------------------------------------------------------------------------
 
 // monolog
-$o_container['logger'] = function ($o_container) {
-    $settings = $o_container->get('settings');
+$container['logger'] = function ($container) {
+    $settings = $container->get('settings');
     $logger = new Logger($settings['logger']['name']);
     $logger->pushProcessor(new UidProcessor());
     $logger->pushHandler(new StreamHandler($settings['logger']['path'], Logger::DEBUG));
@@ -25,25 +28,29 @@ $o_container['logger'] = function ($o_container) {
 };
 
 // i18n multi language support
-$o_container['i18n'] = function($o_container) {
-    $str_lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+$container['i18n'] = function () {
+    $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
     
-    $str_file = PUBLIC_ROOT . 'js/i18n/' . $str_lang . '.json';
+    $file = PUBLIC_ROOT . 'js/i18n/' . $lang . '.json';
     
-    if(!file_exists($str_file)) 
-        $str_file = PUBLIC_ROOT . 'js/i18n/en.json';    
+    if (!file_exists($file)) {
+        $file = PUBLIC_ROOT . 'js/i18n/en.json';
+    }
     
-    $str_json = file_get_contents($str_file);
-    return json_decode($str_json);
+    $json = file_get_contents($file);
+    return json_decode($json);
 };
 
 // Propel
-$o_container['db'] = function($o_container)
-{
-    $a_settings = $o_container->get('settings');
-    $a_db = $a_settings['propel']['database']['connections']['default'];
+$container['db'] = function ($container) {
+    $settings = $container->get('settings');
+    $dbConfig = $settings['propel']['database']['connections']['default'];
     
-    registerPropelConnection($a_db);
+    registerPropelConnection($dbConfig);
     
     return true;
+};
+
+$container['Auth'] = function ($container) {
+    return new Auth(new UserQuery());
 };

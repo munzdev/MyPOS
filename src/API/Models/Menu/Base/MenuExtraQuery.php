@@ -19,86 +19,83 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'menu_extra' table.
  *
+ * @method ChildMenuExtraQuery orderByMenuExtraid($order = Criteria::ASC) Order by the menu_extraid column
+ * @method ChildMenuExtraQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
+ * @method ChildMenuExtraQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method ChildMenuExtraQuery orderByAvailabilityid($order = Criteria::ASC) Order by the availabilityid column
+ * @method ChildMenuExtraQuery orderByAvailabilityAmount($order = Criteria::ASC) Order by the availability_amount column
  *
+ * @method ChildMenuExtraQuery groupByMenuExtraid() Group by the menu_extraid column
+ * @method ChildMenuExtraQuery groupByEventid() Group by the eventid column
+ * @method ChildMenuExtraQuery groupByName() Group by the name column
+ * @method ChildMenuExtraQuery groupByAvailabilityid() Group by the availabilityid column
+ * @method ChildMenuExtraQuery groupByAvailabilityAmount() Group by the availability_amount column
  *
- * @method     ChildMenuExtraQuery orderByMenuExtraid($order = Criteria::ASC) Order by the menu_extraid column
- * @method     ChildMenuExtraQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
- * @method     ChildMenuExtraQuery orderByName($order = Criteria::ASC) Order by the name column
- * @method     ChildMenuExtraQuery orderByAvailabilityid($order = Criteria::ASC) Order by the availabilityid column
- * @method     ChildMenuExtraQuery orderByAvailabilityAmount($order = Criteria::ASC) Order by the availability_amount column
+ * @method ChildMenuExtraQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildMenuExtraQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildMenuExtraQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildMenuExtraQuery groupByMenuExtraid() Group by the menu_extraid column
- * @method     ChildMenuExtraQuery groupByEventid() Group by the eventid column
- * @method     ChildMenuExtraQuery groupByName() Group by the name column
- * @method     ChildMenuExtraQuery groupByAvailabilityid() Group by the availabilityid column
- * @method     ChildMenuExtraQuery groupByAvailabilityAmount() Group by the availability_amount column
+ * @method ChildMenuExtraQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildMenuExtraQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildMenuExtraQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildMenuExtraQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildMenuExtraQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildMenuExtraQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildMenuExtraQuery leftJoinAvailability($relationAlias = null) Adds a LEFT JOIN clause to the query using the Availability relation
+ * @method ChildMenuExtraQuery rightJoinAvailability($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Availability relation
+ * @method ChildMenuExtraQuery innerJoinAvailability($relationAlias = null) Adds a INNER JOIN clause to the query using the Availability relation
  *
- * @method     ChildMenuExtraQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildMenuExtraQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildMenuExtraQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildMenuExtraQuery joinWithAvailability($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Availability relation
  *
- * @method     ChildMenuExtraQuery leftJoinAvailability($relationAlias = null) Adds a LEFT JOIN clause to the query using the Availability relation
- * @method     ChildMenuExtraQuery rightJoinAvailability($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Availability relation
- * @method     ChildMenuExtraQuery innerJoinAvailability($relationAlias = null) Adds a INNER JOIN clause to the query using the Availability relation
+ * @method ChildMenuExtraQuery leftJoinWithAvailability() Adds a LEFT JOIN clause and with to the query using the Availability relation
+ * @method ChildMenuExtraQuery rightJoinWithAvailability() Adds a RIGHT JOIN clause and with to the query using the Availability relation
+ * @method ChildMenuExtraQuery innerJoinWithAvailability() Adds a INNER JOIN clause and with to the query using the Availability relation
  *
- * @method     ChildMenuExtraQuery joinWithAvailability($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Availability relation
+ * @method ChildMenuExtraQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
+ * @method ChildMenuExtraQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
+ * @method ChildMenuExtraQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
  *
- * @method     ChildMenuExtraQuery leftJoinWithAvailability() Adds a LEFT JOIN clause and with to the query using the Availability relation
- * @method     ChildMenuExtraQuery rightJoinWithAvailability() Adds a RIGHT JOIN clause and with to the query using the Availability relation
- * @method     ChildMenuExtraQuery innerJoinWithAvailability() Adds a INNER JOIN clause and with to the query using the Availability relation
+ * @method ChildMenuExtraQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
  *
- * @method     ChildMenuExtraQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
- * @method     ChildMenuExtraQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
- * @method     ChildMenuExtraQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
+ * @method ChildMenuExtraQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
+ * @method ChildMenuExtraQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
+ * @method ChildMenuExtraQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
  *
- * @method     ChildMenuExtraQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
+ * @method ChildMenuExtraQuery leftJoinMenuPossibleExtra($relationAlias = null) Adds a LEFT JOIN clause to the query using the MenuPossibleExtra relation
+ * @method ChildMenuExtraQuery rightJoinMenuPossibleExtra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MenuPossibleExtra relation
+ * @method ChildMenuExtraQuery innerJoinMenuPossibleExtra($relationAlias = null) Adds a INNER JOIN clause to the query using the MenuPossibleExtra relation
  *
- * @method     ChildMenuExtraQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
- * @method     ChildMenuExtraQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
- * @method     ChildMenuExtraQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
+ * @method ChildMenuExtraQuery joinWithMenuPossibleExtra($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the MenuPossibleExtra relation
  *
- * @method     ChildMenuExtraQuery leftJoinMenuPossibleExtra($relationAlias = null) Adds a LEFT JOIN clause to the query using the MenuPossibleExtra relation
- * @method     ChildMenuExtraQuery rightJoinMenuPossibleExtra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MenuPossibleExtra relation
- * @method     ChildMenuExtraQuery innerJoinMenuPossibleExtra($relationAlias = null) Adds a INNER JOIN clause to the query using the MenuPossibleExtra relation
+ * @method ChildMenuExtraQuery leftJoinWithMenuPossibleExtra() Adds a LEFT JOIN clause and with to the query using the MenuPossibleExtra relation
+ * @method ChildMenuExtraQuery rightJoinWithMenuPossibleExtra() Adds a RIGHT JOIN clause and with to the query using the MenuPossibleExtra relation
+ * @method ChildMenuExtraQuery innerJoinWithMenuPossibleExtra() Adds a INNER JOIN clause and with to the query using the MenuPossibleExtra relation
  *
- * @method     ChildMenuExtraQuery joinWithMenuPossibleExtra($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the MenuPossibleExtra relation
+ * @method \API\Models\Menu\AvailabilityQuery|\API\Models\Event\EventQuery|\API\Models\Menu\MenuPossibleExtraQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildMenuExtraQuery leftJoinWithMenuPossibleExtra() Adds a LEFT JOIN clause and with to the query using the MenuPossibleExtra relation
- * @method     ChildMenuExtraQuery rightJoinWithMenuPossibleExtra() Adds a RIGHT JOIN clause and with to the query using the MenuPossibleExtra relation
- * @method     ChildMenuExtraQuery innerJoinWithMenuPossibleExtra() Adds a INNER JOIN clause and with to the query using the MenuPossibleExtra relation
+ * @method ChildMenuExtra findOne(ConnectionInterface $con = null) Return the first ChildMenuExtra matching the query
+ * @method ChildMenuExtra findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMenuExtra matching the query, or a new ChildMenuExtra object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Menu\AvailabilityQuery|\API\Models\Event\EventQuery|\API\Models\Menu\MenuPossibleExtraQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildMenuExtra findOne(ConnectionInterface $con = null) Return the first ChildMenuExtra matching the query
- * @method     ChildMenuExtra findOneOrCreate(ConnectionInterface $con = null) Return the first ChildMenuExtra matching the query, or a new ChildMenuExtra object populated from the query conditions when no match is found
- *
- * @method     ChildMenuExtra findOneByMenuExtraid(int $menu_extraid) Return the first ChildMenuExtra filtered by the menu_extraid column
- * @method     ChildMenuExtra findOneByEventid(int $eventid) Return the first ChildMenuExtra filtered by the eventid column
- * @method     ChildMenuExtra findOneByName(string $name) Return the first ChildMenuExtra filtered by the name column
- * @method     ChildMenuExtra findOneByAvailabilityid(int $availabilityid) Return the first ChildMenuExtra filtered by the availabilityid column
- * @method     ChildMenuExtra findOneByAvailabilityAmount(int $availability_amount) Return the first ChildMenuExtra filtered by the availability_amount column *
+ * @method ChildMenuExtra findOneByMenuExtraid(int $menu_extraid) Return the first ChildMenuExtra filtered by the menu_extraid column
+ * @method ChildMenuExtra findOneByEventid(int $eventid) Return the first ChildMenuExtra filtered by the eventid column
+ * @method ChildMenuExtra findOneByName(string $name) Return the first ChildMenuExtra filtered by the name column
+ * @method ChildMenuExtra findOneByAvailabilityid(int $availabilityid) Return the first ChildMenuExtra filtered by the availabilityid column
+ * @method ChildMenuExtra findOneByAvailabilityAmount(int $availability_amount) Return the first ChildMenuExtra filtered by the availability_amount column *
 
- * @method     ChildMenuExtra requirePk($key, ConnectionInterface $con = null) Return the ChildMenuExtra by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMenuExtra requireOne(ConnectionInterface $con = null) Return the first ChildMenuExtra matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildMenuExtra requirePk($key, ConnectionInterface $con = null) Return the ChildMenuExtra by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildMenuExtra requireOne(ConnectionInterface $con = null) Return the first ChildMenuExtra matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildMenuExtra requireOneByMenuExtraid(int $menu_extraid) Return the first ChildMenuExtra filtered by the menu_extraid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMenuExtra requireOneByEventid(int $eventid) Return the first ChildMenuExtra filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMenuExtra requireOneByName(string $name) Return the first ChildMenuExtra filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMenuExtra requireOneByAvailabilityid(int $availabilityid) Return the first ChildMenuExtra filtered by the availabilityid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildMenuExtra requireOneByAvailabilityAmount(int $availability_amount) Return the first ChildMenuExtra filtered by the availability_amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildMenuExtra requireOneByMenuExtraid(int $menu_extraid) Return the first ChildMenuExtra filtered by the menu_extraid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildMenuExtra requireOneByEventid(int $eventid) Return the first ChildMenuExtra filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildMenuExtra requireOneByName(string $name) Return the first ChildMenuExtra filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildMenuExtra requireOneByAvailabilityid(int $availabilityid) Return the first ChildMenuExtra filtered by the availabilityid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildMenuExtra requireOneByAvailabilityAmount(int $availability_amount) Return the first ChildMenuExtra filtered by the availability_amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildMenuExtra[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMenuExtra objects based on current ModelCriteria
- * @method     ChildMenuExtra[]|ObjectCollection findByMenuExtraid(int $menu_extraid) Return ChildMenuExtra objects filtered by the menu_extraid column
- * @method     ChildMenuExtra[]|ObjectCollection findByEventid(int $eventid) Return ChildMenuExtra objects filtered by the eventid column
- * @method     ChildMenuExtra[]|ObjectCollection findByName(string $name) Return ChildMenuExtra objects filtered by the name column
- * @method     ChildMenuExtra[]|ObjectCollection findByAvailabilityid(int $availabilityid) Return ChildMenuExtra objects filtered by the availabilityid column
- * @method     ChildMenuExtra[]|ObjectCollection findByAvailabilityAmount(int $availability_amount) Return ChildMenuExtra objects filtered by the availability_amount column
- * @method     ChildMenuExtra[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildMenuExtra[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMenuExtra objects based on current ModelCriteria
+ * @method ChildMenuExtra[]|ObjectCollection findByMenuExtraid(int $menu_extraid) Return ChildMenuExtra objects filtered by the menu_extraid column
+ * @method ChildMenuExtra[]|ObjectCollection findByEventid(int $eventid) Return ChildMenuExtra objects filtered by the eventid column
+ * @method ChildMenuExtra[]|ObjectCollection findByName(string $name) Return ChildMenuExtra objects filtered by the name column
+ * @method ChildMenuExtra[]|ObjectCollection findByAvailabilityid(int $availabilityid) Return ChildMenuExtra objects filtered by the availabilityid column
+ * @method ChildMenuExtra[]|ObjectCollection findByAvailabilityAmount(int $availability_amount) Return ChildMenuExtra objects filtered by the availability_amount column
+ * @method ChildMenuExtra[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class MenuExtraQuery extends ModelCriteria
 {
@@ -107,9 +104,9 @@ abstract class MenuExtraQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Menu\Base\MenuExtraQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Menu\\MenuExtra', $modelAlias = null)
     {
@@ -119,8 +116,8 @@ abstract class MenuExtraQuery extends ModelCriteria
     /**
      * Returns a new ChildMenuExtraQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildMenuExtraQuery
      */
@@ -149,7 +146,7 @@ abstract class MenuExtraQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildMenuExtra|array|mixed the result, formatted by the current formatter
@@ -166,8 +163,7 @@ abstract class MenuExtraQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -186,8 +182,8 @@ abstract class MenuExtraQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -206,7 +202,9 @@ abstract class MenuExtraQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildMenuExtra $obj */
+            /**
+ * @var ChildMenuExtra $obj
+*/
             $obj = new ChildMenuExtra();
             $obj->hydrate($row);
             MenuExtraTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -219,8 +217,8 @@ abstract class MenuExtraQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildMenuExtra|array|mixed the result, formatted by the current formatter
      */
@@ -240,8 +238,9 @@ abstract class MenuExtraQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -262,26 +261,24 @@ abstract class MenuExtraQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildMenuExtraQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(MenuExtraTableMap::COL_MENU_EXTRAID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildMenuExtraQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(MenuExtraTableMap::COL_MENU_EXTRAID, $keys, Criteria::IN);
     }
 
@@ -295,11 +292,14 @@ abstract class MenuExtraQuery extends ModelCriteria
      * $query->filterByMenuExtraid(array('min' => 12)); // WHERE menu_extraid > 12
      * </code>
      *
-     * @param     mixed $menuExtraid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $menuExtraid The value to use as filter.
+     *                                Use scalar values for
+     *                                equality. Use array values
+     *                                for in_array() equivalent.
+     *                                Use associative array('min'
+     *                                => $minValue, 'max' =>
+     *                                $maxValue) for intervals.
+     * @param string $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildMenuExtraQuery The current query, for fluid interface
      */
@@ -336,13 +336,16 @@ abstract class MenuExtraQuery extends ModelCriteria
      * $query->filterByEventid(array('min' => 12)); // WHERE eventid > 12
      * </code>
      *
-     * @see       filterByEvent()
+     * @see filterByEvent()
      *
-     * @param     mixed $eventid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $eventid    The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildMenuExtraQuery The current query, for fluid interface
      */
@@ -378,8 +381,8 @@ abstract class MenuExtraQuery extends ModelCriteria
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE name LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $name       The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildMenuExtraQuery The current query, for fluid interface
      */
@@ -404,13 +407,16 @@ abstract class MenuExtraQuery extends ModelCriteria
      * $query->filterByAvailabilityid(array('min' => 12)); // WHERE availabilityid > 12
      * </code>
      *
-     * @see       filterByAvailability()
+     * @see filterByAvailability()
      *
-     * @param     mixed $availabilityid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $availabilityid The value to use as filter.
+     *                                   Use scalar values for
+     *                                   equality. Use array values
+     *                                   for in_array() equivalent.
+     *                                   Use associative array('min'
+     *                                   => $minValue, 'max' =>
+     *                                   $maxValue) for intervals.
+     * @param string $comparison     Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildMenuExtraQuery The current query, for fluid interface
      */
@@ -447,11 +453,14 @@ abstract class MenuExtraQuery extends ModelCriteria
      * $query->filterByAvailabilityAmount(array('min' => 12)); // WHERE availability_amount > 12
      * </code>
      *
-     * @param     mixed $availabilityAmount The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $availabilityAmount The value to use as filter.
+     *                                       Use scalar values for
+     *                                       equality. Use array values
+     *                                       for in_array() equivalent.
+     *                                       Use associative array('min'
+     *                                       => $minValue, 'max' =>
+     *                                       $maxValue) for intervals.
+     * @param string $comparison         Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildMenuExtraQuery The current query, for fluid interface
      */
@@ -482,7 +491,7 @@ abstract class MenuExtraQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Menu\Availability object
      *
      * @param \API\Models\Menu\Availability|ObjectCollection $availability The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                         $comparison   Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -508,8 +517,8 @@ abstract class MenuExtraQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Availability relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildMenuExtraQuery The current query, for fluid interface
      */
@@ -542,9 +551,9 @@ abstract class MenuExtraQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Menu\AvailabilityQuery A secondary query class using the current class as primary query
      */
@@ -558,8 +567,8 @@ abstract class MenuExtraQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Event\Event object
      *
-     * @param \API\Models\Event\Event|ObjectCollection $event The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Event\Event|ObjectCollection $event      The related object(s) to use as filter
+     * @param string                                   $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -585,8 +594,8 @@ abstract class MenuExtraQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Event relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildMenuExtraQuery The current query, for fluid interface
      */
@@ -619,9 +628,9 @@ abstract class MenuExtraQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Event\EventQuery A secondary query class using the current class as primary query
      */
@@ -636,7 +645,7 @@ abstract class MenuExtraQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Menu\MenuPossibleExtra object
      *
      * @param \API\Models\Menu\MenuPossibleExtra|ObjectCollection $menuPossibleExtra the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                              $comparison        Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildMenuExtraQuery The current query, for fluid interface
      */
@@ -658,8 +667,8 @@ abstract class MenuExtraQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the MenuPossibleExtra relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildMenuExtraQuery The current query, for fluid interface
      */
@@ -692,9 +701,9 @@ abstract class MenuExtraQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Menu\MenuPossibleExtraQuery A secondary query class using the current class as primary query
      */
@@ -708,7 +717,7 @@ abstract class MenuExtraQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildMenuExtra $menuExtra Object to remove from the list of results
+     * @param ChildMenuExtra $menuExtra Object to remove from the list of results
      *
      * @return $this|ChildMenuExtraQuery The current query, for fluid interface
      */
@@ -724,7 +733,7 @@ abstract class MenuExtraQuery extends ModelCriteria
     /**
      * Deletes all rows from the menu_extra table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -735,23 +744,25 @@ abstract class MenuExtraQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            MenuExtraTableMap::clearInstancePool();
-            MenuExtraTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                MenuExtraTableMap::clearInstancePool();
+                MenuExtraTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -770,16 +781,17 @@ abstract class MenuExtraQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            MenuExtraTableMap::removeInstanceFromPool($criteria);
+                MenuExtraTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            MenuExtraTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                MenuExtraTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // MenuExtraQuery

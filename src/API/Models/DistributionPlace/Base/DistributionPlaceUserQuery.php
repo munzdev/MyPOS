@@ -20,76 +20,73 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'distribution_place_user' table.
  *
+ * @method ChildDistributionPlaceUserQuery orderByDistributionPlaceid($order = Criteria::ASC) Order by the distribution_placeid column
+ * @method ChildDistributionPlaceUserQuery orderByUserid($order = Criteria::ASC) Order by the userid column
+ * @method ChildDistributionPlaceUserQuery orderByEventPrinterid($order = Criteria::ASC) Order by the event_printerid column
  *
+ * @method ChildDistributionPlaceUserQuery groupByDistributionPlaceid() Group by the distribution_placeid column
+ * @method ChildDistributionPlaceUserQuery groupByUserid() Group by the userid column
+ * @method ChildDistributionPlaceUserQuery groupByEventPrinterid() Group by the event_printerid column
  *
- * @method     ChildDistributionPlaceUserQuery orderByDistributionPlaceid($order = Criteria::ASC) Order by the distribution_placeid column
- * @method     ChildDistributionPlaceUserQuery orderByUserid($order = Criteria::ASC) Order by the userid column
- * @method     ChildDistributionPlaceUserQuery orderByEventPrinterid($order = Criteria::ASC) Order by the event_printerid column
+ * @method ChildDistributionPlaceUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildDistributionPlaceUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildDistributionPlaceUserQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildDistributionPlaceUserQuery groupByDistributionPlaceid() Group by the distribution_placeid column
- * @method     ChildDistributionPlaceUserQuery groupByUserid() Group by the userid column
- * @method     ChildDistributionPlaceUserQuery groupByEventPrinterid() Group by the event_printerid column
+ * @method ChildDistributionPlaceUserQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildDistributionPlaceUserQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildDistributionPlaceUserQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildDistributionPlaceUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildDistributionPlaceUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildDistributionPlaceUserQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildDistributionPlaceUserQuery leftJoinDistributionPlace($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlace relation
+ * @method ChildDistributionPlaceUserQuery rightJoinDistributionPlace($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlace relation
+ * @method ChildDistributionPlaceUserQuery innerJoinDistributionPlace($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlace relation
  *
- * @method     ChildDistributionPlaceUserQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildDistributionPlaceUserQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildDistributionPlaceUserQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildDistributionPlaceUserQuery joinWithDistributionPlace($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlace relation
  *
- * @method     ChildDistributionPlaceUserQuery leftJoinDistributionPlace($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlace relation
- * @method     ChildDistributionPlaceUserQuery rightJoinDistributionPlace($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlace relation
- * @method     ChildDistributionPlaceUserQuery innerJoinDistributionPlace($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlace relation
+ * @method ChildDistributionPlaceUserQuery leftJoinWithDistributionPlace() Adds a LEFT JOIN clause and with to the query using the DistributionPlace relation
+ * @method ChildDistributionPlaceUserQuery rightJoinWithDistributionPlace() Adds a RIGHT JOIN clause and with to the query using the DistributionPlace relation
+ * @method ChildDistributionPlaceUserQuery innerJoinWithDistributionPlace() Adds a INNER JOIN clause and with to the query using the DistributionPlace relation
  *
- * @method     ChildDistributionPlaceUserQuery joinWithDistributionPlace($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlace relation
+ * @method ChildDistributionPlaceUserQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
+ * @method ChildDistributionPlaceUserQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
+ * @method ChildDistributionPlaceUserQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
  *
- * @method     ChildDistributionPlaceUserQuery leftJoinWithDistributionPlace() Adds a LEFT JOIN clause and with to the query using the DistributionPlace relation
- * @method     ChildDistributionPlaceUserQuery rightJoinWithDistributionPlace() Adds a RIGHT JOIN clause and with to the query using the DistributionPlace relation
- * @method     ChildDistributionPlaceUserQuery innerJoinWithDistributionPlace() Adds a INNER JOIN clause and with to the query using the DistributionPlace relation
+ * @method ChildDistributionPlaceUserQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
  *
- * @method     ChildDistributionPlaceUserQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
- * @method     ChildDistributionPlaceUserQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
- * @method     ChildDistributionPlaceUserQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
+ * @method ChildDistributionPlaceUserQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
+ * @method ChildDistributionPlaceUserQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
+ * @method ChildDistributionPlaceUserQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     ChildDistributionPlaceUserQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
+ * @method ChildDistributionPlaceUserQuery leftJoinEventPrinter($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventPrinter relation
+ * @method ChildDistributionPlaceUserQuery rightJoinEventPrinter($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventPrinter relation
+ * @method ChildDistributionPlaceUserQuery innerJoinEventPrinter($relationAlias = null) Adds a INNER JOIN clause to the query using the EventPrinter relation
  *
- * @method     ChildDistributionPlaceUserQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
- * @method     ChildDistributionPlaceUserQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
- * @method     ChildDistributionPlaceUserQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
+ * @method ChildDistributionPlaceUserQuery joinWithEventPrinter($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the EventPrinter relation
  *
- * @method     ChildDistributionPlaceUserQuery leftJoinEventPrinter($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventPrinter relation
- * @method     ChildDistributionPlaceUserQuery rightJoinEventPrinter($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventPrinter relation
- * @method     ChildDistributionPlaceUserQuery innerJoinEventPrinter($relationAlias = null) Adds a INNER JOIN clause to the query using the EventPrinter relation
+ * @method ChildDistributionPlaceUserQuery leftJoinWithEventPrinter() Adds a LEFT JOIN clause and with to the query using the EventPrinter relation
+ * @method ChildDistributionPlaceUserQuery rightJoinWithEventPrinter() Adds a RIGHT JOIN clause and with to the query using the EventPrinter relation
+ * @method ChildDistributionPlaceUserQuery innerJoinWithEventPrinter() Adds a INNER JOIN clause and with to the query using the EventPrinter relation
  *
- * @method     ChildDistributionPlaceUserQuery joinWithEventPrinter($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the EventPrinter relation
+ * @method \API\Models\DistributionPlace\DistributionPlaceQuery|\API\Models\User\UserQuery|\API\Models\Event\EventPrinterQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildDistributionPlaceUserQuery leftJoinWithEventPrinter() Adds a LEFT JOIN clause and with to the query using the EventPrinter relation
- * @method     ChildDistributionPlaceUserQuery rightJoinWithEventPrinter() Adds a RIGHT JOIN clause and with to the query using the EventPrinter relation
- * @method     ChildDistributionPlaceUserQuery innerJoinWithEventPrinter() Adds a INNER JOIN clause and with to the query using the EventPrinter relation
+ * @method ChildDistributionPlaceUser findOne(ConnectionInterface $con = null) Return the first ChildDistributionPlaceUser matching the query
+ * @method ChildDistributionPlaceUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDistributionPlaceUser matching the query, or a new ChildDistributionPlaceUser object populated from the query conditions when no match is found
  *
- * @method     \API\Models\DistributionPlace\DistributionPlaceQuery|\API\Models\User\UserQuery|\API\Models\Event\EventPrinterQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildDistributionPlaceUser findOne(ConnectionInterface $con = null) Return the first ChildDistributionPlaceUser matching the query
- * @method     ChildDistributionPlaceUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildDistributionPlaceUser matching the query, or a new ChildDistributionPlaceUser object populated from the query conditions when no match is found
- *
- * @method     ChildDistributionPlaceUser findOneByDistributionPlaceid(int $distribution_placeid) Return the first ChildDistributionPlaceUser filtered by the distribution_placeid column
- * @method     ChildDistributionPlaceUser findOneByUserid(int $userid) Return the first ChildDistributionPlaceUser filtered by the userid column
- * @method     ChildDistributionPlaceUser findOneByEventPrinterid(int $event_printerid) Return the first ChildDistributionPlaceUser filtered by the event_printerid column *
+ * @method ChildDistributionPlaceUser findOneByDistributionPlaceid(int $distribution_placeid) Return the first ChildDistributionPlaceUser filtered by the distribution_placeid column
+ * @method ChildDistributionPlaceUser findOneByUserid(int $userid) Return the first ChildDistributionPlaceUser filtered by the userid column
+ * @method ChildDistributionPlaceUser findOneByEventPrinterid(int $event_printerid) Return the first ChildDistributionPlaceUser filtered by the event_printerid column *
 
- * @method     ChildDistributionPlaceUser requirePk($key, ConnectionInterface $con = null) Return the ChildDistributionPlaceUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDistributionPlaceUser requireOne(ConnectionInterface $con = null) Return the first ChildDistributionPlaceUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildDistributionPlaceUser requirePk($key, ConnectionInterface $con = null) Return the ChildDistributionPlaceUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildDistributionPlaceUser requireOne(ConnectionInterface $con = null) Return the first ChildDistributionPlaceUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildDistributionPlaceUser requireOneByDistributionPlaceid(int $distribution_placeid) Return the first ChildDistributionPlaceUser filtered by the distribution_placeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDistributionPlaceUser requireOneByUserid(int $userid) Return the first ChildDistributionPlaceUser filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildDistributionPlaceUser requireOneByEventPrinterid(int $event_printerid) Return the first ChildDistributionPlaceUser filtered by the event_printerid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildDistributionPlaceUser requireOneByDistributionPlaceid(int $distribution_placeid) Return the first ChildDistributionPlaceUser filtered by the distribution_placeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildDistributionPlaceUser requireOneByUserid(int $userid) Return the first ChildDistributionPlaceUser filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildDistributionPlaceUser requireOneByEventPrinterid(int $event_printerid) Return the first ChildDistributionPlaceUser filtered by the event_printerid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildDistributionPlaceUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildDistributionPlaceUser objects based on current ModelCriteria
- * @method     ChildDistributionPlaceUser[]|ObjectCollection findByDistributionPlaceid(int $distribution_placeid) Return ChildDistributionPlaceUser objects filtered by the distribution_placeid column
- * @method     ChildDistributionPlaceUser[]|ObjectCollection findByUserid(int $userid) Return ChildDistributionPlaceUser objects filtered by the userid column
- * @method     ChildDistributionPlaceUser[]|ObjectCollection findByEventPrinterid(int $event_printerid) Return ChildDistributionPlaceUser objects filtered by the event_printerid column
- * @method     ChildDistributionPlaceUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildDistributionPlaceUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildDistributionPlaceUser objects based on current ModelCriteria
+ * @method ChildDistributionPlaceUser[]|ObjectCollection findByDistributionPlaceid(int $distribution_placeid) Return ChildDistributionPlaceUser objects filtered by the distribution_placeid column
+ * @method ChildDistributionPlaceUser[]|ObjectCollection findByUserid(int $userid) Return ChildDistributionPlaceUser objects filtered by the userid column
+ * @method ChildDistributionPlaceUser[]|ObjectCollection findByEventPrinterid(int $event_printerid) Return ChildDistributionPlaceUser objects filtered by the event_printerid column
+ * @method ChildDistributionPlaceUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class DistributionPlaceUserQuery extends ModelCriteria
 {
@@ -98,9 +95,9 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\DistributionPlace\Base\DistributionPlaceUserQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\DistributionPlace\\DistributionPlaceUser', $modelAlias = null)
     {
@@ -110,8 +107,8 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
     /**
      * Returns a new ChildDistributionPlaceUserQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildDistributionPlaceUserQuery
      */
@@ -140,8 +137,8 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
      * $obj = $c->findPk(array(12, 34, 56), $con);
      * </code>
      *
-     * @param array[$distribution_placeid, $userid, $event_printerid] $key Primary key to use for the query
-     * @param ConnectionInterface $con an optional connection object
+     * @param array[              $distribution_placeid, $userid, $event_printerid] $key Primary key to use for the query
+     * @param ConnectionInterface $con                   an optional connection object
      *
      * @return ChildDistributionPlaceUser|array|mixed the result, formatted by the current formatter
      */
@@ -157,8 +154,7 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -177,8 +173,8 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -199,7 +195,9 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildDistributionPlaceUser $obj */
+            /**
+ * @var ChildDistributionPlaceUser $obj
+*/
             $obj = new ChildDistributionPlaceUser();
             $obj->hydrate($row);
             DistributionPlaceUserTableMap::addInstanceToPool($obj, serialize([(null === $key[0] || is_scalar($key[0]) || is_callable([$key[0], '__toString']) ? (string) $key[0] : $key[0]), (null === $key[1] || is_scalar($key[1]) || is_callable([$key[1], '__toString']) ? (string) $key[1] : $key[1]), (null === $key[2] || is_scalar($key[2]) || is_callable([$key[2], '__toString']) ? (string) $key[2] : $key[2])]));
@@ -212,8 +210,8 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildDistributionPlaceUser|array|mixed the result, formatted by the current formatter
      */
@@ -233,8 +231,9 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(array(12, 56), array(832, 123), array(123, 456)), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -255,7 +254,7 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildDistributionPlaceUserQuery The current query, for fluid interface
      */
@@ -271,7 +270,7 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildDistributionPlaceUserQuery The current query, for fluid interface
      */
@@ -302,13 +301,16 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
      * $query->filterByDistributionPlaceid(array('min' => 12)); // WHERE distribution_placeid > 12
      * </code>
      *
-     * @see       filterByDistributionPlace()
+     * @see filterByDistributionPlace()
      *
-     * @param     mixed $distributionPlaceid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $distributionPlaceid The value to use as filter.
+     *                                        Use scalar values for
+     *                                        equality. Use array values
+     *                                        for in_array() equivalent.
+     *                                        Use associative array('min'
+     *                                        => $minValue, 'max' =>
+     *                                        $maxValue) for intervals.
+     * @param string $comparison          Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildDistributionPlaceUserQuery The current query, for fluid interface
      */
@@ -345,13 +347,16 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
      * $query->filterByUserid(array('min' => 12)); // WHERE userid > 12
      * </code>
      *
-     * @see       filterByUser()
+     * @see filterByUser()
      *
-     * @param     mixed $userid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $userid     The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildDistributionPlaceUserQuery The current query, for fluid interface
      */
@@ -388,13 +393,16 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
      * $query->filterByEventPrinterid(array('min' => 12)); // WHERE event_printerid > 12
      * </code>
      *
-     * @see       filterByEventPrinter()
+     * @see filterByEventPrinter()
      *
-     * @param     mixed $eventPrinterid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $eventPrinterid The value to use as filter.
+     *                                   Use scalar values for
+     *                                   equality. Use array values
+     *                                   for in_array() equivalent.
+     *                                   Use associative array('min'
+     *                                   => $minValue, 'max' =>
+     *                                   $maxValue) for intervals.
+     * @param string $comparison     Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildDistributionPlaceUserQuery The current query, for fluid interface
      */
@@ -425,7 +433,7 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
      * Filter the query by a related \API\Models\DistributionPlace\DistributionPlace object
      *
      * @param \API\Models\DistributionPlace\DistributionPlace|ObjectCollection $distributionPlace The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                                           $comparison        Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -451,8 +459,8 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the DistributionPlace relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildDistributionPlaceUserQuery The current query, for fluid interface
      */
@@ -485,9 +493,9 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\DistributionPlace\DistributionPlaceQuery A secondary query class using the current class as primary query
      */
@@ -501,8 +509,8 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\User\User object
      *
-     * @param \API\Models\User\User|ObjectCollection $user The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\User\User|ObjectCollection $user       The related object(s) to use as filter
+     * @param string                                 $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -528,8 +536,8 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the User relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildDistributionPlaceUserQuery The current query, for fluid interface
      */
@@ -562,9 +570,9 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\User\UserQuery A secondary query class using the current class as primary query
      */
@@ -579,7 +587,7 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Event\EventPrinter object
      *
      * @param \API\Models\Event\EventPrinter|ObjectCollection $eventPrinter The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                          $comparison   Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -605,8 +613,8 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the EventPrinter relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildDistributionPlaceUserQuery The current query, for fluid interface
      */
@@ -639,9 +647,9 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Event\EventPrinterQuery A secondary query class using the current class as primary query
      */
@@ -655,7 +663,7 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildDistributionPlaceUser $distributionPlaceUser Object to remove from the list of results
+     * @param ChildDistributionPlaceUser $distributionPlaceUser Object to remove from the list of results
      *
      * @return $this|ChildDistributionPlaceUserQuery The current query, for fluid interface
      */
@@ -674,7 +682,7 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
     /**
      * Deletes all rows from the distribution_place_user table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -685,23 +693,25 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            DistributionPlaceUserTableMap::clearInstancePool();
-            DistributionPlaceUserTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                DistributionPlaceUserTableMap::clearInstancePool();
+                DistributionPlaceUserTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -720,16 +730,17 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            DistributionPlaceUserTableMap::removeInstanceFromPool($criteria);
+                DistributionPlaceUserTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            DistributionPlaceUserTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                DistributionPlaceUserTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // DistributionPlaceUserQuery

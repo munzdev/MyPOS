@@ -20,81 +20,78 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'event_table' table.
  *
+ * @method ChildEventTableQuery orderByEventTableid($order = Criteria::ASC) Order by the event_tableid column
+ * @method ChildEventTableQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
+ * @method ChildEventTableQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method ChildEventTableQuery orderByData($order = Criteria::ASC) Order by the data column
  *
+ * @method ChildEventTableQuery groupByEventTableid() Group by the event_tableid column
+ * @method ChildEventTableQuery groupByEventid() Group by the eventid column
+ * @method ChildEventTableQuery groupByName() Group by the name column
+ * @method ChildEventTableQuery groupByData() Group by the data column
  *
- * @method     ChildEventTableQuery orderByEventTableid($order = Criteria::ASC) Order by the event_tableid column
- * @method     ChildEventTableQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
- * @method     ChildEventTableQuery orderByName($order = Criteria::ASC) Order by the name column
- * @method     ChildEventTableQuery orderByData($order = Criteria::ASC) Order by the data column
+ * @method ChildEventTableQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildEventTableQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildEventTableQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildEventTableQuery groupByEventTableid() Group by the event_tableid column
- * @method     ChildEventTableQuery groupByEventid() Group by the eventid column
- * @method     ChildEventTableQuery groupByName() Group by the name column
- * @method     ChildEventTableQuery groupByData() Group by the data column
+ * @method ChildEventTableQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildEventTableQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildEventTableQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildEventTableQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildEventTableQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildEventTableQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildEventTableQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
+ * @method ChildEventTableQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
+ * @method ChildEventTableQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
  *
- * @method     ChildEventTableQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildEventTableQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildEventTableQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildEventTableQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
  *
- * @method     ChildEventTableQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
- * @method     ChildEventTableQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
- * @method     ChildEventTableQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
+ * @method ChildEventTableQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
+ * @method ChildEventTableQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
+ * @method ChildEventTableQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
  *
- * @method     ChildEventTableQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
+ * @method ChildEventTableQuery leftJoinDistributionPlaceTable($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceTable relation
+ * @method ChildEventTableQuery rightJoinDistributionPlaceTable($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceTable relation
+ * @method ChildEventTableQuery innerJoinDistributionPlaceTable($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlaceTable relation
  *
- * @method     ChildEventTableQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
- * @method     ChildEventTableQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
- * @method     ChildEventTableQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
+ * @method ChildEventTableQuery joinWithDistributionPlaceTable($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlaceTable relation
  *
- * @method     ChildEventTableQuery leftJoinDistributionPlaceTable($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlaceTable relation
- * @method     ChildEventTableQuery rightJoinDistributionPlaceTable($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlaceTable relation
- * @method     ChildEventTableQuery innerJoinDistributionPlaceTable($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlaceTable relation
+ * @method ChildEventTableQuery leftJoinWithDistributionPlaceTable() Adds a LEFT JOIN clause and with to the query using the DistributionPlaceTable relation
+ * @method ChildEventTableQuery rightJoinWithDistributionPlaceTable() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceTable relation
+ * @method ChildEventTableQuery innerJoinWithDistributionPlaceTable() Adds a INNER JOIN clause and with to the query using the DistributionPlaceTable relation
  *
- * @method     ChildEventTableQuery joinWithDistributionPlaceTable($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlaceTable relation
+ * @method ChildEventTableQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
+ * @method ChildEventTableQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
+ * @method ChildEventTableQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
  *
- * @method     ChildEventTableQuery leftJoinWithDistributionPlaceTable() Adds a LEFT JOIN clause and with to the query using the DistributionPlaceTable relation
- * @method     ChildEventTableQuery rightJoinWithDistributionPlaceTable() Adds a RIGHT JOIN clause and with to the query using the DistributionPlaceTable relation
- * @method     ChildEventTableQuery innerJoinWithDistributionPlaceTable() Adds a INNER JOIN clause and with to the query using the DistributionPlaceTable relation
+ * @method ChildEventTableQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
  *
- * @method     ChildEventTableQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
- * @method     ChildEventTableQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
- * @method     ChildEventTableQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
+ * @method ChildEventTableQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
+ * @method ChildEventTableQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
+ * @method ChildEventTableQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
  *
- * @method     ChildEventTableQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
+ * @method \API\Models\Event\EventQuery|\API\Models\DistributionPlace\DistributionPlaceTableQuery|\API\Models\Ordering\OrderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildEventTableQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
- * @method     ChildEventTableQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
- * @method     ChildEventTableQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
+ * @method ChildEventTable findOne(ConnectionInterface $con = null) Return the first ChildEventTable matching the query
+ * @method ChildEventTable findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEventTable matching the query, or a new ChildEventTable object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Event\EventQuery|\API\Models\DistributionPlace\DistributionPlaceTableQuery|\API\Models\Ordering\OrderQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildEventTable findOne(ConnectionInterface $con = null) Return the first ChildEventTable matching the query
- * @method     ChildEventTable findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEventTable matching the query, or a new ChildEventTable object populated from the query conditions when no match is found
- *
- * @method     ChildEventTable findOneByEventTableid(int $event_tableid) Return the first ChildEventTable filtered by the event_tableid column
- * @method     ChildEventTable findOneByEventid(int $eventid) Return the first ChildEventTable filtered by the eventid column
- * @method     ChildEventTable findOneByName(string $name) Return the first ChildEventTable filtered by the name column
- * @method     ChildEventTable findOneByData(string $data) Return the first ChildEventTable filtered by the data column *
+ * @method ChildEventTable findOneByEventTableid(int $event_tableid) Return the first ChildEventTable filtered by the event_tableid column
+ * @method ChildEventTable findOneByEventid(int $eventid) Return the first ChildEventTable filtered by the eventid column
+ * @method ChildEventTable findOneByName(string $name) Return the first ChildEventTable filtered by the name column
+ * @method ChildEventTable findOneByData(string $data) Return the first ChildEventTable filtered by the data column *
 
- * @method     ChildEventTable requirePk($key, ConnectionInterface $con = null) Return the ChildEventTable by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventTable requireOne(ConnectionInterface $con = null) Return the first ChildEventTable matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventTable requirePk($key, ConnectionInterface $con = null) Return the ChildEventTable by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventTable requireOne(ConnectionInterface $con = null) Return the first ChildEventTable matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildEventTable requireOneByEventTableid(int $event_tableid) Return the first ChildEventTable filtered by the event_tableid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventTable requireOneByEventid(int $eventid) Return the first ChildEventTable filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventTable requireOneByName(string $name) Return the first ChildEventTable filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventTable requireOneByData(string $data) Return the first ChildEventTable filtered by the data column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventTable requireOneByEventTableid(int $event_tableid) Return the first ChildEventTable filtered by the event_tableid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventTable requireOneByEventid(int $eventid) Return the first ChildEventTable filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventTable requireOneByName(string $name) Return the first ChildEventTable filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventTable requireOneByData(string $data) Return the first ChildEventTable filtered by the data column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildEventTable[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEventTable objects based on current ModelCriteria
- * @method     ChildEventTable[]|ObjectCollection findByEventTableid(int $event_tableid) Return ChildEventTable objects filtered by the event_tableid column
- * @method     ChildEventTable[]|ObjectCollection findByEventid(int $eventid) Return ChildEventTable objects filtered by the eventid column
- * @method     ChildEventTable[]|ObjectCollection findByName(string $name) Return ChildEventTable objects filtered by the name column
- * @method     ChildEventTable[]|ObjectCollection findByData(string $data) Return ChildEventTable objects filtered by the data column
- * @method     ChildEventTable[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildEventTable[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEventTable objects based on current ModelCriteria
+ * @method ChildEventTable[]|ObjectCollection findByEventTableid(int $event_tableid) Return ChildEventTable objects filtered by the event_tableid column
+ * @method ChildEventTable[]|ObjectCollection findByEventid(int $eventid) Return ChildEventTable objects filtered by the eventid column
+ * @method ChildEventTable[]|ObjectCollection findByName(string $name) Return ChildEventTable objects filtered by the name column
+ * @method ChildEventTable[]|ObjectCollection findByData(string $data) Return ChildEventTable objects filtered by the data column
+ * @method ChildEventTable[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class EventTableQuery extends ModelCriteria
 {
@@ -103,9 +100,9 @@ abstract class EventTableQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Event\Base\EventTableQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Event\\EventTable', $modelAlias = null)
     {
@@ -115,8 +112,8 @@ abstract class EventTableQuery extends ModelCriteria
     /**
      * Returns a new ChildEventTableQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildEventTableQuery
      */
@@ -145,7 +142,7 @@ abstract class EventTableQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildEventTable|array|mixed the result, formatted by the current formatter
@@ -162,8 +159,7 @@ abstract class EventTableQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -182,8 +178,8 @@ abstract class EventTableQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -202,7 +198,9 @@ abstract class EventTableQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildEventTable $obj */
+            /**
+ * @var ChildEventTable $obj
+*/
             $obj = new ChildEventTable();
             $obj->hydrate($row);
             EventTableTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -215,8 +213,8 @@ abstract class EventTableQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildEventTable|array|mixed the result, formatted by the current formatter
      */
@@ -236,8 +234,9 @@ abstract class EventTableQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -258,26 +257,24 @@ abstract class EventTableQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildEventTableQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(EventTableTableMap::COL_EVENT_TABLEID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildEventTableQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(EventTableTableMap::COL_EVENT_TABLEID, $keys, Criteria::IN);
     }
 
@@ -291,11 +288,14 @@ abstract class EventTableQuery extends ModelCriteria
      * $query->filterByEventTableid(array('min' => 12)); // WHERE event_tableid > 12
      * </code>
      *
-     * @param     mixed $eventTableid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $eventTableid The value to use as filter.
+     *                                 Use scalar values for
+     *                                 equality. Use array values
+     *                                 for in_array() equivalent.
+     *                                 Use associative array('min'
+     *                                 => $minValue, 'max' =>
+     *                                 $maxValue) for intervals.
+     * @param string $comparison   Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventTableQuery The current query, for fluid interface
      */
@@ -332,13 +332,16 @@ abstract class EventTableQuery extends ModelCriteria
      * $query->filterByEventid(array('min' => 12)); // WHERE eventid > 12
      * </code>
      *
-     * @see       filterByEvent()
+     * @see filterByEvent()
      *
-     * @param     mixed $eventid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $eventid    The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventTableQuery The current query, for fluid interface
      */
@@ -374,8 +377,8 @@ abstract class EventTableQuery extends ModelCriteria
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE name LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $name       The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventTableQuery The current query, for fluid interface
      */
@@ -399,8 +402,8 @@ abstract class EventTableQuery extends ModelCriteria
      * $query->filterByData('%fooValue%', Criteria::LIKE); // WHERE data LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $data The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $data       The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventTableQuery The current query, for fluid interface
      */
@@ -418,8 +421,8 @@ abstract class EventTableQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Event\Event object
      *
-     * @param \API\Models\Event\Event|ObjectCollection $event The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Event\Event|ObjectCollection $event      The related object(s) to use as filter
+     * @param string                                   $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -445,8 +448,8 @@ abstract class EventTableQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Event relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildEventTableQuery The current query, for fluid interface
      */
@@ -479,9 +482,9 @@ abstract class EventTableQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Event\EventQuery A secondary query class using the current class as primary query
      */
@@ -496,7 +499,7 @@ abstract class EventTableQuery extends ModelCriteria
      * Filter the query by a related \API\Models\DistributionPlace\DistributionPlaceTable object
      *
      * @param \API\Models\DistributionPlace\DistributionPlaceTable|ObjectCollection $distributionPlaceTable the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                                                $comparison             Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildEventTableQuery The current query, for fluid interface
      */
@@ -518,8 +521,8 @@ abstract class EventTableQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the DistributionPlaceTable relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildEventTableQuery The current query, for fluid interface
      */
@@ -552,9 +555,9 @@ abstract class EventTableQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\DistributionPlace\DistributionPlaceTableQuery A secondary query class using the current class as primary query
      */
@@ -568,8 +571,8 @@ abstract class EventTableQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Ordering\Order object
      *
-     * @param \API\Models\Ordering\Order|ObjectCollection $order the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Ordering\Order|ObjectCollection $order      the related object to use as filter
+     * @param string                                      $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildEventTableQuery The current query, for fluid interface
      */
@@ -591,8 +594,8 @@ abstract class EventTableQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Order relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildEventTableQuery The current query, for fluid interface
      */
@@ -625,9 +628,9 @@ abstract class EventTableQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Ordering\OrderQuery A secondary query class using the current class as primary query
      */
@@ -643,7 +646,7 @@ abstract class EventTableQuery extends ModelCriteria
      * using the distribution_place_table table as cross reference
      *
      * @param DistributionPlaceGroup $distributionPlaceGroup the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                 $comparison             Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildEventTableQuery The current query, for fluid interface
      */
@@ -658,7 +661,7 @@ abstract class EventTableQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildEventTable $eventTable Object to remove from the list of results
+     * @param ChildEventTable $eventTable Object to remove from the list of results
      *
      * @return $this|ChildEventTableQuery The current query, for fluid interface
      */
@@ -674,7 +677,7 @@ abstract class EventTableQuery extends ModelCriteria
     /**
      * Deletes all rows from the event_table table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -685,23 +688,25 @@ abstract class EventTableQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            EventTableTableMap::clearInstancePool();
-            EventTableTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                EventTableTableMap::clearInstancePool();
+                EventTableTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -720,16 +725,17 @@ abstract class EventTableQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            EventTableTableMap::removeInstanceFromPool($criteria);
+                EventTableTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            EventTableTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                EventTableTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // EventTableQuery

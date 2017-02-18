@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'menu_possible_extra' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class MenuPossibleExtraTableMap extends TableMap
 {
@@ -102,7 +98,7 @@ class MenuPossibleExtraTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('MenuPossibleExtraid', 'MenuExtraid', 'Menuid', 'Price', ),
         self::TYPE_CAMELNAME     => array('menuPossibleExtraid', 'menuExtraid', 'menuid', 'price', ),
         self::TYPE_COLNAME       => array(MenuPossibleExtraTableMap::COL_MENU_POSSIBLE_EXTRAID, MenuPossibleExtraTableMap::COL_MENU_EXTRAID, MenuPossibleExtraTableMap::COL_MENUID, MenuPossibleExtraTableMap::COL_PRICE, ),
@@ -116,7 +112,7 @@ class MenuPossibleExtraTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('MenuPossibleExtraid' => 0, 'MenuExtraid' => 1, 'Menuid' => 2, 'Price' => 3, ),
         self::TYPE_CAMELNAME     => array('menuPossibleExtraid' => 0, 'menuExtraid' => 1, 'menuid' => 2, 'price' => 3, ),
         self::TYPE_COLNAME       => array(MenuPossibleExtraTableMap::COL_MENU_POSSIBLE_EXTRAID => 0, MenuPossibleExtraTableMap::COL_MENU_EXTRAID => 1, MenuPossibleExtraTableMap::COL_MENUID => 2, MenuPossibleExtraTableMap::COL_PRICE => 3, ),
@@ -153,27 +149,54 @@ class MenuPossibleExtraTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('MenuExtra', '\\API\\Models\\Menu\\MenuExtra', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':menu_extraid',
-    1 => ':menu_extraid',
-  ),
-), null, null, null, false);
-        $this->addRelation('Menu', '\\API\\Models\\Menu\\Menu', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':menuid',
-    1 => ':menuid',
-  ),
-), null, null, null, false);
-        $this->addRelation('OrderDetailExtra', '\\API\\Models\\Ordering\\OrderDetailExtra', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':menu_possible_extraid',
-    1 => ':menu_possible_extraid',
-  ),
-), null, null, 'OrderDetailExtras', false);
+        $this->addRelation(
+            'MenuExtra',
+            '\\API\\Models\\Menu\\MenuExtra',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':menu_extraid',
+            1 => ':menu_extraid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'Menu',
+            '\\API\\Models\\Menu\\Menu',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':menuid',
+            1 => ':menuid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'OrderDetailExtra',
+            '\\API\\Models\\Ordering\\OrderDetailExtra',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':menu_possible_extraid',
+            1 => ':menu_possible_extraid',
+            ),
+            ),
+            null,
+            null,
+            'OrderDetailExtras',
+            false
+        );
         $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::MANY_TO_MANY, array(), null, null, 'OrderDetails');
     } // buildRelations()
 
@@ -229,7 +252,7 @@ class MenuPossibleExtraTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -260,7 +283,9 @@ class MenuPossibleExtraTableMap extends TableMap
             $col = $offset + MenuPossibleExtraTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = MenuPossibleExtraTableMap::OM_CLASS;
-            /** @var MenuPossibleExtra $obj */
+            /**
+ * @var MenuPossibleExtra $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             MenuPossibleExtraTableMap::addInstanceToPool($obj, $key);
@@ -273,7 +298,7 @@ class MenuPossibleExtraTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -293,7 +318,9 @@ class MenuPossibleExtraTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var MenuPossibleExtra $obj */
+                /**
+ * @var MenuPossibleExtra $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -310,8 +337,8 @@ class MenuPossibleExtraTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -333,6 +360,7 @@ class MenuPossibleExtraTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -356,16 +384,16 @@ class MenuPossibleExtraTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a MenuPossibleExtra or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or MenuPossibleExtra object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or MenuPossibleExtra object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(MenuPossibleExtraTableMap::DATABASE_NAME);
         }
@@ -397,7 +425,7 @@ class MenuPossibleExtraTableMap extends TableMap
     /**
      * Deletes all rows from the menu_possible_extra table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -408,8 +436,8 @@ class MenuPossibleExtraTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a MenuPossibleExtra or Criteria object.
      *
-     * @param mixed               $criteria Criteria or MenuPossibleExtra object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or MenuPossibleExtra object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -426,7 +454,7 @@ class MenuPossibleExtraTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from MenuPossibleExtra object
         }
 
-        if ($criteria->containsKey(MenuPossibleExtraTableMap::COL_MENU_POSSIBLE_EXTRAID) && $criteria->keyContainsValue(MenuPossibleExtraTableMap::COL_MENU_POSSIBLE_EXTRAID) ) {
+        if ($criteria->containsKey(MenuPossibleExtraTableMap::COL_MENU_POSSIBLE_EXTRAID) && $criteria->keyContainsValue(MenuPossibleExtraTableMap::COL_MENU_POSSIBLE_EXTRAID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.MenuPossibleExtraTableMap::COL_MENU_POSSIBLE_EXTRAID.')');
         }
 
@@ -436,11 +464,12 @@ class MenuPossibleExtraTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // MenuPossibleExtraTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

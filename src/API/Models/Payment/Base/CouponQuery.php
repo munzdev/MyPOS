@@ -20,91 +20,88 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'coupon' table.
  *
+ * @method ChildCouponQuery orderByCouponid($order = Criteria::ASC) Order by the couponid column
+ * @method ChildCouponQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
+ * @method ChildCouponQuery orderByCreatedByUserid($order = Criteria::ASC) Order by the created_by_userid column
+ * @method ChildCouponQuery orderByCode($order = Criteria::ASC) Order by the code column
+ * @method ChildCouponQuery orderByCreated($order = Criteria::ASC) Order by the created column
+ * @method ChildCouponQuery orderByValue($order = Criteria::ASC) Order by the value column
  *
+ * @method ChildCouponQuery groupByCouponid() Group by the couponid column
+ * @method ChildCouponQuery groupByEventid() Group by the eventid column
+ * @method ChildCouponQuery groupByCreatedByUserid() Group by the created_by_userid column
+ * @method ChildCouponQuery groupByCode() Group by the code column
+ * @method ChildCouponQuery groupByCreated() Group by the created column
+ * @method ChildCouponQuery groupByValue() Group by the value column
  *
- * @method     ChildCouponQuery orderByCouponid($order = Criteria::ASC) Order by the couponid column
- * @method     ChildCouponQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
- * @method     ChildCouponQuery orderByCreatedByUserid($order = Criteria::ASC) Order by the created_by_userid column
- * @method     ChildCouponQuery orderByCode($order = Criteria::ASC) Order by the code column
- * @method     ChildCouponQuery orderByCreated($order = Criteria::ASC) Order by the created column
- * @method     ChildCouponQuery orderByValue($order = Criteria::ASC) Order by the value column
+ * @method ChildCouponQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildCouponQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildCouponQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildCouponQuery groupByCouponid() Group by the couponid column
- * @method     ChildCouponQuery groupByEventid() Group by the eventid column
- * @method     ChildCouponQuery groupByCreatedByUserid() Group by the created_by_userid column
- * @method     ChildCouponQuery groupByCode() Group by the code column
- * @method     ChildCouponQuery groupByCreated() Group by the created column
- * @method     ChildCouponQuery groupByValue() Group by the value column
+ * @method ChildCouponQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildCouponQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildCouponQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildCouponQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildCouponQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildCouponQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildCouponQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
+ * @method ChildCouponQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
+ * @method ChildCouponQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
  *
- * @method     ChildCouponQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildCouponQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildCouponQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildCouponQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
  *
- * @method     ChildCouponQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
- * @method     ChildCouponQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
- * @method     ChildCouponQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
+ * @method ChildCouponQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
+ * @method ChildCouponQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
+ * @method ChildCouponQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
  *
- * @method     ChildCouponQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
+ * @method ChildCouponQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
+ * @method ChildCouponQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
+ * @method ChildCouponQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
  *
- * @method     ChildCouponQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
- * @method     ChildCouponQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
- * @method     ChildCouponQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
+ * @method ChildCouponQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
  *
- * @method     ChildCouponQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
- * @method     ChildCouponQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
- * @method     ChildCouponQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
+ * @method ChildCouponQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
+ * @method ChildCouponQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
+ * @method ChildCouponQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     ChildCouponQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
+ * @method ChildCouponQuery leftJoinPaymentCoupon($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentCoupon relation
+ * @method ChildCouponQuery rightJoinPaymentCoupon($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentCoupon relation
+ * @method ChildCouponQuery innerJoinPaymentCoupon($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentCoupon relation
  *
- * @method     ChildCouponQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
- * @method     ChildCouponQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
- * @method     ChildCouponQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
+ * @method ChildCouponQuery joinWithPaymentCoupon($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentCoupon relation
  *
- * @method     ChildCouponQuery leftJoinPaymentCoupon($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentCoupon relation
- * @method     ChildCouponQuery rightJoinPaymentCoupon($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentCoupon relation
- * @method     ChildCouponQuery innerJoinPaymentCoupon($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentCoupon relation
+ * @method ChildCouponQuery leftJoinWithPaymentCoupon() Adds a LEFT JOIN clause and with to the query using the PaymentCoupon relation
+ * @method ChildCouponQuery rightJoinWithPaymentCoupon() Adds a RIGHT JOIN clause and with to the query using the PaymentCoupon relation
+ * @method ChildCouponQuery innerJoinWithPaymentCoupon() Adds a INNER JOIN clause and with to the query using the PaymentCoupon relation
  *
- * @method     ChildCouponQuery joinWithPaymentCoupon($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentCoupon relation
+ * @method \API\Models\Event\EventQuery|\API\Models\User\UserQuery|\API\Models\Payment\PaymentCouponQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildCouponQuery leftJoinWithPaymentCoupon() Adds a LEFT JOIN clause and with to the query using the PaymentCoupon relation
- * @method     ChildCouponQuery rightJoinWithPaymentCoupon() Adds a RIGHT JOIN clause and with to the query using the PaymentCoupon relation
- * @method     ChildCouponQuery innerJoinWithPaymentCoupon() Adds a INNER JOIN clause and with to the query using the PaymentCoupon relation
+ * @method ChildCoupon findOne(ConnectionInterface $con = null) Return the first ChildCoupon matching the query
+ * @method ChildCoupon findOneOrCreate(ConnectionInterface $con = null) Return the first ChildCoupon matching the query, or a new ChildCoupon object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Event\EventQuery|\API\Models\User\UserQuery|\API\Models\Payment\PaymentCouponQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildCoupon findOne(ConnectionInterface $con = null) Return the first ChildCoupon matching the query
- * @method     ChildCoupon findOneOrCreate(ConnectionInterface $con = null) Return the first ChildCoupon matching the query, or a new ChildCoupon object populated from the query conditions when no match is found
- *
- * @method     ChildCoupon findOneByCouponid(int $couponid) Return the first ChildCoupon filtered by the couponid column
- * @method     ChildCoupon findOneByEventid(int $eventid) Return the first ChildCoupon filtered by the eventid column
- * @method     ChildCoupon findOneByCreatedByUserid(int $created_by_userid) Return the first ChildCoupon filtered by the created_by_userid column
- * @method     ChildCoupon findOneByCode(string $code) Return the first ChildCoupon filtered by the code column
- * @method     ChildCoupon findOneByCreated(string $created) Return the first ChildCoupon filtered by the created column
- * @method     ChildCoupon findOneByValue(string $value) Return the first ChildCoupon filtered by the value column *
+ * @method ChildCoupon findOneByCouponid(int $couponid) Return the first ChildCoupon filtered by the couponid column
+ * @method ChildCoupon findOneByEventid(int $eventid) Return the first ChildCoupon filtered by the eventid column
+ * @method ChildCoupon findOneByCreatedByUserid(int $created_by_userid) Return the first ChildCoupon filtered by the created_by_userid column
+ * @method ChildCoupon findOneByCode(string $code) Return the first ChildCoupon filtered by the code column
+ * @method ChildCoupon findOneByCreated(string $created) Return the first ChildCoupon filtered by the created column
+ * @method ChildCoupon findOneByValue(string $value) Return the first ChildCoupon filtered by the value column *
 
- * @method     ChildCoupon requirePk($key, ConnectionInterface $con = null) Return the ChildCoupon by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCoupon requireOne(ConnectionInterface $con = null) Return the first ChildCoupon matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildCoupon requirePk($key, ConnectionInterface $con = null) Return the ChildCoupon by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildCoupon requireOne(ConnectionInterface $con = null) Return the first ChildCoupon matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCoupon requireOneByCouponid(int $couponid) Return the first ChildCoupon filtered by the couponid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCoupon requireOneByEventid(int $eventid) Return the first ChildCoupon filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCoupon requireOneByCreatedByUserid(int $created_by_userid) Return the first ChildCoupon filtered by the created_by_userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCoupon requireOneByCode(string $code) Return the first ChildCoupon filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCoupon requireOneByCreated(string $created) Return the first ChildCoupon filtered by the created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildCoupon requireOneByValue(string $value) Return the first ChildCoupon filtered by the value column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildCoupon requireOneByCouponid(int $couponid) Return the first ChildCoupon filtered by the couponid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildCoupon requireOneByEventid(int $eventid) Return the first ChildCoupon filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildCoupon requireOneByCreatedByUserid(int $created_by_userid) Return the first ChildCoupon filtered by the created_by_userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildCoupon requireOneByCode(string $code) Return the first ChildCoupon filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildCoupon requireOneByCreated(string $created) Return the first ChildCoupon filtered by the created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildCoupon requireOneByValue(string $value) Return the first ChildCoupon filtered by the value column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildCoupon[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCoupon objects based on current ModelCriteria
- * @method     ChildCoupon[]|ObjectCollection findByCouponid(int $couponid) Return ChildCoupon objects filtered by the couponid column
- * @method     ChildCoupon[]|ObjectCollection findByEventid(int $eventid) Return ChildCoupon objects filtered by the eventid column
- * @method     ChildCoupon[]|ObjectCollection findByCreatedByUserid(int $created_by_userid) Return ChildCoupon objects filtered by the created_by_userid column
- * @method     ChildCoupon[]|ObjectCollection findByCode(string $code) Return ChildCoupon objects filtered by the code column
- * @method     ChildCoupon[]|ObjectCollection findByCreated(string $created) Return ChildCoupon objects filtered by the created column
- * @method     ChildCoupon[]|ObjectCollection findByValue(string $value) Return ChildCoupon objects filtered by the value column
- * @method     ChildCoupon[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildCoupon[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCoupon objects based on current ModelCriteria
+ * @method ChildCoupon[]|ObjectCollection findByCouponid(int $couponid) Return ChildCoupon objects filtered by the couponid column
+ * @method ChildCoupon[]|ObjectCollection findByEventid(int $eventid) Return ChildCoupon objects filtered by the eventid column
+ * @method ChildCoupon[]|ObjectCollection findByCreatedByUserid(int $created_by_userid) Return ChildCoupon objects filtered by the created_by_userid column
+ * @method ChildCoupon[]|ObjectCollection findByCode(string $code) Return ChildCoupon objects filtered by the code column
+ * @method ChildCoupon[]|ObjectCollection findByCreated(string $created) Return ChildCoupon objects filtered by the created column
+ * @method ChildCoupon[]|ObjectCollection findByValue(string $value) Return ChildCoupon objects filtered by the value column
+ * @method ChildCoupon[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class CouponQuery extends ModelCriteria
 {
@@ -113,9 +110,9 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Payment\Base\CouponQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Payment\\Coupon', $modelAlias = null)
     {
@@ -125,8 +122,8 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Returns a new ChildCouponQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildCouponQuery
      */
@@ -155,7 +152,7 @@ abstract class CouponQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildCoupon|array|mixed the result, formatted by the current formatter
@@ -172,8 +169,7 @@ abstract class CouponQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -192,8 +188,8 @@ abstract class CouponQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -212,7 +208,9 @@ abstract class CouponQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildCoupon $obj */
+            /**
+ * @var ChildCoupon $obj
+*/
             $obj = new ChildCoupon();
             $obj->hydrate($row);
             CouponTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -225,8 +223,8 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildCoupon|array|mixed the result, formatted by the current formatter
      */
@@ -246,8 +244,9 @@ abstract class CouponQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -268,26 +267,24 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(CouponTableMap::COL_COUPONID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(CouponTableMap::COL_COUPONID, $keys, Criteria::IN);
     }
 
@@ -301,11 +298,14 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByCouponid(array('min' => 12)); // WHERE couponid > 12
      * </code>
      *
-     * @param     mixed $couponid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $couponid   The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
@@ -342,13 +342,16 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByEventid(array('min' => 12)); // WHERE eventid > 12
      * </code>
      *
-     * @see       filterByEvent()
+     * @see filterByEvent()
      *
-     * @param     mixed $eventid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $eventid    The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
@@ -385,13 +388,16 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByCreatedByUserid(array('min' => 12)); // WHERE created_by_userid > 12
      * </code>
      *
-     * @see       filterByUser()
+     * @see filterByUser()
      *
-     * @param     mixed $createdByUserid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $createdByUserid The value to use as filter.
+     *                                    Use scalar values for
+     *                                    equality. Use array values
+     *                                    for in_array() equivalent.
+     *                                    Use associative array('min'
+     *                                    => $minValue, 'max' =>
+     *                                    $maxValue) for intervals.
+     * @param string $comparison      Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
@@ -427,8 +433,8 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByCode('%fooValue%', Criteria::LIKE); // WHERE code LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $code The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $code       The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
@@ -453,13 +459,18 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByCreated(array('max' => 'yesterday')); // WHERE created > '2011-03-13'
      * </code>
      *
-     * @param     mixed $created The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $created    The value to use as filter.
+     *                           Values can be integers
+     *                           (unix timestamps), DateTime
+     *                           objects, or strings. Empty
+     *                           strings are treated as
+     *                           NULL. Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
@@ -496,11 +507,14 @@ abstract class CouponQuery extends ModelCriteria
      * $query->filterByValue(array('min' => 12)); // WHERE value > 12
      * </code>
      *
-     * @param     mixed $value The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $value      The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
@@ -530,8 +544,8 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Event\Event object
      *
-     * @param \API\Models\Event\Event|ObjectCollection $event The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Event\Event|ObjectCollection $event      The related object(s) to use as filter
+     * @param string                                   $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -557,8 +571,8 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Event relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
@@ -591,9 +605,9 @@ abstract class CouponQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Event\EventQuery A secondary query class using the current class as primary query
      */
@@ -607,8 +621,8 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\User\User object
      *
-     * @param \API\Models\User\User|ObjectCollection $user The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\User\User|ObjectCollection $user       The related object(s) to use as filter
+     * @param string                                 $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -634,8 +648,8 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the User relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
@@ -668,9 +682,9 @@ abstract class CouponQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\User\UserQuery A secondary query class using the current class as primary query
      */
@@ -685,7 +699,7 @@ abstract class CouponQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Payment\PaymentCoupon object
      *
      * @param \API\Models\Payment\PaymentCoupon|ObjectCollection $paymentCoupon the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                             $comparison    Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildCouponQuery The current query, for fluid interface
      */
@@ -707,8 +721,8 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the PaymentCoupon relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
@@ -741,9 +755,9 @@ abstract class CouponQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Payment\PaymentCouponQuery A secondary query class using the current class as primary query
      */
@@ -759,7 +773,7 @@ abstract class CouponQuery extends ModelCriteria
      * using the payment_coupon table as cross reference
      *
      * @param PaymentRecieved $paymentRecieved the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string          $comparison      Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildCouponQuery The current query, for fluid interface
      */
@@ -774,7 +788,7 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildCoupon $coupon Object to remove from the list of results
+     * @param ChildCoupon $coupon Object to remove from the list of results
      *
      * @return $this|ChildCouponQuery The current query, for fluid interface
      */
@@ -790,7 +804,7 @@ abstract class CouponQuery extends ModelCriteria
     /**
      * Deletes all rows from the coupon table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -801,23 +815,25 @@ abstract class CouponQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            CouponTableMap::clearInstancePool();
-            CouponTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                CouponTableMap::clearInstancePool();
+                CouponTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -836,16 +852,17 @@ abstract class CouponQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            CouponTableMap::removeInstanceFromPool($criteria);
+                CouponTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            CouponTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                CouponTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // CouponQuery

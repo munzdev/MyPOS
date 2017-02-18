@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'invoice' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class InvoiceTableMap extends TableMap
 {
@@ -142,7 +138,7 @@ class InvoiceTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('Invoiceid', 'InvoiceTypeid', 'EventContactid', 'Userid', 'EventBankinformationid', 'CustomerEventContactid', 'CanceledInvoiceid', 'Date', 'Amount', 'MaturityDate', 'PaymentFinished', 'AmountRecieved', ),
         self::TYPE_CAMELNAME     => array('invoiceid', 'invoiceTypeid', 'eventContactid', 'userid', 'eventBankinformationid', 'customerEventContactid', 'canceledInvoiceid', 'date', 'amount', 'maturityDate', 'paymentFinished', 'amountRecieved', ),
         self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID, InvoiceTableMap::COL_INVOICE_TYPEID, InvoiceTableMap::COL_EVENT_CONTACTID, InvoiceTableMap::COL_USERID, InvoiceTableMap::COL_EVENT_BANKINFORMATIONID, InvoiceTableMap::COL_CUSTOMER_EVENT_CONTACTID, InvoiceTableMap::COL_CANCELED_INVOICEID, InvoiceTableMap::COL_DATE, InvoiceTableMap::COL_AMOUNT, InvoiceTableMap::COL_MATURITY_DATE, InvoiceTableMap::COL_PAYMENT_FINISHED, InvoiceTableMap::COL_AMOUNT_RECIEVED, ),
@@ -156,7 +152,7 @@ class InvoiceTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('Invoiceid' => 0, 'InvoiceTypeid' => 1, 'EventContactid' => 2, 'Userid' => 3, 'EventBankinformationid' => 4, 'CustomerEventContactid' => 5, 'CanceledInvoiceid' => 6, 'Date' => 7, 'Amount' => 8, 'MaturityDate' => 9, 'PaymentFinished' => 10, 'AmountRecieved' => 11, ),
         self::TYPE_CAMELNAME     => array('invoiceid' => 0, 'invoiceTypeid' => 1, 'eventContactid' => 2, 'userid' => 3, 'eventBankinformationid' => 4, 'customerEventContactid' => 5, 'canceledInvoiceid' => 6, 'date' => 7, 'amount' => 8, 'maturityDate' => 9, 'paymentFinished' => 10, 'amountRecieved' => 11, ),
         self::TYPE_COLNAME       => array(InvoiceTableMap::COL_INVOICEID => 0, InvoiceTableMap::COL_INVOICE_TYPEID => 1, InvoiceTableMap::COL_EVENT_CONTACTID => 2, InvoiceTableMap::COL_USERID => 3, InvoiceTableMap::COL_EVENT_BANKINFORMATIONID => 4, InvoiceTableMap::COL_CUSTOMER_EVENT_CONTACTID => 5, InvoiceTableMap::COL_CANCELED_INVOICEID => 6, InvoiceTableMap::COL_DATE => 7, InvoiceTableMap::COL_AMOUNT => 8, InvoiceTableMap::COL_MATURITY_DATE => 9, InvoiceTableMap::COL_PAYMENT_FINISHED => 10, InvoiceTableMap::COL_AMOUNT_RECIEVED => 11, ),
@@ -200,76 +196,166 @@ class InvoiceTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('EventContactRelatedByCustomerEventContactid', '\\API\\Models\\Event\\EventContact', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':customer_event_contactid',
-    1 => ':event_contactid',
-  ),
-), null, null, null, false);
-        $this->addRelation('EventBankinformation', '\\API\\Models\\Event\\EventBankinformation', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':event_bankinformationid',
-    1 => ':event_bankinformationid',
-  ),
-), null, null, null, false);
-        $this->addRelation('EventContactRelatedByEventContactid', '\\API\\Models\\Event\\EventContact', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':event_contactid',
-    1 => ':event_contactid',
-  ),
-), null, null, null, false);
-        $this->addRelation('InvoiceRelatedByCanceledInvoiceid', '\\API\\Models\\Invoice\\Invoice', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':canceled_invoiceid',
-    1 => ':invoiceid',
-  ),
-), null, null, null, false);
-        $this->addRelation('InvoiceType', '\\API\\Models\\Invoice\\InvoiceType', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':invoice_typeid',
-    1 => ':invoice_typeid',
-  ),
-), null, null, null, false);
-        $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':userid',
-    1 => ':userid',
-  ),
-), null, null, null, false);
-        $this->addRelation('InvoiceRelatedByInvoiceid', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':canceled_invoiceid',
-    1 => ':invoiceid',
-  ),
-), null, null, 'InvoicesRelatedByInvoiceid', false);
-        $this->addRelation('InvoiceItem', '\\API\\Models\\Invoice\\InvoiceItem', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':invoiceid',
-    1 => ':invoiceid',
-  ),
-), null, null, 'InvoiceItems', false);
-        $this->addRelation('PaymentRecieved', '\\API\\Models\\Payment\\PaymentRecieved', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':invoiceid',
-    1 => ':invoiceid',
-  ),
-), null, null, 'PaymentRecieveds', false);
-        $this->addRelation('InvoiceWarning', '\\API\\Models\\Invoice\\InvoiceWarning', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':invoiceid',
-    1 => ':invoiceid',
-  ),
-), null, null, 'InvoiceWarnings', false);
+        $this->addRelation(
+            'EventContactRelatedByCustomerEventContactid',
+            '\\API\\Models\\Event\\EventContact',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':customer_event_contactid',
+            1 => ':event_contactid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'EventBankinformation',
+            '\\API\\Models\\Event\\EventBankinformation',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':event_bankinformationid',
+            1 => ':event_bankinformationid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'EventContactRelatedByEventContactid',
+            '\\API\\Models\\Event\\EventContact',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':event_contactid',
+            1 => ':event_contactid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'InvoiceRelatedByCanceledInvoiceid',
+            '\\API\\Models\\Invoice\\Invoice',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':canceled_invoiceid',
+            1 => ':invoiceid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'InvoiceType',
+            '\\API\\Models\\Invoice\\InvoiceType',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':invoice_typeid',
+            1 => ':invoice_typeid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'User',
+            '\\API\\Models\\User\\User',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'InvoiceRelatedByInvoiceid',
+            '\\API\\Models\\Invoice\\Invoice',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':canceled_invoiceid',
+            1 => ':invoiceid',
+            ),
+            ),
+            null,
+            null,
+            'InvoicesRelatedByInvoiceid',
+            false
+        );
+        $this->addRelation(
+            'InvoiceItem',
+            '\\API\\Models\\Invoice\\InvoiceItem',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':invoiceid',
+            1 => ':invoiceid',
+            ),
+            ),
+            null,
+            null,
+            'InvoiceItems',
+            false
+        );
+        $this->addRelation(
+            'PaymentRecieved',
+            '\\API\\Models\\Payment\\PaymentRecieved',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':invoiceid',
+            1 => ':invoiceid',
+            ),
+            ),
+            null,
+            null,
+            'PaymentRecieveds',
+            false
+        );
+        $this->addRelation(
+            'InvoiceWarning',
+            '\\API\\Models\\Invoice\\InvoiceWarning',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':invoiceid',
+            1 => ':invoiceid',
+            ),
+            ),
+            null,
+            null,
+            'InvoiceWarnings',
+            false
+        );
     } // buildRelations()
 
     /**
@@ -324,7 +410,7 @@ class InvoiceTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -355,7 +441,9 @@ class InvoiceTableMap extends TableMap
             $col = $offset + InvoiceTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = InvoiceTableMap::OM_CLASS;
-            /** @var Invoice $obj */
+            /**
+ * @var Invoice $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             InvoiceTableMap::addInstanceToPool($obj, $key);
@@ -368,7 +456,7 @@ class InvoiceTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -388,7 +476,9 @@ class InvoiceTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Invoice $obj */
+                /**
+ * @var Invoice $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -405,8 +495,8 @@ class InvoiceTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -444,6 +534,7 @@ class InvoiceTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -467,16 +558,16 @@ class InvoiceTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Invoice or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Invoice object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or Invoice object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(InvoiceTableMap::DATABASE_NAME);
         }
@@ -508,7 +599,7 @@ class InvoiceTableMap extends TableMap
     /**
      * Deletes all rows from the invoice table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -519,8 +610,8 @@ class InvoiceTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Invoice or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Invoice object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or Invoice object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -537,7 +628,7 @@ class InvoiceTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from Invoice object
         }
 
-        if ($criteria->containsKey(InvoiceTableMap::COL_INVOICEID) && $criteria->keyContainsValue(InvoiceTableMap::COL_INVOICEID) ) {
+        if ($criteria->containsKey(InvoiceTableMap::COL_INVOICEID) && $criteria->keyContainsValue(InvoiceTableMap::COL_INVOICEID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.InvoiceTableMap::COL_INVOICEID.')');
         }
 
@@ -547,11 +638,12 @@ class InvoiceTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // InvoiceTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

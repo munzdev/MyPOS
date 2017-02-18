@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'menu_extra' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class MenuExtraTableMap extends TableMap
 {
@@ -107,7 +103,7 @@ class MenuExtraTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('MenuExtraid', 'Eventid', 'Name', 'Availabilityid', 'AvailabilityAmount', ),
         self::TYPE_CAMELNAME     => array('menuExtraid', 'eventid', 'name', 'availabilityid', 'availabilityAmount', ),
         self::TYPE_COLNAME       => array(MenuExtraTableMap::COL_MENU_EXTRAID, MenuExtraTableMap::COL_EVENTID, MenuExtraTableMap::COL_NAME, MenuExtraTableMap::COL_AVAILABILITYID, MenuExtraTableMap::COL_AVAILABILITY_AMOUNT, ),
@@ -121,7 +117,7 @@ class MenuExtraTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('MenuExtraid' => 0, 'Eventid' => 1, 'Name' => 2, 'Availabilityid' => 3, 'AvailabilityAmount' => 4, ),
         self::TYPE_CAMELNAME     => array('menuExtraid' => 0, 'eventid' => 1, 'name' => 2, 'availabilityid' => 3, 'availabilityAmount' => 4, ),
         self::TYPE_COLNAME       => array(MenuExtraTableMap::COL_MENU_EXTRAID => 0, MenuExtraTableMap::COL_EVENTID => 1, MenuExtraTableMap::COL_NAME => 2, MenuExtraTableMap::COL_AVAILABILITYID => 3, MenuExtraTableMap::COL_AVAILABILITY_AMOUNT => 4, ),
@@ -158,27 +154,54 @@ class MenuExtraTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Availability', '\\API\\Models\\Menu\\Availability', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':availabilityid',
-    1 => ':availabilityid',
-  ),
-), null, null, null, false);
-        $this->addRelation('Event', '\\API\\Models\\Event\\Event', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, null, false);
-        $this->addRelation('MenuPossibleExtra', '\\API\\Models\\Menu\\MenuPossibleExtra', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':menu_extraid',
-    1 => ':menu_extraid',
-  ),
-), null, null, 'MenuPossibleExtras', false);
+        $this->addRelation(
+            'Availability',
+            '\\API\\Models\\Menu\\Availability',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':availabilityid',
+            1 => ':availabilityid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'Event',
+            '\\API\\Models\\Event\\Event',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'MenuPossibleExtra',
+            '\\API\\Models\\Menu\\MenuPossibleExtra',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':menu_extraid',
+            1 => ':menu_extraid',
+            ),
+            ),
+            null,
+            null,
+            'MenuPossibleExtras',
+            false
+        );
     } // buildRelations()
 
     /**
@@ -233,7 +256,7 @@ class MenuExtraTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -264,7 +287,9 @@ class MenuExtraTableMap extends TableMap
             $col = $offset + MenuExtraTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = MenuExtraTableMap::OM_CLASS;
-            /** @var MenuExtra $obj */
+            /**
+ * @var MenuExtra $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             MenuExtraTableMap::addInstanceToPool($obj, $key);
@@ -277,7 +302,7 @@ class MenuExtraTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -297,7 +322,9 @@ class MenuExtraTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var MenuExtra $obj */
+                /**
+ * @var MenuExtra $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -314,8 +341,8 @@ class MenuExtraTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -339,6 +366,7 @@ class MenuExtraTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -362,16 +390,16 @@ class MenuExtraTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a MenuExtra or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or MenuExtra object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or MenuExtra object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(MenuExtraTableMap::DATABASE_NAME);
         }
@@ -403,7 +431,7 @@ class MenuExtraTableMap extends TableMap
     /**
      * Deletes all rows from the menu_extra table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -414,8 +442,8 @@ class MenuExtraTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a MenuExtra or Criteria object.
      *
-     * @param mixed               $criteria Criteria or MenuExtra object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or MenuExtra object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -432,7 +460,7 @@ class MenuExtraTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from MenuExtra object
         }
 
-        if ($criteria->containsKey(MenuExtraTableMap::COL_MENU_EXTRAID) && $criteria->keyContainsValue(MenuExtraTableMap::COL_MENU_EXTRAID) ) {
+        if ($criteria->containsKey(MenuExtraTableMap::COL_MENU_EXTRAID) && $criteria->keyContainsValue(MenuExtraTableMap::COL_MENU_EXTRAID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.MenuExtraTableMap::COL_MENU_EXTRAID.')');
         }
 
@@ -442,11 +470,12 @@ class MenuExtraTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // MenuExtraTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

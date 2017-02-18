@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'user_message' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class UserMessageTableMap extends TableMap
 {
@@ -112,7 +108,7 @@ class UserMessageTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('UserMessageid', 'FromEventUserid', 'ToEventUserid', 'Message', 'Date', 'Readed', ),
         self::TYPE_CAMELNAME     => array('userMessageid', 'fromEventUserid', 'toEventUserid', 'message', 'date', 'readed', ),
         self::TYPE_COLNAME       => array(UserMessageTableMap::COL_USER_MESSAGEID, UserMessageTableMap::COL_FROM_EVENT_USERID, UserMessageTableMap::COL_TO_EVENT_USERID, UserMessageTableMap::COL_MESSAGE, UserMessageTableMap::COL_DATE, UserMessageTableMap::COL_READED, ),
@@ -126,7 +122,7 @@ class UserMessageTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('UserMessageid' => 0, 'FromEventUserid' => 1, 'ToEventUserid' => 2, 'Message' => 3, 'Date' => 4, 'Readed' => 5, ),
         self::TYPE_CAMELNAME     => array('userMessageid' => 0, 'fromEventUserid' => 1, 'toEventUserid' => 2, 'message' => 3, 'date' => 4, 'readed' => 5, ),
         self::TYPE_COLNAME       => array(UserMessageTableMap::COL_USER_MESSAGEID => 0, UserMessageTableMap::COL_FROM_EVENT_USERID => 1, UserMessageTableMap::COL_TO_EVENT_USERID => 2, UserMessageTableMap::COL_MESSAGE => 3, UserMessageTableMap::COL_DATE => 4, UserMessageTableMap::COL_READED => 5, ),
@@ -164,20 +160,38 @@ class UserMessageTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('EventUserRelatedByFromEventUserid', '\\API\\Models\\Event\\EventUser', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':from_event_userid',
-    1 => ':event_userid',
-  ),
-), null, null, null, false);
-        $this->addRelation('EventUserRelatedByToEventUserid', '\\API\\Models\\Event\\EventUser', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':to_event_userid',
-    1 => ':event_userid',
-  ),
-), null, null, null, false);
+        $this->addRelation(
+            'EventUserRelatedByFromEventUserid',
+            '\\API\\Models\\Event\\EventUser',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':from_event_userid',
+            1 => ':event_userid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'EventUserRelatedByToEventUserid',
+            '\\API\\Models\\Event\\EventUser',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':to_event_userid',
+            1 => ':event_userid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
     } // buildRelations()
 
     /**
@@ -232,7 +246,7 @@ class UserMessageTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -263,7 +277,9 @@ class UserMessageTableMap extends TableMap
             $col = $offset + UserMessageTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = UserMessageTableMap::OM_CLASS;
-            /** @var UserMessage $obj */
+            /**
+ * @var UserMessage $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             UserMessageTableMap::addInstanceToPool($obj, $key);
@@ -276,7 +292,7 @@ class UserMessageTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -296,7 +312,9 @@ class UserMessageTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var UserMessage $obj */
+                /**
+ * @var UserMessage $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -313,8 +331,8 @@ class UserMessageTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -340,6 +358,7 @@ class UserMessageTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -363,16 +382,16 @@ class UserMessageTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a UserMessage or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or UserMessage object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or UserMessage object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(UserMessageTableMap::DATABASE_NAME);
         }
@@ -404,7 +423,7 @@ class UserMessageTableMap extends TableMap
     /**
      * Deletes all rows from the user_message table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -415,8 +434,8 @@ class UserMessageTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a UserMessage or Criteria object.
      *
-     * @param mixed               $criteria Criteria or UserMessage object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or UserMessage object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -439,11 +458,12 @@ class UserMessageTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // UserMessageTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

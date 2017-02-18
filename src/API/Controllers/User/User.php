@@ -11,35 +11,35 @@ use Slim\App;
 
 class User extends SecurityController
 {
-    protected $o_usersQuery;
+    protected $usersQuery;
 
-    public function __construct(App $o_app) {
-        parent::__construct($o_app);
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
 
-        $o_app->getContainer()['db'];
+        $app->getContainer()['db'];
     }
 
-    protected function GET() : void {
-        $o_currentUser = Auth::GetCurrentUser();
+    protected function get() : void
+    {
+        $auth = $this->app->getContainer()->get('Auth');
+        $currentUser = $auth->getCurrentUser();
 
-        $a_users = UserQuery::create()
-                    ->useEventUserQuery()
-                        ->filterByEventid($o_currentUser->getEventUser()->getEventid())
-                    ->endUse()
-                    ->joinWithEventUser()
-                    ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                    ->find()
-                    ->toArray();
+        $users = UserQuery::create()
+                            ->useEventUserQuery()
+                                ->filterByEventid($currentUser->getEventUser()->getEventid())
+                            ->endUse()
+                            ->joinWithEventUser()
+                            ->setFormatter(ModelCriteria::FORMAT_ARRAY)
+                            ->find()
+                            ->toArray();
 
-        $a_return = [];
-
-        foreach($a_users as &$a_user)
-        {
-            $a_user['EventUser'] = $a_user['EventUsers'][0];
-            unset($a_user['EventUsers']);
-            $a_user = $this->cleanupUserData($a_user);
+        foreach ($users as &$user) {
+            $user['EventUser'] = $user['EventUsers'][0];
+            unset($user['EventUsers']);
+            $user = $this->cleanupUserData($user);
         }
 
-        $this->withJson($a_users);
+        $this->withJson($users);
     }
 }

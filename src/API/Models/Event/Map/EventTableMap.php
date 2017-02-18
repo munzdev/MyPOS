@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'event' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class EventTableMap extends TableMap
 {
@@ -102,7 +98,7 @@ class EventTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('Eventid', 'Name', 'Date', 'Active', ),
         self::TYPE_CAMELNAME     => array('eventid', 'name', 'date', 'active', ),
         self::TYPE_COLNAME       => array(EventTableMap::COL_EVENTID, EventTableMap::COL_NAME, EventTableMap::COL_DATE, EventTableMap::COL_ACTIVE, ),
@@ -116,7 +112,7 @@ class EventTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('Eventid' => 0, 'Name' => 1, 'Date' => 2, 'Active' => 3, ),
         self::TYPE_CAMELNAME     => array('eventid' => 0, 'name' => 1, 'date' => 2, 'active' => 3, ),
         self::TYPE_COLNAME       => array(EventTableMap::COL_EVENTID => 0, EventTableMap::COL_NAME => 1, EventTableMap::COL_DATE => 2, EventTableMap::COL_ACTIVE => 3, ),
@@ -152,83 +148,182 @@ class EventTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Coupon', '\\API\\Models\\Payment\\Coupon', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'Coupons', false);
-        $this->addRelation('EventBankinformation', '\\API\\Models\\Event\\EventBankinformation', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'EventBankinformations', false);
-        $this->addRelation('EventContact', '\\API\\Models\\Event\\EventContact', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'EventContacts', false);
-        $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'DistributionPlaces', false);
-        $this->addRelation('EventPrinter', '\\API\\Models\\Event\\EventPrinter', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'EventPrinters', false);
-        $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'EventTables', false);
-        $this->addRelation('EventUser', '\\API\\Models\\Event\\EventUser', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'EventUsers', false);
-        $this->addRelation('MenuExtra', '\\API\\Models\\Menu\\MenuExtra', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'MenuExtras', false);
-        $this->addRelation('MenuSize', '\\API\\Models\\Menu\\MenuSize', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'MenuSizes', false);
-        $this->addRelation('MenuType', '\\API\\Models\\Menu\\MenuType', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'MenuTypes', false);
-        $this->addRelation('InvoiceWarningType', '\\API\\Models\\Invoice\\InvoiceWarningType', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'InvoiceWarningTypes', false);
+        $this->addRelation(
+            'Coupon',
+            '\\API\\Models\\Payment\\Coupon',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            'Coupons',
+            false
+        );
+        $this->addRelation(
+            'EventBankinformation',
+            '\\API\\Models\\Event\\EventBankinformation',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            'EventBankinformations',
+            false
+        );
+        $this->addRelation(
+            'EventContact',
+            '\\API\\Models\\Event\\EventContact',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            'EventContacts',
+            false
+        );
+        $this->addRelation(
+            'DistributionPlace',
+            '\\API\\Models\\DistributionPlace\\DistributionPlace',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            'DistributionPlaces',
+            false
+        );
+        $this->addRelation(
+            'EventPrinter',
+            '\\API\\Models\\Event\\EventPrinter',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            'EventPrinters',
+            false
+        );
+        $this->addRelation(
+            'EventTable',
+            '\\API\\Models\\Event\\EventTable',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            'EventTables',
+            false
+        );
+        $this->addRelation(
+            'EventUser',
+            '\\API\\Models\\Event\\EventUser',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            'EventUsers',
+            false
+        );
+        $this->addRelation(
+            'MenuExtra',
+            '\\API\\Models\\Menu\\MenuExtra',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            'MenuExtras',
+            false
+        );
+        $this->addRelation(
+            'MenuSize',
+            '\\API\\Models\\Menu\\MenuSize',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            'MenuSizes',
+            false
+        );
+        $this->addRelation(
+            'MenuType',
+            '\\API\\Models\\Menu\\MenuType',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            'MenuTypes',
+            false
+        );
+        $this->addRelation(
+            'InvoiceWarningType',
+            '\\API\\Models\\Invoice\\InvoiceWarningType',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            'InvoiceWarningTypes',
+            false
+        );
     } // buildRelations()
 
     /**
@@ -283,7 +378,7 @@ class EventTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -314,7 +409,9 @@ class EventTableMap extends TableMap
             $col = $offset + EventTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = EventTableMap::OM_CLASS;
-            /** @var Event $obj */
+            /**
+ * @var Event $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             EventTableMap::addInstanceToPool($obj, $key);
@@ -327,7 +424,7 @@ class EventTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -347,7 +444,9 @@ class EventTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Event $obj */
+                /**
+ * @var Event $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -364,8 +463,8 @@ class EventTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -387,6 +486,7 @@ class EventTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -410,16 +510,16 @@ class EventTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Event or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Event object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or Event object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventTableMap::DATABASE_NAME);
         }
@@ -451,7 +551,7 @@ class EventTableMap extends TableMap
     /**
      * Deletes all rows from the event table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -462,8 +562,8 @@ class EventTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Event or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Event object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or Event object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -480,7 +580,7 @@ class EventTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from Event object
         }
 
-        if ($criteria->containsKey(EventTableMap::COL_EVENTID) && $criteria->keyContainsValue(EventTableMap::COL_EVENTID) ) {
+        if ($criteria->containsKey(EventTableMap::COL_EVENTID) && $criteria->keyContainsValue(EventTableMap::COL_EVENTID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.EventTableMap::COL_EVENTID.')');
         }
 
@@ -490,11 +590,12 @@ class EventTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // EventTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

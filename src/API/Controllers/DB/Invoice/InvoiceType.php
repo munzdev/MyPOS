@@ -8,18 +8,17 @@ use Slim\App;
 
 class InvoiceType extends SecurityController
 {
-    protected $o_auth;
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
 
-    public function __construct(App $o_app) {
-        parent::__construct($o_app);
-
-        $o_app->getContainer()['db'];
+        $app->getContainer()['db'];
     }
 
-    protected function GET() : void {
-        $o_invoiceTypes = InvoiceTypeQuery::create()->find();
+    protected function get() : void
+    {
+        $invoiceTypes = InvoiceTypeQuery::create()->find();
 
-        $this->withJson($o_invoiceTypes->toArray());
+        $this->withJson($invoiceTypes->toArray());
     }
-
 }

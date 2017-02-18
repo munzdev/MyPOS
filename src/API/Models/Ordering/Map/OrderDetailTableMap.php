@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'order_detail' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class OrderDetailTableMap extends TableMap
 {
@@ -152,7 +148,7 @@ class OrderDetailTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('OrderDetailid', 'Orderid', 'Menuid', 'MenuSizeid', 'MenuGroupid', 'Amount', 'SinglePrice', 'SinglePriceModifiedByUserid', 'ExtraDetail', 'Availabilityid', 'AvailabilityAmount', 'Verified', 'DistributionFinished', 'InvoiceFinished', ),
         self::TYPE_CAMELNAME     => array('orderDetailid', 'orderid', 'menuid', 'menuSizeid', 'menuGroupid', 'amount', 'singlePrice', 'singlePriceModifiedByUserid', 'extraDetail', 'availabilityid', 'availabilityAmount', 'verified', 'distributionFinished', 'invoiceFinished', ),
         self::TYPE_COLNAME       => array(OrderDetailTableMap::COL_ORDER_DETAILID, OrderDetailTableMap::COL_ORDERID, OrderDetailTableMap::COL_MENUID, OrderDetailTableMap::COL_MENU_SIZEID, OrderDetailTableMap::COL_MENU_GROUPID, OrderDetailTableMap::COL_AMOUNT, OrderDetailTableMap::COL_SINGLE_PRICE, OrderDetailTableMap::COL_SINGLE_PRICE_MODIFIED_BY_USERID, OrderDetailTableMap::COL_EXTRA_DETAIL, OrderDetailTableMap::COL_AVAILABILITYID, OrderDetailTableMap::COL_AVAILABILITY_AMOUNT, OrderDetailTableMap::COL_VERIFIED, OrderDetailTableMap::COL_DISTRIBUTION_FINISHED, OrderDetailTableMap::COL_INVOICE_FINISHED, ),
@@ -166,7 +162,7 @@ class OrderDetailTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('OrderDetailid' => 0, 'Orderid' => 1, 'Menuid' => 2, 'MenuSizeid' => 3, 'MenuGroupid' => 4, 'Amount' => 5, 'SinglePrice' => 6, 'SinglePriceModifiedByUserid' => 7, 'ExtraDetail' => 8, 'Availabilityid' => 9, 'AvailabilityAmount' => 10, 'Verified' => 11, 'DistributionFinished' => 12, 'InvoiceFinished' => 13, ),
         self::TYPE_CAMELNAME     => array('orderDetailid' => 0, 'orderid' => 1, 'menuid' => 2, 'menuSizeid' => 3, 'menuGroupid' => 4, 'amount' => 5, 'singlePrice' => 6, 'singlePriceModifiedByUserid' => 7, 'extraDetail' => 8, 'availabilityid' => 9, 'availabilityAmount' => 10, 'verified' => 11, 'distributionFinished' => 12, 'invoiceFinished' => 13, ),
         self::TYPE_COLNAME       => array(OrderDetailTableMap::COL_ORDER_DETAILID => 0, OrderDetailTableMap::COL_ORDERID => 1, OrderDetailTableMap::COL_MENUID => 2, OrderDetailTableMap::COL_MENU_SIZEID => 3, OrderDetailTableMap::COL_MENU_GROUPID => 4, OrderDetailTableMap::COL_AMOUNT => 5, OrderDetailTableMap::COL_SINGLE_PRICE => 6, OrderDetailTableMap::COL_SINGLE_PRICE_MODIFIED_BY_USERID => 7, OrderDetailTableMap::COL_EXTRA_DETAIL => 8, OrderDetailTableMap::COL_AVAILABILITYID => 9, OrderDetailTableMap::COL_AVAILABILITY_AMOUNT => 10, OrderDetailTableMap::COL_VERIFIED => 11, OrderDetailTableMap::COL_DISTRIBUTION_FINISHED => 12, OrderDetailTableMap::COL_INVOICE_FINISHED => 13, ),
@@ -212,76 +208,166 @@ class OrderDetailTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Availability', '\\API\\Models\\Menu\\Availability', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':availabilityid',
-    1 => ':availabilityid',
-  ),
-), null, null, null, false);
-        $this->addRelation('MenuGroup', '\\API\\Models\\Menu\\MenuGroup', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':menu_groupid',
-    1 => ':menu_groupid',
-  ),
-), null, null, null, false);
-        $this->addRelation('MenuSize', '\\API\\Models\\Menu\\MenuSize', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':menu_sizeid',
-    1 => ':menu_sizeid',
-  ),
-), null, null, null, false);
-        $this->addRelation('Menu', '\\API\\Models\\Menu\\Menu', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':menuid',
-    1 => ':menuid',
-  ),
-), null, null, null, false);
-        $this->addRelation('Order', '\\API\\Models\\Ordering\\Order', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':orderid',
-    1 => ':orderid',
-  ),
-), null, null, null, false);
-        $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':single_price_modified_by_userid',
-    1 => ':userid',
-  ),
-), null, null, null, false);
-        $this->addRelation('InvoiceItem', '\\API\\Models\\Invoice\\InvoiceItem', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':order_detailid',
-    1 => ':order_detailid',
-  ),
-), null, null, 'InvoiceItems', false);
-        $this->addRelation('OrderDetailExtra', '\\API\\Models\\Ordering\\OrderDetailExtra', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':order_detailid',
-    1 => ':order_detailid',
-  ),
-), null, null, 'OrderDetailExtras', false);
-        $this->addRelation('OrderDetailMixedWith', '\\API\\Models\\Ordering\\OrderDetailMixedWith', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':order_detailid',
-    1 => ':order_detailid',
-  ),
-), null, null, 'OrderDetailMixedWiths', false);
-        $this->addRelation('OrderInProgressRecieved', '\\API\\Models\\OIP\\OrderInProgressRecieved', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':order_detailid',
-    1 => ':order_detailid',
-  ),
-), null, null, 'OrderInProgressRecieveds', false);
+        $this->addRelation(
+            'Availability',
+            '\\API\\Models\\Menu\\Availability',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':availabilityid',
+            1 => ':availabilityid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'MenuGroup',
+            '\\API\\Models\\Menu\\MenuGroup',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':menu_groupid',
+            1 => ':menu_groupid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'MenuSize',
+            '\\API\\Models\\Menu\\MenuSize',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':menu_sizeid',
+            1 => ':menu_sizeid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'Menu',
+            '\\API\\Models\\Menu\\Menu',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':menuid',
+            1 => ':menuid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'Order',
+            '\\API\\Models\\Ordering\\Order',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':orderid',
+            1 => ':orderid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'User',
+            '\\API\\Models\\User\\User',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':single_price_modified_by_userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'InvoiceItem',
+            '\\API\\Models\\Invoice\\InvoiceItem',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':order_detailid',
+            1 => ':order_detailid',
+            ),
+            ),
+            null,
+            null,
+            'InvoiceItems',
+            false
+        );
+        $this->addRelation(
+            'OrderDetailExtra',
+            '\\API\\Models\\Ordering\\OrderDetailExtra',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':order_detailid',
+            1 => ':order_detailid',
+            ),
+            ),
+            null,
+            null,
+            'OrderDetailExtras',
+            false
+        );
+        $this->addRelation(
+            'OrderDetailMixedWith',
+            '\\API\\Models\\Ordering\\OrderDetailMixedWith',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':order_detailid',
+            1 => ':order_detailid',
+            ),
+            ),
+            null,
+            null,
+            'OrderDetailMixedWiths',
+            false
+        );
+        $this->addRelation(
+            'OrderInProgressRecieved',
+            '\\API\\Models\\OIP\\OrderInProgressRecieved',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':order_detailid',
+            1 => ':order_detailid',
+            ),
+            ),
+            null,
+            null,
+            'OrderInProgressRecieveds',
+            false
+        );
         $this->addRelation('MenuPossibleExtra', '\\API\\Models\\Menu\\MenuPossibleExtra', RelationMap::MANY_TO_MANY, array(), null, null, 'MenuPossibleExtras');
     } // buildRelations()
 
@@ -337,7 +423,7 @@ class OrderDetailTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -368,7 +454,9 @@ class OrderDetailTableMap extends TableMap
             $col = $offset + OrderDetailTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = OrderDetailTableMap::OM_CLASS;
-            /** @var OrderDetail $obj */
+            /**
+ * @var OrderDetail $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             OrderDetailTableMap::addInstanceToPool($obj, $key);
@@ -381,7 +469,7 @@ class OrderDetailTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -401,7 +489,9 @@ class OrderDetailTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var OrderDetail $obj */
+                /**
+ * @var OrderDetail $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -418,8 +508,8 @@ class OrderDetailTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -461,6 +551,7 @@ class OrderDetailTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -484,16 +575,16 @@ class OrderDetailTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a OrderDetail or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or OrderDetail object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or OrderDetail object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderDetailTableMap::DATABASE_NAME);
         }
@@ -525,7 +616,7 @@ class OrderDetailTableMap extends TableMap
     /**
      * Deletes all rows from the order_detail table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -536,8 +627,8 @@ class OrderDetailTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a OrderDetail or Criteria object.
      *
-     * @param mixed               $criteria Criteria or OrderDetail object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or OrderDetail object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -554,7 +645,7 @@ class OrderDetailTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from OrderDetail object
         }
 
-        if ($criteria->containsKey(OrderDetailTableMap::COL_ORDER_DETAILID) && $criteria->keyContainsValue(OrderDetailTableMap::COL_ORDER_DETAILID) ) {
+        if ($criteria->containsKey(OrderDetailTableMap::COL_ORDER_DETAILID) && $criteria->keyContainsValue(OrderDetailTableMap::COL_ORDER_DETAILID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.OrderDetailTableMap::COL_ORDER_DETAILID.')');
         }
 
@@ -564,11 +655,12 @@ class OrderDetailTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // OrderDetailTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

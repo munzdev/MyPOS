@@ -21,126 +21,123 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'order' table.
  *
+ * @method ChildOrderQuery orderByOrderid($order = Criteria::ASC) Order by the orderid column
+ * @method ChildOrderQuery orderByEventTableid($order = Criteria::ASC) Order by the event_tableid column
+ * @method ChildOrderQuery orderByUserid($order = Criteria::ASC) Order by the userid column
+ * @method ChildOrderQuery orderByOrdertime($order = Criteria::ASC) Order by the ordertime column
+ * @method ChildOrderQuery orderByPriority($order = Criteria::ASC) Order by the priority column
+ * @method ChildOrderQuery orderByDistributionFinished($order = Criteria::ASC) Order by the distribution_finished column
+ * @method ChildOrderQuery orderByInvoiceFinished($order = Criteria::ASC) Order by the invoice_finished column
+ * @method ChildOrderQuery orderByCancellation($order = Criteria::ASC) Order by the cancellation column
+ * @method ChildOrderQuery orderByCancellationCreatedByUserid($order = Criteria::ASC) Order by the cancellation_created_by_userid column
  *
+ * @method ChildOrderQuery groupByOrderid() Group by the orderid column
+ * @method ChildOrderQuery groupByEventTableid() Group by the event_tableid column
+ * @method ChildOrderQuery groupByUserid() Group by the userid column
+ * @method ChildOrderQuery groupByOrdertime() Group by the ordertime column
+ * @method ChildOrderQuery groupByPriority() Group by the priority column
+ * @method ChildOrderQuery groupByDistributionFinished() Group by the distribution_finished column
+ * @method ChildOrderQuery groupByInvoiceFinished() Group by the invoice_finished column
+ * @method ChildOrderQuery groupByCancellation() Group by the cancellation column
+ * @method ChildOrderQuery groupByCancellationCreatedByUserid() Group by the cancellation_created_by_userid column
  *
- * @method     ChildOrderQuery orderByOrderid($order = Criteria::ASC) Order by the orderid column
- * @method     ChildOrderQuery orderByEventTableid($order = Criteria::ASC) Order by the event_tableid column
- * @method     ChildOrderQuery orderByUserid($order = Criteria::ASC) Order by the userid column
- * @method     ChildOrderQuery orderByOrdertime($order = Criteria::ASC) Order by the ordertime column
- * @method     ChildOrderQuery orderByPriority($order = Criteria::ASC) Order by the priority column
- * @method     ChildOrderQuery orderByDistributionFinished($order = Criteria::ASC) Order by the distribution_finished column
- * @method     ChildOrderQuery orderByInvoiceFinished($order = Criteria::ASC) Order by the invoice_finished column
- * @method     ChildOrderQuery orderByCancellation($order = Criteria::ASC) Order by the cancellation column
- * @method     ChildOrderQuery orderByCancellationCreatedByUserid($order = Criteria::ASC) Order by the cancellation_created_by_userid column
+ * @method ChildOrderQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildOrderQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildOrderQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildOrderQuery groupByOrderid() Group by the orderid column
- * @method     ChildOrderQuery groupByEventTableid() Group by the event_tableid column
- * @method     ChildOrderQuery groupByUserid() Group by the userid column
- * @method     ChildOrderQuery groupByOrdertime() Group by the ordertime column
- * @method     ChildOrderQuery groupByPriority() Group by the priority column
- * @method     ChildOrderQuery groupByDistributionFinished() Group by the distribution_finished column
- * @method     ChildOrderQuery groupByInvoiceFinished() Group by the invoice_finished column
- * @method     ChildOrderQuery groupByCancellation() Group by the cancellation column
- * @method     ChildOrderQuery groupByCancellationCreatedByUserid() Group by the cancellation_created_by_userid column
+ * @method ChildOrderQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildOrderQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildOrderQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildOrderQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildOrderQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildOrderQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildOrderQuery leftJoinUserRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByCancellationCreatedByUserid relation
+ * @method ChildOrderQuery rightJoinUserRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByCancellationCreatedByUserid relation
+ * @method ChildOrderQuery innerJoinUserRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByCancellationCreatedByUserid relation
  *
- * @method     ChildOrderQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildOrderQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildOrderQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildOrderQuery joinWithUserRelatedByCancellationCreatedByUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the UserRelatedByCancellationCreatedByUserid relation
  *
- * @method     ChildOrderQuery leftJoinUserRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByCancellationCreatedByUserid relation
- * @method     ChildOrderQuery rightJoinUserRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByCancellationCreatedByUserid relation
- * @method     ChildOrderQuery innerJoinUserRelatedByCancellationCreatedByUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByCancellationCreatedByUserid relation
+ * @method ChildOrderQuery leftJoinWithUserRelatedByCancellationCreatedByUserid() Adds a LEFT JOIN clause and with to the query using the UserRelatedByCancellationCreatedByUserid relation
+ * @method ChildOrderQuery rightJoinWithUserRelatedByCancellationCreatedByUserid() Adds a RIGHT JOIN clause and with to the query using the UserRelatedByCancellationCreatedByUserid relation
+ * @method ChildOrderQuery innerJoinWithUserRelatedByCancellationCreatedByUserid() Adds a INNER JOIN clause and with to the query using the UserRelatedByCancellationCreatedByUserid relation
  *
- * @method     ChildOrderQuery joinWithUserRelatedByCancellationCreatedByUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the UserRelatedByCancellationCreatedByUserid relation
+ * @method ChildOrderQuery leftJoinEventTable($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventTable relation
+ * @method ChildOrderQuery rightJoinEventTable($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventTable relation
+ * @method ChildOrderQuery innerJoinEventTable($relationAlias = null) Adds a INNER JOIN clause to the query using the EventTable relation
  *
- * @method     ChildOrderQuery leftJoinWithUserRelatedByCancellationCreatedByUserid() Adds a LEFT JOIN clause and with to the query using the UserRelatedByCancellationCreatedByUserid relation
- * @method     ChildOrderQuery rightJoinWithUserRelatedByCancellationCreatedByUserid() Adds a RIGHT JOIN clause and with to the query using the UserRelatedByCancellationCreatedByUserid relation
- * @method     ChildOrderQuery innerJoinWithUserRelatedByCancellationCreatedByUserid() Adds a INNER JOIN clause and with to the query using the UserRelatedByCancellationCreatedByUserid relation
+ * @method ChildOrderQuery joinWithEventTable($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the EventTable relation
  *
- * @method     ChildOrderQuery leftJoinEventTable($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventTable relation
- * @method     ChildOrderQuery rightJoinEventTable($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventTable relation
- * @method     ChildOrderQuery innerJoinEventTable($relationAlias = null) Adds a INNER JOIN clause to the query using the EventTable relation
+ * @method ChildOrderQuery leftJoinWithEventTable() Adds a LEFT JOIN clause and with to the query using the EventTable relation
+ * @method ChildOrderQuery rightJoinWithEventTable() Adds a RIGHT JOIN clause and with to the query using the EventTable relation
+ * @method ChildOrderQuery innerJoinWithEventTable() Adds a INNER JOIN clause and with to the query using the EventTable relation
  *
- * @method     ChildOrderQuery joinWithEventTable($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the EventTable relation
+ * @method ChildOrderQuery leftJoinUserRelatedByUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByUserid relation
+ * @method ChildOrderQuery rightJoinUserRelatedByUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByUserid relation
+ * @method ChildOrderQuery innerJoinUserRelatedByUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByUserid relation
  *
- * @method     ChildOrderQuery leftJoinWithEventTable() Adds a LEFT JOIN clause and with to the query using the EventTable relation
- * @method     ChildOrderQuery rightJoinWithEventTable() Adds a RIGHT JOIN clause and with to the query using the EventTable relation
- * @method     ChildOrderQuery innerJoinWithEventTable() Adds a INNER JOIN clause and with to the query using the EventTable relation
+ * @method ChildOrderQuery joinWithUserRelatedByUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the UserRelatedByUserid relation
  *
- * @method     ChildOrderQuery leftJoinUserRelatedByUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserRelatedByUserid relation
- * @method     ChildOrderQuery rightJoinUserRelatedByUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserRelatedByUserid relation
- * @method     ChildOrderQuery innerJoinUserRelatedByUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the UserRelatedByUserid relation
+ * @method ChildOrderQuery leftJoinWithUserRelatedByUserid() Adds a LEFT JOIN clause and with to the query using the UserRelatedByUserid relation
+ * @method ChildOrderQuery rightJoinWithUserRelatedByUserid() Adds a RIGHT JOIN clause and with to the query using the UserRelatedByUserid relation
+ * @method ChildOrderQuery innerJoinWithUserRelatedByUserid() Adds a INNER JOIN clause and with to the query using the UserRelatedByUserid relation
  *
- * @method     ChildOrderQuery joinWithUserRelatedByUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the UserRelatedByUserid relation
+ * @method ChildOrderQuery leftJoinOrderDetail($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderDetail relation
+ * @method ChildOrderQuery rightJoinOrderDetail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderDetail relation
+ * @method ChildOrderQuery innerJoinOrderDetail($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderDetail relation
  *
- * @method     ChildOrderQuery leftJoinWithUserRelatedByUserid() Adds a LEFT JOIN clause and with to the query using the UserRelatedByUserid relation
- * @method     ChildOrderQuery rightJoinWithUserRelatedByUserid() Adds a RIGHT JOIN clause and with to the query using the UserRelatedByUserid relation
- * @method     ChildOrderQuery innerJoinWithUserRelatedByUserid() Adds a INNER JOIN clause and with to the query using the UserRelatedByUserid relation
+ * @method ChildOrderQuery joinWithOrderDetail($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderDetail relation
  *
- * @method     ChildOrderQuery leftJoinOrderDetail($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderDetail relation
- * @method     ChildOrderQuery rightJoinOrderDetail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderDetail relation
- * @method     ChildOrderQuery innerJoinOrderDetail($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderDetail relation
+ * @method ChildOrderQuery leftJoinWithOrderDetail() Adds a LEFT JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildOrderQuery rightJoinWithOrderDetail() Adds a RIGHT JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildOrderQuery innerJoinWithOrderDetail() Adds a INNER JOIN clause and with to the query using the OrderDetail relation
  *
- * @method     ChildOrderQuery joinWithOrderDetail($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderDetail relation
+ * @method ChildOrderQuery leftJoinOrderInProgress($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderInProgress relation
+ * @method ChildOrderQuery rightJoinOrderInProgress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderInProgress relation
+ * @method ChildOrderQuery innerJoinOrderInProgress($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderInProgress relation
  *
- * @method     ChildOrderQuery leftJoinWithOrderDetail() Adds a LEFT JOIN clause and with to the query using the OrderDetail relation
- * @method     ChildOrderQuery rightJoinWithOrderDetail() Adds a RIGHT JOIN clause and with to the query using the OrderDetail relation
- * @method     ChildOrderQuery innerJoinWithOrderDetail() Adds a INNER JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildOrderQuery joinWithOrderInProgress($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderInProgress relation
  *
- * @method     ChildOrderQuery leftJoinOrderInProgress($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderInProgress relation
- * @method     ChildOrderQuery rightJoinOrderInProgress($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderInProgress relation
- * @method     ChildOrderQuery innerJoinOrderInProgress($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderInProgress relation
+ * @method ChildOrderQuery leftJoinWithOrderInProgress() Adds a LEFT JOIN clause and with to the query using the OrderInProgress relation
+ * @method ChildOrderQuery rightJoinWithOrderInProgress() Adds a RIGHT JOIN clause and with to the query using the OrderInProgress relation
+ * @method ChildOrderQuery innerJoinWithOrderInProgress() Adds a INNER JOIN clause and with to the query using the OrderInProgress relation
  *
- * @method     ChildOrderQuery joinWithOrderInProgress($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderInProgress relation
+ * @method \API\Models\User\UserQuery|\API\Models\Event\EventTableQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildOrderQuery leftJoinWithOrderInProgress() Adds a LEFT JOIN clause and with to the query using the OrderInProgress relation
- * @method     ChildOrderQuery rightJoinWithOrderInProgress() Adds a RIGHT JOIN clause and with to the query using the OrderInProgress relation
- * @method     ChildOrderQuery innerJoinWithOrderInProgress() Adds a INNER JOIN clause and with to the query using the OrderInProgress relation
+ * @method ChildOrder findOne(ConnectionInterface $con = null) Return the first ChildOrder matching the query
+ * @method ChildOrder findOneOrCreate(ConnectionInterface $con = null) Return the first ChildOrder matching the query, or a new ChildOrder object populated from the query conditions when no match is found
  *
- * @method     \API\Models\User\UserQuery|\API\Models\Event\EventTableQuery|\API\Models\Ordering\OrderDetailQuery|\API\Models\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildOrder findOne(ConnectionInterface $con = null) Return the first ChildOrder matching the query
- * @method     ChildOrder findOneOrCreate(ConnectionInterface $con = null) Return the first ChildOrder matching the query, or a new ChildOrder object populated from the query conditions when no match is found
- *
- * @method     ChildOrder findOneByOrderid(int $orderid) Return the first ChildOrder filtered by the orderid column
- * @method     ChildOrder findOneByEventTableid(int $event_tableid) Return the first ChildOrder filtered by the event_tableid column
- * @method     ChildOrder findOneByUserid(int $userid) Return the first ChildOrder filtered by the userid column
- * @method     ChildOrder findOneByOrdertime(string $ordertime) Return the first ChildOrder filtered by the ordertime column
- * @method     ChildOrder findOneByPriority(int $priority) Return the first ChildOrder filtered by the priority column
- * @method     ChildOrder findOneByDistributionFinished(string $distribution_finished) Return the first ChildOrder filtered by the distribution_finished column
- * @method     ChildOrder findOneByInvoiceFinished(string $invoice_finished) Return the first ChildOrder filtered by the invoice_finished column
- * @method     ChildOrder findOneByCancellation(string $cancellation) Return the first ChildOrder filtered by the cancellation column
- * @method     ChildOrder findOneByCancellationCreatedByUserid(int $cancellation_created_by_userid) Return the first ChildOrder filtered by the cancellation_created_by_userid column *
+ * @method ChildOrder findOneByOrderid(int $orderid) Return the first ChildOrder filtered by the orderid column
+ * @method ChildOrder findOneByEventTableid(int $event_tableid) Return the first ChildOrder filtered by the event_tableid column
+ * @method ChildOrder findOneByUserid(int $userid) Return the first ChildOrder filtered by the userid column
+ * @method ChildOrder findOneByOrdertime(string $ordertime) Return the first ChildOrder filtered by the ordertime column
+ * @method ChildOrder findOneByPriority(int $priority) Return the first ChildOrder filtered by the priority column
+ * @method ChildOrder findOneByDistributionFinished(string $distribution_finished) Return the first ChildOrder filtered by the distribution_finished column
+ * @method ChildOrder findOneByInvoiceFinished(string $invoice_finished) Return the first ChildOrder filtered by the invoice_finished column
+ * @method ChildOrder findOneByCancellation(string $cancellation) Return the first ChildOrder filtered by the cancellation column
+ * @method ChildOrder findOneByCancellationCreatedByUserid(int $cancellation_created_by_userid) Return the first ChildOrder filtered by the cancellation_created_by_userid column *
 
- * @method     ChildOrder requirePk($key, ConnectionInterface $con = null) Return the ChildOrder by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOne(ConnectionInterface $con = null) Return the first ChildOrder matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrder requirePk($key, ConnectionInterface $con = null) Return the ChildOrder by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrder requireOne(ConnectionInterface $con = null) Return the first ChildOrder matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildOrder requireOneByOrderid(int $orderid) Return the first ChildOrder filtered by the orderid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByEventTableid(int $event_tableid) Return the first ChildOrder filtered by the event_tableid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByUserid(int $userid) Return the first ChildOrder filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByOrdertime(string $ordertime) Return the first ChildOrder filtered by the ordertime column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByPriority(int $priority) Return the first ChildOrder filtered by the priority column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByDistributionFinished(string $distribution_finished) Return the first ChildOrder filtered by the distribution_finished column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByInvoiceFinished(string $invoice_finished) Return the first ChildOrder filtered by the invoice_finished column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByCancellation(string $cancellation) Return the first ChildOrder filtered by the cancellation column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrder requireOneByCancellationCreatedByUserid(int $cancellation_created_by_userid) Return the first ChildOrder filtered by the cancellation_created_by_userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrder requireOneByOrderid(int $orderid) Return the first ChildOrder filtered by the orderid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrder requireOneByEventTableid(int $event_tableid) Return the first ChildOrder filtered by the event_tableid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrder requireOneByUserid(int $userid) Return the first ChildOrder filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrder requireOneByOrdertime(string $ordertime) Return the first ChildOrder filtered by the ordertime column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrder requireOneByPriority(int $priority) Return the first ChildOrder filtered by the priority column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrder requireOneByDistributionFinished(string $distribution_finished) Return the first ChildOrder filtered by the distribution_finished column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrder requireOneByInvoiceFinished(string $invoice_finished) Return the first ChildOrder filtered by the invoice_finished column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrder requireOneByCancellation(string $cancellation) Return the first ChildOrder filtered by the cancellation column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrder requireOneByCancellationCreatedByUserid(int $cancellation_created_by_userid) Return the first ChildOrder filtered by the cancellation_created_by_userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildOrder[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
- * @method     ChildOrder[]|ObjectCollection findByOrderid(int $orderid) Return ChildOrder objects filtered by the orderid column
- * @method     ChildOrder[]|ObjectCollection findByEventTableid(int $event_tableid) Return ChildOrder objects filtered by the event_tableid column
- * @method     ChildOrder[]|ObjectCollection findByUserid(int $userid) Return ChildOrder objects filtered by the userid column
- * @method     ChildOrder[]|ObjectCollection findByOrdertime(string $ordertime) Return ChildOrder objects filtered by the ordertime column
- * @method     ChildOrder[]|ObjectCollection findByPriority(int $priority) Return ChildOrder objects filtered by the priority column
- * @method     ChildOrder[]|ObjectCollection findByDistributionFinished(string $distribution_finished) Return ChildOrder objects filtered by the distribution_finished column
- * @method     ChildOrder[]|ObjectCollection findByInvoiceFinished(string $invoice_finished) Return ChildOrder objects filtered by the invoice_finished column
- * @method     ChildOrder[]|ObjectCollection findByCancellation(string $cancellation) Return ChildOrder objects filtered by the cancellation column
- * @method     ChildOrder[]|ObjectCollection findByCancellationCreatedByUserid(int $cancellation_created_by_userid) Return ChildOrder objects filtered by the cancellation_created_by_userid column
- * @method     ChildOrder[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildOrder[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildOrder objects based on current ModelCriteria
+ * @method ChildOrder[]|ObjectCollection findByOrderid(int $orderid) Return ChildOrder objects filtered by the orderid column
+ * @method ChildOrder[]|ObjectCollection findByEventTableid(int $event_tableid) Return ChildOrder objects filtered by the event_tableid column
+ * @method ChildOrder[]|ObjectCollection findByUserid(int $userid) Return ChildOrder objects filtered by the userid column
+ * @method ChildOrder[]|ObjectCollection findByOrdertime(string $ordertime) Return ChildOrder objects filtered by the ordertime column
+ * @method ChildOrder[]|ObjectCollection findByPriority(int $priority) Return ChildOrder objects filtered by the priority column
+ * @method ChildOrder[]|ObjectCollection findByDistributionFinished(string $distribution_finished) Return ChildOrder objects filtered by the distribution_finished column
+ * @method ChildOrder[]|ObjectCollection findByInvoiceFinished(string $invoice_finished) Return ChildOrder objects filtered by the invoice_finished column
+ * @method ChildOrder[]|ObjectCollection findByCancellation(string $cancellation) Return ChildOrder objects filtered by the cancellation column
+ * @method ChildOrder[]|ObjectCollection findByCancellationCreatedByUserid(int $cancellation_created_by_userid) Return ChildOrder objects filtered by the cancellation_created_by_userid column
+ * @method ChildOrder[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class OrderQuery extends ModelCriteria
 {
@@ -149,9 +146,9 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Ordering\Base\OrderQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Ordering\\Order', $modelAlias = null)
     {
@@ -161,8 +158,8 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Returns a new ChildOrderQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildOrderQuery
      */
@@ -191,7 +188,7 @@ abstract class OrderQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildOrder|array|mixed the result, formatted by the current formatter
@@ -208,8 +205,7 @@ abstract class OrderQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -228,8 +224,8 @@ abstract class OrderQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -248,7 +244,9 @@ abstract class OrderQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildOrder $obj */
+            /**
+ * @var ChildOrder $obj
+*/
             $obj = new ChildOrder();
             $obj->hydrate($row);
             OrderTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -261,8 +259,8 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildOrder|array|mixed the result, formatted by the current formatter
      */
@@ -282,8 +280,9 @@ abstract class OrderQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -304,26 +303,24 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(OrderTableMap::COL_ORDERID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(OrderTableMap::COL_ORDERID, $keys, Criteria::IN);
     }
 
@@ -337,11 +334,14 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByOrderid(array('min' => 12)); // WHERE orderid > 12
      * </code>
      *
-     * @param     mixed $orderid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $orderid    The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -378,13 +378,16 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByEventTableid(array('min' => 12)); // WHERE event_tableid > 12
      * </code>
      *
-     * @see       filterByEventTable()
+     * @see filterByEventTable()
      *
-     * @param     mixed $eventTableid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $eventTableid The value to use as filter.
+     *                                 Use scalar values for
+     *                                 equality. Use array values
+     *                                 for in_array() equivalent.
+     *                                 Use associative array('min'
+     *                                 => $minValue, 'max' =>
+     *                                 $maxValue) for intervals.
+     * @param string $comparison   Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -421,13 +424,16 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByUserid(array('min' => 12)); // WHERE userid > 12
      * </code>
      *
-     * @see       filterByUserRelatedByUserid()
+     * @see filterByUserRelatedByUserid()
      *
-     * @param     mixed $userid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $userid     The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -464,13 +470,18 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByOrdertime(array('max' => 'yesterday')); // WHERE ordertime > '2011-03-13'
      * </code>
      *
-     * @param     mixed $ordertime The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $ordertime  The value to use as filter.
+     *                           Values can be integers
+     *                           (unix timestamps), DateTime
+     *                           objects, or strings. Empty
+     *                           strings are treated as
+     *                           NULL. Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -507,11 +518,14 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByPriority(array('min' => 12)); // WHERE priority > 12
      * </code>
      *
-     * @param     mixed $priority The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $priority   The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -548,13 +562,18 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByDistributionFinished(array('max' => 'yesterday')); // WHERE distribution_finished > '2011-03-13'
      * </code>
      *
-     * @param     mixed $distributionFinished The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $distributionFinished The value to use as filter.
+     *                                         Values can be integers
+     *                                         (unix timestamps), DateTime
+     *                                         objects, or strings. Empty
+     *                                         strings are treated as
+     *                                         NULL. Use scalar values for
+     *                                         equality. Use array values
+     *                                         for in_array() equivalent.
+     *                                         Use associative array('min'
+     *                                         => $minValue, 'max' =>
+     *                                         $maxValue) for intervals.
+     * @param string $comparison           Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -591,13 +610,18 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByInvoiceFinished(array('max' => 'yesterday')); // WHERE invoice_finished > '2011-03-13'
      * </code>
      *
-     * @param     mixed $invoiceFinished The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $invoiceFinished The value to use as filter.
+     *                                    Values can be integers
+     *                                    (unix timestamps), DateTime
+     *                                    objects, or strings. Empty
+     *                                    strings are treated as
+     *                                    NULL. Use scalar values for
+     *                                    equality. Use array values
+     *                                    for in_array() equivalent.
+     *                                    Use associative array('min'
+     *                                    => $minValue, 'max' =>
+     *                                    $maxValue) for intervals.
+     * @param string $comparison      Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -634,13 +658,18 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByCancellation(array('max' => 'yesterday')); // WHERE cancellation > '2011-03-13'
      * </code>
      *
-     * @param     mixed $cancellation The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $cancellation The value to use as filter.
+     *                                 Values can be integers
+     *                                 (unix timestamps), DateTime
+     *                                 objects, or strings. Empty
+     *                                 strings are treated as
+     *                                 NULL. Use scalar values for
+     *                                 equality. Use array values
+     *                                 for in_array() equivalent.
+     *                                 Use associative array('min'
+     *                                 => $minValue, 'max' =>
+     *                                 $maxValue) for intervals.
+     * @param string $comparison   Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -677,13 +706,16 @@ abstract class OrderQuery extends ModelCriteria
      * $query->filterByCancellationCreatedByUserid(array('min' => 12)); // WHERE cancellation_created_by_userid > 12
      * </code>
      *
-     * @see       filterByUserRelatedByCancellationCreatedByUserid()
+     * @see filterByUserRelatedByCancellationCreatedByUserid()
      *
-     * @param     mixed $cancellationCreatedByUserid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $cancellationCreatedByUserid The value to use as filter.
+     *                                                Use scalar values for
+     *                                                equality. Use array values
+     *                                                for in_array() equivalent.
+     *                                                Use associative array('min'
+     *                                                => $minValue, 'max' =>
+     *                                                $maxValue) for intervals.
+     * @param string $comparison                  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -713,8 +745,8 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\User\User object
      *
-     * @param \API\Models\User\User|ObjectCollection $user The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\User\User|ObjectCollection $user       The related object(s) to use as filter
+     * @param string                                 $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -740,8 +772,8 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the UserRelatedByCancellationCreatedByUserid relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -774,9 +806,9 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\User\UserQuery A secondary query class using the current class as primary query
      */
@@ -791,7 +823,7 @@ abstract class OrderQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Event\EventTable object
      *
      * @param \API\Models\Event\EventTable|ObjectCollection $eventTable The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                        $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -817,8 +849,8 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the EventTable relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -851,9 +883,9 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Event\EventTableQuery A secondary query class using the current class as primary query
      */
@@ -867,8 +899,8 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\User\User object
      *
-     * @param \API\Models\User\User|ObjectCollection $user The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\User\User|ObjectCollection $user       The related object(s) to use as filter
+     * @param string                                 $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -894,8 +926,8 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the UserRelatedByUserid relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -928,9 +960,9 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\User\UserQuery A secondary query class using the current class as primary query
      */
@@ -945,7 +977,7 @@ abstract class OrderQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Ordering\OrderDetail object
      *
      * @param \API\Models\Ordering\OrderDetail|ObjectCollection $orderDetail the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                            $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildOrderQuery The current query, for fluid interface
      */
@@ -967,8 +999,8 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the OrderDetail relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -1001,9 +1033,9 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Ordering\OrderDetailQuery A secondary query class using the current class as primary query
      */
@@ -1018,7 +1050,7 @@ abstract class OrderQuery extends ModelCriteria
      * Filter the query by a related \API\Models\OIP\OrderInProgress object
      *
      * @param \API\Models\OIP\OrderInProgress|ObjectCollection $orderInProgress the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                           $comparison      Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildOrderQuery The current query, for fluid interface
      */
@@ -1040,8 +1072,8 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the OrderInProgress relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -1074,9 +1106,9 @@ abstract class OrderQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\OIP\OrderInProgressQuery A secondary query class using the current class as primary query
      */
@@ -1090,7 +1122,7 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildOrder $order Object to remove from the list of results
+     * @param ChildOrder $order Object to remove from the list of results
      *
      * @return $this|ChildOrderQuery The current query, for fluid interface
      */
@@ -1106,7 +1138,7 @@ abstract class OrderQuery extends ModelCriteria
     /**
      * Deletes all rows from the order table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -1117,23 +1149,25 @@ abstract class OrderQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            OrderTableMap::clearInstancePool();
-            OrderTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                OrderTableMap::clearInstancePool();
+                OrderTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -1152,16 +1186,17 @@ abstract class OrderQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            OrderTableMap::removeInstanceFromPool($criteria);
+                OrderTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            OrderTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                OrderTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // OrderQuery

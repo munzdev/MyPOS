@@ -19,86 +19,83 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'invoice_item' table.
  *
+ * @method ChildInvoiceItemQuery orderByInvoiceItemid($order = Criteria::ASC) Order by the invoice_itemid column
+ * @method ChildInvoiceItemQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
+ * @method ChildInvoiceItemQuery orderByOrderDetailid($order = Criteria::ASC) Order by the order_detailid column
+ * @method ChildInvoiceItemQuery orderByAmount($order = Criteria::ASC) Order by the amount column
+ * @method ChildInvoiceItemQuery orderByPrice($order = Criteria::ASC) Order by the price column
+ * @method ChildInvoiceItemQuery orderByDescription($order = Criteria::ASC) Order by the description column
+ * @method ChildInvoiceItemQuery orderByTax($order = Criteria::ASC) Order by the tax column
  *
+ * @method ChildInvoiceItemQuery groupByInvoiceItemid() Group by the invoice_itemid column
+ * @method ChildInvoiceItemQuery groupByInvoiceid() Group by the invoiceid column
+ * @method ChildInvoiceItemQuery groupByOrderDetailid() Group by the order_detailid column
+ * @method ChildInvoiceItemQuery groupByAmount() Group by the amount column
+ * @method ChildInvoiceItemQuery groupByPrice() Group by the price column
+ * @method ChildInvoiceItemQuery groupByDescription() Group by the description column
+ * @method ChildInvoiceItemQuery groupByTax() Group by the tax column
  *
- * @method     ChildInvoiceItemQuery orderByInvoiceItemid($order = Criteria::ASC) Order by the invoice_itemid column
- * @method     ChildInvoiceItemQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
- * @method     ChildInvoiceItemQuery orderByOrderDetailid($order = Criteria::ASC) Order by the order_detailid column
- * @method     ChildInvoiceItemQuery orderByAmount($order = Criteria::ASC) Order by the amount column
- * @method     ChildInvoiceItemQuery orderByPrice($order = Criteria::ASC) Order by the price column
- * @method     ChildInvoiceItemQuery orderByDescription($order = Criteria::ASC) Order by the description column
- * @method     ChildInvoiceItemQuery orderByTax($order = Criteria::ASC) Order by the tax column
+ * @method ChildInvoiceItemQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildInvoiceItemQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildInvoiceItemQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildInvoiceItemQuery groupByInvoiceItemid() Group by the invoice_itemid column
- * @method     ChildInvoiceItemQuery groupByInvoiceid() Group by the invoiceid column
- * @method     ChildInvoiceItemQuery groupByOrderDetailid() Group by the order_detailid column
- * @method     ChildInvoiceItemQuery groupByAmount() Group by the amount column
- * @method     ChildInvoiceItemQuery groupByPrice() Group by the price column
- * @method     ChildInvoiceItemQuery groupByDescription() Group by the description column
- * @method     ChildInvoiceItemQuery groupByTax() Group by the tax column
+ * @method ChildInvoiceItemQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildInvoiceItemQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildInvoiceItemQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildInvoiceItemQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildInvoiceItemQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildInvoiceItemQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildInvoiceItemQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
+ * @method ChildInvoiceItemQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
+ * @method ChildInvoiceItemQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
  *
- * @method     ChildInvoiceItemQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildInvoiceItemQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildInvoiceItemQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildInvoiceItemQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
  *
- * @method     ChildInvoiceItemQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
- * @method     ChildInvoiceItemQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
- * @method     ChildInvoiceItemQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
+ * @method ChildInvoiceItemQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
+ * @method ChildInvoiceItemQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
+ * @method ChildInvoiceItemQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
  *
- * @method     ChildInvoiceItemQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
+ * @method ChildInvoiceItemQuery leftJoinOrderDetail($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderDetail relation
+ * @method ChildInvoiceItemQuery rightJoinOrderDetail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderDetail relation
+ * @method ChildInvoiceItemQuery innerJoinOrderDetail($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderDetail relation
  *
- * @method     ChildInvoiceItemQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
- * @method     ChildInvoiceItemQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
- * @method     ChildInvoiceItemQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
+ * @method ChildInvoiceItemQuery joinWithOrderDetail($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderDetail relation
  *
- * @method     ChildInvoiceItemQuery leftJoinOrderDetail($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderDetail relation
- * @method     ChildInvoiceItemQuery rightJoinOrderDetail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderDetail relation
- * @method     ChildInvoiceItemQuery innerJoinOrderDetail($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderDetail relation
+ * @method ChildInvoiceItemQuery leftJoinWithOrderDetail() Adds a LEFT JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildInvoiceItemQuery rightJoinWithOrderDetail() Adds a RIGHT JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildInvoiceItemQuery innerJoinWithOrderDetail() Adds a INNER JOIN clause and with to the query using the OrderDetail relation
  *
- * @method     ChildInvoiceItemQuery joinWithOrderDetail($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderDetail relation
+ * @method \API\Models\Invoice\InvoiceQuery|\API\Models\Ordering\OrderDetailQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildInvoiceItemQuery leftJoinWithOrderDetail() Adds a LEFT JOIN clause and with to the query using the OrderDetail relation
- * @method     ChildInvoiceItemQuery rightJoinWithOrderDetail() Adds a RIGHT JOIN clause and with to the query using the OrderDetail relation
- * @method     ChildInvoiceItemQuery innerJoinWithOrderDetail() Adds a INNER JOIN clause and with to the query using the OrderDetail relation
+ * @method ChildInvoiceItem findOne(ConnectionInterface $con = null) Return the first ChildInvoiceItem matching the query
+ * @method ChildInvoiceItem findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoiceItem matching the query, or a new ChildInvoiceItem object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Invoice\InvoiceQuery|\API\Models\Ordering\OrderDetailQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildInvoiceItem findOne(ConnectionInterface $con = null) Return the first ChildInvoiceItem matching the query
- * @method     ChildInvoiceItem findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoiceItem matching the query, or a new ChildInvoiceItem object populated from the query conditions when no match is found
- *
- * @method     ChildInvoiceItem findOneByInvoiceItemid(int $invoice_itemid) Return the first ChildInvoiceItem filtered by the invoice_itemid column
- * @method     ChildInvoiceItem findOneByInvoiceid(int $invoiceid) Return the first ChildInvoiceItem filtered by the invoiceid column
- * @method     ChildInvoiceItem findOneByOrderDetailid(int $order_detailid) Return the first ChildInvoiceItem filtered by the order_detailid column
- * @method     ChildInvoiceItem findOneByAmount(int $amount) Return the first ChildInvoiceItem filtered by the amount column
- * @method     ChildInvoiceItem findOneByPrice(string $price) Return the first ChildInvoiceItem filtered by the price column
- * @method     ChildInvoiceItem findOneByDescription(string $description) Return the first ChildInvoiceItem filtered by the description column
- * @method     ChildInvoiceItem findOneByTax(int $tax) Return the first ChildInvoiceItem filtered by the tax column *
+ * @method ChildInvoiceItem findOneByInvoiceItemid(int $invoice_itemid) Return the first ChildInvoiceItem filtered by the invoice_itemid column
+ * @method ChildInvoiceItem findOneByInvoiceid(int $invoiceid) Return the first ChildInvoiceItem filtered by the invoiceid column
+ * @method ChildInvoiceItem findOneByOrderDetailid(int $order_detailid) Return the first ChildInvoiceItem filtered by the order_detailid column
+ * @method ChildInvoiceItem findOneByAmount(int $amount) Return the first ChildInvoiceItem filtered by the amount column
+ * @method ChildInvoiceItem findOneByPrice(string $price) Return the first ChildInvoiceItem filtered by the price column
+ * @method ChildInvoiceItem findOneByDescription(string $description) Return the first ChildInvoiceItem filtered by the description column
+ * @method ChildInvoiceItem findOneByTax(int $tax) Return the first ChildInvoiceItem filtered by the tax column *
 
- * @method     ChildInvoiceItem requirePk($key, ConnectionInterface $con = null) Return the ChildInvoiceItem by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceItem requireOne(ConnectionInterface $con = null) Return the first ChildInvoiceItem matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceItem requirePk($key, ConnectionInterface $con = null) Return the ChildInvoiceItem by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceItem requireOne(ConnectionInterface $con = null) Return the first ChildInvoiceItem matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildInvoiceItem requireOneByInvoiceItemid(int $invoice_itemid) Return the first ChildInvoiceItem filtered by the invoice_itemid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceItem requireOneByInvoiceid(int $invoiceid) Return the first ChildInvoiceItem filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceItem requireOneByOrderDetailid(int $order_detailid) Return the first ChildInvoiceItem filtered by the order_detailid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceItem requireOneByAmount(int $amount) Return the first ChildInvoiceItem filtered by the amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceItem requireOneByPrice(string $price) Return the first ChildInvoiceItem filtered by the price column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceItem requireOneByDescription(string $description) Return the first ChildInvoiceItem filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceItem requireOneByTax(int $tax) Return the first ChildInvoiceItem filtered by the tax column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceItem requireOneByInvoiceItemid(int $invoice_itemid) Return the first ChildInvoiceItem filtered by the invoice_itemid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceItem requireOneByInvoiceid(int $invoiceid) Return the first ChildInvoiceItem filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceItem requireOneByOrderDetailid(int $order_detailid) Return the first ChildInvoiceItem filtered by the order_detailid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceItem requireOneByAmount(int $amount) Return the first ChildInvoiceItem filtered by the amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceItem requireOneByPrice(string $price) Return the first ChildInvoiceItem filtered by the price column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceItem requireOneByDescription(string $description) Return the first ChildInvoiceItem filtered by the description column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceItem requireOneByTax(int $tax) Return the first ChildInvoiceItem filtered by the tax column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildInvoiceItem[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoiceItem objects based on current ModelCriteria
- * @method     ChildInvoiceItem[]|ObjectCollection findByInvoiceItemid(int $invoice_itemid) Return ChildInvoiceItem objects filtered by the invoice_itemid column
- * @method     ChildInvoiceItem[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildInvoiceItem objects filtered by the invoiceid column
- * @method     ChildInvoiceItem[]|ObjectCollection findByOrderDetailid(int $order_detailid) Return ChildInvoiceItem objects filtered by the order_detailid column
- * @method     ChildInvoiceItem[]|ObjectCollection findByAmount(int $amount) Return ChildInvoiceItem objects filtered by the amount column
- * @method     ChildInvoiceItem[]|ObjectCollection findByPrice(string $price) Return ChildInvoiceItem objects filtered by the price column
- * @method     ChildInvoiceItem[]|ObjectCollection findByDescription(string $description) Return ChildInvoiceItem objects filtered by the description column
- * @method     ChildInvoiceItem[]|ObjectCollection findByTax(int $tax) Return ChildInvoiceItem objects filtered by the tax column
- * @method     ChildInvoiceItem[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildInvoiceItem[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoiceItem objects based on current ModelCriteria
+ * @method ChildInvoiceItem[]|ObjectCollection findByInvoiceItemid(int $invoice_itemid) Return ChildInvoiceItem objects filtered by the invoice_itemid column
+ * @method ChildInvoiceItem[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildInvoiceItem objects filtered by the invoiceid column
+ * @method ChildInvoiceItem[]|ObjectCollection findByOrderDetailid(int $order_detailid) Return ChildInvoiceItem objects filtered by the order_detailid column
+ * @method ChildInvoiceItem[]|ObjectCollection findByAmount(int $amount) Return ChildInvoiceItem objects filtered by the amount column
+ * @method ChildInvoiceItem[]|ObjectCollection findByPrice(string $price) Return ChildInvoiceItem objects filtered by the price column
+ * @method ChildInvoiceItem[]|ObjectCollection findByDescription(string $description) Return ChildInvoiceItem objects filtered by the description column
+ * @method ChildInvoiceItem[]|ObjectCollection findByTax(int $tax) Return ChildInvoiceItem objects filtered by the tax column
+ * @method ChildInvoiceItem[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class InvoiceItemQuery extends ModelCriteria
 {
@@ -107,9 +104,9 @@ abstract class InvoiceItemQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Invoice\Base\InvoiceItemQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Invoice\\InvoiceItem', $modelAlias = null)
     {
@@ -119,8 +116,8 @@ abstract class InvoiceItemQuery extends ModelCriteria
     /**
      * Returns a new ChildInvoiceItemQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildInvoiceItemQuery
      */
@@ -149,7 +146,7 @@ abstract class InvoiceItemQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildInvoiceItem|array|mixed the result, formatted by the current formatter
@@ -166,8 +163,7 @@ abstract class InvoiceItemQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -186,8 +182,8 @@ abstract class InvoiceItemQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -206,7 +202,9 @@ abstract class InvoiceItemQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildInvoiceItem $obj */
+            /**
+ * @var ChildInvoiceItem $obj
+*/
             $obj = new ChildInvoiceItem();
             $obj->hydrate($row);
             InvoiceItemTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -219,8 +217,8 @@ abstract class InvoiceItemQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildInvoiceItem|array|mixed the result, formatted by the current formatter
      */
@@ -240,8 +238,9 @@ abstract class InvoiceItemQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -262,26 +261,24 @@ abstract class InvoiceItemQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildInvoiceItemQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(InvoiceItemTableMap::COL_INVOICE_ITEMID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildInvoiceItemQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(InvoiceItemTableMap::COL_INVOICE_ITEMID, $keys, Criteria::IN);
     }
 
@@ -295,11 +292,14 @@ abstract class InvoiceItemQuery extends ModelCriteria
      * $query->filterByInvoiceItemid(array('min' => 12)); // WHERE invoice_itemid > 12
      * </code>
      *
-     * @param     mixed $invoiceItemid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $invoiceItemid The value to use as filter.
+     *                                  Use scalar values for
+     *                                  equality. Use array values
+     *                                  for in_array() equivalent.
+     *                                  Use associative array('min'
+     *                                  => $minValue, 'max' =>
+     *                                  $maxValue) for intervals.
+     * @param string $comparison    Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceItemQuery The current query, for fluid interface
      */
@@ -336,13 +336,16 @@ abstract class InvoiceItemQuery extends ModelCriteria
      * $query->filterByInvoiceid(array('min' => 12)); // WHERE invoiceid > 12
      * </code>
      *
-     * @see       filterByInvoice()
+     * @see filterByInvoice()
      *
-     * @param     mixed $invoiceid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $invoiceid  The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceItemQuery The current query, for fluid interface
      */
@@ -379,13 +382,16 @@ abstract class InvoiceItemQuery extends ModelCriteria
      * $query->filterByOrderDetailid(array('min' => 12)); // WHERE order_detailid > 12
      * </code>
      *
-     * @see       filterByOrderDetail()
+     * @see filterByOrderDetail()
      *
-     * @param     mixed $orderDetailid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $orderDetailid The value to use as filter.
+     *                                  Use scalar values for
+     *                                  equality. Use array values
+     *                                  for in_array() equivalent.
+     *                                  Use associative array('min'
+     *                                  => $minValue, 'max' =>
+     *                                  $maxValue) for intervals.
+     * @param string $comparison    Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceItemQuery The current query, for fluid interface
      */
@@ -422,11 +428,14 @@ abstract class InvoiceItemQuery extends ModelCriteria
      * $query->filterByAmount(array('min' => 12)); // WHERE amount > 12
      * </code>
      *
-     * @param     mixed $amount The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $amount     The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceItemQuery The current query, for fluid interface
      */
@@ -463,11 +472,14 @@ abstract class InvoiceItemQuery extends ModelCriteria
      * $query->filterByPrice(array('min' => 12)); // WHERE price > 12
      * </code>
      *
-     * @param     mixed $price The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $price      The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceItemQuery The current query, for fluid interface
      */
@@ -503,8 +515,8 @@ abstract class InvoiceItemQuery extends ModelCriteria
      * $query->filterByDescription('%fooValue%', Criteria::LIKE); // WHERE description LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $description The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $description The value to use as filter.
+     * @param string $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceItemQuery The current query, for fluid interface
      */
@@ -529,11 +541,14 @@ abstract class InvoiceItemQuery extends ModelCriteria
      * $query->filterByTax(array('min' => 12)); // WHERE tax > 12
      * </code>
      *
-     * @param     mixed $tax The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $tax        The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceItemQuery The current query, for fluid interface
      */
@@ -563,8 +578,8 @@ abstract class InvoiceItemQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Invoice\Invoice object
      *
-     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice    The related object(s) to use as filter
+     * @param string                                       $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -590,8 +605,8 @@ abstract class InvoiceItemQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Invoice relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceItemQuery The current query, for fluid interface
      */
@@ -624,9 +639,9 @@ abstract class InvoiceItemQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Invoice\InvoiceQuery A secondary query class using the current class as primary query
      */
@@ -641,7 +656,7 @@ abstract class InvoiceItemQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Ordering\OrderDetail object
      *
      * @param \API\Models\Ordering\OrderDetail|ObjectCollection $orderDetail The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                            $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -667,8 +682,8 @@ abstract class InvoiceItemQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the OrderDetail relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceItemQuery The current query, for fluid interface
      */
@@ -701,9 +716,9 @@ abstract class InvoiceItemQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Ordering\OrderDetailQuery A secondary query class using the current class as primary query
      */
@@ -717,7 +732,7 @@ abstract class InvoiceItemQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildInvoiceItem $invoiceItem Object to remove from the list of results
+     * @param ChildInvoiceItem $invoiceItem Object to remove from the list of results
      *
      * @return $this|ChildInvoiceItemQuery The current query, for fluid interface
      */
@@ -733,7 +748,7 @@ abstract class InvoiceItemQuery extends ModelCriteria
     /**
      * Deletes all rows from the invoice_item table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -744,23 +759,25 @@ abstract class InvoiceItemQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            InvoiceItemTableMap::clearInstancePool();
-            InvoiceItemTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                InvoiceItemTableMap::clearInstancePool();
+                InvoiceItemTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -779,16 +796,17 @@ abstract class InvoiceItemQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            InvoiceItemTableMap::removeInstanceFromPool($criteria);
+                InvoiceItemTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            InvoiceItemTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                InvoiceItemTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // InvoiceItemQuery

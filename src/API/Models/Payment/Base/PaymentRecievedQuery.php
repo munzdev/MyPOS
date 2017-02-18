@@ -20,101 +20,98 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'payment_recieved' table.
  *
+ * @method ChildPaymentRecievedQuery orderByPaymentRecievedid($order = Criteria::ASC) Order by the payment_recievedid column
+ * @method ChildPaymentRecievedQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
+ * @method ChildPaymentRecievedQuery orderByPaymentTypeid($order = Criteria::ASC) Order by the payment_typeid column
+ * @method ChildPaymentRecievedQuery orderByUserid($order = Criteria::ASC) Order by the userid column
+ * @method ChildPaymentRecievedQuery orderByDate($order = Criteria::ASC) Order by the date column
+ * @method ChildPaymentRecievedQuery orderByAmount($order = Criteria::ASC) Order by the amount column
  *
+ * @method ChildPaymentRecievedQuery groupByPaymentRecievedid() Group by the payment_recievedid column
+ * @method ChildPaymentRecievedQuery groupByInvoiceid() Group by the invoiceid column
+ * @method ChildPaymentRecievedQuery groupByPaymentTypeid() Group by the payment_typeid column
+ * @method ChildPaymentRecievedQuery groupByUserid() Group by the userid column
+ * @method ChildPaymentRecievedQuery groupByDate() Group by the date column
+ * @method ChildPaymentRecievedQuery groupByAmount() Group by the amount column
  *
- * @method     ChildPaymentRecievedQuery orderByPaymentRecievedid($order = Criteria::ASC) Order by the payment_recievedid column
- * @method     ChildPaymentRecievedQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
- * @method     ChildPaymentRecievedQuery orderByPaymentTypeid($order = Criteria::ASC) Order by the payment_typeid column
- * @method     ChildPaymentRecievedQuery orderByUserid($order = Criteria::ASC) Order by the userid column
- * @method     ChildPaymentRecievedQuery orderByDate($order = Criteria::ASC) Order by the date column
- * @method     ChildPaymentRecievedQuery orderByAmount($order = Criteria::ASC) Order by the amount column
+ * @method ChildPaymentRecievedQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildPaymentRecievedQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildPaymentRecievedQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildPaymentRecievedQuery groupByPaymentRecievedid() Group by the payment_recievedid column
- * @method     ChildPaymentRecievedQuery groupByInvoiceid() Group by the invoiceid column
- * @method     ChildPaymentRecievedQuery groupByPaymentTypeid() Group by the payment_typeid column
- * @method     ChildPaymentRecievedQuery groupByUserid() Group by the userid column
- * @method     ChildPaymentRecievedQuery groupByDate() Group by the date column
- * @method     ChildPaymentRecievedQuery groupByAmount() Group by the amount column
+ * @method ChildPaymentRecievedQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildPaymentRecievedQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildPaymentRecievedQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildPaymentRecievedQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildPaymentRecievedQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildPaymentRecievedQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildPaymentRecievedQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
+ * @method ChildPaymentRecievedQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
+ * @method ChildPaymentRecievedQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
  *
- * @method     ChildPaymentRecievedQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildPaymentRecievedQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildPaymentRecievedQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildPaymentRecievedQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
  *
- * @method     ChildPaymentRecievedQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
- * @method     ChildPaymentRecievedQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
- * @method     ChildPaymentRecievedQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
+ * @method ChildPaymentRecievedQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
+ * @method ChildPaymentRecievedQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
+ * @method ChildPaymentRecievedQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
  *
- * @method     ChildPaymentRecievedQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
+ * @method ChildPaymentRecievedQuery leftJoinPaymentType($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentType relation
+ * @method ChildPaymentRecievedQuery rightJoinPaymentType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentType relation
+ * @method ChildPaymentRecievedQuery innerJoinPaymentType($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentType relation
  *
- * @method     ChildPaymentRecievedQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
- * @method     ChildPaymentRecievedQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
- * @method     ChildPaymentRecievedQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
+ * @method ChildPaymentRecievedQuery joinWithPaymentType($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentType relation
  *
- * @method     ChildPaymentRecievedQuery leftJoinPaymentType($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentType relation
- * @method     ChildPaymentRecievedQuery rightJoinPaymentType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentType relation
- * @method     ChildPaymentRecievedQuery innerJoinPaymentType($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentType relation
+ * @method ChildPaymentRecievedQuery leftJoinWithPaymentType() Adds a LEFT JOIN clause and with to the query using the PaymentType relation
+ * @method ChildPaymentRecievedQuery rightJoinWithPaymentType() Adds a RIGHT JOIN clause and with to the query using the PaymentType relation
+ * @method ChildPaymentRecievedQuery innerJoinWithPaymentType() Adds a INNER JOIN clause and with to the query using the PaymentType relation
  *
- * @method     ChildPaymentRecievedQuery joinWithPaymentType($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentType relation
+ * @method ChildPaymentRecievedQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
+ * @method ChildPaymentRecievedQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
+ * @method ChildPaymentRecievedQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
  *
- * @method     ChildPaymentRecievedQuery leftJoinWithPaymentType() Adds a LEFT JOIN clause and with to the query using the PaymentType relation
- * @method     ChildPaymentRecievedQuery rightJoinWithPaymentType() Adds a RIGHT JOIN clause and with to the query using the PaymentType relation
- * @method     ChildPaymentRecievedQuery innerJoinWithPaymentType() Adds a INNER JOIN clause and with to the query using the PaymentType relation
+ * @method ChildPaymentRecievedQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
  *
- * @method     ChildPaymentRecievedQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
- * @method     ChildPaymentRecievedQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
- * @method     ChildPaymentRecievedQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
+ * @method ChildPaymentRecievedQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
+ * @method ChildPaymentRecievedQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
+ * @method ChildPaymentRecievedQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     ChildPaymentRecievedQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
+ * @method ChildPaymentRecievedQuery leftJoinPaymentCoupon($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentCoupon relation
+ * @method ChildPaymentRecievedQuery rightJoinPaymentCoupon($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentCoupon relation
+ * @method ChildPaymentRecievedQuery innerJoinPaymentCoupon($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentCoupon relation
  *
- * @method     ChildPaymentRecievedQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
- * @method     ChildPaymentRecievedQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
- * @method     ChildPaymentRecievedQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
+ * @method ChildPaymentRecievedQuery joinWithPaymentCoupon($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentCoupon relation
  *
- * @method     ChildPaymentRecievedQuery leftJoinPaymentCoupon($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentCoupon relation
- * @method     ChildPaymentRecievedQuery rightJoinPaymentCoupon($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentCoupon relation
- * @method     ChildPaymentRecievedQuery innerJoinPaymentCoupon($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentCoupon relation
+ * @method ChildPaymentRecievedQuery leftJoinWithPaymentCoupon() Adds a LEFT JOIN clause and with to the query using the PaymentCoupon relation
+ * @method ChildPaymentRecievedQuery rightJoinWithPaymentCoupon() Adds a RIGHT JOIN clause and with to the query using the PaymentCoupon relation
+ * @method ChildPaymentRecievedQuery innerJoinWithPaymentCoupon() Adds a INNER JOIN clause and with to the query using the PaymentCoupon relation
  *
- * @method     ChildPaymentRecievedQuery joinWithPaymentCoupon($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentCoupon relation
+ * @method \API\Models\Invoice\InvoiceQuery|\API\Models\Payment\PaymentTypeQuery|\API\Models\User\UserQuery|\API\Models\Payment\PaymentCouponQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildPaymentRecievedQuery leftJoinWithPaymentCoupon() Adds a LEFT JOIN clause and with to the query using the PaymentCoupon relation
- * @method     ChildPaymentRecievedQuery rightJoinWithPaymentCoupon() Adds a RIGHT JOIN clause and with to the query using the PaymentCoupon relation
- * @method     ChildPaymentRecievedQuery innerJoinWithPaymentCoupon() Adds a INNER JOIN clause and with to the query using the PaymentCoupon relation
+ * @method ChildPaymentRecieved findOne(ConnectionInterface $con = null) Return the first ChildPaymentRecieved matching the query
+ * @method ChildPaymentRecieved findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPaymentRecieved matching the query, or a new ChildPaymentRecieved object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Invoice\InvoiceQuery|\API\Models\Payment\PaymentTypeQuery|\API\Models\User\UserQuery|\API\Models\Payment\PaymentCouponQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildPaymentRecieved findOne(ConnectionInterface $con = null) Return the first ChildPaymentRecieved matching the query
- * @method     ChildPaymentRecieved findOneOrCreate(ConnectionInterface $con = null) Return the first ChildPaymentRecieved matching the query, or a new ChildPaymentRecieved object populated from the query conditions when no match is found
- *
- * @method     ChildPaymentRecieved findOneByPaymentRecievedid(int $payment_recievedid) Return the first ChildPaymentRecieved filtered by the payment_recievedid column
- * @method     ChildPaymentRecieved findOneByInvoiceid(int $invoiceid) Return the first ChildPaymentRecieved filtered by the invoiceid column
- * @method     ChildPaymentRecieved findOneByPaymentTypeid(int $payment_typeid) Return the first ChildPaymentRecieved filtered by the payment_typeid column
- * @method     ChildPaymentRecieved findOneByUserid(int $userid) Return the first ChildPaymentRecieved filtered by the userid column
- * @method     ChildPaymentRecieved findOneByDate(string $date) Return the first ChildPaymentRecieved filtered by the date column
- * @method     ChildPaymentRecieved findOneByAmount(string $amount) Return the first ChildPaymentRecieved filtered by the amount column *
+ * @method ChildPaymentRecieved findOneByPaymentRecievedid(int $payment_recievedid) Return the first ChildPaymentRecieved filtered by the payment_recievedid column
+ * @method ChildPaymentRecieved findOneByInvoiceid(int $invoiceid) Return the first ChildPaymentRecieved filtered by the invoiceid column
+ * @method ChildPaymentRecieved findOneByPaymentTypeid(int $payment_typeid) Return the first ChildPaymentRecieved filtered by the payment_typeid column
+ * @method ChildPaymentRecieved findOneByUserid(int $userid) Return the first ChildPaymentRecieved filtered by the userid column
+ * @method ChildPaymentRecieved findOneByDate(string $date) Return the first ChildPaymentRecieved filtered by the date column
+ * @method ChildPaymentRecieved findOneByAmount(string $amount) Return the first ChildPaymentRecieved filtered by the amount column *
 
- * @method     ChildPaymentRecieved requirePk($key, ConnectionInterface $con = null) Return the ChildPaymentRecieved by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPaymentRecieved requireOne(ConnectionInterface $con = null) Return the first ChildPaymentRecieved matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildPaymentRecieved requirePk($key, ConnectionInterface $con = null) Return the ChildPaymentRecieved by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildPaymentRecieved requireOne(ConnectionInterface $con = null) Return the first ChildPaymentRecieved matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPaymentRecieved requireOneByPaymentRecievedid(int $payment_recievedid) Return the first ChildPaymentRecieved filtered by the payment_recievedid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPaymentRecieved requireOneByInvoiceid(int $invoiceid) Return the first ChildPaymentRecieved filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPaymentRecieved requireOneByPaymentTypeid(int $payment_typeid) Return the first ChildPaymentRecieved filtered by the payment_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPaymentRecieved requireOneByUserid(int $userid) Return the first ChildPaymentRecieved filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPaymentRecieved requireOneByDate(string $date) Return the first ChildPaymentRecieved filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildPaymentRecieved requireOneByAmount(string $amount) Return the first ChildPaymentRecieved filtered by the amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildPaymentRecieved requireOneByPaymentRecievedid(int $payment_recievedid) Return the first ChildPaymentRecieved filtered by the payment_recievedid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildPaymentRecieved requireOneByInvoiceid(int $invoiceid) Return the first ChildPaymentRecieved filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildPaymentRecieved requireOneByPaymentTypeid(int $payment_typeid) Return the first ChildPaymentRecieved filtered by the payment_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildPaymentRecieved requireOneByUserid(int $userid) Return the first ChildPaymentRecieved filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildPaymentRecieved requireOneByDate(string $date) Return the first ChildPaymentRecieved filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildPaymentRecieved requireOneByAmount(string $amount) Return the first ChildPaymentRecieved filtered by the amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildPaymentRecieved[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPaymentRecieved objects based on current ModelCriteria
- * @method     ChildPaymentRecieved[]|ObjectCollection findByPaymentRecievedid(int $payment_recievedid) Return ChildPaymentRecieved objects filtered by the payment_recievedid column
- * @method     ChildPaymentRecieved[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildPaymentRecieved objects filtered by the invoiceid column
- * @method     ChildPaymentRecieved[]|ObjectCollection findByPaymentTypeid(int $payment_typeid) Return ChildPaymentRecieved objects filtered by the payment_typeid column
- * @method     ChildPaymentRecieved[]|ObjectCollection findByUserid(int $userid) Return ChildPaymentRecieved objects filtered by the userid column
- * @method     ChildPaymentRecieved[]|ObjectCollection findByDate(string $date) Return ChildPaymentRecieved objects filtered by the date column
- * @method     ChildPaymentRecieved[]|ObjectCollection findByAmount(string $amount) Return ChildPaymentRecieved objects filtered by the amount column
- * @method     ChildPaymentRecieved[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildPaymentRecieved[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildPaymentRecieved objects based on current ModelCriteria
+ * @method ChildPaymentRecieved[]|ObjectCollection findByPaymentRecievedid(int $payment_recievedid) Return ChildPaymentRecieved objects filtered by the payment_recievedid column
+ * @method ChildPaymentRecieved[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildPaymentRecieved objects filtered by the invoiceid column
+ * @method ChildPaymentRecieved[]|ObjectCollection findByPaymentTypeid(int $payment_typeid) Return ChildPaymentRecieved objects filtered by the payment_typeid column
+ * @method ChildPaymentRecieved[]|ObjectCollection findByUserid(int $userid) Return ChildPaymentRecieved objects filtered by the userid column
+ * @method ChildPaymentRecieved[]|ObjectCollection findByDate(string $date) Return ChildPaymentRecieved objects filtered by the date column
+ * @method ChildPaymentRecieved[]|ObjectCollection findByAmount(string $amount) Return ChildPaymentRecieved objects filtered by the amount column
+ * @method ChildPaymentRecieved[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class PaymentRecievedQuery extends ModelCriteria
 {
@@ -123,9 +120,9 @@ abstract class PaymentRecievedQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Payment\Base\PaymentRecievedQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Payment\\PaymentRecieved', $modelAlias = null)
     {
@@ -135,8 +132,8 @@ abstract class PaymentRecievedQuery extends ModelCriteria
     /**
      * Returns a new ChildPaymentRecievedQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildPaymentRecievedQuery
      */
@@ -165,7 +162,7 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildPaymentRecieved|array|mixed the result, formatted by the current formatter
@@ -182,8 +179,7 @@ abstract class PaymentRecievedQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -202,8 +198,8 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -222,7 +218,9 @@ abstract class PaymentRecievedQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildPaymentRecieved $obj */
+            /**
+ * @var ChildPaymentRecieved $obj
+*/
             $obj = new ChildPaymentRecieved();
             $obj->hydrate($row);
             PaymentRecievedTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -235,8 +233,8 @@ abstract class PaymentRecievedQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildPaymentRecieved|array|mixed the result, formatted by the current formatter
      */
@@ -256,8 +254,9 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -278,26 +277,24 @@ abstract class PaymentRecievedQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID, $keys, Criteria::IN);
     }
 
@@ -311,11 +308,14 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      * $query->filterByPaymentRecievedid(array('min' => 12)); // WHERE payment_recievedid > 12
      * </code>
      *
-     * @param     mixed $paymentRecievedid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $paymentRecievedid The value to use as filter.
+     *                                      Use scalar values for
+     *                                      equality. Use array values
+     *                                      for in_array() equivalent.
+     *                                      Use associative array('min'
+     *                                      => $minValue, 'max' =>
+     *                                      $maxValue) for intervals.
+     * @param string $comparison        Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
@@ -352,13 +352,16 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      * $query->filterByInvoiceid(array('min' => 12)); // WHERE invoiceid > 12
      * </code>
      *
-     * @see       filterByInvoice()
+     * @see filterByInvoice()
      *
-     * @param     mixed $invoiceid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $invoiceid  The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
@@ -395,13 +398,16 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      * $query->filterByPaymentTypeid(array('min' => 12)); // WHERE payment_typeid > 12
      * </code>
      *
-     * @see       filterByPaymentType()
+     * @see filterByPaymentType()
      *
-     * @param     mixed $paymentTypeid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $paymentTypeid The value to use as filter.
+     *                                  Use scalar values for
+     *                                  equality. Use array values
+     *                                  for in_array() equivalent.
+     *                                  Use associative array('min'
+     *                                  => $minValue, 'max' =>
+     *                                  $maxValue) for intervals.
+     * @param string $comparison    Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
@@ -438,13 +444,16 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      * $query->filterByUserid(array('min' => 12)); // WHERE userid > 12
      * </code>
      *
-     * @see       filterByUser()
+     * @see filterByUser()
      *
-     * @param     mixed $userid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $userid     The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
@@ -481,13 +490,18 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      * $query->filterByDate(array('max' => 'yesterday')); // WHERE date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $date The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $date       The value to use as filter.
+     *                           Values can be integers
+     *                           (unix timestamps), DateTime
+     *                           objects, or strings. Empty
+     *                           strings are treated as
+     *                           NULL. Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
@@ -524,11 +538,14 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      * $query->filterByAmount(array('min' => 12)); // WHERE amount > 12
      * </code>
      *
-     * @param     mixed $amount The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $amount     The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
@@ -558,8 +575,8 @@ abstract class PaymentRecievedQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Invoice\Invoice object
      *
-     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice    The related object(s) to use as filter
+     * @param string                                       $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -585,8 +602,8 @@ abstract class PaymentRecievedQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Invoice relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
@@ -619,9 +636,9 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Invoice\InvoiceQuery A secondary query class using the current class as primary query
      */
@@ -636,7 +653,7 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Payment\PaymentType object
      *
      * @param \API\Models\Payment\PaymentType|ObjectCollection $paymentType The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                           $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -662,8 +679,8 @@ abstract class PaymentRecievedQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the PaymentType relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
@@ -696,9 +713,9 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Payment\PaymentTypeQuery A secondary query class using the current class as primary query
      */
@@ -712,8 +729,8 @@ abstract class PaymentRecievedQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\User\User object
      *
-     * @param \API\Models\User\User|ObjectCollection $user The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\User\User|ObjectCollection $user       The related object(s) to use as filter
+     * @param string                                 $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -739,8 +756,8 @@ abstract class PaymentRecievedQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the User relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
@@ -773,9 +790,9 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\User\UserQuery A secondary query class using the current class as primary query
      */
@@ -790,7 +807,7 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Payment\PaymentCoupon object
      *
      * @param \API\Models\Payment\PaymentCoupon|ObjectCollection $paymentCoupon the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                             $comparison    Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildPaymentRecievedQuery The current query, for fluid interface
      */
@@ -812,8 +829,8 @@ abstract class PaymentRecievedQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the PaymentCoupon relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
@@ -846,9 +863,9 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Payment\PaymentCouponQuery A secondary query class using the current class as primary query
      */
@@ -863,7 +880,7 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      * Filter the query by a related Coupon object
      * using the payment_coupon table as cross reference
      *
-     * @param Coupon $coupon the related object to use as filter
+     * @param Coupon $coupon     the related object to use as filter
      * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildPaymentRecievedQuery The current query, for fluid interface
@@ -879,7 +896,7 @@ abstract class PaymentRecievedQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildPaymentRecieved $paymentRecieved Object to remove from the list of results
+     * @param ChildPaymentRecieved $paymentRecieved Object to remove from the list of results
      *
      * @return $this|ChildPaymentRecievedQuery The current query, for fluid interface
      */
@@ -895,7 +912,7 @@ abstract class PaymentRecievedQuery extends ModelCriteria
     /**
      * Deletes all rows from the payment_recieved table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -906,23 +923,25 @@ abstract class PaymentRecievedQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            PaymentRecievedTableMap::clearInstancePool();
-            PaymentRecievedTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                PaymentRecievedTableMap::clearInstancePool();
+                PaymentRecievedTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -941,16 +960,17 @@ abstract class PaymentRecievedQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            PaymentRecievedTableMap::removeInstanceFromPool($criteria);
+                PaymentRecievedTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            PaymentRecievedTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                PaymentRecievedTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // PaymentRecievedQuery

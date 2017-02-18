@@ -17,69 +17,74 @@ use const API\USER_ROLE_INVOICE_CANCEL;
 
 class InvoiceModify extends SecurityController
 {
-    public function __construct(App $o_app) {
-        parent::__construct($o_app);
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
 
-        $this->a_security = ['PATCH' => USER_ROLE_INVOICE_CANCEL];
+        $this->security = ['PATCH' => USER_ROLE_INVOICE_CANCEL];
 
-        $o_app->getContainer()['db'];
+        $app->getContainer()['db'];
     }
 
-    protected function ANY() : void {
-        $a_validators = array(
+    protected function any() : void
+    {
+        $validators = array(
             'id' => v::intVal()->positive()
         );
 
-        $this->validate($a_validators, $this->a_args);
+        $this->validate($validators, $this->args);
     }
 
-    protected function PATCH() : void {
-        $o_invoice = InvoiceQuery::create()
-                                   ->innerJoinWithInvoiceItem()
-                                   ->filterByInvoiceid($this->a_args['id'])
-                                   ->find()
-                                   ->getFirst();
+    protected function patch() : void
+    {
+        $invoice = InvoiceQuery::create()
+                                ->innerJoinWithInvoiceItem()
+                                ->filterByInvoiceid($this->args['id'])
+                                ->find()
+                                ->getFirst();
 
         //-- allready canceled
-        if($o_invoice->getCanceledInvoiceid())
-            throw new Exception ('Invoice allready canceled');
+        if ($invoice->getCanceledInvoiceid()) {
+            throw new Exception('Invoice allready canceled');
+        }
 
-        $o_user = Auth::GetCurrentUser();
-        $o_connection = Propel::getConnection();
+        $auth = $this->app->getContainer()->get('Auth');
+        $user = $auth->getCurrentUser();
+        $connection = Propel::getConnection();
 
         try {
-            $o_connection->beginTransaction();
+            $connection->beginTransaction();
 
-            $o_new_invoice = new Invoice();
-            $o_new_invoice->setInvoiceTypeid(INVOICE_TYPE_CANCELLATION);
-            $o_new_invoice->setEventContactid($o_invoice->getEventContactid());
-            $o_new_invoice->setUser($o_user);
-            $o_new_invoice->setEventBankinformationid($o_invoice->getEventBankinformationid());
-            $o_new_invoice->setCustomerEventContactid($o_invoice->getCustomerEventContactid());
-            $o_new_invoice->setDate(new DateTime());
-            $o_new_invoice->setAmount($o_invoice->getAmount() * -1);
-            $o_new_invoice->setMaturityDate(new DateTime());
-            $o_new_invoice->save();
+            $newInvoice = new Invoice();
+            $newInvoice->setInvoiceTypeid(INVOICE_TYPE_CANCELLATION);
+            $newInvoice->setEventContactid($invoice->getEventContactid());
+            $newInvoice->setUser($user);
+            $newInvoice->setEventBankinformationid($invoice->getEventBankinformationid());
+            $newInvoice->setCustomerEventContactid($invoice->getCustomerEventContactid());
+            $newInvoice->setDate(new DateTime());
+            $newInvoice->setAmount($invoice->getAmount() * -1);
+            $newInvoice->setMaturityDate(new DateTime());
+            $newInvoice->save();
 
-            foreach($o_invoice->getInvoiceItems() as $o_invoiceItem) {
-                $o_new_invoiceItem = new InvoiceItem();
-                $o_new_invoiceItem->setInvoice($o_new_invoice);
-                $o_new_invoiceItem->setAmount($o_invoiceItem->getAmount());
-                $o_new_invoiceItem->setPrice($o_invoiceItem->getPrice() * -1);
-                $o_new_invoiceItem->setDescription($o_invoiceItem->getDescription());
-                $o_new_invoiceItem->setTax($o_invoiceItem->getTax());
-                $o_new_invoiceItem->save();
+            foreach ($invoice->getInvoiceItems() as $invoiceItem) {
+                $newInvoiceItem = new InvoiceItem();
+                $newInvoiceItem->setInvoice($newInvoice);
+                $newInvoiceItem->setAmount($invoiceItem->getAmount());
+                $newInvoiceItem->setPrice($invoiceItem->getPrice() * -1);
+                $newInvoiceItem->setDescription($invoiceItem->getDescription());
+                $newInvoiceItem->setTax($invoiceItem->getTax());
+                $newInvoiceItem->save();
             }
 
-            $o_invoice->setCanceledInvoiceid($o_new_invoice->getInvoiceid());
-            $o_invoice->save();
+            $invoice->setCanceledInvoiceid($newInvoice->getInvoiceid());
+            $invoice->save();
 
-            $o_connection->commit();
+            $connection->commit();
 
-            $this->withJson($o_new_invoice->toArray());
-        } catch(Exception $o_exception) {
-            $o_connection->rollBack();
-            throw $o_exception;
+            $this->withJson($newInvoice->toArray());
+        } catch (Exception $exception) {
+            $connection->rollBack();
+            throw $exception;
         }
     }
 }

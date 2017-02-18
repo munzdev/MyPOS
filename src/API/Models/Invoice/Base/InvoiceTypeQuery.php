@@ -18,51 +18,48 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'invoice_type' table.
  *
+ * @method ChildInvoiceTypeQuery orderByInvoiceTypeid($order = Criteria::ASC) Order by the invoice_typeid column
+ * @method ChildInvoiceTypeQuery orderByName($order = Criteria::ASC) Order by the name column
  *
+ * @method ChildInvoiceTypeQuery groupByInvoiceTypeid() Group by the invoice_typeid column
+ * @method ChildInvoiceTypeQuery groupByName() Group by the name column
  *
- * @method     ChildInvoiceTypeQuery orderByInvoiceTypeid($order = Criteria::ASC) Order by the invoice_typeid column
- * @method     ChildInvoiceTypeQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method ChildInvoiceTypeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildInvoiceTypeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildInvoiceTypeQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildInvoiceTypeQuery groupByInvoiceTypeid() Group by the invoice_typeid column
- * @method     ChildInvoiceTypeQuery groupByName() Group by the name column
+ * @method ChildInvoiceTypeQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildInvoiceTypeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildInvoiceTypeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildInvoiceTypeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildInvoiceTypeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildInvoiceTypeQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildInvoiceTypeQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
+ * @method ChildInvoiceTypeQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
+ * @method ChildInvoiceTypeQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
  *
- * @method     ChildInvoiceTypeQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildInvoiceTypeQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildInvoiceTypeQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildInvoiceTypeQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
  *
- * @method     ChildInvoiceTypeQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
- * @method     ChildInvoiceTypeQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
- * @method     ChildInvoiceTypeQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
+ * @method ChildInvoiceTypeQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
+ * @method ChildInvoiceTypeQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
+ * @method ChildInvoiceTypeQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
  *
- * @method     ChildInvoiceTypeQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
+ * @method \API\Models\Invoice\InvoiceQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildInvoiceTypeQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
- * @method     ChildInvoiceTypeQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
- * @method     ChildInvoiceTypeQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
+ * @method ChildInvoiceType findOne(ConnectionInterface $con = null) Return the first ChildInvoiceType matching the query
+ * @method ChildInvoiceType findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoiceType matching the query, or a new ChildInvoiceType object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Invoice\InvoiceQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildInvoiceType findOne(ConnectionInterface $con = null) Return the first ChildInvoiceType matching the query
- * @method     ChildInvoiceType findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoiceType matching the query, or a new ChildInvoiceType object populated from the query conditions when no match is found
- *
- * @method     ChildInvoiceType findOneByInvoiceTypeid(int $invoice_typeid) Return the first ChildInvoiceType filtered by the invoice_typeid column
- * @method     ChildInvoiceType findOneByName(string $name) Return the first ChildInvoiceType filtered by the name column *
+ * @method ChildInvoiceType findOneByInvoiceTypeid(int $invoice_typeid) Return the first ChildInvoiceType filtered by the invoice_typeid column
+ * @method ChildInvoiceType findOneByName(string $name) Return the first ChildInvoiceType filtered by the name column *
 
- * @method     ChildInvoiceType requirePk($key, ConnectionInterface $con = null) Return the ChildInvoiceType by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceType requireOne(ConnectionInterface $con = null) Return the first ChildInvoiceType matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceType requirePk($key, ConnectionInterface $con = null) Return the ChildInvoiceType by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceType requireOne(ConnectionInterface $con = null) Return the first ChildInvoiceType matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildInvoiceType requireOneByInvoiceTypeid(int $invoice_typeid) Return the first ChildInvoiceType filtered by the invoice_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceType requireOneByName(string $name) Return the first ChildInvoiceType filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceType requireOneByInvoiceTypeid(int $invoice_typeid) Return the first ChildInvoiceType filtered by the invoice_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceType requireOneByName(string $name) Return the first ChildInvoiceType filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildInvoiceType[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoiceType objects based on current ModelCriteria
- * @method     ChildInvoiceType[]|ObjectCollection findByInvoiceTypeid(int $invoice_typeid) Return ChildInvoiceType objects filtered by the invoice_typeid column
- * @method     ChildInvoiceType[]|ObjectCollection findByName(string $name) Return ChildInvoiceType objects filtered by the name column
- * @method     ChildInvoiceType[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildInvoiceType[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoiceType objects based on current ModelCriteria
+ * @method ChildInvoiceType[]|ObjectCollection findByInvoiceTypeid(int $invoice_typeid) Return ChildInvoiceType objects filtered by the invoice_typeid column
+ * @method ChildInvoiceType[]|ObjectCollection findByName(string $name) Return ChildInvoiceType objects filtered by the name column
+ * @method ChildInvoiceType[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class InvoiceTypeQuery extends ModelCriteria
 {
@@ -71,9 +68,9 @@ abstract class InvoiceTypeQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Invoice\Base\InvoiceTypeQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Invoice\\InvoiceType', $modelAlias = null)
     {
@@ -83,8 +80,8 @@ abstract class InvoiceTypeQuery extends ModelCriteria
     /**
      * Returns a new ChildInvoiceTypeQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildInvoiceTypeQuery
      */
@@ -113,7 +110,7 @@ abstract class InvoiceTypeQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildInvoiceType|array|mixed the result, formatted by the current formatter
@@ -130,8 +127,7 @@ abstract class InvoiceTypeQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -150,8 +146,8 @@ abstract class InvoiceTypeQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -170,7 +166,9 @@ abstract class InvoiceTypeQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildInvoiceType $obj */
+            /**
+ * @var ChildInvoiceType $obj
+*/
             $obj = new ChildInvoiceType();
             $obj->hydrate($row);
             InvoiceTypeTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -183,8 +181,8 @@ abstract class InvoiceTypeQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildInvoiceType|array|mixed the result, formatted by the current formatter
      */
@@ -204,8 +202,9 @@ abstract class InvoiceTypeQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -226,26 +225,24 @@ abstract class InvoiceTypeQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildInvoiceTypeQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(InvoiceTypeTableMap::COL_INVOICE_TYPEID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildInvoiceTypeQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(InvoiceTypeTableMap::COL_INVOICE_TYPEID, $keys, Criteria::IN);
     }
 
@@ -259,11 +256,14 @@ abstract class InvoiceTypeQuery extends ModelCriteria
      * $query->filterByInvoiceTypeid(array('min' => 12)); // WHERE invoice_typeid > 12
      * </code>
      *
-     * @param     mixed $invoiceTypeid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $invoiceTypeid The value to use as filter.
+     *                                  Use scalar values for
+     *                                  equality. Use array values
+     *                                  for in_array() equivalent.
+     *                                  Use associative array('min'
+     *                                  => $minValue, 'max' =>
+     *                                  $maxValue) for intervals.
+     * @param string $comparison    Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceTypeQuery The current query, for fluid interface
      */
@@ -299,8 +299,8 @@ abstract class InvoiceTypeQuery extends ModelCriteria
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE name LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $name       The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceTypeQuery The current query, for fluid interface
      */
@@ -318,8 +318,8 @@ abstract class InvoiceTypeQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Invoice\Invoice object
      *
-     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice    the related object to use as filter
+     * @param string                                       $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildInvoiceTypeQuery The current query, for fluid interface
      */
@@ -341,8 +341,8 @@ abstract class InvoiceTypeQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Invoice relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceTypeQuery The current query, for fluid interface
      */
@@ -375,9 +375,9 @@ abstract class InvoiceTypeQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Invoice\InvoiceQuery A secondary query class using the current class as primary query
      */
@@ -391,7 +391,7 @@ abstract class InvoiceTypeQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildInvoiceType $invoiceType Object to remove from the list of results
+     * @param ChildInvoiceType $invoiceType Object to remove from the list of results
      *
      * @return $this|ChildInvoiceTypeQuery The current query, for fluid interface
      */
@@ -407,7 +407,7 @@ abstract class InvoiceTypeQuery extends ModelCriteria
     /**
      * Deletes all rows from the invoice_type table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -418,23 +418,25 @@ abstract class InvoiceTypeQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            InvoiceTypeTableMap::clearInstancePool();
-            InvoiceTypeTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                InvoiceTypeTableMap::clearInstancePool();
+                InvoiceTypeTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -453,16 +455,17 @@ abstract class InvoiceTypeQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            InvoiceTypeTableMap::removeInstanceFromPool($criteria);
+                InvoiceTypeTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            InvoiceTypeTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                InvoiceTypeTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // InvoiceTypeQuery

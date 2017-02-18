@@ -11,30 +11,33 @@ use Slim\App;
 
 class CustomerSearch extends SecurityController
 {
-    public function __construct(App $o_app) {
-        parent::__construct($o_app);
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
 
-        $o_app->getContainer()['db'];
+        $app->getContainer()['db'];
     }
 
-    function ANY() : void {
-        $a_validators = array(
+    public function any() : void
+    {
+        $validators = array(
             'name' => v::alnum()->length(1),
         );
 
-        $this->validate($a_validators, $this->a_args);
+        $this->validate($validators, $this->args);
     }
 
-    protected function GET() : void  {
-        $o_user = Auth::GetCurrentUser();
+    protected function get() : void
+    {
+        $auth = $this->app->getContainer()->get('Auth');
+        $user = $auth->getCurrentUser();
 
-        $o_event_contacts = EventContactQuery::create()
-                                                ->filterByEventid($o_user->getEventUser()->getEventid())
-                                                ->filterByActive(true)
-                                                ->filterByName('%'.$this->a_args['name'].'%', Criteria::LIKE)
-                                                ->find();
+        $eventContacts = EventContactQuery::create()
+                                            ->filterByEventid($user->getEventUser()->getEventid())
+                                            ->filterByActive(true)
+                                            ->filterByName('%'.$this->args['name'].'%', Criteria::LIKE)
+                                            ->find();
 
-        $this->withJson($o_event_contacts->toArray());
+        $this->withJson($eventContacts->toArray());
     }
-
 }

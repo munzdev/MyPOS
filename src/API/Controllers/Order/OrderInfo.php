@@ -16,26 +16,27 @@ use const API\USER_ROLE_ORDER_OVERVIEW;
 
 class OrderInfo extends SecurityController
 {
-    public function __construct(App $o_app) {
-        parent::__construct($o_app);
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
 
-        $this->a_security = ['GET' => USER_ROLE_ORDER_OVERVIEW];
+        $this->security = ['GET' => USER_ROLE_ORDER_OVERVIEW];
 
-        $o_app->getContainer()['db'];
+        $app->getContainer()['db'];
     }
 
-    function ANY() : void {
-        $a_validators = array(
+    public function any() : void
+    {
+        $validators = array(
             'id' => v::intVal()->positive()
         );
 
-        $this->validate($a_validators, $this->a_args);
+        $this->validate($validators, $this->args);
     }
 
-    protected function GET() : void  {
-        $o_user = Auth::GetCurrentUser();
-
-        $o_order_info = OrderQuery::create()
+    protected function get() : void
+    {
+        $orderInfo = OrderQuery::create()
                         ->useOrderDetailQuery()
                             ->useInvoiceItemQuery(null, ModelCriteria::LEFT_JOIN)
                                 ->useInvoiceQuery(null, ModelCriteria::LEFT_JOIN)
@@ -47,10 +48,10 @@ class OrderInfo extends SecurityController
                         ->withColumn("COUNT(" . OrderDetailTableMap::COL_ORDER_DETAILID . ") - COUNT(" . InvoiceItemTableMap::COL_INVOICE_ITEMID . ")", "open")
                         ->withColumn("SUM(" . InvoiceItemTableMap::COL_AMOUNT . " * " . InvoiceItemTableMap::COL_PRICE . ")", "amountBilled")
                         ->groupByOrderid()
-                        ->findByOrderid($this->a_args['id'])
+                        ->findByOrderid($this->args['id'])
                         ->getFirst();
 
-        $o_order_detail_info = OrderQuery::create()
+        $orderDetailInfo = OrderQuery::create()
                                 ->joinWithEventTable()
                                 ->joinWithOrderDetail()
                                 ->joinWithUser()
@@ -65,20 +66,19 @@ class OrderInfo extends SecurityController
                                     ->with(OrderInProgressRecievedTableMap::getTableMap()->getPhpName())
                                 ->endUse()
                                 ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                ->findByOrderid($this->a_args['id'])
+                                ->findByOrderid($this->args['id'])
                                 ->getFirst();
 
-        $o_order_detail_info['price'] = $o_order_info->getVirtualColumn('price');
-        $o_order_detail_info['open'] = $o_order_info->getVirtualColumn('open');
-        $o_order_detail_info['amountBilled'] = $o_order_info->getVirtualColumn('amountBilled');
+        $orderDetailInfo['price'] = $orderInfo->getVirtualColumn('price');
+        $orderDetailInfo['open'] = $orderInfo->getVirtualColumn('open');
+        $orderDetailInfo['amountBilled'] = $orderInfo->getVirtualColumn('amountBilled');
 
         // Dont send secure critical datas
-        $o_order_detail_info['User']['Password'] = null;
-        $o_order_detail_info['User']['AutologinHash'] = null;
-        $o_order_detail_info['User']['IsAdmin'] = null;
-        $o_order_detail_info['User']['CallRequest'] = null;
+        $orderDetailInfo['User']['Password'] = null;
+        $orderDetailInfo['User']['AutologinHash'] = null;
+        $orderDetailInfo['User']['IsAdmin'] = null;
+        $orderDetailInfo['User']['CallRequest'] = null;
 
-        $this->withJson($o_order_detail_info);
+        $this->withJson($orderDetailInfo);
     }
-
 }

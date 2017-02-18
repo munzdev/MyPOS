@@ -2,7 +2,9 @@
 
 namespace API\Controllers\Login;
 
-use API\Lib\{Auth, Controller, RememberMe};
+use API\Lib\Auth;
+use API\Lib\Controller;
+use API\Lib\RememberMe;
 use API\Lib\Exceptions\GeneralException;
 use API\Models\User\UserQuery;
 use Propel\Runtime\Propel;
@@ -11,89 +13,89 @@ use Slim\App;
 
 class Login extends Controller
 {
-    protected $o_auth;
-    protected $str_privateKey;
+    protected $auth;
+    protected $privateKey;
 
-    public function __construct(App $o_app) {
-        parent::__construct($o_app);
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
 
-        $o_app->getContainer()['db'];
+        $app->getContainer()['db'];
 
-        $this->o_auth = new Auth(new UserQuery());
-        $this->str_privateKey = $this->o_app->getContainer()['settings']['Auth']['RememberMe_PrivateKey'];
+        $this->auth = $this->app->getContainer()->get('Auth');
+        $this->privateKey = $this->app->getContainer()['settings']['Auth']['RememberMe_PrivateKey'];
     }
 
-    protected function POST() : void {
-        $a_validators = array(
+    protected function post() : void
+    {
+        $validators = array(
             'username' => Validator::alnum()->noWhitespace()->length(1),
             'password' => Validator::alnum()->noWhitespace()->length(1),
             'rememberMe' => Validator::boolType()
         );
 
-        $this->validate($a_validators);
+        $this->validate($validators);
 
-        $b_result = $this->o_auth->CheckLogin($this->a_json['username'],
-                                              $this->a_json['password']);
+        $result = $this->auth->checkLogin($this->json['username'], $this->json['password']);
 
-        if(!$b_result)
+        if (!$result) {
             throw new GeneralException("Login failed");
+        }
 
-        if($this->a_json['rememberMe'])
-        {
-            $i_userid = $this->o_auth->GetCurrentUser()->getUserid();
+        if ($this->json['rememberMe']) {
+            $userid = $this->auth->getCurrentUser()->getUserid();
 
-            $o_rememberMe = new RememberMe($this->str_privateKey);
-            $str_hash = $o_rememberMe->remember($i_userid);
+            $rememberMe = new RememberMe($this->privateKey);
+            $hash = $rememberMe->remember($userid);
 
             Propel::disableInstancePooling();
 
-            UserQuery::create()->findPk($i_userid)
-                               ->setAutologinHash($str_hash)
+            UserQuery::create()->findPk($userid)
+                               ->setAutologinHash($hash)
                                ->save();
 
             Propel::enableInstancePooling();
-
         }
 
         $this->withJson(true);
     }
 
-    protected function GET() : void {
-
-        if($this->o_auth->IsLoggedIn())
-        {
-            $this->withJson(array('username' => $this->o_auth->GetCurrentUser()->getUsername()));
+    protected function get() : void
+    {
+        if ($this->auth->isLoggedIn()) {
+            $this->withJson(array('username' => $this->auth->getCurrentUser()->getUsername()));
             return;
         }
 
-        $o_rememberMe = new RememberMe($this->str_privateKey);
-        $i_userid = $o_rememberMe->parseCookie();
+        $rememberMe = new RememberMe($this->privateKey);
+        $userid = $rememberMe->parseCookie();
 
-        if($i_userid !== false)
-        {
-            $o_user = UserQuery::create()->findPk($i_userid);
-            $str_newHash = $o_rememberMe->validateHash((string)$o_user->getAutologinHash());
+        if ($userid !== false) {
+            $user = UserQuery::create()->findPk($userid);
+            $newHash = $rememberMe->validateHash((string)$user->getAutologinHash());
 
-            if($str_newHash === false)
+            if ($newHash === false) {
                 throw new GeneralException("Autologin Failed");
+            }
 
-            $o_user->setAutologinHash($str_newHash)->save();
+            $user->setAutologinHash($newHash)->save();
 
-            $this->o_auth->DoLogin($o_user->getUsername());
+            $this->auth->doLogin($user->getUsername());
 
-            $this->withJson(array('username' => $o_user->getUsername(),
-                                              'rememberMe' => true));
+            $this->withJson(array('username' => $user->getUsername(),
+                                  'rememberMe' => true));
         }
     }
 
-    protected function DELETE() : void {
-        $i_userid = $this->o_auth->GetCurrentUser()->getUserid();
+    protected function delete() : void
+    {
+        $userid = $this->auth->getCurrentUser()->getUserid();
 
-        UserQuery::create()->findPk($i_userid)
+        UserQuery::create()->findPk($userid)
                            ->setAutologinHash(null)
                            ->save();
 
-        $this->o_auth->Logout();
-        RememberMe::Destroy();
+        $this->auth->logout();
+        RememberMe::destroy();
     }
 }

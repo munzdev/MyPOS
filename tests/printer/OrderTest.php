@@ -14,21 +14,21 @@ $o_connector = new NetworkPrintConnector("192.168.0.50", 9100);
 //$o_connector = new FilePrintConnector("php://stdout");
 
 $o_reciep = new ReciepPrint($o_connector, 48, $o_i18n->ReciepPrint);
-$o_reciep->SetOrderNr(584);
-$o_reciep->SetTableNr("B32");
-$o_reciep->SetName("Test Order");
-$o_reciep->SetDate(new DateTime("-10 Minutes"));
-$o_reciep->SetDateFooter(new DateTime);
+$o_reciep->setOrderNr(584);
+$o_reciep->setTableNr("B32");
+$o_reciep->setName("Test Order");
+$o_reciep->setDate(new DateTime("-10 Minutes"));
+$o_reciep->setDateFooter(new DateTime);
 
-$o_reciep->Add("Colla 0.5L", "2");
-$o_reciep->Add("Colla 0.5L mit Zitronne", "1");
-$o_reciep->Add("Mineral 0.25L", "2");
+$o_reciep->add("Colla 0.5L", "2");
+$o_reciep->add("Colla 0.5L mit Zitronne", "1");
+$o_reciep->add("Mineral 0.25L", "2");
 
 
-$o_reciep->Add("Wiener Schnitzel", "1");
-$o_reciep->Add("Schweinsbratten ohne Knödel", "3");
-$o_reciep->Add("Schweinsbratten ohne Knödel, mit Wurstsemmel", "10");
-$o_reciep->Add("Wiener Schnitzel klein ohne Pommes, mit extra Ketchup, bla blalsaf bsadfsdafsda fsdasd ds", "1");
-$o_reciep->Add("Salat Klein", "1");
+$o_reciep->add("Wiener Schnitzel", "1");
+$o_reciep->add("Schweinsbratten ohne Knödel", "3");
+$o_reciep->add("Schweinsbratten ohne Knödel, mit Wurstsemmel", "10");
+$o_reciep->add("Wiener Schnitzel klein ohne Pommes, mit extra Ketchup, bla blalsaf bsadfsdafsda fsdasd ds", "1");
+$o_reciep->add("Salat Klein", "1");
 
-$o_reciep->PrintOrder();
+$o_reciep->printOrder();

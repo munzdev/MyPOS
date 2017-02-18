@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'distribution_place_group' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class DistributionPlaceGroupTableMap extends TableMap
 {
@@ -97,7 +93,7 @@ class DistributionPlaceGroupTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('DistributionPlaceGroupid', 'DistributionPlaceid', 'MenuGroupid', ),
         self::TYPE_CAMELNAME     => array('distributionPlaceGroupid', 'distributionPlaceid', 'menuGroupid', ),
         self::TYPE_COLNAME       => array(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID, DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID, DistributionPlaceGroupTableMap::COL_MENU_GROUPID, ),
@@ -111,7 +107,7 @@ class DistributionPlaceGroupTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('DistributionPlaceGroupid' => 0, 'DistributionPlaceid' => 1, 'MenuGroupid' => 2, ),
         self::TYPE_CAMELNAME     => array('distributionPlaceGroupid' => 0, 'distributionPlaceid' => 1, 'menuGroupid' => 2, ),
         self::TYPE_COLNAME       => array(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID => 0, DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID => 1, DistributionPlaceGroupTableMap::COL_MENU_GROUPID => 2, ),
@@ -147,27 +143,54 @@ class DistributionPlaceGroupTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':distribution_placeid',
-    1 => ':distribution_placeid',
-  ),
-), null, null, null, false);
-        $this->addRelation('MenuGroup', '\\API\\Models\\Menu\\MenuGroup', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':menu_groupid',
-    1 => ':menu_groupid',
-  ),
-), null, null, null, false);
-        $this->addRelation('DistributionPlaceTable', '\\API\\Models\\DistributionPlace\\DistributionPlaceTable', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':distribution_place_groupid',
-    1 => ':distribution_place_groupid',
-  ),
-), null, null, 'DistributionPlaceTables', false);
+        $this->addRelation(
+            'DistributionPlace',
+            '\\API\\Models\\DistributionPlace\\DistributionPlace',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':distribution_placeid',
+            1 => ':distribution_placeid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'MenuGroup',
+            '\\API\\Models\\Menu\\MenuGroup',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':menu_groupid',
+            1 => ':menu_groupid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'DistributionPlaceTable',
+            '\\API\\Models\\DistributionPlace\\DistributionPlaceTable',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':distribution_place_groupid',
+            1 => ':distribution_place_groupid',
+            ),
+            ),
+            null,
+            null,
+            'DistributionPlaceTables',
+            false
+        );
         $this->addRelation('EventTable', '\\API\\Models\\Event\\EventTable', RelationMap::MANY_TO_MANY, array(), null, null, 'EventTables');
     } // buildRelations()
 
@@ -223,7 +246,7 @@ class DistributionPlaceGroupTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -254,7 +277,9 @@ class DistributionPlaceGroupTableMap extends TableMap
             $col = $offset + DistributionPlaceGroupTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = DistributionPlaceGroupTableMap::OM_CLASS;
-            /** @var DistributionPlaceGroup $obj */
+            /**
+ * @var DistributionPlaceGroup $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             DistributionPlaceGroupTableMap::addInstanceToPool($obj, $key);
@@ -267,7 +292,7 @@ class DistributionPlaceGroupTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -287,7 +312,9 @@ class DistributionPlaceGroupTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var DistributionPlaceGroup $obj */
+                /**
+ * @var DistributionPlaceGroup $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -304,8 +331,8 @@ class DistributionPlaceGroupTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -325,6 +352,7 @@ class DistributionPlaceGroupTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -348,16 +376,16 @@ class DistributionPlaceGroupTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a DistributionPlaceGroup or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or DistributionPlaceGroup object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or DistributionPlaceGroup object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(DistributionPlaceGroupTableMap::DATABASE_NAME);
         }
@@ -389,7 +417,7 @@ class DistributionPlaceGroupTableMap extends TableMap
     /**
      * Deletes all rows from the distribution_place_group table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -400,8 +428,8 @@ class DistributionPlaceGroupTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a DistributionPlaceGroup or Criteria object.
      *
-     * @param mixed               $criteria Criteria or DistributionPlaceGroup object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or DistributionPlaceGroup object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -418,7 +446,7 @@ class DistributionPlaceGroupTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from DistributionPlaceGroup object
         }
 
-        if ($criteria->containsKey(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID) && $criteria->keyContainsValue(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID) ) {
+        if ($criteria->containsKey(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID) && $criteria->keyContainsValue(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID.')');
         }
 
@@ -428,11 +456,12 @@ class DistributionPlaceGroupTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // DistributionPlaceGroupTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

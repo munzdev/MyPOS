@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'coupon' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class CouponTableMap extends TableMap
 {
@@ -112,7 +108,7 @@ class CouponTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('Couponid', 'Eventid', 'CreatedByUserid', 'Code', 'Created', 'Value', ),
         self::TYPE_CAMELNAME     => array('couponid', 'eventid', 'createdByUserid', 'code', 'created', 'value', ),
         self::TYPE_COLNAME       => array(CouponTableMap::COL_COUPONID, CouponTableMap::COL_EVENTID, CouponTableMap::COL_CREATED_BY_USERID, CouponTableMap::COL_CODE, CouponTableMap::COL_CREATED, CouponTableMap::COL_VALUE, ),
@@ -126,7 +122,7 @@ class CouponTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('Couponid' => 0, 'Eventid' => 1, 'CreatedByUserid' => 2, 'Code' => 3, 'Created' => 4, 'Value' => 5, ),
         self::TYPE_CAMELNAME     => array('couponid' => 0, 'eventid' => 1, 'createdByUserid' => 2, 'code' => 3, 'created' => 4, 'value' => 5, ),
         self::TYPE_COLNAME       => array(CouponTableMap::COL_COUPONID => 0, CouponTableMap::COL_EVENTID => 1, CouponTableMap::COL_CREATED_BY_USERID => 2, CouponTableMap::COL_CODE => 3, CouponTableMap::COL_CREATED => 4, CouponTableMap::COL_VALUE => 5, ),
@@ -164,27 +160,54 @@ class CouponTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Event', '\\API\\Models\\Event\\Event', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, null, false);
-        $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':created_by_userid',
-    1 => ':userid',
-  ),
-), null, null, null, false);
-        $this->addRelation('PaymentCoupon', '\\API\\Models\\Payment\\PaymentCoupon', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':couponid',
-    1 => ':couponid',
-  ),
-), null, null, 'PaymentCoupons', false);
+        $this->addRelation(
+            'Event',
+            '\\API\\Models\\Event\\Event',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'User',
+            '\\API\\Models\\User\\User',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':created_by_userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'PaymentCoupon',
+            '\\API\\Models\\Payment\\PaymentCoupon',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':couponid',
+            1 => ':couponid',
+            ),
+            ),
+            null,
+            null,
+            'PaymentCoupons',
+            false
+        );
         $this->addRelation('PaymentRecieved', '\\API\\Models\\Payment\\PaymentRecieved', RelationMap::MANY_TO_MANY, array(), null, null, 'PaymentRecieveds');
     } // buildRelations()
 
@@ -240,7 +263,7 @@ class CouponTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -271,7 +294,9 @@ class CouponTableMap extends TableMap
             $col = $offset + CouponTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = CouponTableMap::OM_CLASS;
-            /** @var Coupon $obj */
+            /**
+ * @var Coupon $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             CouponTableMap::addInstanceToPool($obj, $key);
@@ -284,7 +309,7 @@ class CouponTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -304,7 +329,9 @@ class CouponTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var Coupon $obj */
+                /**
+ * @var Coupon $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -321,8 +348,8 @@ class CouponTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -348,6 +375,7 @@ class CouponTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -371,16 +399,16 @@ class CouponTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a Coupon or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or Coupon object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or Coupon object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(CouponTableMap::DATABASE_NAME);
         }
@@ -412,7 +440,7 @@ class CouponTableMap extends TableMap
     /**
      * Deletes all rows from the coupon table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -423,8 +451,8 @@ class CouponTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a Coupon or Criteria object.
      *
-     * @param mixed               $criteria Criteria or Coupon object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or Coupon object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -441,7 +469,7 @@ class CouponTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from Coupon object
         }
 
-        if ($criteria->containsKey(CouponTableMap::COL_COUPONID) && $criteria->keyContainsValue(CouponTableMap::COL_COUPONID) ) {
+        if ($criteria->containsKey(CouponTableMap::COL_COUPONID) && $criteria->keyContainsValue(CouponTableMap::COL_COUPONID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.CouponTableMap::COL_COUPONID.')');
         }
 
@@ -451,11 +479,12 @@ class CouponTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // CouponTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

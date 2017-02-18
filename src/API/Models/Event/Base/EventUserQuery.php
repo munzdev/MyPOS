@@ -20,96 +20,93 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'event_user' table.
  *
+ * @method ChildEventUserQuery orderByEventUserid($order = Criteria::ASC) Order by the event_userid column
+ * @method ChildEventUserQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
+ * @method ChildEventUserQuery orderByUserid($order = Criteria::ASC) Order by the userid column
+ * @method ChildEventUserQuery orderByUserRoles($order = Criteria::ASC) Order by the user_roles column
+ * @method ChildEventUserQuery orderByBeginMoney($order = Criteria::ASC) Order by the begin_money column
  *
+ * @method ChildEventUserQuery groupByEventUserid() Group by the event_userid column
+ * @method ChildEventUserQuery groupByEventid() Group by the eventid column
+ * @method ChildEventUserQuery groupByUserid() Group by the userid column
+ * @method ChildEventUserQuery groupByUserRoles() Group by the user_roles column
+ * @method ChildEventUserQuery groupByBeginMoney() Group by the begin_money column
  *
- * @method     ChildEventUserQuery orderByEventUserid($order = Criteria::ASC) Order by the event_userid column
- * @method     ChildEventUserQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
- * @method     ChildEventUserQuery orderByUserid($order = Criteria::ASC) Order by the userid column
- * @method     ChildEventUserQuery orderByUserRoles($order = Criteria::ASC) Order by the user_roles column
- * @method     ChildEventUserQuery orderByBeginMoney($order = Criteria::ASC) Order by the begin_money column
+ * @method ChildEventUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildEventUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildEventUserQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildEventUserQuery groupByEventUserid() Group by the event_userid column
- * @method     ChildEventUserQuery groupByEventid() Group by the eventid column
- * @method     ChildEventUserQuery groupByUserid() Group by the userid column
- * @method     ChildEventUserQuery groupByUserRoles() Group by the user_roles column
- * @method     ChildEventUserQuery groupByBeginMoney() Group by the begin_money column
+ * @method ChildEventUserQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildEventUserQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildEventUserQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildEventUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildEventUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildEventUserQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildEventUserQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
+ * @method ChildEventUserQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
+ * @method ChildEventUserQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
  *
- * @method     ChildEventUserQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildEventUserQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildEventUserQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildEventUserQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
  *
- * @method     ChildEventUserQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
- * @method     ChildEventUserQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
- * @method     ChildEventUserQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
+ * @method ChildEventUserQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
+ * @method ChildEventUserQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
+ * @method ChildEventUserQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
  *
- * @method     ChildEventUserQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
+ * @method ChildEventUserQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
+ * @method ChildEventUserQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
+ * @method ChildEventUserQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
  *
- * @method     ChildEventUserQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
- * @method     ChildEventUserQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
- * @method     ChildEventUserQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
+ * @method ChildEventUserQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
  *
- * @method     ChildEventUserQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
- * @method     ChildEventUserQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
- * @method     ChildEventUserQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
+ * @method ChildEventUserQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
+ * @method ChildEventUserQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
+ * @method ChildEventUserQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     ChildEventUserQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
+ * @method ChildEventUserQuery leftJoinUserMessageRelatedByFromEventUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserMessageRelatedByFromEventUserid relation
+ * @method ChildEventUserQuery rightJoinUserMessageRelatedByFromEventUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserMessageRelatedByFromEventUserid relation
+ * @method ChildEventUserQuery innerJoinUserMessageRelatedByFromEventUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the UserMessageRelatedByFromEventUserid relation
  *
- * @method     ChildEventUserQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
- * @method     ChildEventUserQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
- * @method     ChildEventUserQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
+ * @method ChildEventUserQuery joinWithUserMessageRelatedByFromEventUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the UserMessageRelatedByFromEventUserid relation
  *
- * @method     ChildEventUserQuery leftJoinUserMessageRelatedByFromEventUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserMessageRelatedByFromEventUserid relation
- * @method     ChildEventUserQuery rightJoinUserMessageRelatedByFromEventUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserMessageRelatedByFromEventUserid relation
- * @method     ChildEventUserQuery innerJoinUserMessageRelatedByFromEventUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the UserMessageRelatedByFromEventUserid relation
+ * @method ChildEventUserQuery leftJoinWithUserMessageRelatedByFromEventUserid() Adds a LEFT JOIN clause and with to the query using the UserMessageRelatedByFromEventUserid relation
+ * @method ChildEventUserQuery rightJoinWithUserMessageRelatedByFromEventUserid() Adds a RIGHT JOIN clause and with to the query using the UserMessageRelatedByFromEventUserid relation
+ * @method ChildEventUserQuery innerJoinWithUserMessageRelatedByFromEventUserid() Adds a INNER JOIN clause and with to the query using the UserMessageRelatedByFromEventUserid relation
  *
- * @method     ChildEventUserQuery joinWithUserMessageRelatedByFromEventUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the UserMessageRelatedByFromEventUserid relation
+ * @method ChildEventUserQuery leftJoinUserMessageRelatedByToEventUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserMessageRelatedByToEventUserid relation
+ * @method ChildEventUserQuery rightJoinUserMessageRelatedByToEventUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserMessageRelatedByToEventUserid relation
+ * @method ChildEventUserQuery innerJoinUserMessageRelatedByToEventUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the UserMessageRelatedByToEventUserid relation
  *
- * @method     ChildEventUserQuery leftJoinWithUserMessageRelatedByFromEventUserid() Adds a LEFT JOIN clause and with to the query using the UserMessageRelatedByFromEventUserid relation
- * @method     ChildEventUserQuery rightJoinWithUserMessageRelatedByFromEventUserid() Adds a RIGHT JOIN clause and with to the query using the UserMessageRelatedByFromEventUserid relation
- * @method     ChildEventUserQuery innerJoinWithUserMessageRelatedByFromEventUserid() Adds a INNER JOIN clause and with to the query using the UserMessageRelatedByFromEventUserid relation
+ * @method ChildEventUserQuery joinWithUserMessageRelatedByToEventUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the UserMessageRelatedByToEventUserid relation
  *
- * @method     ChildEventUserQuery leftJoinUserMessageRelatedByToEventUserid($relationAlias = null) Adds a LEFT JOIN clause to the query using the UserMessageRelatedByToEventUserid relation
- * @method     ChildEventUserQuery rightJoinUserMessageRelatedByToEventUserid($relationAlias = null) Adds a RIGHT JOIN clause to the query using the UserMessageRelatedByToEventUserid relation
- * @method     ChildEventUserQuery innerJoinUserMessageRelatedByToEventUserid($relationAlias = null) Adds a INNER JOIN clause to the query using the UserMessageRelatedByToEventUserid relation
+ * @method ChildEventUserQuery leftJoinWithUserMessageRelatedByToEventUserid() Adds a LEFT JOIN clause and with to the query using the UserMessageRelatedByToEventUserid relation
+ * @method ChildEventUserQuery rightJoinWithUserMessageRelatedByToEventUserid() Adds a RIGHT JOIN clause and with to the query using the UserMessageRelatedByToEventUserid relation
+ * @method ChildEventUserQuery innerJoinWithUserMessageRelatedByToEventUserid() Adds a INNER JOIN clause and with to the query using the UserMessageRelatedByToEventUserid relation
  *
- * @method     ChildEventUserQuery joinWithUserMessageRelatedByToEventUserid($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the UserMessageRelatedByToEventUserid relation
+ * @method \API\Models\Event\EventQuery|\API\Models\User\UserQuery|\API\Models\User\Message\UserMessageQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildEventUserQuery leftJoinWithUserMessageRelatedByToEventUserid() Adds a LEFT JOIN clause and with to the query using the UserMessageRelatedByToEventUserid relation
- * @method     ChildEventUserQuery rightJoinWithUserMessageRelatedByToEventUserid() Adds a RIGHT JOIN clause and with to the query using the UserMessageRelatedByToEventUserid relation
- * @method     ChildEventUserQuery innerJoinWithUserMessageRelatedByToEventUserid() Adds a INNER JOIN clause and with to the query using the UserMessageRelatedByToEventUserid relation
+ * @method ChildEventUser findOne(ConnectionInterface $con = null) Return the first ChildEventUser matching the query
+ * @method ChildEventUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEventUser matching the query, or a new ChildEventUser object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Event\EventQuery|\API\Models\User\UserQuery|\API\Models\User\Message\UserMessageQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildEventUser findOne(ConnectionInterface $con = null) Return the first ChildEventUser matching the query
- * @method     ChildEventUser findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEventUser matching the query, or a new ChildEventUser object populated from the query conditions when no match is found
- *
- * @method     ChildEventUser findOneByEventUserid(int $event_userid) Return the first ChildEventUser filtered by the event_userid column
- * @method     ChildEventUser findOneByEventid(int $eventid) Return the first ChildEventUser filtered by the eventid column
- * @method     ChildEventUser findOneByUserid(int $userid) Return the first ChildEventUser filtered by the userid column
- * @method     ChildEventUser findOneByUserRoles(int $user_roles) Return the first ChildEventUser filtered by the user_roles column
- * @method     ChildEventUser findOneByBeginMoney(string $begin_money) Return the first ChildEventUser filtered by the begin_money column *
+ * @method ChildEventUser findOneByEventUserid(int $event_userid) Return the first ChildEventUser filtered by the event_userid column
+ * @method ChildEventUser findOneByEventid(int $eventid) Return the first ChildEventUser filtered by the eventid column
+ * @method ChildEventUser findOneByUserid(int $userid) Return the first ChildEventUser filtered by the userid column
+ * @method ChildEventUser findOneByUserRoles(int $user_roles) Return the first ChildEventUser filtered by the user_roles column
+ * @method ChildEventUser findOneByBeginMoney(string $begin_money) Return the first ChildEventUser filtered by the begin_money column *
 
- * @method     ChildEventUser requirePk($key, ConnectionInterface $con = null) Return the ChildEventUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventUser requireOne(ConnectionInterface $con = null) Return the first ChildEventUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventUser requirePk($key, ConnectionInterface $con = null) Return the ChildEventUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventUser requireOne(ConnectionInterface $con = null) Return the first ChildEventUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildEventUser requireOneByEventUserid(int $event_userid) Return the first ChildEventUser filtered by the event_userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventUser requireOneByEventid(int $eventid) Return the first ChildEventUser filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventUser requireOneByUserid(int $userid) Return the first ChildEventUser filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventUser requireOneByUserRoles(int $user_roles) Return the first ChildEventUser filtered by the user_roles column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventUser requireOneByBeginMoney(string $begin_money) Return the first ChildEventUser filtered by the begin_money column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventUser requireOneByEventUserid(int $event_userid) Return the first ChildEventUser filtered by the event_userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventUser requireOneByEventid(int $eventid) Return the first ChildEventUser filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventUser requireOneByUserid(int $userid) Return the first ChildEventUser filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventUser requireOneByUserRoles(int $user_roles) Return the first ChildEventUser filtered by the user_roles column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventUser requireOneByBeginMoney(string $begin_money) Return the first ChildEventUser filtered by the begin_money column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildEventUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEventUser objects based on current ModelCriteria
- * @method     ChildEventUser[]|ObjectCollection findByEventUserid(int $event_userid) Return ChildEventUser objects filtered by the event_userid column
- * @method     ChildEventUser[]|ObjectCollection findByEventid(int $eventid) Return ChildEventUser objects filtered by the eventid column
- * @method     ChildEventUser[]|ObjectCollection findByUserid(int $userid) Return ChildEventUser objects filtered by the userid column
- * @method     ChildEventUser[]|ObjectCollection findByUserRoles(int $user_roles) Return ChildEventUser objects filtered by the user_roles column
- * @method     ChildEventUser[]|ObjectCollection findByBeginMoney(string $begin_money) Return ChildEventUser objects filtered by the begin_money column
- * @method     ChildEventUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildEventUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEventUser objects based on current ModelCriteria
+ * @method ChildEventUser[]|ObjectCollection findByEventUserid(int $event_userid) Return ChildEventUser objects filtered by the event_userid column
+ * @method ChildEventUser[]|ObjectCollection findByEventid(int $eventid) Return ChildEventUser objects filtered by the eventid column
+ * @method ChildEventUser[]|ObjectCollection findByUserid(int $userid) Return ChildEventUser objects filtered by the userid column
+ * @method ChildEventUser[]|ObjectCollection findByUserRoles(int $user_roles) Return ChildEventUser objects filtered by the user_roles column
+ * @method ChildEventUser[]|ObjectCollection findByBeginMoney(string $begin_money) Return ChildEventUser objects filtered by the begin_money column
+ * @method ChildEventUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class EventUserQuery extends ModelCriteria
 {
@@ -118,9 +115,9 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Event\Base\EventUserQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Event\\EventUser', $modelAlias = null)
     {
@@ -130,8 +127,8 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Returns a new ChildEventUserQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildEventUserQuery
      */
@@ -160,7 +157,7 @@ abstract class EventUserQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildEventUser|array|mixed the result, formatted by the current formatter
@@ -177,8 +174,7 @@ abstract class EventUserQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -197,8 +193,8 @@ abstract class EventUserQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -217,7 +213,9 @@ abstract class EventUserQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildEventUser $obj */
+            /**
+ * @var ChildEventUser $obj
+*/
             $obj = new ChildEventUser();
             $obj->hydrate($row);
             EventUserTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -230,8 +228,8 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildEventUser|array|mixed the result, formatted by the current formatter
      */
@@ -251,8 +249,9 @@ abstract class EventUserQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -273,26 +272,24 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildEventUserQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(EventUserTableMap::COL_EVENT_USERID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildEventUserQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(EventUserTableMap::COL_EVENT_USERID, $keys, Criteria::IN);
     }
 
@@ -306,11 +303,14 @@ abstract class EventUserQuery extends ModelCriteria
      * $query->filterByEventUserid(array('min' => 12)); // WHERE event_userid > 12
      * </code>
      *
-     * @param     mixed $eventUserid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $eventUserid The value to use as filter.
+     *                                Use scalar values for
+     *                                equality. Use array values
+     *                                for in_array() equivalent.
+     *                                Use associative array('min'
+     *                                => $minValue, 'max' =>
+     *                                $maxValue) for intervals.
+     * @param string $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventUserQuery The current query, for fluid interface
      */
@@ -347,13 +347,16 @@ abstract class EventUserQuery extends ModelCriteria
      * $query->filterByEventid(array('min' => 12)); // WHERE eventid > 12
      * </code>
      *
-     * @see       filterByEvent()
+     * @see filterByEvent()
      *
-     * @param     mixed $eventid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $eventid    The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventUserQuery The current query, for fluid interface
      */
@@ -390,13 +393,16 @@ abstract class EventUserQuery extends ModelCriteria
      * $query->filterByUserid(array('min' => 12)); // WHERE userid > 12
      * </code>
      *
-     * @see       filterByUser()
+     * @see filterByUser()
      *
-     * @param     mixed $userid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $userid     The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventUserQuery The current query, for fluid interface
      */
@@ -433,11 +439,14 @@ abstract class EventUserQuery extends ModelCriteria
      * $query->filterByUserRoles(array('min' => 12)); // WHERE user_roles > 12
      * </code>
      *
-     * @param     mixed $userRoles The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $userRoles  The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventUserQuery The current query, for fluid interface
      */
@@ -474,11 +483,14 @@ abstract class EventUserQuery extends ModelCriteria
      * $query->filterByBeginMoney(array('min' => 12)); // WHERE begin_money > 12
      * </code>
      *
-     * @param     mixed $beginMoney The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $beginMoney The value to use as filter.
+     *                               Use scalar values for
+     *                               equality. Use array values
+     *                               for in_array() equivalent.
+     *                               Use associative array('min'
+     *                               => $minValue, 'max' =>
+     *                               $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventUserQuery The current query, for fluid interface
      */
@@ -508,8 +520,8 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Event\Event object
      *
-     * @param \API\Models\Event\Event|ObjectCollection $event The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Event\Event|ObjectCollection $event      The related object(s) to use as filter
+     * @param string                                   $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -535,8 +547,8 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Event relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildEventUserQuery The current query, for fluid interface
      */
@@ -569,9 +581,9 @@ abstract class EventUserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Event\EventQuery A secondary query class using the current class as primary query
      */
@@ -585,8 +597,8 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\User\User object
      *
-     * @param \API\Models\User\User|ObjectCollection $user The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\User\User|ObjectCollection $user       The related object(s) to use as filter
+     * @param string                                 $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -612,8 +624,8 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the User relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildEventUserQuery The current query, for fluid interface
      */
@@ -646,9 +658,9 @@ abstract class EventUserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\User\UserQuery A secondary query class using the current class as primary query
      */
@@ -663,7 +675,7 @@ abstract class EventUserQuery extends ModelCriteria
      * Filter the query by a related \API\Models\User\Message\UserMessage object
      *
      * @param \API\Models\User\Message\UserMessage|ObjectCollection $userMessage the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                                $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildEventUserQuery The current query, for fluid interface
      */
@@ -685,8 +697,8 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the UserMessageRelatedByFromEventUserid relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildEventUserQuery The current query, for fluid interface
      */
@@ -719,9 +731,9 @@ abstract class EventUserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\User\Message\UserMessageQuery A secondary query class using the current class as primary query
      */
@@ -736,7 +748,7 @@ abstract class EventUserQuery extends ModelCriteria
      * Filter the query by a related \API\Models\User\Message\UserMessage object
      *
      * @param \API\Models\User\Message\UserMessage|ObjectCollection $userMessage the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                                $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildEventUserQuery The current query, for fluid interface
      */
@@ -758,8 +770,8 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the UserMessageRelatedByToEventUserid relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildEventUserQuery The current query, for fluid interface
      */
@@ -792,9 +804,9 @@ abstract class EventUserQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\User\Message\UserMessageQuery A secondary query class using the current class as primary query
      */
@@ -808,7 +820,7 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildEventUser $eventUser Object to remove from the list of results
+     * @param ChildEventUser $eventUser Object to remove from the list of results
      *
      * @return $this|ChildEventUserQuery The current query, for fluid interface
      */
@@ -824,7 +836,7 @@ abstract class EventUserQuery extends ModelCriteria
     /**
      * Deletes all rows from the event_user table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -835,23 +847,25 @@ abstract class EventUserQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            EventUserTableMap::clearInstancePool();
-            EventUserTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                EventUserTableMap::clearInstancePool();
+                EventUserTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -870,16 +884,17 @@ abstract class EventUserQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            EventUserTableMap::removeInstanceFromPool($criteria);
+                EventUserTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            EventUserTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                EventUserTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // EventUserQuery

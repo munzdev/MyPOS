@@ -18,81 +18,78 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'invoice_warning' table.
  *
+ * @method ChildInvoiceWarningQuery orderByInvoiceWarningid($order = Criteria::ASC) Order by the invoice_warningid column
+ * @method ChildInvoiceWarningQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
+ * @method ChildInvoiceWarningQuery orderByInvoiceWarningTypeid($order = Criteria::ASC) Order by the invoice_warning_typeid column
+ * @method ChildInvoiceWarningQuery orderByWarningDate($order = Criteria::ASC) Order by the warning_date column
+ * @method ChildInvoiceWarningQuery orderByMaturityDate($order = Criteria::ASC) Order by the maturity_date column
+ * @method ChildInvoiceWarningQuery orderByWarningValue($order = Criteria::ASC) Order by the warning_value column
  *
+ * @method ChildInvoiceWarningQuery groupByInvoiceWarningid() Group by the invoice_warningid column
+ * @method ChildInvoiceWarningQuery groupByInvoiceid() Group by the invoiceid column
+ * @method ChildInvoiceWarningQuery groupByInvoiceWarningTypeid() Group by the invoice_warning_typeid column
+ * @method ChildInvoiceWarningQuery groupByWarningDate() Group by the warning_date column
+ * @method ChildInvoiceWarningQuery groupByMaturityDate() Group by the maturity_date column
+ * @method ChildInvoiceWarningQuery groupByWarningValue() Group by the warning_value column
  *
- * @method     ChildInvoiceWarningQuery orderByInvoiceWarningid($order = Criteria::ASC) Order by the invoice_warningid column
- * @method     ChildInvoiceWarningQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
- * @method     ChildInvoiceWarningQuery orderByInvoiceWarningTypeid($order = Criteria::ASC) Order by the invoice_warning_typeid column
- * @method     ChildInvoiceWarningQuery orderByWarningDate($order = Criteria::ASC) Order by the warning_date column
- * @method     ChildInvoiceWarningQuery orderByMaturityDate($order = Criteria::ASC) Order by the maturity_date column
- * @method     ChildInvoiceWarningQuery orderByWarningValue($order = Criteria::ASC) Order by the warning_value column
+ * @method ChildInvoiceWarningQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildInvoiceWarningQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildInvoiceWarningQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildInvoiceWarningQuery groupByInvoiceWarningid() Group by the invoice_warningid column
- * @method     ChildInvoiceWarningQuery groupByInvoiceid() Group by the invoiceid column
- * @method     ChildInvoiceWarningQuery groupByInvoiceWarningTypeid() Group by the invoice_warning_typeid column
- * @method     ChildInvoiceWarningQuery groupByWarningDate() Group by the warning_date column
- * @method     ChildInvoiceWarningQuery groupByMaturityDate() Group by the maturity_date column
- * @method     ChildInvoiceWarningQuery groupByWarningValue() Group by the warning_value column
+ * @method ChildInvoiceWarningQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildInvoiceWarningQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildInvoiceWarningQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildInvoiceWarningQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildInvoiceWarningQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildInvoiceWarningQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildInvoiceWarningQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
+ * @method ChildInvoiceWarningQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
+ * @method ChildInvoiceWarningQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
  *
- * @method     ChildInvoiceWarningQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildInvoiceWarningQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildInvoiceWarningQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildInvoiceWarningQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
  *
- * @method     ChildInvoiceWarningQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
- * @method     ChildInvoiceWarningQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
- * @method     ChildInvoiceWarningQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
+ * @method ChildInvoiceWarningQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
+ * @method ChildInvoiceWarningQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
+ * @method ChildInvoiceWarningQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
  *
- * @method     ChildInvoiceWarningQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
+ * @method ChildInvoiceWarningQuery leftJoinInvoiceWarningType($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceWarningType relation
+ * @method ChildInvoiceWarningQuery rightJoinInvoiceWarningType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceWarningType relation
+ * @method ChildInvoiceWarningQuery innerJoinInvoiceWarningType($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceWarningType relation
  *
- * @method     ChildInvoiceWarningQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
- * @method     ChildInvoiceWarningQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
- * @method     ChildInvoiceWarningQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
+ * @method ChildInvoiceWarningQuery joinWithInvoiceWarningType($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceWarningType relation
  *
- * @method     ChildInvoiceWarningQuery leftJoinInvoiceWarningType($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceWarningType relation
- * @method     ChildInvoiceWarningQuery rightJoinInvoiceWarningType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceWarningType relation
- * @method     ChildInvoiceWarningQuery innerJoinInvoiceWarningType($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceWarningType relation
+ * @method ChildInvoiceWarningQuery leftJoinWithInvoiceWarningType() Adds a LEFT JOIN clause and with to the query using the InvoiceWarningType relation
+ * @method ChildInvoiceWarningQuery rightJoinWithInvoiceWarningType() Adds a RIGHT JOIN clause and with to the query using the InvoiceWarningType relation
+ * @method ChildInvoiceWarningQuery innerJoinWithInvoiceWarningType() Adds a INNER JOIN clause and with to the query using the InvoiceWarningType relation
  *
- * @method     ChildInvoiceWarningQuery joinWithInvoiceWarningType($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceWarningType relation
+ * @method \API\Models\Invoice\InvoiceQuery|\API\Models\Invoice\InvoiceWarningTypeQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildInvoiceWarningQuery leftJoinWithInvoiceWarningType() Adds a LEFT JOIN clause and with to the query using the InvoiceWarningType relation
- * @method     ChildInvoiceWarningQuery rightJoinWithInvoiceWarningType() Adds a RIGHT JOIN clause and with to the query using the InvoiceWarningType relation
- * @method     ChildInvoiceWarningQuery innerJoinWithInvoiceWarningType() Adds a INNER JOIN clause and with to the query using the InvoiceWarningType relation
+ * @method ChildInvoiceWarning findOne(ConnectionInterface $con = null) Return the first ChildInvoiceWarning matching the query
+ * @method ChildInvoiceWarning findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoiceWarning matching the query, or a new ChildInvoiceWarning object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Invoice\InvoiceQuery|\API\Models\Invoice\InvoiceWarningTypeQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildInvoiceWarning findOne(ConnectionInterface $con = null) Return the first ChildInvoiceWarning matching the query
- * @method     ChildInvoiceWarning findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoiceWarning matching the query, or a new ChildInvoiceWarning object populated from the query conditions when no match is found
- *
- * @method     ChildInvoiceWarning findOneByInvoiceWarningid(int $invoice_warningid) Return the first ChildInvoiceWarning filtered by the invoice_warningid column
- * @method     ChildInvoiceWarning findOneByInvoiceid(int $invoiceid) Return the first ChildInvoiceWarning filtered by the invoiceid column
- * @method     ChildInvoiceWarning findOneByInvoiceWarningTypeid(int $invoice_warning_typeid) Return the first ChildInvoiceWarning filtered by the invoice_warning_typeid column
- * @method     ChildInvoiceWarning findOneByWarningDate(string $warning_date) Return the first ChildInvoiceWarning filtered by the warning_date column
- * @method     ChildInvoiceWarning findOneByMaturityDate(string $maturity_date) Return the first ChildInvoiceWarning filtered by the maturity_date column
- * @method     ChildInvoiceWarning findOneByWarningValue(string $warning_value) Return the first ChildInvoiceWarning filtered by the warning_value column *
+ * @method ChildInvoiceWarning findOneByInvoiceWarningid(int $invoice_warningid) Return the first ChildInvoiceWarning filtered by the invoice_warningid column
+ * @method ChildInvoiceWarning findOneByInvoiceid(int $invoiceid) Return the first ChildInvoiceWarning filtered by the invoiceid column
+ * @method ChildInvoiceWarning findOneByInvoiceWarningTypeid(int $invoice_warning_typeid) Return the first ChildInvoiceWarning filtered by the invoice_warning_typeid column
+ * @method ChildInvoiceWarning findOneByWarningDate(string $warning_date) Return the first ChildInvoiceWarning filtered by the warning_date column
+ * @method ChildInvoiceWarning findOneByMaturityDate(string $maturity_date) Return the first ChildInvoiceWarning filtered by the maturity_date column
+ * @method ChildInvoiceWarning findOneByWarningValue(string $warning_value) Return the first ChildInvoiceWarning filtered by the warning_value column *
 
- * @method     ChildInvoiceWarning requirePk($key, ConnectionInterface $con = null) Return the ChildInvoiceWarning by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceWarning requireOne(ConnectionInterface $con = null) Return the first ChildInvoiceWarning matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceWarning requirePk($key, ConnectionInterface $con = null) Return the ChildInvoiceWarning by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceWarning requireOne(ConnectionInterface $con = null) Return the first ChildInvoiceWarning matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildInvoiceWarning requireOneByInvoiceWarningid(int $invoice_warningid) Return the first ChildInvoiceWarning filtered by the invoice_warningid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceWarning requireOneByInvoiceid(int $invoiceid) Return the first ChildInvoiceWarning filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceWarning requireOneByInvoiceWarningTypeid(int $invoice_warning_typeid) Return the first ChildInvoiceWarning filtered by the invoice_warning_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceWarning requireOneByWarningDate(string $warning_date) Return the first ChildInvoiceWarning filtered by the warning_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceWarning requireOneByMaturityDate(string $maturity_date) Return the first ChildInvoiceWarning filtered by the maturity_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildInvoiceWarning requireOneByWarningValue(string $warning_value) Return the first ChildInvoiceWarning filtered by the warning_value column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceWarning requireOneByInvoiceWarningid(int $invoice_warningid) Return the first ChildInvoiceWarning filtered by the invoice_warningid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceWarning requireOneByInvoiceid(int $invoiceid) Return the first ChildInvoiceWarning filtered by the invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceWarning requireOneByInvoiceWarningTypeid(int $invoice_warning_typeid) Return the first ChildInvoiceWarning filtered by the invoice_warning_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceWarning requireOneByWarningDate(string $warning_date) Return the first ChildInvoiceWarning filtered by the warning_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceWarning requireOneByMaturityDate(string $maturity_date) Return the first ChildInvoiceWarning filtered by the maturity_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildInvoiceWarning requireOneByWarningValue(string $warning_value) Return the first ChildInvoiceWarning filtered by the warning_value column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildInvoiceWarning[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoiceWarning objects based on current ModelCriteria
- * @method     ChildInvoiceWarning[]|ObjectCollection findByInvoiceWarningid(int $invoice_warningid) Return ChildInvoiceWarning objects filtered by the invoice_warningid column
- * @method     ChildInvoiceWarning[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildInvoiceWarning objects filtered by the invoiceid column
- * @method     ChildInvoiceWarning[]|ObjectCollection findByInvoiceWarningTypeid(int $invoice_warning_typeid) Return ChildInvoiceWarning objects filtered by the invoice_warning_typeid column
- * @method     ChildInvoiceWarning[]|ObjectCollection findByWarningDate(string $warning_date) Return ChildInvoiceWarning objects filtered by the warning_date column
- * @method     ChildInvoiceWarning[]|ObjectCollection findByMaturityDate(string $maturity_date) Return ChildInvoiceWarning objects filtered by the maturity_date column
- * @method     ChildInvoiceWarning[]|ObjectCollection findByWarningValue(string $warning_value) Return ChildInvoiceWarning objects filtered by the warning_value column
- * @method     ChildInvoiceWarning[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildInvoiceWarning[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildInvoiceWarning objects based on current ModelCriteria
+ * @method ChildInvoiceWarning[]|ObjectCollection findByInvoiceWarningid(int $invoice_warningid) Return ChildInvoiceWarning objects filtered by the invoice_warningid column
+ * @method ChildInvoiceWarning[]|ObjectCollection findByInvoiceid(int $invoiceid) Return ChildInvoiceWarning objects filtered by the invoiceid column
+ * @method ChildInvoiceWarning[]|ObjectCollection findByInvoiceWarningTypeid(int $invoice_warning_typeid) Return ChildInvoiceWarning objects filtered by the invoice_warning_typeid column
+ * @method ChildInvoiceWarning[]|ObjectCollection findByWarningDate(string $warning_date) Return ChildInvoiceWarning objects filtered by the warning_date column
+ * @method ChildInvoiceWarning[]|ObjectCollection findByMaturityDate(string $maturity_date) Return ChildInvoiceWarning objects filtered by the maturity_date column
+ * @method ChildInvoiceWarning[]|ObjectCollection findByWarningValue(string $warning_value) Return ChildInvoiceWarning objects filtered by the warning_value column
+ * @method ChildInvoiceWarning[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class InvoiceWarningQuery extends ModelCriteria
 {
@@ -101,9 +98,9 @@ abstract class InvoiceWarningQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Invoice\Base\InvoiceWarningQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Invoice\\InvoiceWarning', $modelAlias = null)
     {
@@ -113,8 +110,8 @@ abstract class InvoiceWarningQuery extends ModelCriteria
     /**
      * Returns a new ChildInvoiceWarningQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildInvoiceWarningQuery
      */
@@ -143,7 +140,7 @@ abstract class InvoiceWarningQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildInvoiceWarning|array|mixed the result, formatted by the current formatter
@@ -160,8 +157,7 @@ abstract class InvoiceWarningQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -180,8 +176,8 @@ abstract class InvoiceWarningQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -200,7 +196,9 @@ abstract class InvoiceWarningQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildInvoiceWarning $obj */
+            /**
+ * @var ChildInvoiceWarning $obj
+*/
             $obj = new ChildInvoiceWarning();
             $obj->hydrate($row);
             InvoiceWarningTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -213,8 +211,8 @@ abstract class InvoiceWarningQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildInvoiceWarning|array|mixed the result, formatted by the current formatter
      */
@@ -234,8 +232,9 @@ abstract class InvoiceWarningQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -256,26 +255,24 @@ abstract class InvoiceWarningQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildInvoiceWarningQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(InvoiceWarningTableMap::COL_INVOICE_WARNINGID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildInvoiceWarningQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(InvoiceWarningTableMap::COL_INVOICE_WARNINGID, $keys, Criteria::IN);
     }
 
@@ -289,11 +286,14 @@ abstract class InvoiceWarningQuery extends ModelCriteria
      * $query->filterByInvoiceWarningid(array('min' => 12)); // WHERE invoice_warningid > 12
      * </code>
      *
-     * @param     mixed $invoiceWarningid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $invoiceWarningid The value to use as filter.
+     *                                     Use scalar values for
+     *                                     equality. Use array values
+     *                                     for in_array() equivalent.
+     *                                     Use associative array('min'
+     *                                     => $minValue, 'max' =>
+     *                                     $maxValue) for intervals.
+     * @param string $comparison       Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceWarningQuery The current query, for fluid interface
      */
@@ -330,13 +330,16 @@ abstract class InvoiceWarningQuery extends ModelCriteria
      * $query->filterByInvoiceid(array('min' => 12)); // WHERE invoiceid > 12
      * </code>
      *
-     * @see       filterByInvoice()
+     * @see filterByInvoice()
      *
-     * @param     mixed $invoiceid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $invoiceid  The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceWarningQuery The current query, for fluid interface
      */
@@ -373,13 +376,16 @@ abstract class InvoiceWarningQuery extends ModelCriteria
      * $query->filterByInvoiceWarningTypeid(array('min' => 12)); // WHERE invoice_warning_typeid > 12
      * </code>
      *
-     * @see       filterByInvoiceWarningType()
+     * @see filterByInvoiceWarningType()
      *
-     * @param     mixed $invoiceWarningTypeid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $invoiceWarningTypeid The value to use as filter.
+     *                                         Use scalar values for
+     *                                         equality. Use array values
+     *                                         for in_array() equivalent.
+     *                                         Use associative array('min'
+     *                                         => $minValue, 'max' =>
+     *                                         $maxValue) for intervals.
+     * @param string $comparison           Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceWarningQuery The current query, for fluid interface
      */
@@ -416,13 +422,18 @@ abstract class InvoiceWarningQuery extends ModelCriteria
      * $query->filterByWarningDate(array('max' => 'yesterday')); // WHERE warning_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $warningDate The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $warningDate The value to use as filter.
+     *                                Values can be integers
+     *                                (unix timestamps), DateTime
+     *                                objects, or strings. Empty
+     *                                strings are treated as
+     *                                NULL. Use scalar values for
+     *                                equality. Use array values
+     *                                for in_array() equivalent.
+     *                                Use associative array('min'
+     *                                => $minValue, 'max' =>
+     *                                $maxValue) for intervals.
+     * @param string $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceWarningQuery The current query, for fluid interface
      */
@@ -459,13 +470,18 @@ abstract class InvoiceWarningQuery extends ModelCriteria
      * $query->filterByMaturityDate(array('max' => 'yesterday')); // WHERE maturity_date > '2011-03-13'
      * </code>
      *
-     * @param     mixed $maturityDate The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $maturityDate The value to use as filter.
+     *                                 Values can be integers
+     *                                 (unix timestamps), DateTime
+     *                                 objects, or strings. Empty
+     *                                 strings are treated as
+     *                                 NULL. Use scalar values for
+     *                                 equality. Use array values
+     *                                 for in_array() equivalent.
+     *                                 Use associative array('min'
+     *                                 => $minValue, 'max' =>
+     *                                 $maxValue) for intervals.
+     * @param string $comparison   Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceWarningQuery The current query, for fluid interface
      */
@@ -502,11 +518,14 @@ abstract class InvoiceWarningQuery extends ModelCriteria
      * $query->filterByWarningValue(array('min' => 12)); // WHERE warning_value > 12
      * </code>
      *
-     * @param     mixed $warningValue The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $warningValue The value to use as filter.
+     *                                 Use scalar values for
+     *                                 equality. Use array values
+     *                                 for in_array() equivalent.
+     *                                 Use associative array('min'
+     *                                 => $minValue, 'max' =>
+     *                                 $maxValue) for intervals.
+     * @param string $comparison   Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildInvoiceWarningQuery The current query, for fluid interface
      */
@@ -536,8 +555,8 @@ abstract class InvoiceWarningQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Invoice\Invoice object
      *
-     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice    The related object(s) to use as filter
+     * @param string                                       $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -563,8 +582,8 @@ abstract class InvoiceWarningQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Invoice relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceWarningQuery The current query, for fluid interface
      */
@@ -597,9 +616,9 @@ abstract class InvoiceWarningQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Invoice\InvoiceQuery A secondary query class using the current class as primary query
      */
@@ -614,7 +633,7 @@ abstract class InvoiceWarningQuery extends ModelCriteria
      * Filter the query by a related \API\Models\Invoice\InvoiceWarningType object
      *
      * @param \API\Models\Invoice\InvoiceWarningType|ObjectCollection $invoiceWarningType The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                                  $comparison         Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -640,8 +659,8 @@ abstract class InvoiceWarningQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the InvoiceWarningType relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildInvoiceWarningQuery The current query, for fluid interface
      */
@@ -674,9 +693,9 @@ abstract class InvoiceWarningQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Invoice\InvoiceWarningTypeQuery A secondary query class using the current class as primary query
      */
@@ -690,7 +709,7 @@ abstract class InvoiceWarningQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildInvoiceWarning $invoiceWarning Object to remove from the list of results
+     * @param ChildInvoiceWarning $invoiceWarning Object to remove from the list of results
      *
      * @return $this|ChildInvoiceWarningQuery The current query, for fluid interface
      */
@@ -706,7 +725,7 @@ abstract class InvoiceWarningQuery extends ModelCriteria
     /**
      * Deletes all rows from the invoice_warning table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -717,23 +736,25 @@ abstract class InvoiceWarningQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            InvoiceWarningTableMap::clearInstancePool();
-            InvoiceWarningTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                InvoiceWarningTableMap::clearInstancePool();
+                InvoiceWarningTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -752,16 +773,17 @@ abstract class InvoiceWarningQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            InvoiceWarningTableMap::removeInstanceFromPool($criteria);
+                InvoiceWarningTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            InvoiceWarningTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                InvoiceWarningTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // InvoiceWarningQuery

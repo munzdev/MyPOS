@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'event_contact' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class EventContactTableMap extends TableMap
 {
@@ -157,7 +153,7 @@ class EventContactTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('EventContactid', 'Eventid', 'Title', 'Name', 'ContactPerson', 'Address', 'Address2', 'City', 'Zip', 'TaxIdentificationNr', 'Telephon', 'Fax', 'Email', 'Active', 'Default', ),
         self::TYPE_CAMELNAME     => array('eventContactid', 'eventid', 'title', 'name', 'contactPerson', 'address', 'address2', 'city', 'zip', 'taxIdentificationNr', 'telephon', 'fax', 'email', 'active', 'default', ),
         self::TYPE_COLNAME       => array(EventContactTableMap::COL_EVENT_CONTACTID, EventContactTableMap::COL_EVENTID, EventContactTableMap::COL_TITLE, EventContactTableMap::COL_NAME, EventContactTableMap::COL_CONTACT_PERSON, EventContactTableMap::COL_ADDRESS, EventContactTableMap::COL_ADDRESS2, EventContactTableMap::COL_CITY, EventContactTableMap::COL_ZIP, EventContactTableMap::COL_TAX_IDENTIFICATION_NR, EventContactTableMap::COL_TELEPHON, EventContactTableMap::COL_FAX, EventContactTableMap::COL_EMAIL, EventContactTableMap::COL_ACTIVE, EventContactTableMap::COL_DEFAULT, ),
@@ -171,7 +167,7 @@ class EventContactTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('EventContactid' => 0, 'Eventid' => 1, 'Title' => 2, 'Name' => 3, 'ContactPerson' => 4, 'Address' => 5, 'Address2' => 6, 'City' => 7, 'Zip' => 8, 'TaxIdentificationNr' => 9, 'Telephon' => 10, 'Fax' => 11, 'Email' => 12, 'Active' => 13, 'Default' => 14, ),
         self::TYPE_CAMELNAME     => array('eventContactid' => 0, 'eventid' => 1, 'title' => 2, 'name' => 3, 'contactPerson' => 4, 'address' => 5, 'address2' => 6, 'city' => 7, 'zip' => 8, 'taxIdentificationNr' => 9, 'telephon' => 10, 'fax' => 11, 'email' => 12, 'active' => 13, 'default' => 14, ),
         self::TYPE_COLNAME       => array(EventContactTableMap::COL_EVENT_CONTACTID => 0, EventContactTableMap::COL_EVENTID => 1, EventContactTableMap::COL_TITLE => 2, EventContactTableMap::COL_NAME => 3, EventContactTableMap::COL_CONTACT_PERSON => 4, EventContactTableMap::COL_ADDRESS => 5, EventContactTableMap::COL_ADDRESS2 => 6, EventContactTableMap::COL_CITY => 7, EventContactTableMap::COL_ZIP => 8, EventContactTableMap::COL_TAX_IDENTIFICATION_NR => 9, EventContactTableMap::COL_TELEPHON => 10, EventContactTableMap::COL_FAX => 11, EventContactTableMap::COL_EMAIL => 12, EventContactTableMap::COL_ACTIVE => 13, EventContactTableMap::COL_DEFAULT => 14, ),
@@ -218,27 +214,54 @@ class EventContactTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Event', '\\API\\Models\\Event\\Event', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, null, false);
-        $this->addRelation('InvoiceRelatedByCustomerEventContactid', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':customer_event_contactid',
-    1 => ':event_contactid',
-  ),
-), null, null, 'InvoicesRelatedByCustomerEventContactid', false);
-        $this->addRelation('InvoiceRelatedByEventContactid', '\\API\\Models\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':event_contactid',
-    1 => ':event_contactid',
-  ),
-), null, null, 'InvoicesRelatedByEventContactid', false);
+        $this->addRelation(
+            'Event',
+            '\\API\\Models\\Event\\Event',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'InvoiceRelatedByCustomerEventContactid',
+            '\\API\\Models\\Invoice\\Invoice',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':customer_event_contactid',
+            1 => ':event_contactid',
+            ),
+            ),
+            null,
+            null,
+            'InvoicesRelatedByCustomerEventContactid',
+            false
+        );
+        $this->addRelation(
+            'InvoiceRelatedByEventContactid',
+            '\\API\\Models\\Invoice\\Invoice',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':event_contactid',
+            1 => ':event_contactid',
+            ),
+            ),
+            null,
+            null,
+            'InvoicesRelatedByEventContactid',
+            false
+        );
     } // buildRelations()
 
     /**
@@ -293,7 +316,7 @@ class EventContactTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -324,7 +347,9 @@ class EventContactTableMap extends TableMap
             $col = $offset + EventContactTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = EventContactTableMap::OM_CLASS;
-            /** @var EventContact $obj */
+            /**
+ * @var EventContact $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             EventContactTableMap::addInstanceToPool($obj, $key);
@@ -337,7 +362,7 @@ class EventContactTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -357,7 +382,9 @@ class EventContactTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var EventContact $obj */
+                /**
+ * @var EventContact $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -374,8 +401,8 @@ class EventContactTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -419,6 +446,7 @@ class EventContactTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -442,16 +470,16 @@ class EventContactTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a EventContact or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or EventContact object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or EventContact object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventContactTableMap::DATABASE_NAME);
         }
@@ -483,7 +511,7 @@ class EventContactTableMap extends TableMap
     /**
      * Deletes all rows from the event_contact table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -494,8 +522,8 @@ class EventContactTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a EventContact or Criteria object.
      *
-     * @param mixed               $criteria Criteria or EventContact object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or EventContact object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -512,7 +540,7 @@ class EventContactTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from EventContact object
         }
 
-        if ($criteria->containsKey(EventContactTableMap::COL_EVENT_CONTACTID) && $criteria->keyContainsValue(EventContactTableMap::COL_EVENT_CONTACTID) ) {
+        if ($criteria->containsKey(EventContactTableMap::COL_EVENT_CONTACTID) && $criteria->keyContainsValue(EventContactTableMap::COL_EVENT_CONTACTID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.EventContactTableMap::COL_EVENT_CONTACTID.')');
         }
 
@@ -522,11 +550,12 @@ class EventContactTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // EventContactTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

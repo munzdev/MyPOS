@@ -13,212 +13,213 @@ use Slim\Http\Response;
 
 abstract class Controller
 {
-    protected $o_app;
-    protected $o_logger;
-    protected $a_json;
-    protected $o_request;
-    protected $o_response;
-    protected $a_args;
+    protected $app;
+    protected $logger;
+    protected $json;
+    protected $request;
+    protected $response;
+    protected $args;
 
 
-    public function __construct(App $o_app)
+    public function __construct(App $app)
     {
-        $this->o_app = $o_app;
-        $this->o_logger = $o_app->getContainer()->get('logger');
+        $this->app = $app;
+        $this->logger = $app->getContainer()->get('logger');
     }
 
-    public function __invoke(Request $o_request, Response $o_response, $a_args) : Response
+    public function __invoke(Request $request, Response $response, $args) : Response
     {
-        $this->o_request = $o_request;
-        $this->o_response = $o_response;
-        $this->a_args = $a_args;
+        $this->request = $request;
+        $this->response = $response;
+        $this->args = $args;
 
-        try
-        {
-            $this->a_json = $o_request->getParsedBody();
+        try {
+            $this->json = $request->getParsedBody();
 
-            $this->ANY($o_request, $o_response, $a_args);
+            $this->any($request, $response, $args);
 
-            if($o_request->isGet())
-                $this->GET();
-            elseif($o_request->isPost())
-                $this->POST();
-            elseif($o_request->isPut())
-                $this->PUT();
-            elseif($o_request->isDelete())
-                $this->DELETE();
-            elseif($o_request->isHead())
-                $this->HEAD();
-            elseif($o_request->isPatch())
-                $this->PATCH();
-            elseif($o_request->isOptions())
-                $this->OPTIONS();
-        } catch (InvalidRequestException $o_exception) {
-            $this->GenerateJSONErrorFromException($o_exception, 400);
-        } catch (\Exception $o_exception) {
-            $this->GenerateJSONErrorFromException($o_exception, 500);
+            if ($request->isGet()) {
+                $this->get();
+            } elseif ($request->isPost()) {
+                $this->post();
+            } elseif ($request->isPut()) {
+                $this->put();
+            } elseif ($request->isDelete()) {
+                $this->delete();
+            } elseif ($request->isHead()) {
+                $this->head();
+            } elseif ($request->isPatch()) {
+                $this->patch();
+            } elseif ($request->isOptions()) {
+                $this->options();
+            }
+        } catch (InvalidRequestException $exception) {
+            $this->generateJSONErrorFromException($exception, 400);
+        } catch (\Exception $exception) {
+            $this->generateJSONErrorFromException($exception, 500);
         }
 
-        return $this->o_response;
+        return $this->response;
     }
 
-    protected function validate($a_validators, $a_array = null) : void
+    protected function validate($validators, $array = null) : void
     {
-        if($a_array == null)
-            $a_array = $this->a_json;
+        if ($array == null) {
+            $array = $this->json;
+        }
 
-        $a_errors = $this->recursiveValidate($a_array, $a_validators);
+        $errors = $this->recursiveValidate($array, $validators);
 
-        if($a_errors)
-        {
-            $str_error = "";
+        if ($errors) {
+            $error = "";
 
-            foreach ($a_errors as $str_context => $str_message)
-            {
-                $str_error .= "$str_context: $str_message\n";
+            foreach ($errors as $context => $message) {
+                $error .= "$context: $message\n";
             }
 
-            throw new InvalidRequestException(trim($str_error));
+            throw new InvalidRequestException(trim($error));
         }
     }
 
-    protected function jsonToPropel(array $a_json, $o_propel)
+    protected function jsonToPropel(array $json, $propel)
     {
-        foreach($a_json as $str_key => $value) {
-            if(is_numeric($str_key) && is_array($value) && $o_propel instanceOf Collection)
-            {
-                $str_modelClassName = $o_propel->getFullyQualifiedModel();
-                $str_tableMapClassName = $str_modelClassName::TABLE_MAP;
-                $o_modelTableMap = $str_tableMapClassName::getTableMap();
-                $a_columns = $o_modelTableMap->getColumns();
-                $o_primaryKey = reset($a_columns);
-                $str_primaryKeyName = $o_primaryKey->getPhpName();
+        foreach ($json as $key => $value) {
+            if (is_numeric($key) && is_array($value) && $propel instanceof Collection) {
+                $modelClassName = $propel->getFullyQualifiedModel();
+                $tableMapClassName = $modelClassName::TABLE_MAP;
+                $modelTableMap = $tableMapClassName::getTableMap();
+                $columns = $modelTableMap->getColumns();
+                $primaryKey = reset($columns);
+                $primaryKeyName = $primaryKey->getPhpName();
 
-                $a_existingKeys = $o_propel->getPrimaryKeys(false);
+                $existingKeys = $propel->getPrimaryKeys(false);
 
-                $o_model = null;
+                $model = null;
 
-                foreach($value as $a_model)
-                {
-                    if(isset($a_model[$str_primaryKeyName]) && $str_key = array_search($a_model[$str_primaryKeyName], $a_existingKeys))
-                    {
-                        $o_model = $o_propel[$str_key];
+                foreach ($value as $model) {
+                    if (isset($model[$primaryKeyName]) && $key = array_search($model[$primaryKeyName], $existingKeys)) {
+                        $model = $propel[$key];
                         break;
                     }
                 }
 
-                if($o_model === null)
-                {
-                    $o_model = new $str_modelClassName();
-                    $o_propel->append($o_model);
+                if ($model === null) {
+                    $model = new $modelClassName();
+                    $propel->append($model);
                 }
 
-                $this->jsonToPropel($value, $o_model);
-            } elseif(is_array($value) && $o_propel instanceOf ActiveRecordInterface) {
+                $this->jsonToPropel($value, $model);
+            } elseif (is_array($value) && $propel instanceof ActiveRecordInterface) {
+                $tableMapName = $propel::TABLE_MAP;
+                $tableMap = $tableMapName::getTableMap();
 
-                $str_tableMapName = $o_propel::TABLE_MAP;
-                $o_tableMap = $str_tableMapName::getTableMap();
-
-                if(!$o_tableMap->hasRelation($str_key) && mb_substr($str_key, -1) == 's') {
-                    $str_key = mb_substr($str_key, 0, -1);
-                } elseif(!$o_tableMap->hasRelation($str_key)) {
+                if (!$tableMap->hasRelation($key) && mb_substr($key, -1) == 's') {
+                    $key = mb_substr($key, 0, -1);
+                } elseif (!$tableMap->hasRelation($key)) {
                     throw new GeneralException('Invalid Array Format given');
                 }
 
-                $o_relation = $o_tableMap->getRelation($str_key);
+                $relation = $tableMap->getRelation($key);
 
-                $str_name = $str_key;
-                if($o_relation->getPluralName() !== null)
-                    $str_name = $o_relation->getPluralName();
-
-                $str_methodName = "get$str_name";
-
-                if(method_exists($o_propel, $str_methodName)) {
-                    $this->jsonToPropel($value, $o_propel->$str_methodName());
+                $name = $key;
+                if ($relation->getPluralName() !== null) {
+                    $name = $relation->getPluralName();
                 }
-            } elseif($value !== null && $value !== 0) {
-                $str_methodName = "set$str_key";
 
-                if(method_exists($o_propel, $str_methodName))
-                    $o_propel->$str_methodName($value);
-                else
-                    $o_propel->setVirtualColumn($str_key, $value);
+                $methodName = "get$name";
+
+                if (method_exists($propel, $methodName)) {
+                    $this->jsonToPropel($value, $propel->$methodName());
+                }
+            } elseif ($value !== null && $value !== 0) {
+                $methodName = "set$key";
+
+                if (method_exists($propel, $methodName)) {
+                    $propel->$methodName($value);
+                    continue;
+                }
+                
+                $propel->setVirtualColumn($key, $value);
             }
         }
 
-        return $o_propel;
+        return $propel;
     }
 
-    private function recursiveValidate($a_json = [], $a_validators = [], $a_actualKeys = []) : array
+    private function recursiveValidate($json = [], $validators = [], $actualKeys = []) : array
     {
-        $a_errors = [];
+        $errors = [];
 
-        foreach ($a_validators as $str_key => $o_validator) {
-            $a_actualKeys[] = $str_key;
-            $str_value = $this->getNestedParam($a_json, $a_actualKeys);
-            if (is_array($o_validator)) {
-                $this->recursiveValidate($a_json, $o_validator, $a_actualKeys);
-            } else {
-                try {
-                    $o_validator->assert($str_value);
-                } catch (NestedValidationException $exception) {
-                    $a_errors[implode('.', $a_actualKeys)] = $exception->getFullMessage();
-                }
+        foreach ($validators as $key => $validator) {
+            $actualKeys[] = $key;
+            $value = $this->getNestedParam($json, $actualKeys);
+            
+            if (is_array($validator)) {
+                $this->recursiveValidate($json, $validator, $actualKeys);
+                array_pop($actualKeys);
+                continue;
             }
-
+            
+            try {
+                $validator->assert($value);
+            } catch (NestedValidationException $exception) {
+                $errors[implode('.', $actualKeys)] = $exception->getFullMessage();
+            }
+            
             //Remove the key added in this foreach
-            array_pop($a_actualKeys);
+            array_pop($actualKeys);
         }
 
-        return $a_errors;
+        return $errors;
     }
 
     /**
      * Get the nested parameter value.
      *
-     * @param array $a_json An array that represents the values of the parameters.
-     * @param array $a_keys   An array that represents the tree of keys to use.
+     * @param array $json An array that represents the values of the parameters.
+     * @param array $keys An array that represents the tree of keys to use.
      *
      * @return mixed The nested parameter value by the given params and tree of keys.
      */
-    private function getNestedParam($a_json = [], $a_keys = []) // : ?array
+    private function getNestedParam($json = [], $keys = []) // : ?array
     {
-        if (empty($a_keys)) {
-            return $a_json;
-        } else {
-            $str_firstKey = array_shift($a_keys);
-            if (array_key_exists($str_firstKey, $a_json)) {
-                $a_json = (array) $a_json;
-                $str_jsonValue = $a_json[$str_firstKey];
-
-                return $this->getNestedParam($str_jsonValue, $a_keys);
-            } else {
-                return null;
-            }
+        if (empty($keys)) {
+            return $json;
         }
+        
+        if (!array_key_exists($firstKey, $json)) {
+            return null;
+        }
+        
+        $firstKey = array_shift($keys);
+        $json = (array) $json;
+        $jsonValue = $json[$firstKey];
+
+        return $this->getNestedParam($jsonValue, $keys);
     }
 
-    private function GenerateJSONErrorFromException(\Exception $o_exception, int $i_statusCode) : void
+    private function generateJSONErrorFromException(\Exception $exception, int $statusCode) : void
     {
-        $this->o_response = $this->o_response->withJson(array(
-            'status' => $i_statusCode,
-            'code' => $o_exception->getCode(),
-            'title' => $o_exception->getMessage(),
-            'detail' => $o_exception->__toString()
-        ), $i_statusCode);
-
-        //$this->o_app->respond($this->o_response);
-        //exit;
+        $this->response = $this->response->withJson(
+            array(
+            'status' => $statusCode,
+            'code' => $exception->getCode(),
+            'title' => $exception->getMessage(),
+            'detail' => $exception->__toString()
+            ),
+            $statusCode
+        );
     }
 
-    protected function cleanupRecursionData(array $a_array) {
-        $a_relationsFound = [];
-        foreach ($a_array as $str_key => $a_item) {
-            if ($a_item === ["*RECURSION*"] || $a_item == "*RECURSION*") {
-                unset($a_array[$str_key]);
-            } elseif (is_array($a_item)) {
-                $a_array[$str_key] = $this->cleanupRecursionData($a_item);
-                $a_relationsFound[] = $str_key;
+    protected function cleanupRecursionData(array $array)
+    {
+        $relationsFound = [];
+        foreach ($array as $key => $item) {
+            if ($item === ["*RECURSION*"] || $item == "*RECURSION*") {
+                unset($array[$key]);
+            } elseif (is_array($item)) {
+                $array[$key] = $this->cleanupRecursionData($item);
+                $relationsFound[] = $key;
             }
         }
 
@@ -229,31 +230,50 @@ abstract class Controller
             }
         }*/
 
-        return $a_array;
+        return $array;
     }
 
-    protected function cleanupUserData(array $a_user) {
-        $a_user['Password'] = null;
-        $a_user['AutologinHash'] = null;
-        $a_user['IsAdmin'] = null;
-        $a_user['CallRequest'] = null;
+    protected function cleanupUserData(array $user)
+    {
+        $user['Password'] = null;
+        $user['AutologinHash'] = null;
+        $user['IsAdmin'] = null;
+        $user['CallRequest'] = null;
 
-        if(isset($a_user['EventUser']))
-            $a_user['EventUser']['BeginMoney'] = null;
+        if (isset($user['EventUser'])) {
+            $user['EventUser']['BeginMoney'] = null;
+        }
 
-        return $a_user;
+        return $user;
     }
 
-    protected function withJson($a_json) {
-        $this->o_response = $this->o_response->withJson($a_json);
+    protected function withJson($json)
+    {
+        $this->response = $this->response->withJson($json);
     }
 
-    protected function ANY() : void {}
-    protected function POST() : void {}
-    protected function GET() : void {}
-    protected function PUT() : void {}
-    protected function DELETE() : void {}
-    protected function HEAD() : void {}
-    protected function PATCH() : void {}
-    protected function OPTIONS() : void {}
+    protected function any() : void
+    {
+    }
+    protected function post() : void
+    {
+    }
+    protected function get() : void
+    {
+    }
+    protected function put() : void
+    {
+    }
+    protected function delete() : void
+    {
+    }
+    protected function head() : void
+    {
+    }
+    protected function patch() : void
+    {
+    }
+    protected function options() : void
+    {
+    }
 }

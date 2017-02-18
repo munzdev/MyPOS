@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'distribution_place_user' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class DistributionPlaceUserTableMap extends TableMap
 {
@@ -97,7 +93,7 @@ class DistributionPlaceUserTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('DistributionPlaceid', 'Userid', 'EventPrinterid', ),
         self::TYPE_CAMELNAME     => array('distributionPlaceid', 'userid', 'eventPrinterid', ),
         self::TYPE_COLNAME       => array(DistributionPlaceUserTableMap::COL_DISTRIBUTION_PLACEID, DistributionPlaceUserTableMap::COL_USERID, DistributionPlaceUserTableMap::COL_EVENT_PRINTERID, ),
@@ -111,7 +107,7 @@ class DistributionPlaceUserTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('DistributionPlaceid' => 0, 'Userid' => 1, 'EventPrinterid' => 2, ),
         self::TYPE_CAMELNAME     => array('distributionPlaceid' => 0, 'userid' => 1, 'eventPrinterid' => 2, ),
         self::TYPE_COLNAME       => array(DistributionPlaceUserTableMap::COL_DISTRIBUTION_PLACEID => 0, DistributionPlaceUserTableMap::COL_USERID => 1, DistributionPlaceUserTableMap::COL_EVENT_PRINTERID => 2, ),
@@ -136,9 +132,9 @@ class DistributionPlaceUserTableMap extends TableMap
         $this->setPackage('API.Models.DistributionPlace');
         $this->setUseIdGenerator(false);
         // columns
-        $this->addForeignPrimaryKey('distribution_placeid', 'DistributionPlaceid', 'INTEGER' , 'distribution_place', 'distribution_placeid', true, null, null);
-        $this->addForeignPrimaryKey('userid', 'Userid', 'INTEGER' , 'user', 'userid', true, null, null);
-        $this->addForeignPrimaryKey('event_printerid', 'EventPrinterid', 'INTEGER' , 'event_printer', 'event_printerid', true, null, null);
+        $this->addForeignPrimaryKey('distribution_placeid', 'DistributionPlaceid', 'INTEGER', 'distribution_place', 'distribution_placeid', true, null, null);
+        $this->addForeignPrimaryKey('userid', 'Userid', 'INTEGER', 'user', 'userid', true, null, null);
+        $this->addForeignPrimaryKey('event_printerid', 'EventPrinterid', 'INTEGER', 'event_printer', 'event_printerid', true, null, null);
     } // initialize()
 
     /**
@@ -146,27 +142,54 @@ class DistributionPlaceUserTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('DistributionPlace', '\\API\\Models\\DistributionPlace\\DistributionPlace', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':distribution_placeid',
-    1 => ':distribution_placeid',
-  ),
-), null, null, null, false);
-        $this->addRelation('User', '\\API\\Models\\User\\User', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':userid',
-    1 => ':userid',
-  ),
-), null, null, null, false);
-        $this->addRelation('EventPrinter', '\\API\\Models\\Event\\EventPrinter', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':event_printerid',
-    1 => ':event_printerid',
-  ),
-), null, null, null, false);
+        $this->addRelation(
+            'DistributionPlace',
+            '\\API\\Models\\DistributionPlace\\DistributionPlace',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':distribution_placeid',
+            1 => ':distribution_placeid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'User',
+            '\\API\\Models\\User\\User',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':userid',
+            1 => ':userid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'EventPrinter',
+            '\\API\\Models\\Event\\EventPrinter',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':event_printerid',
+            1 => ':event_printerid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
     } // buildRelations()
 
     /**
@@ -178,7 +201,7 @@ class DistributionPlaceUserTableMap extends TableMap
      * and findPk*() calls.
      *
      * @param \API\Models\DistributionPlace\DistributionPlaceUser $obj A \API\Models\DistributionPlace\DistributionPlaceUser object.
-     * @param string $key             (optional) key to use for instance map (for performance boost if key was already calculated externally).
+     * @param string                                              $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
      */
     public static function addInstanceToPool($obj, $key = null)
     {
@@ -205,7 +228,6 @@ class DistributionPlaceUserTableMap extends TableMap
         if (Propel::isInstancePoolingEnabled() && null !== $value) {
             if (is_object($value) && $value instanceof \API\Models\DistributionPlace\DistributionPlaceUser) {
                 $key = serialize([(null === $value->getDistributionPlaceid() || is_scalar($value->getDistributionPlaceid()) || is_callable([$value->getDistributionPlaceid(), '__toString']) ? (string) $value->getDistributionPlaceid() : $value->getDistributionPlaceid()), (null === $value->getUserid() || is_scalar($value->getUserid()) || is_callable([$value->getUserid(), '__toString']) ? (string) $value->getUserid() : $value->getUserid()), (null === $value->getEventPrinterid() || is_scalar($value->getEventPrinterid()) || is_callable([$value->getEventPrinterid(), '__toString']) ? (string) $value->getEventPrinterid() : $value->getEventPrinterid())]);
-
             } elseif (is_array($value) && count($value) === 3) {
                 // assume we've been passed a primary key";
                 $key = serialize([(null === $value[0] || is_scalar($value[0]) || is_callable([$value[0], '__toString']) ? (string) $value[0] : $value[0]), (null === $value[1] || is_scalar($value[1]) || is_callable([$value[1], '__toString']) ? (string) $value[1] : $value[1]), (null === $value[2] || is_scalar($value[2]) || is_callable([$value[2], '__toString']) ? (string) $value[2] : $value[2])]);
@@ -259,7 +281,7 @@ class DistributionPlaceUserTableMap extends TableMap
      */
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-            $pks = [];
+        $pks = [];
 
         $pks[] = (int) $row[
             $indexType == TableMap::TYPE_NUM
@@ -288,7 +310,7 @@ class DistributionPlaceUserTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -319,7 +341,9 @@ class DistributionPlaceUserTableMap extends TableMap
             $col = $offset + DistributionPlaceUserTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = DistributionPlaceUserTableMap::OM_CLASS;
-            /** @var DistributionPlaceUser $obj */
+            /**
+ * @var DistributionPlaceUser $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             DistributionPlaceUserTableMap::addInstanceToPool($obj, $key);
@@ -332,7 +356,7 @@ class DistributionPlaceUserTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -352,7 +376,9 @@ class DistributionPlaceUserTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var DistributionPlaceUser $obj */
+                /**
+ * @var DistributionPlaceUser $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -369,8 +395,8 @@ class DistributionPlaceUserTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -390,6 +416,7 @@ class DistributionPlaceUserTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -413,16 +440,16 @@ class DistributionPlaceUserTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a DistributionPlaceUser or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or DistributionPlaceUser object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or DistributionPlaceUser object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(DistributionPlaceUserTableMap::DATABASE_NAME);
         }
@@ -465,7 +492,7 @@ class DistributionPlaceUserTableMap extends TableMap
     /**
      * Deletes all rows from the distribution_place_user table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -476,8 +503,8 @@ class DistributionPlaceUserTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a DistributionPlaceUser or Criteria object.
      *
-     * @param mixed               $criteria Criteria or DistributionPlaceUser object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or DistributionPlaceUser object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -500,11 +527,12 @@ class DistributionPlaceUserTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // DistributionPlaceUserTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

@@ -6,28 +6,27 @@ use API\Lib\Controller;
 
 class Constants extends Controller
 {
-    protected function ANY() : void
+    protected function any() : void
     {
-        $a_defined_constants = get_defined_constants(TRUE)['user'];
+        $definedConstants = get_defined_constants(true)['user'];
 
-        $a_js_constants = array();
+        $jsConstants = array();
 
-        foreach ($a_defined_constants as $str_name => $value)
-        {
-            $str_namespace = "API\\";
-            $i_start = strlen($str_namespace);
+        foreach ($definedConstants as $name => $value) {
+            $namespace = "API\\";
+            $start = strlen($namespace);
 
-            if (0 === strpos($str_name, $str_namespace))
-            {
-                $str_name = substr($str_name, $i_start);
+            if (0 === strpos($name, $namespace)) {
+                $name = substr($name, $start);
 
-                if(0 === strpos($str_name, "PRINTER_"))
+                if (0 === strpos($name, "PRINTER_")) {
                     continue;
+                }
 
-                $a_js_constants[$str_name] = $value;
+                $jsConstants[$name] = $value;
             }
         }
 
-        $this->withJson($a_js_constants);
+        $this->withJson($jsConstants);
     }
 }

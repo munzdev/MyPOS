@@ -22,219 +22,232 @@ abstract class StatusCheck
     /**
      * Checks if distribution and invoice of an order are finished and sets them in the table row.
      *
-     * @param int $i_orderid
+     * @param int $orderid
      */
-    public static function verifyOrder(int $i_orderid) : void {
-        $o_order = OrderQuery::create()
-                                ->joinWithOrderDetail()
-                                ->with(OrderDetailTableMap::getTableMap()->getPhpName())
-                                ->leftJoinWithOrderInProgress()
-                                ->filterByOrderid($i_orderid)
-                                ->find()
-                                ->getFirst();
+    public static function verifyOrder(int $orderid) : void
+    {
+        $order = OrderQuery::create()
+                            ->joinWithOrderDetail()
+                            ->with(OrderDetailTableMap::getTableMap()->getPhpName())
+                            ->leftJoinWithOrderInProgress()
+                            ->filterByOrderid($orderid)
+                            ->find()
+                            ->getFirst();
 
-        $d_distribution_finished = false;
-        $d_invoice_finished = false;
+        $distributionFinished = false;
+        $invoiceFinished = false;
 
-        foreach($o_order->getOrderDetails() as $o_order_detail) {
-            self::verifyOrderDetail($o_order_detail->getOrderDetailid());
+        foreach ($order->getOrderDetails() as $orderDetail) {
+            self::verifyOrderDetail($orderDetail->getOrderDetailid());
 
-            if($d_distribution_finished === false || ($d_distribution_finished !== null && ($o_order_detail->getDistributionFinished() == null ||
-                                                                                            $o_order_detail->getDistributionFinished() > $d_distribution_finished)))
-                $d_distribution_finished = $o_order_detail->getDistributionFinished();
+            if ($distributionFinished === false || ($distributionFinished !== null && ($orderDetail->getDistributionFinished() == null
+                || $orderDetail->getDistributionFinished() > $distributionFinished))
+            ) {
+                $distributionFinished = $orderDetail->getDistributionFinished();
+            }
 
-            if($d_invoice_finished === false || ($d_invoice_finished !== null && ($o_order_detail->getInvoiceFinished() == null ||
-                                                                                  $o_order_detail->getInvoiceFinished() > $d_invoice_finished)))
-                $d_invoice_finished = $o_order_detail->getInvoiceFinished();
+            if ($invoiceFinished === false || ($invoiceFinished !== null && ($orderDetail->getInvoiceFinished() == null
+                || $orderDetail->getInvoiceFinished() > $invoiceFinished))
+            ) {
+                $invoiceFinished = $orderDetail->getInvoiceFinished();
+            }
         }
 
-        $o_order->setDistributionFinished($d_distribution_finished);
-        $o_order->setInvoiceFinished($d_invoice_finished);
-        $o_order->save();
+        $order->setDistributionFinished($distributionFinished);
+        $order->setInvoiceFinished($invoiceFinished);
+        $order->save();
     }
 
     /**
      * Checks if distribution and invoice of an order_details is finished and sets them in the table row.
      *
-     * @param int $i_order_detailid
+     * @param int $orderDetailid
      */
-    public static function verifyOrderDetail(int $i_order_detailid) : void {
-        $o_order_detail = OrderDetailQuery::create()
-                                            ->useInvoiceItemQuery(null, Criteria::LEFT_JOIN)
-                                                ->useInvoiceQuery(null, Criteria::LEFT_JOIN)
-                                                    ->filterByCanceledInvoiceid(null)
-                                                ->endUse()
+    public static function verifyOrderDetail(int $orderDetailid) : void
+    {
+        $orderDetail = OrderDetailQuery::create()
+                                        ->useInvoiceItemQuery(null, Criteria::LEFT_JOIN)
+                                            ->useInvoiceQuery(null, Criteria::LEFT_JOIN)
+                                                ->filterByCanceledInvoiceid(null)
                                             ->endUse()
-                                            ->joinWithOrder()
-                                            ->with(InvoiceItemTableMap::getTableMap()->getPhpName())
-                                            ->leftJoinWithOrderInProgressRecieved()
-                                            ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " - IFNULL(" . OrderInProgressRecievedTableMap::COL_AMOUNT . ", 0))", "DistribtuionLeft")
-                                            ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " - IFNULL(" . InvoiceItemTableMap::COL_AMOUNT . ", 0))", "InvoiceLeft")
-                                            ->groupByOrderDetailid()
-                                            ->findByOrderDetailid($i_order_detailid)
-                                            ->getFirst();
+                                        ->endUse()
+                                        ->joinWithOrder()
+                                        ->with(InvoiceItemTableMap::getTableMap()->getPhpName())
+                                        ->leftJoinWithOrderInProgressRecieved()
+                                        ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " - IFNULL(" . OrderInProgressRecievedTableMap::COL_AMOUNT . ", 0))", "DistribtuionLeft")
+                                        ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " - IFNULL(" . InvoiceItemTableMap::COL_AMOUNT . ", 0))", "InvoiceLeft")
+                                        ->groupByOrderDetailid()
+                                        ->findByOrderDetailid($orderDetailid)
+                                        ->getFirst();
 
-        foreach($o_order_detail->getInvoiceItems() as $o_invoice_item) {
-            self::verifyInvoice($o_invoice_item->getInvoiceid());
+        foreach ($orderDetail->getInvoiceItems() as $invoiceItem) {
+            self::verifyInvoice($invoiceItem->getInvoiceid());
         }
 
-        foreach($o_order_detail->getOrderInProgressRecieveds() as $o_order_in_progress_recieved) {
-            self::verifyOrderInProgress($o_order_in_progress_recieved->getOrderInProgressid());
+        foreach ($orderDetail->getOrderInProgressRecieveds() as $orderInProgressRecieved) {
+            self::verifyOrderInProgress($orderInProgressRecieved->getOrderInProgressid());
         }
 
-        if($o_order_detail->getMenuid())
-            self::verifyAvailability($i_order_detailid);
-
-        $d_distribution = $o_order_detail->getDistributionFinished();
-        $d_invoice = $o_order_detail->getInvoiceFinished();
-
-        if($o_order_detail->getVirtualColumn('DistribtuionLeft') == 0 && $d_distribution == null)
-            $d_distribution = new DateTime();
-        elseif($o_order_detail->getVirtualColumn('DistribtuionLeft') != 0 && $d_distribution != null)
-            $d_distribution = null;
-
-        if($o_order_detail->getVirtualColumn('InvoiceLeft') == 0 && $d_invoice == null)
-            $d_invoice = new DateTime();
-        elseif($o_order_detail->getVirtualColumn('InvoiceLeft') != 0 && $d_invoice != null)
-            $d_invoice = null;
-
-        if(!$d_distribution && $o_order_detail->getOrder()->getCancellation()) {
-            $d_distribution = $o_order_detail->getOrder()->getCancellation();
+        if ($orderDetail->getMenuid()) {
+            self::verifyAvailability($orderDetailid);
         }
 
-        $o_order_detail->setDistributionFinished($d_distribution);
-        $o_order_detail->setInvoiceFinished($d_invoice);
-        $o_order_detail->save();
+        $distribution = $orderDetail->getDistributionFinished();
+        $invoice = $orderDetail->getInvoiceFinished();
+
+        if ($orderDetail->getVirtualColumn('DistribtuionLeft') == 0 && $distribution == null) {
+            $distribution = new DateTime();
+        } elseif ($orderDetail->getVirtualColumn('DistribtuionLeft') != 0 && $distribution != null) {
+            $distribution = null;
+        }
+
+        if ($orderDetail->getVirtualColumn('InvoiceLeft') == 0 && $invoice == null) {
+            $invoice = new DateTime();
+        } elseif ($orderDetail->getVirtualColumn('InvoiceLeft') != 0 && $invoice != null) {
+            $invoice = null;
+        }
+
+        if (!$distribution && $orderDetail->getOrder()->getCancellation()) {
+            $distribution = $orderDetail->getOrder()->getCancellation();
+        }
+
+        $orderDetail->setDistributionFinished($distribution);
+        $orderDetail->setInvoiceFinished($invoice);
+        $orderDetail->save();
     }
 
     /**
      * Checks if an invoice is payed and marke the invoice as payed
      *
-     * @param int $i_invoiceid
+     * @param int $invoiceid
      */
-    public static function verifyInvoice(int $i_invoiceid) : void {
-        $o_invoice = InvoiceQuery::create()
-                                    ->joinInvoiceItem()
-                                    ->findByInvoiceid($i_invoiceid)
-                                    ->getFirst();
+    public static function verifyInvoice(int $invoiceid) : void
+    {
+        $invoice = InvoiceQuery::create()
+                                ->joinInvoiceItem()
+                                ->findByInvoiceid($invoiceid)
+                                ->getFirst();
 
-        $d_payment_finished = $o_invoice->getPaymentFinished();
+        $paymentFinished = $invoice->getPaymentFinished();
 
-        if($o_invoice->getAmount() == $o_invoice->getAmountRecieved() && $d_payment_finished == null)
-            $d_payment_finished = new DateTime();
-        elseif($o_invoice->getAmount() != $o_invoice->getAmountRecieved() && $d_payment_finished != null)
-            $d_payment_finished = null;
+        if ($invoice->getAmount() == $invoice->getAmountRecieved() && $paymentFinished == null) {
+            $paymentFinished = new DateTime();
+        } elseif ($invoice->getAmount() != $invoice->getAmountRecieved() && $paymentFinished != null) {
+            $paymentFinished = null;
+        }
 
-        $o_invoice->setPaymentFinished($d_payment_finished);
-        $o_invoice->save();
+        $invoice->setPaymentFinished($paymentFinished);
+        $invoice->save();
     }
 
     /**
      * Checks if an order in progress is finished and sets the done time
      *
-     * @param int $i_order_in_progressid
+     * @param int $orderInProgressid
      */
-    public static function verifyOrderInProgress(int $i_order_in_progressid) : void {
+    public static function verifyOrderInProgress(int $orderInProgressid) : void
+    {
         // TODO make use of SQL group by and SUM to retrieve amount left. But propel somehow creates a problem here
-        $o_order_in_progress = OrderInProgressQuery::create()
-                                                    ->joinWithOrderInProgressRecieved()
-                                                    ->useOrderInProgressRecievedQuery()
-                                                        ->joinWithOrderDetail()
-                                                        //->withColumn(OrderDetailTableMap::COL_AMOUNT . " - IFNULL(SUM(" . OrderInProgressRecievedTableMap::COL_AMOUNT . "), 0)" , "AmountLeft")
-                                                        //->groupByOrderDetailid()
-                                                    ->endUse()
-                                                    ->joinWithOrder()
-                                                    ->findByOrderInProgressid($i_order_in_progressid)
-                                                    ->getFirst();
+        $orderInProgress = OrderInProgressQuery::create()
+                                                ->joinWithOrderInProgressRecieved()
+                                                ->useOrderInProgressRecievedQuery()
+                                                    ->joinWithOrderDetail()
+                                                    //->withColumn(OrderDetailTableMap::COL_AMOUNT . " - IFNULL(SUM(" . OrderInProgressRecievedTableMap::COL_AMOUNT . "), 0)" , "AmountLeft")
+                                                    //->groupByOrderDetailid()
+                                                ->endUse()
+                                                ->joinWithOrder()
+                                                ->findByOrderInProgressid($orderInProgressid)
+                                                ->getFirst();
 
-        $d_done = $o_order_in_progress->getDone();
-        $i_amount_left = null;
-        $a_amount = [];
+        $done = $orderInProgress->getDone();
+        $amountLeft = null;
+        $amount = [];
 
-        foreach($o_order_in_progress->getOrderInProgressRecieveds() as $o_order_in_progress_recieved) {
-
-            if(!isset($a_amount[$o_order_in_progress_recieved->getOrderDetailid()])) {
-                $a_amount[$o_order_in_progress_recieved->getOrderDetailid()] = $o_order_in_progress_recieved->getOrderDetail()->getAmount();
+        foreach ($orderInProgress->getOrderInProgressRecieveds() as $orderInProgressRecieved) {
+            if (!isset($amount[$orderInProgressRecieved->getOrderDetailid()])) {
+                $amount[$orderInProgressRecieved->getOrderDetailid()] = $orderInProgressRecieved->getOrderDetail()->getAmount();
             }
 
-            $a_amount[$o_order_in_progress_recieved->getOrderDetailid()] -= $o_order_in_progress_recieved->getAmount();
+            $amount[$orderInProgressRecieved->getOrderDetailid()] -= $orderInProgressRecieved->getAmount();
         }
 
-        if(!empty($a_amount))
-            $i_amount_left = array_sum($a_amount);
-
-        if($i_amount_left == 0 && $d_done == null)
-            $d_done = new DateTime();
-        elseif($i_amount_left != 0 && $d_done != null)
-            $d_done = null;
-
-        if(!$d_done && $o_order_detail->getOrder()->getCancellation()) {
-            $d_done = $o_order_detail->getOrder()->getCancellation();
+        if (!empty($amount)) {
+            $amountLeft = array_sum($amount);
         }
 
-        $o_order_in_progress->setDone($d_done);
-        $o_order_in_progress->save();
+        if ($amountLeft == 0 && $done == null) {
+            $done = new DateTime();
+        } elseif ($amountLeft != 0 && $done != null) {
+            $done = null;
+        }
+
+        if (!$done && $orderInProgress->getOrder()->getCancellation()) {
+            $done = $orderInProgress->getOrder()->getCancellation();
+        }
+
+        $orderInProgress->setDone($done);
+        $orderInProgress->save();
     }
 
     /**
      * Checks for menu availability of given order_detailid and sets correct status in order_detail
      *
-     * @param int $i_order_detailid
+     * @param int $orderDetailid
      */
-    public static function verifyAvailability(int $i_order_detailid) : void {
-        $o_order_detail = OrderDetailQuery::create()
-                                            ->leftJoinWithMenu()
-                                            ->leftJoinWithOrderDetailExtra()
-                                            ->leftJoinWithOrderDetailMixedWith()
-                                            ->filterByOrderDetailid($i_order_detailid)
-                                            ->find();
+    public static function verifyAvailability(int $orderDetailid) : void
+    {
+        $orderDetailCollection = OrderDetailQuery::create()
+                                        ->leftJoinWithMenu()
+                                        ->leftJoinWithOrderDetailExtra()
+                                        ->leftJoinWithOrderDetailMixedWith()
+                                        ->filterByOrderDetailid($orderDetailid)
+                                        ->find();
 
-        if(!$o_order_detail->count())
+        if (!$orderDetailCollection->count()) {
             return;
-
-        $o_order_detail = $o_order_detail->getFirst();
-
-        $o_menu = $o_order_detail->getMenu();
-
-        if($o_menu) {
-            $o_order_detail->setAvailabilityid($o_menu->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE);
-            $o_order_detail->setAvailabilityAmount($o_menu->getAvailabilityAmount());
-            $o_order_detail->save();
         }
 
-        $i_availbilityid = $o_order_detail->getAvailabilityid();
-        $i_availbilityAmount = $o_order_detail->getAvailabilityAmount();
+        $orderDetail = $orderDetailCollection->getFirst();
 
-        foreach($o_order_detail->getOrderDetailExtras() as $o_order_detail_extra)
-        {
-            $o_menuExtra = $o_order_detail_extra->getMenuPossibleExtra()->getMenu();
+        $menu = $orderDetail->getMenu();
 
-            if($i_availbilityid == ORDER_AVAILABILITY_AVAILABLE) {
-                $i_availbilityid = ($o_menuExtra->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER) ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE;
-            }
-
-            if($i_availbilityAmount == null || $i_availbilityAmount > $o_menuExtra->getAvailabilityAmount()) {
-                $i_availbilityAmount = $o_menuExtra->getAvailabilityAmount();
-            }
+        if ($menu) {
+            $orderDetail->setAvailabilityid($menu->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE);
+            $orderDetail->setAvailabilityAmount($menu->getAvailabilityAmount());
+            $orderDetail->save();
         }
 
-        foreach($o_order_detail->getOrderDetailMixedWiths() as $o_order_detail_mixed_with)
-        {
-            $o_menu = $o_order_detail_mixed_with->getMenu();
+        $availbilityid = $orderDetail->getAvailabilityid();
+        $availbilityAmount = $orderDetail->getAvailabilityAmount();
 
-            if($i_availbilityid == ORDER_AVAILABILITY_AVAILABLE) {
-                $i_availbilityid = ($o_menu->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER) ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE;
+        foreach ($orderDetail->getOrderDetailExtras() as $orderDetailExtra) {
+            $menuExtra = $orderDetailExtra->getMenuPossibleExtra()->getMenu();
+
+            if ($availbilityid == ORDER_AVAILABILITY_AVAILABLE) {
+                $availbilityid = ($menuExtra->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER) ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE;
             }
 
-            if($i_availbilityAmount == null || $i_availbilityAmount > $o_menu->getAvailabilityAmount()) {
-                $i_availbilityAmount = $o_menu->getAvailabilityAmount();
+            if ($availbilityAmount == null || $availbilityAmount > $menuExtra->getAvailabilityAmount()) {
+                $availbilityAmount = $menuExtra->getAvailabilityAmount();
             }
         }
 
-        if($i_availbilityid != $o_order_detail->getAvailabilityid() || $i_availbilityAmount != $o_order_detail->getAvailabilityAmount()) {
-            $o_order_detail->setAvailabilityid($i_availbilityid);
-            $o_order_detail->setAvailabilityAmount($i_availbilityAmount);
-            $o_order_detail->save();
+        foreach ($orderDetail->getOrderDetailMixedWiths() as $orderDetailMixedWith) {
+            $menu = $orderDetailMixedWith->getMenu();
+
+            if ($availbilityid == ORDER_AVAILABILITY_AVAILABLE) {
+                $availbilityid = ($menu->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER) ? ORDER_AVAILABILITY_OUT_OF_ORDER : ORDER_AVAILABILITY_AVAILABLE;
+            }
+
+            if ($availbilityAmount == null || $availbilityAmount > $menu->getAvailabilityAmount()) {
+                $availbilityAmount = $menu->getAvailabilityAmount();
+            }
+        }
+
+        if ($availbilityid != $orderDetail->getAvailabilityid() || $availbilityAmount != $orderDetail->getAvailabilityAmount()) {
+            $orderDetail->setAvailabilityid($availbilityid);
+            $orderDetail->setAvailabilityAmount($availbilityAmount);
+            $orderDetail->save();
         }
     }
 }

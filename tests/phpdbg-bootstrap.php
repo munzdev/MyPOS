@@ -1,9 +1,9 @@
 <?php
 /**
  * The following file shows how to bootstrap phpdbg so that you can mock specific server environments
- * 
+ *
  * Steps to run:
- * 
+ *
  * 1. Modify file to have needed vars for request simulation
  * 2. run command 'phpdbg' in same directory as this file
  * 3. ev include("phpdbg-bootstrap.php")
@@ -11,22 +11,25 @@
  * 5. break ...
  * 6. run
  */
-if (!defined('PHPDBG_BOOTSTRAPPED'))
-{
+if (!defined('PHPDBG_BOOTSTRAPPED')) {
     /* define these once */
     define("PHPDBG_BOOTPATH", "../src/public/API");
     define("PHPDBG_BOOTSTRAP", "index.php");
-    define("PHPDBG_BOOTSTRAPPED", sprintf(
-        "/%s", PHPDBG_BOOTSTRAP));
+    define(
+        "PHPDBG_BOOTSTRAPPED",
+        sprintf(
+            "/%s",
+            PHPDBG_BOOTSTRAP
+        )
+    );
 }
 
 /*
-* Superglobals are JIT, phpdbg will not over-write 
+* Superglobals are JIT, phpdbg will not over-write
 * whatever is set during bootstrap
 */
 
-$_SERVER = array
-(
+$_SERVER = array(
   'HTTP_HOST' => 'localhost',
   'HTTP_CONNECTION' => 'keep-alive',
   'HTTP_ACCEPT' => '...',
@@ -47,7 +50,9 @@ $_SERVER = array
   'CONTEXT_DOCUMENT_ROOT' => PHPDBG_BOOTPATH,
   'SERVER_ADMIN' => '[no address given]',
   'SCRIPT_FILENAME' => sprintf(
-    '%s/%s', PHPDBG_BOOTPATH, PHPDBG_BOOTSTRAP
+      '%s/%s',
+      PHPDBG_BOOTPATH,
+      PHPDBG_BOOTSTRAP
   ),
   'REMOTE_PORT' => '47931',
   'GATEWAY_INTERFACE' => 'CGI/1.1',

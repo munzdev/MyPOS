@@ -27,9 +27,7 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'invoice_warning' table.
  *
- *
- *
- * @package    propel.generator.API.Models.Invoice.Base
+ * @package propel.generator.API.Models.Invoice.Base
  */
 abstract class InvoiceWarning implements ActiveRecordInterface
 {
@@ -41,12 +39,14 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * attribute to determine if this object has previously been saved.
+     *
      * @var boolean
      */
     protected $new = true;
 
     /**
      * attribute to determine whether this object has been deleted.
+     *
      * @var boolean
      */
     protected $deleted = false;
@@ -54,6 +54,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * The columns that have been modified in current object.
      * Tracking modified columns allows us to only update modified columns.
+     *
      * @var array
      */
     protected $modifiedColumns = array();
@@ -61,6 +62,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * The (virtual) columns that are added at runtime
      * The formatters can add supplementary columns based on a resultset
+     *
      * @var array
      */
     protected $virtualColumns = array();
@@ -68,42 +70,42 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * The value for the invoice_warningid field.
      *
-     * @var        int
+     * @var int
      */
     protected $invoice_warningid;
 
     /**
      * The value for the invoiceid field.
      *
-     * @var        int
+     * @var int
      */
     protected $invoiceid;
 
     /**
      * The value for the invoice_warning_typeid field.
      *
-     * @var        int
+     * @var int
      */
     protected $invoice_warning_typeid;
 
     /**
      * The value for the warning_date field.
      *
-     * @var        DateTime
+     * @var DateTime
      */
     protected $warning_date;
 
     /**
      * The value for the maturity_date field.
      *
-     * @var        DateTime
+     * @var DateTime
      */
     protected $maturity_date;
 
     /**
      * The value for the warning_value field.
      *
-     * @var        string
+     * @var string
      */
     protected $warning_value;
 
@@ -145,7 +147,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Has specified column been modified?
      *
-     * @param  string  $col column fully qualified name (TableMap::TYPE_COLNAME), e.g. Book::AUTHOR_ID
+     * @param  string $col column fully qualified name (TableMap::TYPE_COLNAME), e.g. Book::AUTHOR_ID
      * @return boolean True if $col has been modified.
      */
     public function isColumnModified($col)
@@ -155,6 +157,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Get the columns that have been modified in this object.
+     *
      * @return array A unique list of the modified column names for this object.
      */
     public function getModifiedColumns()
@@ -187,6 +190,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Whether this object has been deleted.
+     *
      * @return boolean The deleted state of this object.
      */
     public function isDeleted()
@@ -196,6 +200,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Specify whether this object has been deleted.
+     *
      * @param  boolean $b The deleted state of this object.
      * @return void
      */
@@ -206,6 +211,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Sets the modified state for the object to be false.
+     *
      * @param  string $col If supplied, only the specified column is reset.
      * @return void
      */
@@ -225,7 +231,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
      * <code>obj</code> is an instance of <code>InvoiceWarning</code>, delegates to
      * <code>equals(InvoiceWarning)</code>.  Otherwise, returns <code>false</code>.
      *
-     * @param  mixed   $obj The object to compare to.
+     * @param  mixed $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
      */
     public function equals($obj)
@@ -258,7 +264,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Checks the existence of a virtual column in this object
      *
-     * @param  string  $name The virtual column name
+     * @param  string $name The virtual column name
      * @return boolean
      */
     public function hasVirtualColumn($name)
@@ -301,8 +307,8 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Logs a message using Propel::log().
      *
-     * @param  string  $msg
-     * @param  int     $priority One of the Propel::LOG_* logging levels
+     * @param  string $msg
+     * @param  int    $priority One of the Propel::LOG_* logging levels
      * @return boolean
      */
     protected function log($msg, $priority = Propel::LOG_INFO)
@@ -343,7 +349,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
 
-        foreach($serializableProperties as $property) {
+        foreach ($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
 
@@ -383,15 +389,14 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Get the [optionally formatted] temporal [warning_date] column value.
      *
-     *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
      *
      * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getWarningDate($format = NULL)
+    public function getWarningDate($format = null)
     {
         if ($format === null) {
             return $this->warning_date;
@@ -403,15 +408,14 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Get the [optionally formatted] temporal [maturity_date] column value.
      *
-     *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
      *
      * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getMaturityDate($format = NULL)
+    public function getMaturityDate($format = null)
     {
         if ($format === null) {
             return $this->maturity_date;
@@ -433,7 +437,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Set the value of [invoice_warningid] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return $this|\API\Models\Invoice\InvoiceWarning The current object (for fluent API support)
      */
     public function setInvoiceWarningid($v)
@@ -453,7 +457,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Set the value of [invoiceid] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return $this|\API\Models\Invoice\InvoiceWarning The current object (for fluent API support)
      */
     public function setInvoiceid($v)
@@ -477,7 +481,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Set the value of [invoice_warning_typeid] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return $this|\API\Models\Invoice\InvoiceWarning The current object (for fluent API support)
      */
     public function setInvoiceWarningTypeid($v)
@@ -541,7 +545,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Set the value of [warning_value] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return $this|\API\Models\Invoice\InvoiceWarning The current object (for fluent API support)
      */
     public function setWarningValue($v)
@@ -593,7 +597,6 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     public function hydrate($row, $startcol = 0, $rehydrate = false, $indexType = TableMap::TYPE_NUM)
     {
         try {
-
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : InvoiceWarningTableMap::translateFieldName('InvoiceWarningid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->invoice_warningid = (null !== $col) ? (int) $col : null;
 
@@ -626,7 +629,6 @@ abstract class InvoiceWarning implements ActiveRecordInterface
             }
 
             return $startcol + 6; // 6 = InvoiceWarningTableMap::NUM_HYDRATE_COLUMNS.
-
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Invoice\\InvoiceWarning'), 0, $e);
         }
@@ -660,8 +662,8 @@ abstract class InvoiceWarning implements ActiveRecordInterface
      *
      * This will only work if the object has been saved and has a valid primary key set.
      *
-     * @param      boolean $deep (optional) Whether to also de-associated any related objects.
-     * @param      ConnectionInterface $con (optional) The ConnectionInterface connection to use.
+     * @param  boolean             $deep (optional) Whether to also de-associated any related objects.
+     * @param  ConnectionInterface $con  (optional) The ConnectionInterface connection to use.
      * @return void
      * @throws PropelException - if this object is deleted, unsaved or doesn't have pk match in db
      */
@@ -700,11 +702,11 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Removes this object from datastore and sets delete attribute.
      *
-     * @param      ConnectionInterface $con
+     * @param  ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see InvoiceWarning::setDeleted()
-     * @see InvoiceWarning::isDeleted()
+     * @see    InvoiceWarning::setDeleted()
+     * @see    InvoiceWarning::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -716,16 +718,18 @@ abstract class InvoiceWarning implements ActiveRecordInterface
             $con = Propel::getServiceContainer()->getWriteConnection(InvoiceWarningTableMap::DATABASE_NAME);
         }
 
-        $con->transaction(function () use ($con) {
-            $deleteQuery = ChildInvoiceWarningQuery::create()
+        $con->transaction(
+            function () use ($con) {
+                $deleteQuery = ChildInvoiceWarningQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
-            $ret = $this->preDelete($con);
-            if ($ret) {
-                $deleteQuery->delete($con);
-                $this->postDelete($con);
-                $this->setDeleted(true);
+                $ret = $this->preDelete($con);
+                if ($ret) {
+                    $deleteQuery->delete($con);
+                    $this->postDelete($con);
+                    $this->setDeleted(true);
+                }
             }
-        });
+        );
     }
 
     /**
@@ -736,10 +740,10 @@ abstract class InvoiceWarning implements ActiveRecordInterface
      * method.  This method wraps all precipitate database operations in a
      * single transaction.
      *
-     * @param      ConnectionInterface $con
+     * @param  ConnectionInterface $con
      * @return int             The number of rows affected by this insert/update and any referring fk objects' save() operations.
      * @throws PropelException
-     * @see doSave()
+     * @see    doSave()
      */
     public function save(ConnectionInterface $con = null)
     {
@@ -755,29 +759,31 @@ abstract class InvoiceWarning implements ActiveRecordInterface
             $con = Propel::getServiceContainer()->getWriteConnection(InvoiceWarningTableMap::DATABASE_NAME);
         }
 
-        return $con->transaction(function () use ($con) {
-            $ret = $this->preSave($con);
-            $isInsert = $this->isNew();
-            if ($isInsert) {
-                $ret = $ret && $this->preInsert($con);
-            } else {
-                $ret = $ret && $this->preUpdate($con);
-            }
-            if ($ret) {
-                $affectedRows = $this->doSave($con);
+        return $con->transaction(
+            function () use ($con) {
+                $ret = $this->preSave($con);
+                $isInsert = $this->isNew();
                 if ($isInsert) {
-                    $this->postInsert($con);
+                    $ret = $ret && $this->preInsert($con);
                 } else {
-                    $this->postUpdate($con);
+                    $ret = $ret && $this->preUpdate($con);
                 }
-                $this->postSave($con);
-                InvoiceWarningTableMap::addInstanceToPool($this);
-            } else {
-                $affectedRows = 0;
-            }
+                if ($ret) {
+                    $affectedRows = $this->doSave($con);
+                    if ($isInsert) {
+                        $this->postInsert($con);
+                    } else {
+                        $this->postUpdate($con);
+                    }
+                    $this->postSave($con);
+                    InvoiceWarningTableMap::addInstanceToPool($this);
+                } else {
+                    $affectedRows = 0;
+                }
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
@@ -786,10 +792,10 @@ abstract class InvoiceWarning implements ActiveRecordInterface
      * If the object is new, it inserts it; otherwise an update is performed.
      * All related objects are also updated in this method.
      *
-     * @param      ConnectionInterface $con
+     * @param  ConnectionInterface $con
      * @return int             The number of rows affected by this insert/update and any referring fk objects' save() operations.
      * @throws PropelException
-     * @see save()
+     * @see    save()
      */
     protected function doSave(ConnectionInterface $con)
     {
@@ -828,7 +834,6 @@ abstract class InvoiceWarning implements ActiveRecordInterface
             }
 
             $this->alreadyInSave = false;
-
         }
 
         return $affectedRows;
@@ -837,10 +842,10 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Insert the row in the database.
      *
-     * @param      ConnectionInterface $con
+     * @param ConnectionInterface $con
      *
      * @throws PropelException
-     * @see doSave()
+     * @see    doSave()
      */
     protected function doInsert(ConnectionInterface $con)
     {
@@ -921,10 +926,10 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Update the row in the database.
      *
-     * @param      ConnectionInterface $con
+     * @param ConnectionInterface $con
      *
      * @return Integer Number of updated rows
-     * @see doSave()
+     * @see    doSave()
      */
     protected function doUpdate(ConnectionInterface $con)
     {
@@ -937,8 +942,8 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Retrieves a field from the object by name passed in as a string.
      *
-     * @param      string $name name
-     * @param      string $type The type of fieldname the $name is of:
+     * @param  string $name name
+     * @param  string $type The type of fieldname the $name is of:
      *                     one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                     TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                     Defaults to TableMap::TYPE_PHPNAME.
@@ -956,7 +961,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
      * Retrieves a field from the object by Position as specified in the xml schema.
      * Zero-based.
      *
-     * @param      int $pos position in xml schema
+     * @param  int $pos position in xml schema
      * @return mixed Value of field at $pos
      */
     public function getByPosition($pos)
@@ -992,18 +997,17 @@ abstract class InvoiceWarning implements ActiveRecordInterface
      * You can specify the key type of the array by passing one of the class
      * type constants.
      *
-     * @param     string  $keyType (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME,
-     *                    TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                    Defaults to TableMap::TYPE_PHPNAME.
-     * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
-     * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
-     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
+     * @param string  $keyType                (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME,
+     *                                            TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM. Defaults to
+     *                                            TableMap::TYPE_PHPNAME.
+     * @param boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+     * @param array   $alreadyDumpedObjects   List of objects to skip to avoid recursion
+     * @param boolean $includeForeignObjects  (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-
         if (isset($alreadyDumpedObjects['InvoiceWarning'][$this->hashCode()])) {
             return '*RECURSION*';
         }
@@ -1032,7 +1036,6 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
         if ($includeForeignObjects) {
             if (null !== $this->aInvoice) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoice';
@@ -1044,10 +1047,9 @@ abstract class InvoiceWarning implements ActiveRecordInterface
                         $key = 'Invoice';
                 }
 
-                $result[$key] = $this->aInvoice->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aInvoice->toArray($keyType, $includeLazyLoadColumns, $alreadyDumpedObjects, true);
             }
             if (null !== $this->aInvoiceWarningType) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoiceWarningType';
@@ -1059,7 +1061,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
                         $key = 'InvoiceWarningType';
                 }
 
-                $result[$key] = $this->aInvoiceWarningType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+                $result[$key] = $this->aInvoiceWarningType->toArray($keyType, $includeLazyLoadColumns, $alreadyDumpedObjects, true);
             }
         }
 
@@ -1071,10 +1073,14 @@ abstract class InvoiceWarning implements ActiveRecordInterface
      *
      * @param  string $name
      * @param  mixed  $value field value
-     * @param  string $type The type of fieldname the $name is of:
-     *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
-     *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                Defaults to TableMap::TYPE_PHPNAME.
+     * @param  string $type  The type of fieldname the $name is of:
+     *                       one of the class type constants
+     *                       TableMap::TYPE_PHPNAME,
+     *                       TableMap::TYPE_CAMELNAME
+     *                       TableMap::TYPE_COLNAME,
+     *                       TableMap::TYPE_FIELDNAME,
+     *                       TableMap::TYPE_NUM. Defaults to
+     *                       TableMap::TYPE_PHPNAME.
      * @return $this|\API\Models\Invoice\InvoiceWarning
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
@@ -1088,7 +1094,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
      * Sets a field from the object by Position as specified in the xml schema.
      * Zero-based.
      *
-     * @param  int $pos position in xml schema
+     * @param  int   $pos   position in xml schema
      * @param  mixed $value field value
      * @return $this|\API\Models\Invoice\InvoiceWarning
      */
@@ -1131,8 +1137,8 @@ abstract class InvoiceWarning implements ActiveRecordInterface
      * TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      * The default key type is the column's TableMap::TYPE_PHPNAME.
      *
-     * @param      array  $arr     An array to populate the object from.
-     * @param      string $keyType The type of keys the array uses.
+     * @param  array  $arr     An array to populate the object from.
+     * @param  string $keyType The type of keys the array uses.
      * @return void
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
@@ -1171,9 +1177,10 @@ abstract class InvoiceWarning implements ActiveRecordInterface
      * TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      * The default key type is the column's TableMap::TYPE_PHPNAME.
      *
-     * @param mixed $parser A AbstractParser instance,
-     *                       or a format name ('XML', 'YAML', 'JSON', 'CSV')
-     * @param string $data The source data to import from
+     * @param mixed  $parser  A AbstractParser instance,
+     *                        or a format name ('XML',
+     *                        'YAML', 'JSON', 'CSV')
+     * @param string $data    The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
      * @return $this|\API\Models\Invoice\InvoiceWarning The current object, for fluid interface
@@ -1262,6 +1269,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Returns the primary key for this object (row).
+     *
      * @return int
      */
     public function getPrimaryKey()
@@ -1272,7 +1280,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     /**
      * Generic method to set the primary key (invoice_warningid column).
      *
-     * @param       int $key Primary key.
+     * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
@@ -1282,6 +1290,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Returns true if the primary key for this object is null.
+     *
      * @return boolean
      */
     public function isPrimaryKeyNull()
@@ -1295,9 +1304,9 @@ abstract class InvoiceWarning implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \API\Models\Invoice\InvoiceWarning (or compatible) type.
-     * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
+     * @param  object  $copyObj  An object of \API\Models\Invoice\InvoiceWarning (or compatible) type.
+     * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+     * @param  boolean $makeNew  Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
@@ -1309,7 +1318,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
         $copyObj->setWarningValue($this->getWarningValue());
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setInvoiceWarningid(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setInvoiceWarningid(null); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1345,7 +1354,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     public function setInvoice(ChildInvoice $v = null)
     {
         if ($v === null) {
-            $this->setInvoiceid(NULL);
+            $this->setInvoiceid(null);
         } else {
             $this->setInvoiceid($v->getInvoiceid());
         }
@@ -1396,7 +1405,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
     public function setInvoiceWarningType(ChildInvoiceWarningType $v = null)
     {
         if ($v === null) {
-            $this->setInvoiceWarningTypeid(NULL);
+            $this->setInvoiceWarningTypeid(null);
         } else {
             $this->setInvoiceWarningTypeid($v->getInvoiceWarningTypeid());
         }
@@ -1469,7 +1478,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
      * This method is used to reset all php object references (not the actual reference in the database).
      * Necessary for object serialisation.
      *
-     * @param      boolean $deep Whether to also clear the references on all referrer objects.
+     * @param boolean $deep Whether to also clear the references on all referrer objects.
      */
     public function clearAllReferences($deep = false)
     {
@@ -1492,6 +1501,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Code to be run before persisting the object
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -1505,6 +1515,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Code to be run after persisting the object
+     *
      * @param ConnectionInterface $con
      */
     public function postSave(ConnectionInterface $con = null)
@@ -1516,6 +1527,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Code to be run before inserting to database
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -1529,6 +1541,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Code to be run after inserting to database
+     *
      * @param ConnectionInterface $con
      */
     public function postInsert(ConnectionInterface $con = null)
@@ -1540,6 +1553,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Code to be run before updating the object in database
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -1553,6 +1567,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Code to be run after updating the object in database
+     *
      * @param ConnectionInterface $con
      */
     public function postUpdate(ConnectionInterface $con = null)
@@ -1564,6 +1579,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Code to be run before deleting the object in database
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -1577,6 +1593,7 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
     /**
      * Code to be run after deleting the object in database
+     *
      * @param ConnectionInterface $con
      */
     public function postDelete(ConnectionInterface $con = null)
@@ -1627,5 +1644,4 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
         throw new BadMethodCallException(sprintf('Call to undefined method: %s.', $name));
     }
-
 }

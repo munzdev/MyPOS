@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'order_in_progress_recieved' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class OrderInProgressRecievedTableMap extends TableMap
 {
@@ -107,7 +103,7 @@ class OrderInProgressRecievedTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('OrderInProgressRecievedid', 'OrderDetailid', 'OrderInProgressid', 'DistributionGivingOutid', 'Amount', ),
         self::TYPE_CAMELNAME     => array('orderInProgressRecievedid', 'orderDetailid', 'orderInProgressid', 'distributionGivingOutid', 'amount', ),
         self::TYPE_COLNAME       => array(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID, OrderInProgressRecievedTableMap::COL_ORDER_DETAILID, OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESSID, OrderInProgressRecievedTableMap::COL_DISTRIBUTION_GIVING_OUTID, OrderInProgressRecievedTableMap::COL_AMOUNT, ),
@@ -121,7 +117,7 @@ class OrderInProgressRecievedTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('OrderInProgressRecievedid' => 0, 'OrderDetailid' => 1, 'OrderInProgressid' => 2, 'DistributionGivingOutid' => 3, 'Amount' => 4, ),
         self::TYPE_CAMELNAME     => array('orderInProgressRecievedid' => 0, 'orderDetailid' => 1, 'orderInProgressid' => 2, 'distributionGivingOutid' => 3, 'amount' => 4, ),
         self::TYPE_COLNAME       => array(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID => 0, OrderInProgressRecievedTableMap::COL_ORDER_DETAILID => 1, OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESSID => 2, OrderInProgressRecievedTableMap::COL_DISTRIBUTION_GIVING_OUTID => 3, OrderInProgressRecievedTableMap::COL_AMOUNT => 4, ),
@@ -158,27 +154,54 @@ class OrderInProgressRecievedTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':order_detailid',
-    1 => ':order_detailid',
-  ),
-), null, null, null, false);
-        $this->addRelation('OrderInProgress', '\\API\\Models\\OIP\\OrderInProgress', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':order_in_progressid',
-    1 => ':order_in_progressid',
-  ),
-), null, null, null, false);
-        $this->addRelation('DistributionGivingOut', '\\API\\Models\\OIP\\DistributionGivingOut', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':distribution_giving_outid',
-    1 => ':distribution_giving_outid',
-  ),
-), null, null, null, false);
+        $this->addRelation(
+            'OrderDetail',
+            '\\API\\Models\\Ordering\\OrderDetail',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':order_detailid',
+            1 => ':order_detailid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'OrderInProgress',
+            '\\API\\Models\\OIP\\OrderInProgress',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':order_in_progressid',
+            1 => ':order_in_progressid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'DistributionGivingOut',
+            '\\API\\Models\\OIP\\DistributionGivingOut',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':distribution_giving_outid',
+            1 => ':distribution_giving_outid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
     } // buildRelations()
 
     /**
@@ -233,7 +256,7 @@ class OrderInProgressRecievedTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -264,7 +287,9 @@ class OrderInProgressRecievedTableMap extends TableMap
             $col = $offset + OrderInProgressRecievedTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = OrderInProgressRecievedTableMap::OM_CLASS;
-            /** @var OrderInProgressRecieved $obj */
+            /**
+ * @var OrderInProgressRecieved $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             OrderInProgressRecievedTableMap::addInstanceToPool($obj, $key);
@@ -277,7 +302,7 @@ class OrderInProgressRecievedTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -297,7 +322,9 @@ class OrderInProgressRecievedTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var OrderInProgressRecieved $obj */
+                /**
+ * @var OrderInProgressRecieved $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -314,8 +341,8 @@ class OrderInProgressRecievedTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -339,6 +366,7 @@ class OrderInProgressRecievedTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -362,16 +390,16 @@ class OrderInProgressRecievedTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a OrderInProgressRecieved or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or OrderInProgressRecieved object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or OrderInProgressRecieved object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderInProgressRecievedTableMap::DATABASE_NAME);
         }
@@ -403,7 +431,7 @@ class OrderInProgressRecievedTableMap extends TableMap
     /**
      * Deletes all rows from the order_in_progress_recieved table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -414,8 +442,8 @@ class OrderInProgressRecievedTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a OrderInProgressRecieved or Criteria object.
      *
-     * @param mixed               $criteria Criteria or OrderInProgressRecieved object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or OrderInProgressRecieved object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -432,7 +460,7 @@ class OrderInProgressRecievedTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from OrderInProgressRecieved object
         }
 
-        if ($criteria->containsKey(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID) && $criteria->keyContainsValue(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID) ) {
+        if ($criteria->containsKey(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID) && $criteria->keyContainsValue(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID.')');
         }
 
@@ -442,11 +470,12 @@ class OrderInProgressRecievedTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // OrderInProgressRecievedTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

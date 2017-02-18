@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'menu_size' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class MenuSizeTableMap extends TableMap
 {
@@ -102,7 +98,7 @@ class MenuSizeTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('MenuSizeid', 'Eventid', 'Name', 'Factor', ),
         self::TYPE_CAMELNAME     => array('menuSizeid', 'eventid', 'name', 'factor', ),
         self::TYPE_COLNAME       => array(MenuSizeTableMap::COL_MENU_SIZEID, MenuSizeTableMap::COL_EVENTID, MenuSizeTableMap::COL_NAME, MenuSizeTableMap::COL_FACTOR, ),
@@ -116,7 +112,7 @@ class MenuSizeTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('MenuSizeid' => 0, 'Eventid' => 1, 'Name' => 2, 'Factor' => 3, ),
         self::TYPE_CAMELNAME     => array('menuSizeid' => 0, 'eventid' => 1, 'name' => 2, 'factor' => 3, ),
         self::TYPE_COLNAME       => array(MenuSizeTableMap::COL_MENU_SIZEID => 0, MenuSizeTableMap::COL_EVENTID => 1, MenuSizeTableMap::COL_NAME => 2, MenuSizeTableMap::COL_FACTOR => 3, ),
@@ -152,27 +148,54 @@ class MenuSizeTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Event', '\\API\\Models\\Event\\Event', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, null, false);
-        $this->addRelation('MenuPossibleSize', '\\API\\Models\\Menu\\MenuPossibleSize', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':menu_sizeid',
-    1 => ':menu_sizeid',
-  ),
-), null, null, 'MenuPossibleSizes', false);
-        $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':menu_sizeid',
-    1 => ':menu_sizeid',
-  ),
-), null, null, 'OrderDetails', false);
+        $this->addRelation(
+            'Event',
+            '\\API\\Models\\Event\\Event',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':eventid',
+            1 => ':eventid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'MenuPossibleSize',
+            '\\API\\Models\\Menu\\MenuPossibleSize',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':menu_sizeid',
+            1 => ':menu_sizeid',
+            ),
+            ),
+            null,
+            null,
+            'MenuPossibleSizes',
+            false
+        );
+        $this->addRelation(
+            'OrderDetail',
+            '\\API\\Models\\Ordering\\OrderDetail',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':menu_sizeid',
+            1 => ':menu_sizeid',
+            ),
+            ),
+            null,
+            null,
+            'OrderDetails',
+            false
+        );
     } // buildRelations()
 
     /**
@@ -227,7 +250,7 @@ class MenuSizeTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -258,7 +281,9 @@ class MenuSizeTableMap extends TableMap
             $col = $offset + MenuSizeTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = MenuSizeTableMap::OM_CLASS;
-            /** @var MenuSize $obj */
+            /**
+ * @var MenuSize $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             MenuSizeTableMap::addInstanceToPool($obj, $key);
@@ -271,7 +296,7 @@ class MenuSizeTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -291,7 +316,9 @@ class MenuSizeTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var MenuSize $obj */
+                /**
+ * @var MenuSize $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -308,8 +335,8 @@ class MenuSizeTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -331,6 +358,7 @@ class MenuSizeTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -354,16 +382,16 @@ class MenuSizeTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a MenuSize or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or MenuSize object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or MenuSize object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(MenuSizeTableMap::DATABASE_NAME);
         }
@@ -395,7 +423,7 @@ class MenuSizeTableMap extends TableMap
     /**
      * Deletes all rows from the menu_size table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -406,8 +434,8 @@ class MenuSizeTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a MenuSize or Criteria object.
      *
-     * @param mixed               $criteria Criteria or MenuSize object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or MenuSize object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -424,7 +452,7 @@ class MenuSizeTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from MenuSize object
         }
 
-        if ($criteria->containsKey(MenuSizeTableMap::COL_MENU_SIZEID) && $criteria->keyContainsValue(MenuSizeTableMap::COL_MENU_SIZEID) ) {
+        if ($criteria->containsKey(MenuSizeTableMap::COL_MENU_SIZEID) && $criteria->keyContainsValue(MenuSizeTableMap::COL_MENU_SIZEID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.MenuSizeTableMap::COL_MENU_SIZEID.')');
         }
 
@@ -434,11 +462,12 @@ class MenuSizeTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // MenuSizeTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

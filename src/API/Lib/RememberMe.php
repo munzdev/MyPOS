@@ -1,20 +1,19 @@
 <?php
 namespace API\Lib;
 
-use Model\Users;
 use Exception;
 
 class RememberMe
 {
-    private $str_key = null;
+    private $key = null;
 
-    function __construct(string $str_privateKey)
+    public function __construct(string $privateKey)
     {
-        $this->str_key = $str_privateKey;
-    }        
+        $this->key = $privateKey;
+    }
 
     /**
-     * 
+     *
      * @return string|false
      * @throws Exception
      */
@@ -22,15 +21,15 @@ class RememberMe
     {
         $cookie = $this->getCookie();
         
-        if($cookie === false)
+        if ($cookie === false) {
             return false;
+        }
 
         $var = $cookie['user'] . $cookie['token'];
 
         // Check Signature
-        if (! $this->verify($var, $cookie['signature']))
-        {
-            self::Destroy();
+        if (! $this->verify($var, $cookie['signature'])) {
+            self::destroy();
             throw new Exception("Cokies has been tampared with");
         }
         
@@ -38,35 +37,33 @@ class RememberMe
     }
     
     /**
-     * 
-     * @param string $str_hash
+     *
+     * @param string $hash
      * @return string|false
      * @throws Exception
      */
-    public function validateHash(string $str_hash)
-    {        
+    public function validateHash(string $hash)
+    {
         $cookie = $this->getCookie();
         
-        if($cookie === false)
+        if ($cookie === false) {
             return false;
+        }
         
         // Check Database
-        if (!$str_hash)
-        {
+        if (!$hash) {
             return false; // User must have deleted accout
         }
 
         // Check User Data
-        if (!$a_info = json_decode($str_hash, true))
-        {
-            self::Destroy();
+        if (!$info = json_decode($hash, true)) {
+            self::destroy();
             throw new Exception("User Data corrupted");
         }
 
         // Verify Token
-        if ($a_info['token'] !== $cookie['token'])
-        {
-            self::Destroy();
+        if ($info['token'] !== $cookie['token']) {
+            self::destroy();
             throw new Exception("System Hijacked or User use another browser");
         }
 
@@ -76,17 +73,18 @@ class RememberMe
          * reset the Token information
          */
 
-        return $this->remember($a_info['user']);
+        return $this->remember($info['user']);
     }
 
     /**
-     * 
-     * @param int $i_userid
+     *
+     * @param int $userid
      * @return string
      */
-    public function remember(int $i_userid) {
+    public function remember(int $userid)
+    {
         $cookie = [
-                        "user" => $i_userid,
+                        "user" => $userid,
                         "token" => $this->getRand(64),
                         "signature" => null
         ];
@@ -113,7 +111,7 @@ class RememberMe
         return $this->hash($data, $rand) === $hash;
     }
 
-    public static function Destroy()
+    public static function destroy()
     {
         unset($_COOKIE['auto']);
         setcookie('auto', null, -1, '/');
@@ -121,51 +119,57 @@ class RememberMe
 
     private function hash(string $value, string $rand = null)
     {
-        $rand = $rand === null ? $this->getRand(4) : $rand;
-        return $rand . bin2hex(hash_hmac('sha256', $value . $rand, $this->str_key, true));
+        if ($rand === null) {
+            $rand = $this->getRand(4);
+        }
+        
+        return $rand . bin2hex(hash_hmac('sha256', $value . $rand, $this->key, true));
     }
 
     private function getRand(int $length)
     {
         switch (true) {
-            case function_exists("openssl_random_pseudo_bytes") :
-                $r = openssl_random_pseudo_bytes($length);
+            case function_exists("openssl_random_pseudo_bytes"):
+                $randomBytes = openssl_random_pseudo_bytes($length);
                 break;
-            case is_readable('/dev/urandom') : // deceze
-                $r = file_get_contents('/dev/urandom', false, null, 0, $length);
+            case is_readable('/dev/urandom'): // deceze
+                $randomBytes = file_get_contents('/dev/urandom', false, null, 0, $length);
                 break;
-            default :
-                $i = 0;
-                $r = "";
-                while($i ++ < $length) {
-                        $r .= chr(mt_rand(0, 255));
+            default:
+                $counter = 0;
+                $randomBytes = "";
+                while ($counter ++ < $length) {
+                    $randomBytes .= chr(mt_rand(0, 255));
                 }
                 break;
         }
-        return substr(bin2hex($r), 0, $length);
+        return substr(bin2hex($randomBytes), 0, $length);
     }
     
     /**
-     * 
+     *
      * @return array|false
      */
     private function getCookie()
     {
         // Check if remeber me cookie is present
-        if (! isset($_COOKIE["auto"]) || empty($_COOKIE["auto"]))
-        {
+        if (!isset($_COOKIE["auto"]) || empty($_COOKIE["auto"])) {
             return false;
         }
 
         // Decode cookie value
-        if (! $cookie = @json_decode($_COOKIE["auto"], true))
-        {
+        try {
+            $cookie = json_decode($_COOKIE["auto"], true);
+            
+            if (!$cookie) {
+                return false;
+            }
+        } catch (Exception $exception) {
             return false;
         }
 
         // Check all parameters
-        if (! (isset($cookie['user']) || isset($cookie['token']) || isset($cookie['signature'])))
-        {
+        if (! (isset($cookie['user']) || isset($cookie['token']) || isset($cookie['signature']))) {
             return false;
         }
         

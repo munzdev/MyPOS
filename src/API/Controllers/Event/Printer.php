@@ -2,26 +2,27 @@
 
 namespace API\Controllers\Event;
 
-use API\Lib\Auth;
 use API\Lib\SecurityController;
 use API\Models\Event\EventPrinterQuery;
 use Slim\App;
 
 class Printer extends SecurityController
 {
-    public function __construct(App $o_app) {
-        parent::__construct($o_app);
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
 
-        $o_app->getContainer()['db'];
+        $app->getContainer()['db'];
     }
 
-    protected function GET() : void
+    protected function get() : void
     {
-        $o_user = Auth::GetCurrentUser();
+        $auth = $this->app->getContainer()->get('Auth');
+        $user = $auth->getCurrentUser();
 
-        $o_printer = EventPrinterQuery::create()
-                                        ->findByEventid($o_user->getEventUser()->getEventid());
+        $printer = EventPrinterQuery::create()
+                                        ->findByEventid($user->getEventUser()->getEventid());
 
-        $this->withJson($o_printer->toArray());
+        $this->withJson($printer->toArray());
     }
 }

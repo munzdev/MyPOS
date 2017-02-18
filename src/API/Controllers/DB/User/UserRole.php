@@ -8,18 +8,17 @@ use Slim\App;
 
 class UserRole extends SecurityController
 {
-    protected $o_auth;
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
 
-    public function __construct(App $o_app) {
-        parent::__construct($o_app);
-
-        $o_app->getContainer()['db'];
+        $app->getContainer()['db'];
     }
 
-    protected function GET() : void {
-        $o_userRoles = UserRoleQuery::create()->find();
+    protected function get() : void
+    {
+        $userRoles = UserRoleQuery::create()->find();
 
-        $this->withJson($o_userRoles->toArray());
+        $this->withJson($userRoles->toArray());
     }
-
 }

@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'menu_group' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class MenuGroupTableMap extends TableMap
 {
@@ -97,7 +93,7 @@ class MenuGroupTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('MenuGroupid', 'MenuTypeid', 'Name', ),
         self::TYPE_CAMELNAME     => array('menuGroupid', 'menuTypeid', 'name', ),
         self::TYPE_COLNAME       => array(MenuGroupTableMap::COL_MENU_GROUPID, MenuGroupTableMap::COL_MENU_TYPEID, MenuGroupTableMap::COL_NAME, ),
@@ -111,7 +107,7 @@ class MenuGroupTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('MenuGroupid' => 0, 'MenuTypeid' => 1, 'Name' => 2, ),
         self::TYPE_CAMELNAME     => array('menuGroupid' => 0, 'menuTypeid' => 1, 'name' => 2, ),
         self::TYPE_COLNAME       => array(MenuGroupTableMap::COL_MENU_GROUPID => 0, MenuGroupTableMap::COL_MENU_TYPEID => 1, MenuGroupTableMap::COL_NAME => 2, ),
@@ -146,41 +142,86 @@ class MenuGroupTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('MenuType', '\\API\\Models\\Menu\\MenuType', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':menu_typeid',
-    1 => ':menu_typeid',
-  ),
-), null, null, null, false);
-        $this->addRelation('DistributionPlaceGroup', '\\API\\Models\\DistributionPlace\\DistributionPlaceGroup', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':menu_groupid',
-    1 => ':menu_groupid',
-  ),
-), null, null, 'DistributionPlaceGroups', false);
-        $this->addRelation('Menu', '\\API\\Models\\Menu\\Menu', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':menu_groupid',
-    1 => ':menu_groupid',
-  ),
-), null, null, 'Menus', false);
-        $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':menu_groupid',
-    1 => ':menu_groupid',
-  ),
-), null, null, 'OrderDetails', false);
-        $this->addRelation('OrderInProgress', '\\API\\Models\\OIP\\OrderInProgress', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':menu_groupid',
-    1 => ':menu_groupid',
-  ),
-), null, null, 'OrderInProgresses', false);
+        $this->addRelation(
+            'MenuType',
+            '\\API\\Models\\Menu\\MenuType',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':menu_typeid',
+            1 => ':menu_typeid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'DistributionPlaceGroup',
+            '\\API\\Models\\DistributionPlace\\DistributionPlaceGroup',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':menu_groupid',
+            1 => ':menu_groupid',
+            ),
+            ),
+            null,
+            null,
+            'DistributionPlaceGroups',
+            false
+        );
+        $this->addRelation(
+            'Menu',
+            '\\API\\Models\\Menu\\Menu',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':menu_groupid',
+            1 => ':menu_groupid',
+            ),
+            ),
+            null,
+            null,
+            'Menus',
+            false
+        );
+        $this->addRelation(
+            'OrderDetail',
+            '\\API\\Models\\Ordering\\OrderDetail',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':menu_groupid',
+            1 => ':menu_groupid',
+            ),
+            ),
+            null,
+            null,
+            'OrderDetails',
+            false
+        );
+        $this->addRelation(
+            'OrderInProgress',
+            '\\API\\Models\\OIP\\OrderInProgress',
+            RelationMap::ONE_TO_MANY,
+            array(
+            0 =>
+            array(
+            0 => ':menu_groupid',
+            1 => ':menu_groupid',
+            ),
+            ),
+            null,
+            null,
+            'OrderInProgresses',
+            false
+        );
     } // buildRelations()
 
     /**
@@ -235,7 +276,7 @@ class MenuGroupTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -266,7 +307,9 @@ class MenuGroupTableMap extends TableMap
             $col = $offset + MenuGroupTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = MenuGroupTableMap::OM_CLASS;
-            /** @var MenuGroup $obj */
+            /**
+ * @var MenuGroup $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             MenuGroupTableMap::addInstanceToPool($obj, $key);
@@ -279,7 +322,7 @@ class MenuGroupTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -299,7 +342,9 @@ class MenuGroupTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var MenuGroup $obj */
+                /**
+ * @var MenuGroup $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -316,8 +361,8 @@ class MenuGroupTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -337,6 +382,7 @@ class MenuGroupTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -360,16 +406,16 @@ class MenuGroupTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a MenuGroup or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or MenuGroup object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or MenuGroup object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(MenuGroupTableMap::DATABASE_NAME);
         }
@@ -401,7 +447,7 @@ class MenuGroupTableMap extends TableMap
     /**
      * Deletes all rows from the menu_group table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -412,8 +458,8 @@ class MenuGroupTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a MenuGroup or Criteria object.
      *
-     * @param mixed               $criteria Criteria or MenuGroup object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or MenuGroup object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -430,7 +476,7 @@ class MenuGroupTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from MenuGroup object
         }
 
-        if ($criteria->containsKey(MenuGroupTableMap::COL_MENU_GROUPID) && $criteria->keyContainsValue(MenuGroupTableMap::COL_MENU_GROUPID) ) {
+        if ($criteria->containsKey(MenuGroupTableMap::COL_MENU_GROUPID) && $criteria->keyContainsValue(MenuGroupTableMap::COL_MENU_GROUPID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.MenuGroupTableMap::COL_MENU_GROUPID.')');
         }
 
@@ -440,11 +486,12 @@ class MenuGroupTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // MenuGroupTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

@@ -19,81 +19,78 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'event_bankinformation' table.
  *
+ * @method ChildEventBankinformationQuery orderByEventBankinformationid($order = Criteria::ASC) Order by the event_bankinformationid column
+ * @method ChildEventBankinformationQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
+ * @method ChildEventBankinformationQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method ChildEventBankinformationQuery orderByIban($order = Criteria::ASC) Order by the iban column
+ * @method ChildEventBankinformationQuery orderByBic($order = Criteria::ASC) Order by the bic column
+ * @method ChildEventBankinformationQuery orderByActive($order = Criteria::ASC) Order by the active column
  *
+ * @method ChildEventBankinformationQuery groupByEventBankinformationid() Group by the event_bankinformationid column
+ * @method ChildEventBankinformationQuery groupByEventid() Group by the eventid column
+ * @method ChildEventBankinformationQuery groupByName() Group by the name column
+ * @method ChildEventBankinformationQuery groupByIban() Group by the iban column
+ * @method ChildEventBankinformationQuery groupByBic() Group by the bic column
+ * @method ChildEventBankinformationQuery groupByActive() Group by the active column
  *
- * @method     ChildEventBankinformationQuery orderByEventBankinformationid($order = Criteria::ASC) Order by the event_bankinformationid column
- * @method     ChildEventBankinformationQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
- * @method     ChildEventBankinformationQuery orderByName($order = Criteria::ASC) Order by the name column
- * @method     ChildEventBankinformationQuery orderByIban($order = Criteria::ASC) Order by the iban column
- * @method     ChildEventBankinformationQuery orderByBic($order = Criteria::ASC) Order by the bic column
- * @method     ChildEventBankinformationQuery orderByActive($order = Criteria::ASC) Order by the active column
+ * @method ChildEventBankinformationQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildEventBankinformationQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildEventBankinformationQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildEventBankinformationQuery groupByEventBankinformationid() Group by the event_bankinformationid column
- * @method     ChildEventBankinformationQuery groupByEventid() Group by the eventid column
- * @method     ChildEventBankinformationQuery groupByName() Group by the name column
- * @method     ChildEventBankinformationQuery groupByIban() Group by the iban column
- * @method     ChildEventBankinformationQuery groupByBic() Group by the bic column
- * @method     ChildEventBankinformationQuery groupByActive() Group by the active column
+ * @method ChildEventBankinformationQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildEventBankinformationQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildEventBankinformationQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildEventBankinformationQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildEventBankinformationQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildEventBankinformationQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildEventBankinformationQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
+ * @method ChildEventBankinformationQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
+ * @method ChildEventBankinformationQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
  *
- * @method     ChildEventBankinformationQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildEventBankinformationQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildEventBankinformationQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildEventBankinformationQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
  *
- * @method     ChildEventBankinformationQuery leftJoinEvent($relationAlias = null) Adds a LEFT JOIN clause to the query using the Event relation
- * @method     ChildEventBankinformationQuery rightJoinEvent($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Event relation
- * @method     ChildEventBankinformationQuery innerJoinEvent($relationAlias = null) Adds a INNER JOIN clause to the query using the Event relation
+ * @method ChildEventBankinformationQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
+ * @method ChildEventBankinformationQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
+ * @method ChildEventBankinformationQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
  *
- * @method     ChildEventBankinformationQuery joinWithEvent($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Event relation
+ * @method ChildEventBankinformationQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
+ * @method ChildEventBankinformationQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
+ * @method ChildEventBankinformationQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
  *
- * @method     ChildEventBankinformationQuery leftJoinWithEvent() Adds a LEFT JOIN clause and with to the query using the Event relation
- * @method     ChildEventBankinformationQuery rightJoinWithEvent() Adds a RIGHT JOIN clause and with to the query using the Event relation
- * @method     ChildEventBankinformationQuery innerJoinWithEvent() Adds a INNER JOIN clause and with to the query using the Event relation
+ * @method ChildEventBankinformationQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
  *
- * @method     ChildEventBankinformationQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
- * @method     ChildEventBankinformationQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
- * @method     ChildEventBankinformationQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
+ * @method ChildEventBankinformationQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
+ * @method ChildEventBankinformationQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
+ * @method ChildEventBankinformationQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
  *
- * @method     ChildEventBankinformationQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
+ * @method \API\Models\Event\EventQuery|\API\Models\Invoice\InvoiceQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildEventBankinformationQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
- * @method     ChildEventBankinformationQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
- * @method     ChildEventBankinformationQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
+ * @method ChildEventBankinformation findOne(ConnectionInterface $con = null) Return the first ChildEventBankinformation matching the query
+ * @method ChildEventBankinformation findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEventBankinformation matching the query, or a new ChildEventBankinformation object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Event\EventQuery|\API\Models\Invoice\InvoiceQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildEventBankinformation findOne(ConnectionInterface $con = null) Return the first ChildEventBankinformation matching the query
- * @method     ChildEventBankinformation findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEventBankinformation matching the query, or a new ChildEventBankinformation object populated from the query conditions when no match is found
- *
- * @method     ChildEventBankinformation findOneByEventBankinformationid(int $event_bankinformationid) Return the first ChildEventBankinformation filtered by the event_bankinformationid column
- * @method     ChildEventBankinformation findOneByEventid(int $eventid) Return the first ChildEventBankinformation filtered by the eventid column
- * @method     ChildEventBankinformation findOneByName(string $name) Return the first ChildEventBankinformation filtered by the name column
- * @method     ChildEventBankinformation findOneByIban(string $iban) Return the first ChildEventBankinformation filtered by the iban column
- * @method     ChildEventBankinformation findOneByBic(string $bic) Return the first ChildEventBankinformation filtered by the bic column
- * @method     ChildEventBankinformation findOneByActive(boolean $active) Return the first ChildEventBankinformation filtered by the active column *
+ * @method ChildEventBankinformation findOneByEventBankinformationid(int $event_bankinformationid) Return the first ChildEventBankinformation filtered by the event_bankinformationid column
+ * @method ChildEventBankinformation findOneByEventid(int $eventid) Return the first ChildEventBankinformation filtered by the eventid column
+ * @method ChildEventBankinformation findOneByName(string $name) Return the first ChildEventBankinformation filtered by the name column
+ * @method ChildEventBankinformation findOneByIban(string $iban) Return the first ChildEventBankinformation filtered by the iban column
+ * @method ChildEventBankinformation findOneByBic(string $bic) Return the first ChildEventBankinformation filtered by the bic column
+ * @method ChildEventBankinformation findOneByActive(boolean $active) Return the first ChildEventBankinformation filtered by the active column *
 
- * @method     ChildEventBankinformation requirePk($key, ConnectionInterface $con = null) Return the ChildEventBankinformation by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventBankinformation requireOne(ConnectionInterface $con = null) Return the first ChildEventBankinformation matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventBankinformation requirePk($key, ConnectionInterface $con = null) Return the ChildEventBankinformation by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventBankinformation requireOne(ConnectionInterface $con = null) Return the first ChildEventBankinformation matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildEventBankinformation requireOneByEventBankinformationid(int $event_bankinformationid) Return the first ChildEventBankinformation filtered by the event_bankinformationid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventBankinformation requireOneByEventid(int $eventid) Return the first ChildEventBankinformation filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventBankinformation requireOneByName(string $name) Return the first ChildEventBankinformation filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventBankinformation requireOneByIban(string $iban) Return the first ChildEventBankinformation filtered by the iban column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventBankinformation requireOneByBic(string $bic) Return the first ChildEventBankinformation filtered by the bic column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventBankinformation requireOneByActive(boolean $active) Return the first ChildEventBankinformation filtered by the active column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventBankinformation requireOneByEventBankinformationid(int $event_bankinformationid) Return the first ChildEventBankinformation filtered by the event_bankinformationid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventBankinformation requireOneByEventid(int $eventid) Return the first ChildEventBankinformation filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventBankinformation requireOneByName(string $name) Return the first ChildEventBankinformation filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventBankinformation requireOneByIban(string $iban) Return the first ChildEventBankinformation filtered by the iban column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventBankinformation requireOneByBic(string $bic) Return the first ChildEventBankinformation filtered by the bic column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildEventBankinformation requireOneByActive(boolean $active) Return the first ChildEventBankinformation filtered by the active column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildEventBankinformation[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEventBankinformation objects based on current ModelCriteria
- * @method     ChildEventBankinformation[]|ObjectCollection findByEventBankinformationid(int $event_bankinformationid) Return ChildEventBankinformation objects filtered by the event_bankinformationid column
- * @method     ChildEventBankinformation[]|ObjectCollection findByEventid(int $eventid) Return ChildEventBankinformation objects filtered by the eventid column
- * @method     ChildEventBankinformation[]|ObjectCollection findByName(string $name) Return ChildEventBankinformation objects filtered by the name column
- * @method     ChildEventBankinformation[]|ObjectCollection findByIban(string $iban) Return ChildEventBankinformation objects filtered by the iban column
- * @method     ChildEventBankinformation[]|ObjectCollection findByBic(string $bic) Return ChildEventBankinformation objects filtered by the bic column
- * @method     ChildEventBankinformation[]|ObjectCollection findByActive(boolean $active) Return ChildEventBankinformation objects filtered by the active column
- * @method     ChildEventBankinformation[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildEventBankinformation[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEventBankinformation objects based on current ModelCriteria
+ * @method ChildEventBankinformation[]|ObjectCollection findByEventBankinformationid(int $event_bankinformationid) Return ChildEventBankinformation objects filtered by the event_bankinformationid column
+ * @method ChildEventBankinformation[]|ObjectCollection findByEventid(int $eventid) Return ChildEventBankinformation objects filtered by the eventid column
+ * @method ChildEventBankinformation[]|ObjectCollection findByName(string $name) Return ChildEventBankinformation objects filtered by the name column
+ * @method ChildEventBankinformation[]|ObjectCollection findByIban(string $iban) Return ChildEventBankinformation objects filtered by the iban column
+ * @method ChildEventBankinformation[]|ObjectCollection findByBic(string $bic) Return ChildEventBankinformation objects filtered by the bic column
+ * @method ChildEventBankinformation[]|ObjectCollection findByActive(boolean $active) Return ChildEventBankinformation objects filtered by the active column
+ * @method ChildEventBankinformation[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class EventBankinformationQuery extends ModelCriteria
 {
@@ -102,9 +99,9 @@ abstract class EventBankinformationQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\Event\Base\EventBankinformationQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\Event\\EventBankinformation', $modelAlias = null)
     {
@@ -114,8 +111,8 @@ abstract class EventBankinformationQuery extends ModelCriteria
     /**
      * Returns a new ChildEventBankinformationQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildEventBankinformationQuery
      */
@@ -144,7 +141,7 @@ abstract class EventBankinformationQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildEventBankinformation|array|mixed the result, formatted by the current formatter
@@ -161,8 +158,7 @@ abstract class EventBankinformationQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -181,8 +177,8 @@ abstract class EventBankinformationQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -201,7 +197,9 @@ abstract class EventBankinformationQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildEventBankinformation $obj */
+            /**
+ * @var ChildEventBankinformation $obj
+*/
             $obj = new ChildEventBankinformation();
             $obj->hydrate($row);
             EventBankinformationTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -214,8 +212,8 @@ abstract class EventBankinformationQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildEventBankinformation|array|mixed the result, formatted by the current formatter
      */
@@ -235,8 +233,9 @@ abstract class EventBankinformationQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -257,26 +256,24 @@ abstract class EventBankinformationQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildEventBankinformationQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(EventBankinformationTableMap::COL_EVENT_BANKINFORMATIONID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildEventBankinformationQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(EventBankinformationTableMap::COL_EVENT_BANKINFORMATIONID, $keys, Criteria::IN);
     }
 
@@ -290,11 +287,14 @@ abstract class EventBankinformationQuery extends ModelCriteria
      * $query->filterByEventBankinformationid(array('min' => 12)); // WHERE event_bankinformationid > 12
      * </code>
      *
-     * @param     mixed $eventBankinformationid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $eventBankinformationid The value to use as filter.
+     *                                           Use scalar values for
+     *                                           equality. Use array values
+     *                                           for in_array() equivalent.
+     *                                           Use associative array('min'
+     *                                           => $minValue, 'max' =>
+     *                                           $maxValue) for intervals.
+     * @param string $comparison             Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventBankinformationQuery The current query, for fluid interface
      */
@@ -331,13 +331,16 @@ abstract class EventBankinformationQuery extends ModelCriteria
      * $query->filterByEventid(array('min' => 12)); // WHERE eventid > 12
      * </code>
      *
-     * @see       filterByEvent()
+     * @see filterByEvent()
      *
-     * @param     mixed $eventid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $eventid    The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventBankinformationQuery The current query, for fluid interface
      */
@@ -373,8 +376,8 @@ abstract class EventBankinformationQuery extends ModelCriteria
      * $query->filterByName('%fooValue%', Criteria::LIKE); // WHERE name LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $name The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $name       The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventBankinformationQuery The current query, for fluid interface
      */
@@ -398,8 +401,8 @@ abstract class EventBankinformationQuery extends ModelCriteria
      * $query->filterByIban('%fooValue%', Criteria::LIKE); // WHERE iban LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $iban The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $iban       The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventBankinformationQuery The current query, for fluid interface
      */
@@ -423,8 +426,8 @@ abstract class EventBankinformationQuery extends ModelCriteria
      * $query->filterByBic('%fooValue%', Criteria::LIKE); // WHERE bic LIKE '%fooValue%'
      * </code>
      *
-     * @param     string $bic The value to use as filter.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string $bic        The value to use as filter.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventBankinformationQuery The current query, for fluid interface
      */
@@ -448,12 +451,20 @@ abstract class EventBankinformationQuery extends ModelCriteria
      * $query->filterByActive('yes'); // WHERE active = true
      * </code>
      *
-     * @param     boolean|string $active The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param boolean|string $active     The value to use as filter.
+     *                                       Non-boolean arguments are
+     *                                       converted using the
+     *                                       following rules: * 1, '1',
+     *                                       'true',  'on',  and 'yes'
+     *                                       are converted to boolean
+     *                                       true * 0, '0', 'false',
+     *                                       'off', and 'no'  are
+     *                                       converted to boolean false
+     *                                       Check on string values is
+     *                                       case insensitive (so
+     *                                       'FaLsE' is seen as
+     *                                       'false').
+     * @param string         $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventBankinformationQuery The current query, for fluid interface
      */
@@ -469,8 +480,8 @@ abstract class EventBankinformationQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Event\Event object
      *
-     * @param \API\Models\Event\Event|ObjectCollection $event The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Event\Event|ObjectCollection $event      The related object(s) to use as filter
+     * @param string                                   $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -496,8 +507,8 @@ abstract class EventBankinformationQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Event relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildEventBankinformationQuery The current query, for fluid interface
      */
@@ -530,9 +541,9 @@ abstract class EventBankinformationQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Event\EventQuery A secondary query class using the current class as primary query
      */
@@ -546,8 +557,8 @@ abstract class EventBankinformationQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Invoice\Invoice object
      *
-     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Invoice\Invoice|ObjectCollection $invoice    the related object to use as filter
+     * @param string                                       $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildEventBankinformationQuery The current query, for fluid interface
      */
@@ -569,8 +580,8 @@ abstract class EventBankinformationQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Invoice relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildEventBankinformationQuery The current query, for fluid interface
      */
@@ -603,9 +614,9 @@ abstract class EventBankinformationQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Invoice\InvoiceQuery A secondary query class using the current class as primary query
      */
@@ -619,7 +630,7 @@ abstract class EventBankinformationQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildEventBankinformation $eventBankinformation Object to remove from the list of results
+     * @param ChildEventBankinformation $eventBankinformation Object to remove from the list of results
      *
      * @return $this|ChildEventBankinformationQuery The current query, for fluid interface
      */
@@ -635,7 +646,7 @@ abstract class EventBankinformationQuery extends ModelCriteria
     /**
      * Deletes all rows from the event_bankinformation table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -646,23 +657,25 @@ abstract class EventBankinformationQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            EventBankinformationTableMap::clearInstancePool();
-            EventBankinformationTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                EventBankinformationTableMap::clearInstancePool();
+                EventBankinformationTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -681,16 +694,17 @@ abstract class EventBankinformationQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            EventBankinformationTableMap::removeInstanceFromPool($criteria);
+                EventBankinformationTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            EventBankinformationTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                EventBankinformationTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // EventBankinformationQuery

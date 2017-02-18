@@ -10,22 +10,24 @@ use Slim\App;
 
 class User extends Controller
 {
-    protected $o_auth;
+    protected $auth;
 
-    public function __construct(App $o_app) {
-        parent::__construct($o_app);
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
 
-        $o_app->getContainer()['db'];
+        $app->getContainer()['db'];
 
-        $this->o_auth = new Auth(new UserQuery());
+        $this->auth = $this->app->getContainer()->get('Auth');
     }
 
-    protected function GET() : void {
-        $o_user = $this->o_auth->GetCurrentUser();
+    protected function get() : void
+    {
+        $user = $this->auth->getCurrentUser();
 
-        $a_return = $o_user->toArray();
-        $a_return[EventUserTableMap::getTableMap()->getPhpName()] = $o_user->getEventUser()->toArray();
+        $return = $user->toArray();
+        $return[EventUserTableMap::getTableMap()->getPhpName()] = $user->getEventUser()->toArray();
 
-        $this->withJson($a_return);
+        $this->withJson($return);
     }
 }

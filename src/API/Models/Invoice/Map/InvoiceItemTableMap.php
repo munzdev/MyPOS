@@ -14,17 +14,13 @@ use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
 
-
 /**
  * This class defines the structure of the 'invoice_item' table.
- *
- *
  *
  * This map class is used by Propel to do runtime db structure discovery.
  * For example, the createSelectSql() method checks the type of a given column used in an
  * ORDER BY clause to know whether it needs to apply SQL to make the ORDER BY case-insensitive
  * (i.e. if it's a text column type).
- *
  */
 class InvoiceItemTableMap extends TableMap
 {
@@ -117,7 +113,7 @@ class InvoiceItemTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
-    protected static $fieldNames = array (
+    protected static $fieldNames = array(
         self::TYPE_PHPNAME       => array('InvoiceItemid', 'Invoiceid', 'OrderDetailid', 'Amount', 'Price', 'Description', 'Tax', ),
         self::TYPE_CAMELNAME     => array('invoiceItemid', 'invoiceid', 'orderDetailid', 'amount', 'price', 'description', 'tax', ),
         self::TYPE_COLNAME       => array(InvoiceItemTableMap::COL_INVOICE_ITEMID, InvoiceItemTableMap::COL_INVOICEID, InvoiceItemTableMap::COL_ORDER_DETAILID, InvoiceItemTableMap::COL_AMOUNT, InvoiceItemTableMap::COL_PRICE, InvoiceItemTableMap::COL_DESCRIPTION, InvoiceItemTableMap::COL_TAX, ),
@@ -131,7 +127,7 @@ class InvoiceItemTableMap extends TableMap
      * first dimension keys are the type constants
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
-    protected static $fieldKeys = array (
+    protected static $fieldKeys = array(
         self::TYPE_PHPNAME       => array('InvoiceItemid' => 0, 'Invoiceid' => 1, 'OrderDetailid' => 2, 'Amount' => 3, 'Price' => 4, 'Description' => 5, 'Tax' => 6, ),
         self::TYPE_CAMELNAME     => array('invoiceItemid' => 0, 'invoiceid' => 1, 'orderDetailid' => 2, 'amount' => 3, 'price' => 4, 'description' => 5, 'tax' => 6, ),
         self::TYPE_COLNAME       => array(InvoiceItemTableMap::COL_INVOICE_ITEMID => 0, InvoiceItemTableMap::COL_INVOICEID => 1, InvoiceItemTableMap::COL_ORDER_DETAILID => 2, InvoiceItemTableMap::COL_AMOUNT => 3, InvoiceItemTableMap::COL_PRICE => 4, InvoiceItemTableMap::COL_DESCRIPTION => 5, InvoiceItemTableMap::COL_TAX => 6, ),
@@ -170,20 +166,38 @@ class InvoiceItemTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('Invoice', '\\API\\Models\\Invoice\\Invoice', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':invoiceid',
-    1 => ':invoiceid',
-  ),
-), null, null, null, false);
-        $this->addRelation('OrderDetail', '\\API\\Models\\Ordering\\OrderDetail', RelationMap::MANY_TO_ONE, array (
-  0 =>
-  array (
-    0 => ':order_detailid',
-    1 => ':order_detailid',
-  ),
-), null, null, null, false);
+        $this->addRelation(
+            'Invoice',
+            '\\API\\Models\\Invoice\\Invoice',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':invoiceid',
+            1 => ':invoiceid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
+        $this->addRelation(
+            'OrderDetail',
+            '\\API\\Models\\Ordering\\OrderDetail',
+            RelationMap::MANY_TO_ONE,
+            array(
+            0 =>
+            array(
+            0 => ':order_detailid',
+            1 => ':order_detailid',
+            ),
+            ),
+            null,
+            null,
+            null,
+            false
+        );
     } // buildRelations()
 
     /**
@@ -238,7 +252,7 @@ class InvoiceItemTableMap extends TableMap
      * relative to a location on the PHP include_path.
      * (e.g. path.to.MyClass -> 'path/to/MyClass.php')
      *
-     * @param boolean $withPrefix Whether or not to return the path with the class name
+     * @param  boolean $withPrefix Whether or not to return the path with the class name
      * @return string path.to.ClassName
      */
     public static function getOMClass($withPrefix = true)
@@ -269,7 +283,9 @@ class InvoiceItemTableMap extends TableMap
             $col = $offset + InvoiceItemTableMap::NUM_HYDRATE_COLUMNS;
         } else {
             $cls = InvoiceItemTableMap::OM_CLASS;
-            /** @var InvoiceItem $obj */
+            /**
+ * @var InvoiceItem $obj
+*/
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
             InvoiceItemTableMap::addInstanceToPool($obj, $key);
@@ -282,7 +298,7 @@ class InvoiceItemTableMap extends TableMap
      * The returned array will contain objects of the default type or
      * objects that inherit from the default.
      *
-     * @param DataFetcherInterface $dataFetcher
+     * @param  DataFetcherInterface $dataFetcher
      * @return array
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -302,7 +318,9 @@ class InvoiceItemTableMap extends TableMap
                 // $obj->hydrate($row, 0, true); // rehydrate
                 $results[] = $obj;
             } else {
-                /** @var InvoiceItem $obj */
+                /**
+ * @var InvoiceItem $obj
+*/
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
@@ -319,8 +337,8 @@ class InvoiceItemTableMap extends TableMap
      * XML schema will not be added to the select list and only loaded
      * on demand.
      *
-     * @param Criteria $criteria object containing the columns to add.
-     * @param string   $alias    optional table alias
+     * @param  Criteria $criteria object containing the columns to add.
+     * @param  string   $alias    optional table alias
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
@@ -348,6 +366,7 @@ class InvoiceItemTableMap extends TableMap
     /**
      * Returns the TableMap related to this object.
      * This method is not needed for general use but a specific application could have a need.
+     *
      * @return TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -371,16 +390,16 @@ class InvoiceItemTableMap extends TableMap
     /**
      * Performs a DELETE on the database, given a InvoiceItem or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or InvoiceItem object or primary key or array of primary keys
+     * @param  mixed               $values Criteria or InvoiceItem object or primary key or array of primary keys
      *              which is used to create the DELETE statement
-     * @param  ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con    the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
      */
-     public static function doDelete($values, ConnectionInterface $con = null)
-     {
+    public static function doDelete($values, ConnectionInterface $con = null)
+    {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(InvoiceItemTableMap::DATABASE_NAME);
         }
@@ -412,7 +431,7 @@ class InvoiceItemTableMap extends TableMap
     /**
      * Deletes all rows from the invoice_item table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
@@ -423,8 +442,8 @@ class InvoiceItemTableMap extends TableMap
     /**
      * Performs an INSERT on the database, given a InvoiceItem or Criteria object.
      *
-     * @param mixed               $criteria Criteria or InvoiceItem object containing data that is used to create the INSERT statement.
-     * @param ConnectionInterface $con the ConnectionInterface connection to use
+     * @param  mixed               $criteria Criteria or InvoiceItem object containing data that is used to create the INSERT statement.
+     * @param  ConnectionInterface $con      the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
      *                         rethrown wrapped into a PropelException.
@@ -441,7 +460,7 @@ class InvoiceItemTableMap extends TableMap
             $criteria = $criteria->buildCriteria(); // build Criteria from InvoiceItem object
         }
 
-        if ($criteria->containsKey(InvoiceItemTableMap::COL_INVOICE_ITEMID) && $criteria->keyContainsValue(InvoiceItemTableMap::COL_INVOICE_ITEMID) ) {
+        if ($criteria->containsKey(InvoiceItemTableMap::COL_INVOICE_ITEMID) && $criteria->keyContainsValue(InvoiceItemTableMap::COL_INVOICE_ITEMID)) {
             throw new PropelException('Cannot insert a value for auto-increment primary key ('.InvoiceItemTableMap::COL_INVOICE_ITEMID.')');
         }
 
@@ -451,11 +470,12 @@ class InvoiceItemTableMap extends TableMap
 
         // use transaction because $criteria could contain info
         // for more than one table (I guess, conceivably)
-        return $con->transaction(function () use ($con, $query) {
-            return $query->doInsert($con);
-        });
+        return $con->transaction(
+            function () use ($con, $query) {
+                return $query->doInsert($con);
+            }
+        );
     }
-
 } // InvoiceItemTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //

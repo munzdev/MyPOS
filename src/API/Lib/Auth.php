@@ -9,41 +9,36 @@ use Propel\Runtime\Collection\Collection;
 
 class Auth
 {
-    private $o_queryClass;
+    private $queryClass;
 
-    public function __construct(UserQuery $o_queryClass)
+    public function __construct(UserQuery $queryClass)
     {
-        $this->o_queryClass = $o_queryClass;
+        $this->queryClass = $queryClass;
     }
 
-    public function DoLogin(string $str_username) : bool
+    public function doLogin(string $username) : bool
     {
-        $o_user = $this->FindUserObject($str_username);
+        $user = $this->findUserObject($username);
 
-        if($o_user)
-        {
-            $o_user->setAutologinHash(null);
-            $o_user->setPassword(null);
+        if ($user) {
+            $user->setAutologinHash(null);
+            $user->setPassword(null);
 
-            $this->SetLogin($o_user);
+            $this->setLogin($user);
 
             return true;
-         }
-         else
-         {
+        } else {
             return false;
-         }
+        }
     }
 
-    public function CheckLogin(string $str_username, string $str_password) : bool
+    public function checkLogin(string $username, string $password) : bool
     {
-        $o_user = $this->FindUserObject($str_username);
+        $user = $this->findUserObject($username);
 
-        if($o_user)
-        {
-            if(password_verify($str_password, $o_user->getPassword()))
-            {
-                return $this->DoLogin($str_username);
+        if ($user) {
+            if (password_verify($password, $user->getPassword())) {
+                return $this->doLogin($username);
             }
         }
 
@@ -52,70 +47,71 @@ class Auth
 
     /**
      *
-     * @param string $str_username
+     * @param string $username
      * @return User|null
      */
-    private function FindUserObject(string $str_username) // : ?User
+    private function findUserObject(string $username) // : ?User
     {
-        $o_user = $this->o_queryClass->create()->useEventUserQuery()
-                                                  ->useEventQuery()
-                                                      ->filterByActive(true)
-                                                  ->endUse()
-                                               ->endUse()
-                                               ->filterByUsername($str_username)
-                                               ->filterByActive(true)
-                                               ->with(EventUserTableMap::getTableMap()->getPhpName())
-                                               ->find();
+        $user = $this->queryClass->create()->useEventUserQuery()
+            ->useEventQuery()
+            ->filterByActive(true)
+            ->endUse()
+            ->endUse()
+            ->filterByUsername($username)
+            ->filterByActive(true)
+            ->with(EventUserTableMap::getTableMap()->getPhpName())
+            ->find();
 
-        if(!$o_user->isEmpty())
-            return $o_user->getFirst();
+        if (!$user->isEmpty()) {
+            return $user->getFirst();
+        }
 
-        return $this->o_queryClass->create()->filterByUsername($str_username)
-                                            ->filterByIsAdmin(true)
-                                            ->filterByActive(true)
-                                            ->findOne();
+        return $this->queryClass->create()->filterByUsername($username)
+            ->filterByIsAdmin(true)
+            ->filterByActive(true)
+            ->findOne();
     }
 
-    public function SetLogin(User $o_user) : void
+    public function setLogin(User $user) : void
     {
-        $_SESSION['Auth'][UserTableMap::getTableMap()->getPhpName()] = serialize($o_user);
-        $_SESSION['Auth'][EventUserTableMap::getTableMap()->getPhpName()] = serialize($o_user->getEventUser());
+        $_SESSION['Auth'][UserTableMap::getTableMap()->getPhpName()] = serialize($user);
+        $_SESSION['Auth'][EventUserTableMap::getTableMap()->getPhpName()] = serialize($user->getEventUser());
     }
 
     /**
      *
      * @return User|null
      */
-    public static function GetCurrentUser() // : ?User
+    public static function getCurrentUser() // : ?User
     {
-        static $o_unserializedUser = null;
+        static $unserializedUser = null;
 
-        if(isset($_SESSION['Auth']))
-        {
-            if($o_unserializedUser)
-                return $o_unserializedUser;
+        if (isset($_SESSION['Auth'])) {
+            if ($unserializedUser) {
+                return $unserializedUser;
+            }
 
-            $o_user = unserialize($_SESSION['Auth'][UserTableMap::getTableMap()->getPhpName()]);
-            $o_eventUser = unserialize($_SESSION['Auth'][EventUserTableMap::getTableMap()->getPhpName()]);
+            $user = unserialize($_SESSION['Auth'][UserTableMap::getTableMap()->getPhpName()]);
+            $eventUser = unserialize($_SESSION['Auth'][EventUserTableMap::getTableMap()->getPhpName()]);
 
-            $o_collection = new Collection([$o_eventUser]);
+            $collection = new Collection([$eventUser]);
 
-            $o_user->setEventUsers($o_collection);
+            $user->setEventUsers($collection);
 
-            $o_unserializedUser = $o_user;
+            $unserializedUser = $user;
 
-            return $o_user;
-       }
+            return $user;
+        }
 
         return null;
     }
 
-    public static function IsLoggedIn() : bool
+    public static function isLoggedIn() : bool
     {
         return isset($_SESSION['Auth']);
     }
 
-    public function Logout() : void
+    public function logout() : void
     {
         $_SESSION['Auth'] = null;
         unset($_SESSION['Auth']);

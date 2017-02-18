@@ -64,9 +64,7 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'event' table.
  *
- *
- *
- * @package    propel.generator.API.Models.Event.Base
+ * @package propel.generator.API.Models.Event.Base
  */
 abstract class Event implements ActiveRecordInterface
 {
@@ -78,12 +76,14 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * attribute to determine if this object has previously been saved.
+     *
      * @var boolean
      */
     protected $new = true;
 
     /**
      * attribute to determine whether this object has been deleted.
+     *
      * @var boolean
      */
     protected $deleted = false;
@@ -91,6 +91,7 @@ abstract class Event implements ActiveRecordInterface
     /**
      * The columns that have been modified in current object.
      * Tracking modified columns allows us to only update modified columns.
+     *
      * @var array
      */
     protected $modifiedColumns = array();
@@ -98,6 +99,7 @@ abstract class Event implements ActiveRecordInterface
     /**
      * The (virtual) columns that are added at runtime
      * The formatters can add supplementary columns based on a resultset
+     *
      * @var array
      */
     protected $virtualColumns = array();
@@ -105,28 +107,28 @@ abstract class Event implements ActiveRecordInterface
     /**
      * The value for the eventid field.
      *
-     * @var        int
+     * @var int
      */
     protected $eventid;
 
     /**
      * The value for the name field.
      *
-     * @var        string
+     * @var string
      */
     protected $name;
 
     /**
      * The value for the date field.
      *
-     * @var        DateTime
+     * @var DateTime
      */
     protected $date;
 
     /**
      * The value for the active field.
      *
-     * @var        boolean
+     * @var boolean
      */
     protected $active;
 
@@ -206,66 +208,77 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|Coupon[]
      */
     protected $couponsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|ChildEventBankinformation[]
      */
     protected $eventBankinformationsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|ChildEventContact[]
      */
     protected $eventContactsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|DistributionPlace[]
      */
     protected $distributionPlacesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|ChildEventPrinter[]
      */
     protected $eventPrintersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|ChildEventTable[]
      */
     protected $eventTablesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|ChildEventUser[]
      */
     protected $eventUsersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|MenuExtra[]
      */
     protected $menuExtrasScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|MenuSize[]
      */
     protected $menuSizesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|MenuType[]
      */
     protected $menuTypesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|InvoiceWarningType[]
      */
     protected $invoiceWarningTypesScheduledForDeletion = null;
@@ -290,7 +303,7 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Has specified column been modified?
      *
-     * @param  string  $col column fully qualified name (TableMap::TYPE_COLNAME), e.g. Book::AUTHOR_ID
+     * @param  string $col column fully qualified name (TableMap::TYPE_COLNAME), e.g. Book::AUTHOR_ID
      * @return boolean True if $col has been modified.
      */
     public function isColumnModified($col)
@@ -300,6 +313,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Get the columns that have been modified in this object.
+     *
      * @return array A unique list of the modified column names for this object.
      */
     public function getModifiedColumns()
@@ -332,6 +346,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Whether this object has been deleted.
+     *
      * @return boolean The deleted state of this object.
      */
     public function isDeleted()
@@ -341,6 +356,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Specify whether this object has been deleted.
+     *
      * @param  boolean $b The deleted state of this object.
      * @return void
      */
@@ -351,6 +367,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Sets the modified state for the object to be false.
+     *
      * @param  string $col If supplied, only the specified column is reset.
      * @return void
      */
@@ -370,7 +387,7 @@ abstract class Event implements ActiveRecordInterface
      * <code>obj</code> is an instance of <code>Event</code>, delegates to
      * <code>equals(Event)</code>.  Otherwise, returns <code>false</code>.
      *
-     * @param  mixed   $obj The object to compare to.
+     * @param  mixed $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
      */
     public function equals($obj)
@@ -403,7 +420,7 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Checks the existence of a virtual column in this object
      *
-     * @param  string  $name The virtual column name
+     * @param  string $name The virtual column name
      * @return boolean
      */
     public function hasVirtualColumn($name)
@@ -446,8 +463,8 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Logs a message using Propel::log().
      *
-     * @param  string  $msg
-     * @param  int     $priority One of the Propel::LOG_* logging levels
+     * @param  string $msg
+     * @param  int    $priority One of the Propel::LOG_* logging levels
      * @return boolean
      */
     protected function log($msg, $priority = Propel::LOG_INFO)
@@ -488,7 +505,7 @@ abstract class Event implements ActiveRecordInterface
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
 
-        foreach($serializableProperties as $property) {
+        foreach ($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
 
@@ -518,15 +535,14 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Get the [optionally formatted] temporal [date] column value.
      *
-     *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
      *
      * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getDate($format = NULL)
+    public function getDate($format = null)
     {
         if ($format === null) {
             return $this->date;
@@ -558,7 +574,7 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Set the value of [eventid] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return $this|\API\Models\Event\Event The current object (for fluent API support)
      */
     public function setEventid($v)
@@ -578,7 +594,7 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Set the value of [name] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return $this|\API\Models\Event\Event The current object (for fluent API support)
      */
     public function setName($v)
@@ -678,7 +694,6 @@ abstract class Event implements ActiveRecordInterface
     public function hydrate($row, $startcol = 0, $rehydrate = false, $indexType = TableMap::TYPE_NUM)
     {
         try {
-
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : EventTableMap::translateFieldName('Eventid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->eventid = (null !== $col) ? (int) $col : null;
 
@@ -702,7 +717,6 @@ abstract class Event implements ActiveRecordInterface
             }
 
             return $startcol + 4; // 4 = EventTableMap::NUM_HYDRATE_COLUMNS.
-
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\Event\\Event'), 0, $e);
         }
@@ -730,8 +744,8 @@ abstract class Event implements ActiveRecordInterface
      *
      * This will only work if the object has been saved and has a valid primary key set.
      *
-     * @param      boolean $deep (optional) Whether to also de-associated any related objects.
-     * @param      ConnectionInterface $con (optional) The ConnectionInterface connection to use.
+     * @param  boolean             $deep (optional) Whether to also de-associated any related objects.
+     * @param  ConnectionInterface $con  (optional) The ConnectionInterface connection to use.
      * @return void
      * @throws PropelException - if this object is deleted, unsaved or doesn't have pk match in db
      */
@@ -783,18 +797,17 @@ abstract class Event implements ActiveRecordInterface
             $this->collMenuTypes = null;
 
             $this->collInvoiceWarningTypes = null;
-
         } // if (deep)
     }
 
     /**
      * Removes this object from datastore and sets delete attribute.
      *
-     * @param      ConnectionInterface $con
+     * @param  ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see Event::setDeleted()
-     * @see Event::isDeleted()
+     * @see    Event::setDeleted()
+     * @see    Event::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -806,16 +819,18 @@ abstract class Event implements ActiveRecordInterface
             $con = Propel::getServiceContainer()->getWriteConnection(EventTableMap::DATABASE_NAME);
         }
 
-        $con->transaction(function () use ($con) {
-            $deleteQuery = ChildEventQuery::create()
+        $con->transaction(
+            function () use ($con) {
+                $deleteQuery = ChildEventQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
-            $ret = $this->preDelete($con);
-            if ($ret) {
-                $deleteQuery->delete($con);
-                $this->postDelete($con);
-                $this->setDeleted(true);
+                $ret = $this->preDelete($con);
+                if ($ret) {
+                    $deleteQuery->delete($con);
+                    $this->postDelete($con);
+                    $this->setDeleted(true);
+                }
             }
-        });
+        );
     }
 
     /**
@@ -826,10 +841,10 @@ abstract class Event implements ActiveRecordInterface
      * method.  This method wraps all precipitate database operations in a
      * single transaction.
      *
-     * @param      ConnectionInterface $con
+     * @param  ConnectionInterface $con
      * @return int             The number of rows affected by this insert/update and any referring fk objects' save() operations.
      * @throws PropelException
-     * @see doSave()
+     * @see    doSave()
      */
     public function save(ConnectionInterface $con = null)
     {
@@ -845,29 +860,31 @@ abstract class Event implements ActiveRecordInterface
             $con = Propel::getServiceContainer()->getWriteConnection(EventTableMap::DATABASE_NAME);
         }
 
-        return $con->transaction(function () use ($con) {
-            $ret = $this->preSave($con);
-            $isInsert = $this->isNew();
-            if ($isInsert) {
-                $ret = $ret && $this->preInsert($con);
-            } else {
-                $ret = $ret && $this->preUpdate($con);
-            }
-            if ($ret) {
-                $affectedRows = $this->doSave($con);
+        return $con->transaction(
+            function () use ($con) {
+                $ret = $this->preSave($con);
+                $isInsert = $this->isNew();
                 if ($isInsert) {
-                    $this->postInsert($con);
+                    $ret = $ret && $this->preInsert($con);
                 } else {
-                    $this->postUpdate($con);
+                    $ret = $ret && $this->preUpdate($con);
                 }
-                $this->postSave($con);
-                EventTableMap::addInstanceToPool($this);
-            } else {
-                $affectedRows = 0;
-            }
+                if ($ret) {
+                    $affectedRows = $this->doSave($con);
+                    if ($isInsert) {
+                        $this->postInsert($con);
+                    } else {
+                        $this->postUpdate($con);
+                    }
+                    $this->postSave($con);
+                    EventTableMap::addInstanceToPool($this);
+                } else {
+                    $affectedRows = 0;
+                }
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
@@ -876,10 +893,10 @@ abstract class Event implements ActiveRecordInterface
      * If the object is new, it inserts it; otherwise an update is performed.
      * All related objects are also updated in this method.
      *
-     * @param      ConnectionInterface $con
+     * @param  ConnectionInterface $con
      * @return int             The number of rows affected by this insert/update and any referring fk objects' save() operations.
      * @throws PropelException
-     * @see save()
+     * @see    save()
      */
     protected function doSave(ConnectionInterface $con)
     {
@@ -1086,7 +1103,6 @@ abstract class Event implements ActiveRecordInterface
             }
 
             $this->alreadyInSave = false;
-
         }
 
         return $affectedRows;
@@ -1095,10 +1111,10 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Insert the row in the database.
      *
-     * @param      ConnectionInterface $con
+     * @param ConnectionInterface $con
      *
      * @throws PropelException
-     * @see doSave()
+     * @see    doSave()
      */
     protected function doInsert(ConnectionInterface $con)
     {
@@ -1167,10 +1183,10 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Update the row in the database.
      *
-     * @param      ConnectionInterface $con
+     * @param ConnectionInterface $con
      *
      * @return Integer Number of updated rows
-     * @see doSave()
+     * @see    doSave()
      */
     protected function doUpdate(ConnectionInterface $con)
     {
@@ -1183,8 +1199,8 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Retrieves a field from the object by name passed in as a string.
      *
-     * @param      string $name name
-     * @param      string $type The type of fieldname the $name is of:
+     * @param  string $name name
+     * @param  string $type The type of fieldname the $name is of:
      *                     one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                     TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                     Defaults to TableMap::TYPE_PHPNAME.
@@ -1202,7 +1218,7 @@ abstract class Event implements ActiveRecordInterface
      * Retrieves a field from the object by Position as specified in the xml schema.
      * Zero-based.
      *
-     * @param      int $pos position in xml schema
+     * @param  int $pos position in xml schema
      * @return mixed Value of field at $pos
      */
     public function getByPosition($pos)
@@ -1232,18 +1248,17 @@ abstract class Event implements ActiveRecordInterface
      * You can specify the key type of the array by passing one of the class
      * type constants.
      *
-     * @param     string  $keyType (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME,
-     *                    TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                    Defaults to TableMap::TYPE_PHPNAME.
-     * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
-     * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
-     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
+     * @param string  $keyType                (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME,
+     *                                            TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM. Defaults to
+     *                                            TableMap::TYPE_PHPNAME.
+     * @param boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+     * @param array   $alreadyDumpedObjects   List of objects to skip to avoid recursion
+     * @param boolean $includeForeignObjects  (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-
         if (isset($alreadyDumpedObjects['Event'][$this->hashCode()])) {
             return '*RECURSION*';
         }
@@ -1266,7 +1281,6 @@ abstract class Event implements ActiveRecordInterface
 
         if ($includeForeignObjects) {
             if (null !== $this->collCoupons) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'coupons';
@@ -1281,7 +1295,6 @@ abstract class Event implements ActiveRecordInterface
                 $result[$key] = $this->collCoupons->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventBankinformations) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventBankinformations';
@@ -1296,7 +1309,6 @@ abstract class Event implements ActiveRecordInterface
                 $result[$key] = $this->collEventBankinformations->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventContacts) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventContacts';
@@ -1311,7 +1323,6 @@ abstract class Event implements ActiveRecordInterface
                 $result[$key] = $this->collEventContacts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collDistributionPlaces) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'distributionPlaces';
@@ -1326,7 +1337,6 @@ abstract class Event implements ActiveRecordInterface
                 $result[$key] = $this->collDistributionPlaces->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventPrinters) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventPrinters';
@@ -1341,7 +1351,6 @@ abstract class Event implements ActiveRecordInterface
                 $result[$key] = $this->collEventPrinters->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventTables) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventTables';
@@ -1356,7 +1365,6 @@ abstract class Event implements ActiveRecordInterface
                 $result[$key] = $this->collEventTables->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventUsers) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventUsers';
@@ -1371,7 +1379,6 @@ abstract class Event implements ActiveRecordInterface
                 $result[$key] = $this->collEventUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collMenuExtras) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuExtras';
@@ -1386,7 +1393,6 @@ abstract class Event implements ActiveRecordInterface
                 $result[$key] = $this->collMenuExtras->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collMenuSizes) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuSizes';
@@ -1401,7 +1407,6 @@ abstract class Event implements ActiveRecordInterface
                 $result[$key] = $this->collMenuSizes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collMenuTypes) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuTypes';
@@ -1416,7 +1421,6 @@ abstract class Event implements ActiveRecordInterface
                 $result[$key] = $this->collMenuTypes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collInvoiceWarningTypes) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoiceWarningTypes';
@@ -1440,10 +1444,14 @@ abstract class Event implements ActiveRecordInterface
      *
      * @param  string $name
      * @param  mixed  $value field value
-     * @param  string $type The type of fieldname the $name is of:
-     *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
-     *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                Defaults to TableMap::TYPE_PHPNAME.
+     * @param  string $type  The type of fieldname the $name is of:
+     *                       one of the class type constants
+     *                       TableMap::TYPE_PHPNAME,
+     *                       TableMap::TYPE_CAMELNAME
+     *                       TableMap::TYPE_COLNAME,
+     *                       TableMap::TYPE_FIELDNAME,
+     *                       TableMap::TYPE_NUM. Defaults to
+     *                       TableMap::TYPE_PHPNAME.
      * @return $this|\API\Models\Event\Event
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
@@ -1457,7 +1465,7 @@ abstract class Event implements ActiveRecordInterface
      * Sets a field from the object by Position as specified in the xml schema.
      * Zero-based.
      *
-     * @param  int $pos position in xml schema
+     * @param  int   $pos   position in xml schema
      * @param  mixed $value field value
      * @return $this|\API\Models\Event\Event
      */
@@ -1494,8 +1502,8 @@ abstract class Event implements ActiveRecordInterface
      * TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      * The default key type is the column's TableMap::TYPE_PHPNAME.
      *
-     * @param      array  $arr     An array to populate the object from.
-     * @param      string $keyType The type of keys the array uses.
+     * @param  array  $arr     An array to populate the object from.
+     * @param  string $keyType The type of keys the array uses.
      * @return void
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
@@ -1528,9 +1536,10 @@ abstract class Event implements ActiveRecordInterface
      * TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      * The default key type is the column's TableMap::TYPE_PHPNAME.
      *
-     * @param mixed $parser A AbstractParser instance,
-     *                       or a format name ('XML', 'YAML', 'JSON', 'CSV')
-     * @param string $data The source data to import from
+     * @param mixed  $parser  A AbstractParser instance,
+     *                        or a format name ('XML',
+     *                        'YAML', 'JSON', 'CSV')
+     * @param string $data    The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
      * @return $this|\API\Models\Event\Event The current object, for fluid interface
@@ -1613,6 +1622,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Returns the primary key for this object (row).
+     *
      * @return int
      */
     public function getPrimaryKey()
@@ -1623,7 +1633,7 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Generic method to set the primary key (eventid column).
      *
-     * @param       int $key Primary key.
+     * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
@@ -1633,6 +1643,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Returns true if the primary key for this object is null.
+     *
      * @return boolean
      */
     public function isPrimaryKeyNull()
@@ -1646,9 +1657,9 @@ abstract class Event implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \API\Models\Event\Event (or compatible) type.
-     * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
+     * @param  object  $copyObj  An object of \API\Models\Event\Event (or compatible) type.
+     * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+     * @param  boolean $makeNew  Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
@@ -1727,12 +1738,11 @@ abstract class Event implements ActiveRecordInterface
                     $copyObj->addInvoiceWarningType($relObj->copy($deepCopy));
                 }
             }
-
         } // if ($deepCopy)
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setEventid(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setEventid(null); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -1764,7 +1774,7 @@ abstract class Event implements ActiveRecordInterface
      * Avoids crafting an 'init[$relationName]s' method name
      * that wouldn't work when StandardEnglishPluralizer is used.
      *
-     * @param      string $relationName The name of the relation to initialize
+     * @param  string $relationName The name of the relation to initialize
      * @return void
      */
     public function initRelation($relationName)
@@ -1811,7 +1821,7 @@ abstract class Event implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addCoupons()
+     * @see    addCoupons()
      */
     public function clearCoupons()
     {
@@ -1833,7 +1843,7 @@ abstract class Event implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -1859,8 +1869,8 @@ abstract class Event implements ActiveRecordInterface
      * If this ChildEvent is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|Coupon[] List of Coupon objects
      * @throws PropelException
      */
@@ -1914,13 +1924,15 @@ abstract class Event implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $coupons A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $coupons A Propel collection.
+     * @param  ConnectionInterface $con     Optional connection object
      * @return $this|ChildEvent The current object (for fluent API support)
      */
     public function setCoupons(Collection $coupons, ConnectionInterface $con = null)
     {
-        /** @var Coupon[] $couponsToDelete */
+        /**
+ * @var Coupon[] $couponsToDelete
+*/
         $couponsToDelete = $this->getCoupons(new Criteria(), $con)->diff($coupons);
 
 
@@ -1944,9 +1956,9 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Returns the number of related BaseCoupon objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseCoupon objects.
      * @throws PropelException
      */
@@ -2041,9 +2053,9 @@ abstract class Event implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in Event.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Coupon[] List of Coupon objects
      */
     public function getCouponsJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -2061,7 +2073,7 @@ abstract class Event implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addEventBankinformations()
+     * @see    addEventBankinformations()
      */
     public function clearEventBankinformations()
     {
@@ -2083,7 +2095,7 @@ abstract class Event implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -2109,8 +2121,8 @@ abstract class Event implements ActiveRecordInterface
      * If this ChildEvent is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|ChildEventBankinformation[] List of ChildEventBankinformation objects
      * @throws PropelException
      */
@@ -2164,13 +2176,15 @@ abstract class Event implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $eventBankinformations A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $eventBankinformations A Propel collection.
+     * @param  ConnectionInterface $con                   Optional connection object
      * @return $this|ChildEvent The current object (for fluent API support)
      */
     public function setEventBankinformations(Collection $eventBankinformations, ConnectionInterface $con = null)
     {
-        /** @var ChildEventBankinformation[] $eventBankinformationsToDelete */
+        /**
+ * @var ChildEventBankinformation[] $eventBankinformationsToDelete
+*/
         $eventBankinformationsToDelete = $this->getEventBankinformations(new Criteria(), $con)->diff($eventBankinformations);
 
 
@@ -2194,9 +2208,9 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Returns the number of related EventBankinformation objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related EventBankinformation objects.
      * @throws PropelException
      */
@@ -2286,7 +2300,7 @@ abstract class Event implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addEventContacts()
+     * @see    addEventContacts()
      */
     public function clearEventContacts()
     {
@@ -2308,7 +2322,7 @@ abstract class Event implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -2334,8 +2348,8 @@ abstract class Event implements ActiveRecordInterface
      * If this ChildEvent is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|ChildEventContact[] List of ChildEventContact objects
      * @throws PropelException
      */
@@ -2389,13 +2403,15 @@ abstract class Event implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $eventContacts A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $eventContacts A Propel collection.
+     * @param  ConnectionInterface $con           Optional connection object
      * @return $this|ChildEvent The current object (for fluent API support)
      */
     public function setEventContacts(Collection $eventContacts, ConnectionInterface $con = null)
     {
-        /** @var ChildEventContact[] $eventContactsToDelete */
+        /**
+ * @var ChildEventContact[] $eventContactsToDelete
+*/
         $eventContactsToDelete = $this->getEventContacts(new Criteria(), $con)->diff($eventContacts);
 
 
@@ -2419,9 +2435,9 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Returns the number of related EventContact objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related EventContact objects.
      * @throws PropelException
      */
@@ -2511,7 +2527,7 @@ abstract class Event implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addDistributionPlaces()
+     * @see    addDistributionPlaces()
      */
     public function clearDistributionPlaces()
     {
@@ -2533,7 +2549,7 @@ abstract class Event implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -2559,8 +2575,8 @@ abstract class Event implements ActiveRecordInterface
      * If this ChildEvent is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|DistributionPlace[] List of DistributionPlace objects
      * @throws PropelException
      */
@@ -2614,13 +2630,15 @@ abstract class Event implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $distributionPlaces A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $distributionPlaces A Propel collection.
+     * @param  ConnectionInterface $con                Optional connection object
      * @return $this|ChildEvent The current object (for fluent API support)
      */
     public function setDistributionPlaces(Collection $distributionPlaces, ConnectionInterface $con = null)
     {
-        /** @var DistributionPlace[] $distributionPlacesToDelete */
+        /**
+ * @var DistributionPlace[] $distributionPlacesToDelete
+*/
         $distributionPlacesToDelete = $this->getDistributionPlaces(new Criteria(), $con)->diff($distributionPlaces);
 
 
@@ -2644,9 +2662,9 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Returns the number of related BaseDistributionPlace objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseDistributionPlace objects.
      * @throws PropelException
      */
@@ -2736,7 +2754,7 @@ abstract class Event implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addEventPrinters()
+     * @see    addEventPrinters()
      */
     public function clearEventPrinters()
     {
@@ -2758,7 +2776,7 @@ abstract class Event implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -2784,8 +2802,8 @@ abstract class Event implements ActiveRecordInterface
      * If this ChildEvent is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|ChildEventPrinter[] List of ChildEventPrinter objects
      * @throws PropelException
      */
@@ -2839,13 +2857,15 @@ abstract class Event implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $eventPrinters A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $eventPrinters A Propel collection.
+     * @param  ConnectionInterface $con           Optional connection object
      * @return $this|ChildEvent The current object (for fluent API support)
      */
     public function setEventPrinters(Collection $eventPrinters, ConnectionInterface $con = null)
     {
-        /** @var ChildEventPrinter[] $eventPrintersToDelete */
+        /**
+ * @var ChildEventPrinter[] $eventPrintersToDelete
+*/
         $eventPrintersToDelete = $this->getEventPrinters(new Criteria(), $con)->diff($eventPrinters);
 
 
@@ -2869,9 +2889,9 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Returns the number of related EventPrinter objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related EventPrinter objects.
      * @throws PropelException
      */
@@ -2961,7 +2981,7 @@ abstract class Event implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addEventTables()
+     * @see    addEventTables()
      */
     public function clearEventTables()
     {
@@ -2983,7 +3003,7 @@ abstract class Event implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -3009,8 +3029,8 @@ abstract class Event implements ActiveRecordInterface
      * If this ChildEvent is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|ChildEventTable[] List of ChildEventTable objects
      * @throws PropelException
      */
@@ -3064,13 +3084,15 @@ abstract class Event implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $eventTables A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $eventTables A Propel collection.
+     * @param  ConnectionInterface $con         Optional connection object
      * @return $this|ChildEvent The current object (for fluent API support)
      */
     public function setEventTables(Collection $eventTables, ConnectionInterface $con = null)
     {
-        /** @var ChildEventTable[] $eventTablesToDelete */
+        /**
+ * @var ChildEventTable[] $eventTablesToDelete
+*/
         $eventTablesToDelete = $this->getEventTables(new Criteria(), $con)->diff($eventTables);
 
 
@@ -3094,9 +3116,9 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Returns the number of related EventTable objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related EventTable objects.
      * @throws PropelException
      */
@@ -3186,7 +3208,7 @@ abstract class Event implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addEventUsers()
+     * @see    addEventUsers()
      */
     public function clearEventUsers()
     {
@@ -3208,7 +3230,7 @@ abstract class Event implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -3234,8 +3256,8 @@ abstract class Event implements ActiveRecordInterface
      * If this ChildEvent is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|ChildEventUser[] List of ChildEventUser objects
      * @throws PropelException
      */
@@ -3289,13 +3311,15 @@ abstract class Event implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $eventUsers A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $eventUsers A Propel collection.
+     * @param  ConnectionInterface $con        Optional connection object
      * @return $this|ChildEvent The current object (for fluent API support)
      */
     public function setEventUsers(Collection $eventUsers, ConnectionInterface $con = null)
     {
-        /** @var ChildEventUser[] $eventUsersToDelete */
+        /**
+ * @var ChildEventUser[] $eventUsersToDelete
+*/
         $eventUsersToDelete = $this->getEventUsers(new Criteria(), $con)->diff($eventUsers);
 
 
@@ -3319,9 +3343,9 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Returns the number of related EventUser objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related EventUser objects.
      * @throws PropelException
      */
@@ -3416,9 +3440,9 @@ abstract class Event implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in Event.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildEventUser[] List of ChildEventUser objects
      */
     public function getEventUsersJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -3436,7 +3460,7 @@ abstract class Event implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addMenuExtras()
+     * @see    addMenuExtras()
      */
     public function clearMenuExtras()
     {
@@ -3458,7 +3482,7 @@ abstract class Event implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -3484,8 +3508,8 @@ abstract class Event implements ActiveRecordInterface
      * If this ChildEvent is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|MenuExtra[] List of MenuExtra objects
      * @throws PropelException
      */
@@ -3539,13 +3563,15 @@ abstract class Event implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $menuExtras A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $menuExtras A Propel collection.
+     * @param  ConnectionInterface $con        Optional connection object
      * @return $this|ChildEvent The current object (for fluent API support)
      */
     public function setMenuExtras(Collection $menuExtras, ConnectionInterface $con = null)
     {
-        /** @var MenuExtra[] $menuExtrasToDelete */
+        /**
+ * @var MenuExtra[] $menuExtrasToDelete
+*/
         $menuExtrasToDelete = $this->getMenuExtras(new Criteria(), $con)->diff($menuExtras);
 
 
@@ -3569,9 +3595,9 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Returns the number of related BaseMenuExtra objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseMenuExtra objects.
      * @throws PropelException
      */
@@ -3666,9 +3692,9 @@ abstract class Event implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in Event.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|MenuExtra[] List of MenuExtra objects
      */
     public function getMenuExtrasJoinAvailability(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -3686,7 +3712,7 @@ abstract class Event implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addMenuSizes()
+     * @see    addMenuSizes()
      */
     public function clearMenuSizes()
     {
@@ -3708,7 +3734,7 @@ abstract class Event implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -3734,8 +3760,8 @@ abstract class Event implements ActiveRecordInterface
      * If this ChildEvent is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|MenuSize[] List of MenuSize objects
      * @throws PropelException
      */
@@ -3789,13 +3815,15 @@ abstract class Event implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $menuSizes A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $menuSizes A Propel collection.
+     * @param  ConnectionInterface $con       Optional connection object
      * @return $this|ChildEvent The current object (for fluent API support)
      */
     public function setMenuSizes(Collection $menuSizes, ConnectionInterface $con = null)
     {
-        /** @var MenuSize[] $menuSizesToDelete */
+        /**
+ * @var MenuSize[] $menuSizesToDelete
+*/
         $menuSizesToDelete = $this->getMenuSizes(new Criteria(), $con)->diff($menuSizes);
 
 
@@ -3819,9 +3847,9 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Returns the number of related BaseMenuSize objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseMenuSize objects.
      * @throws PropelException
      */
@@ -3911,7 +3939,7 @@ abstract class Event implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addMenuTypes()
+     * @see    addMenuTypes()
      */
     public function clearMenuTypes()
     {
@@ -3933,7 +3961,7 @@ abstract class Event implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -3959,8 +3987,8 @@ abstract class Event implements ActiveRecordInterface
      * If this ChildEvent is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|MenuType[] List of MenuType objects
      * @throws PropelException
      */
@@ -4014,13 +4042,15 @@ abstract class Event implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $menuTypes A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $menuTypes A Propel collection.
+     * @param  ConnectionInterface $con       Optional connection object
      * @return $this|ChildEvent The current object (for fluent API support)
      */
     public function setMenuTypes(Collection $menuTypes, ConnectionInterface $con = null)
     {
-        /** @var MenuType[] $menuTypesToDelete */
+        /**
+ * @var MenuType[] $menuTypesToDelete
+*/
         $menuTypesToDelete = $this->getMenuTypes(new Criteria(), $con)->diff($menuTypes);
 
 
@@ -4044,9 +4074,9 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Returns the number of related BaseMenuType objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseMenuType objects.
      * @throws PropelException
      */
@@ -4136,7 +4166,7 @@ abstract class Event implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addInvoiceWarningTypes()
+     * @see    addInvoiceWarningTypes()
      */
     public function clearInvoiceWarningTypes()
     {
@@ -4158,7 +4188,7 @@ abstract class Event implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -4184,8 +4214,8 @@ abstract class Event implements ActiveRecordInterface
      * If this ChildEvent is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|InvoiceWarningType[] List of InvoiceWarningType objects
      * @throws PropelException
      */
@@ -4239,13 +4269,15 @@ abstract class Event implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $invoiceWarningTypes A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $invoiceWarningTypes A Propel collection.
+     * @param  ConnectionInterface $con                 Optional connection object
      * @return $this|ChildEvent The current object (for fluent API support)
      */
     public function setInvoiceWarningTypes(Collection $invoiceWarningTypes, ConnectionInterface $con = null)
     {
-        /** @var InvoiceWarningType[] $invoiceWarningTypesToDelete */
+        /**
+ * @var InvoiceWarningType[] $invoiceWarningTypesToDelete
+*/
         $invoiceWarningTypesToDelete = $this->getInvoiceWarningTypes(new Criteria(), $con)->diff($invoiceWarningTypes);
 
 
@@ -4269,9 +4301,9 @@ abstract class Event implements ActiveRecordInterface
     /**
      * Returns the number of related BaseInvoiceWarningType objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseInvoiceWarningType objects.
      * @throws PropelException
      */
@@ -4378,7 +4410,7 @@ abstract class Event implements ActiveRecordInterface
      * This method is used to reset all php object references (not the actual reference in the database).
      * Necessary for object serialisation.
      *
-     * @param      boolean $deep Whether to also clear the references on all referrer objects.
+     * @param boolean $deep Whether to also clear the references on all referrer objects.
      */
     public function clearAllReferences($deep = false)
     {
@@ -4465,6 +4497,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Code to be run before persisting the object
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -4478,6 +4511,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Code to be run after persisting the object
+     *
      * @param ConnectionInterface $con
      */
     public function postSave(ConnectionInterface $con = null)
@@ -4489,6 +4523,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Code to be run before inserting to database
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -4502,6 +4537,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Code to be run after inserting to database
+     *
      * @param ConnectionInterface $con
      */
     public function postInsert(ConnectionInterface $con = null)
@@ -4513,6 +4549,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Code to be run before updating the object in database
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -4526,6 +4563,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Code to be run after updating the object in database
+     *
      * @param ConnectionInterface $con
      */
     public function postUpdate(ConnectionInterface $con = null)
@@ -4537,6 +4575,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Code to be run before deleting the object in database
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -4550,6 +4589,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Code to be run after deleting the object in database
+     *
      * @param ConnectionInterface $con
      */
     public function postDelete(ConnectionInterface $con = null)
@@ -4600,5 +4640,4 @@ abstract class Event implements ActiveRecordInterface
 
         throw new BadMethodCallException(sprintf('Call to undefined method: %s.', $name));
     }
-
 }

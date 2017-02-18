@@ -8,12 +8,9 @@ use Mike42\Escpos\Printer;
 $o_connector = new NetworkPrintConnector("192.168.0.50", 9100);
 $o_printer = new Printer($o_connector);
 
-try
-{
+try {
     $o_printer->text("Hello World!\n This is a Test!\n\n");
     $o_printer->cut();
-}
-finally
-{
+} finally {
     $o_printer->close();
 }

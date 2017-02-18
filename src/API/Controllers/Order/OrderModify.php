@@ -23,28 +23,29 @@ use const API\USER_ROLE_ORDER_MODIFY_PRIORITY;
 
 class OrderModify extends SecurityController
 {
-    public function __construct(App $o_app) {
-        parent::__construct($o_app);
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
 
-        $this->a_security = ['GET' => USER_ROLE_ORDER_MODIFY,
-                             'PUT' => USER_ROLE_ORDER_MODIFY,
-                             'PATCH' => USER_ROLE_ORDER_MODIFY_PRICE | USER_ROLE_ORDER_MODIFY_PRIORITY];
+        $this->security = ['GET' => USER_ROLE_ORDER_MODIFY,
+                            'PUT' => USER_ROLE_ORDER_MODIFY,
+                            'PATCH' => USER_ROLE_ORDER_MODIFY_PRICE | USER_ROLE_ORDER_MODIFY_PRIORITY];
 
-        $o_app->getContainer()['db'];
+        $app->getContainer()['db'];
     }
 
-    function ANY() : void {
-        $a_validators = array(
+    public function any() : void
+    {
+        $validators = array(
             'id' => v::intVal()->positive()
         );
 
-        $this->validate($a_validators, $this->a_args);
+        $this->validate($validators, $this->args);
     }
 
-    protected function GET() : void  {
-        $o_user = Auth::GetCurrentUser();
-
-        $o_order = OrderQuery::create()
+    protected function get() : void
+    {
+        $order = OrderQuery::create()
                                 ->joinWithOrderDetail()
                                 ->useOrderDetailQuery()
                                     ->leftJoinWithMenuSize()
@@ -52,195 +53,202 @@ class OrderModify extends SecurityController
                                     ->leftJoinWithOrderDetailMixedWith()
                                 ->endUse()
                                 ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                ->findByOrderid($this->a_args['id']);
+                                ->findByOrderid($this->args['id']);
 
-        $this->withJson($o_order->getFirst());
+        $this->withJson($order->getFirst());
     }
 
-    function PATCH() : void {
-        if(isset($this->a_json['Priority'])) {
-            $this->setPriority($this->a_args['id']);
+    public function patch() : void
+    {
+        if (isset($this->json['Priority'])) {
+            $this->setPriority($this->args['id']);
         }
 
-        if(isset($this->a_json['Cancellation'])) {
-            $this->cancelOrder($this->a_args['id']);
+        if (isset($this->json['Cancellation'])) {
+            $this->cancelOrder($this->args['id']);
         }
 
-        if(isset($this->a_json['PriceModifications']) && !empty($this->a_json['Modifications'])) {
-            $this->setPriceModifications($this->a_json['Modifications']);
+        if (isset($this->json['PriceModifications']) && !empty($this->json['Modifications'])) {
+            $this->setPriceModifications($this->json['Modifications']);
         }
     }
 
-    function PUT() : void {
-        $o_connection = Propel::getConnection();
+    public function put() : void
+    {
+        $connection = Propel::getConnection();
 
         try {
-            $o_connection->beginTransaction();
+            $connection->beginTransaction();
 
-            $o_order = OrderQuery::create()
+            $order = OrderQuery::create()
                                 ->joinWithOrderDetail()
                                 ->useOrderDetailQuery()
                                     ->leftJoinWithOrderDetailExtra()
                                     ->leftJoinWithOrderDetailMixedWith()
                                 ->endUse()
-                                ->findByOrderid($this->a_args['id'])
+                                ->findByOrderid($this->args['id'])
                                 ->getFirst();
 
-            $o_order_template = new Order();
-            $this->jsonToPropel($this->a_json, $o_order_template);
+            $orderTemplate = new Order();
+            $this->jsonToPropel($this->json, $orderTemplate);
 
-            foreach($o_order_template->getOrderDetails() as $o_order_detail_template)
-            {
-                $i_orderDetailid = $o_order_detail_template->getOrderDetailid();
+            foreach ($orderTemplate->getOrderDetails() as $orderDetailTemplate) {
+                $orderDetailid = $orderDetailTemplate->getOrderDetailid();
 
-                if($i_orderDetailid) {
-                    foreach($o_order->getOrderDetails() as $o_order_detail) {
-                        if($o_order_detail->getOrderDetailid() == $i_orderDetailid) {
-                            if($o_order_detail_template->getAmount() != $o_order_detail->getAmount()) {
-                                $o_order_detail->setAmount($o_order_detail_template->getAmount());
-                                $o_order_detail->save();
+                if ($orderDetailid) {
+                    foreach ($order->getOrderDetails() as $orderDetail) {
+                        if ($orderDetail->getOrderDetailid() == $orderDetailid) {
+                            if ($orderDetailTemplate->getAmount() != $orderDetail->getAmount()) {
+                                $orderDetail->setAmount($orderDetailTemplate->getAmount());
+                                $orderDetail->save();
                             }
                             break;
                         }
                     }
-
                 } else {
-                    if($o_order_detail_template->getAmount() == 0)
+                    if ($orderDetailTemplate->getAmount() == 0) {
                         continue;
+                    }
 
-                    $o_order_detail = new OrderDetail();
-                    $o_order_detail->fromArray($o_order_detail_template->toArray());
-                    $o_order_detail->setOrder($o_order);
-                    $o_order_detail->save();
+                    $orderDetail = new OrderDetail();
+                    $orderDetail->fromArray($orderDetailTemplate->toArray());
+                    $orderDetail->setOrder($order);
+                    $orderDetail->save();
                 }
 
-                foreach($o_order_detail_template->getOrderDetailExtras() as $o_order_detail_extra_template)
-                {
-                    $i_extra_orderDetailid = $o_order_detail_extra_template->getOrderDetailid();
+                foreach ($orderDetailTemplate->getOrderDetailExtras() as $orderDetailExtraTemplate) {
+                    $extraOrderDetailid = $orderDetailExtraTemplate->getOrderDetailid();
 
-                    if(!$i_extra_orderDetailid) {
-                        $o_order_detail_extra = new OrderDetailExtra();
-                        $o_order_detail_extra->fromArray($o_order_detail_extra_template->toArray());
-                        $o_order_detail_extra->setOrderDetail($o_order_detail);
-                        $o_order_detail_extra->save();
+                    if (!$extraOrderDetailid) {
+                        $orderDetailExtra = new OrderDetailExtra();
+                        $orderDetailExtra->fromArray($orderDetailExtraTemplate->toArray());
+                        $orderDetailExtra->setOrderDetail($orderDetail);
+                        $orderDetailExtra->save();
                     }
                 }
 
-                foreach($o_order_detail_template->getOrderDetailMixedWiths() as $o_order_detail_mixed_with_template)
-                {
-                    $i_extra_orderDetailid = $o_order_detail_mixed_with_template->getOrderDetailid();
+                foreach ($orderDetailTemplate->getOrderDetailMixedWiths() as $orderDetailMixedWithTemplate) {
+                    $extraOrderDetailid = $orderDetailMixedWithTemplate->getOrderDetailid();
 
-                    if(!$i_extra_orderDetailid) {
-                        $o_order_detail_mixed_with = new OrderDetailMixedWith();
-                        $o_order_detail_mixed_with->fromArray($o_order_detail_mixed_with_template->toArray());
-                        $o_order_detail_mixed_with->setOrderDetail($o_order_detail);
-                        $o_order_detail_mixed_with->save();
+                    if (!$extraOrderDetailid) {
+                        $orderDetailMixedWith = new OrderDetailMixedWith();
+                        $orderDetailMixedWith->fromArray($orderDetailMixedWithTemplate->toArray());
+                        $orderDetailMixedWith->setOrderDetail($orderDetail);
+                        $orderDetailMixedWith->save();
                     }
                 }
             }
 
-            StatusCheck::verifyOrder($o_order->getOrderid());
+            StatusCheck::verifyOrder($order->getOrderid());
 
-            $o_connection->commit();
+            $connection->commit();
 
-            $this->withJson($o_order->toArray());
-        } catch(Exception $o_exception) {
-            $o_connection->rollBack();
-            throw $o_exception;
+            $this->withJson($order->toArray());
+        } catch (Exception $exception) {
+            $connection->rollBack();
+            throw $exception;
         }
-
     }
 
-    private function cancelOrder($i_orderid) {
-        $o_user = Auth::GetCurrentUser();
-        $o_connection = Propel::getConnection();
+    private function cancelOrder($orderid)
+    {
+        $auth = $this->app->getContainer()->get('Auth');
+        $user = $auth->getCurrentUser();
+        $connection = Propel::getConnection();
 
         try {
-            $o_connection->beginTransaction();
+            $connection->beginTransaction();
 
-            $o_order = OrderQuery::create()->findPk($i_orderid);
+            $order = OrderQuery::create()->findPk($orderid);
 
-            if($o_order->getCancellation())
+            if ($order->getCancellation()) {
                 return;
+            }
 
-            $o_order->setCancellation(new DateTime());
-            $o_order->setCancellationCreatedByUserid($o_user->getUserid());
-            $o_order->save();
+            $order->setCancellation(new DateTime());
+            $order->setCancellationCreatedByUserid($user->getUserid());
+            $order->save();
 
-            $o_orderDetails = OrderDetailQuery::create()
-                                            ->filterByOrderid($i_orderid)
+            $orderDetails = OrderDetailQuery::create()
+                                            ->filterByOrderid($orderid)
                                             ->filterByDistributionFinished(null)
                                             ->leftJoinWithOrderInProgressRecieved()
                                             ->find();
 
-            foreach($o_orderDetails as $o_orderDetail) {
-                $i_recieved = 0;
+            foreach ($orderDetails as $orderDetail) {
+                $amountRecieved = 0;
 
-                foreach($o_orderDetail->getOrderInProgressRecieveds() as $o_orderInProgressRecieved) {
-                    $i_recieved += $o_orderInProgressRecieved->getAmount();
+                foreach ($orderDetail->getOrderInProgressRecieveds() as $orderInProgressRecieved) {
+                    $amountRecieved += $orderInProgressRecieved->getAmount();
                 }
 
-                $o_orderDetail->setAmount($i_recieved);
-                $o_orderDetail->save();
+                $orderDetail->setAmount($amountRecieved);
+                $orderDetail->save();
             }
 
-            StatusCheck::verifyOrder($i_orderid);
+            StatusCheck::verifyOrder($orderid);
 
-            $o_order = OrderQuery::create()->findPk($i_orderid);
+            $modifiedOrder = OrderQuery::create()->findPk($orderid);
 
-            $o_connection->commit();
+            $connection->commit();
 
-            $this->withJson(['OpenInvoice' => $o_order->getInvoiceFinished() == null]);
-        } catch (Exception $ex) {
-            $o_connection->rollBack();
-            throw $o_exception;
+            $this->withJson(['OpenInvoice' => $modifiedOrder->getInvoiceFinished() == null]);
+        } catch (Exception $exception) {
+            $connection->rollBack();
+            throw $exception;
         }
     }
 
-    private function setPriority($i_orderid) {
-        $o_user = Auth::GetCurrentUser();
-        $o_connection = Propel::getConnection();
+    private function setPriority($orderid)
+    {
+        $auth = $this->app->getContainer()->get('Auth');
+        $user = $auth->getCurrentUser();
+        $connection = Propel::getConnection();
 
         try {
-            $o_connection->beginTransaction();
+            $connection->beginTransaction();
 
-            $o_order = OrderQuery::create()
-                                    ->setFirstPriority($i_orderid,
-                                                       $o_user->getEventUser()->getEventid());
+            $order = OrderQuery::create()
+                                ->setFirstPriority(
+                                    $orderid,
+                                    $user->getEventUser()->getEventid()
+                                );
 
-            $o_connection->commit();
+            $connection->commit();
 
-            $this->withJson($o_order->toArray());
-        } catch(Exception $o_exception) {
-            $o_connection->rollBack();
-            throw $o_exception;
+            $this->withJson($order->toArray());
+        } catch (Exception $exception) {
+            $connection->rollBack();
+            throw $exception;
         }
     }
 
-    private function setPriceModifications($a_orderDetails) {
-        $o_user = Auth::GetCurrentUser();
-        $o_connection = Propel::getConnection();
+    private function setPriceModifications($orderDetails)
+    {
+        $auth = $this->app->getContainer()->get('Auth');
+        $user = $auth->getCurrentUser();
+        $connection = Propel::getConnection();
 
         try {
-            $o_connection->beginTransaction();
+            $connection->beginTransaction();
 
-            foreach($a_orderDetails as $a_orderDetail) {
-                $o_orderDetailTemplate = new OrderDetail();
-                $this->jsonToPropel($a_orderDetail, $o_orderDetailTemplate);
+            foreach ($orderDetails as $orderDetail) {
+                $orderDetailTemplate = new OrderDetail();
+                $this->jsonToPropel($orderDetail, $orderDetailTemplate);
 
-                $o_orderDetail = OrderDetailQuery::create()
-                                                    ->findPk($o_orderDetailTemplate->getOrderDetailid());
+                $orderDetail = OrderDetailQuery::create()
+                                                ->findPk($orderDetailTemplate->getOrderDetailid());
 
-                $o_orderDetail->setSinglePrice($o_orderDetailTemplate->getSinglePrice())
-                              ->setSinglePriceModifiedByUserid($o_user->getUserid())
-                              ->save();
+                $orderDetail->setSinglePrice($orderDetailTemplate->getSinglePrice())
+                    ->setSinglePriceModifiedByUserid($user->getUserid())
+                    ->save();
             }
 
-            $this->withJson($o_orderDetail->getOrder()->toArray());
-            $o_connection->commit();
-        } catch(Exception $o_exception) {
-            $o_connection->rollBack();
-            throw $o_exception;
+            $this->withJson($orderDetail->getOrder()->toArray());
+            $connection->commit();
+        } catch (Exception $exception) {
+            $connection->rollBack();
+            throw $exception;
         }
     }
 }

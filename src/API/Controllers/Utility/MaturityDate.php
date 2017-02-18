@@ -7,12 +7,12 @@ use DateTime;
 
 class MaturityDate extends Controller
 {
-    protected function ANY() : void
+    protected function any() : void
     {
-        $a_config = $this->o_app->getContainer()['settings'];
+        $config = $this->app->getContainer()['settings'];
 
-        $o_maturityDate = new DateTime($a_config['Invoice']['MaturityDate']);
+        $maturityDate = new DateTime($config['Invoice']['MaturityDate']);
 
-        $this->withJson(["MaturityDate" => $o_maturityDate->format(DateTime::ATOM)]);
+        $this->withJson(["MaturityDate" => $maturityDate->format(DateTime::ATOM)]);
     }
 }

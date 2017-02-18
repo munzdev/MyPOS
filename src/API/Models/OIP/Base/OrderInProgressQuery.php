@@ -21,101 +21,98 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'order_in_progress' table.
  *
+ * @method ChildOrderInProgressQuery orderByOrderInProgressid($order = Criteria::ASC) Order by the order_in_progressid column
+ * @method ChildOrderInProgressQuery orderByOrderid($order = Criteria::ASC) Order by the orderid column
+ * @method ChildOrderInProgressQuery orderByUserid($order = Criteria::ASC) Order by the userid column
+ * @method ChildOrderInProgressQuery orderByMenuGroupid($order = Criteria::ASC) Order by the menu_groupid column
+ * @method ChildOrderInProgressQuery orderByBegin($order = Criteria::ASC) Order by the begin column
+ * @method ChildOrderInProgressQuery orderByDone($order = Criteria::ASC) Order by the done column
  *
+ * @method ChildOrderInProgressQuery groupByOrderInProgressid() Group by the order_in_progressid column
+ * @method ChildOrderInProgressQuery groupByOrderid() Group by the orderid column
+ * @method ChildOrderInProgressQuery groupByUserid() Group by the userid column
+ * @method ChildOrderInProgressQuery groupByMenuGroupid() Group by the menu_groupid column
+ * @method ChildOrderInProgressQuery groupByBegin() Group by the begin column
+ * @method ChildOrderInProgressQuery groupByDone() Group by the done column
  *
- * @method     ChildOrderInProgressQuery orderByOrderInProgressid($order = Criteria::ASC) Order by the order_in_progressid column
- * @method     ChildOrderInProgressQuery orderByOrderid($order = Criteria::ASC) Order by the orderid column
- * @method     ChildOrderInProgressQuery orderByUserid($order = Criteria::ASC) Order by the userid column
- * @method     ChildOrderInProgressQuery orderByMenuGroupid($order = Criteria::ASC) Order by the menu_groupid column
- * @method     ChildOrderInProgressQuery orderByBegin($order = Criteria::ASC) Order by the begin column
- * @method     ChildOrderInProgressQuery orderByDone($order = Criteria::ASC) Order by the done column
+ * @method ChildOrderInProgressQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
+ * @method ChildOrderInProgressQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
+ * @method ChildOrderInProgressQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     ChildOrderInProgressQuery groupByOrderInProgressid() Group by the order_in_progressid column
- * @method     ChildOrderInProgressQuery groupByOrderid() Group by the orderid column
- * @method     ChildOrderInProgressQuery groupByUserid() Group by the userid column
- * @method     ChildOrderInProgressQuery groupByMenuGroupid() Group by the menu_groupid column
- * @method     ChildOrderInProgressQuery groupByBegin() Group by the begin column
- * @method     ChildOrderInProgressQuery groupByDone() Group by the done column
+ * @method ChildOrderInProgressQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
+ * @method ChildOrderInProgressQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
+ * @method ChildOrderInProgressQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
  *
- * @method     ChildOrderInProgressQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
- * @method     ChildOrderInProgressQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
- * @method     ChildOrderInProgressQuery innerJoin($relation) Adds a INNER JOIN clause to the query
+ * @method ChildOrderInProgressQuery leftJoinMenuGroup($relationAlias = null) Adds a LEFT JOIN clause to the query using the MenuGroup relation
+ * @method ChildOrderInProgressQuery rightJoinMenuGroup($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MenuGroup relation
+ * @method ChildOrderInProgressQuery innerJoinMenuGroup($relationAlias = null) Adds a INNER JOIN clause to the query using the MenuGroup relation
  *
- * @method     ChildOrderInProgressQuery leftJoinWith($relation) Adds a LEFT JOIN clause and with to the query
- * @method     ChildOrderInProgressQuery rightJoinWith($relation) Adds a RIGHT JOIN clause and with to the query
- * @method     ChildOrderInProgressQuery innerJoinWith($relation) Adds a INNER JOIN clause and with to the query
+ * @method ChildOrderInProgressQuery joinWithMenuGroup($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the MenuGroup relation
  *
- * @method     ChildOrderInProgressQuery leftJoinMenuGroup($relationAlias = null) Adds a LEFT JOIN clause to the query using the MenuGroup relation
- * @method     ChildOrderInProgressQuery rightJoinMenuGroup($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MenuGroup relation
- * @method     ChildOrderInProgressQuery innerJoinMenuGroup($relationAlias = null) Adds a INNER JOIN clause to the query using the MenuGroup relation
+ * @method ChildOrderInProgressQuery leftJoinWithMenuGroup() Adds a LEFT JOIN clause and with to the query using the MenuGroup relation
+ * @method ChildOrderInProgressQuery rightJoinWithMenuGroup() Adds a RIGHT JOIN clause and with to the query using the MenuGroup relation
+ * @method ChildOrderInProgressQuery innerJoinWithMenuGroup() Adds a INNER JOIN clause and with to the query using the MenuGroup relation
  *
- * @method     ChildOrderInProgressQuery joinWithMenuGroup($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the MenuGroup relation
+ * @method ChildOrderInProgressQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
+ * @method ChildOrderInProgressQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
+ * @method ChildOrderInProgressQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
  *
- * @method     ChildOrderInProgressQuery leftJoinWithMenuGroup() Adds a LEFT JOIN clause and with to the query using the MenuGroup relation
- * @method     ChildOrderInProgressQuery rightJoinWithMenuGroup() Adds a RIGHT JOIN clause and with to the query using the MenuGroup relation
- * @method     ChildOrderInProgressQuery innerJoinWithMenuGroup() Adds a INNER JOIN clause and with to the query using the MenuGroup relation
+ * @method ChildOrderInProgressQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
  *
- * @method     ChildOrderInProgressQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
- * @method     ChildOrderInProgressQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
- * @method     ChildOrderInProgressQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
+ * @method ChildOrderInProgressQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
+ * @method ChildOrderInProgressQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
+ * @method ChildOrderInProgressQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
  *
- * @method     ChildOrderInProgressQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
+ * @method ChildOrderInProgressQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
+ * @method ChildOrderInProgressQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
+ * @method ChildOrderInProgressQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
  *
- * @method     ChildOrderInProgressQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
- * @method     ChildOrderInProgressQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
- * @method     ChildOrderInProgressQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
+ * @method ChildOrderInProgressQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
  *
- * @method     ChildOrderInProgressQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
- * @method     ChildOrderInProgressQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
- * @method     ChildOrderInProgressQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
+ * @method ChildOrderInProgressQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
+ * @method ChildOrderInProgressQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
+ * @method ChildOrderInProgressQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
  *
- * @method     ChildOrderInProgressQuery joinWithUser($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the User relation
+ * @method ChildOrderInProgressQuery leftJoinOrderInProgressRecieved($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderInProgressRecieved relation
+ * @method ChildOrderInProgressQuery rightJoinOrderInProgressRecieved($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderInProgressRecieved relation
+ * @method ChildOrderInProgressQuery innerJoinOrderInProgressRecieved($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderInProgressRecieved relation
  *
- * @method     ChildOrderInProgressQuery leftJoinWithUser() Adds a LEFT JOIN clause and with to the query using the User relation
- * @method     ChildOrderInProgressQuery rightJoinWithUser() Adds a RIGHT JOIN clause and with to the query using the User relation
- * @method     ChildOrderInProgressQuery innerJoinWithUser() Adds a INNER JOIN clause and with to the query using the User relation
+ * @method ChildOrderInProgressQuery joinWithOrderInProgressRecieved($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderInProgressRecieved relation
  *
- * @method     ChildOrderInProgressQuery leftJoinOrderInProgressRecieved($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderInProgressRecieved relation
- * @method     ChildOrderInProgressQuery rightJoinOrderInProgressRecieved($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderInProgressRecieved relation
- * @method     ChildOrderInProgressQuery innerJoinOrderInProgressRecieved($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderInProgressRecieved relation
+ * @method ChildOrderInProgressQuery leftJoinWithOrderInProgressRecieved() Adds a LEFT JOIN clause and with to the query using the OrderInProgressRecieved relation
+ * @method ChildOrderInProgressQuery rightJoinWithOrderInProgressRecieved() Adds a RIGHT JOIN clause and with to the query using the OrderInProgressRecieved relation
+ * @method ChildOrderInProgressQuery innerJoinWithOrderInProgressRecieved() Adds a INNER JOIN clause and with to the query using the OrderInProgressRecieved relation
  *
- * @method     ChildOrderInProgressQuery joinWithOrderInProgressRecieved($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the OrderInProgressRecieved relation
+ * @method \API\Models\Menu\MenuGroupQuery|\API\Models\Ordering\OrderQuery|\API\Models\User\UserQuery|\API\Models\OIP\OrderInProgressRecievedQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
- * @method     ChildOrderInProgressQuery leftJoinWithOrderInProgressRecieved() Adds a LEFT JOIN clause and with to the query using the OrderInProgressRecieved relation
- * @method     ChildOrderInProgressQuery rightJoinWithOrderInProgressRecieved() Adds a RIGHT JOIN clause and with to the query using the OrderInProgressRecieved relation
- * @method     ChildOrderInProgressQuery innerJoinWithOrderInProgressRecieved() Adds a INNER JOIN clause and with to the query using the OrderInProgressRecieved relation
+ * @method ChildOrderInProgress findOne(ConnectionInterface $con = null) Return the first ChildOrderInProgress matching the query
+ * @method ChildOrderInProgress findOneOrCreate(ConnectionInterface $con = null) Return the first ChildOrderInProgress matching the query, or a new ChildOrderInProgress object populated from the query conditions when no match is found
  *
- * @method     \API\Models\Menu\MenuGroupQuery|\API\Models\Ordering\OrderQuery|\API\Models\User\UserQuery|\API\Models\OIP\OrderInProgressRecievedQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
- *
- * @method     ChildOrderInProgress findOne(ConnectionInterface $con = null) Return the first ChildOrderInProgress matching the query
- * @method     ChildOrderInProgress findOneOrCreate(ConnectionInterface $con = null) Return the first ChildOrderInProgress matching the query, or a new ChildOrderInProgress object populated from the query conditions when no match is found
- *
- * @method     ChildOrderInProgress findOneByOrderInProgressid(int $order_in_progressid) Return the first ChildOrderInProgress filtered by the order_in_progressid column
- * @method     ChildOrderInProgress findOneByOrderid(int $orderid) Return the first ChildOrderInProgress filtered by the orderid column
- * @method     ChildOrderInProgress findOneByUserid(int $userid) Return the first ChildOrderInProgress filtered by the userid column
- * @method     ChildOrderInProgress findOneByMenuGroupid(int $menu_groupid) Return the first ChildOrderInProgress filtered by the menu_groupid column
- * @method     ChildOrderInProgress findOneByBegin(string $begin) Return the first ChildOrderInProgress filtered by the begin column
- * @method     ChildOrderInProgress findOneByDone(string $done) Return the first ChildOrderInProgress filtered by the done column *
+ * @method ChildOrderInProgress findOneByOrderInProgressid(int $order_in_progressid) Return the first ChildOrderInProgress filtered by the order_in_progressid column
+ * @method ChildOrderInProgress findOneByOrderid(int $orderid) Return the first ChildOrderInProgress filtered by the orderid column
+ * @method ChildOrderInProgress findOneByUserid(int $userid) Return the first ChildOrderInProgress filtered by the userid column
+ * @method ChildOrderInProgress findOneByMenuGroupid(int $menu_groupid) Return the first ChildOrderInProgress filtered by the menu_groupid column
+ * @method ChildOrderInProgress findOneByBegin(string $begin) Return the first ChildOrderInProgress filtered by the begin column
+ * @method ChildOrderInProgress findOneByDone(string $done) Return the first ChildOrderInProgress filtered by the done column *
 
- * @method     ChildOrderInProgress requirePk($key, ConnectionInterface $con = null) Return the ChildOrderInProgress by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrderInProgress requireOne(ConnectionInterface $con = null) Return the first ChildOrderInProgress matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrderInProgress requirePk($key, ConnectionInterface $con = null) Return the ChildOrderInProgress by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrderInProgress requireOne(ConnectionInterface $con = null) Return the first ChildOrderInProgress matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildOrderInProgress requireOneByOrderInProgressid(int $order_in_progressid) Return the first ChildOrderInProgress filtered by the order_in_progressid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrderInProgress requireOneByOrderid(int $orderid) Return the first ChildOrderInProgress filtered by the orderid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrderInProgress requireOneByUserid(int $userid) Return the first ChildOrderInProgress filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrderInProgress requireOneByMenuGroupid(int $menu_groupid) Return the first ChildOrderInProgress filtered by the menu_groupid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrderInProgress requireOneByBegin(string $begin) Return the first ChildOrderInProgress filtered by the begin column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildOrderInProgress requireOneByDone(string $done) Return the first ChildOrderInProgress filtered by the done column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrderInProgress requireOneByOrderInProgressid(int $order_in_progressid) Return the first ChildOrderInProgress filtered by the order_in_progressid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrderInProgress requireOneByOrderid(int $orderid) Return the first ChildOrderInProgress filtered by the orderid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrderInProgress requireOneByUserid(int $userid) Return the first ChildOrderInProgress filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrderInProgress requireOneByMenuGroupid(int $menu_groupid) Return the first ChildOrderInProgress filtered by the menu_groupid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrderInProgress requireOneByBegin(string $begin) Return the first ChildOrderInProgress filtered by the begin column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method ChildOrderInProgress requireOneByDone(string $done) Return the first ChildOrderInProgress filtered by the done column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
- * @method     ChildOrderInProgress[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildOrderInProgress objects based on current ModelCriteria
- * @method     ChildOrderInProgress[]|ObjectCollection findByOrderInProgressid(int $order_in_progressid) Return ChildOrderInProgress objects filtered by the order_in_progressid column
- * @method     ChildOrderInProgress[]|ObjectCollection findByOrderid(int $orderid) Return ChildOrderInProgress objects filtered by the orderid column
- * @method     ChildOrderInProgress[]|ObjectCollection findByUserid(int $userid) Return ChildOrderInProgress objects filtered by the userid column
- * @method     ChildOrderInProgress[]|ObjectCollection findByMenuGroupid(int $menu_groupid) Return ChildOrderInProgress objects filtered by the menu_groupid column
- * @method     ChildOrderInProgress[]|ObjectCollection findByBegin(string $begin) Return ChildOrderInProgress objects filtered by the begin column
- * @method     ChildOrderInProgress[]|ObjectCollection findByDone(string $done) Return ChildOrderInProgress objects filtered by the done column
- * @method     ChildOrderInProgress[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
- *
+ * @method ChildOrderInProgress[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildOrderInProgress objects based on current ModelCriteria
+ * @method ChildOrderInProgress[]|ObjectCollection findByOrderInProgressid(int $order_in_progressid) Return ChildOrderInProgress objects filtered by the order_in_progressid column
+ * @method ChildOrderInProgress[]|ObjectCollection findByOrderid(int $orderid) Return ChildOrderInProgress objects filtered by the orderid column
+ * @method ChildOrderInProgress[]|ObjectCollection findByUserid(int $userid) Return ChildOrderInProgress objects filtered by the userid column
+ * @method ChildOrderInProgress[]|ObjectCollection findByMenuGroupid(int $menu_groupid) Return ChildOrderInProgress objects filtered by the menu_groupid column
+ * @method ChildOrderInProgress[]|ObjectCollection findByBegin(string $begin) Return ChildOrderInProgress objects filtered by the begin column
+ * @method ChildOrderInProgress[]|ObjectCollection findByDone(string $done) Return ChildOrderInProgress objects filtered by the done column
+ * @method ChildOrderInProgress[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  */
 abstract class OrderInProgressQuery extends ModelCriteria
 {
@@ -124,9 +121,9 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Initializes internal state of \API\Models\OIP\Base\OrderInProgressQuery object.
      *
-     * @param     string $dbName The database name
-     * @param     string $modelName The phpName of a model, e.g. 'Book'
-     * @param     string $modelAlias The alias for the model in this query, e.g. 'b'
+     * @param string $dbName     The database name
+     * @param string $modelName  The phpName of a model, e.g. 'Book'
+     * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
     public function __construct($dbName = 'default', $modelName = '\\API\\Models\\OIP\\OrderInProgress', $modelAlias = null)
     {
@@ -136,8 +133,8 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Returns a new ChildOrderInProgressQuery object.
      *
-     * @param     string $modelAlias The alias of a model in the query
-     * @param     Criteria $criteria Optional Criteria to build the query from
+     * @param string   $modelAlias The alias of a model in the query
+     * @param Criteria $criteria   Optional Criteria to build the query from
      *
      * @return ChildOrderInProgressQuery
      */
@@ -166,7 +163,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
      * $obj  = $c->findPk(12, $con);
      * </code>
      *
-     * @param mixed $key Primary key to use for the query
+     * @param mixed               $key Primary key to use for the query
      * @param ConnectionInterface $con an optional connection object
      *
      * @return ChildOrderInProgress|array|mixed the result, formatted by the current formatter
@@ -183,8 +180,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
 
         $this->basePreSelect($con);
 
-        if (
-            $this->formatter || $this->modelAlias || $this->with || $this->select
+        if ($this->formatter || $this->modelAlias || $this->with || $this->select
             || $this->selectColumns || $this->asColumns || $this->selectModifiers
             || $this->map || $this->having || $this->joins
         ) {
@@ -203,8 +199,8 @@ abstract class OrderInProgressQuery extends ModelCriteria
      * Find object by primary key using raw SQL to go fast.
      * Bypass doSelect() and the object formatter by using generated code.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -223,7 +219,9 @@ abstract class OrderInProgressQuery extends ModelCriteria
         }
         $obj = null;
         if ($row = $stmt->fetch(\PDO::FETCH_NUM)) {
-            /** @var ChildOrderInProgress $obj */
+            /**
+ * @var ChildOrderInProgress $obj
+*/
             $obj = new ChildOrderInProgress();
             $obj->hydrate($row);
             OrderInProgressTableMap::addInstanceToPool($obj, null === $key || is_scalar($key) || is_callable([$key, '__toString']) ? (string) $key : $key);
@@ -236,8 +234,8 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Find object by primary key.
      *
-     * @param     mixed $key Primary key to use for the query
-     * @param     ConnectionInterface $con A connection object
+     * @param mixed               $key Primary key to use for the query
+     * @param ConnectionInterface $con A connection object
      *
      * @return ChildOrderInProgress|array|mixed the result, formatted by the current formatter
      */
@@ -257,8 +255,9 @@ abstract class OrderInProgressQuery extends ModelCriteria
      * <code>
      * $objs = $c->findPks(array(12, 56, 832), $con);
      * </code>
-     * @param     array $keys Primary keys to use for the query
-     * @param     ConnectionInterface $con an optional connection object
+     *
+     * @param array               $keys Primary keys to use for the query
+     * @param ConnectionInterface $con  an optional connection object
      *
      * @return ObjectCollection|array|mixed the list of results, formatted by the current formatter
      */
@@ -279,26 +278,24 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Filter the query by primary key
      *
-     * @param     mixed $key Primary key to use for the query
+     * @param mixed $key Primary key to use for the query
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
     public function filterByPrimaryKey($key)
     {
-
         return $this->addUsingAlias(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID, $key, Criteria::EQUAL);
     }
 
     /**
      * Filter the query by a list of primary keys
      *
-     * @param     array $keys The list of primary key to use for the query
+     * @param array $keys The list of primary key to use for the query
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
     public function filterByPrimaryKeys($keys)
     {
-
         return $this->addUsingAlias(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID, $keys, Criteria::IN);
     }
 
@@ -312,11 +309,14 @@ abstract class OrderInProgressQuery extends ModelCriteria
      * $query->filterByOrderInProgressid(array('min' => 12)); // WHERE order_in_progressid > 12
      * </code>
      *
-     * @param     mixed $orderInProgressid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $orderInProgressid The value to use as filter.
+     *                                      Use scalar values for
+     *                                      equality. Use array values
+     *                                      for in_array() equivalent.
+     *                                      Use associative array('min'
+     *                                      => $minValue, 'max' =>
+     *                                      $maxValue) for intervals.
+     * @param string $comparison        Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
@@ -353,13 +353,16 @@ abstract class OrderInProgressQuery extends ModelCriteria
      * $query->filterByOrderid(array('min' => 12)); // WHERE orderid > 12
      * </code>
      *
-     * @see       filterByOrder()
+     * @see filterByOrder()
      *
-     * @param     mixed $orderid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $orderid    The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
@@ -396,13 +399,16 @@ abstract class OrderInProgressQuery extends ModelCriteria
      * $query->filterByUserid(array('min' => 12)); // WHERE userid > 12
      * </code>
      *
-     * @see       filterByUser()
+     * @see filterByUser()
      *
-     * @param     mixed $userid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $userid     The value to use as filter.
+     *                           Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
@@ -439,13 +445,16 @@ abstract class OrderInProgressQuery extends ModelCriteria
      * $query->filterByMenuGroupid(array('min' => 12)); // WHERE menu_groupid > 12
      * </code>
      *
-     * @see       filterByMenuGroup()
+     * @see filterByMenuGroup()
      *
-     * @param     mixed $menuGroupid The value to use as filter.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $menuGroupid The value to use as filter.
+     *                                Use scalar values for
+     *                                equality. Use array values
+     *                                for in_array() equivalent.
+     *                                Use associative array('min'
+     *                                => $minValue, 'max' =>
+     *                                $maxValue) for intervals.
+     * @param string $comparison  Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
@@ -482,13 +491,18 @@ abstract class OrderInProgressQuery extends ModelCriteria
      * $query->filterByBegin(array('max' => 'yesterday')); // WHERE begin > '2011-03-13'
      * </code>
      *
-     * @param     mixed $begin The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $begin      The value to use as filter.
+     *                           Values can be integers
+     *                           (unix timestamps), DateTime
+     *                           objects, or strings. Empty
+     *                           strings are treated as
+     *                           NULL. Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
@@ -525,13 +539,18 @@ abstract class OrderInProgressQuery extends ModelCriteria
      * $query->filterByDone(array('max' => 'yesterday')); // WHERE done > '2011-03-13'
      * </code>
      *
-     * @param     mixed $done The value to use as filter.
-     *              Values can be integers (unix timestamps), DateTime objects, or strings.
-     *              Empty strings are treated as NULL.
-     *              Use scalar values for equality.
-     *              Use array values for in_array() equivalent.
-     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param mixed  $done       The value to use as filter.
+     *                           Values can be integers
+     *                           (unix timestamps), DateTime
+     *                           objects, or strings. Empty
+     *                           strings are treated as
+     *                           NULL. Use scalar values for
+     *                           equality. Use array values
+     *                           for in_array() equivalent.
+     *                           Use associative array('min'
+     *                           => $minValue, 'max' =>
+     *                           $maxValue) for intervals.
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
@@ -561,8 +580,8 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Menu\MenuGroup object
      *
-     * @param \API\Models\Menu\MenuGroup|ObjectCollection $menuGroup The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Menu\MenuGroup|ObjectCollection $menuGroup  The related object(s) to use as filter
+     * @param string                                      $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -588,8 +607,8 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the MenuGroup relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
@@ -622,9 +641,9 @@ abstract class OrderInProgressQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Menu\MenuGroupQuery A secondary query class using the current class as primary query
      */
@@ -638,8 +657,8 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\Ordering\Order object
      *
-     * @param \API\Models\Ordering\Order|ObjectCollection $order The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\Ordering\Order|ObjectCollection $order      The related object(s) to use as filter
+     * @param string                                      $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -665,8 +684,8 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the Order relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
@@ -699,9 +718,9 @@ abstract class OrderInProgressQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\Ordering\OrderQuery A secondary query class using the current class as primary query
      */
@@ -715,8 +734,8 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Filter the query by a related \API\Models\User\User object
      *
-     * @param \API\Models\User\User|ObjectCollection $user The related object(s) to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param \API\Models\User\User|ObjectCollection $user       The related object(s) to use as filter
+     * @param string                                 $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @throws \Propel\Runtime\Exception\PropelException
      *
@@ -742,8 +761,8 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the User relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
@@ -776,9 +795,9 @@ abstract class OrderInProgressQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\User\UserQuery A secondary query class using the current class as primary query
      */
@@ -793,7 +812,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
      * Filter the query by a related \API\Models\OIP\OrderInProgressRecieved object
      *
      * @param \API\Models\OIP\OrderInProgressRecieved|ObjectCollection $orderInProgressRecieved the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     * @param string                                                   $comparison              Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return ChildOrderInProgressQuery The current query, for fluid interface
      */
@@ -815,8 +834,8 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Adds a JOIN clause to the query using the OrderInProgressRecieved relation
      *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $relationAlias optional alias for the relation
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
@@ -849,9 +868,9 @@ abstract class OrderInProgressQuery extends ModelCriteria
      *
      * @see useQuery()
      *
-     * @param     string $relationAlias optional alias for the relation,
+     * @param string $relationAlias optional alias for the relation,
      *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     * @param string $joinType      Accepted values are null, 'left join', 'right join', 'inner join'
      *
      * @return \API\Models\OIP\OrderInProgressRecievedQuery A secondary query class using the current class as primary query
      */
@@ -865,7 +884,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Exclude object from result
      *
-     * @param   ChildOrderInProgress $orderInProgress Object to remove from the list of results
+     * @param ChildOrderInProgress $orderInProgress Object to remove from the list of results
      *
      * @return $this|ChildOrderInProgressQuery The current query, for fluid interface
      */
@@ -881,7 +900,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
     /**
      * Deletes all rows from the order_in_progress table.
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public function doDeleteAll(ConnectionInterface $con = null)
@@ -892,23 +911,25 @@ abstract class OrderInProgressQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
-            $affectedRows += parent::doDeleteAll($con);
-            // Because this db requires some delete cascade/set null emulation, we have to
-            // clear the cached instance *after* the emulation has happened (since
-            // instances get re-added by the select statement contained therein).
-            OrderInProgressTableMap::clearInstancePool();
-            OrderInProgressTableMap::clearRelatedInstancePool();
+        return $con->transaction(
+            function () use ($con) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
+                $affectedRows += parent::doDeleteAll($con);
+                // Because this db requires some delete cascade/set null emulation, we have to
+                // clear the cached instance *after* the emulation has happened (since
+                // instances get re-added by the select statement contained therein).
+                OrderInProgressTableMap::clearInstancePool();
+                OrderInProgressTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
      * Performs a DELETE on the database based on the current ModelCriteria
      *
-     * @param ConnectionInterface $con the connection to use
+     * @param  ConnectionInterface $con the connection to use
      * @return int             The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
      *                         if supported by native driver or if emulated using Propel.
      * @throws PropelException Any exceptions caught during processing will be
@@ -927,16 +948,17 @@ abstract class OrderInProgressQuery extends ModelCriteria
 
         // use transaction because $criteria could contain info
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
-        return $con->transaction(function () use ($con, $criteria) {
-            $affectedRows = 0; // initialize var to track total num of affected rows
+        return $con->transaction(
+            function () use ($con, $criteria) {
+                $affectedRows = 0; // initialize var to track total num of affected rows
 
-            OrderInProgressTableMap::removeInstanceFromPool($criteria);
+                OrderInProgressTableMap::removeInstanceFromPool($criteria);
 
-            $affectedRows += ModelCriteria::delete($con);
-            OrderInProgressTableMap::clearRelatedInstancePool();
+                $affectedRows += ModelCriteria::delete($con);
+                OrderInProgressTableMap::clearRelatedInstancePool();
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
-
 } // OrderInProgressQuery

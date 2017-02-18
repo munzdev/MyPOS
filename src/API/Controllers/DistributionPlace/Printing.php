@@ -16,122 +16,121 @@ use const API\ORDER_DEFAULT_SIZEID;
 
 class Printing extends SecurityController
 {
-    private $b_withPayments;
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
 
-    public function __construct(App $o_app) {
-        parent::__construct($o_app);
-
-        $o_app->getContainer()['db'];
+        $app->getContainer()['db'];
     }
 
-    function ANY() : void {
-        $a_validators_json = array(
+    public function any() : void
+    {
+        $validatorsJson = array(
             'EventPrinterid' => v::alnum()->length(1),
         );
 
-        $a_validators_args = array(
+        $validatorsArgs = array(
             'DistributionGivingOutid' => v::alnum()->length(1),
         );
 
-        $this->validate($a_validators_args, $this->a_args);
-        $this->validate($a_validators_json, $this->a_json);
+        $this->validate($validatorsArgs, $this->args);
+        $this->validate($validatorsJson, $this->json);
     }
 
-    protected function POST() : void  {
-        $o_user = Auth::GetCurrentUser();
+    protected function post() : void
+    {
+        $printer = EventPrinterQuery::create()
+                                        ->findOneByEventPrinterid($this->json['EventPrinterid']);
 
-        $o_printer = EventPrinterQuery::create()
-                                        ->findOneByEventPrinterid($this->a_json['EventPrinterid']);
-
-        $o_distributionGibingOut = DistributionGivingOutQuery::create()
-                                                                ->joinWithOrderInProgressRecieved()
-                                                                ->useOrderInProgressRecievedQuery()
-                                                                    ->joinWithOrderDetail()
-                                                                    ->useOrderDetailQuery()
-                                                                        ->leftJoinWithMenu()
-                                                                        ->leftJoinWithMenuSize()
-                                                                        ->leftJoinWithOrderDetailExtra()
-                                                                        ->useOrderDetailExtraQuery(null, Criteria::LEFT_JOIN)
-                                                                            ->leftJoinWithMenuPossibleExtra()
-                                                                            ->useMenuPossibleExtraQuery(null, Criteria::LEFT_JOIN)
-                                                                                ->leftJoinWithMenuExtra()
-                                                                            ->endUse()
+        $distributionGivingOut = DistributionGivingOutQuery::create()
+                                                            ->joinWithOrderInProgressRecieved()
+                                                            ->useOrderInProgressRecievedQuery()
+                                                                ->joinWithOrderDetail()
+                                                                ->useOrderDetailQuery()
+                                                                    ->leftJoinWithMenu()
+                                                                    ->leftJoinWithMenuSize()
+                                                                    ->leftJoinWithOrderDetailExtra()
+                                                                    ->useOrderDetailExtraQuery(null, Criteria::LEFT_JOIN)
+                                                                        ->leftJoinWithMenuPossibleExtra()
+                                                                        ->useMenuPossibleExtraQuery(null, Criteria::LEFT_JOIN)
+                                                                            ->leftJoinWithMenuExtra()
                                                                         ->endUse()
-                                                                        ->leftJoinWithOrderDetailMixedWith()
                                                                     ->endUse()
+                                                                    ->leftJoinWithOrderDetailMixedWith()
                                                                 ->endUse()
-                                                                ->filterByDistributionGivingOutid($this->a_args['DistributionGivingOutid'])
-                                                                ->find()
-                                                                ->getFirst();
+                                                            ->endUse()
+                                                            ->filterByDistributionGivingOutid($this->args['DistributionGivingOutid'])
+                                                            ->find()
+                                                            ->getFirst();
 
-        $i_orderid = $o_distributionGibingOut->getOrderInProgressRecieveds()
-                                             ->getFirst()
-                                             ->getOrderDetail()
-                                             ->getOrderid();
+        $orderid = $distributionGivingOut->getOrderInProgressRecieveds()
+                                        ->getFirst()
+                                        ->getOrderDetail()
+                                        ->getOrderid();
 
-        $o_order = OrderQuery::create()
-                                ->joinWithEventTable()
-                                ->joinUserRelatedByUserid()
-                                ->filterByOrderid($i_orderid)
-                                ->find()
-                                ->getFirst();
+        $order = OrderQuery::create()
+                            ->joinWithEventTable()
+                            ->joinUserRelatedByUserid()
+                            ->filterByOrderid($orderid)
+                            ->find()
+                            ->getFirst();
 
-        $o_i18n = $this->o_app->getContainer()['i18n'];
+        $i18n = $this->app->getContainer()['i18n'];
 
-        $o_connector = ReciepPrint::GetConnector($o_printer);
-        $o_reciepPrint = new ReciepPrint($o_connector, $o_printer->getCharactersPerRow(), $o_i18n->ReciepPrint);
+        $connector = ReciepPrint::getConnector($printer);
+        $reciepPrint = new ReciepPrint($connector, $printer->getCharactersPerRow(), $i18n->ReciepPrint);
 
-        $o_reciepPrint->SetOrderNr($i_orderid);
-        $o_reciepPrint->SetTableNr($o_order->getEventTable()->getName());
-        $o_reciepPrint->SetName($o_order->getUserRelatedByuserid()->getFirstname() . " " . $o_order->getUserRelatedByuserid()->getLastname());
-        $o_reciepPrint->SetDate($o_order->getOrdertime());
-        $o_reciepPrint->SetDateFooter($o_distributionGibingOut->getDate());
+        $reciepPrint->setOrderNr($orderid);
+        $reciepPrint->setTableNr($order->getEventTable()->getName());
+        $reciepPrint->setName($order->getUserRelatedByuserid()->getFirstname() . " " . $order->getUserRelatedByuserid()->getLastname());
+        $reciepPrint->setDate($order->getOrdertime());
+        $reciepPrint->setDateFooter($distributionGivingOut->getDate());
 
-        foreach($o_distributionGibingOut->getOrderInProgressRecieveds() as $o_orderInProgressRecieved) {
+        foreach ($distributionGivingOut->getOrderInProgressRecieveds() as $orderInProgressRecieved) {
+            $name = "";
+            $orderDetail = $orderInProgressRecieved->getOrderDetail();
 
-            $str_name = "";
-            $o_orderDetail = $o_orderInProgressRecieved->getOrderDetail();
+            if ($orderDetail->getMenuid()) {
+                $name = $orderDetail->getMenu()->getName();
 
-            if($o_orderDetail->getMenuid()) {
-                $str_name = $o_orderDetail->getMenu()->getName();
-
-                if($o_orderDetail->getMenuSizeid() != ORDER_DEFAULT_SIZEID) {
-                    $str_name .= " " . $o_orderDetail->getMenuSize()->getName();
+                if ($orderDetail->getMenuSizeid() != ORDER_DEFAULT_SIZEID) {
+                    $name .= " " . $orderDetail->getMenuSize()->getName();
                 }
 
-                if($o_orderDetail->getOrderDetailMixedWiths()->count() > 0) {
-                    $str_name .= " " . $o_i18n->ReciepPrint->mixedWith . ": ";
+                if ($orderDetail->getOrderDetailMixedWiths()->count() > 0) {
+                    $name .= " " . $i18n->ReciepPrint->mixedWith . ": ";
 
-                    foreach($o_orderDetail->getOrderDetailMixedWiths as $o_orderDetailMixedWith) {
-                        $str_name .= $o_orderDetailMixedWith->getMenu()->getName() . ", ";
+                    foreach ($orderDetail->getOrderDetailMixedWiths as $orderDetailMixedWith) {
+                        $name .= $orderDetailMixedWith->getMenu()->getName() . ", ";
                     }
 
-                    $str_name = substr($str_name, 0, -2) . ";";
+                    $name = substr($name, 0, -2) . ";";
                 }
 
-                foreach($o_orderDetail->getOrderDetailExtras() as $o_orderDetailExtra) {
-                    $str_name .= " " . $o_orderDetailExtra->getMenuPossibleExtra()->getMenuExtra()->getName() . ',';
+                foreach ($orderDetail->getOrderDetailExtras() as $orderDetailExtra) {
+                    $name .= " " . $orderDetailExtra->getMenuPossibleExtra()->getMenuExtra()->getName() . ',';
                 }
 
-                if(!empty($o_orderDetail->getExtraDetail()))
-                    $str_name .= " " . $o_orderDetail->getExtraDetail();
+                if (!empty($orderDetail->getExtraDetail())) {
+                    $name .= " " . $orderDetail->getExtraDetail();
+                }
 
-                if(substr($str_name, -1) == ',')
-                    $str_name = substr($str_name, 0, -1);
-
+                if (substr($name, -1) == ',') {
+                    $name = substr($name, 0, -1);
+                }
             } else {
-                $str_name = $o_orderDetail->getExtraDetail();
+                $name = $orderDetail->getExtraDetail();
             }
 
-            $o_reciepPrint->Add($str_name, $o_orderInProgressRecieved->getAmount());
+            $reciepPrint->add($name, $orderInProgressRecieved->getAmount());
         }
 
         try {
-            $o_reciepPrint->PrintOrder();
+            $reciepPrint->printOrder();
 
             $this->withJson(true);
-        } catch(Exception $o_exception) {
-            throw new Exception("Rechnungsdruck fehlgeschlagen! Bitte Vorgang wiederhollen! Rechnungsnummer: $a_params[invoiceid]", $o_exception->getCode(), $o_exception);
+        } catch (Exception $exception) {
+            throw new Exception("Ausgabenzetteldruck fehlgeschlagen! Ausgabeid: {$this->args['DistributionGivingOutid']}", $exception->getCode(), $exception);
         }
     }
 }

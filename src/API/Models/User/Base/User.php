@@ -57,9 +57,7 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'user' table.
  *
- *
- *
- * @package    propel.generator.API.Models.User.Base
+ * @package propel.generator.API.Models.User.Base
  */
 abstract class User implements ActiveRecordInterface
 {
@@ -71,12 +69,14 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * attribute to determine if this object has previously been saved.
+     *
      * @var boolean
      */
     protected $new = true;
 
     /**
      * attribute to determine whether this object has been deleted.
+     *
      * @var boolean
      */
     protected $deleted = false;
@@ -84,6 +84,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * The columns that have been modified in current object.
      * Tracking modified columns allows us to only update modified columns.
+     *
      * @var array
      */
     protected $modifiedColumns = array();
@@ -91,6 +92,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * The (virtual) columns that are added at runtime
      * The formatters can add supplementary columns based on a resultset
+     *
      * @var array
      */
     protected $virtualColumns = array();
@@ -98,70 +100,70 @@ abstract class User implements ActiveRecordInterface
     /**
      * The value for the userid field.
      *
-     * @var        int
+     * @var int
      */
     protected $userid;
 
     /**
      * The value for the username field.
      *
-     * @var        string
+     * @var string
      */
     protected $username;
 
     /**
      * The value for the password field.
      *
-     * @var        string
+     * @var string
      */
     protected $password;
 
     /**
      * The value for the firstname field.
      *
-     * @var        string
+     * @var string
      */
     protected $firstname;
 
     /**
      * The value for the lastname field.
      *
-     * @var        string
+     * @var string
      */
     protected $lastname;
 
     /**
      * The value for the autologin_hash field.
      *
-     * @var        string
+     * @var string
      */
     protected $autologin_hash;
 
     /**
      * The value for the active field.
      *
-     * @var        int
+     * @var int
      */
     protected $active;
 
     /**
      * The value for the phonenumber field.
      *
-     * @var        string
+     * @var string
      */
     protected $phonenumber;
 
     /**
      * The value for the call_request field.
      *
-     * @var        DateTime
+     * @var DateTime
      */
     protected $call_request;
 
     /**
      * The value for the is_admin field.
      *
-     * @var        boolean
+     * @var boolean
      */
     protected $is_admin;
 
@@ -229,54 +231,63 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|Coupon[]
      */
     protected $couponsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|DistributionPlaceUser[]
      */
     protected $distributionPlaceUsersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|EventUser[]
      */
     protected $eventUsersScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|Invoice[]
      */
     protected $invoicesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|Order[]
      */
     protected $ordersRelatedByCancellationCreatedByUseridScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|Order[]
      */
     protected $ordersRelatedByUseridScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|OrderDetail[]
      */
     protected $orderDetailsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|OrderInProgress[]
      */
     protected $orderInProgressesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
+     *
      * @var ObjectCollection|PaymentRecieved[]
      */
     protected $paymentRecievedsScheduledForDeletion = null;
@@ -301,7 +312,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Has specified column been modified?
      *
-     * @param  string  $col column fully qualified name (TableMap::TYPE_COLNAME), e.g. Book::AUTHOR_ID
+     * @param  string $col column fully qualified name (TableMap::TYPE_COLNAME), e.g. Book::AUTHOR_ID
      * @return boolean True if $col has been modified.
      */
     public function isColumnModified($col)
@@ -311,6 +322,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the columns that have been modified in this object.
+     *
      * @return array A unique list of the modified column names for this object.
      */
     public function getModifiedColumns()
@@ -343,6 +355,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Whether this object has been deleted.
+     *
      * @return boolean The deleted state of this object.
      */
     public function isDeleted()
@@ -352,6 +365,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Specify whether this object has been deleted.
+     *
      * @param  boolean $b The deleted state of this object.
      * @return void
      */
@@ -362,6 +376,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Sets the modified state for the object to be false.
+     *
      * @param  string $col If supplied, only the specified column is reset.
      * @return void
      */
@@ -381,7 +396,7 @@ abstract class User implements ActiveRecordInterface
      * <code>obj</code> is an instance of <code>User</code>, delegates to
      * <code>equals(User)</code>.  Otherwise, returns <code>false</code>.
      *
-     * @param  mixed   $obj The object to compare to.
+     * @param  mixed $obj The object to compare to.
      * @return boolean Whether equal to the object specified.
      */
     public function equals($obj)
@@ -414,7 +429,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Checks the existence of a virtual column in this object
      *
-     * @param  string  $name The virtual column name
+     * @param  string $name The virtual column name
      * @return boolean
      */
     public function hasVirtualColumn($name)
@@ -457,8 +472,8 @@ abstract class User implements ActiveRecordInterface
     /**
      * Logs a message using Propel::log().
      *
-     * @param  string  $msg
-     * @param  int     $priority One of the Propel::LOG_* logging levels
+     * @param  string $msg
+     * @param  int    $priority One of the Propel::LOG_* logging levels
      * @return boolean
      */
     protected function log($msg, $priority = Propel::LOG_INFO)
@@ -499,7 +514,7 @@ abstract class User implements ActiveRecordInterface
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
 
-        foreach($serializableProperties as $property) {
+        foreach ($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
 
@@ -589,15 +604,14 @@ abstract class User implements ActiveRecordInterface
     /**
      * Get the [optionally formatted] temporal [call_request] column value.
      *
-     *
-     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     * @param string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
      *
      * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
      *
      * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getCallRequest($format = NULL)
+    public function getCallRequest($format = null)
     {
         if ($format === null) {
             return $this->call_request;
@@ -629,7 +643,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [userid] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return $this|\API\Models\User\User The current object (for fluent API support)
      */
     public function setUserid($v)
@@ -649,7 +663,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [username] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return $this|\API\Models\User\User The current object (for fluent API support)
      */
     public function setUsername($v)
@@ -669,7 +683,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [password] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return $this|\API\Models\User\User The current object (for fluent API support)
      */
     public function setPassword($v)
@@ -689,7 +703,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [firstname] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return $this|\API\Models\User\User The current object (for fluent API support)
      */
     public function setFirstname($v)
@@ -709,7 +723,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [lastname] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return $this|\API\Models\User\User The current object (for fluent API support)
      */
     public function setLastname($v)
@@ -729,7 +743,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [autologin_hash] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return $this|\API\Models\User\User The current object (for fluent API support)
      */
     public function setAutologinHash($v)
@@ -749,7 +763,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [active] column.
      *
-     * @param int $v new value
+     * @param  int $v new value
      * @return $this|\API\Models\User\User The current object (for fluent API support)
      */
     public function setActive($v)
@@ -769,7 +783,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Set the value of [phonenumber] column.
      *
-     * @param string $v new value
+     * @param  string $v new value
      * @return $this|\API\Models\User\User The current object (for fluent API support)
      */
     public function setPhonenumber($v)
@@ -869,7 +883,6 @@ abstract class User implements ActiveRecordInterface
     public function hydrate($row, $startcol = 0, $rehydrate = false, $indexType = TableMap::TYPE_NUM)
     {
         try {
-
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : UserTableMap::translateFieldName('Userid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->userid = (null !== $col) ? (int) $col : null;
 
@@ -911,7 +924,6 @@ abstract class User implements ActiveRecordInterface
             }
 
             return $startcol + 10; // 10 = UserTableMap::NUM_HYDRATE_COLUMNS.
-
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\User\\User'), 0, $e);
         }
@@ -939,8 +951,8 @@ abstract class User implements ActiveRecordInterface
      *
      * This will only work if the object has been saved and has a valid primary key set.
      *
-     * @param      boolean $deep (optional) Whether to also de-associated any related objects.
-     * @param      ConnectionInterface $con (optional) The ConnectionInterface connection to use.
+     * @param  boolean             $deep (optional) Whether to also de-associated any related objects.
+     * @param  ConnectionInterface $con  (optional) The ConnectionInterface connection to use.
      * @return void
      * @throws PropelException - if this object is deleted, unsaved or doesn't have pk match in db
      */
@@ -988,18 +1000,17 @@ abstract class User implements ActiveRecordInterface
             $this->collOrderInProgresses = null;
 
             $this->collPaymentRecieveds = null;
-
         } // if (deep)
     }
 
     /**
      * Removes this object from datastore and sets delete attribute.
      *
-     * @param      ConnectionInterface $con
+     * @param  ConnectionInterface $con
      * @return void
      * @throws PropelException
-     * @see User::setDeleted()
-     * @see User::isDeleted()
+     * @see    User::setDeleted()
+     * @see    User::isDeleted()
      */
     public function delete(ConnectionInterface $con = null)
     {
@@ -1011,16 +1022,18 @@ abstract class User implements ActiveRecordInterface
             $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
         }
 
-        $con->transaction(function () use ($con) {
-            $deleteQuery = ChildUserQuery::create()
+        $con->transaction(
+            function () use ($con) {
+                $deleteQuery = ChildUserQuery::create()
                 ->filterByPrimaryKey($this->getPrimaryKey());
-            $ret = $this->preDelete($con);
-            if ($ret) {
-                $deleteQuery->delete($con);
-                $this->postDelete($con);
-                $this->setDeleted(true);
+                $ret = $this->preDelete($con);
+                if ($ret) {
+                    $deleteQuery->delete($con);
+                    $this->postDelete($con);
+                    $this->setDeleted(true);
+                }
             }
-        });
+        );
     }
 
     /**
@@ -1031,10 +1044,10 @@ abstract class User implements ActiveRecordInterface
      * method.  This method wraps all precipitate database operations in a
      * single transaction.
      *
-     * @param      ConnectionInterface $con
+     * @param  ConnectionInterface $con
      * @return int             The number of rows affected by this insert/update and any referring fk objects' save() operations.
      * @throws PropelException
-     * @see doSave()
+     * @see    doSave()
      */
     public function save(ConnectionInterface $con = null)
     {
@@ -1050,29 +1063,31 @@ abstract class User implements ActiveRecordInterface
             $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
         }
 
-        return $con->transaction(function () use ($con) {
-            $ret = $this->preSave($con);
-            $isInsert = $this->isNew();
-            if ($isInsert) {
-                $ret = $ret && $this->preInsert($con);
-            } else {
-                $ret = $ret && $this->preUpdate($con);
-            }
-            if ($ret) {
-                $affectedRows = $this->doSave($con);
+        return $con->transaction(
+            function () use ($con) {
+                $ret = $this->preSave($con);
+                $isInsert = $this->isNew();
                 if ($isInsert) {
-                    $this->postInsert($con);
+                    $ret = $ret && $this->preInsert($con);
                 } else {
-                    $this->postUpdate($con);
+                    $ret = $ret && $this->preUpdate($con);
                 }
-                $this->postSave($con);
-                UserTableMap::addInstanceToPool($this);
-            } else {
-                $affectedRows = 0;
-            }
+                if ($ret) {
+                    $affectedRows = $this->doSave($con);
+                    if ($isInsert) {
+                        $this->postInsert($con);
+                    } else {
+                        $this->postUpdate($con);
+                    }
+                    $this->postSave($con);
+                    UserTableMap::addInstanceToPool($this);
+                } else {
+                    $affectedRows = 0;
+                }
 
-            return $affectedRows;
-        });
+                return $affectedRows;
+            }
+        );
     }
 
     /**
@@ -1081,10 +1096,10 @@ abstract class User implements ActiveRecordInterface
      * If the object is new, it inserts it; otherwise an update is performed.
      * All related objects are also updated in this method.
      *
-     * @param      ConnectionInterface $con
+     * @param  ConnectionInterface $con
      * @return int             The number of rows affected by this insert/update and any referring fk objects' save() operations.
      * @throws PropelException
-     * @see save()
+     * @see    save()
      */
     protected function doSave(ConnectionInterface $con)
     {
@@ -1259,7 +1274,6 @@ abstract class User implements ActiveRecordInterface
             }
 
             $this->alreadyInSave = false;
-
         }
 
         return $affectedRows;
@@ -1268,10 +1282,10 @@ abstract class User implements ActiveRecordInterface
     /**
      * Insert the row in the database.
      *
-     * @param      ConnectionInterface $con
+     * @param ConnectionInterface $con
      *
      * @throws PropelException
-     * @see doSave()
+     * @see    doSave()
      */
     protected function doInsert(ConnectionInterface $con)
     {
@@ -1376,10 +1390,10 @@ abstract class User implements ActiveRecordInterface
     /**
      * Update the row in the database.
      *
-     * @param      ConnectionInterface $con
+     * @param ConnectionInterface $con
      *
      * @return Integer Number of updated rows
-     * @see doSave()
+     * @see    doSave()
      */
     protected function doUpdate(ConnectionInterface $con)
     {
@@ -1392,8 +1406,8 @@ abstract class User implements ActiveRecordInterface
     /**
      * Retrieves a field from the object by name passed in as a string.
      *
-     * @param      string $name name
-     * @param      string $type The type of fieldname the $name is of:
+     * @param  string $name name
+     * @param  string $type The type of fieldname the $name is of:
      *                     one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
      *                     TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *                     Defaults to TableMap::TYPE_PHPNAME.
@@ -1411,7 +1425,7 @@ abstract class User implements ActiveRecordInterface
      * Retrieves a field from the object by Position as specified in the xml schema.
      * Zero-based.
      *
-     * @param      int $pos position in xml schema
+     * @param  int $pos position in xml schema
      * @return mixed Value of field at $pos
      */
     public function getByPosition($pos)
@@ -1459,18 +1473,17 @@ abstract class User implements ActiveRecordInterface
      * You can specify the key type of the array by passing one of the class
      * type constants.
      *
-     * @param     string  $keyType (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME,
-     *                    TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                    Defaults to TableMap::TYPE_PHPNAME.
-     * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
-     * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
-     * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
+     * @param string  $keyType                (optional) One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME,
+     *                                            TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM. Defaults to
+     *                                            TableMap::TYPE_PHPNAME.
+     * @param boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+     * @param array   $alreadyDumpedObjects   List of objects to skip to avoid recursion
+     * @param boolean $includeForeignObjects  (optional) Whether to include hydrated related objects. Default to FALSE.
      *
      * @return array an associative array containing the field names (as keys) and field values
      */
     public function toArray($keyType = TableMap::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
     {
-
         if (isset($alreadyDumpedObjects['User'][$this->hashCode()])) {
             return '*RECURSION*';
         }
@@ -1499,7 +1512,6 @@ abstract class User implements ActiveRecordInterface
 
         if ($includeForeignObjects) {
             if (null !== $this->collCoupons) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'coupons';
@@ -1514,7 +1526,6 @@ abstract class User implements ActiveRecordInterface
                 $result[$key] = $this->collCoupons->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collDistributionPlaceUsers) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'distributionPlaceUsers';
@@ -1529,7 +1540,6 @@ abstract class User implements ActiveRecordInterface
                 $result[$key] = $this->collDistributionPlaceUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventUsers) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventUsers';
@@ -1544,7 +1554,6 @@ abstract class User implements ActiveRecordInterface
                 $result[$key] = $this->collEventUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collInvoices) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoices';
@@ -1559,7 +1568,6 @@ abstract class User implements ActiveRecordInterface
                 $result[$key] = $this->collInvoices->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrdersRelatedByCancellationCreatedByUserid) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orders';
@@ -1574,7 +1582,6 @@ abstract class User implements ActiveRecordInterface
                 $result[$key] = $this->collOrdersRelatedByCancellationCreatedByUserid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrdersRelatedByUserid) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orders';
@@ -1589,7 +1596,6 @@ abstract class User implements ActiveRecordInterface
                 $result[$key] = $this->collOrdersRelatedByUserid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderDetails) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetails';
@@ -1604,7 +1610,6 @@ abstract class User implements ActiveRecordInterface
                 $result[$key] = $this->collOrderDetails->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderInProgresses) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderInProgresses';
@@ -1619,7 +1624,6 @@ abstract class User implements ActiveRecordInterface
                 $result[$key] = $this->collOrderInProgresses->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collPaymentRecieveds) {
-
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'paymentRecieveds';
@@ -1643,10 +1647,14 @@ abstract class User implements ActiveRecordInterface
      *
      * @param  string $name
      * @param  mixed  $value field value
-     * @param  string $type The type of fieldname the $name is of:
-     *                one of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_CAMELNAME
-     *                TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
-     *                Defaults to TableMap::TYPE_PHPNAME.
+     * @param  string $type  The type of fieldname the $name is of:
+     *                       one of the class type constants
+     *                       TableMap::TYPE_PHPNAME,
+     *                       TableMap::TYPE_CAMELNAME
+     *                       TableMap::TYPE_COLNAME,
+     *                       TableMap::TYPE_FIELDNAME,
+     *                       TableMap::TYPE_NUM. Defaults to
+     *                       TableMap::TYPE_PHPNAME.
      * @return $this|\API\Models\User\User
      */
     public function setByName($name, $value, $type = TableMap::TYPE_PHPNAME)
@@ -1660,7 +1668,7 @@ abstract class User implements ActiveRecordInterface
      * Sets a field from the object by Position as specified in the xml schema.
      * Zero-based.
      *
-     * @param  int $pos position in xml schema
+     * @param  int   $pos   position in xml schema
      * @param  mixed $value field value
      * @return $this|\API\Models\User\User
      */
@@ -1715,8 +1723,8 @@ abstract class User implements ActiveRecordInterface
      * TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      * The default key type is the column's TableMap::TYPE_PHPNAME.
      *
-     * @param      array  $arr     An array to populate the object from.
-     * @param      string $keyType The type of keys the array uses.
+     * @param  array  $arr     An array to populate the object from.
+     * @param  string $keyType The type of keys the array uses.
      * @return void
      */
     public function fromArray($arr, $keyType = TableMap::TYPE_PHPNAME)
@@ -1767,9 +1775,10 @@ abstract class User implements ActiveRecordInterface
      * TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      * The default key type is the column's TableMap::TYPE_PHPNAME.
      *
-     * @param mixed $parser A AbstractParser instance,
-     *                       or a format name ('XML', 'YAML', 'JSON', 'CSV')
-     * @param string $data The source data to import from
+     * @param mixed  $parser  A AbstractParser instance,
+     *                        or a format name ('XML',
+     *                        'YAML', 'JSON', 'CSV')
+     * @param string $data    The source data to import from
      * @param string $keyType The type of keys the array uses.
      *
      * @return $this|\API\Models\User\User The current object, for fluid interface
@@ -1870,6 +1879,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Returns the primary key for this object (row).
+     *
      * @return int
      */
     public function getPrimaryKey()
@@ -1880,7 +1890,7 @@ abstract class User implements ActiveRecordInterface
     /**
      * Generic method to set the primary key (userid column).
      *
-     * @param       int $key Primary key.
+     * @param  int $key Primary key.
      * @return void
      */
     public function setPrimaryKey($key)
@@ -1890,6 +1900,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Returns true if the primary key for this object is null.
+     *
      * @return boolean
      */
     public function isPrimaryKeyNull()
@@ -1903,9 +1914,9 @@ abstract class User implements ActiveRecordInterface
      * If desired, this method can also make copies of all associated (fkey referrers)
      * objects.
      *
-     * @param      object $copyObj An object of \API\Models\User\User (or compatible) type.
-     * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
-     * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
+     * @param  object  $copyObj  An object of \API\Models\User\User (or compatible) type.
+     * @param  boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+     * @param  boolean $makeNew  Whether to reset autoincrement PKs and make the object new.
      * @throws PropelException
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
@@ -1978,12 +1989,11 @@ abstract class User implements ActiveRecordInterface
                     $copyObj->addPaymentRecieved($relObj->copy($deepCopy));
                 }
             }
-
         } // if ($deepCopy)
 
         if ($makeNew) {
             $copyObj->setNew(true);
-            $copyObj->setUserid(NULL); // this is a auto-increment column, so set to default value
+            $copyObj->setUserid(null); // this is a auto-increment column, so set to default value
         }
     }
 
@@ -2015,7 +2025,7 @@ abstract class User implements ActiveRecordInterface
      * Avoids crafting an 'init[$relationName]s' method name
      * that wouldn't work when StandardEnglishPluralizer is used.
      *
-     * @param      string $relationName The name of the relation to initialize
+     * @param  string $relationName The name of the relation to initialize
      * @return void
      */
     public function initRelation($relationName)
@@ -2056,7 +2066,7 @@ abstract class User implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addCoupons()
+     * @see    addCoupons()
      */
     public function clearCoupons()
     {
@@ -2078,7 +2088,7 @@ abstract class User implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -2104,8 +2114,8 @@ abstract class User implements ActiveRecordInterface
      * If this ChildUser is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|Coupon[] List of Coupon objects
      * @throws PropelException
      */
@@ -2159,13 +2169,15 @@ abstract class User implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $coupons A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $coupons A Propel collection.
+     * @param  ConnectionInterface $con     Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
     public function setCoupons(Collection $coupons, ConnectionInterface $con = null)
     {
-        /** @var Coupon[] $couponsToDelete */
+        /**
+ * @var Coupon[] $couponsToDelete
+*/
         $couponsToDelete = $this->getCoupons(new Criteria(), $con)->diff($coupons);
 
 
@@ -2189,9 +2201,9 @@ abstract class User implements ActiveRecordInterface
     /**
      * Returns the number of related BaseCoupon objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseCoupon objects.
      * @throws PropelException
      */
@@ -2286,9 +2298,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Coupon[] List of Coupon objects
      */
     public function getCouponsJoinEvent(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -2306,7 +2318,7 @@ abstract class User implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addDistributionPlaceUsers()
+     * @see    addDistributionPlaceUsers()
      */
     public function clearDistributionPlaceUsers()
     {
@@ -2328,7 +2340,7 @@ abstract class User implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -2354,8 +2366,8 @@ abstract class User implements ActiveRecordInterface
      * If this ChildUser is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|DistributionPlaceUser[] List of DistributionPlaceUser objects
      * @throws PropelException
      */
@@ -2409,13 +2421,15 @@ abstract class User implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $distributionPlaceUsers A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $distributionPlaceUsers A Propel collection.
+     * @param  ConnectionInterface $con                    Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
     public function setDistributionPlaceUsers(Collection $distributionPlaceUsers, ConnectionInterface $con = null)
     {
-        /** @var DistributionPlaceUser[] $distributionPlaceUsersToDelete */
+        /**
+ * @var DistributionPlaceUser[] $distributionPlaceUsersToDelete
+*/
         $distributionPlaceUsersToDelete = $this->getDistributionPlaceUsers(new Criteria(), $con)->diff($distributionPlaceUsers);
 
 
@@ -2442,9 +2456,9 @@ abstract class User implements ActiveRecordInterface
     /**
      * Returns the number of related BaseDistributionPlaceUser objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseDistributionPlaceUser objects.
      * @throws PropelException
      */
@@ -2539,9 +2553,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|DistributionPlaceUser[] List of DistributionPlaceUser objects
      */
     public function getDistributionPlaceUsersJoinDistributionPlace(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -2564,9 +2578,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|DistributionPlaceUser[] List of DistributionPlaceUser objects
      */
     public function getDistributionPlaceUsersJoinEventPrinter(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -2584,7 +2598,7 @@ abstract class User implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addEventUsers()
+     * @see    addEventUsers()
      */
     public function clearEventUsers()
     {
@@ -2606,7 +2620,7 @@ abstract class User implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -2632,8 +2646,8 @@ abstract class User implements ActiveRecordInterface
      * If this ChildUser is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|EventUser[] List of EventUser objects
      * @throws PropelException
      */
@@ -2687,13 +2701,15 @@ abstract class User implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $eventUsers A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $eventUsers A Propel collection.
+     * @param  ConnectionInterface $con        Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
     public function setEventUsers(Collection $eventUsers, ConnectionInterface $con = null)
     {
-        /** @var EventUser[] $eventUsersToDelete */
+        /**
+ * @var EventUser[] $eventUsersToDelete
+*/
         $eventUsersToDelete = $this->getEventUsers(new Criteria(), $con)->diff($eventUsers);
 
 
@@ -2717,9 +2733,9 @@ abstract class User implements ActiveRecordInterface
     /**
      * Returns the number of related BaseEventUser objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseEventUser objects.
      * @throws PropelException
      */
@@ -2814,9 +2830,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|EventUser[] List of EventUser objects
      */
     public function getEventUsersJoinEvent(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -2834,7 +2850,7 @@ abstract class User implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addInvoices()
+     * @see    addInvoices()
      */
     public function clearInvoices()
     {
@@ -2856,7 +2872,7 @@ abstract class User implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -2882,8 +2898,8 @@ abstract class User implements ActiveRecordInterface
      * If this ChildUser is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|Invoice[] List of Invoice objects
      * @throws PropelException
      */
@@ -2937,13 +2953,15 @@ abstract class User implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $invoices A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $invoices A Propel collection.
+     * @param  ConnectionInterface $con      Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
     public function setInvoices(Collection $invoices, ConnectionInterface $con = null)
     {
-        /** @var Invoice[] $invoicesToDelete */
+        /**
+ * @var Invoice[] $invoicesToDelete
+*/
         $invoicesToDelete = $this->getInvoices(new Criteria(), $con)->diff($invoices);
 
 
@@ -2967,9 +2985,9 @@ abstract class User implements ActiveRecordInterface
     /**
      * Returns the number of related BaseInvoice objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseInvoice objects.
      * @throws PropelException
      */
@@ -3064,9 +3082,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Invoice[] List of Invoice objects
      */
     public function getInvoicesJoinEventContactRelatedByCustomerEventContactid(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -3089,9 +3107,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Invoice[] List of Invoice objects
      */
     public function getInvoicesJoinEventBankinformation(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -3114,9 +3132,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Invoice[] List of Invoice objects
      */
     public function getInvoicesJoinEventContactRelatedByEventContactid(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -3139,9 +3157,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Invoice[] List of Invoice objects
      */
     public function getInvoicesJoinInvoiceRelatedByCanceledInvoiceid(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -3164,9 +3182,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Invoice[] List of Invoice objects
      */
     public function getInvoicesJoinInvoiceType(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -3184,7 +3202,7 @@ abstract class User implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addOrdersRelatedByCancellationCreatedByUserid()
+     * @see    addOrdersRelatedByCancellationCreatedByUserid()
      */
     public function clearOrdersRelatedByCancellationCreatedByUserid()
     {
@@ -3206,7 +3224,7 @@ abstract class User implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -3232,8 +3250,8 @@ abstract class User implements ActiveRecordInterface
      * If this ChildUser is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|Order[] List of Order objects
      * @throws PropelException
      */
@@ -3287,13 +3305,15 @@ abstract class User implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $ordersRelatedByCancellationCreatedByUserid A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $ordersRelatedByCancellationCreatedByUserid A Propel collection.
+     * @param  ConnectionInterface $con                                        Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
     public function setOrdersRelatedByCancellationCreatedByUserid(Collection $ordersRelatedByCancellationCreatedByUserid, ConnectionInterface $con = null)
     {
-        /** @var Order[] $ordersRelatedByCancellationCreatedByUseridToDelete */
+        /**
+ * @var Order[] $ordersRelatedByCancellationCreatedByUseridToDelete
+*/
         $ordersRelatedByCancellationCreatedByUseridToDelete = $this->getOrdersRelatedByCancellationCreatedByUserid(new Criteria(), $con)->diff($ordersRelatedByCancellationCreatedByUserid);
 
 
@@ -3317,9 +3337,9 @@ abstract class User implements ActiveRecordInterface
     /**
      * Returns the number of related BaseOrder objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseOrder objects.
      * @throws PropelException
      */
@@ -3414,9 +3434,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Order[] List of Order objects
      */
     public function getOrdersRelatedByCancellationCreatedByUseridJoinEventTable(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -3434,7 +3454,7 @@ abstract class User implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addOrdersRelatedByUserid()
+     * @see    addOrdersRelatedByUserid()
      */
     public function clearOrdersRelatedByUserid()
     {
@@ -3456,7 +3476,7 @@ abstract class User implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -3482,8 +3502,8 @@ abstract class User implements ActiveRecordInterface
      * If this ChildUser is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|Order[] List of Order objects
      * @throws PropelException
      */
@@ -3537,13 +3557,15 @@ abstract class User implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $ordersRelatedByUserid A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $ordersRelatedByUserid A Propel collection.
+     * @param  ConnectionInterface $con                   Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
     public function setOrdersRelatedByUserid(Collection $ordersRelatedByUserid, ConnectionInterface $con = null)
     {
-        /** @var Order[] $ordersRelatedByUseridToDelete */
+        /**
+ * @var Order[] $ordersRelatedByUseridToDelete
+*/
         $ordersRelatedByUseridToDelete = $this->getOrdersRelatedByUserid(new Criteria(), $con)->diff($ordersRelatedByUserid);
 
 
@@ -3567,9 +3589,9 @@ abstract class User implements ActiveRecordInterface
     /**
      * Returns the number of related BaseOrder objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseOrder objects.
      * @throws PropelException
      */
@@ -3664,9 +3686,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Order[] List of Order objects
      */
     public function getOrdersRelatedByUseridJoinEventTable(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -3684,7 +3706,7 @@ abstract class User implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addOrderDetails()
+     * @see    addOrderDetails()
      */
     public function clearOrderDetails()
     {
@@ -3706,7 +3728,7 @@ abstract class User implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -3732,8 +3754,8 @@ abstract class User implements ActiveRecordInterface
      * If this ChildUser is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
      * @throws PropelException
      */
@@ -3787,13 +3809,15 @@ abstract class User implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $orderDetails A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $orderDetails A Propel collection.
+     * @param  ConnectionInterface $con          Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
     public function setOrderDetails(Collection $orderDetails, ConnectionInterface $con = null)
     {
-        /** @var OrderDetail[] $orderDetailsToDelete */
+        /**
+ * @var OrderDetail[] $orderDetailsToDelete
+*/
         $orderDetailsToDelete = $this->getOrderDetails(new Criteria(), $con)->diff($orderDetails);
 
 
@@ -3817,9 +3841,9 @@ abstract class User implements ActiveRecordInterface
     /**
      * Returns the number of related BaseOrderDetail objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseOrderDetail objects.
      * @throws PropelException
      */
@@ -3914,9 +3938,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
      */
     public function getOrderDetailsJoinAvailability(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -3939,9 +3963,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
      */
     public function getOrderDetailsJoinMenuGroup(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -3964,9 +3988,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
      */
     public function getOrderDetailsJoinMenuSize(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -3989,9 +4013,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
      */
     public function getOrderDetailsJoinMenu(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -4014,9 +4038,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|OrderDetail[] List of OrderDetail objects
      */
     public function getOrderDetailsJoinOrder(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -4034,7 +4058,7 @@ abstract class User implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addOrderInProgresses()
+     * @see    addOrderInProgresses()
      */
     public function clearOrderInProgresses()
     {
@@ -4056,7 +4080,7 @@ abstract class User implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -4082,8 +4106,8 @@ abstract class User implements ActiveRecordInterface
      * If this ChildUser is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|OrderInProgress[] List of OrderInProgress objects
      * @throws PropelException
      */
@@ -4137,13 +4161,15 @@ abstract class User implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $orderInProgresses A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $orderInProgresses A Propel collection.
+     * @param  ConnectionInterface $con               Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
     public function setOrderInProgresses(Collection $orderInProgresses, ConnectionInterface $con = null)
     {
-        /** @var OrderInProgress[] $orderInProgressesToDelete */
+        /**
+ * @var OrderInProgress[] $orderInProgressesToDelete
+*/
         $orderInProgressesToDelete = $this->getOrderInProgresses(new Criteria(), $con)->diff($orderInProgresses);
 
 
@@ -4167,9 +4193,9 @@ abstract class User implements ActiveRecordInterface
     /**
      * Returns the number of related BaseOrderInProgress objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BaseOrderInProgress objects.
      * @throws PropelException
      */
@@ -4264,9 +4290,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|OrderInProgress[] List of OrderInProgress objects
      */
     public function getOrderInProgressesJoinMenuGroup(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -4289,9 +4315,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|OrderInProgress[] List of OrderInProgress objects
      */
     public function getOrderInProgressesJoinOrder(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -4309,7 +4335,7 @@ abstract class User implements ActiveRecordInterface
      * them to be refetched by subsequent calls to accessor method.
      *
      * @return void
-     * @see        addPaymentRecieveds()
+     * @see    addPaymentRecieveds()
      */
     public function clearPaymentRecieveds()
     {
@@ -4331,7 +4357,7 @@ abstract class User implements ActiveRecordInterface
      * however, you may wish to override this method in your stub class to provide setting appropriate
      * to your application -- for example, setting the initial array to the values stored in database.
      *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
+     * @param boolean $overrideExisting If set to true, the method call initializes
      *                                        the collection even if it is not empty
      *
      * @return void
@@ -4357,8 +4383,8 @@ abstract class User implements ActiveRecordInterface
      * If this ChildUser is new, it will return
      * an empty collection or the current collection; the criteria is ignored on a new object.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
+     * @param  Criteria            $criteria optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con      optional connection object
      * @return ObjectCollection|PaymentRecieved[] List of PaymentRecieved objects
      * @throws PropelException
      */
@@ -4412,13 +4438,15 @@ abstract class User implements ActiveRecordInterface
      * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
      * and new objects from the given Propel collection.
      *
-     * @param      Collection $paymentRecieveds A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
+     * @param  Collection          $paymentRecieveds A Propel collection.
+     * @param  ConnectionInterface $con              Optional connection object
      * @return $this|ChildUser The current object (for fluent API support)
      */
     public function setPaymentRecieveds(Collection $paymentRecieveds, ConnectionInterface $con = null)
     {
-        /** @var PaymentRecieved[] $paymentRecievedsToDelete */
+        /**
+ * @var PaymentRecieved[] $paymentRecievedsToDelete
+*/
         $paymentRecievedsToDelete = $this->getPaymentRecieveds(new Criteria(), $con)->diff($paymentRecieveds);
 
 
@@ -4442,9 +4470,9 @@ abstract class User implements ActiveRecordInterface
     /**
      * Returns the number of related BasePaymentRecieved objects.
      *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
+     * @param  Criteria            $criteria
+     * @param  boolean             $distinct
+     * @param  ConnectionInterface $con
      * @return int             Count of related BasePaymentRecieved objects.
      * @throws PropelException
      */
@@ -4539,9 +4567,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|PaymentRecieved[] List of PaymentRecieved objects
      */
     public function getPaymentRecievedsJoinInvoice(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -4564,9 +4592,9 @@ abstract class User implements ActiveRecordInterface
      * api reasonable.  You can provide public methods for those you
      * actually need in User.
      *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @param  Criteria            $criteria     optional Criteria object to narrow the query
+     * @param  ConnectionInterface $con          optional connection object
+     * @param  string              $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|PaymentRecieved[] List of PaymentRecieved objects
      */
     public function getPaymentRecievedsJoinPaymentType(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
@@ -4607,7 +4635,7 @@ abstract class User implements ActiveRecordInterface
      * This method is used to reset all php object references (not the actual reference in the database).
      * Necessary for object serialisation.
      *
-     * @param      boolean $deep Whether to also clear the references on all referrer objects.
+     * @param boolean $deep Whether to also clear the references on all referrer objects.
      */
     public function clearAllReferences($deep = false)
     {
@@ -4682,6 +4710,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Code to be run before persisting the object
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -4695,6 +4724,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Code to be run after persisting the object
+     *
      * @param ConnectionInterface $con
      */
     public function postSave(ConnectionInterface $con = null)
@@ -4706,6 +4736,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Code to be run before inserting to database
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -4719,6 +4750,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Code to be run after inserting to database
+     *
      * @param ConnectionInterface $con
      */
     public function postInsert(ConnectionInterface $con = null)
@@ -4730,6 +4762,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Code to be run before updating the object in database
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -4743,6 +4776,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Code to be run after updating the object in database
+     *
      * @param ConnectionInterface $con
      */
     public function postUpdate(ConnectionInterface $con = null)
@@ -4754,6 +4788,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Code to be run before deleting the object in database
+     *
      * @param  ConnectionInterface $con
      * @return boolean
      */
@@ -4767,6 +4802,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Code to be run after deleting the object in database
+     *
      * @param ConnectionInterface $con
      */
     public function postDelete(ConnectionInterface $con = null)
@@ -4817,5 +4853,4 @@ abstract class User implements ActiveRecordInterface
 
         throw new BadMethodCallException(sprintf('Call to undefined method: %s.', $name));
     }
-
 }
