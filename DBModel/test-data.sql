@@ -71,17 +71,6 @@ COMMIT;
 
 
 -- -----------------------------------------------------
--- Data for table `availability`
--- -----------------------------------------------------
-START TRANSACTION;
-INSERT INTO `availability` (`availabilityid`, `name`) VALUES (DEFAULT, 'AVAILABLE');
-INSERT INTO `availability` (`availabilityid`, `name`) VALUES (DEFAULT, 'DELAYED');
-INSERT INTO `availability` (`availabilityid`, `name`) VALUES (DEFAULT, 'OUT OF ORDER');
-
-COMMIT;
-
-
--- -----------------------------------------------------
 -- Data for table `menu`
 -- -----------------------------------------------------
 START TRANSACTION;

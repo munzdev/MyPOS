@@ -65,3 +65,13 @@ START TRANSACTION;
 INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`) VALUES (DEFAULT, 1, 'Normal', 1);
 
 COMMIT;
+
+-- -----------------------------------------------------
+-- Data for table `availability`
+-- -----------------------------------------------------
+START TRANSACTION;
+INSERT INTO `availability` (`availabilityid`, `name`) VALUES (DEFAULT, 'AVAILABLE');
+INSERT INTO `availability` (`availabilityid`, `name`) VALUES (DEFAULT, 'DELAYED');
+INSERT INTO `availability` (`availabilityid`, `name`) VALUES (DEFAULT, 'OUT_OF_ORDER');
+
+COMMIT;
