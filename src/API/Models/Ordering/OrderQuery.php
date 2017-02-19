@@ -4,9 +4,10 @@ namespace API\Models\Ordering;
 
 use API\Models\Ordering\Base\OrderQuery as BaseOrderQuery;
 use API\Models\Ordering\Map\OrderTableMap;
+use PDO;
 use Propel\Runtime\Propel;
 use React\Socket\ConnectionInterface;
-use const API\ORDER_AVAILABILITY_OUT_OF_ORDER;
+use const API\ORDER_AVAILABILITY_AVAILABLE;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'order' table.
@@ -61,7 +62,7 @@ class OrderQuery extends BaseOrderQuery
             $connection = Propel::getWriteConnection(OrderTableMap::DATABASE_NAME);
         }
 
-        $sql = "SELECT o.orderid
+        $sql = "SELECT DISTINCT o.orderid
                 FROM `order` o
                 INNER JOIN order_detail od ON od.orderid = o.orderid
                 INNER JOIN event_table et ON et.event_tableid = o.event_tableid
@@ -81,18 +82,18 @@ class OrderQuery extends BaseOrderQuery
 
         $sql .= "WHERE od.distribution_finished IS NULL
                            AND od.verified = 1
-                           AND od.availabilityid <> :availbilityid
+                           AND od.availabilityid = :availbilityid
                            AND oip.order_in_progressid IS NULL
-                     ORDER BY o.priority ASC
+                     ORDER BY o.priority ASC                     
                      LIMIT $limit";
 
         $statement = $connection->prepare($sql);
         $statement->bindValue(":userid", $userid);
         $statement->bindValue(":eventid", $eventid);
-        $statement->bindValue(":availbilityid", ORDER_AVAILABILITY_OUT_OF_ORDER);
+        $statement->bindValue(":availbilityid", ORDER_AVAILABILITY_AVAILABLE);
         $statement->execute();
 
-        $orderids = $statement->fetchAll(\PDO::FETCH_COLUMN);
+        $orderids = $statement->fetchAll(PDO::FETCH_COLUMN);
 
         if ($orderids) {
             $this->filterByOrderid($orderids);
