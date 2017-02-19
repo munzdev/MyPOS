@@ -187,11 +187,12 @@ abstract class Controller
             return $json;
         }
         
+        $firstKey = array_shift($keys);
+        
         if (!array_key_exists($firstKey, $json)) {
             return null;
         }
-        
-        $firstKey = array_shift($keys);
+                
         $json = (array) $json;
         $jsonValue = $json[$firstKey];
 
