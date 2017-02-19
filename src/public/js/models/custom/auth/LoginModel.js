@@ -4,13 +4,15 @@ define(["models/BaseModel"
 
     return class LoginModel extends BaseModel
     {
-        urlRoot() { return app.API + "Login"; }
+        url() { return app.API + "Login"; }
+        idAttribute() { return 'userid'; }
 
         defaults()
         {
             return {
-                username: '',
-                password: '',
+                userid: null,
+                username: null,
+                password: null,
                 rememberMe: false
             };
         }

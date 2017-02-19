@@ -114,8 +114,12 @@ function( Webservice,
                             window.location.href = app.URL + hash;
                        });                
             });            
+            app.auth.on("pre-logout", () => {
+                app.ws.api.Disconnect();
+                app.ws.chat.Disconnect();
+            });
             app.auth.on("logout", () => {
-               Backbone.history.navigate(app.URL, { replace: true });
+                app.AbstractView.changeHash("");
             });
             app.auth.on("noAutologin", initApp);
             

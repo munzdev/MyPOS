@@ -23,7 +23,7 @@ define(["websocket/WebsocketClient"
         {
             if(DEBUG) console.log("UNREGISTERED TO CHANEL: " + app.auth.authUser.get('Userid'));
 
-            this.ws.unsubscribe(app.auth.authUser.get('EventUser').get('EventUserid'));
+            this.ws.unsubscribe(app.auth.authUser.get('EventUser').get('EventUserid').toString());
         }
         
         _messageRecieved(data)

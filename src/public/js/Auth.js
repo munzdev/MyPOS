@@ -61,6 +61,10 @@ define([
         logout() {
             return this.loginData.destroy()
                 .done(() => {
+                    this.trigger("pre-logout");
+                    this.authUser.clear();
+                    this.loginData.clear();
+                    
                     this.logged_in = false;
                     this.trigger("logout");                    
                 });

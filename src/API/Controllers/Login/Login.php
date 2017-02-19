@@ -63,7 +63,8 @@ class Login extends Controller
     protected function get() : void
     {
         if ($this->auth->isLoggedIn()) {
-            $this->withJson(array('username' => $this->auth->getCurrentUser()->getUsername()));
+            $this->withJson(array('username' => $this->auth->getCurrentUser()->getUsername(),
+                                  'userid' => $this->auth->getCurrentUser()->getUserid()));
             return;
         }
 
@@ -83,6 +84,7 @@ class Login extends Controller
             $this->auth->doLogin($user->getUsername());
 
             $this->withJson(array('username' => $user->getUsername(),
+                                  'userid' => $user->getUserid(),
                                   'rememberMe' => true));
         }
     }
@@ -97,5 +99,7 @@ class Login extends Controller
 
         $this->auth->logout();
         RememberMe::destroy();
+        
+        $this->withJson(true);
     }
 }
