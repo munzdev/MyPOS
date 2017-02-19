@@ -6,132 +6,123 @@ use Ratchet\ConnectionInterface;
 use const API\USER_ROLE_DISTRIBUTION;
 use const API\USER_ROLE_MANAGER;
 
-class API extends WebsocketServer {
-
-    private $a_subscribers = array();
+class API extends WebsocketServer
+{
+    private $subscribers = array();
     
-    public function onPublish(ConnectionInterface $o_connection, $o_topic, $str_event, array $a_exclude, array $a_eligible) {
-        $o_connection->callError($o_connection->getId(), $o_topic, 'Publish not supported');
+    public function onPublish(ConnectionInterface $connection, $topic, $event, array $exclude, array $eligible)
+    {
+        $connection->callError($connection->getId(), $topic, 'Publish not supported');
     }
 
-    public function onCall(ConnectionInterface $o_connection, $id, $o_topic, array $params) {
-        echo "API command " . $o_topic->getId() . "\n";
+    public function onCall(ConnectionInterface $connection, $id, $topic, array $params)
+    {
+        echo "API command " . $topic->getId() . "\n";
 
-        switch($o_topic->getId())
-        {
+        switch ($topic->getId()) {
             case 'manager-callback':
-                if(isset($this->a_subscribers[USER_ROLE_MANAGER]))
-                {
-                    $o_target_topic = $this->a_subscribers[USER_ROLE_MANAGER]['topic'];
+                if (isset($this->subscribers[USER_ROLE_MANAGER])) {
+                    $targetTopic = $this->subscribers[USER_ROLE_MANAGER]['topic'];
 
-                    $a_message = array('command' => $o_topic->getId(),
-                                       'options' => array('systemMessage' => 'Eine Rückrufanforderung wurde hinzugefügt!'));
+                    $message = array('command' => $topic->getId(),
+                                     'options' => array('systemMessage' => 'Eine Rückrufanforderung wurde hinzugefügt!'));
 
-                    $o_target_topic->broadcast(json_encode($a_message));
+                    $targetTopic->broadcast(json_encode($message));
                 }
                 break;
 
             case 'manager-check':
-                if(isset($this->a_subscribers[USER_ROLE_MANAGER]))
-                {
-                    $o_target_topic = $this->a_subscribers[USER_ROLE_MANAGER]['topic'];
+                if (isset($this->subscribers[USER_ROLE_MANAGER])) {
+                    $targetTopic = $this->subscribers[USER_ROLE_MANAGER]['topic'];
 
-                    $a_message = array('command' => $o_topic->getId(),
-                                       'options' => array('systemMessage' => 'Ein Sonderwunsch wurde hinzugefügt!'));
+                    $message = array('command' => $topic->getId(),
+                                     'options' => array('systemMessage' => 'Ein Sonderwunsch wurde hinzugefügt!'));
 
-                    $o_target_topic->broadcast(json_encode($a_message));
+                    $targetTopic->broadcast(json_encode($message));
                 }
                 break;
 
             case 'manager-groupmessage':
-                $i_user_roleid = $params[0];
+                $userRoleid = $params[0];
 
-                $a_user_ids = array();
+                $userids = array();
 
-                if(isset($this->a_subscribers[$i_user_roleid]))
-                {
-                    $a_user_ids = array_values($this->a_subscribers[$i_user_roleid]['users']);
+                if (isset($this->subscribers[$userRoleid])) {
+                    $userids = array_values($this->subscribers[$userRoleid]['users']);
                 }
 
-                return $o_connection->callResult($id, $a_user_ids);
-                break;
+                return $connection->callResult($id, $userids);
 
             case 'distribution-update':
-                if(isset($this->a_subscribers[USER_ROLE_DISTRIBUTION]))
-                {
-                    $o_target_topic = $this->a_subscribers[USER_ROLE_DISTRIBUTION]['topic'];
+                if (isset($this->subscribers[USER_ROLE_DISTRIBUTION])) {
+                    $targetTopic = $this->subscribers[USER_ROLE_DISTRIBUTION]['topic'];
 
-                    $a_message = array('command' => $o_topic->getId());
+                    $message = array('command' => $topic->getId());
 
-                    $o_target_topic->broadcast(json_encode($a_message));
+                    $targetTopic->broadcast(json_encode($message));
                 }
                 break;
 
             case 'global:product-update':
-                $a_userids = array();
+                $userids = array();
 
-                foreach ($this->a_subscribers as $a_subscriber)
-                {
-                    $o_target_topic = $a_subscriber['topic'];
+                foreach ($this->subscribers as $subscriber) {
+                    $targetTopic = $subscriber['topic'];
 
-                    $a_userids_message_recieved = array_intersect($a_subscriber['users'], $a_userids);
+                    $useridsMessageRecieved = array_intersect($subscriber['users'], $userids);
 
-                    $a_exclude = array();
+                    $exclude = array();
 
-                    foreach($a_subscriber['users'] as $i_sessionId => $i_userid)
-                    {
-                        if(array_search($i_userid, $a_userids_message_recieved) !== false)
-                        {
-                            $a_exclude[] = $i_sessionId;
+                    foreach ($subscriber['users'] as $sessionId => $userid) {
+                        if (array_search($userid, $useridsMessageRecieved) !== false) {
+                            $exclude[] = $sessionId;
                         }
                     }
 
-                    $a_message = array('command' => $o_topic->getId());
+                    $message = array('command' => $topic->getId());
 
-                    $o_target_topic->broadcast(json_encode($a_message), $a_exclude);
+                    $targetTopic->broadcast(json_encode($message), $exclude);
 
-                    $a_userids = array_merge($a_subscriber['users'], $a_userids);
+                    $userids = array_merge($subscriber['users'], $userids);
                 }
                 break;
 
             default:
-                $o_connection->callError($id, $o_topic, 'Command not supported');
+                $connection->callError($id, $topic, 'Command not supported');
                 break;
         }
     }
 
-    public function onSubscribe(ConnectionInterface $o_connection, $o_topic)
+    public function onSubscribe(ConnectionInterface $connection, $topic)
     {
-        list($i_userid, $i_user_roleid) = explode('-', $o_topic->getId());
+        list($userid, $userRoleid) = explode('-', $topic->getId());
 
-        echo "API Subscriber: $o_connection->resourceId with Userid $i_userid for Role: $i_user_roleid\n";
+        echo "API Subscriber: $connection->resourceId with Userid $userid for Role: $userRoleid\n";
 
-        if(!isset($this->a_subscribers[$i_user_roleid]))
-        {
-            $this->a_subscribers[$i_user_roleid] = array('users' => array($o_connection->WAMP->sessionId => $i_userid),
-                                                         'topic' => $o_topic);
-        }
-        else
-        {
-            $this->a_subscribers[$i_user_roleid]['users'][$o_connection->resourceId] = $i_userid;
+        if (!isset($this->subscribers[$userRoleid])) {
+            $this->subscribers[$userRoleid] = array('users' => array($connection->WAMP->sessionId => $userid),
+                                                         'topic' => $topic);
+        } else {
+            $this->subscribers[$userRoleid]['users'][$connection->resourceId] = $userid;
         }
     }
 
-    public function onUnSubscribe(ConnectionInterface $o_connection, $o_topic)
+    public function onUnSubscribe(ConnectionInterface $connection, $topic)
     {
-        list($i_userid, $i_user_roleid) = explode('-', $o_topic->getId());
+        list($userid, $userRoleid) = explode('-', $topic->getId());
 
-        echo "API Unsubscriber: $o_connection->resourceId with Userid $i_userid  for Role: $i_user_roleid\n";
+        echo "API Unsubscriber: $connection->resourceId with Userid $userid  for Role: $userRoleid\n";
 
-        if(isset($this->a_subscribers[$i_user_roleid]))
-        {
-            $i_resourceId = array_search($i_userid, $this->a_subscribers[$i_user_roleid]['users']);
+        if (isset($this->subscribers[$userRoleid])) {
+            $resourceId = array_search($userid, $this->subscribers[$userRoleid]['users']);
 
-            if($i_resourceId)
-                unset($this->a_subscribers[$i_user_roleid]['users'][$i_resourceId]);
+            if ($resourceId) {
+                unset($this->subscribers[$userRoleid]['users'][$resourceId]);
+            }
 
-            if(count($this->a_subscribers[$i_user_roleid]['users']) == 0)
-                unset($this->a_subscribers[$i_user_roleid]);
+            if (count($this->subscribers[$userRoleid]['users']) == 0) {
+                unset($this->subscribers[$userRoleid]);
+            }
         }
     }
 }
