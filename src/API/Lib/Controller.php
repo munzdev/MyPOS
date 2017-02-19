@@ -96,8 +96,8 @@ abstract class Controller
 
                 $model = null;
 
-                foreach ($value as $model) {
-                    if (isset($model[$primaryKeyName]) && $key = array_search($model[$primaryKeyName], $existingKeys)) {
+                foreach ($value as $item) {
+                    if (isset($item[$primaryKeyName]) && $key = array_search($item[$primaryKeyName], $existingKeys)) {
                         $model = $propel[$key];
                         break;
                     }
