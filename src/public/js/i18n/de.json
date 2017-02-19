@@ -425,5 +425,11 @@
         "orderDoneVerifyText": "Sind sie sicher das die Bestellung fertig ist?",
         "abort": "Abbrechen",
         "continue": "Fortfahren"
+    },
+    "DistributionSummaryView": {
+        "noOrder": "Zurzeit keine offenen Bestellungen für diese Ausgabestelle vorhanden!",
+        "orders": "Bestellungen",
+        "specialOrder": "Sonderwunsch",
+        "mixedWith": "Gemischt mit"
     }
 }

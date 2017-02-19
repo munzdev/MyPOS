@@ -12,6 +12,9 @@
     <% if(rights & USER_ROLE_DISTRIBUTION_OVERVIEW) { %>
         <li><a href="#distribution" class="header-link ui-btn ui-btn-icon-left ui-icon-star">Ausgabe</a></li>
     <% } %>
+    <% if(rights & USER_ROLE_DISTRIBUTION_PREVIEW) { %>
+        <li><a href="#distribution-summary" class="header-link ui-btn ui-btn-icon-left ui-icon-table">Ausgabe Übersicht</a></li>
+    <% } %>    
     <% if(rights & USER_ROLE_MANAGER_OVERVIEW) { %>
         <li><a href="#manager" class="header-link ui-btn ui-btn-icon-left ui-icon-eye">Manager</a></li>
     <% } %>

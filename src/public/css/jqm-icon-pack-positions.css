@@ -1,3 +1,7 @@
 .ui-icon-euro:after {
     background-position: 0.5em 0.25em;
 }
+
+.ui-icon-table:after {
+    background-position: 0.22em 0.22em;
+}

@@ -16,6 +16,7 @@ define(["views/dialoges/LoginView",
         "views/pages/InvoiceAddView",
         "views/pages/InvoicePaymentView",
         "views/pages/DistributionView",
+        "views/pages/DistributionSummaryView",
         /*"views/pages/ManagerView",
         "views/pages/ManagerCallbackView",
         "views/pages/ManagerCheckView",
@@ -58,6 +59,7 @@ define(["views/dialoges/LoginView",
             InvoiceAddView,
             InvoicePaymentView,
             DistributionView,
+            DistributionSummaryView,
             ManagerView,
             ManagerCallbackView,
             ManagerCheckView,
@@ -146,6 +148,7 @@ define(["views/dialoges/LoginView",
                     "invoice/id/:invoiceid": "invoice_info",
                     "invoice/id/:invoiceid/payment": "invoice_add_payment",
                     "distribution": "distribution",
+                    "distribution-summary": "distribution_summary",
                     "manager": "manager",
                     "manager-callback": "manager_callback",
                     "manager-check(/verified/:verified)": "manager_check",
@@ -274,6 +277,10 @@ define(["views/dialoges/LoginView",
 
         distribution() {
             this.show(new DistributionView());
+        }
+        
+        distribution_summary() {
+            this.show(new DistributionSummaryView());
         }
 
         manager() {

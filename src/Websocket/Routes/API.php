@@ -4,6 +4,7 @@ namespace Websocket\Routes;
 
 use Ratchet\ConnectionInterface;
 use const API\USER_ROLE_DISTRIBUTION;
+use const API\USER_ROLE_DISTRIBUTION_PREVIEW;
 use const API\USER_ROLE_MANAGER;
 
 class API extends WebsocketServer
@@ -56,6 +57,16 @@ class API extends WebsocketServer
             case 'distribution-update':
                 if (isset($this->subscribers[USER_ROLE_DISTRIBUTION])) {
                     $targetTopic = $this->subscribers[USER_ROLE_DISTRIBUTION]['topic'];
+
+                    $message = array('command' => $topic->getId());
+
+                    $targetTopic->broadcast(json_encode($message));
+                }
+                break;
+                
+            case 'distribution-summary-update':
+                if (isset($this->subscribers[USER_ROLE_DISTRIBUTION_PREVIEW])) {
+                    $targetTopic = $this->subscribers[USER_ROLE_DISTRIBUTION_PREVIEW]['topic'];
 
                     $message = array('command' => $topic->getId());
 

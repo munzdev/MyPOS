@@ -93,6 +93,10 @@ function( Webservice,
                             {
                                 hash = "distribution";
                             }
+                            else if(rights & USER_ROLE_DISTRIBUTION_PREVIEW)
+                            {
+                                hash = "distribution-summary";
+                            }
                             else if(rights & USER_ROLE_MANAGER_OVERVIEW)
                             {
                                 hash = "manager";

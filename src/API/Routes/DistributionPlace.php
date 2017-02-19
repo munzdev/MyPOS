@@ -5,6 +5,8 @@ $app->group(
     function () {
         $this->any('', new API\Controllers\DistributionPlace\DistributionPlace($this))
             ->setName('DistributionPlace');
+         $this->any('/Summary', new API\Controllers\DistributionPlace\DistributionPlaceSummary($this))
+            ->setName('DistributionPlace-Summary');
         $this->any('/Availability', new API\Controllers\DistributionPlace\DistributionPlaceAvailability($this))
             ->setName('DistributionPlace-Availability');
         $this->any('/Amount', new API\Controllers\DistributionPlace\DistributionPlaceAmount($this))

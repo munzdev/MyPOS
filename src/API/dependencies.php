@@ -5,6 +5,7 @@ use API\Models\User\UserQuery;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
+use Propel\Runtime\Propel;
 use const API\PUBLIC_ROOT;
 
 // DIC configuration
@@ -48,7 +49,7 @@ $container['db'] = function ($container) {
     
     registerPropelConnection($dbConfig);
     
-    return true;
+    return Propel::getConnection();
 };
 
 $container['Auth'] = function ($container) {

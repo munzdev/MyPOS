@@ -1,0 +1,46 @@
+ <div data-role="content">
+    <div class="nav-header"></div>
+    <div role="main" class="ui-content" id='current-menu'>
+        <% if(distributionSummary.length == 0) { %>
+              <h2 style="text-align: center"><%= t.noOrder %></h2>
+        <% } else { %>
+            <fieldset style="border: lightgrey solid thin ; border-radius: 10px; padding: 10px">
+                <legend><strong><%= t.orders %></strong></legend>
+                <% distributionSummary.each(function(orderDetail) { %>
+                    <div class="distribution-order ui-grid-a ui-body-a ui-corner-all">
+                        <h2>
+                            <%- orderDetail.get('Amount') %>x
+                            <% if(orderDetail.get('Menuid')) { %>
+                                <%- orderDetail.get('Menu').get('Name') %>
+                            <% } else { %>
+                                <%= t.specialOrder %>
+                            <% } %>
+                        </h2>
+                        <p>
+                            <strong style="white-space: normal;">
+                                <% if(orderDetail.get('MenuSizeid') != ORDER_DEFAULT_SIZEID) { %>
+                                    <%- orderDetail.get('MenuSize').get('Name') %>
+                                <% } %>
+                                <% if(orderDetail.get('OrderDetailMixedWiths').length) { %>
+                                    <%= t.mixedWith %>:
+                                    <% orderDetail.get('OrderDetailMixedWiths').each(function(orderDetailMixedWith) { %>
+                                        <%- orderDetailMixedWith.get('Menu').get('Name') %> -
+                                    <% }) %>
+                                    <% if(orderDetail.get('OrderDetailExtras').length || orderDetail.get('ExtraDetail').length) { %>
+                                        ;
+                                    <% } %>
+                                <% } %>
+                                <% if( orderDetail.get('OrderDetailExtras').length) { %>
+                                    <% orderDetail.get('OrderDetailExtras').each(function(orderDetailExtra, index) { %>
+                                        <%- orderDetailExtra.get('MenuPossibleExtra').get('MenuExtra').get('Name') %><% if(index < orderDetail.get('OrderDetailExtras').length - 1) { %>,<% } %>
+                                    <% }) %>
+                                <% } %>
+                                <p><%- orderDetail.get('ExtraDetail') %></p>
+                            </strong>
+                        </p>
+                    </div>
+                <% }) %>
+            </fieldset>
+        <% } %>
+    </div>
+</div>

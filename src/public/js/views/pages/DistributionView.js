@@ -15,6 +15,7 @@ define(['Webservice',
             this.distributionOrderDetail = new DistributionOrderDetail();
             this.distributionOrderDetail.fetch()
                                         .done(() => {
+                                            app.ws.api.Trigger("distribution-summary-update");
                                             this.render();
                                         });
         }
@@ -99,7 +100,7 @@ define(['Webservice',
                                                         var webservice = new Webservice();
                                                         webservice.action = "DistributionPlace/Printing/" + result;
                                                         webservice.formData = {EventPrinterid: this.distributionOrderDetail.get('EventPrinterid')};
-                                                        webservice.call();
+                                                        webservice.call();                                                                                                                
 
                                                         this.reload();
                                                     });
@@ -130,7 +131,7 @@ define(['Webservice',
         }
 
         apiCommandReciever(command) {
-            if(command == 'update' && this.distributionOrderDetail.get('Order') == null)
+            if(command == 'distribution-update' && this.distributionOrderDetail.get('Order') == null)
             {
                 this.reload();
             }
