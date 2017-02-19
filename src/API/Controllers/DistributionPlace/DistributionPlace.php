@@ -2,7 +2,6 @@
 
 namespace API\Controllers\DistributionPlace;
 
-use API\Lib\Auth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\DistributionPlace\DistributionPlaceGroupQuery;
@@ -645,6 +644,10 @@ class DistributionPlace extends SecurityController
                                                                 ->filterByEventid($user->getEventUser()->getEventid())
                                                             ->endUse()
                                                             ->findOne();
+        
+        if (!$distributionPlaceUser) {
+            return;
+        }
 
         return $distributionPlaceUser->getEventPrinterid();
     }
