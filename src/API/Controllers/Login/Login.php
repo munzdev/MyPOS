@@ -2,10 +2,10 @@
 
 namespace API\Controllers\Login;
 
-use API\Lib\Auth;
 use API\Lib\Controller;
-use API\Lib\RememberMe;
 use API\Lib\Exceptions\GeneralException;
+use API\Lib\Interfaces\IAuth;
+use API\Lib\RememberMe;
 use API\Models\User\UserQuery;
 use Propel\Runtime\Propel;
 use Respect\Validation\Validator;
@@ -22,7 +22,7 @@ class Login extends Controller
 
         $app->getContainer()['db'];
 
-        $this->auth = $this->app->getContainer()->get('Auth');
+        $this->auth = $this->app->getContainer()->get(IAuth::class);
         $this->privateKey = $this->app->getContainer()['settings']['Auth']['RememberMe_PrivateKey'];
     }
 

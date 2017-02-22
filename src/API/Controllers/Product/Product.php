@@ -25,7 +25,7 @@ class Product extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $menuTypes = MenuTypeQuery::create()

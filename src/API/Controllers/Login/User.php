@@ -2,10 +2,9 @@
 
 namespace API\Controllers\Login;
 
-use API\Lib\Auth;
 use API\Lib\Controller;
+use API\Lib\Interfaces\IAuth;
 use API\Models\Event\Map\EventUserTableMap;
-use API\Models\User\UserQuery;
 use Slim\App;
 
 class User extends Controller
@@ -18,7 +17,7 @@ class User extends Controller
 
         $app->getContainer()['db'];
 
-        $this->auth = $this->app->getContainer()->get('Auth');
+        $this->auth = $this->app->getContainer()->get(IAuth::class);
     }
 
     protected function get() : void

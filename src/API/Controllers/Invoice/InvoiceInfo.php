@@ -2,7 +2,7 @@
 
 namespace API\Controllers\Invoice;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Invoice\InvoiceQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -33,7 +33,7 @@ class InvoiceInfo extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $invoice = InvoiceQuery::create()

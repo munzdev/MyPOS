@@ -10,7 +10,6 @@ use API\Models\Ordering\OrderDetailQuery;
 use API\Models\Ordering\OrderQuery;
 use DateTime;
 use Propel\Runtime\ActiveQuery\Criteria;
-use Propel\Runtime\Propel;
 use const API\ORDER_AVAILABILITY_AVAILABLE;
 use const API\ORDER_AVAILABILITY_OUT_OF_ORDER;
 

@@ -2,6 +2,7 @@
 namespace API\Lib;
 
 use API\Lib\Exceptions\SecurityException;
+use API\Lib\Interfaces\IAuth;
 use Slim\App;
 
 abstract class AdminController extends SecurityController
@@ -10,7 +11,7 @@ abstract class AdminController extends SecurityController
     {
         parent::__construct($app);
 
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         if (!$user->getIsAdmin()) {

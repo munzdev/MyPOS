@@ -2,9 +2,8 @@
 
 namespace API\Controllers\User;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
-use API\Models\Event\Map\EventUserTableMap;
 use API\Models\User\UserQuery;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Slim\App;
@@ -22,7 +21,7 @@ class User extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $currentUser = $auth->getCurrentUser();
 
         $users = UserQuery::create()

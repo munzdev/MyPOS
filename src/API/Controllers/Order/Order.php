@@ -2,7 +2,7 @@
 
 namespace API\Controllers\Order;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\Event\EventTableQuery;
@@ -39,7 +39,7 @@ class Order extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $status = 'open';
@@ -153,7 +153,7 @@ class Order extends SecurityController
 
     public function post() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
         $connection = Propel::getConnection();
 

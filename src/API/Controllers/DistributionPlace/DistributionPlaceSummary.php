@@ -2,6 +2,7 @@
 
 namespace API\Controllers\DistributionPlace;
 
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\DistributionPlace\DistributionPlaceGroupQuery;
 use API\Models\OIP\Base\OrderInProgressQuery;
@@ -24,7 +25,7 @@ class DistributionPlaceSummary extends SecurityController
 
     protected function get() : void
     {        
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
         $config = $this->app->getContainer()['settings'];
 
@@ -130,7 +131,7 @@ class DistributionPlaceSummary extends SecurityController
 
     private function getOpenOrderInProgress()
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $ordersInProgress = OrderInProgressQuery::create()
@@ -154,7 +155,7 @@ class DistributionPlaceSummary extends SecurityController
 
     private function getMyDistributionPlaceGroups()
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $distributionPlaceGroups = DistributionPlaceGroupQuery::create()

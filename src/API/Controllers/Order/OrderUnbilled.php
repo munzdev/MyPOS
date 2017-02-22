@@ -2,7 +2,7 @@
 
 namespace API\Controllers\Order;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\Event\EventBankinformationQuery;
@@ -92,7 +92,7 @@ class OrderUnbilled extends SecurityController
 
     public function post() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
         $config = $this->app->getContainer()['settings'];
 

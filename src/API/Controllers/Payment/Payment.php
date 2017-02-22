@@ -2,7 +2,7 @@
 
 namespace API\Controllers\Payment;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Payment\PaymentCoupon;
 use API\Models\Payment\PaymentRecieved;
@@ -25,7 +25,7 @@ class Payment extends SecurityController
 
     protected function post() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
         $connection = Propel::getConnection();
 

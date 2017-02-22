@@ -1,6 +1,8 @@
 <?php
 
 use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\User\IUserQuery;
 use API\Models\User\UserQuery;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -45,13 +47,17 @@ $container['i18n'] = function () {
 // Propel
 $container['db'] = function ($container) {
     $settings = $container->get('settings');
-    $dbConfig = $settings['propel']['database']['connections']['default'];
+    $dbConfig = $settings['database'];
     
     registerPropelConnection($dbConfig);
     
     return Propel::getConnection();
 };
 
-$container['Auth'] = function ($container) {
-    return new Auth(new UserQuery());
+$container[IAuth::class] = function ($container) : IAuth {
+    return new Auth($container->get(IUserQuery::class));
+};
+
+$container[IUserQuery::class] = function ($container) : IUserQuery {
+    return new UserQuery();
 };

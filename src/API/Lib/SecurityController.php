@@ -2,8 +2,7 @@
 namespace API\Lib;
 
 use API\Lib\Exceptions\SecurityException;
-use API\Models\Event\Map\EventUserTableMap;
-use Slim\App;
+use API\Lib\Interfaces\IAuth;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -13,7 +12,7 @@ abstract class SecurityController extends Controller
 
     public function __invoke(Request $request, Response $response, $args) : Response
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         
         if (!$auth->isLoggedIn()) {
             throw new SecurityException("Access Denied!");
@@ -36,7 +35,7 @@ abstract class SecurityController extends Controller
             return true;
         }
         
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
 
         $user = $auth->getCurrentUser();
         $userRoles = $user->getEventUser()->getUserRoles();

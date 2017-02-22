@@ -2,6 +2,7 @@
 
 namespace API\Controllers\DistributionPlace;
 
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\DistributionPlace\DistributionPlaceGroupQuery;
@@ -41,7 +42,7 @@ class DistributionPlace extends SecurityController
 
     protected function put() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
         $connection = Propel::getConnection();
 
@@ -275,7 +276,7 @@ class DistributionPlace extends SecurityController
 
     private function getCurrentOrder()
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
         $config = $this->app->getContainer()['settings'];
         $assist = $config['App']['Distribution']['OnStandbyAssistOtherDistributionPlaces'];
@@ -430,7 +431,7 @@ class DistributionPlace extends SecurityController
 
     private function getOpenOrderInProgress()
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $ordersInProgress = OrderInProgressQuery::create()
@@ -454,7 +455,7 @@ class DistributionPlace extends SecurityController
 
     private function getMyDistributionPlaceGroups()
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $distributionPlaceGroups = DistributionPlaceGroupQuery::create()
@@ -472,7 +473,7 @@ class DistributionPlace extends SecurityController
 
     private function getOrdersInTodo()
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
         $config = $this->app->getContainer()['settings'];
         $assist = $config['App']['Distribution']['OnStandbyAssistOtherDistributionPlaces'];
@@ -570,7 +571,7 @@ class DistributionPlace extends SecurityController
 
     private function getOrderStatisic()
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
         $config = $this->app->getContainer()['settings'];
         $minutes = $config['App']['Distribution']['OrderProgressTimeRangeMinutes'];
@@ -623,7 +624,7 @@ class DistributionPlace extends SecurityController
 
     private function getMenuExtras()
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $menuExtras = MenuExtraQuery::create()
@@ -635,7 +636,7 @@ class DistributionPlace extends SecurityController
 
     private function getPrinterid()
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $distributionPlaceUser = DistributionPlaceUserQuery::create()

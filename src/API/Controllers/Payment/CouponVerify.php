@@ -2,12 +2,11 @@
 
 namespace API\Controllers\Payment;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Payment\CouponQuery;
 use API\Models\Payment\Map\CouponTableMap;
 use API\Models\Payment\Map\PaymentCouponTableMap;
-use Propel\Runtime\Propel;
 use Respect\Validation\Validator as v;
 use Slim\App;
 
@@ -31,7 +30,7 @@ class CouponVerify extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $coupon = CouponQuery::create()

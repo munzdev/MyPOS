@@ -2,7 +2,7 @@
 
 namespace API\Controllers\Invoice;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Invoice\Invoice;
 use API\Models\Invoice\InvoiceItem;
@@ -48,7 +48,7 @@ class InvoiceModify extends SecurityController
             throw new Exception('Invoice allready canceled');
         }
 
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
         $connection = Propel::getConnection();
 

@@ -2,7 +2,7 @@
 
 namespace API\Controllers\Invoice;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Event\EventBankinformationQuery;
 use API\Models\Event\EventContactQuery;
@@ -33,7 +33,7 @@ class Invoice extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $status = 'unpaid';
@@ -161,7 +161,7 @@ class Invoice extends SecurityController
 
     public function post() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
         $connection = Propel::getConnection();
 

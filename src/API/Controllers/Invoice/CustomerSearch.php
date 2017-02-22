@@ -2,7 +2,7 @@
 
 namespace API\Controllers\Invoice;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Event\EventContactQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -29,7 +29,7 @@ class CustomerSearch extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $eventContacts = EventContactQuery::create()

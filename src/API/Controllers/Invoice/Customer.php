@@ -2,7 +2,7 @@
 
 namespace API\Controllers\Invoice;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Event\EventContact;
 use Slim\App;
@@ -18,7 +18,7 @@ class Customer extends SecurityController
 
     protected function post() : void
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $eventContact = new EventContact();

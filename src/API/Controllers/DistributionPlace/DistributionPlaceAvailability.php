@@ -2,7 +2,7 @@
 
 namespace API\Controllers\DistributionPlace;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\Menu\MenuExtraQuery;
@@ -68,7 +68,7 @@ class DistributionPlaceAvailability extends SecurityController
 
     private function setMenu()
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $menu = MenuQuery::create()
@@ -120,7 +120,7 @@ class DistributionPlaceAvailability extends SecurityController
 
     private function setExtra()
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $menuExtra = MenuExtraQuery::create()
@@ -164,7 +164,7 @@ class DistributionPlaceAvailability extends SecurityController
 
     private function setSpecialExtra()
     {
-        $auth = $this->app->getContainer()->get('Auth');
+        $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         $orderDetail = OrderDetailQuery::create()

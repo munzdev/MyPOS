@@ -1,17 +1,15 @@
 <?php
 namespace API\Lib;
 
-use API\Models\Event\Map\EventUserTableMap;
-use API\Models\User\Map\UserTableMap;
-use API\Models\User\User;
-use API\Models\User\UserQuery;
-use Propel\Runtime\Collection\Collection;
+use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\User\IUser;
+use API\Lib\Interfaces\Models\User\IUserQuery;
 
-class Auth
+class Auth implements IAuth
 {
     private $queryClass;
 
-    public function __construct(UserQuery $queryClass)
+    public function __construct(IUserQuery $queryClass)
     {
         $this->queryClass = $queryClass;
     }
@@ -48,41 +46,30 @@ class Auth
     /**
      *
      * @param string $username
-     * @return User|null
+     * @return IUser|null
      */
     private function findUserObject(string $username) // : ?User
     {
-        $user = $this->queryClass->create()->useEventUserQuery()
-            ->useEventQuery()
-            ->filterByActive(true)
-            ->endUse()
-            ->endUse()
-            ->filterByUsername($username)
-            ->filterByActive(true)
-            ->with(EventUserTableMap::getTableMap()->getPhpName())
-            ->find();
+        $user = $this->queryClass->getActiveEventUserByUsername($username);
 
         if (!$user->isEmpty()) {
             return $user->getFirst();
         }
 
-        return $this->queryClass->create()->filterByUsername($username)
-            ->filterByIsAdmin(true)
-            ->filterByActive(true)
-            ->findOne();
+        return $this->queryClass->getActiveAdminUserByUsername($username);
     }
 
-    public function setLogin(User $user) : void
+    public function setLogin(IUser $user) : void
     {
-        $_SESSION['Auth'][UserTableMap::getTableMap()->getPhpName()] = serialize($user);
-        $_SESSION['Auth'][EventUserTableMap::getTableMap()->getPhpName()] = serialize($user->getEventUser());
+        $_SESSION['Auth']['IUser'] = serialize($user);
+        $_SESSION['Auth']['IEventUser'] = serialize($user->getEventUsers()->getFirst());
     }
 
     /**
      *
-     * @return User|null
+     * @return IUser|null
      */
-    public static function getCurrentUser() // : ?User
+    public function getCurrentUser() // : ?IUser
     {
         static $unserializedUser = null;
 
@@ -91,12 +78,10 @@ class Auth
                 return $unserializedUser;
             }
 
-            $user = unserialize($_SESSION['Auth'][UserTableMap::getTableMap()->getPhpName()]);
-            $eventUser = unserialize($_SESSION['Auth'][EventUserTableMap::getTableMap()->getPhpName()]);
-
-            $collection = new Collection([$eventUser]);
-
-            $user->setEventUsers($collection);
+            $user = unserialize($_SESSION['Auth']['IUser']);            
+            $eventUser = unserialize($_SESSION['Auth']['IEventUser']);
+            
+            $user->getEventUsers()->append($eventUser);
 
             $unserializedUser = $user;
 
@@ -106,7 +91,7 @@ class Auth
         return null;
     }
 
-    public static function isLoggedIn() : bool
+    public function isLoggedIn() : bool
     {
         return isset($_SESSION['Auth']);
     }

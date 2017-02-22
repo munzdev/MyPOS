@@ -2,6 +2,7 @@
 
 namespace API\Models\User;
 
+use API\Lib\Interfaces\Models\User\IUser;
 use API\Models\Event\EventUser;
 use API\Models\User\Base\User as BaseUser;
 
@@ -12,7 +13,7 @@ use API\Models\User\Base\User as BaseUser;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class User extends BaseUser
+class User extends BaseUser implements IUser
 {
     /**
      *
@@ -22,4 +23,5 @@ class User extends BaseUser
     {
         return $this->getEventUsers()->getFirst();
     }
+
 }
