@@ -2,7 +2,7 @@
 
 namespace API\Controllers\Product;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Menu\Map\MenuExtraTableMap;
 use API\Models\Menu\Map\MenuGroupTableMap;
