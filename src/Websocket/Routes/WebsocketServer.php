@@ -6,10 +6,17 @@ use Exception;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 use Ratchet\Wamp\WampServerInterface;
+use Slim\Container;
 use const API\DEBUG;
 
 abstract class WebsocketServer implements WampServerInterface
 {
+    protected $container;
+
+    function __construct(Container $container) {
+        $this->container = $container;
+    }
+
     /**
      *
      * @param ConnectionInterface $connection
@@ -28,7 +35,7 @@ abstract class WebsocketServer implements WampServerInterface
             echo get_class($this) . " Publish from $sender to $reciever: $event\n";
         }
     }
-    
+
     /**
      *
      * @param ConnectionInterface $connection

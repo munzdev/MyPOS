@@ -1,9 +1,10 @@
 <?php
 namespace API\Lib;
 
+use API\Lib\Interfaces\IRememberMe;
 use Exception;
 
-class RememberMe
+class RememberMe implements IRememberMe
 {
     private $key = null;
 
@@ -20,7 +21,7 @@ class RememberMe
     public function parseCookie()
     {
         $cookie = $this->getCookie();
-        
+
         if ($cookie === false) {
             return false;
         }
@@ -32,10 +33,10 @@ class RememberMe
             self::destroy();
             throw new Exception("Cokies has been tampared with");
         }
-        
+
         return $cookie['user'];
     }
-    
+
     /**
      *
      * @param string $hash
@@ -45,11 +46,11 @@ class RememberMe
     public function validateHash(string $hash)
     {
         $cookie = $this->getCookie();
-        
+
         if ($cookie === false) {
             return false;
         }
-        
+
         // Check Database
         if (!$hash) {
             return false; // User must have deleted accout
@@ -101,14 +102,8 @@ class RememberMe
          * "example.com", 1, 1);
          */
         setcookie("auto", $encoded, time() + 31536000, "/", null, null, 1);
-        
-        return $encoded;
-    }
 
-    public function verify(string $data, string $hash)
-    {
-        $rand = substr($hash, 0, 4);
-        return $this->hash($data, $rand) === $hash;
+        return $encoded;
     }
 
     public static function destroy()
@@ -117,12 +112,18 @@ class RememberMe
         setcookie('auto', null, -1, '/');
     }
 
+    private function verify(string $data, string $hash)
+    {
+        $rand = substr($hash, 0, 4);
+        return $this->hash($data, $rand) === $hash;
+    }
+
     private function hash(string $value, string $rand = null)
     {
         if ($rand === null) {
             $rand = $this->getRand(4);
         }
-        
+
         return $rand . bin2hex(hash_hmac('sha256', $value . $rand, $this->key, true));
     }
 
@@ -145,7 +146,7 @@ class RememberMe
         }
         return substr(bin2hex($randomBytes), 0, $length);
     }
-    
+
     /**
      *
      * @return array|false
@@ -160,7 +161,7 @@ class RememberMe
         // Decode cookie value
         try {
             $cookie = json_decode($_COOKIE["auto"], true);
-            
+
             if (!$cookie) {
                 return false;
             }
@@ -172,7 +173,7 @@ class RememberMe
         if (! (isset($cookie['user']) || isset($cookie['token']) || isset($cookie['signature']))) {
             return false;
         }
-        
+
         return $cookie;
     }
 }

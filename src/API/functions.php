@@ -1,10 +1,6 @@
 <?php
 
-use Propel\Runtime\Connection\ConnectionManagerSingle;
-use Propel\Runtime\Connection\ConnectionWrapper;
-use Propel\Runtime\Connection\DebugPDO;
-use Propel\Runtime\Propel;
-use const API\DEBUG;
+use Slim\App;
 
 /**
  * Original function from User comment on http://php.net/manual/de/function.str-pad.php
@@ -19,7 +15,10 @@ use const API\DEBUG;
  */
 function mb_str_pad($str, $padLen, $padStr = ' ', $dir = STR_PAD_RIGHT, $encoding = null)
 {
-    $encoding = $encoding === null ? mb_internal_encoding() : $encoding;
+    if ($encoding === null) {
+        $encoding = mb_internal_encoding();
+    }
+
     $padBefore = $dir === STR_PAD_BOTH || $dir === STR_PAD_LEFT;
     $padAfter = $dir === STR_PAD_BOTH || $dir === STR_PAD_RIGHT;
     $padLen -= mb_strlen($str, $encoding);
@@ -32,27 +31,18 @@ function mb_str_pad($str, $padLen, $padStr = ' ', $dir = STR_PAD_RIGHT, $encodin
     return $before . $str . $after;
 }
 
-function registerPropelConnection($dbConfig)
+function loadFilesInDirecotry(string $path, App $app)
 {
-    $serviceContainer = Propel::getServiceContainer();
-    $serviceContainer->checkVersion('2.0.0-dev');
-    $serviceContainer->setAdapterClass('default', $dbConfig['adapter']);
-    $manager = new ConnectionManagerSingle();
-    
-    $config = array('dsn' => $dbConfig['dsn'],
-                    'user' => $dbConfig['user'],
-                    'password' => $dbConfig['password'],
-                    'settings' => $dbConfig['settings'],
-                    'classname' => (DEBUG) ? DebugPDO::class : ConnectionWrapper::class,
-                    'model_paths' =>
-                        array(
-                            0 => 'src',
-                            1 => 'vendor',
-                        ),
-                    );
-    
-    $manager->setConfiguration($config);
-    $manager->setName('default');
-    $serviceContainer->setConnectionManager('default', $manager);
-    $serviceContainer->setDefaultDatasource('default');
+    $directory = new RecursiveDirectoryIterator(
+        $path,
+        FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::SKIP_DOTS
+    );
+
+    $iterator = new RecursiveIteratorIterator($directory);
+
+    foreach ($iterator as $filename => $file) {
+        if ($file->isFile()) {
+            include $filename;
+        }
+    }
 }

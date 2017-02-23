@@ -4,10 +4,17 @@ namespace Websocket\Routes;
 
 use API\Models\User\Messages\UserMessage;
 use Ratchet\ConnectionInterface;
+use Slim\Container;
 
 class Chat extends WebsocketServer
 {
     private $subscribers = array();
+
+    function __construct(Container $container) {
+        parent::__construct($container);
+
+        $container->get('db');
+    }
 
     public function onPublish(ConnectionInterface $connection, $topic, $event, array $exclude, array $eligible)
     {
@@ -16,7 +23,7 @@ class Chat extends WebsocketServer
         $recieverUserid = $topic->getId();
 
         echo "Sending message from $senderUserid to userid $recieverUserid: $event\n";
-        
+
         (new UserMessage())->setFromEventUserid($senderUserid)
                            ->setToEventUserid($recieverUserid)
                            ->setMessage($event)
@@ -28,7 +35,7 @@ class Chat extends WebsocketServer
 
         $topic->broadcast(json_encode($message));
     }
-    
+
     public function onCall(ConnectionInterface $connection, $id, $topic, array $params)
     {
         if ($topic->getId() == 'systemMessage') {
@@ -36,7 +43,7 @@ class Chat extends WebsocketServer
             $message = $params[1];
 
             echo "Sending System Message to userid $recieverUserid: $message\n";
-            
+
             (new UserMessage())->setToEventUserid($recieverUserid)
                                ->setMessage($message)
                                ->setDate(time())

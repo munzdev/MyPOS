@@ -2,14 +2,16 @@
 
 namespace API\Lib;
 
+use API\Lib\Exceptions\GeneralException;
 use API\Lib\Exceptions\InvalidRequestException;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
-use Propel\Runtime\Map\RelationMap;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Slim\App;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use const API\DEBUG;
+use function mb_substr;
 
 abstract class Controller
 {
@@ -20,14 +22,13 @@ abstract class Controller
     protected $response;
     protected $args;
 
-
     public function __construct(App $app)
     {
         $this->app = $app;
         $this->logger = $app->getContainer()->get('logger');
     }
 
-    public function __invoke(Request $request, Response $response, $args) : Response
+    public function __invoke(Request $request, Response $response, $args): Response
     {
         $this->request = $request;
         $this->response = $response;
@@ -62,7 +63,7 @@ abstract class Controller
         return $this->response;
     }
 
-    protected function validate($validators, $array = null) : void
+    protected function validate($validators, $array = null): void
     {
         if ($array == null) {
             $array = $this->json;
@@ -138,7 +139,7 @@ abstract class Controller
                     $propel->$methodName($value);
                     continue;
                 }
-                
+
                 $propel->setVirtualColumn($key, $value);
             }
         }
@@ -146,26 +147,26 @@ abstract class Controller
         return $propel;
     }
 
-    private function recursiveValidate($json = [], $validators = [], $actualKeys = []) : array
+    private function recursiveValidate($json = [], $validators = [], $actualKeys = []): array
     {
         $errors = [];
 
         foreach ($validators as $key => $validator) {
             $actualKeys[] = $key;
             $value = $this->getNestedParam($json, $actualKeys);
-            
+
             if (is_array($validator)) {
                 $this->recursiveValidate($json, $validator, $actualKeys);
                 array_pop($actualKeys);
                 continue;
             }
-            
+
             try {
                 $validator->assert($value);
             } catch (NestedValidationException $exception) {
                 $errors[implode('.', $actualKeys)] = $exception->getFullMessage();
             }
-            
+
             //Remove the key added in this foreach
             array_pop($actualKeys);
         }
@@ -186,30 +187,33 @@ abstract class Controller
         if (empty($keys)) {
             return $json;
         }
-        
+
         $firstKey = array_shift($keys);
-        
+
         if (!array_key_exists($firstKey, $json)) {
             return null;
         }
-                
+
         $json = (array) $json;
         $jsonValue = $json[$firstKey];
 
         return $this->getNestedParam($jsonValue, $keys);
     }
 
-    private function generateJSONErrorFromException(\Exception $exception, int $statusCode) : void
+    private function generateJSONErrorFromException(\Exception $exception, int $statusCode): void
     {
-        $this->response = $this->response->withJson(
-            array(
-            'status' => $statusCode,
+        $result = array('status' => $statusCode,
             'code' => $exception->getCode(),
-            'title' => $exception->getMessage(),
-            'detail' => $exception->__toString()
-            ),
-            $statusCode
-        );
+            'detail' => get_class($exception) . ': ' .
+                        $exception->getMessage() . ' in ' .
+                        $exception->getFile() . ':' .
+                        $exception->getLine());
+
+        if (DEBUG) {
+            $result['trace'] = (array) $exception->getTrace();
+        }
+
+        $this->response = $this->response->withJson($result, $statusCode);
     }
 
     protected function cleanupRecursionData(array $array)
@@ -224,12 +228,12 @@ abstract class Controller
             }
         }
 
-        /*foreach ($a_relationsFound as $relation) {
-            $str_key = $relation . 'Id';
-            if (isset($a_array[$str_key])) {
-                unset($a_array[$str_key]);
-            }
-        }*/
+        /* foreach ($a_relationsFound as $relation) {
+          $str_key = $relation . 'Id';
+          if (isset($a_array[$str_key])) {
+          unset($a_array[$str_key]);
+          }
+          } */
 
         return $array;
     }
@@ -253,28 +257,35 @@ abstract class Controller
         $this->response = $this->response->withJson($json);
     }
 
-    protected function any() : void
+    protected function any(): void
     {
     }
-    protected function post() : void
+
+    protected function post(): void
     {
     }
-    protected function get() : void
+
+    protected function get(): void
     {
     }
-    protected function put() : void
+
+    protected function put(): void
     {
     }
-    protected function delete() : void
+
+    protected function delete(): void
     {
     }
-    protected function head() : void
+
+    protected function head(): void
     {
     }
-    protected function patch() : void
+
+    protected function patch(): void
     {
     }
-    protected function options() : void
+
+    protected function options(): void
     {
     }
 }

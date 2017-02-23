@@ -1,7 +1,7 @@
 <?php
 // To help the built-in PHP dev server, check if the request was actually for
 // something which should probably be served as a static file
-if (PHP_SAPI === 'cli-server' && $_SERVER['SCRIPT_FILENAME'] !== __FILE__) {
+if (PHP_SAPI === 'cli-server' && filter_input(INPUT_SERVER, 'SCRIPT_FILENAME') !== __FILE__) {
     return false;
 }
 
@@ -21,15 +21,16 @@ if (API\DEBUG) {
 // Instantiate the app
 $settings = include 'settings.php';
 $app = new \Slim\App($settings);
+$container = $app->getContainer();
 
 // Set up dependencies
 require 'dependencies.php';
 
-// Register middleware
-require 'middleware.php';
-
 // Register routes
-require 'routes.php';
+loadFilesInDirecotry(__DIR__ . "/Routes/", $app);
+
+// Load Plugins
+loadFilesInDirecotry(__DIR__ . "/Plugins/", $app);
 
 // Run!
 $app->run();

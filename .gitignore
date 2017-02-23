@@ -4,3 +4,6 @@
 /src/vendor/*
 /build/*
 /src/API/settings.php
+/src/API/Plugins/*
+!/src/API/Plugins/.keepme
+.php_cs.cache
