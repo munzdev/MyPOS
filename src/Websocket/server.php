@@ -12,7 +12,7 @@ require API_ROOT . 'constants.php';
 require API_ROOT . 'functions.php';
 
 $settings = include API_ROOT . 'settings.php';
-$db = $settings['settings']['propel']['database']['connections']['default'];
+$db = $settings['settings']['database'];
 
 registerPropelConnection($db);
 
