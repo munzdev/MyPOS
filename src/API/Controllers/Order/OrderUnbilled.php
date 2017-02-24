@@ -2,6 +2,8 @@
 
 namespace API\Controllers\Order;
 
+use API\Lib\Interfaces\Helpers\IJsonToModel;
+use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
@@ -51,7 +53,8 @@ class OrderUnbilled extends SecurityController
             'all' => v::boolVal()
         );
 
-        $this->validate($validators, $this->args);
+        $validate = $this->container->get(IValidate::class);
+        $validate->assert($validators, $this->args);
     }
 
     protected function get() : void
@@ -107,11 +110,13 @@ class OrderUnbilled extends SecurityController
 
         $invoiceOrderDetails = new ObjectCollection();
         $invoiceOrderDetails->setModel(OrderDetail::class);
-        $this->jsonToPropel($this->json['UnbilledOrderDetails'], $invoiceOrderDetails);
 
         $usedCoupons = new ObjectCollection();
         $usedCoupons->setModel(Coupon::class);
-        $this->jsonToPropel($this->json['UsedCoupons'], $usedCoupons);
+
+        $jsonToModel = $this->container->get(IJsonToModel::class);
+        $jsonToModel->convert($this->json['UnbilledOrderDetails'], $invoiceOrderDetails);
+        $jsonToModel->convert($this->json['UsedCoupons'], $usedCoupons);
 
         $unbilledOrderDetails = $this->getUnbilledOrderDetails($orderid, $all);
 

@@ -1,9 +1,12 @@
 <?php
 return [
     'settings' => [
+        // Debug settings
+        'debug' => false,
+
         // Slim Settings
         'determineRouteBeforeAppMiddleware' => false,
-        'displayErrorDetails' => API\DEBUG,
+        'displayErrorDetails' => false,
 
         // monolog settings
         'logger' => [
@@ -11,7 +14,7 @@ return [
             'path' => __DIR__ . '/../log/app.log',
         ],
 
-        'database' => [                
+        'database' => [
             'adapter' => 'mysql',
             'dsn' => 'mysql:host=localhost;port=3306;dbname=mypos',
             'user' => 'root',

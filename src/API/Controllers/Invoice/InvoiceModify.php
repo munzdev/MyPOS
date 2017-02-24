@@ -2,6 +2,7 @@
 
 namespace API\Controllers\Invoice;
 
+use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Invoice\Invoice;
@@ -32,7 +33,8 @@ class InvoiceModify extends SecurityController
             'id' => v::intVal()->positive()
         );
 
-        $this->validate($validators, $this->args);
+        $validate = $this->container->get(IValidate::class);
+        $validate->assert($validators, $this->args);
     }
 
     protected function patch() : void

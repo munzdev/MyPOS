@@ -2,6 +2,7 @@
 
 namespace API\Controllers\DistributionPlace;
 
+use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
@@ -34,7 +35,8 @@ class DistributionPlaceAmount extends SecurityController
             'amount' => v::intVal()->length(1),
         );
 
-        $this->validate($validators, $this->json);
+        $validate = $this->container->get(IValidate::class);
+        $validate->assert($validators, $this->json);
     }
 
     protected function post() : void

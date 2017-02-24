@@ -2,7 +2,7 @@
 
 namespace API\Controllers\Order;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\SecurityController;
 use API\Models\Invoice\Map\InvoiceItemTableMap;
 use API\Models\OIP\Map\OrderInProgressRecievedTableMap;
@@ -31,7 +31,8 @@ class OrderInfo extends SecurityController
             'id' => v::intVal()->positive()
         );
 
-        $this->validate($validators, $this->args);
+        $validate = $this->container->get(IValidate::class);
+        $validate->assert($validators, $this->args);
     }
 
     protected function get() : void

@@ -1,6 +1,10 @@
 <?php
 
 use API\Lib\Auth;
+use API\Lib\Helpers\JsonToModel;
+use API\Lib\Helpers\Validate;
+use API\Lib\Interfaces\Helpers\IJsonToModel;
+use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\IRememberMe;
 use API\Lib\Interfaces\Models\User\IUserQuery;
@@ -73,3 +77,10 @@ $container[IUserQuery::class] = $container->factory(function () : IUserQuery {
     return new UserQuery();
 });
 
+$container[IJsonToModel::class] = function () : IJsonToModel {
+    return new JsonToModel();
+};
+
+$container[IValidate::class] = function () : IValidate {
+    return new Validate();
+};

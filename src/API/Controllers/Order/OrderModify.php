@@ -2,6 +2,8 @@
 
 namespace API\Controllers\Order;
 
+use API\Lib\Interfaces\Helpers\IJsonToModel;
+use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
@@ -40,7 +42,8 @@ class OrderModify extends SecurityController
             'id' => v::intVal()->positive()
         );
 
-        $this->validate($validators, $this->args);
+        $validate = $this->container->get(IValidate::class);
+        $validate->assert($validators, $this->args);
     }
 
     protected function get() : void
@@ -90,7 +93,9 @@ class OrderModify extends SecurityController
                                 ->getFirst();
 
             $orderTemplate = new Order();
-            $this->jsonToPropel($this->json, $orderTemplate);
+
+            $jsonToModel = $this->container->get(IJsonToModel::class);
+            $jsonToModel->convert($this->json, $orderTemplate);
 
             foreach ($orderTemplate->getOrderDetails() as $orderDetailTemplate) {
                 $orderDetailid = $orderDetailTemplate->getOrderDetailid();
@@ -234,7 +239,9 @@ class OrderModify extends SecurityController
 
             foreach ($orderDetails as $orderDetail) {
                 $orderDetailTemplate = new OrderDetail();
-                $this->jsonToPropel($orderDetail, $orderDetailTemplate);
+
+                $jsonToModel = $this->container->get(IJsonToModel::class);
+                $jsonToModel->convert($orderDetail, $orderDetailTemplate);
 
                 $orderDetail = OrderDetailQuery::create()
                                                 ->findPk($orderDetailTemplate->getOrderDetailid());

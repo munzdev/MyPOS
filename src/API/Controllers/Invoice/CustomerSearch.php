@@ -2,6 +2,7 @@
 
 namespace API\Controllers\Invoice;
 
+use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Event\EventContactQuery;
@@ -24,7 +25,8 @@ class CustomerSearch extends SecurityController
             'name' => v::alnum()->length(1),
         );
 
-        $this->validate($validators, $this->args);
+        $validate = $this->container->get(IValidate::class);
+        $validate->assert($validators, $this->args);
     }
 
     protected function get() : void

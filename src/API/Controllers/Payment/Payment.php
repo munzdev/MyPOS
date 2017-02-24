@@ -2,6 +2,7 @@
 
 namespace API\Controllers\Payment;
 
+use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Payment\PaymentCoupon;
@@ -33,8 +34,9 @@ class Payment extends SecurityController
             $connection->beginTransaction();
 
             $paymentRecievedTemplate = new PaymentRecieved();
-            $this->jsonToPropel($this->json, $paymentRecievedTemplate);
 
+            $jsonToModel = $this->container->get(IJsonToModel::class);
+            $jsonToModel->convert($this->json, $paymentRecievedTemplate);
 
             $paymentRecieved = new PaymentRecieved();
             $paymentRecieved->setInvoiceid($paymentRecievedTemplate->getInvoiceid());

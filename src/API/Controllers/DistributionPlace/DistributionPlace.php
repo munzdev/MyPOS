@@ -2,6 +2,7 @@
 
 namespace API\Controllers\DistributionPlace;
 
+use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
@@ -49,7 +50,9 @@ class DistributionPlace extends SecurityController
         try {
             $connection->beginTransaction();
             $orderTemplate = new Order();
-            $this->jsonToPropel($this->json, $orderTemplate);
+
+            $jsonToModel = $this->container->get(IJsonToModel::class);
+            $jsonToModel->convert($this->json, $orderTemplate);
 
             $order = OrderQuery::create()
                                    ->joinWithOrderDetail()
@@ -223,7 +226,7 @@ class DistributionPlace extends SecurityController
 
                         $orderInProgressRecieved->setOrderInProgressid($orderInProgressid);
                         $orderInProgressRecieved->save();
-                        
+
                         continue 2;
                     }
                 }
@@ -645,7 +648,7 @@ class DistributionPlace extends SecurityController
                                                                 ->filterByEventid($user->getEventUser()->getEventid())
                                                             ->endUse()
                                                             ->findOne();
-        
+
         if (!$distributionPlaceUser) {
             return;
         }

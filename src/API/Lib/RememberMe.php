@@ -108,7 +108,7 @@ class RememberMe implements IRememberMe
 
     public static function destroy()
     {
-        unset($_COOKIE['auto']);
+        $_COOKIE['auto'] = null;
         setcookie('auto', null, -1, '/');
     }
 
@@ -154,18 +154,13 @@ class RememberMe implements IRememberMe
     private function getCookie()
     {
         // Check if remeber me cookie is present
-        if (!isset($_COOKIE["auto"]) || empty($_COOKIE["auto"])) {
+        if (!filter_has_var(INPUT_COOKIE, "auto") || empty(filter_input(INPUT_COOKIE, "auto"))) {
             return false;
         }
 
-        // Decode cookie value
-        try {
-            $cookie = json_decode($_COOKIE["auto"], true);
+       $cookie = json_decode(filter_input(INPUT_COOKIE, "auto"), true);
 
-            if (!$cookie) {
-                return false;
-            }
-        } catch (Exception $exception) {
+        if (!$cookie) {
             return false;
         }
 

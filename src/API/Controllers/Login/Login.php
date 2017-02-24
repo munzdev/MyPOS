@@ -4,6 +4,7 @@ namespace API\Controllers\Login;
 
 use API\Lib\Controller;
 use API\Lib\Exceptions\GeneralException;
+use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\RememberMe;
 use API\Models\User\UserQuery;
@@ -34,7 +35,8 @@ class Login extends Controller
             'rememberMe' => Validator::boolType()
         );
 
-        $this->validate($validators);
+        $validate = $this->container->get(IValidate::class);
+        $validate->assert($validators, $this->json);
 
         $result = $this->auth->checkLogin($this->json['username'], $this->json['password']);
 
@@ -99,7 +101,7 @@ class Login extends Controller
 
         $this->auth->logout();
         RememberMe::destroy();
-        
+
         $this->withJson(true);
     }
 }

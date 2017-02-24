@@ -2,6 +2,7 @@
 
 namespace API\Controllers\Payment;
 
+use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Payment\CouponQuery;
@@ -25,7 +26,8 @@ class CouponVerify extends SecurityController
             'code' => v::alnum()->length(1),
         );
 
-        $this->validate($validators, $this->args);
+        $validate = $this->container->get(IValidate::class);
+        $validate->assert($validators, $this->args);
     }
 
     protected function get() : void

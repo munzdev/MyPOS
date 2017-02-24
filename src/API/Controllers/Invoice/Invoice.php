@@ -2,6 +2,8 @@
 
 namespace API\Controllers\Invoice;
 
+use API\Lib\Interfaces\Helpers\IJsonToModel;
+use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Models\Event\EventBankinformationQuery;
@@ -45,6 +47,8 @@ class Invoice extends SecurityController
         $dateTo = null;
         $userid = $user->getUserid();
 
+        $validate = $this->container->get(IValidate::class);
+
         if (isset($_REQUEST['search'])) {
             $validators = array(
                 'search' => [
@@ -64,7 +68,7 @@ class Invoice extends SecurityController
                     )]
             );
 
-            $this->validate($validators, $_REQUEST);
+            $validate->assert($validators, $_REQUEST);
 
             $status = $_REQUEST['search']['status'];
             $userid = $_REQUEST['search']['userid'];
@@ -134,7 +138,7 @@ class Invoice extends SecurityController
                 'elementsPerPage' => v::intVal()->length(1)->positive()
             );
 
-            $this->validate($validators, $_REQUEST);
+            $validate->assert($validators, $_REQUEST);
 
             $invoiceList = InvoiceQuery::create(null, clone $searchCriteria)
                                         ->offset(($_REQUEST['elementsPerPage'] * $_REQUEST['page']) - $_REQUEST['elementsPerPage'])
@@ -169,7 +173,9 @@ class Invoice extends SecurityController
             $connection->beginTransaction();
 
             $invoiceTemplate = new InvoiceModel();
-            $this->jsonToPropel($this->json, $invoiceTemplate);
+
+            $jsonToModel = $this->container->get(IJsonToModel::class);
+            $jsonToModel->convert($this->json, $invoiceTemplate);
 
             // fix given ISO Date
             $invoiceTemplate->setMaturityDate(date("c", strtotime($this->json['MaturityDate'])));

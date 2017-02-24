@@ -2,7 +2,7 @@
 
 namespace API\Controllers\DistributionPlace;
 
-use API\Lib\Auth;
+use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\ReciepPrint;
 use API\Lib\SecurityController;
 use API\Models\Event\Base\EventPrinterQuery;
@@ -33,8 +33,9 @@ class Printing extends SecurityController
             'DistributionGivingOutid' => v::alnum()->length(1),
         );
 
-        $this->validate($validatorsArgs, $this->args);
-        $this->validate($validatorsJson, $this->json);
+        $validate = $this->container->get(IValidate::class);
+        $validate->assert($validatorsArgs, $this->args);
+        $validate->assert($validatorsJson, $this->json);
     }
 
     protected function post() : void

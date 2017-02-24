@@ -2,6 +2,8 @@
 
 namespace API\Controllers\Order;
 
+use API\Lib\Interfaces\Helpers\IJsonToModel;
+use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
@@ -49,6 +51,8 @@ class Order extends SecurityController
         $dateTo = null;
         $userid = $user->getUserid();
 
+        $validate = $this->container->get(IValidate::class);
+
         if (isset($_REQUEST['search'])) {
             $validators = array(
                 'search' => [
@@ -63,7 +67,7 @@ class Order extends SecurityController
                     )]
             );
 
-            $this->validate($validators, $_REQUEST);
+            $validate->assert($validators, $_REQUEST);
 
             $status = $_REQUEST['search']['status'];
             $userid = $_REQUEST['search']['userid'];
@@ -120,7 +124,7 @@ class Order extends SecurityController
                 'elementsPerPage' => v::intVal()->length(1)->positive()
             );
 
-            $this->validate($validators, $_REQUEST);
+            $validate->assert($validators, $_REQUEST);
 
             $ordersList = OrderQuery::create(null, clone $searchCriteria)
                                         ->offset(($_REQUEST['elementsPerPage'] * $_REQUEST['page']) - $_REQUEST['elementsPerPage'])
@@ -166,7 +170,9 @@ class Order extends SecurityController
                                             ->findOneOrCreate();
 
             $orderTemplate = new ModelsOrder();
-            $this->jsonToPropel($this->json, $orderTemplate);
+
+            $jsonToModel = $this->container->get(IJsonToModel::class);
+            $jsonToModel->convert($this->json, $orderTemplate);
 
             $orderDetailPriority = OrderQuery::create()
                                                     ->useEventTableQuery()

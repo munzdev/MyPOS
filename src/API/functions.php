@@ -1,7 +1,5 @@
 <?php
 
-use Slim\App;
-
 /**
  * Original function from User comment on http://php.net/manual/de/function.str-pad.php
  * User: wes@nospamplsexample.org
@@ -29,20 +27,4 @@ function mb_str_pad($str, $padLen, $padStr = ' ', $dir = STR_PAD_RIGHT, $encodin
     $before = $padBefore ? mb_substr($repeatedString, 0, floor($targetLen), $encoding) : '';
     $after = $padAfter ? mb_substr($repeatedString, 0, ceil($targetLen), $encoding) : '';
     return $before . $str . $after;
-}
-
-function loadFilesInDirecotry(string $path, App $app)
-{
-    $directory = new RecursiveDirectoryIterator(
-        $path,
-        FilesystemIterator::KEY_AS_PATHNAME | FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::SKIP_DOTS
-    );
-
-    $iterator = new RecursiveIteratorIterator($directory);
-
-    foreach ($iterator as $filename => $file) {
-        if ($file->isFile()) {
-            include $filename;
-        }
-    }
 }
