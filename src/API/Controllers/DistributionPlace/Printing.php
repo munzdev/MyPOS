@@ -3,7 +3,7 @@
 namespace API\Controllers\DistributionPlace;
 
 use API\Lib\Interfaces\Helpers\IValidate;
-use API\Lib\ReciepPrint;
+use API\Lib\Printer;
 use API\Lib\SecurityController;
 use API\Models\Event\Base\EventPrinterQuery;
 use API\Models\OIP\DistributionGivingOutQuery;
@@ -78,8 +78,8 @@ class Printing extends SecurityController
 
         $i18n = $this->app->getContainer()['i18n'];
 
-        $connector = ReciepPrint::getConnector($printer);
-        $reciepPrint = new ReciepPrint($connector, $printer->getCharactersPerRow(), $i18n->ReciepPrint);
+        $connector = Printer::getConnector($printer);
+        $reciepPrint = new Printer($connector, $printer->getCharactersPerRow(), $i18n->ReciepPrint);
 
         $reciepPrint->setOrderNr($orderid);
         $reciepPrint->setTableNr($order->getEventTable()->getName());

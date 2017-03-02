@@ -4,7 +4,7 @@ require __DIR__ . '/../../src/vendor/autoload.php';
 require __DIR__ . '/../../src/API/constants.php';
 require __DIR__ . '/../../src/API/functions.php';
 
-use API\Lib\ReciepPrint;
+use API\Lib\Printer;
 use API\Models\Event\EventBankinformation;
 use API\Models\Event\EventContact;
 use API\Models\Payment\Coupon;
@@ -66,7 +66,7 @@ $o_event_bankinformation->setBic("ATOO12354");
 $o_connector = new NetworkPrintConnector("192.168.0.50", 9100);
 //$o_connector = new FilePrintConnector("php://stdout");
 
-$o_reciep = new ReciepPrint($o_connector, 48, $o_i18n->ReciepPrint);
+$o_reciep = new Printer($o_connector, 48, $o_i18n->ReciepPrint);
 $o_reciep->setLogo("resources/escpos-php.png", PRINTER_LOGO_BIT_IMAGE_COLUMN);
 $o_reciep->setHeader("Company bon printed\nStreet whatever 1\nCity 1234\nTAX:1234567");
 $o_reciep->setCustomer($o_event_contact);
