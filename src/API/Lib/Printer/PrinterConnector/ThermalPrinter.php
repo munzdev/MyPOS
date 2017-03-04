@@ -52,6 +52,8 @@ class ThermalPrinter implements IPrinterConnector
     private $header;
     private $logo;
     private $detailsHeader;
+    private $detailsTitle;
+    private $formatDetailAsList;
     private $details = array();
     private $headerInfos = array();
     private $footerInfos = array();
@@ -106,17 +108,17 @@ class ThermalPrinter implements IPrinterConnector
             $paymentType = $this->localization->paymentTypeBankTransfer;
         }
 
-        $this->printItem($paymentType, '', sprintf('%0.2f', $total), true);
-        $this->printItem($this->localization->datePaymentRecieved . ": " . date_format($paymentRecieved->getDate(), DATE_PHP_DATEFORMAT), '', '', false);
+        $this->printItemColumnsFormatted($paymentType, '', sprintf('%0.2f', $total), true);
+        $this->printItemColumnsFormatted($this->localization->datePaymentRecieved . ": " . date_format($paymentRecieved->getDate(), DATE_PHP_DATEFORMAT), '', '', false);
     }
 
     private function printCoupons(PaymentRecieved $paymentRecieved, &$total)
     {
-        $this->printItem($this->localization->usedCoupons, '', '', false);
+        $this->printItemColumnsFormatted($this->localization->usedCoupons, '', '', false);
 
         foreach ($paymentRecieved->getPaymentCoupons() as $paymentCoupon) {
             $total = bcadd($total, $paymentCoupon->getValueUsed(), 2);
-            $this->printItem($this->localization->couponCode . ": " . $paymentCoupon->getCoupon()->getCode(), '', sprintf('%0.2f', $paymentCoupon->getValueUsed()), true);
+            $this->printItemColumnsFormatted($this->localization->couponCode . ": " . $paymentCoupon->getCoupon()->getCode(), '', sprintf('%0.2f', $paymentCoupon->getValueUsed()), true);
         }
     }
 
@@ -198,7 +200,51 @@ class ThermalPrinter implements IPrinterConnector
         $this->printer->text(trim($text));
     }
 
-    private function printItem($name, $amount = 0, $price = 0, $currencySign = false, $bold = false)
+    private function printItemsListFormatted($name, $amount) {
+
+        $this->printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+
+        $leftCols = $this->paperRowLength / 2;
+
+        $text = $amount . $this->localization->multiplier . " " . $name;
+
+        $leftElements = explode(' ', $text);
+        $final = array('');
+        $row = "";
+        $rowCounter = 0;
+
+        for ($i = 0; $i < count($leftElements); $i++) {
+            $word = $leftElements[$i];
+
+            if ($i == 0) {
+                $leftPadding = strlen($word) + 1;
+            }
+
+            if ($row == '') {
+                $tmp = $word;
+            } else {
+                $tmp = $row . ' ' . $word;
+            }
+
+            if ($i > 1 && strlen($tmp) > $leftCols) {
+                $final[$rowCounter] .= mb_str_pad($row, $leftCols);
+                $rowCounter++;
+                $final[$rowCounter] = '';
+
+                $row = mb_str_pad(' ', $leftPadding) . $word;
+            } else {
+                $row = $tmp;
+            }
+        }
+
+        $final[$rowCounter] .= mb_str_pad($row, $leftCols);
+
+        $this->printer->text(join("\n", $final) . "\n");
+        $this->printer->setEmphasis(false);
+        $this->printer->selectPrintMode();
+    }
+
+    private function printItemColumnsFormatted($name, $amount = 0, $price = 0, $currencySign = false, $bold = false)
     {
         $rightCols = self::RIGHT_COLS;
         $leftPadding = self::LEFT_PADDING;
@@ -262,8 +308,29 @@ class ThermalPrinter implements IPrinterConnector
     private function printHeaderInfos()
     {
         foreach($this->headerInfos as $info) {
-            $this->printer->text($info[0] . ": " . $info[1] . "\n");
+            list($title, $value, $bigFont) = $info;
+
+            $this->printer->text("$title: ");
+
+            if ($bigFont) {
+                $this->printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH | Printer::MODE_DOUBLE_HEIGHT);
+            }
+
+            $this->printer->text("$value\n");
+
+            if ($bigFont) {
+                $this->printer->selectPrintMode();
+            }
         }
+    }
+
+    private function printDetailsTitle()
+    {
+        $this->printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $this->printer->setEmphasis(true);
+        $this->printer->text($this->detailsTitle . "\n");
+        $this->printer->selectPrintMode();
+        $this->printer->setEmphasis(false);
     }
 
     public function printDocument()
@@ -285,42 +352,53 @@ class ThermalPrinter implements IPrinterConnector
         $this->printer->setEmphasis(false);
 
         /* Details Header */
-        if($this->detailsHeader) {
+        if ($this->detailsHeader) {
             $this->printer->setEmphasis(true);
-            $this->printItem(detailsHeader[0], detailsHeader[1], detailsHeader[2]);
+            $this->printItemColumnsFormatted(detailsHeader[0], detailsHeader[1], detailsHeader[2]);
             $this->printer->setEmphasis(false);
+        }
+
+        /* Details Title */
+        if ($this->detailsTitle) {
+            $this->printDetailsTitle();
         }
 
         /* Details */
         foreach ($this->details as $detail) {
             list($name, $amount, $price, $currencySign, $bold) = $detail;
-            $this->printItem($name, $amount, $price, $currencySign, $bold);
+
+            if ($this->formatDetailAsList) {
+                $this->printItemsListFormatted($name, $amount);
+                continue;
+            }
+
+            $this->printItemColumnsFormatted($name, $amount, $price, $currencySign, $bold);
         }
 
         /* Sum Position 1 */
-        if($this->sumPos1) {
+        if ($this->sumPos1) {
             list($name, $value) = $this->sumPos1;
 
             $this->printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
             $this->printer->setEmphasis(true);
 
-            $this->printItem($name, '', sprintf('%0.2f', $value), true, true);
+            $this->printItemColumnsFormatted($name, '', sprintf('%0.2f', $value), true, true);
             $this->printer->setEmphasis(false);
             $this->printer->selectPrintMode();
             $this->printer->feed();
         }
 
         /* Tax and total */
-        if($this->taxes) {
+        if ($this->taxes) {
             $this->printer->text($this->localization->totalSumContainsTax . "\n");
 
             foreach ($this->taxes as $tax => $price) {
-                $this->printItem($tax . $this->localization->percentTaxOfCurrency . sprintf('%0.2f', $price), '', sprintf('%0.2f', $price * ($tax / 100)), true);
+                $this->printItemColumnsFormatted($tax . $this->localization->percentTaxOfCurrency . sprintf('%0.2f', $price), '', sprintf('%0.2f', $price * ($tax / 100)), true);
             }
         }
 
         /* Payment informations */
-        if($this->payments) {
+        if ($this->payments) {
             $this->printer->feed();
             $this->printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
             $this->printer->text($this->localization->payments);
@@ -342,11 +420,11 @@ class ThermalPrinter implements IPrinterConnector
         }
 
          /* Sum Position 2 */
-        if($this->sumPos2) {
+        if ($this->sumPos2) {
             list($name, $value) = $this->sumPos2;
             $this->printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
             $this->printer->setEmphasis(true);
-            $this->printItem($name, '', sprintf('%0.2f', $value), true, true);
+            $this->printItemColumnsFormatted($name, '', sprintf('%0.2f', $value), true, true);
             $this->printer->setEmphasis(false);
             $this->printer->selectPrintMode();
             $this->printer->feed();
@@ -364,7 +442,7 @@ class ThermalPrinter implements IPrinterConnector
         }
 
         /* Footer */
-        if($this->footerInfos) {
+        if ($this->footerInfos) {
             $this->printer->feed(2);
             $this->printer->setJustification(Printer::JUSTIFY_CENTER);
 
@@ -399,9 +477,9 @@ class ThermalPrinter implements IPrinterConnector
         $this->footerInfos[] = $info;
     }
 
-    public function addHeaderInfo(string $title, string $value)
+    public function addHeaderInfo(string $title, string $value, bool $bigFont = false)
     {
-        $this->headerInfos[] = [$title, $value];
+        $this->headerInfos[] = [$title, $value, $bigFont];
     }
 
     public function addPayment(PaymentRecieved $paymentRecieved)
@@ -424,10 +502,9 @@ class ThermalPrinter implements IPrinterConnector
         $this->taxes[$tax] = $price;
     }
 
-    public function setBankinformation(EventBankinformation $eventBankinformation, DateTime $maturityDate = null)
+    public function setBankinformation(EventBankinformation $eventBankinformation)
     {
         $this->eventBankinformation = $eventBankinformation;
-        $this->maturityDate = $maturityDate;
     }
 
     public function setContactInformation(EventContact $eventContact)
@@ -453,6 +530,21 @@ class ThermalPrinter implements IPrinterConnector
     public function setDetailHeader(string $name, string $amount, string $price)
     {
         $this->detailsHeader = [$name, $amount, $price];
+    }
+
+    public function setDetailsTitle(string $name)
+    {
+        $this->detailsTitle = $name;
+    }
+
+    public function setFormatDetailAsList(bool $format)
+    {
+        $this->formatDetailAsList = $format;
+    }
+
+    public function setMaturityDate(DateTime $maturityDate)
+    {
+        $this->maturityDate = $maturityDate;
     }
 
 }

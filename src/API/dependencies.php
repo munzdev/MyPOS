@@ -6,8 +6,17 @@ use API\Lib\Helpers\Validate;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\IPrintingInformation;
 use API\Lib\Interfaces\IRememberMe;
 use API\Lib\Interfaces\Models\User\IUserQuery;
+use API\Lib\Interfaces\Printer\PrinterConnector\IPrinterConnector;
+use API\Lib\Interfaces\Printer\PrintingType\IPrintingType;
+use API\Lib\Printer\PrinterConnector\PdfPrinter;
+use API\Lib\Printer\PrinterConnector\ThermalPrinter;
+use API\Lib\Printer\PrintingType\Invoice;
+use API\Lib\Printer\PrintingType\Order;
+use API\Lib\Printer\PrintingType\PaymentRecieved;
+use API\Lib\PrintingInformation;
 use API\Lib\RememberMe;
 use API\Models\User\UserQuery;
 use Monolog\Handler\StreamHandler;
@@ -75,6 +84,30 @@ $container[IRememberMe::class] = function ($c) : IRememberMe {
 
 $container[IUserQuery::class] = $container->factory(function () : IUserQuery {
     return new UserQuery();
+});
+
+$container[Order::class] = $container->factory(function () : IPrintingType {
+    return new Order();
+});
+
+$container[Invoice::class] = $container->factory(function () : IPrintingType {
+    return new Invoice();
+});
+
+$container[PaymentRecieved::class] = $container->factory(function () : IPrintingType {
+    return new PaymentRecieved();
+});
+
+$container[IPrintingInformation::class] = $container->factory(function () : IPrintingInformation {
+    return new PrintingInformation();
+});
+
+$container[ThermalPrinter::class] = $container->factory(function () : IPrinterConnector {
+    return new ThermalPrinter();
+});
+
+$container[PdfPrinter::class] = $container->factory(function () : IPrinterConnector {
+    return new PdfPrinter();
 });
 
 $container[IJsonToModel::class] = function () : IJsonToModel {

@@ -24,7 +24,7 @@ class PaymentRecieved extends AbstractPrintingType
 
         /* Title of receipt */
         $this->printerConnector->addHeaderInfo($this->localization->receiptNr, $paymentRecieved->getPaymentRecievedid());
-        $this->printerConnector->addHeaderInfo($this->localization->invoiceNr, $this->invoiceid);
+        $this->printerConnector->addHeaderInfo($this->localization->invoiceNr, $this->printingInformation->getInvoiceid());
         $this->printerConnector->addHeaderInfo($this->localization->cashier, $user->getFirstname() . " " . $user->getLastname());
 
         // Add Coupons if used

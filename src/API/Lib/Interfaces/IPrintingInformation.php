@@ -1,8 +1,6 @@
 <?php
 namespace API\Lib\Interfaces;
 
-use API\Lib\Interfaces\ReciepType\IPrintConnector;
-use API\Lib\Interfaces\ReciepType\IPrintType;
 use API\Models\Event\EventBankinformation;
 use API\Models\Event\EventContact;
 use API\Models\Payment\PaymentRecieved;

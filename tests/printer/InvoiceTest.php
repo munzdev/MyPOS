@@ -4,32 +4,38 @@ require __DIR__ . '/../../src/vendor/autoload.php';
 require __DIR__ . '/../../src/API/constants.php';
 require __DIR__ . '/../../src/API/functions.php';
 
-use API\Lib\Printer;
-use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
+use API\Lib\Printer\PrinterConnector\ThermalPrinter;
+use API\Lib\Printer\PrintingType\Invoice;
+use API\Lib\PrintingInformation;
+use API\Models\Event\EventPrinter;
 use const API\PRINTER_LOGO_BIT_IMAGE_COLUMN;
 
-$str_json = file_get_contents("../../src/public/js/i18n/de.json");
-$o_i18n = json_decode($str_json);
+$json = file_get_contents("../../src/public/js/i18n/de.json");
+$localization = json_decode($json);
 
-$o_connector = new NetworkPrintConnector("192.168.0.50", 9100);
-//$o_connector = new FilePrintConnector("php://stdout");
+$eventPrinter = new EventPrinter();
+$eventPrinter->setEventPrinterid(1);
+$eventPrinter->setCharactersPerRow(48);
+$eventPrinter->setAttr1("192.168.0.50");
+$eventPrinter->setAttr2(9100);
 
-$o_reciep = new Printer($o_connector, 48, $o_i18n->ReciepPrint);
-$o_reciep->setLogo("resources/escpos-php.png", PRINTER_LOGO_BIT_IMAGE_COLUMN);
-$o_reciep->setHeader("HEADER TOP LINE\nSECOND LINE\n THIRD LINE");
-$o_reciep->setInvoiceid(587472);
-$o_reciep->setTableNr("B32");
-$o_reciep->setName("Test Cashier");
+$printingInformation = new PrintingInformation();
+$printingInformation->setLogoFile("resources/escpos-php.png");
+$printingInformation->setLogoType(PRINTER_LOGO_BIT_IMAGE_COLUMN);
+$printingInformation->setHeader("HEADER TOP LINE\nSECOND LINE\n THIRD LINE");
+$printingInformation->setInvoiceid(587472);
+$printingInformation->setTableNr("B32");
+$printingInformation->setName("Test Cashier");
 
-$o_reciep->add("Colla 0.5L", "2", "5.00", "20");
-$o_reciep->add("Colla 0.5L mit Zitronne", "1", "5.20", "20");
-$o_reciep->add("Mineral 0.25L", "2", "5.20", "20");
+$printingInformation->addRow("Colla 0.5L", "2", "5.00", "20");
+$printingInformation->addRow("Colla 0.5L mit Zitronne", "1", "5.20", "20");
+$printingInformation->addRow("Mineral 0.25L", "2", "5.20", "20");
+$printingInformation->addRow("Wiener Schnitzel", "1", "5.00", "10");
+$printingInformation->addRow("Schweinsbratten ohne Knödel", "3", "10.20", "10");
+$printingInformation->addRow("Schweinsbratten ohne Knödel, mit Wurstsemmel", "3", "10.20", "10");
+$printingInformation->addRow("Wiener Schnitzel klein ohne Pommes, mit extra Ketchup, bla blalsaf bsadfsdafsda fsdasd ds", "1", "5.00", "10");
+$printingInformation->addRow("Salat Klein", "1", "1.50", "10");
 
-
-$o_reciep->add("Wiener Schnitzel", "1", "5.00", "10");
-$o_reciep->add("Schweinsbratten ohne Knödel", "3", "10.20", "10");
-$o_reciep->add("Schweinsbratten ohne Knödel, mit Wurstsemmel", "3", "10.20", "10");
-$o_reciep->add("Wiener Schnitzel klein ohne Pommes, mit extra Ketchup, bla blalsaf bsadfsdafsda fsdasd ds", "1", "5.00", "10");
-$o_reciep->add("Salat Klein", "1", "1.50", "10");
-
-$o_reciep->printInvoice();
+$printerConnector = new ThermalPrinter($eventPrinter, $localization->ReciepPrint);
+$invoice = new Invoice($printingInformation, $printerConnector, $localization->ReciepPrint);
+$invoice->printType();

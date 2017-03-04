@@ -11,36 +11,31 @@ class Invoice extends AbstractPrintingType
     public function printType()
     {
         /* Print top logo and header */
-        $this->printHeader();
+        if($this->printingInformation->getLogoFile()) {
+            $this->printerConnector->setLogo($this->printingInformation->getLogoFile(),
+                                             $this->printingInformation->getLogoType());
+        }
+        $this->printerConnector->setHeader($this->printingInformation->getHeader());
+        $this->printerConnector->setContactInformation($this->printingInformation->getContact());
 
         // Add customer data if set
-        if ($this->customer) {
-            $this->printCustomer();
-            $this->printer -> feed();
+        if ($this->printingInformation->getCustomer()) {
+            $this->printerConnector->setCustomerContactInformation($this->printingInformation->getCustomer());
         }
-        $this->printer -> feed();
 
         /* Title of receipt */
-        $this->printer -> setEmphasis(true);
-
-        if ($this->paymentid) {
-            $this->printer -> text($this->i18n->receiptNr . ": " . $this->paymentid . "\n");
+        if ($this->printingInformation->getPaymentid()) {
+            $this->printerConnector->addHeaderInfo($this->localization->receiptNr, $this->printingInformation->getPaymentid());
         }
 
-        $this->printer -> text($this->i18n->invoiceNr . ": " . $this->invoiceid  . "\n");
+        $this->printerConnector->addHeaderInfo($this->localization->invoiceNr, $this->printingInformation->getInvoiceid());
 
-        if ($this->tableNr) {
-            $this->printer -> text($this->i18n->tableNr . ": " . $this->tableNr  . "\n");
+        if ($this->printingInformation->getTableNr()) {
+            $this->printerConnector->addHeaderInfo($this->localization->tableNr, $this->printingInformation->getTableNr());
         }
-
-        $this->printer -> text($this->i18n->cashier . ": " . $this->name  . "\n");
-        $this->printer -> feed();
-        $this->printer -> setEmphasis(false);
 
         /* Items */
-        $this->printer -> setEmphasis(true);
-        $this->printItem($this->i18n->amountAndTitle, '', $this->i18n->price);
-        $this->printer -> setEmphasis(false);
+        $this->printerConnector->setDetailHeader($this->localization->amountAndTitle, '', $this->localization->price);
 
         $total = 0;
         $taxes = array();
@@ -51,7 +46,7 @@ class Invoice extends AbstractPrintingType
             }
 
             foreach ($entries as $entrie) {
-                $this->printItem($entrie['name'], $entrie['amount'], $entrie['price'], true);
+                $this->printerConnector->addDetail($entrie['name'], $entrie['amount'], $entrie['price'], true);
                 $price = $entrie['amount'] * $entrie['price'];
                 $total += $price;
 
@@ -59,77 +54,39 @@ class Invoice extends AbstractPrintingType
             }
         }
 
-        $this->printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-        $this->printer -> setEmphasis(true);
-
-        $totalText = $this->i18n->totalSum;
-
-        $this->printItem($totalText, '', sprintf('%0.2f', $total), true, true);
-        $this->printer -> setEmphasis(false);
-        $this->printer -> selectPrintMode();
-        $this->printer -> feed();
+        $this->printerConnector->addSumPos1($this->localization->totalSum, sprintf('%0.2f', $total));
 
         /* Tax and total */
-        $this->printer->text($this->i18n->totalSumContainsTax . "\n");
-
         foreach ($taxes as $tax => $price) {
-            $this->printItem($tax . $this->i18n->percentTaxOfCurrency . sprintf('%0.2f', $price), '', sprintf('%0.2f', $price * ($tax / 100)), true);
+            $this->printerConnector->addTax($tax, $price);
         }
 
         // add payments if given
         if (count($this->paymentRecieved)) {
-            $this->printer->feed();
-            $this->printer->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-            $this->printer->text($this->i18n->payments);
-            $this->printer->selectPrintMode();
-            $this->printer->feed();
-
             foreach ($this->paymentRecieved as $paymentRecieved) {
-                $tmpTotal = $total;
-
-                // Add Coupons if used
-                if (count($paymentRecieved->getPaymentCoupons()) > 0) {
-                    $this->printCoupons($paymentRecieved, $tmpTotal);
-                }
-
-                $payedByCoupons = bcsub($total, $tmpTotal, 2);
-
                 $total = bcsub($total, $paymentRecieved->getAmount(), 2);
-
-                $this->printPaymentRecievedType($paymentRecieved, bcsub($paymentRecieved->getAmount(), $payedByCoupons, 2));
+                $this->printerConnector->addPayment($paymentRecieved);
             }
 
-            $this->printer -> selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-            $this->printer -> setEmphasis(true);
-            $this->printItem($this->i18n->totalSumOpen, '', sprintf('%0.2f', $total), true, true);
-            $this->printer -> setEmphasis(false);
-            $this->printer -> selectPrintMode();
-            $this->printer -> feed();
+            $this->printerConnector->addSumPos2($this->localization->totalSumOpen, $total);
         }
 
         // add a maturity date if given
-        if ($this->maturityDate) {
-            $this->printer -> feed();
-            $this->printer -> text($this->i18n->maturityDate . ": " . date_format($this->maturityDate, DATE_PHP_DATEFORMAT) . "\n");
+        if ($this->printingInformation->getMaturityDate()) {
+            $this->printerConnector->setMaturityDate($this->printingInformation->getMaturityDate());
         }
 
         // add bank information if given
-        if ($this->eventBankinformation) {
-            $this->printBankInformation();
+        if ($this->printingInformation->getBankinformation()) {
+            $this->printerConnector->setBankinformation($this->printingInformation->getBankinformation());
         }
 
         /* Footer */
-        $this->printer -> feed(2);
-        $this->printer -> setJustification(Printer::JUSTIFY_CENTER);
-        $this->printer -> text($this->i18n->thanks . "!\n");
-        $this->printer -> text(($this->date) ? date_format($this->date, DATE_PHP_TIMEFORMAT) : date(DATE_PHP_TIMEFORMAT) . "\n");
-        $this->printer -> feed(2);
+        $this->printerConnector->addFooterInfo($this->localization->thanks);
+        $this->printerConnector->addFooterInfo(($this->printingInformation->getDate()) ? date_format($this->printingInformation->getDate(), DATE_PHP_TIMEFORMAT) : date(DATE_PHP_TIMEFORMAT));
 
-        /* Cut the receipt and open the cash drawer */
-        $this->printer -> cut();
-        $this->printer -> pulse();
-
-        $this->close();
+        $this->printerConnector->printDocument();
+        $this->printerConnector->close();
     }
 
 }
