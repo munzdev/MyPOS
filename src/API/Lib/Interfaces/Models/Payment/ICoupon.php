@@ -48,7 +48,6 @@ interface ICoupon extends IModel {
      */
     function getValue();
 
-
     /**
      *
      * @param int $couponid Description

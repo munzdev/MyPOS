@@ -2,6 +2,7 @@
 
 namespace API\Models\Payment;
 
+use API\Lib\Interfaces\Models\Payment\IPaymentTypeQuery;
 use API\Models\Payment\Base\PaymentTypeQuery as BasePaymentTypeQuery;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Payment\Base\PaymentTypeQuery as BasePaymentTypeQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class PaymentTypeQuery extends BasePaymentTypeQuery
+class PaymentTypeQuery extends BasePaymentTypeQuery implements IPaymentTypeQuery
 {
 }

@@ -2,6 +2,7 @@
 
 namespace API\Models\Event;
 
+use API\Lib\Interfaces\Models\Event\IEventContact;
 use API\Models\Event\Base\EventContact as BaseEventContact;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Event\Base\EventContact as BaseEventContact;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class EventContact extends BaseEventContact
+class EventContact extends BaseEventContact implements IEventContact
 {
 }

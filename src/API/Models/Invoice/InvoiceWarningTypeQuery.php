@@ -2,6 +2,7 @@
 
 namespace API\Models\Invoice;
 
+use API\Lib\Interfaces\Models\Invoice\IInvoiceWarningTypeQuery;
 use API\Models\Invoice\Base\InvoiceWarningTypeQuery as BaseInvoiceWarningTypeQuery;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Invoice\Base\InvoiceWarningTypeQuery as BaseInvoiceWarningTypeQue
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class InvoiceWarningTypeQuery extends BaseInvoiceWarningTypeQuery
+class InvoiceWarningTypeQuery extends BaseInvoiceWarningTypeQuery implements IInvoiceWarningTypeQuery
 {
 }

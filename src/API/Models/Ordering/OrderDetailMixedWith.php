@@ -2,6 +2,7 @@
 
 namespace API\Models\Ordering;
 
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailMixedWith;
 use API\Models\Ordering\Base\OrderDetailMixedWith as BaseOrderDetailMixedWith;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Ordering\Base\OrderDetailMixedWith as BaseOrderDetailMixedWith;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class OrderDetailMixedWith extends BaseOrderDetailMixedWith
+class OrderDetailMixedWith extends BaseOrderDetailMixedWith implements IOrderDetailMixedWith
 {
 }

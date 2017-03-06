@@ -97,8 +97,8 @@ interface IInvoiceWarning extends IModel {
 
     /**
      *
-     * @param float $extraPrice Description
+     * @param float $warningValue Description
      * @return IInvoiceWarning Description
      */
-    function setExtraPrice($extraPrice);
+    function setWarningValue($warningValue);
 }

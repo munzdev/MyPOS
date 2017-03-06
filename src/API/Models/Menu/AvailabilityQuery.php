@@ -2,6 +2,7 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IAvailabilityQuery;
 use API\Models\Menu\Base\AvailabilityQuery as BaseAvailabilityQuery;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Menu\Base\AvailabilityQuery as BaseAvailabilityQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class AvailabilityQuery extends BaseAvailabilityQuery
+class AvailabilityQuery extends BaseAvailabilityQuery implements IAvailabilityQuery
 {
 }

@@ -2,6 +2,7 @@
 
 namespace API\Models\Ordering;
 
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailExtra;
 use API\Models\Ordering\Base\OrderDetailExtra as BaseOrderDetailExtra;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Ordering\Base\OrderDetailExtra as BaseOrderDetailExtra;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class OrderDetailExtra extends BaseOrderDetailExtra
+class OrderDetailExtra extends BaseOrderDetailExtra implements IOrderDetailExtra
 {
 }

@@ -2,6 +2,7 @@
 
 namespace API\Models\Ordering;
 
+use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Models\Ordering\Base\OrderQuery as BaseOrderQuery;
 use API\Models\Ordering\Map\OrderTableMap;
 use PDO;
@@ -16,7 +17,7 @@ use const API\ORDER_AVAILABILITY_AVAILABLE;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class OrderQuery extends BaseOrderQuery
+class OrderQuery extends BaseOrderQuery implements IOrderQuery
 {
     /**
      * Modifys all orders of the given eventid. Fixes priority order sorting and let them start by 2 and
@@ -84,7 +85,7 @@ class OrderQuery extends BaseOrderQuery
                            AND od.verified = 1
                            AND od.availabilityid = :availbilityid
                            AND oip.order_in_progressid IS NULL
-                     ORDER BY o.priority ASC                     
+                     ORDER BY o.priority ASC
                      LIMIT $limit";
 
         $statement = $connection->prepare($sql);

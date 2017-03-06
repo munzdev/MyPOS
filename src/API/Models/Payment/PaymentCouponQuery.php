@@ -2,6 +2,7 @@
 
 namespace API\Models\Payment;
 
+use API\Lib\Interfaces\Models\Payment\IPaymentCouponQuery;
 use API\Models\Payment\Base\PaymentCouponQuery as BasePaymentCouponQuery;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Payment\Base\PaymentCouponQuery as BasePaymentCouponQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class PaymentCouponQuery extends BasePaymentCouponQuery
+class PaymentCouponQuery extends BasePaymentCouponQuery implements IPaymentCouponQuery
 {
 }

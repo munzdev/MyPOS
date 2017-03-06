@@ -2,6 +2,7 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuTypeQuery;
 use API\Models\Menu\Base\MenuTypeQuery as BaseMenuTypeQuery;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Menu\Base\MenuTypeQuery as BaseMenuTypeQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuTypeQuery extends BaseMenuTypeQuery
+class MenuTypeQuery extends BaseMenuTypeQuery implements IMenuTypeQuery
 {
 }

@@ -2,6 +2,7 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuPossibleSize;
 use API\Models\Menu\Base\MenuPossibleSize as BaseMenuPossibleSize;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Menu\Base\MenuPossibleSize as BaseMenuPossibleSize;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuPossibleSize extends BaseMenuPossibleSize
+class MenuPossibleSize extends BaseMenuPossibleSize implements IMenuPossibleSize
 {
 }

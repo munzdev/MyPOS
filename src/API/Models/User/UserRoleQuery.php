@@ -2,6 +2,7 @@
 
 namespace API\Models\User;
 
+use API\Lib\Interfaces\Models\User\IUserRoleQuery;
 use API\Models\User\Base\UserRoleQuery as BaseUserRoleQuery;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\User\Base\UserRoleQuery as BaseUserRoleQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class UserRoleQuery extends BaseUserRoleQuery
+class UserRoleQuery extends BaseUserRoleQuery implements IUserRoleQuery
 {
 }

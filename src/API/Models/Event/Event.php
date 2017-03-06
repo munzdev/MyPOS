@@ -2,6 +2,7 @@
 
 namespace API\Models\Event;
 
+use API\Lib\Interfaces\Models\Event\IEvent;
 use API\Models\Event\Base\Event as BaseEvent;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Event\Base\Event as BaseEvent;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class Event extends BaseEvent
+class Event extends BaseEvent implements IEvent
 {
 }

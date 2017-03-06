@@ -2,6 +2,7 @@
 
 namespace API\Models\DistributionPlace;
 
+use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlace;
 use API\Models\DistributionPlace\Base\DistributionPlace as BaseDistributionPlace;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\DistributionPlace\Base\DistributionPlace as BaseDistributionPlace
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class DistributionPlace extends BaseDistributionPlace
+class DistributionPlace extends BaseDistributionPlace implements IDistributionPlace
 {
 }

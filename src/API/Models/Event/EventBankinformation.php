@@ -2,6 +2,7 @@
 
 namespace API\Models\Event;
 
+use API\Lib\Interfaces\Models\Event\IEventBankinformation;
 use API\Models\Event\Base\EventBankinformation as BaseEventBankinformation;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Event\Base\EventBankinformation as BaseEventBankinformation;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class EventBankinformation extends BaseEventBankinformation
+class EventBankinformation extends BaseEventBankinformation implements IEventBankinformation
 {
 }

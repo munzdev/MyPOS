@@ -2,6 +2,7 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuGroup;
 use API\Models\Menu\Base\MenuGroup as BaseMenuGroup;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Menu\Base\MenuGroup as BaseMenuGroup;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuGroup extends BaseMenuGroup
+class MenuGroup extends BaseMenuGroup implements IMenuGroup
 {
 }

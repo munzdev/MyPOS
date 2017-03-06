@@ -2,6 +2,7 @@
 
 namespace API\Models\Invoice;
 
+use API\Lib\Interfaces\Models\Invoice\IInvoiceItem;
 use API\Models\Invoice\Base\InvoiceItem as BaseInvoiceItem;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Invoice\Base\InvoiceItem as BaseInvoiceItem;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class InvoiceItem extends BaseInvoiceItem
+class InvoiceItem extends BaseInvoiceItem implements IInvoiceItem
 {
 }

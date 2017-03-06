@@ -2,6 +2,7 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuExtraQuery;
 use API\Models\Menu\Base\MenuExtraQuery as BaseMenuExtraQuery;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Menu\Base\MenuExtraQuery as BaseMenuExtraQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuExtraQuery extends BaseMenuExtraQuery
+class MenuExtraQuery extends BaseMenuExtraQuery implements IMenuExtraQuery
 {
 }

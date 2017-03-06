@@ -2,6 +2,8 @@
 
 namespace API\Models\Ordering;
 
+use API\Lib\Interfaces\Models\Ordering\IOrderDetail;
+use API\Lib\Interfaces\Models\User\IUser;
 use API\Models\Ordering\Base\OrderDetail as BaseOrderDetail;
 
 /**
@@ -11,6 +13,17 @@ use API\Models\Ordering\Base\OrderDetail as BaseOrderDetail;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class OrderDetail extends BaseOrderDetail
+class OrderDetail extends BaseOrderDetail implements IOrderDetail
 {
+    public function getSinglePriceModifiedByUser(): IUser
+    {
+        $this->getUser();
+    }
+
+    public function setSinglePriceModifiedByUser($user): IOrderDetail
+    {
+        $this->setUser($user);
+        return $this;
+    }
+
 }

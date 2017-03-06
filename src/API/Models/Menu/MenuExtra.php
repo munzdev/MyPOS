@@ -2,6 +2,7 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuExtra;
 use API\Models\Menu\Base\MenuExtra as BaseMenuExtra;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Menu\Base\MenuExtra as BaseMenuExtra;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuExtra extends BaseMenuExtra
+class MenuExtra extends BaseMenuExtra implements IMenuExtra
 {
 }

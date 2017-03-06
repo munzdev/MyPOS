@@ -2,6 +2,7 @@
 
 namespace API\Models\Invoice;
 
+use API\Lib\Interfaces\Models\Invoice\IInvoiceWarning;
 use API\Models\Invoice\Base\InvoiceWarning as BaseInvoiceWarning;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Invoice\Base\InvoiceWarning as BaseInvoiceWarning;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class InvoiceWarning extends BaseInvoiceWarning
+class InvoiceWarning extends BaseInvoiceWarning implements IInvoiceWarning
 {
 }

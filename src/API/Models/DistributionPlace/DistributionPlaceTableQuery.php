@@ -2,6 +2,7 @@
 
 namespace API\Models\DistributionPlace;
 
+use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceTableQuery;
 use API\Models\DistributionPlace\Base\DistributionPlaceTableQuery as BaseDistributionPlaceTableQuery;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\DistributionPlace\Base\DistributionPlaceTableQuery as BaseDistrib
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class DistributionPlaceTableQuery extends BaseDistributionPlaceTableQuery
+class DistributionPlaceTableQuery extends BaseDistributionPlaceTableQuery implements IDistributionPlaceTableQuery
 {
 }

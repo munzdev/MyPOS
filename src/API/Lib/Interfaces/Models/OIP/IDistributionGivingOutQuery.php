@@ -2,6 +2,6 @@
 
 namespace API\Lib\Interfaces\Models\OIP;
 
-interface IDistributionGivingOut {
+interface IDistributionGivingOutQuery {
 
 }

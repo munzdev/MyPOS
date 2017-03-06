@@ -2,6 +2,7 @@
 
 namespace API\Models\OIP;
 
+use API\Lib\Interfaces\Models\OIP\IOrderInProgress;
 use API\Models\OIP\Base\OrderInProgress as BaseOrderInProgress;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\OIP\Base\OrderInProgress as BaseOrderInProgress;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class OrderInProgress extends BaseOrderInProgress
+class OrderInProgress extends BaseOrderInProgress implements IOrderInProgress
 {
 }

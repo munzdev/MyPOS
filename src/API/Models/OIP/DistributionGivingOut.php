@@ -2,6 +2,7 @@
 
 namespace API\Models\OIP;
 
+use API\Lib\Interfaces\Models\OIP\IDistributionGivingOut;
 use API\Models\OIP\Base\DistributionGivingOut as BaseDistributionGivingOut;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\OIP\Base\DistributionGivingOut as BaseDistributionGivingOut;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class DistributionGivingOut extends BaseDistributionGivingOut
+class DistributionGivingOut extends BaseDistributionGivingOut implements IDistributionGivingOut
 {
 }

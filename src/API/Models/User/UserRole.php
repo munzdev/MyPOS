@@ -2,6 +2,7 @@
 
 namespace API\Models\User;
 
+use API\Lib\Interfaces\Models\User\IUserRole;
 use API\Models\User\Base\UserRole as BaseUserRole;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\User\Base\UserRole as BaseUserRole;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class UserRole extends BaseUserRole
+class UserRole extends BaseUserRole implements IUserRole
 {
 }

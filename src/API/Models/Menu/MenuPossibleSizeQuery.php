@@ -2,6 +2,7 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuPossibleSizeQuery;
 use API\Models\Menu\Base\MenuPossibleSizeQuery as BaseMenuPossibleSizeQuery;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Menu\Base\MenuPossibleSizeQuery as BaseMenuPossibleSizeQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuPossibleSizeQuery extends BaseMenuPossibleSizeQuery
+class MenuPossibleSizeQuery extends BaseMenuPossibleSizeQuery implements IMenuPossibleSizeQuery
 {
 }

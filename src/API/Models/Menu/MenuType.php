@@ -2,6 +2,7 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuType;
 use API\Models\Menu\Base\MenuType as BaseMenuType;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Menu\Base\MenuType as BaseMenuType;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuType extends BaseMenuType
+class MenuType extends BaseMenuType implements IMenuType
 {
 }

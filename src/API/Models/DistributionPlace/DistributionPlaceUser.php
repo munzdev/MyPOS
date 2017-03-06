@@ -2,6 +2,7 @@
 
 namespace API\Models\DistributionPlace;
 
+use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceUser;
 use API\Models\DistributionPlace\Base\DistributionPlaceUser as BaseDistributionPlaceUser;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\DistributionPlace\Base\DistributionPlaceUser as BaseDistributionP
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class DistributionPlaceUser extends BaseDistributionPlaceUser
+class DistributionPlaceUser extends BaseDistributionPlaceUser implements IDistributionPlaceUser
 {
 }

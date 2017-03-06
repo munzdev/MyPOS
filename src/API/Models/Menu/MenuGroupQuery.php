@@ -2,6 +2,7 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuGroupQuery;
 use API\Models\Menu\Base\MenuGroupQuery as BaseMenuGroupQuery;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Menu\Base\MenuGroupQuery as BaseMenuGroupQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuGroupQuery extends BaseMenuGroupQuery
+class MenuGroupQuery extends BaseMenuGroupQuery implements IMenuGroupQuery
 {
 }

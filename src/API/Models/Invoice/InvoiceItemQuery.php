@@ -2,6 +2,7 @@
 
 namespace API\Models\Invoice;
 
+use API\Lib\Interfaces\Models\Invoice\IInvoiceItemQuery;
 use API\Models\Invoice\Base\InvoiceItemQuery as BaseInvoiceItemQuery;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Invoice\Base\InvoiceItemQuery as BaseInvoiceItemQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class InvoiceItemQuery extends BaseInvoiceItemQuery
+class InvoiceItemQuery extends BaseInvoiceItemQuery implements IInvoiceItemQuery
 {
 }

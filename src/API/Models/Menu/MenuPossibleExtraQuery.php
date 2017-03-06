@@ -2,6 +2,7 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuPossibleExtraQuery;
 use API\Models\Menu\Base\MenuPossibleExtraQuery as BaseMenuPossibleExtraQuery;
 
 /**
@@ -11,6 +12,6 @@ use API\Models\Menu\Base\MenuPossibleExtraQuery as BaseMenuPossibleExtraQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuPossibleExtraQuery extends BaseMenuPossibleExtraQuery
+class MenuPossibleExtraQuery extends BaseMenuPossibleExtraQuery implements IMenuPossibleExtraQuery
 {
 }
