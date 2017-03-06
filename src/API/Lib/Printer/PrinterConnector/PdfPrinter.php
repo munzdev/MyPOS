@@ -94,4 +94,19 @@ class PdfPrinter implements IPrinterConnector
 
     }
 
+    public function setDetailsTitle(string $name)
+    {
+
+    }
+
+    public function setFormatDetailAsList(bool $format)
+    {
+
+    }
+
+    public function setMaturityDate(\DateTime $maturityDate)
+    {
+
+    }
+
 }
