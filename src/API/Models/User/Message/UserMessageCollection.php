@@ -1,6 +1,6 @@
 <?php
 
-namespace API\Models\User;
+namespace API\Models\User\Message;
 
 use API\Lib\Interfaces\Models\User\Message\IUserMessageCollection;
 use API\Models\Collection;
