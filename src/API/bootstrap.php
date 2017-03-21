@@ -8,7 +8,8 @@ if (PHP_SAPI === 'cli-server' && filter_input(INPUT_SERVER, 'SCRIPT_FILENAME') !
 // Load up composers libs
 require __DIR__ . '/../vendor/autoload.php';
 
-// Load constants and functions
+// Load Container, constants and functions
+require 'Lib/Container.php';
 require 'constants.php';
 require 'functions.php';
 
@@ -22,9 +23,11 @@ if (API\DEBUG) {
     set_time_limit(0);
 }
 
+// Create container
+$container = new API\Lib\Container($settings);
+
 // Instantiate the app
-$app = new \Slim\App($settings);
-$container = $app->getContainer();
+$app = new \Slim\App($container);
 
 // Set up dependencies
 require 'dependencies.php';

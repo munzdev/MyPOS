@@ -293,491 +293,495 @@ $container['db'] = function ($c) {
     return $serviceContainer->getConnection();
 };
 
-$container[IAuth::class] = function ($c) : IAuth {
+$container->registerService(IAuth::class, function ($c) {
     return new Auth($c->get(IUserQuery::class));
-};
+});
 
-$container[IRememberMe::class] = function ($c) : IRememberMe {
+$container->registerService(IAuth::class, function ($c) {
+    return new Auth($c->get(IUserQuery::class));
+});
+
+$container->registerService(IRememberMe::class, function ($c) {
     $settings = $c->get('settings');
     return new RememberMe($settings['Auth']['RememberMe_PrivateKey']);
-};
-
-$container[IUserQuery::class] = $container->factory(function () : IUserQuery {
-    return new UserQuery();
 });
 
-$container[Order::class] = $container->factory(function () : IPrintingType {
+$container->registerService(IUserQuery::class, $container->factory(function () {
+    return new UserQuery();
+}));
+
+$container->registerService(Order::class, $container->factory(function () {
     return new Order();
-});
+}), IPrintingType::class);
 
-$container[Invoice::class] = $container->factory(function () : IPrintingType {
+$container->registerService(Invoice::class, $container->factory(function () {
     return new Invoice();
-});
+}), IPrintingType::class);
 
-$container[PaymentRecieved::class] = $container->factory(function () : IPrintingType {
+$container->registerService(PaymentRecieved::class, $container->factory(function () {
     return new PaymentRecieved();
-});
+}), IPrintingType::class);
 
-$container[IPrintingInformation::class] = $container->factory(function () : IPrintingInformation {
+$container->registerService(IPrintingInformation::class, $container->factory(function () {
     return new PrintingInformation();
-});
+}));
 
-$container[ThermalPrinter::class] = $container->factory(function () : IPrinterConnector {
+$container->registerService(ThermalPrinter::class, $container->factory(function () {
     return new ThermalPrinter();
-});
+}), IPrinterConnector::class);
 
-$container[PdfPrinter::class] = $container->factory(function () : IPrinterConnector {
+$container->registerService(PdfPrinter::class, $container->factory(function () {
     return new PdfPrinter();
-});
+}), IPrinterConnector::class);
 
-$container[IJsonToModel::class] = function () : IJsonToModel {
+$container->registerService(IJsonToModel::class, function () {
     return new JsonToModel();
-};
+});
 
-$container[IValidate::class] = function () : IValidate {
+$container->registerService(IValidate::class, function () {
     return new Validate();
-};
+});
 
-$container[IDistributionPlace::class] = $container->factory(function () : IDistributionPlace {
+$container->registerService(IDistributionPlace::class, $container->factory(function () {
     return new DistributionPlace();
-});
+}));
 
-$container[IDistributionPlaceCollection::class] = $container->factory(function () : IDistributionPlaceCollection {
+$container->registerService(IDistributionPlaceCollection::class, $container->factory(function () {
     return new DistributionPlaceCollection();
-});
+}));
 
-$container[IDistributionPlaceGroup::class] = $container->factory(function () : IDistributionPlaceGroup {
+$container->registerService(IDistributionPlaceGroup::class, $container->factory(function () {
     return new DistributionPlaceGroup();
-});
+}));
 
-$container[IDistributionPlaceGroupCollection::class] = $container->factory(function () : IDistributionPlaceGroupCollection {
+$container->registerService(IDistributionPlaceGroupCollection::class, $container->factory(function () {
     return new DistributionPlaceGroupCollection();
-});
+}));
 
-$container[IDistributionPlaceGroupQuery::class] = $container->factory(function () : IDistributionPlaceGroupQuery {
+$container->registerService(IDistributionPlaceGroupQuery::class, $container->factory(function () {
     return new DistributionPlaceGroupQuery();
-});
+}));
 
-$container[IDistributionPlaceQuery::class] = $container->factory(function () : IDistributionPlaceQuery {
+$container->registerService(IDistributionPlaceQuery::class, $container->factory(function () {
     return new DistributionPlaceQuery();
-});
+}));
 
-$container[IDistributionPlaceTable::class] = $container->factory(function () : IDistributionPlaceTable {
+$container->registerService(IDistributionPlaceTable::class, $container->factory(function () {
     return new DistributionPlaceTable();
-});
+}));
 
-$container[IDistributionPlaceTableCollection::class] = $container->factory(function () : IDistributionPlaceTableCollection {
+$container->registerService(IDistributionPlaceTableCollection::class, $container->factory(function () {
     return new DistributionPlaceTableCollection();
-});
+}));
 
-$container[IDistributionPlaceTableQuery::class] = $container->factory(function () : IDistributionPlaceTableQuery {
+$container->registerService(IDistributionPlaceTableQuery::class, $container->factory(function () {
     return new DistributionPlaceTableQuery();
-});
+}));
 
-$container[IDistributionPlaceUser::class] = $container->factory(function () : IDistributionPlaceUser {
+$container->registerService(IDistributionPlaceUser::class, $container->factory(function () {
     return new DistributionPlaceUser();
-});
+}));
 
-$container[IDistributionPlaceUserCollection::class] = $container->factory(function () : IDistributionPlaceUserCollection {
+$container->registerService(IDistributionPlaceUserCollection::class, $container->factory(function () {
     return new DistributionPlaceUserCollection();
-});
+}));
 
-$container[IDistributionPlaceUserQuery::class] = $container->factory(function () : IDistributionPlaceUserQuery {
+$container->registerService(IDistributionPlaceUserQuery::class, $container->factory(function () {
     return new DistributionPlaceUserQuery();
-});
+}));
 
-$container[IEvent::class] = $container->factory(function () : IEvent {
+$container->registerService(IEvent::class, $container->factory(function () {
     return new Event();
-});
+}));
 
-$container[IEventBankinformation::class] = $container->factory(function () : IEventBankinformation {
+$container->registerService(IEventBankinformation::class, $container->factory(function () {
     return new EventBankinformation();
-});
+}));
 
-$container[IEventBankinformationCollection::class] = $container->factory(function () : IEventBankinformationCollection {
+$container->registerService(IEventBankinformationCollection::class, $container->factory(function () {
     return new EventBankinformationCollection();
-});
+}));
 
-$container[IEventBankinformationQuery::class] = $container->factory(function () : IEventBankinformationQuery {
+$container->registerService(IEventBankinformationQuery::class, $container->factory(function () {
     return new EventBankinformationQuery();
-});
+}));
 
-$container[IEventCollection::class] = $container->factory(function () : IEventCollection {
+$container->registerService(IEventCollection::class, $container->factory(function () {
     return new EventCollection();
-});
+}));
 
-$container[IEventContact::class] = $container->factory(function () : IEventContact {
+$container->registerService(IEventContact::class, $container->factory(function () {
     return new EventContact();
-});
+}));
 
-$container[IEventContactCollection::class] = $container->factory(function () : IEventContactCollection {
+$container->registerService(IEventContactCollection::class, $container->factory(function () {
     return new EventContactCollection();
-});
+}));
 
-$container[IEventContactQuery::class] = $container->factory(function () : IEventContactQuery {
+$container->registerService(IEventContactQuery::class, $container->factory(function () {
     return new EventContactQuery();
-});
+}));
 
-$container[IEventPrinter::class] = $container->factory(function () : IEventPrinter {
+$container->registerService(IEventPrinter::class, $container->factory(function () {
     return new EventPrinter();
-});
+}));
 
-$container[IEventPrinterCollection::class] = $container->factory(function () : IEventPrinterCollection {
+$container->registerService(IEventPrinterCollection::class, $container->factory(function () {
     return new EventPrinterCollection();
-});
+}));
 
-$container[IEventPrinterQuery::class] = $container->factory(function () : IEventPrinterQuery {
+$container->registerService(IEventPrinterQuery::class, $container->factory(function () {
     return new EventPrinterQuery();
-});
+}));
 
-$container[IEventQuery::class] = $container->factory(function () : IEventQuery {
+$container->registerService(IEventQuery::class, $container->factory(function () {
     return new EventQuery();
-});
+}));
 
-$container[IEventTable::class] = $container->factory(function () : IEventTable {
+$container->registerService(IEventTable::class, $container->factory(function () {
     return new EventTable();
-});
+}));
 
-$container[IEventTableCollection::class] = $container->factory(function () : IEventTableCollection {
+$container->registerService(IEventTableCollection::class, $container->factory(function () {
     return new EventTableCollection();
-});
+}));
 
-$container[IEventTableQuery::class] = $container->factory(function () : IEventTableQuery {
+$container->registerService(IEventTableQuery::class, $container->factory(function () {
     return new EventTableQuery();
-});
+}));
 
-$container[IEventUser::class] = $container->factory(function () : IEventUser {
+$container->registerService(IEventUser::class, $container->factory(function () {
     return new EventUser();
-});
+}));
 
-$container[IEventUserCollection::class] = $container->factory(function () : IEventUserCollection {
+$container->registerService(IEventUserCollection::class, $container->factory(function () {
     return new EventUserCollection();
-});
+}));
 
-$container[IEventUserQuery::class] = $container->factory(function () : IEventUserQuery {
+$container->registerService(IEventUserQuery::class, $container->factory(function () {
     return new EventUserQuery();
-});
+}));
 
-$container[IInvoice::class] = $container->factory(function () : IInvoice {
+$container->registerService(IInvoice::class, $container->factory(function () {
     return new Invoice2();
-});
+}));
 
-$container[IInvoiceCollection::class] = $container->factory(function () : IInvoiceCollection {
+$container->registerService(IInvoiceCollection::class, $container->factory(function () {
     return new InvoiceCollection();
-});
+}));
 
-$container[IInvoiceItem::class] = $container->factory(function () : IInvoiceItem {
+$container->registerService(IInvoiceItem::class, $container->factory(function () {
     return new InvoiceItem();
-});
+}));
 
-$container[IInvoiceItemCollection::class] = $container->factory(function () : IInvoiceItemCollection {
+$container->registerService(IInvoiceItemCollection::class, $container->factory(function () {
     return new InvoiceItemCollection();
-});
+}));
 
-$container[IInvoiceItemQuery::class] = $container->factory(function () : IInvoiceItemQuery {
+$container->registerService(IInvoiceItemQuery::class, $container->factory(function () {
     return new InvoiceItemQuery();
-});
+}));
 
-$container[IInvoiceQuery::class] = $container->factory(function () : IInvoiceQuery {
+$container->registerService(IInvoiceQuery::class, $container->factory(function () {
     return new InvoiceQuery();
-});
+}));
 
-$container[IInvoiceType::class] = $container->factory(function () : IInvoiceType {
+$container->registerService(IInvoiceType::class, $container->factory(function () {
     return new InvoiceType();
-});
+}));
 
-$container[IInvoiceTypeCollection::class] = $container->factory(function () : IInvoiceTypeCollection {
+$container->registerService(IInvoiceTypeCollection::class, $container->factory(function () {
     return new InvoiceTypeCollection();
-});
+}));
 
-$container[IInvoiceTypeQuery::class] = $container->factory(function () : IInvoiceTypeQuery {
+$container->registerService(IInvoiceTypeQuery::class, $container->factory(function () {
     return new InvoiceTypeQuery();
-});
+}));
 
-$container[IInvoiceWarning::class] = $container->factory(function () : IInvoiceWarning {
+$container->registerService(IInvoiceWarning::class, $container->factory(function () {
     return new InvoiceWarning();
-});
+}));
 
-$container[IInvoiceWarningCollection::class] = $container->factory(function () : IInvoiceWarningCollection {
+$container->registerService(IInvoiceWarningCollection::class, $container->factory(function () {
     return new InvoiceWarningCollection();
-});
+}));
 
-$container[IInvoiceWarningQuery::class] = $container->factory(function () : IInvoiceWarningQuery {
+$container->registerService(IInvoiceWarningQuery::class, $container->factory(function () {
     return new InvoiceWarningQuery();
-});
+}));
 
-$container[IInvoiceWarningType::class] = $container->factory(function () : IInvoiceWarningType {
+$container->registerService(IInvoiceWarningType::class, $container->factory(function () {
     return new InvoiceWarningType();
-});
+}));
 
-$container[IInvoiceWarningTypeCollection::class] = $container->factory(function () : IInvoiceWarningTypeCollection {
+$container->registerService(IInvoiceWarningTypeCollection::class, $container->factory(function () {
     return new InvoiceWarningTypeCollection();
-});
+}));
 
-$container[IInvoiceWarningTypeQuery::class] = $container->factory(function () : IInvoiceWarningTypeQuery {
+$container->registerService(IInvoiceWarningTypeQuery::class, $container->factory(function () {
     return new InvoiceWarningTypeQuery();
-});
+}));
 
-$container[IAvailability::class] = $container->factory(function () : IAvailability {
+$container->registerService(IAvailability::class, $container->factory(function () {
     return new Availability();
-});
+}));
 
-$container[IAvailabilityCollection::class] = $container->factory(function () : IAvailabilityCollection {
+$container->registerService(IAvailabilityCollection::class, $container->factory(function () {
     return new AvailabilityCollection();
-});
+}));
 
-$container[IAvailabilityQuery::class] = $container->factory(function () : IAvailabilityQuery {
+$container->registerService(IAvailabilityQuery::class, $container->factory(function () {
     return new AvailabilityQuery();
-});
+}));
 
-$container[IMenu::class] = $container->factory(function () : IMenu {
+$container->registerService(IMenu::class, $container->factory(function () {
     return new Menu();
-});
+}));
 
-$container[IMenuCollection::class] = $container->factory(function () : IMenuCollection {
+$container->registerService(IMenuCollection::class, $container->factory(function () {
     return new MenuCollection();
-});
+}));
 
-$container[IMenuExtra::class] = $container->factory(function () : IMenuExtra {
+$container->registerService(IMenuExtra::class, $container->factory(function () {
     return new MenuExtra();
-});
+}));
 
-$container[IMenuExtraCollection::class] = $container->factory(function () : IMenuExtraCollection {
+$container->registerService(IMenuExtraCollection::class, $container->factory(function () {
     return new MenuExtraCollection();
-});
+}));
 
-$container[IMenuExtraQuery::class] = $container->factory(function () : IMenuExtraQuery {
+$container->registerService(IMenuExtraQuery::class, $container->factory(function () {
     return new MenuExtraQuery();
-});
+}));
 
-$container[IMenuGroup::class] = $container->factory(function () : IMenuGroup {
+$container->registerService(IMenuGroup::class, $container->factory(function () {
     return new MenuGroup();
-});
+}));
 
-$container[IMenuGroupCollection::class] = $container->factory(function () : IMenuGroupCollection {
+$container->registerService(IMenuGroupCollection::class, $container->factory(function () {
     return new MenuGroupCollection();
-});
+}));
 
-$container[IMenuGroupQuery::class] = $container->factory(function () : IMenuGroupQuery {
+$container->registerService(IMenuGroupQuery::class, $container->factory(function () {
     return new MenuGroupQuery();
-});
+}));
 
-$container[IMenuPossibleExtra::class] = $container->factory(function () : IMenuPossibleExtra {
+$container->registerService(IMenuPossibleExtra::class, $container->factory(function () {
     return new MenuPossibleExtra();
-});
+}));
 
-$container[IMenuPossibleExtraCollection::class] = $container->factory(function () : IMenuPossibleExtraCollection {
+$container->registerService(IMenuPossibleExtraCollection::class, $container->factory(function () {
     return new MenuPossibleExtraCollection();
-});
+}));
 
-$container[IMenuPossibleExtraQuery::class] = $container->factory(function () : IMenuPossibleExtraQuery {
+$container->registerService(IMenuPossibleExtraQuery::class, $container->factory(function () {
     return new MenuPossibleExtraQuery();
-});
+}));
 
-$container[IMenuPossibleSize::class] = $container->factory(function () : IMenuPossibleSize {
+$container->registerService(IMenuPossibleSize::class, $container->factory(function () {
     return new MenuPossibleSize();
-});
+}));
 
-$container[IMenuPossibleSizeCollection::class] = $container->factory(function () : IMenuPossibleSizeCollection {
+$container->registerService(IMenuPossibleSizeCollection::class, $container->factory(function () {
     return new MenuPossibleSizeCollection();
-});
+}));
 
-$container[IMenuPossibleSizeQuery::class] = $container->factory(function () : IMenuPossibleSizeQuery {
+$container->registerService(IMenuPossibleSizeQuery::class, $container->factory(function () {
     return new MenuPossibleSizeQuery();
-});
+}));
 
-$container[IMenuQuery::class] = $container->factory(function () : IMenuQuery {
+$container->registerService(IMenuQuery::class, $container->factory(function () {
     return new MenuQuery();
-});
+}));
 
-$container[IMenuSize::class] = $container->factory(function () : IMenuSize {
+$container->registerService(IMenuSize::class, $container->factory(function () {
     return new MenuSize();
-});
+}));
 
-$container[IMenuSizeCollection::class] = $container->factory(function () : IMenuSizeCollection {
+$container->registerService(IMenuSizeCollection::class, $container->factory(function () {
     return new MenuSizeCollection();
-});
+}));
 
-$container[IMenuSizeQuery::class] = $container->factory(function () : IMenuSizeQuery {
+$container->registerService(IMenuSizeQuery::class, $container->factory(function () {
     return new MenuSizeQuery();
-});
+}));
 
-$container[IMenuType::class] = $container->factory(function () : IMenuType {
+$container->registerService(IMenuType::class, $container->factory(function () {
     return new MenuType();
-});
+}));
 
-$container[IMenuTypeCollection::class] = $container->factory(function () : IMenuTypeCollection {
+$container->registerService(IMenuTypeCollection::class, $container->factory(function () {
     return new MenuTypeCollection();
-});
+}));
 
-$container[IMenuTypeQuery::class] = $container->factory(function () : IMenuTypeQuery {
+$container->registerService(IMenuTypeQuery::class, $container->factory(function () {
     return new MenuTypeQuery();
-});
+}));
 
-$container[IDistributionGivingOut::class] = $container->factory(function () : IDistributionGivingOut {
+$container->registerService(IDistributionGivingOut::class, $container->factory(function () {
     return new DistributionGivingOut();
-});
+}));
 
-$container[IDistributionGivingOutCollection::class] = $container->factory(function () : IDistributionGivingOutCollection {
+$container->registerService(IDistributionGivingOutCollection::class, $container->factory(function () {
     return new DistributionGivingOutCollection();
-});
+}));
 
-$container[IDistributionGivingOutQuery::class] = $container->factory(function () : IDistributionGivingOutQuery {
+$container->registerService(IDistributionGivingOutQuery::class, $container->factory(function () {
     return new DistributionGivingOutQuery();
-});
+}));
 
-$container[IOrderInProgress::class] = $container->factory(function () : IOrderInProgress {
+$container->registerService(IOrderInProgress::class, $container->factory(function () {
     return new OrderInProgress();
-});
+}));
 
-$container[IOrderInProgressCollection::class] = $container->factory(function () : IOrderInProgressCollection {
+$container->registerService(IOrderInProgressCollection::class, $container->factory(function () {
     return new OrderInProgressCollection();
-});
+}));
 
-$container[IOrderInProgressQuery::class] = $container->factory(function () : IOrderInProgressQuery {
+$container->registerService(IOrderInProgressQuery::class, $container->factory(function () {
     return new OrderInProgressQuery();
-});
+}));
 
-$container[IOrderInProgressRecieved::class] = $container->factory(function () : IOrderInProgressRecieved {
+$container->registerService(IOrderInProgressRecieved::class, $container->factory(function () {
     return new OrderInProgressRecieved();
-});
+}));
 
-$container[IOrderInProgressRecievedCollection::class] = $container->factory(function () : IOrderInProgressRecievedCollection {
+$container->registerService(IOrderInProgressRecievedCollection::class, $container->factory(function () {
     return new OrderInProgressRecievedCollection();
-});
+}));
 
-$container[IOrderInProgressRecievedQuery::class] = $container->factory(function () : IOrderInProgressRecievedQuery {
+$container->registerService(IOrderInProgressRecievedQuery::class, $container->factory(function () {
     return new OrderInProgressRecievedQuery();
-});
+}));
 
-$container[IOrder::class] = $container->factory(function () : IOrder {
+$container->registerService(IOrder::class, $container->factory(function () {
     return new Order2();
-});
+}));
 
-$container[IOrderCollection::class] = $container->factory(function () : IOrderCollection {
+$container->registerService(IOrderCollection::class, $container->factory(function () {
     return new OrderCollection();
-});
+}));
 
-$container[IOrderDetail::class] = $container->factory(function () : IOrderDetail {
+$container->registerService(IOrderDetail::class, $container->factory(function () {
     return new OrderDetail();
-});
+}));
 
-$container[IOrderDetailCollection::class] = $container->factory(function () : IOrderDetailCollection {
+$container->registerService(IOrderDetailCollection::class, $container->factory(function () {
     return new OrderDetailCollection();
-});
+}));
 
-$container[IOrderDetailExtra::class] = $container->factory(function () : IOrderDetailExtra {
+$container->registerService(IOrderDetailExtra::class, $container->factory(function () {
     return new OrderDetailExtra();
-});
+}));
 
-$container[IOrderDetailExtraCollection::class] = $container->factory(function () : IOrderDetailExtraCollection {
+$container->registerService(IOrderDetailExtraCollection::class, $container->factory(function () {
     return new OrderDetailExtraCollection();
-});
+}));
 
-$container[IOrderDetailExtraQuery::class] = $container->factory(function () : IOrderDetailExtraQuery {
+$container->registerService(IOrderDetailExtraQuery::class, $container->factory(function () {
     return new OrderDetailExtraQuery();
-});
+}));
 
-$container[IOrderDetailMixedWith::class] = $container->factory(function () : IOrderDetailMixedWith {
+$container->registerService(IOrderDetailMixedWith::class, $container->factory(function () {
     return new OrderDetailMixedWith();
-});
+}));
 
-$container[IOrderDetailMixedWithCollection::class] = $container->factory(function () : IOrderDetailMixedWithCollection {
+$container->registerService(IOrderDetailMixedWithCollection::class, $container->factory(function () {
     return new OrderDetailMixedWithCollection();
-});
+}));
 
-$container[IOrderDetailMixedWithQuery::class] = $container->factory(function () : IOrderDetailMixedWithQuery {
+$container->registerService(IOrderDetailMixedWithQuery::class, $container->factory(function () {
     return new OrderDetailMixedWithQuery();
-});
+}));
 
-$container[IOrderDetailQuery::class] = $container->factory(function () : IOrderDetailQuery {
+$container->registerService(IOrderDetailQuery::class, $container->factory(function () {
     return new OrderDetailQuery();
-});
+}));
 
-$container[IOrderQuery::class] = $container->factory(function () : IOrderQuery {
+$container->registerService(IOrderQuery::class, $container->factory(function () {
     return new OrderQuery();
-});
+}));
 
-$container[ICoupon::class] = $container->factory(function () : ICoupon {
+$container->registerService(ICoupon::class, $container->factory(function () {
     return new Coupon();
-});
+}));
 
-$container[ICouponCollection::class] = $container->factory(function () : ICouponCollection {
+$container->registerService(ICouponCollection::class, $container->factory(function () {
     return new CouponCollection();
-});
+}));
 
-$container[ICouponQuery::class] = $container->factory(function () : ICouponQuery {
+$container->registerService(ICouponQuery::class, $container->factory(function () {
     return new CouponQuery();
-});
+}));
 
-$container[IPaymentCoupon::class] = $container->factory(function () : IPaymentCoupon {
+$container->registerService(IPaymentCoupon::class, $container->factory(function () {
     return new PaymentCoupon();
-});
+}));
 
-$container[IPaymentCouponCollection::class] = $container->factory(function () : IPaymentCouponCollection {
+$container->registerService(IPaymentCouponCollection::class, $container->factory(function () {
     return new PaymentCouponCollection();
-});
+}));
 
-$container[IPaymentCouponQuery::class] = $container->factory(function () : IPaymentCouponQuery {
+$container->registerService(IPaymentCouponQuery::class, $container->factory(function () {
     return new PaymentCouponQuery();
-});
+}));
 
-$container[IPaymentRecieved::class] = $container->factory(function () : IPaymentRecieved {
+$container->registerService(IPaymentRecieved::class, $container->factory(function () {
     return new PaymentRecieved2();
-});
+}));
 
-$container[IPaymentRecievedCollection::class] = $container->factory(function () : IPaymentRecievedCollection {
+$container->registerService(IPaymentRecievedCollection::class, $container->factory(function () {
     return new PaymentRecievedCollection();
-});
+}));
 
-$container[IPaymentRecievedQuery::class] = $container->factory(function () : IPaymentRecievedQuery {
+$container->registerService(IPaymentRecievedQuery::class, $container->factory(function () {
     return new PaymentRecievedQuery();
-});
+}));
 
-$container[IPaymentType::class] = $container->factory(function () : IPaymentType {
+$container->registerService(IPaymentType::class, $container->factory(function () {
     return new PaymentType();
-});
+}));
 
-$container[IPaymentTypeCollection::class] = $container->factory(function () : IPaymentTypeCollection {
+$container->registerService(IPaymentTypeCollection::class, $container->factory(function () {
     return new PaymentTypeCollection();
-});
+}));
 
-$container[IPaymentTypeQuery::class] = $container->factory(function () : IPaymentTypeQuery {
+$container->registerService(IPaymentTypeQuery::class, $container->factory(function () {
     return new PaymentTypeQuery();
-});
+}));
 
-$container[IUserMessage::class] = $container->factory(function () : IUserMessage {
+$container->registerService(IUserMessage::class, $container->factory(function () {
     return new UserMessage();
-});
+}));
 
-$container[IUserMessageCollection::class] = $container->factory(function () : IUserMessageCollection {
+$container->registerService(IUserMessageCollection::class, $container->factory(function () {
     return new UserMessageCollection();
-});
+}));
 
-$container[IUserMessageQuery::class] = $container->factory(function () : IUserMessageQuery {
+$container->registerService(IUserMessageQuery::class, $container->factory(function () {
     return new UserMessageQuery();
-});
+}));
 
-$container[IUser::class] = $container->factory(function () : IUser {
+$container->registerService(IUser::class, $container->factory(function () {
     return new User();
-});
+}));
 
-$container[IUserCollection::class] = $container->factory(function () : IUserCollection {
+$container->registerService(IUserCollection::class, $container->factory(function () {
     return new UserCollection();
-});
+}));
 
-$container[IUserQuery::class] = $container->factory(function () : IUserQuery {
+$container->registerService(IUserQuery::class, $container->factory(function () {
     return new UserQuery();
-});
+}));
 
-$container[IUserRole::class] = $container->factory(function () : IUserRole {
+$container->registerService(IUserRole::class, $container->factory(function () {
     return new UserRole();
-});
+}));
 
-$container[IUserRoleCollection::class] = $container->factory(function () : IUserRoleCollection {
+$container->registerService(IUserRoleCollection::class, $container->factory(function () {
     return new UserRoleCollection();
-});
+}));
 
-$container[IUserRoleQuery::class] = $container->factory(function () : IUserRoleQuery {
+$container->registerService(IUserRoleQuery::class, $container->factory(function () {
     return new UserRoleQuery();
-});
+}));
