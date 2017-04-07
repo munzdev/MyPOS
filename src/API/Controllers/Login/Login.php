@@ -7,7 +7,7 @@ use API\Lib\Exceptions\GeneralException;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\RememberMe;
-use API\Models\User\UserQuery;
+use API\Models\ORM\User\UserQuery;
 use Propel\Runtime\Propel;
 use Respect\Validation\Validator;
 use Slim\App;

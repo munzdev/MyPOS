@@ -61,10 +61,10 @@ interface IEventUser extends IModel {
     function setEventid($eventid);
 
     /**
-     * @param IEvent $eventid
+     * @param IEvent $event
      * @return IEventUser Description
      */
-    function setEvent($eventid);
+    function setEvent(IEvent $event = null);
 
     /**
      * @param int $userid Description

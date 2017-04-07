@@ -4,7 +4,7 @@ namespace API\Controllers\Invoice;
 
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
-use API\Models\Event\EventContact;
+use API\Models\ORM\Event\EventContact;
 use Slim\App;
 
 class Customer extends SecurityController

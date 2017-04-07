@@ -4,7 +4,7 @@ namespace API\Controllers\User;
 
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
-use API\Models\User\UserQuery;
+use API\Models\ORM\User\UserQuery;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Slim\App;
 

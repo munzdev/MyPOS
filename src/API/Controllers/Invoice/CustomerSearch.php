@@ -5,7 +5,7 @@ namespace API\Controllers\Invoice;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
-use API\Models\Event\EventContactQuery;
+use API\Models\ORM\Event\EventContactQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Respect\Validation\Validator as v;
 use Slim\App;

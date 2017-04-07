@@ -4,7 +4,7 @@ namespace API\Controllers\Login;
 
 use API\Lib\Controller;
 use API\Lib\Interfaces\IAuth;
-use API\Models\Event\Map\EventUserTableMap;
+use API\Models\ORM\Event\Map\EventUserTableMap;
 use Slim\App;
 
 class User extends Controller

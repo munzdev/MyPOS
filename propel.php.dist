@@ -16,7 +16,6 @@ return [
             // The directory where Propel should output generated object model classes.
             'phpDir' => 'src',
         ],
-        /*
         'database' => [
             'connections' => [
                 'default' => [
@@ -30,6 +29,5 @@ return [
                 ]
             ]
         ]
-        */
     ]
 ];

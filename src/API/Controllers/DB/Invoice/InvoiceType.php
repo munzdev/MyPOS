@@ -2,8 +2,8 @@
 
 namespace API\Controllers\DB\Invoice;
 
+use API\Lib\Interfaces\Models\Invoice\IInvoiceTypeQuery;
 use API\Lib\SecurityController;
-use API\Models\Invoice\InvoiceTypeQuery;
 use Slim\App;
 
 class InvoiceType extends SecurityController
@@ -12,12 +12,13 @@ class InvoiceType extends SecurityController
     {
         parent::__construct($app);
 
-        $app->getContainer()['db'];
+        $this->container->get('db');
     }
 
     protected function get() : void
     {
-        $invoiceTypes = InvoiceTypeQuery::create()->find();
+        $invoiceTypeQuery = $this->container->get(IInvoiceTypeQuery::class);
+        $invoiceTypes = $invoiceTypeQuery->find();
 
         $this->withJson($invoiceTypes->toArray());
     }

@@ -4,10 +4,10 @@ namespace API\Controllers\Order;
 
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\SecurityController;
-use API\Models\Invoice\Map\InvoiceItemTableMap;
-use API\Models\OIP\Map\OrderInProgressRecievedTableMap;
-use API\Models\Ordering\Map\OrderDetailTableMap;
-use API\Models\Ordering\OrderQuery;
+use API\Models\ORM\Invoice\Map\InvoiceItemTableMap;
+use API\Models\ORM\OIP\Map\OrderInProgressRecievedTableMap;
+use API\Models\ORM\Ordering\Map\OrderDetailTableMap;
+use API\Models\ORM\Ordering\OrderQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Respect\Validation\Validator as v;

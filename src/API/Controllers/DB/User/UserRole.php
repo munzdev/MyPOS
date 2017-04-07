@@ -2,8 +2,8 @@
 
 namespace API\Controllers\DB\User;
 
+use API\Lib\Interfaces\Models\User\IUserRoleQuery;
 use API\Lib\SecurityController;
-use API\Models\User\UserRoleQuery;
 use Slim\App;
 
 class UserRole extends SecurityController
@@ -12,12 +12,13 @@ class UserRole extends SecurityController
     {
         parent::__construct($app);
 
-        $app->getContainer()['db'];
+        $this->container->get('db');
     }
 
     protected function get() : void
     {
-        $userRoles = UserRoleQuery::create()->find();
+        $userRoleQuery = $this->container->get(IUserRoleQuery::class);
+        $userRoles = $userRoleQuery->find();
 
         $this->withJson($userRoles->toArray());
     }

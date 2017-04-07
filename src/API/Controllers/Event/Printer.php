@@ -4,7 +4,7 @@ namespace API\Controllers\Event;
 
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
-use API\Models\Event\EventPrinterQuery;
+use API\Models\ORM\Event\EventPrinterQuery;
 use Slim\App;
 
 class Printer extends SecurityController

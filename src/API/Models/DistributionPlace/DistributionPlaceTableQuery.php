@@ -3,7 +3,6 @@
 namespace API\Models\DistributionPlace;
 
 use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceTableQuery;
-use API\Models\DistributionPlace\Base\DistributionPlaceTableQuery as BaseDistributionPlaceTableQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'distribution_place_table' table.
@@ -12,6 +11,6 @@ use API\Models\DistributionPlace\Base\DistributionPlaceTableQuery as BaseDistrib
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class DistributionPlaceTableQuery extends BaseDistributionPlaceTableQuery implements IDistributionPlaceTableQuery
+class DistributionPlaceTableQuery implements IDistributionPlaceTableQuery
 {
 }

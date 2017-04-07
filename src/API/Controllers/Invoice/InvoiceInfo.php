@@ -5,7 +5,7 @@ namespace API\Controllers\Invoice;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
-use API\Models\Invoice\InvoiceQuery;
+use API\Models\ORM\Invoice\InvoiceQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Respect\Validation\Validator as v;

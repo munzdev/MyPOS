@@ -2,6 +2,7 @@
 
 namespace API\Models\Event;
 
+use API\Lib\Interfaces\Models\Event\IEvent;
 use API\Lib\Interfaces\Models\Event\IEventUser;
 use API\Models\Event\Base\EventUser as BaseEventUser;
 
@@ -14,4 +15,7 @@ use API\Models\Event\Base\EventUser as BaseEventUser;
  */
 class EventUser extends BaseEventUser implements IEventUser
 {
+    public function setEvent(IEvent $v = null) {
+        parent::setEvent($v);
+    }
 }

@@ -5,9 +5,9 @@ namespace API\Controllers\Payment;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
-use API\Models\Payment\CouponQuery;
-use API\Models\Payment\Map\CouponTableMap;
-use API\Models\Payment\Map\PaymentCouponTableMap;
+use API\Models\ORM\Payment\CouponQuery;
+use API\Models\ORM\Payment\Map\CouponTableMap;
+use API\Models\ORM\Payment\Map\PaymentCouponTableMap;
 use Respect\Validation\Validator as v;
 use Slim\App;
 

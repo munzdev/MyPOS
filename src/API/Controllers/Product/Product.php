@@ -4,13 +4,13 @@ namespace API\Controllers\Product;
 
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
-use API\Models\Menu\Map\MenuExtraTableMap;
-use API\Models\Menu\Map\MenuGroupTableMap;
-use API\Models\Menu\Map\MenuPossibleExtraTableMap;
-use API\Models\Menu\Map\MenuPossibleSizeTableMap;
-use API\Models\Menu\Map\MenuSizeTableMap;
-use API\Models\Menu\Map\MenuTableMap;
-use API\Models\Menu\MenuTypeQuery;
+use API\Models\ORM\Menu\Map\MenuExtraTableMap;
+use API\Models\ORM\Menu\Map\MenuGroupTableMap;
+use API\Models\ORM\Menu\Map\MenuPossibleExtraTableMap;
+use API\Models\ORM\Menu\Map\MenuPossibleSizeTableMap;
+use API\Models\ORM\Menu\Map\MenuSizeTableMap;
+use API\Models\ORM\Menu\Map\MenuTableMap;
+use API\Models\ORM\Menu\MenuTypeQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Slim\App;
 

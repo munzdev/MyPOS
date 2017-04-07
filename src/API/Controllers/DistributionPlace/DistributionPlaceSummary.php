@@ -4,9 +4,9 @@ namespace API\Controllers\DistributionPlace;
 
 use API\Lib\Interfaces\IAuth;
 use API\Lib\SecurityController;
-use API\Models\DistributionPlace\DistributionPlaceGroupQuery;
-use API\Models\OIP\Base\OrderInProgressQuery;
-use API\Models\Ordering\OrderQuery;
+use API\Models\ORM\DistributionPlace\DistributionPlaceGroupQuery;
+use API\Models\ORM\OIP\Base\OrderInProgressQuery;
+use API\Models\ORM\Ordering\OrderQuery;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Slim\App;
 use const API\ORDER_AVAILABILITY_AVAILABLE;
