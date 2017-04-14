@@ -3,6 +3,7 @@
 namespace API\Models\Event;
 
 use API\Lib\Interfaces\Models\Event\IEventBankinformationQuery;
+use API\Models\Query;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'event_bankinformation' table.
@@ -11,6 +12,6 @@ use API\Lib\Interfaces\Models\Event\IEventBankinformationQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class EventBankinformationQuery implements IEventBankinformationQuery
+class EventBankinformationQuery extends Query implements IEventBankinformationQuery
 {
 }

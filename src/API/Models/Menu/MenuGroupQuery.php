@@ -3,6 +3,7 @@
 namespace API\Models\Menu;
 
 use API\Lib\Interfaces\Models\Menu\IMenuGroupQuery;
+use API\Models\Query;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'menu_group' table.
@@ -11,6 +12,6 @@ use API\Lib\Interfaces\Models\Menu\IMenuGroupQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuGroupQuery implements IMenuGroupQuery
+class MenuGroupQuery extends Query implements IMenuGroupQuery
 {
 }

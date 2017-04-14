@@ -3,6 +3,7 @@
 namespace API\Models\OIP;
 
 use API\Lib\Interfaces\Models\OIP\IOrderInProgressRecievedQuery;
+use API\Models\Query;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'order_in_progress_recieved' table.
@@ -11,6 +12,6 @@ use API\Lib\Interfaces\Models\OIP\IOrderInProgressRecievedQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class OrderInProgressRecievedQuery implements IOrderInProgressRecievedQuery
+class OrderInProgressRecievedQuery extends Query implements IOrderInProgressRecievedQuery
 {
 }

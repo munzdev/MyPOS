@@ -3,6 +3,7 @@
 namespace API\Models\Invoice;
 
 use API\Lib\Interfaces\Models\Invoice\IInvoiceWarningTypeQuery;
+use API\Models\Query;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'invoice_warning_type' table.
@@ -11,6 +12,6 @@ use API\Lib\Interfaces\Models\Invoice\IInvoiceWarningTypeQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class InvoiceWarningTypeQuery implements IInvoiceWarningTypeQuery
+class InvoiceWarningTypeQuery extends Query implements IInvoiceWarningTypeQuery
 {
 }

@@ -3,6 +3,7 @@
 namespace API\Models\Invoice;
 
 use API\Lib\Interfaces\Models\Invoice\IInvoiceItemQuery;
+use API\Models\Query;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'invoice_item' table.
@@ -11,6 +12,6 @@ use API\Lib\Interfaces\Models\Invoice\IInvoiceItemQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class InvoiceItemQuery implements IInvoiceItemQuery
+class InvoiceItemQuery extends Query implements IInvoiceItemQuery
 {
 }

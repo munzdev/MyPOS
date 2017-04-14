@@ -3,6 +3,7 @@
 namespace API\Models\Menu;
 
 use API\Lib\Interfaces\Models\Menu\IAvailabilityQuery;
+use API\Models\Query;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'availability' table.
@@ -11,6 +12,6 @@ use API\Lib\Interfaces\Models\Menu\IAvailabilityQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class AvailabilityQuery implements IAvailabilityQuery
+class AvailabilityQuery extends Query implements IAvailabilityQuery
 {
 }

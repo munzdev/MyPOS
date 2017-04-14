@@ -3,6 +3,7 @@
 namespace API\Models\Payment;
 
 use API\Lib\Interfaces\Models\Payment\IPaymentRecievedQuery;
+use API\Models\Query;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'payment_recieved' table.
@@ -11,6 +12,6 @@ use API\Lib\Interfaces\Models\Payment\IPaymentRecievedQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class PaymentRecievedQuery implements IPaymentRecievedQuery
+class PaymentRecievedQuery extends Query implements IPaymentRecievedQuery
 {
 }

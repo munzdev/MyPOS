@@ -5,8 +5,9 @@ namespace API\Models\User;
 use API\Lib\Interfaces\Models\User\IUser;
 use API\Lib\Interfaces\Models\User\IUserCollection;
 use API\Lib\Interfaces\Models\User\IUserQuery;
-use API\Models\Event\Map\EventUserTableMap;
-use API\Models\ORM\User\UserQuery;
+use API\Models\ORM\Event\Map\EventUserTableMap;
+use API\Models\ORM\User\UserQuery as UserQueryORM;
+use API\Models\Query;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'user' table.
@@ -15,11 +16,11 @@ use API\Models\ORM\User\UserQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class UserQuery implements IUserQuery
-{
+class UserQuery extends Query implements IUserQuery
+{   
     public function getActiveAdminUserByUsername($username) : IUser
     {
-        $user = UserQuery::create()
+        $user = UserQueryORM::create()
                     ->filterByUsername($username)
                     ->filterByIsAdmin(true)
                     ->filterByActive(true)
@@ -33,7 +34,7 @@ class UserQuery implements IUserQuery
 
     public function getActiveEventUserByUsername($username) : IUserCollection
     {
-        $users = UserQuery::create()
+        $users = UserQueryORM::create()
                     ->useEventUserQuery()
                         ->useEventQuery()
                             ->filterByActive(true)
@@ -46,6 +47,7 @@ class UserQuery implements IUserQuery
 
         $userCollection = $this->container->get(IUserCollection::class);
         $userCollection->setCollection($users);
+        $userCollection->setModel($this->container->get(IUser::class));
 
         return $userCollection;
     }
