@@ -128,117 +128,117 @@ use API\Lib\Printer\PrintingType\Order;
 use API\Lib\Printer\PrintingType\PaymentRecieved;
 use API\Lib\PrintingInformation;
 use API\Lib\RememberMe;
-use API\Models\ORM\DistributionPlace\DistributionPlace;
-use API\Models\ORM\DistributionPlace\DistributionPlaceCollection;
-use API\Models\ORM\DistributionPlace\DistributionPlaceGroup;
-use API\Models\ORM\DistributionPlace\DistributionPlaceGroupCollection;
-use API\Models\ORM\DistributionPlace\DistributionPlaceGroupQuery;
-use API\Models\ORM\DistributionPlace\DistributionPlaceQuery;
-use API\Models\ORM\DistributionPlace\DistributionPlaceTable;
-use API\Models\ORM\DistributionPlace\DistributionPlaceTableCollection;
-use API\Models\ORM\DistributionPlace\DistributionPlaceTableQuery;
-use API\Models\ORM\DistributionPlace\DistributionPlaceUser;
-use API\Models\ORM\DistributionPlace\DistributionPlaceUserCollection;
-use API\Models\ORM\DistributionPlace\DistributionPlaceUserQuery;
-use API\Models\ORM\Event\Event;
-use API\Models\ORM\Event\EventBankinformation;
-use API\Models\ORM\Event\EventBankinformationCollection;
-use API\Models\ORM\Event\EventBankinformationQuery;
-use API\Models\ORM\Event\EventCollection;
-use API\Models\ORM\Event\EventContact;
-use API\Models\ORM\Event\EventContactCollection;
-use API\Models\ORM\Event\EventContactQuery;
-use API\Models\ORM\Event\EventPrinter;
-use API\Models\ORM\Event\EventPrinterCollection;
-use API\Models\ORM\Event\EventPrinterQuery;
-use API\Models\ORM\Event\EventQuery;
-use API\Models\ORM\Event\EventTable;
-use API\Models\ORM\Event\EventTableCollection;
-use API\Models\ORM\Event\EventTableQuery;
-use API\Models\ORM\Event\EventUser;
-use API\Models\ORM\Event\EventUserCollection;
-use API\Models\ORM\Event\EventUserQuery;
-use API\Models\ORM\Invoice\Invoice as Invoice2;
-use API\Models\ORM\Invoice\InvoiceCollection;
-use API\Models\ORM\Invoice\InvoiceItem;
-use API\Models\ORM\Invoice\InvoiceItemCollection;
-use API\Models\ORM\Invoice\InvoiceItemQuery;
-use API\Models\ORM\Invoice\InvoiceQuery;
-use API\Models\ORM\Invoice\InvoiceType;
-use API\Models\ORM\Invoice\InvoiceTypeCollection;
-use API\Models\ORM\Invoice\InvoiceTypeQuery;
-use API\Models\ORM\Invoice\InvoiceWarning;
-use API\Models\ORM\Invoice\InvoiceWarningCollection;
-use API\Models\ORM\Invoice\InvoiceWarningQuery;
-use API\Models\ORM\Invoice\InvoiceWarningType;
-use API\Models\ORM\Invoice\InvoiceWarningTypeCollection;
-use API\Models\ORM\Invoice\InvoiceWarningTypeQuery;
-use API\Models\ORM\Menu\Availability;
-use API\Models\ORM\Menu\AvailabilityCollection;
-use API\Models\ORM\Menu\AvailabilityQuery;
-use API\Models\ORM\Menu\Menu;
-use API\Models\ORM\Menu\MenuCollection;
-use API\Models\ORM\Menu\MenuExtra;
-use API\Models\ORM\Menu\MenuExtraCollection;
-use API\Models\ORM\Menu\MenuExtraQuery;
-use API\Models\ORM\Menu\MenuGroup;
-use API\Models\ORM\Menu\MenuGroupCollection;
-use API\Models\ORM\Menu\MenuGroupQuery;
-use API\Models\ORM\Menu\MenuPossibleExtra;
-use API\Models\ORM\Menu\MenuPossibleExtraCollection;
-use API\Models\ORM\Menu\MenuPossibleExtraQuery;
-use API\Models\ORM\Menu\MenuPossibleSize;
-use API\Models\ORM\Menu\MenuPossibleSizeCollection;
-use API\Models\ORM\Menu\MenuPossibleSizeQuery;
-use API\Models\ORM\Menu\MenuQuery;
-use API\Models\ORM\Menu\MenuSize;
-use API\Models\ORM\Menu\MenuSizeCollection;
-use API\Models\ORM\Menu\MenuSizeQuery;
-use API\Models\ORM\Menu\MenuType;
-use API\Models\ORM\Menu\MenuTypeCollection;
-use API\Models\ORM\Menu\MenuTypeQuery;
-use API\Models\ORM\OIP\DistributionGivingOut;
-use API\Models\ORM\OIP\DistributionGivingOutCollection;
-use API\Models\ORM\OIP\DistributionGivingOutQuery;
-use API\Models\ORM\OIP\OrderInProgress;
-use API\Models\ORM\OIP\OrderInProgressCollection;
-use API\Models\ORM\OIP\OrderInProgressQuery;
-use API\Models\ORM\OIP\OrderInProgressRecieved;
-use API\Models\ORM\OIP\OrderInProgressRecievedCollection;
-use API\Models\ORM\OIP\OrderInProgressRecievedQuery;
-use API\Models\ORM\Ordering\Order as Order2;
-use API\Models\ORM\Ordering\OrderCollection;
-use API\Models\ORM\Ordering\OrderDetail;
-use API\Models\ORM\Ordering\OrderDetailCollection;
-use API\Models\ORM\Ordering\OrderDetailExtra;
-use API\Models\ORM\Ordering\OrderDetailExtraCollection;
-use API\Models\ORM\Ordering\OrderDetailExtraQuery;
-use API\Models\ORM\Ordering\OrderDetailMixedWith;
-use API\Models\ORM\Ordering\OrderDetailMixedWithCollection;
-use API\Models\ORM\Ordering\OrderDetailMixedWithQuery;
-use API\Models\ORM\Ordering\OrderDetailQuery;
-use API\Models\ORM\Ordering\OrderQuery;
-use API\Models\ORM\Payment\Coupon;
-use API\Models\ORM\Payment\CouponCollection;
-use API\Models\ORM\Payment\CouponQuery;
-use API\Models\ORM\Payment\PaymentCoupon;
-use API\Models\ORM\Payment\PaymentCouponCollection;
-use API\Models\ORM\Payment\PaymentCouponQuery;
-use API\Models\ORM\Payment\PaymentRecieved as PaymentRecieved2;
-use API\Models\ORM\Payment\PaymentRecievedCollection;
-use API\Models\ORM\Payment\PaymentRecievedQuery;
-use API\Models\ORM\Payment\PaymentType;
-use API\Models\ORM\Payment\PaymentTypeCollection;
-use API\Models\ORM\Payment\PaymentTypeQuery;
-use API\Models\ORM\User\Message\UserMessage;
-use API\Models\ORM\User\Message\UserMessageCollection;
-use API\Models\ORM\User\Message\UserMessageQuery;
-use API\Models\ORM\User\User;
-use API\Models\ORM\User\UserCollection;
-use API\Models\ORM\User\UserQuery;
-use API\Models\ORM\User\UserRole;
-use API\Models\ORM\User\UserRoleCollection;
-use API\Models\ORM\User\UserRoleQuery;
+use API\Models\DistributionPlace\DistributionPlace;
+use API\Models\DistributionPlace\DistributionPlaceCollection;
+use API\Models\DistributionPlace\DistributionPlaceGroup;
+use API\Models\DistributionPlace\DistributionPlaceGroupCollection;
+use API\Models\DistributionPlace\DistributionPlaceGroupQuery;
+use API\Models\DistributionPlace\DistributionPlaceQuery;
+use API\Models\DistributionPlace\DistributionPlaceTable;
+use API\Models\DistributionPlace\DistributionPlaceTableCollection;
+use API\Models\DistributionPlace\DistributionPlaceTableQuery;
+use API\Models\DistributionPlace\DistributionPlaceUser;
+use API\Models\DistributionPlace\DistributionPlaceUserCollection;
+use API\Models\DistributionPlace\DistributionPlaceUserQuery;
+use API\Models\Event\Event;
+use API\Models\Event\EventBankinformation;
+use API\Models\Event\EventBankinformationCollection;
+use API\Models\Event\EventBankinformationQuery;
+use API\Models\Event\EventCollection;
+use API\Models\Event\EventContact;
+use API\Models\Event\EventContactCollection;
+use API\Models\Event\EventContactQuery;
+use API\Models\Event\EventPrinter;
+use API\Models\Event\EventPrinterCollection;
+use API\Models\Event\EventPrinterQuery;
+use API\Models\Event\EventQuery;
+use API\Models\Event\EventTable;
+use API\Models\Event\EventTableCollection;
+use API\Models\Event\EventTableQuery;
+use API\Models\Event\EventUser;
+use API\Models\Event\EventUserCollection;
+use API\Models\Event\EventUserQuery;
+use API\Models\Invoice\Invoice as Invoice2;
+use API\Models\Invoice\InvoiceCollection;
+use API\Models\Invoice\InvoiceItem;
+use API\Models\Invoice\InvoiceItemCollection;
+use API\Models\Invoice\InvoiceItemQuery;
+use API\Models\Invoice\InvoiceQuery;
+use API\Models\Invoice\InvoiceType;
+use API\Models\Invoice\InvoiceTypeCollection;
+use API\Models\Invoice\InvoiceTypeQuery;
+use API\Models\Invoice\InvoiceWarning;
+use API\Models\Invoice\InvoiceWarningCollection;
+use API\Models\Invoice\InvoiceWarningQuery;
+use API\Models\Invoice\InvoiceWarningType;
+use API\Models\Invoice\InvoiceWarningTypeCollection;
+use API\Models\Invoice\InvoiceWarningTypeQuery;
+use API\Models\Menu\Availability;
+use API\Models\Menu\AvailabilityCollection;
+use API\Models\Menu\AvailabilityQuery;
+use API\Models\Menu\Menu;
+use API\Models\Menu\MenuCollection;
+use API\Models\Menu\MenuExtra;
+use API\Models\Menu\MenuExtraCollection;
+use API\Models\Menu\MenuExtraQuery;
+use API\Models\Menu\MenuGroup;
+use API\Models\Menu\MenuGroupCollection;
+use API\Models\Menu\MenuGroupQuery;
+use API\Models\Menu\MenuPossibleExtra;
+use API\Models\Menu\MenuPossibleExtraCollection;
+use API\Models\Menu\MenuPossibleExtraQuery;
+use API\Models\Menu\MenuPossibleSize;
+use API\Models\Menu\MenuPossibleSizeCollection;
+use API\Models\Menu\MenuPossibleSizeQuery;
+use API\Models\Menu\MenuQuery;
+use API\Models\Menu\MenuSize;
+use API\Models\Menu\MenuSizeCollection;
+use API\Models\Menu\MenuSizeQuery;
+use API\Models\Menu\MenuType;
+use API\Models\Menu\MenuTypeCollection;
+use API\Models\Menu\MenuTypeQuery;
+use API\Models\OIP\DistributionGivingOut;
+use API\Models\OIP\DistributionGivingOutCollection;
+use API\Models\OIP\DistributionGivingOutQuery;
+use API\Models\OIP\OrderInProgress;
+use API\Models\OIP\OrderInProgressCollection;
+use API\Models\OIP\OrderInProgressQuery;
+use API\Models\OIP\OrderInProgressRecieved;
+use API\Models\OIP\OrderInProgressRecievedCollection;
+use API\Models\OIP\OrderInProgressRecievedQuery;
+use API\Models\Ordering\Order as Order2;
+use API\Models\Ordering\OrderCollection;
+use API\Models\Ordering\OrderDetail;
+use API\Models\Ordering\OrderDetailCollection;
+use API\Models\Ordering\OrderDetailExtra;
+use API\Models\Ordering\OrderDetailExtraCollection;
+use API\Models\Ordering\OrderDetailExtraQuery;
+use API\Models\Ordering\OrderDetailMixedWith;
+use API\Models\Ordering\OrderDetailMixedWithCollection;
+use API\Models\Ordering\OrderDetailMixedWithQuery;
+use API\Models\Ordering\OrderDetailQuery;
+use API\Models\Ordering\OrderQuery;
+use API\Models\Payment\Coupon;
+use API\Models\Payment\CouponCollection;
+use API\Models\Payment\CouponQuery;
+use API\Models\Payment\PaymentCoupon;
+use API\Models\Payment\PaymentCouponCollection;
+use API\Models\Payment\PaymentCouponQuery;
+use API\Models\Payment\PaymentRecieved as PaymentRecieved2;
+use API\Models\Payment\PaymentRecievedCollection;
+use API\Models\Payment\PaymentRecievedQuery;
+use API\Models\Payment\PaymentType;
+use API\Models\Payment\PaymentTypeCollection;
+use API\Models\Payment\PaymentTypeQuery;
+use API\Models\User\Message\UserMessage;
+use API\Models\User\Message\UserMessageCollection;
+use API\Models\User\Message\UserMessageQuery;
+use API\Models\User\User;
+use API\Models\User\UserCollection;
+use API\Models\User\UserQuery;
+use API\Models\User\UserRole;
+use API\Models\User\UserRoleCollection;
+use API\Models\User\UserRoleQuery;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
@@ -310,16 +310,16 @@ $container->registerService(IUserQuery::class, $container->factory(function () {
     return new UserQuery();
 }));
 
-$container->registerService(Order::class, $container->factory(function () {
-    return new Order();
+$container->registerService(Order::class, $container->factory(function ($c) {
+    return new Order($c);
 }), IPrintingType::class);
 
-$container->registerService(Invoice::class, $container->factory(function () {
-    return new Invoice();
+$container->registerService(Invoice::class, $container->factory(function ($c) {
+    return new Invoice($c);
 }), IPrintingType::class);
 
-$container->registerService(PaymentRecieved::class, $container->factory(function () {
-    return new PaymentRecieved();
+$container->registerService(PaymentRecieved::class, $container->factory(function ($c) {
+    return new PaymentRecieved($c);
 }), IPrintingType::class);
 
 $container->registerService(IPrintingInformation::class, $container->factory(function () {
@@ -342,16 +342,16 @@ $container->registerService(IValidate::class, function () {
     return new Validate();
 });
 
-$container->registerService(IDistributionPlace::class, $container->factory(function () {
-    return new DistributionPlace();
+$container->registerService(IDistributionPlace::class, $container->factory(function ($c) {
+    return new DistributionPlace($c);
 }));
 
 $container->registerService(IDistributionPlaceCollection::class, $container->factory(function () {
     return new DistributionPlaceCollection();
 }));
 
-$container->registerService(IDistributionPlaceGroup::class, $container->factory(function () {
-    return new DistributionPlaceGroup();
+$container->registerService(IDistributionPlaceGroup::class, $container->factory(function ($c) {
+    return new DistributionPlaceGroup($c);
 }));
 
 $container->registerService(IDistributionPlaceGroupCollection::class, $container->factory(function () {
@@ -366,8 +366,8 @@ $container->registerService(IDistributionPlaceQuery::class, $container->factory(
     return new DistributionPlaceQuery();
 }));
 
-$container->registerService(IDistributionPlaceTable::class, $container->factory(function () {
-    return new DistributionPlaceTable();
+$container->registerService(IDistributionPlaceTable::class, $container->factory(function ($c) {
+    return new DistributionPlaceTable($c);
 }));
 
 $container->registerService(IDistributionPlaceTableCollection::class, $container->factory(function () {
@@ -378,8 +378,8 @@ $container->registerService(IDistributionPlaceTableQuery::class, $container->fac
     return new DistributionPlaceTableQuery();
 }));
 
-$container->registerService(IDistributionPlaceUser::class, $container->factory(function () {
-    return new DistributionPlaceUser();
+$container->registerService(IDistributionPlaceUser::class, $container->factory(function ($c) {
+    return new DistributionPlaceUser($c);
 }));
 
 $container->registerService(IDistributionPlaceUserCollection::class, $container->factory(function () {
@@ -390,12 +390,12 @@ $container->registerService(IDistributionPlaceUserQuery::class, $container->fact
     return new DistributionPlaceUserQuery();
 }));
 
-$container->registerService(IEvent::class, $container->factory(function () {
-    return new Event();
+$container->registerService(IEvent::class, $container->factory(function ($c) {
+    return new Event($c);
 }));
 
-$container->registerService(IEventBankinformation::class, $container->factory(function () {
-    return new EventBankinformation();
+$container->registerService(IEventBankinformation::class, $container->factory(function ($c) {
+    return new EventBankinformation($c);
 }));
 
 $container->registerService(IEventBankinformationCollection::class, $container->factory(function () {
@@ -410,8 +410,8 @@ $container->registerService(IEventCollection::class, $container->factory(functio
     return new EventCollection();
 }));
 
-$container->registerService(IEventContact::class, $container->factory(function () {
-    return new EventContact();
+$container->registerService(IEventContact::class, $container->factory(function ($c) {
+    return new EventContact($c);
 }));
 
 $container->registerService(IEventContactCollection::class, $container->factory(function () {
@@ -422,8 +422,8 @@ $container->registerService(IEventContactQuery::class, $container->factory(funct
     return new EventContactQuery();
 }));
 
-$container->registerService(IEventPrinter::class, $container->factory(function () {
-    return new EventPrinter();
+$container->registerService(IEventPrinter::class, $container->factory(function ($c) {
+    return new EventPrinter($c);
 }));
 
 $container->registerService(IEventPrinterCollection::class, $container->factory(function () {
@@ -438,8 +438,8 @@ $container->registerService(IEventQuery::class, $container->factory(function () 
     return new EventQuery();
 }));
 
-$container->registerService(IEventTable::class, $container->factory(function () {
-    return new EventTable();
+$container->registerService(IEventTable::class, $container->factory(function ($c) {
+    return new EventTable($c);
 }));
 
 $container->registerService(IEventTableCollection::class, $container->factory(function () {
@@ -450,8 +450,8 @@ $container->registerService(IEventTableQuery::class, $container->factory(functio
     return new EventTableQuery();
 }));
 
-$container->registerService(IEventUser::class, $container->factory(function () {
-    return new EventUser();
+$container->registerService(IEventUser::class, $container->factory(function ($c) {
+    return new EventUser($c);
 }));
 
 $container->registerService(IEventUserCollection::class, $container->factory(function () {
@@ -462,16 +462,16 @@ $container->registerService(IEventUserQuery::class, $container->factory(function
     return new EventUserQuery();
 }));
 
-$container->registerService(IInvoice::class, $container->factory(function () {
-    return new Invoice2();
+$container->registerService(IInvoice::class, $container->factory(function ($c) {
+    return new Invoice2($c);
 }));
 
 $container->registerService(IInvoiceCollection::class, $container->factory(function () {
     return new InvoiceCollection();
 }));
 
-$container->registerService(IInvoiceItem::class, $container->factory(function () {
-    return new InvoiceItem();
+$container->registerService(IInvoiceItem::class, $container->factory(function ($c) {
+    return new InvoiceItem($c);
 }));
 
 $container->registerService(IInvoiceItemCollection::class, $container->factory(function () {
@@ -486,8 +486,8 @@ $container->registerService(IInvoiceQuery::class, $container->factory(function (
     return new InvoiceQuery();
 }));
 
-$container->registerService(IInvoiceType::class, $container->factory(function () {
-    return new InvoiceType();
+$container->registerService(IInvoiceType::class, $container->factory(function ($c) {
+    return new InvoiceType($c);
 }));
 
 $container->registerService(IInvoiceTypeCollection::class, $container->factory(function () {
@@ -498,8 +498,8 @@ $container->registerService(IInvoiceTypeQuery::class, $container->factory(functi
     return new InvoiceTypeQuery();
 }));
 
-$container->registerService(IInvoiceWarning::class, $container->factory(function () {
-    return new InvoiceWarning();
+$container->registerService(IInvoiceWarning::class, $container->factory(function ($c) {
+    return new InvoiceWarning($c);
 }));
 
 $container->registerService(IInvoiceWarningCollection::class, $container->factory(function () {
@@ -510,8 +510,8 @@ $container->registerService(IInvoiceWarningQuery::class, $container->factory(fun
     return new InvoiceWarningQuery();
 }));
 
-$container->registerService(IInvoiceWarningType::class, $container->factory(function () {
-    return new InvoiceWarningType();
+$container->registerService(IInvoiceWarningType::class, $container->factory(function ($c) {
+    return new InvoiceWarningType($c);
 }));
 
 $container->registerService(IInvoiceWarningTypeCollection::class, $container->factory(function () {
@@ -522,8 +522,8 @@ $container->registerService(IInvoiceWarningTypeQuery::class, $container->factory
     return new InvoiceWarningTypeQuery();
 }));
 
-$container->registerService(IAvailability::class, $container->factory(function () {
-    return new Availability();
+$container->registerService(IAvailability::class, $container->factory(function ($c) {
+    return new Availability($c);
 }));
 
 $container->registerService(IAvailabilityCollection::class, $container->factory(function () {
@@ -534,16 +534,16 @@ $container->registerService(IAvailabilityQuery::class, $container->factory(funct
     return new AvailabilityQuery();
 }));
 
-$container->registerService(IMenu::class, $container->factory(function () {
-    return new Menu();
+$container->registerService(IMenu::class, $container->factory(function ($c) {
+    return new Menu($c);
 }));
 
 $container->registerService(IMenuCollection::class, $container->factory(function () {
     return new MenuCollection();
 }));
 
-$container->registerService(IMenuExtra::class, $container->factory(function () {
-    return new MenuExtra();
+$container->registerService(IMenuExtra::class, $container->factory(function ($c) {
+    return new MenuExtra($c);
 }));
 
 $container->registerService(IMenuExtraCollection::class, $container->factory(function () {
@@ -554,8 +554,8 @@ $container->registerService(IMenuExtraQuery::class, $container->factory(function
     return new MenuExtraQuery();
 }));
 
-$container->registerService(IMenuGroup::class, $container->factory(function () {
-    return new MenuGroup();
+$container->registerService(IMenuGroup::class, $container->factory(function ($c) {
+    return new MenuGroup($c);
 }));
 
 $container->registerService(IMenuGroupCollection::class, $container->factory(function () {
@@ -566,8 +566,8 @@ $container->registerService(IMenuGroupQuery::class, $container->factory(function
     return new MenuGroupQuery();
 }));
 
-$container->registerService(IMenuPossibleExtra::class, $container->factory(function () {
-    return new MenuPossibleExtra();
+$container->registerService(IMenuPossibleExtra::class, $container->factory(function ($c) {
+    return new MenuPossibleExtra($c);
 }));
 
 $container->registerService(IMenuPossibleExtraCollection::class, $container->factory(function () {
@@ -578,8 +578,8 @@ $container->registerService(IMenuPossibleExtraQuery::class, $container->factory(
     return new MenuPossibleExtraQuery();
 }));
 
-$container->registerService(IMenuPossibleSize::class, $container->factory(function () {
-    return new MenuPossibleSize();
+$container->registerService(IMenuPossibleSize::class, $container->factory(function ($c) {
+    return new MenuPossibleSize($c);
 }));
 
 $container->registerService(IMenuPossibleSizeCollection::class, $container->factory(function () {
@@ -594,8 +594,8 @@ $container->registerService(IMenuQuery::class, $container->factory(function () {
     return new MenuQuery();
 }));
 
-$container->registerService(IMenuSize::class, $container->factory(function () {
-    return new MenuSize();
+$container->registerService(IMenuSize::class, $container->factory(function ($c) {
+    return new MenuSize($c);
 }));
 
 $container->registerService(IMenuSizeCollection::class, $container->factory(function () {
@@ -606,8 +606,8 @@ $container->registerService(IMenuSizeQuery::class, $container->factory(function 
     return new MenuSizeQuery();
 }));
 
-$container->registerService(IMenuType::class, $container->factory(function () {
-    return new MenuType();
+$container->registerService(IMenuType::class, $container->factory(function ($c) {
+    return new MenuType($c);
 }));
 
 $container->registerService(IMenuTypeCollection::class, $container->factory(function () {
@@ -618,8 +618,8 @@ $container->registerService(IMenuTypeQuery::class, $container->factory(function 
     return new MenuTypeQuery();
 }));
 
-$container->registerService(IDistributionGivingOut::class, $container->factory(function () {
-    return new DistributionGivingOut();
+$container->registerService(IDistributionGivingOut::class, $container->factory(function ($c) {
+    return new DistributionGivingOut($c);
 }));
 
 $container->registerService(IDistributionGivingOutCollection::class, $container->factory(function () {
@@ -630,8 +630,8 @@ $container->registerService(IDistributionGivingOutQuery::class, $container->fact
     return new DistributionGivingOutQuery();
 }));
 
-$container->registerService(IOrderInProgress::class, $container->factory(function () {
-    return new OrderInProgress();
+$container->registerService(IOrderInProgress::class, $container->factory(function ($c) {
+    return new OrderInProgress($c);
 }));
 
 $container->registerService(IOrderInProgressCollection::class, $container->factory(function () {
@@ -642,8 +642,8 @@ $container->registerService(IOrderInProgressQuery::class, $container->factory(fu
     return new OrderInProgressQuery();
 }));
 
-$container->registerService(IOrderInProgressRecieved::class, $container->factory(function () {
-    return new OrderInProgressRecieved();
+$container->registerService(IOrderInProgressRecieved::class, $container->factory(function ($c) {
+    return new OrderInProgressRecieved($c);
 }));
 
 $container->registerService(IOrderInProgressRecievedCollection::class, $container->factory(function () {
@@ -654,24 +654,24 @@ $container->registerService(IOrderInProgressRecievedQuery::class, $container->fa
     return new OrderInProgressRecievedQuery();
 }));
 
-$container->registerService(IOrder::class, $container->factory(function () {
-    return new Order2();
+$container->registerService(IOrder::class, $container->factory(function ($c) {
+    return new Order2($c);
 }));
 
 $container->registerService(IOrderCollection::class, $container->factory(function () {
     return new OrderCollection();
 }));
 
-$container->registerService(IOrderDetail::class, $container->factory(function () {
-    return new OrderDetail();
+$container->registerService(IOrderDetail::class, $container->factory(function ($c) {
+    return new OrderDetail($c);
 }));
 
 $container->registerService(IOrderDetailCollection::class, $container->factory(function () {
     return new OrderDetailCollection();
 }));
 
-$container->registerService(IOrderDetailExtra::class, $container->factory(function () {
-    return new OrderDetailExtra();
+$container->registerService(IOrderDetailExtra::class, $container->factory(function ($c) {
+    return new OrderDetailExtra($c);
 }));
 
 $container->registerService(IOrderDetailExtraCollection::class, $container->factory(function () {
@@ -682,8 +682,8 @@ $container->registerService(IOrderDetailExtraQuery::class, $container->factory(f
     return new OrderDetailExtraQuery();
 }));
 
-$container->registerService(IOrderDetailMixedWith::class, $container->factory(function () {
-    return new OrderDetailMixedWith();
+$container->registerService(IOrderDetailMixedWith::class, $container->factory(function ($c) {
+    return new OrderDetailMixedWith($c);
 }));
 
 $container->registerService(IOrderDetailMixedWithCollection::class, $container->factory(function () {
@@ -702,8 +702,8 @@ $container->registerService(IOrderQuery::class, $container->factory(function () 
     return new OrderQuery();
 }));
 
-$container->registerService(ICoupon::class, $container->factory(function () {
-    return new Coupon();
+$container->registerService(ICoupon::class, $container->factory(function ($c) {
+    return new Coupon($c);
 }));
 
 $container->registerService(ICouponCollection::class, $container->factory(function () {
@@ -714,8 +714,8 @@ $container->registerService(ICouponQuery::class, $container->factory(function ()
     return new CouponQuery();
 }));
 
-$container->registerService(IPaymentCoupon::class, $container->factory(function () {
-    return new PaymentCoupon();
+$container->registerService(IPaymentCoupon::class, $container->factory(function ($c) {
+    return new PaymentCoupon($c);
 }));
 
 $container->registerService(IPaymentCouponCollection::class, $container->factory(function () {
@@ -726,8 +726,8 @@ $container->registerService(IPaymentCouponQuery::class, $container->factory(func
     return new PaymentCouponQuery();
 }));
 
-$container->registerService(IPaymentRecieved::class, $container->factory(function () {
-    return new PaymentRecieved2();
+$container->registerService(IPaymentRecieved::class, $container->factory(function ($c) {
+    return new PaymentRecieved2($c);
 }));
 
 $container->registerService(IPaymentRecievedCollection::class, $container->factory(function () {
@@ -738,8 +738,8 @@ $container->registerService(IPaymentRecievedQuery::class, $container->factory(fu
     return new PaymentRecievedQuery();
 }));
 
-$container->registerService(IPaymentType::class, $container->factory(function () {
-    return new PaymentType();
+$container->registerService(IPaymentType::class, $container->factory(function ($c) {
+    return new PaymentType($c);
 }));
 
 $container->registerService(IPaymentTypeCollection::class, $container->factory(function () {
@@ -750,8 +750,8 @@ $container->registerService(IPaymentTypeQuery::class, $container->factory(functi
     return new PaymentTypeQuery();
 }));
 
-$container->registerService(IUserMessage::class, $container->factory(function () {
-    return new UserMessage();
+$container->registerService(IUserMessage::class, $container->factory(function ($c) {
+    return new UserMessage($c);
 }));
 
 $container->registerService(IUserMessageCollection::class, $container->factory(function () {
@@ -762,8 +762,8 @@ $container->registerService(IUserMessageQuery::class, $container->factory(functi
     return new UserMessageQuery();
 }));
 
-$container->registerService(IUser::class, $container->factory(function () {
-    return new User();
+$container->registerService(IUser::class, $container->factory(function ($c) {
+    return new User($c);
 }));
 
 $container->registerService(IUserCollection::class, $container->factory(function () {
@@ -774,8 +774,8 @@ $container->registerService(IUserQuery::class, $container->factory(function () {
     return new UserQuery();
 }));
 
-$container->registerService(IUserRole::class, $container->factory(function () {
-    return new UserRole();
+$container->registerService(IUserRole::class, $container->factory(function ($c) {
+    return new UserRole($c);
 }));
 
 $container->registerService(IUserRoleCollection::class, $container->factory(function () {
