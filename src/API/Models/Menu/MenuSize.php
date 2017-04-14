@@ -2,8 +2,11 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Container;
+use API\Lib\Interfaces\Models\Event\IEvent;
 use API\Lib\Interfaces\Models\Menu\IMenuSize;
-use API\Models\Menu\Base\MenuSize as BaseMenuSize;
+use API\Models\Model;
+use API\Models\ORM\Menu\MenuSize as MenuSizeORM;
 
 /**
  * Skeleton subclass for representing a row from the 'menu_size' table.
@@ -12,6 +15,73 @@ use API\Models\Menu\Base\MenuSize as BaseMenuSize;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuSize extends BaseMenuSize implements IMenuSize
+class MenuSize extends Model implements IMenuSize
 {
+    private $container;
+
+    function __construct(Container $container) {
+        $this->container = $container;
+        $this->setModel(new MenuSizeORM());
+    }
+
+    public function getEvent(): IEvent
+    {
+        $event = $this->model->getEvent();
+
+        $eventModel = $this->container->get(IEvent::class);
+        $eventModel->setModel($event);
+
+        return $eventModel;
+    }
+
+    public function getEventid(): int
+    {
+        return $this->model->getEventid();
+    }
+
+    public function getFactor(): float
+    {
+        return $this->model->getFactor();
+    }
+
+    public function getMenuSizeid(): int
+    {
+        return $this->model->getMenuSizeid();
+    }
+
+    public function getName(): string
+    {
+        return $this->model->getName();
+    }
+
+    public function setEvent($event): IMenuSize
+    {
+        $this->model->setEvent($event);
+        return $this;
+    }
+
+    public function setEventid($eventid): IMenuSize
+    {
+        $this->model->setEventid($eventid);
+        return $this;
+    }
+
+    public function setFactor($factor): IMenuSize
+    {
+        $this->model->setFactor($factor);
+        return $this;
+    }
+
+    public function setMenuSizeid($menuSizeid): IMenuSize
+    {
+        $this->model->setMenuSizeid($menuSizeid);
+        return $this;
+    }
+
+    public function setName($name): IMenuSize
+    {
+        $this->model->setName($name);
+        return $this;
+    }
+
 }

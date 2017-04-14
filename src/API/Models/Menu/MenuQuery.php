@@ -3,7 +3,6 @@
 namespace API\Models\Menu;
 
 use API\Lib\Interfaces\Models\Menu\IMenuQuery;
-use API\Models\Menu\Base\MenuQuery as BaseMenuQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'menu' table.
@@ -12,6 +11,6 @@ use API\Models\Menu\Base\MenuQuery as BaseMenuQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuQuery extends BaseMenuQuery implements IMenuQuery
+class MenuQuery implements IMenuQuery
 {
 }

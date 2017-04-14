@@ -2,7 +2,7 @@
 
 namespace API\Models\Event;
 
-use API\Models\Event\Base\EventUserQuery as BaseEventUserQuery;
+use API\Lib\Interfaces\Models\Event\IEventUserQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'event_user' table.
@@ -11,6 +11,6 @@ use API\Models\Event\Base\EventUserQuery as BaseEventUserQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class EventUserQuery extends BaseEventUserQuery
+class EventUserQuery implements IEventUserQuery
 {
 }

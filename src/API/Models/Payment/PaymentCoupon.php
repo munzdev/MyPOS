@@ -2,8 +2,12 @@
 
 namespace API\Models\Payment;
 
+use API\Lib\Container;
+use API\Lib\Interfaces\Models\Payment\ICoupon;
 use API\Lib\Interfaces\Models\Payment\IPaymentCoupon;
-use API\Models\Payment\Base\PaymentCoupon as BasePaymentCoupon;
+use API\Lib\Interfaces\Models\Payment\IPaymentRecieved;
+use API\Models\Model;
+use API\Models\ORM\Payment\PaymentCoupon as PaymentCouponORM;
 
 /**
  * Skeleton subclass for representing a row from the 'payment_coupon' table.
@@ -12,6 +16,78 @@ use API\Models\Payment\Base\PaymentCoupon as BasePaymentCoupon;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class PaymentCoupon extends BasePaymentCoupon implements IPaymentCoupon
+class PaymentCoupon extends Model implements IPaymentCoupon
 {
+    private $container;
+
+    function __construct(Container $container) {
+        $this->container = $container;
+        $this->setModel(new PaymentCouponORM());
+    }
+
+    public function getCoupon(): ICoupon
+    {
+        $coupon = $this->model->getCoupon();
+
+        $couponModel = $this->container->get(ICoupon::class);
+        $couponModel->setModel($coupon);
+
+        return $couponModel;
+    }
+
+    public function getCouponid(): int
+    {
+        return $this->model->getCouponid();
+    }
+
+    public function getPaymentRecieved(): IPaymentRecieved
+    {
+        $paymentRecieved = $this->model->getPaymentRecieved();
+
+        $paymentRecievedModel = $this->container->get(IPaymentRecieved::class);
+        $paymentRecievedModel->setModel($coupon);
+
+        return $paymentRecievedModel;
+    }
+
+    public function getPaymentRecievedid(): int
+    {
+        return $this->model->getPaymentRecievedid();
+    }
+
+    public function getValueUsed(): float
+    {
+        return $this->model->getValueUsed();
+    }
+
+    public function setCoupon($coupon): IPaymentCoupon
+    {
+        $this->model->setCoupon($coupon);
+        return $this;
+    }
+
+    public function setCouponid($couponid): IPaymentCoupon
+    {
+        $this->model->setCouponid($couponid);
+        return $this;
+    }
+
+    public function setPaymentRecieved($paymentRecieved): IPaymentCoupon
+    {
+        $this->model->setPaymentRecieved($paymentRecieved);
+        return $this;
+    }
+
+    public function setPaymentRecievedid($paymentRecievedid): IPaymentCoupon
+    {
+        $this->model->setPaymentRecievedid($paymentRecievedid);
+        return $this;
+    }
+
+    public function setValueUsed($valueUsed): IPaymentCoupon
+    {
+        $this->model->setValueUsed($valueUsed);
+        return $this;
+    }
+
 }

@@ -3,7 +3,6 @@
 namespace API\Models\Event;
 
 use API\Lib\Interfaces\Models\Event\IEventPrinterQuery;
-use API\Models\Event\Base\EventPrinterQuery as BaseEventPrinterQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'event_printer' table.
@@ -12,6 +11,6 @@ use API\Models\Event\Base\EventPrinterQuery as BaseEventPrinterQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class EventPrinterQuery extends BaseEventPrinterQuery implements IEventPrinterQuery
+class EventPrinterQuery implements IEventPrinterQuery
 {
 }

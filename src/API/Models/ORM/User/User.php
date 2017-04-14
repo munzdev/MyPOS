@@ -16,5 +16,12 @@ use API\Models\ORM\User\Base\User as BaseUser;
  */
 class User extends BaseUser
 {
-
+    /**
+     *
+     * @return EventUser
+     */
+    public function getEventUser() : EventUser
+    {
+        return $this->getEventUsers()->getFirst();
+    }
 }

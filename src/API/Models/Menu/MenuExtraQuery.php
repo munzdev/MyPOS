@@ -3,7 +3,6 @@
 namespace API\Models\Menu;
 
 use API\Lib\Interfaces\Models\Menu\IMenuExtraQuery;
-use API\Models\Menu\Base\MenuExtraQuery as BaseMenuExtraQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'menu_extra' table.
@@ -12,6 +11,6 @@ use API\Models\Menu\Base\MenuExtraQuery as BaseMenuExtraQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class MenuExtraQuery extends BaseMenuExtraQuery implements IMenuExtraQuery
+class MenuExtraQuery implements IMenuExtraQuery
 {
 }

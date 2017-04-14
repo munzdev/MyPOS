@@ -2,8 +2,10 @@
 
 namespace API\Models\Payment;
 
+use API\Lib\Container;
 use API\Lib\Interfaces\Models\Payment\IPaymentType;
-use API\Models\Payment\Base\PaymentType as BasePaymentType;
+use API\Models\Model;
+use API\Models\ORM\Payment\PaymentType as PaymentTypeORM;
 
 /**
  * Skeleton subclass for representing a row from the 'payment_type' table.
@@ -12,6 +14,35 @@ use API\Models\Payment\Base\PaymentType as BasePaymentType;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class PaymentType extends BasePaymentType implements IPaymentType
+class PaymentType extends Model implements IPaymentType
 {
+    private $container;
+
+    function __construct(Container $container) {
+        $this->container = $container;
+        $this->setModel(new PaymentTypeORM());
+    }
+
+    public function getName(): string
+    {
+        return $this->model->getName();
+    }
+
+    public function getPaymentTypeid(): int
+    {
+        return $this->model->getPaymentTypeid();
+    }
+
+    public function setName($name): IPaymentType
+    {
+        $this->model->setName($name);
+        return $this;
+    }
+
+    public function setPaymentTypeid($paymentTypeid): IPaymentType
+    {
+        $this->model->setPaymentTypeid($paymentTypeid);
+        return $this;
+    }
+
 }

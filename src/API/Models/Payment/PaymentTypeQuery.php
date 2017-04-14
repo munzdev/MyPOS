@@ -2,8 +2,9 @@
 
 namespace API\Models\Payment;
 
+use API\Lib\Interfaces\Models\Payment\IPaymentTypeCollection;
 use API\Lib\Interfaces\Models\Payment\IPaymentTypeQuery;
-use API\Models\Payment\Base\PaymentTypeQuery as BasePaymentTypeQuery;
+use API\Models\ORM\Payment\PaymentTypeQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'payment_type' table.
@@ -12,6 +13,16 @@ use API\Models\Payment\Base\PaymentTypeQuery as BasePaymentTypeQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class PaymentTypeQuery extends BasePaymentTypeQuery implements IPaymentTypeQuery
+class PaymentTypeQuery implements IPaymentTypeQuery
 {
+    public function find(): IPaymentTypeCollection
+    {
+        $paymentType = PaymentTypeQuery::create()->find();
+
+        $paymentTypeCollection = $this->container->get(IPaymentTypeCollection::class);
+        $paymentTypeCollection->setCollection($paymentType);
+
+        return $paymentTypeCollection;
+    }
+
 }

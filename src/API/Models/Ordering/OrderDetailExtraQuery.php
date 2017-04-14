@@ -12,6 +12,6 @@ use API\Models\Ordering\Base\OrderDetailExtraQuery as BaseOrderDetailExtraQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class OrderDetailExtraQuery extends BaseOrderDetailExtraQuery implements IOrderDetailExtraQuery
+class OrderDetailExtraQuery implements IOrderDetailExtraQuery
 {
 }

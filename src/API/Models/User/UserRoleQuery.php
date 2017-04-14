@@ -2,8 +2,9 @@
 
 namespace API\Models\User;
 
+use API\Lib\Interfaces\Models\User\IUserRoleCollection;
 use API\Lib\Interfaces\Models\User\IUserRoleQuery;
-use API\Models\User\Base\UserRoleQuery as BaseUserRoleQuery;
+use API\Models\ORM\User\UserRoleQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'user_role' table.
@@ -12,6 +13,16 @@ use API\Models\User\Base\UserRoleQuery as BaseUserRoleQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class UserRoleQuery extends BaseUserRoleQuery implements IUserRoleQuery
+class UserRoleQuery implements IUserRoleQuery
 {
+    public function find(): IUserRoleCollection
+    {
+        $userRoles = UserRoleQuery::create()->find();
+
+        $userRoleCollection = $this->container->get(IUserRoleCollection::class);
+        $userRoleCollection->setCollection($userRoles);
+
+        return $userRoleCollection;
+    }
+
 }

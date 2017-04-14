@@ -3,7 +3,6 @@
 namespace API\Models\OIP;
 
 use API\Lib\Interfaces\Models\OIP\IDistributionGivingOutQuery;
-use API\Models\OIP\Base\DistributionGivingOutQuery as BaseDistributionGivingOutQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'distribution_giving_out' table.
@@ -12,6 +11,6 @@ use API\Models\OIP\Base\DistributionGivingOutQuery as BaseDistributionGivingOutQ
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class DistributionGivingOutQuery extends BaseDistributionGivingOutQuery implements IDistributionGivingOutQuery
+class DistributionGivingOutQuery implements IDistributionGivingOutQuery
 {
 }

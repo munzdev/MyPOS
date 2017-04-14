@@ -2,9 +2,17 @@
 
 namespace API\Models\Ordering;
 
+use API\Lib\Container;
+use API\Lib\Interfaces\Models\Menu\IAvailability;
+use API\Lib\Interfaces\Models\Menu\IMenu;
+use API\Lib\Interfaces\Models\Menu\IMenuGroup;
+use API\Lib\Interfaces\Models\Menu\IMenuSize;
+use API\Lib\Interfaces\Models\Ordering\IOrder;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetail;
 use API\Lib\Interfaces\Models\User\IUser;
-use API\Models\Ordering\Base\OrderDetail as BaseOrderDetail;
+use API\Models\Model;
+use API\Models\ORM\Ordering\OrderDetail as OrderDetailORM;
+use DateTime;
 
 /**
  * Skeleton subclass for representing a row from the 'order_detail' table.
@@ -13,16 +21,262 @@ use API\Models\Ordering\Base\OrderDetail as BaseOrderDetail;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class OrderDetail extends BaseOrderDetail implements IOrderDetail
+class OrderDetail extends Model implements IOrderDetail
 {
+    private $container;
+
+    function __construct(Container $container) {
+        $this->container = $container;
+        $this->setModel(new OrderDetailORM());
+    }
+
+    public function getAmount(): int
+    {
+        return $this->model->getAmount();
+    }
+
+    public function getAvailability(): IAvailability
+    {
+        $availability = $this->model->getAvailability();
+
+        $availabilityModel = $this->container->get(IAvailability::class);
+        $availabilityModel->setModel($availability);
+
+        return $availabilityModel;
+    }
+
+    public function getAvailabilityAmount(): int
+    {
+        return $this->model->getAvailabilityAmount();
+    }
+
+    public function getAvailabilityid(): int
+    {
+        return $this->model->getAvailabilityid();
+    }
+
+    public function getDistributionFinished(): DateTime
+    {
+        return $this->model->getDistributionFinished();
+    }
+
+    public function getExtraDetail(): string
+    {
+        return $this->model->getExtraDetail();
+    }
+
+    public function getInvoiceFinished(): DateTime
+    {
+        return $this->model->getInvoiceFinished();
+    }
+
+    public function getMenu(): IMenu
+    {
+        $menu = $this->model->getMenu();
+
+        $menuModel = $this->container->get(IMenu::class);
+        $menuModel->setModel($menu);
+
+        return $menuModel;
+    }
+
+    public function getMenuGroup(): IMenuGroup
+    {
+        $menuGroup = $this->model->getMenuGroup();
+
+        $menuGroupModel = $this->container->get(IMenuGroup::class);
+        $menuGroupModel->setModel($menuGroup);
+
+        return $menuGroupModel;
+    }
+
+    public function getMenuGroupid(): int
+    {
+        return $this->model->getMenuGroupid();
+    }
+
+    public function getMenuSize(): IMenuSize
+    {
+        $menuSize = $this->model->getMenuSize();
+
+        $menuSizeModel = $this->container->get(IMenuSize::class);
+        $menuSizeModel->setModel($menuSize);
+
+        return $menuSizeModel;
+    }
+
+    public function getMenuSizeid(): int
+    {
+        return $this->model->getMenuSizeid();
+    }
+
+    public function getMenuid(): int
+    {
+        return $this->model->getMenuid();
+    }
+
+    public function getOrder(): IOrder
+    {
+        $order = $this->model->getOrder();
+
+        $orderModel = $this->container->get(IOrder::class);
+        $orderModel->setModel($order);
+
+        return $orderModel;
+    }
+
+    public function getOrderDetailid(): int
+    {
+        return $this->model->getOrderDetailid();
+    }
+
+    public function getOrderid(): int
+    {
+        return $this->model->getOrderid();
+    }
+
+    public function getSinglePrice(): float
+    {
+        return $this->model->getSinglePrice();
+    }
+
     public function getSinglePriceModifiedByUser(): IUser
     {
-        $this->getUser();
+        $user = $this->model->getSinglePriceModifiedByUser();
+
+        $userModel = $this->container->get(IUser::class);
+        $userModel->setModel($user);
+
+        return $userModel;
+    }
+
+    public function getSinglePriceModifiedByUserid(): int
+    {
+        return $this->model->getSinglePriceModifiedByUserid();
+    }
+
+    public function getVerified(): boolean
+    {
+        return $this->model->getVerified();
+    }
+
+    public function setAmount($amount): IOrderDetail
+    {
+        $this->model->setAmount($amount);
+        return $this;
+    }
+
+    public function setAvailability($availability): IOrderDetail
+    {
+        $this->model->setAvailability($availability);
+        return $this;
+    }
+
+    public function setAvailabilityAmount($availabilityAmount): IOrderDetail
+    {
+        $this->model->setAvailabilityAmount($availabilityAmount);
+        return $this;
+    }
+
+    public function setAvailabilityid($availabilityid): IOrderDetail
+    {
+        $this->model->setAvailabilityid($availabilityid);
+        return $this;
+    }
+
+    public function setDistributionFinished($distributionFinished): IOrderDetail
+    {
+        $this->model->setDistributionFinished($distributionFinished);
+        return $this;
+    }
+
+    public function setExtraDetail($extraDetail): IOrderDetail
+    {
+        $this->model->setExtraDetail($extraDetail);
+        return $this;
+    }
+
+    public function setInvoiceFinished($invoiceFinished): IOrderDetail
+    {
+        $this->model->setInvoiceFinished($invoiceFinished);
+        return $this;
+    }
+
+    public function setMenu($menu): IOrderDetail
+    {
+        $this->model->setMenu($menu);
+        return $this;
+    }
+
+    public function setMenuGroup($menuGroup): IOrderDetail
+    {
+        $this->model->setMenuGroup($menuGroup);
+        return $this;
+    }
+
+    public function setMenuGroupid($menuGroupid): IOrderDetail
+    {
+        $this->model->setMenuGroupid($menuGroupid);
+        return $this;
+    }
+
+    public function setMenuSize($menuSize): IOrderDetail
+    {
+        $this->model->setMenuSize($menuSize);
+        return $this;
+    }
+
+    public function setMenuSizeid($menuSizeid): IOrderDetail
+    {
+        $this->model->setMenuSizeid($menuSizeid);
+        return $this;
+    }
+
+    public function setMenuid($menuid): IOrderDetail
+    {
+        $this->model->setMenuid($menuid);
+        return $this;
+    }
+
+    public function setOrder($order): IOrderDetail
+    {
+        $this->model->setOrder($order);
+        return $this;
+    }
+
+    public function setOrderDetailid($orderDetailid): IOrderDetail
+    {
+        $this->model->setOrderDetailid($orderDetailid);
+        return $this;
+    }
+
+    public function setOrderid($orderid): IOrderDetail
+    {
+        $this->model->setOrderid($orderid);
+        return $this;
+    }
+
+    public function setSinglePrice($singlePrice): IOrderDetail
+    {
+        $this->model->setSinglePrice($singlePrice);
+        return $this;
     }
 
     public function setSinglePriceModifiedByUser($user): IOrderDetail
     {
-        $this->setUser($user);
+        $this->model->setSinglePriceModifiedByUser($user);
+        return $this;
+    }
+
+    public function setSinglePriceModifiedByUserid($userid): IOrderDetail
+    {
+        $this->model->setSinglePriceModifiedByUserid($userid);
+        return $this;
+    }
+
+    public function setVerified($verified): IOrderDetail
+    {
+        $this->model->setVerified($verified);
         return $this;
     }
 

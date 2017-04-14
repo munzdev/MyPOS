@@ -3,7 +3,6 @@
 namespace API\Models\Payment;
 
 use API\Lib\Interfaces\Models\Payment\IPaymentCouponQuery;
-use API\Models\Payment\Base\PaymentCouponQuery as BasePaymentCouponQuery;
 
 /**
  * Skeleton subclass for performing query and update operations on the 'payment_coupon' table.
@@ -12,6 +11,6 @@ use API\Models\Payment\Base\PaymentCouponQuery as BasePaymentCouponQuery;
  * application requirements.  This class will only be generated as
  * long as it does not already exist in the output directory.
  */
-class PaymentCouponQuery extends BasePaymentCouponQuery implements IPaymentCouponQuery
+class PaymentCouponQuery implements IPaymentCouponQuery
 {
 }
