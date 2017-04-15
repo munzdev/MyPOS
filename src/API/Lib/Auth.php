@@ -78,9 +78,10 @@ class Auth implements IAuth
                 return $unserializedUser;
             }
 
-            $user = unserialize($_SESSION['Auth']['IUser']);            
+            $user = unserialize($_SESSION['Auth']['IUser']);
             $eventUser = unserialize($_SESSION['Auth']['IEventUser']);
-            
+
+            $user->getEventUsers()->clear(); // avoid permisson reftching -> user needs to logout and relogin to get new permissions for date integrety
             $user->getEventUsers()->append($eventUser);
 
             $unserializedUser = $user;
