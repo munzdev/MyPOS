@@ -12,8 +12,8 @@ abstract class SecurityController extends Controller
 
     public function __invoke(Request $request, Response $response, $args) : Response
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
-        
+        $auth = $this->container->get(IAuth::class);
+
         if (!$auth->isLoggedIn()) {
             throw new SecurityException("Access Denied!");
         }
@@ -34,11 +34,11 @@ abstract class SecurityController extends Controller
         if (!isset($this->security[$method])) {
             return true;
         }
-        
-        $auth = $this->app->getContainer()->get(IAuth::class);
+
+        $auth = $this->container->get(IAuth::class);
 
         $user = $auth->getCurrentUser();
-        $userRoles = $user->getEventUser()->getUserRoles();
+        $userRoles = $user->getEventUsers()->getFirst()->getUserRoles();
 
         if ($userRoles & $this->security[$method]) {
             return true;

@@ -6,6 +6,8 @@ use API\Lib\Controller;
 use API\Lib\Exceptions\GeneralException;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\IRememberMe;
+use API\Lib\Interfaces\Models\User\IUserQuery;
 use API\Lib\RememberMe;
 use API\Models\ORM\User\UserQuery;
 use Propel\Runtime\Propel;
@@ -14,17 +16,18 @@ use Slim\App;
 
 class Login extends Controller
 {
+    /**
+     *
+     * @var IAuth
+     */
     protected $auth;
-    protected $privateKey;
 
     public function __construct(App $app)
     {
         parent::__construct($app);
 
-        $app->getContainer()['db'];
-
-        $this->auth = $this->app->getContainer()->get(IAuth::class);
-        $this->privateKey = $this->app->getContainer()['settings']['Auth']['RememberMe_PrivateKey'];
+        $this->container['db'];
+        $this->auth =$this->container->get(IAuth::class);
     }
 
     protected function post() : void
@@ -47,16 +50,14 @@ class Login extends Controller
         if ($this->json['rememberMe']) {
             $userid = $this->auth->getCurrentUser()->getUserid();
 
-            $rememberMe = new RememberMe($this->privateKey);
+            $rememberMe = $this->container->get(IRememberMe::class);
             $hash = $rememberMe->remember($userid);
 
-            Propel::disableInstancePooling();
+            $userQuery = $this->container->get(IUserQuery::class);
 
-            UserQuery::create()->findPk($userid)
-                               ->setAutologinHash($hash)
-                               ->save();
-
-            Propel::enableInstancePooling();
+            $user = $userQuery->findPk($userid);
+            $user->setAutologinHash($hash)
+                 ->save();
         }
 
         $this->withJson(true);
@@ -70,18 +71,22 @@ class Login extends Controller
             return;
         }
 
-        $rememberMe = new RememberMe($this->privateKey);
+        $rememberMe = $this->container->get(IRememberMe::class);
         $userid = $rememberMe->parseCookie();
 
         if ($userid !== false) {
-            $user = UserQuery::create()->findPk($userid);
+            $userQuery = $this->container->get(IUserQuery::class);
+
+            $user = $userQuery->findPk($userid);
+
             $newHash = $rememberMe->validateHash((string)$user->getAutologinHash());
 
             if ($newHash === false) {
                 throw new GeneralException("Autologin Failed");
             }
 
-            $user->setAutologinHash($newHash)->save();
+            $user->setAutologinHash($newHash)
+                 ->save();
 
             $this->auth->doLogin($user->getUsername());
 
@@ -93,14 +98,17 @@ class Login extends Controller
 
     protected function delete() : void
     {
+        $userQuery = $this->container->get(IUserQuery::class);
+        $rememberMe = $this->container->get(IRememberMe::class);
+
         $userid = $this->auth->getCurrentUser()->getUserid();
 
-        UserQuery::create()->findPk($userid)
-                           ->setAutologinHash(null)
-                           ->save();
+        $user = $userQuery->findPk($userid);
+        $user->setAutologinHash(null)
+             ->save();
 
         $this->auth->logout();
-        RememberMe::destroy();
+        $rememberMe->destroy();
 
         $this->withJson(true);
     }

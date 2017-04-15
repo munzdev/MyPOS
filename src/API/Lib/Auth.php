@@ -69,7 +69,7 @@ class Auth implements IAuth
      *
      * @return IUser|null
      */
-    public function getCurrentUser() // : ?IUser
+    public function getCurrentUser() : ?IUser
     {
         static $unserializedUser = null;
 

@@ -3,6 +3,7 @@
 namespace API\Controllers\User;
 
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\User\IUserQuery;
 use API\Lib\SecurityController;
 use API\Models\ORM\User\UserQuery;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
@@ -16,29 +17,24 @@ class User extends SecurityController
     {
         parent::__construct($app);
 
-        $app->getContainer()['db'];
+        $this->container['db'];
     }
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $userQuery = $this->container->get(IUserQuery::class);
+        $auth = $this->container->get(IAuth::class);
         $currentUser = $auth->getCurrentUser();
 
-        $users = UserQuery::create()
-                            ->useEventUserQuery()
-                                ->filterByEventid($currentUser->getEventUser()->getEventid())
-                            ->endUse()
-                            ->joinWithEventUser()
-                            ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                            ->find()
-                            ->toArray();
+        $users = $userQuery->getUsersByEventid($currentUser->getEventUsers()->getFirst()->getEventid());
+        $usersArray = $users->toArray();
 
-        foreach ($users as &$user) {
+        foreach ($usersArray as &$user) {
             $user['EventUser'] = $user['EventUsers'][0];
             unset($user['EventUsers']);
             $user = $this->cleanupUserData($user);
         }
 
-        $this->withJson($users);
+        $this->withJson($usersArray);
     }
 }

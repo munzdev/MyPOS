@@ -3,15 +3,8 @@
 namespace API\Controllers\Product;
 
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\Menu\IMenuTypeQuery;
 use API\Lib\SecurityController;
-use API\Models\ORM\Menu\Map\MenuExtraTableMap;
-use API\Models\ORM\Menu\Map\MenuGroupTableMap;
-use API\Models\ORM\Menu\Map\MenuPossibleExtraTableMap;
-use API\Models\ORM\Menu\Map\MenuPossibleSizeTableMap;
-use API\Models\ORM\Menu\Map\MenuSizeTableMap;
-use API\Models\ORM\Menu\Map\MenuTableMap;
-use API\Models\ORM\Menu\MenuTypeQuery;
-use Propel\Runtime\ActiveQuery\Criteria;
 use Slim\App;
 
 class Product extends SecurityController
@@ -20,33 +13,16 @@ class Product extends SecurityController
     {
         parent::__construct($app);
 
-        $app->getContainer()['db'];
+        $this->container['db'];
     }
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $menuTypeQuery = $this->container->get(IMenuTypeQuery::class);
+        $auth = $this->container->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
-        $menuTypes = MenuTypeQuery::create()
-                        ->useMenuGroupQuery()
-                            ->useMenuQuery()
-                                ->useMenuPossibleSizeQuery(null, Criteria::LEFT_JOIN)
-                                    ->leftJoinMenuSize()
-                                ->endUse()
-                                ->useMenuPossibleExtraQuery(null, Criteria::LEFT_JOIN)
-                                    ->leftJoinMenuExtra()
-                                ->endUse()
-                            ->endUse()
-                        ->endUse()
-                        ->with(MenuGroupTableMap::getTableMap()->getPhpName())
-                        ->with(MenuTableMap::getTableMap()->getPhpName())
-                        ->with(MenuPossibleExtraTableMap::getTableMap()->getPhpName())
-                        ->with(MenuPossibleSizeTableMap::getTableMap()->getPhpName())
-                        ->with(MenuSizeTableMap::getTableMap()->getPhpName())
-                        ->with(MenuExtraTableMap::getTableMap()->getPhpName())
-                        ->filterByEventid($user->getEventUser()->getEventid())
-                        ->find();
+        $menuTypes = $menuTypeQuery->getMenuTypesForEventid($user->getEventUsers()->getFirst()->getEventid());
 
         $return = [];
 
@@ -61,22 +37,22 @@ class Product extends SecurityController
 
                     foreach ($menu->getMenuPossibleExtras() as $menuPossibleExtra) {
                         $menuPossibleSizeArray = $menuPossibleExtra->toArray();
-                        $menuPossibleSizeArray[MenuExtraTableMap::getTableMap()->getPhpName()] = $menuPossibleExtra->getMenuExtra()->toArray();
+                        $menuPossibleSizeArray["MenuExtra"] = $menuPossibleExtra->getMenuExtra()->toArray();
 
-                        $menuArray[MenuPossibleExtraTableMap::getTableMap()->getPhpName()][] = $menuPossibleSizeArray;
+                        $menuArray["MenuPossibleExtra"][] = $menuPossibleSizeArray;
                     }
 
                     foreach ($menu->getMenuPossibleSizes() as $menuPossibleSize) {
                         $menuPossibleSizeArray = $menuPossibleSize->toArray();
-                        $menuPossibleSizeArray[MenuSizeTableMap::getTableMap()->getPhpName()] = $menuPossibleSize->getMenuSize()->toArray();
+                        $menuPossibleSizeArray["MenuSize"] = $menuPossibleSize->getMenuSize()->toArray();
 
-                        $menuArray[MenuPossibleSizeTableMap::getTableMap()->getPhpName()][] = $menuPossibleSizeArray;
+                        $menuArray["MenuPossibleSize"][] = $menuPossibleSizeArray;
                     }
 
-                    $menuGroupArray[MenuTableMap::getTableMap()->getPhpName()][] = $menuArray;
+                    $menuGroupArray["Menu"][] = $menuArray;
                 }
 
-                $menuTypeArray[MenuGroupTableMap::getTableMap()->getPhpName()][] = $menuGroupArray;
+                $menuTypeArray["MenuGroup"][] = $menuGroupArray;
             }
 
             $return[] = $menuTypeArray;

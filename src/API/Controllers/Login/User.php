@@ -4,20 +4,22 @@ namespace API\Controllers\Login;
 
 use API\Lib\Controller;
 use API\Lib\Interfaces\IAuth;
-use API\Models\ORM\Event\Map\EventUserTableMap;
 use Slim\App;
 
 class User extends Controller
 {
+    /**
+     *
+     * @var IAuth
+     */
     protected $auth;
 
     public function __construct(App $app)
     {
         parent::__construct($app);
 
-        $app->getContainer()['db'];
-
-        $this->auth = $this->app->getContainer()->get(IAuth::class);
+        $this->container['db'];
+        $this->auth = $this->container->get(IAuth::class);
     }
 
     protected function get() : void
@@ -25,7 +27,7 @@ class User extends Controller
         $user = $this->auth->getCurrentUser();
 
         $return = $user->toArray();
-        $return[EventUserTableMap::getTableMap()->getPhpName()] = $user->getEventUser()->toArray();
+        $return["EventUser"] = $user->getEventUsers()->getFirst()->toArray();
 
         $this->withJson($return);
     }

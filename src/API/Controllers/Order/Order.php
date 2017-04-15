@@ -91,7 +91,7 @@ class Order extends SecurityController
 
         $searchCriteria = OrderQuery::create()
                                         ->useEventTableQuery()
-                                            ->filterByEventid($user->getEventUser()->getEventid())
+                                            ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                             ->_if($tablenr)
                                                 ->filterByName($tablenr)
                                             ->_endif()

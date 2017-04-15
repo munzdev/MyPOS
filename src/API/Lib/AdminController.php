@@ -11,7 +11,7 @@ abstract class AdminController extends SecurityController
     {
         parent::__construct($app);
 
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
         if (!$user->getIsAdmin()) {
