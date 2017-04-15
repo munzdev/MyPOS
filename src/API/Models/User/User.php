@@ -3,6 +3,7 @@
 namespace API\Models\User;
 
 use API\Lib\Container;
+use API\Lib\Interfaces\Models\Event\IEventUser;
 use API\Lib\Interfaces\Models\Event\IEventUserCollection;
 use API\Lib\Interfaces\Models\User\IUser;
 use API\Models\Model;
@@ -17,10 +18,8 @@ use API\Models\ORM\User\User as UserORM;
  */
 class User extends Model implements IUser
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new UserORM());
     }
 
@@ -44,7 +43,7 @@ class User extends Model implements IUser
         $eventUsers = $this->model->getEventUsers();
 
         $eventUserCollection = $this->container->get(IEventUserCollection::class);
-        $eventUserCollection->setCollecton($eventUsers);
+        $eventUserCollection->setCollection($eventUsers);
 
         return $eventUserCollection;
     }
@@ -143,5 +142,4 @@ class User extends Model implements IUser
         $this->model->setUsername($username);
         return $this;
     }
-
 }

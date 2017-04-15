@@ -17,10 +17,8 @@ use API\Models\ORM\Invoice\InvoiceWarningType as InvoiceWarningTypeORM;
  */
 class InvoiceWarningType extends Model implements IInvoiceWarningType
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new InvoiceWarningTypeORM());
     }
 

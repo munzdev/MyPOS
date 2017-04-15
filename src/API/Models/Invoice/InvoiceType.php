@@ -16,10 +16,8 @@ use API\Models\ORM\Invoice\InvoiceType as InvoiceTypeORM;
  */
 class InvoiceType extends Model implements IInvoiceType
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new InvoiceTypeORM());
     }
 

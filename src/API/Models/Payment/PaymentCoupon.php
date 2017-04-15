@@ -18,10 +18,8 @@ use API\Models\ORM\Payment\PaymentCoupon as PaymentCouponORM;
  */
 class PaymentCoupon extends Model implements IPaymentCoupon
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new PaymentCouponORM());
     }
 

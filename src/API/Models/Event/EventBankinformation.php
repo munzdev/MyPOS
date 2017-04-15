@@ -17,13 +17,11 @@ use API\Models\ORM\Event\EventBankinformation as EventBankinformationORM;
  */
 class EventBankinformation extends Model implements IEventBankinformation
 {
-    private $container;
-    
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new EventBankinformationORM());
     }
-    
+
     public function getActive(): boolean {
         return $this->model->getActive();
     }
@@ -34,10 +32,10 @@ class EventBankinformation extends Model implements IEventBankinformation
 
     public function getEvent(): IEvent {
         $event = $this->model->getEvent();
-        
+
         $eventModel = $this->container->get(IEvent::class);
         $eventModel->setModel($event);
-        
+
         return $eventModel;
     }
 

@@ -17,10 +17,8 @@ use Slim\Container;
  */
 class EventPrinter extends Model implements IEventPrinter
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new EventPrinterORM());
     }
 

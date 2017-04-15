@@ -17,7 +17,7 @@ use API\Models\Query;
  * long as it does not already exist in the output directory.
  */
 class UserQuery extends Query implements IUserQuery
-{   
+{
     public function getActiveAdminUserByUsername($username) : IUser
     {
         $user = UserQueryORM::create()
@@ -47,7 +47,6 @@ class UserQuery extends Query implements IUserQuery
 
         $userCollection = $this->container->get(IUserCollection::class);
         $userCollection->setCollection($users);
-        $userCollection->setModel($this->container->get(IUser::class));
 
         return $userCollection;
     }

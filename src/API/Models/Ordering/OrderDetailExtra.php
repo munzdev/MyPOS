@@ -18,10 +18,8 @@ use API\Models\ORM\Ordering\OrderDetailExtra as OrderDetailExtraORM;
  */
 class OrderDetailExtra extends Model implements IOrderDetailExtra
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new OrderDetailExtraORM());
     }
 

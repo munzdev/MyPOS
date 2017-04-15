@@ -18,10 +18,8 @@ use API\Models\ORM\Menu\MenuPossibleSize as MenuPossibleSizeORM;
  */
 class MenuPossibleSize extends Model implements IMenuPossibleSize
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new MenuPossibleSizeORM());
     }
 

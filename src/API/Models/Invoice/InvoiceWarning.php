@@ -19,10 +19,8 @@ use DateTime;
  */
 class InvoiceWarning extends Model implements IInvoiceWarning
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new InvoiceWarningORM());
     }
 

@@ -18,10 +18,8 @@ use API\Models\ORM\Menu\MenuExtra as MenuExtraORM;
  */
 class MenuExtra extends Model implements IMenuExtra
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new MenuExtraORM());
     }
 

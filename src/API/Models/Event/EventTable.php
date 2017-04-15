@@ -17,10 +17,8 @@ use API\Models\ORM\Event\EventTable as EventTableORM;
  */
 class EventTable extends Model implements IEventTable
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new EventTableORM());
     }
 

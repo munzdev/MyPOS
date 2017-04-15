@@ -18,10 +18,8 @@ use API\Models\ORM\Menu\Menu as MenuORM;
  */
 class Menu extends Model implements IMenu
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new MenuORM());
     }
 

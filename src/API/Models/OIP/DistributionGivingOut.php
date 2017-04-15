@@ -17,10 +17,8 @@ use DateTime;
  */
 class DistributionGivingOut extends Model implements IDistributionGivingOut
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new DistributionGivingOutORM());
     }
 

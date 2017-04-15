@@ -18,10 +18,8 @@ use API\Models\ORM\Invoice\InvoiceItem as InvoiceItemORM;
  */
 class InvoiceItem extends Model implements IInvoiceItem
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new InvoiceItemORM());
     }
 

@@ -18,10 +18,8 @@ use API\Models\ORM\Ordering\OrderDetailMixedWith as OrderDetailMixedWithORM;
  */
 class OrderDetailMixedWith extends Model implements IOrderDetailMixedWith
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new OrderDetailMixedWithORM());
     }
 

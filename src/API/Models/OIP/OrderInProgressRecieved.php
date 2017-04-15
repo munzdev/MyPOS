@@ -19,10 +19,8 @@ use API\Models\ORM\OIP\OrderInProgressRecieved as OrderInProgressRecievedORM;
  */
 class OrderInProgressRecieved extends Model implements IOrderInProgressRecieved
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new OrderInProgressRecievedORM());
     }
 

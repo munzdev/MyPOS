@@ -15,13 +15,11 @@ use API\Models\Model;
  */
 class Event extends Model implements IEvent
 {
-    private $container;
-    
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new EventORM());
     }
-    
+
     public function getActive(): boolean {
         return $this->model->getActive();
     }

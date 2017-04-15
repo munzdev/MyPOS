@@ -17,10 +17,8 @@ use API\Models\ORM\Menu\MenuSize as MenuSizeORM;
  */
 class MenuSize extends Model implements IMenuSize
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new MenuSizeORM());
     }
 

@@ -17,23 +17,21 @@ use API\Models\ORM\DistributionPlace\DistributionPlace as DistributionPlaceORM;
  */
 class DistributionPlace extends Model implements IDistributionPlace
 {
-    private $container;
-    
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new DistributionPlaceORM());
     }
-    
+
     public function getDistributionPlaceid(): int {
         return $this->model->getDistributionPlaceid();
     }
 
     public function getEvent(): IEvent {
         $event = $this->model->getEvent();
-        
+
         $eventModel = $this->container->get(IEvent::class);
         $eventModel->setModel($event);
-        
+
         return $eventModel;
     }
 

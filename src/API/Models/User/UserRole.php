@@ -15,10 +15,8 @@ use API\Models\Model;
  */
 class UserRole extends Model implements IUserRole
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new UserORM());
     }
 

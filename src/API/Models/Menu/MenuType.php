@@ -17,10 +17,8 @@ use API\Models\ORM\Menu\MenuType as MenuTypeORM;
  */
 class MenuType extends Model implements IMenuType
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new MenuTypeORM());
     }
 

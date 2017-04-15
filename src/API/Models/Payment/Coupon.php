@@ -19,10 +19,8 @@ use DateTime;
  */
 class Coupon extends Model implements ICoupon
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new CouponORM());
     }
 

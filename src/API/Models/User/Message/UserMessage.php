@@ -18,10 +18,8 @@ use DateTime;
  */
 class UserMessage extends Model implements IUserMessage
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new UserMessageORM());
     }
 

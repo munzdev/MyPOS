@@ -17,10 +17,8 @@ use API\Models\ORM\Event\EventContact as EventContactORM;
  */
 class EventContact extends Model implements IEventContact
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new EventContactORM());
     }
 

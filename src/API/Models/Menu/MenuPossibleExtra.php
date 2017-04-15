@@ -18,10 +18,8 @@ use API\Models\ORM\Menu\MenuPossibleExtra as MenuPossibleExtraORM;
  */
 class MenuPossibleExtra extends Model implements IMenuPossibleExtra
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new MenuPossibleExtraORM());
     }
 

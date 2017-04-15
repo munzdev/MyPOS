@@ -19,10 +19,8 @@ use DateTime;
  */
 class Order extends Model implements IOrder
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new OrderORM());
     }
 

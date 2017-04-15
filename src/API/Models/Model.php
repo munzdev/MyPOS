@@ -2,20 +2,35 @@
 
 namespace API\Models;
 
+use API\Lib\Container;
 use API\Lib\Interfaces\Models\IModel;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 
-abstract class Model implements IModel {  
-    
+abstract class Model implements IModel {
+
     /**
      *
-     * @var ActiveRecordInterface 
+     * @var ActiveRecordInterface
      */
-    protected $model;        
-    
+    protected $model;
+
+    /**
+     *
+     * @var Container
+     */
+    protected $container;
+
+    function __construct(Container $container) {
+        $this->container = $container;
+    }
+
     public function setModel(ActiveRecordInterface $model)
     {
         $this->model = $model;
+    }
+
+    public function getModel() : ActiveRecordInterface {
+        return $this->model;
     }
 
     public function clear() {

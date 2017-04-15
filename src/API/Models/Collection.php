@@ -2,8 +2,8 @@
 
 namespace API\Models;
 
+use API\Lib\Container;
 use API\Lib\Interfaces\Models\ICollection;
-use API\Lib\Interfaces\Models\IModel;
 use Propel\Runtime\Collection\Collection as PropelCollection;
 use Propel\Runtime\Collection\ObjectCollection;
 use Traversable;
@@ -12,25 +12,32 @@ class Collection implements ICollection {
 
     /**
      *
+     * @var Container
+     */
+    protected $container;
+
+    /**
+     *
      * @var PropelCollection
      */
     private $collection;
-    
-    /**
-     * 
-     */
-    private $model;
 
-    function __construct() {
+    /**
+     * @var string
+     */
+    private $modelServiceName;
+
+    function __construct(Container $container) {
+        $this->container = $container;
         $this->setCollection(new ObjectCollection());
     }
 
     public function setCollection(PropelCollection $collection) {
         $this->collection = $collection;
     }
-    
-    public function setModel(IModel $model) {
-        $this->model = $model;
+
+    public function setModelServiceName(string $model) {
+        $this->modelServiceName = $model;
     }
 
     public function toArray() {
@@ -42,7 +49,7 @@ class Collection implements ICollection {
     }
 
     public function getFirst() {
-        $model = clone $this->model;
+        $model = $this->container->get($this->modelServiceName);
         $model->setModel($this->collection->getFirst());
         return $model;
     }
@@ -60,7 +67,7 @@ class Collection implements ICollection {
     }
 
     public function offsetGet($offset) {
-        $model = clone $this->model;
+        $model = $this->container->get($this->modelServiceName);
         $model->setModel($this->collection->offsetGet($offset));
         return $model;
     }
@@ -83,7 +90,7 @@ class Collection implements ICollection {
 
     public function append($value)
     {
-        return $this->collection->append($value);
+        return $this->collection->append($value->getModel());
     }
 
     public function clear()
@@ -103,7 +110,7 @@ class Collection implements ICollection {
 
     public function get($key)
     {
-        $model = clone $this->model;
+        $model = $this->container->get($this->modelServiceName);
         $model->setModel($this->collection->get($key));
         return $model;
     }
@@ -120,14 +127,14 @@ class Collection implements ICollection {
 
     public function getLast()
     {
-        $model = clone $this->model;
+        $model = $this->container->get($this->modelServiceName);
         $model->setModel($this->collection->getLast());
         return $model;
     }
 
     public function pop()
     {
-        $model = clone $this->model;
+        $model = $this->container->get($this->modelServiceName);
         $model->setModel($this->collection->pop());
         return $model;
     }

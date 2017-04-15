@@ -18,10 +18,8 @@ use API\Models\ORM\Event\EventUser as EventUserORM;
  */
 class EventUser extends Model implements IEventUser
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new EventUserORM());
     }
 

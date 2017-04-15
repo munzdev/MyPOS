@@ -18,19 +18,17 @@ use API\Models\Model;
  */
 class DistributionPlaceGroup extends Model implements IDistributionPlaceGroup
 {
-    private $container;
-    
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new DistributionPlaceGroupORM());
     }
-    
+
     public function getDistributionPlace(): IDistributionPlace {
         $distributionPlace = $this->model->getDistributionPlace();
-        
+
         $distributionPlaceModel = $this->container->get(IDistributionPlace::class);
         $distributionPlaceModel->setModel($distributionPlace);
-        
+
         return $distributionPlaceModel;
     }
 
@@ -44,10 +42,10 @@ class DistributionPlaceGroup extends Model implements IDistributionPlaceGroup
 
     public function getMenuGroup(): IMenuGroup {
         $distributionPlace = $this->model->getDistributionPlace();
-        
+
         $distributionPlaceModel = $this->container->get(IDistributionPlace::class);
         $distributionPlaceModel->setModel($distributionPlace);
-        
+
         return $distributionPlaceModel;
     }
 

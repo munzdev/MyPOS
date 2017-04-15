@@ -21,10 +21,8 @@ use DateTime;
  */
 class Invoice extends Model implements IInvoice
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new InvoiceORM());
     }
 

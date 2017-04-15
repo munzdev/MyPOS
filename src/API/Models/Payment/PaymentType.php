@@ -16,10 +16,8 @@ use API\Models\ORM\Payment\PaymentType as PaymentTypeORM;
  */
 class PaymentType extends Model implements IPaymentType
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new PaymentTypeORM());
     }
 

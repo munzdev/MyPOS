@@ -18,19 +18,17 @@ use \API\Models\ORM\DistributionPlace\DistributionPlaceUser as DistributionPlace
  */
 class DistributionPlaceUser extends Model implements IDistributionPlaceUser
 {
-    private $container;
-    
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new DistributionPlaceUserORM());
     }
-    
+
     public function getDistributionPlace(): IDistributionPlace {
         $distribtionPlace = $this->model->getDistributionPlace();
-        
+
         $distribtionPlaceModel = $this->container->get(IDistributionPlace::class);
         $distribtionPlaceModel->setModel($distribtionPlace);
-        
+
         return $distribtionPlaceModel;
     }
 
@@ -40,10 +38,10 @@ class DistributionPlaceUser extends Model implements IDistributionPlaceUser
 
     public function getEventPrinter(): IEventPrinter {
         $eventPrinter = $this->model->getEventPrinter();
-        
+
         $eventPrinterModel = $this->container->get(IEventPrinter::class);
         $eventPrinterModel->setModel($eventPrinter);
-        
+
         return $eventPrinterModel;
     }
 
@@ -53,10 +51,10 @@ class DistributionPlaceUser extends Model implements IDistributionPlaceUser
 
     public function getUser(): IUser {
         $user = $this->model->getUser();
-        
+
         $userModel = $this->container->get(IUser::class);
         $userModel->setModel($user);
-        
+
         return $userModel;
     }
 

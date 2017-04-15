@@ -17,19 +17,17 @@ use API\Models\ORM\DistributionPlace\DistributionPlaceTable as DistributionPlace
  */
 class DistributionPlaceTable extends Model implements IDistributionPlaceTable
 {
-    private $container;
-    
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new DistributionPlaceTableORM());
     }
-    
+
     public function getDistributionPlaceGroup(): IDistributionPlaceGroup {
         $distributionPlaceGroup = $this->model->getDistributionPlaceGroup();
-        
+
         $distributionPlaceGroupModel = $this->container->get(IDistributionPlaceGroup::class);
         $distributionPlaceGroupModel->setModel($distributionPlaceGroup);
-        
+
         return $distributionPlaceGroupModel;
     }
 
@@ -39,10 +37,10 @@ class DistributionPlaceTable extends Model implements IDistributionPlaceTable
 
     public function getEventTable(): IEventTable {
         $eventTable = $this->model->getEventTable();
-        
+
         $eventTableModel = $this->container->get(IEventTable::class);
         $eventTableModel->setModel($eventTable);
-        
+
         return $eventTableModel;
     }
 

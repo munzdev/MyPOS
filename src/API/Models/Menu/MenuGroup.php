@@ -17,10 +17,8 @@ use API\Models\ORM\Menu\MenuGroup as MenuGroupORM;
  */
 class MenuGroup extends Model implements IMenuGroup
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new MenuGroupORM());
     }
 

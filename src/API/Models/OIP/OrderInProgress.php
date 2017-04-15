@@ -20,10 +20,8 @@ use DateTime;
  */
 class OrderInProgress extends Model implements IOrderInProgress
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new OrderInProgressORM());
     }
 

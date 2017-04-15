@@ -16,10 +16,8 @@ use API\Models\ORM\Menu\Availability as AvailabilityORM;
  */
 class Availability extends Model implements IAvailability
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new AvailabilityORM());
     }
 

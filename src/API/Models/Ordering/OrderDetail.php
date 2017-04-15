@@ -23,10 +23,8 @@ use DateTime;
  */
 class OrderDetail extends Model implements IOrderDetail
 {
-    private $container;
-
     function __construct(Container $container) {
-        $this->container = $container;
+        parent::__construct($container);
         $this->setModel(new OrderDetailORM());
     }
 
