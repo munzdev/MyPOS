@@ -55,7 +55,7 @@ class Collection implements ICollection {
     }
 
     public function getIterator(): Traversable {
-        return $this->collection->getIterator();
+        return new CollectionIterator($this->collection, $this->modelServiceName, $this->container);
     }
 
     public function isEmpty() {
