@@ -8,12 +8,12 @@ interface IQuery {
      *
      * @return ICollection
      */
-    function find() : ICollection;
+    function find();
 
     /**
      *
      * @param int $id The Primary ID to retrieve
      * @return IModel
      */
-    function findPk($id) : IModel;
+    function findPk($id);
 }
