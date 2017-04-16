@@ -4,6 +4,7 @@ namespace API\Models\Menu;
 
 use API\Lib\Container;
 use API\Lib\Interfaces\Models\Event\IEvent;
+use API\Lib\Interfaces\Models\Menu\IMenuGroupCollection;
 use API\Lib\Interfaces\Models\Menu\IMenuType;
 use API\Models\Model;
 use API\Models\ORM\Menu\MenuType as MenuTypeORM;
@@ -55,6 +56,15 @@ class MenuType extends Model implements IMenuType
     public function getTax(): int
     {
         return $this->model->getTax();
+    }
+
+    public function getMenuGroups() {
+        $menuGroups = $this->model->getMenuGroups();
+
+        $menuGroupCollection = $this->container->get(IMenuGroupCollection::class);
+        $menuGroupCollection->setCollection($menuGroups);
+
+        return $menuGroupCollection;
     }
 
     public function setAllowMixing($allowMixing): IMenuType

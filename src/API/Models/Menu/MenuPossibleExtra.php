@@ -35,7 +35,7 @@ class MenuPossibleExtra extends Model implements IMenuPossibleExtra
 
     public function getMenuExtra(): IMenuExtra
     {
-        $menuExtra = $this->model->getMenuType();
+        $menuExtra = $this->model->getMenuExtra();
 
         $menuExtraModel = $this->container->get(IMenuExtra::class);
         $menuExtraModel->setModel($menuExtra);

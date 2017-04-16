@@ -6,6 +6,8 @@ use API\Lib\Container;
 use API\Lib\Interfaces\Models\Menu\IAvailability;
 use API\Lib\Interfaces\Models\Menu\IMenu;
 use API\Lib\Interfaces\Models\Menu\IMenuGroup;
+use API\Lib\Interfaces\Models\Menu\IMenuPossibleExtraCollection;
+use API\Lib\Interfaces\Models\Menu\IMenuPossibleSizeCollection;
 use API\Models\Model;
 use API\Models\ORM\Menu\Menu as MenuORM;
 
@@ -71,6 +73,24 @@ class Menu extends Model implements IMenu
     public function getPrice(): float
     {
         return $this->model->getPrice();
+    }
+
+    public function getMenuPossibleExtras() {
+        $menuPossibleExtras = $this->model->getMenuPossibleExtras();
+
+        $menuPossibleExtraCollection = $this->container->get(IMenuPossibleExtraCollection::class);
+        $menuPossibleExtraCollection->setCollection($menuPossibleExtras);
+
+        return $menuPossibleExtraCollection;
+    }
+
+    public function getMenuPossibleSizes() {
+        $menuPossibleSizes = $this->model->getMenuPossibleSizes();
+
+        $menuPossibleSizeCollection = $this->container->get(IMenuPossibleSizeCollection::class);
+        $menuPossibleSizeCollection->setCollection($menuPossibleSizes);
+
+        return $menuPossibleSizeCollection;
     }
 
     public function setAvailability($availability): IMenu

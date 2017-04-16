@@ -3,6 +3,7 @@
 namespace API\Models\Menu;
 
 use API\Lib\Container;
+use API\Lib\Interfaces\Models\Menu\IMenuCollection;
 use API\Lib\Interfaces\Models\Menu\IMenuGroup;
 use API\Lib\Interfaces\Models\Menu\IMenuType;
 use API\Models\Model;
@@ -45,6 +46,15 @@ class MenuGroup extends Model implements IMenuGroup
     public function getName(): string
     {
         return $this->model->getName();
+    }
+
+    public function getMenus() {
+        $menues = $this->model->getMenus();
+
+        $menuCollection = $this->container->get(IMenuCollection::class);
+        $menuCollection->setCollection($menues);
+
+        return $menuCollection;
     }
 
     public function setMenuGroupid($menuGroupid): IMenuGroup
