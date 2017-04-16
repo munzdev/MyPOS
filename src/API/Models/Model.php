@@ -41,7 +41,7 @@ abstract class Model implements IModel {
         return $this->model->delete();
     }
 
-    public function isNew() {
+    public function isNew() : bool {
         return $this->model->isNew();
     }
 
