@@ -106,7 +106,7 @@ class RememberMe implements IRememberMe
         return $encoded;
     }
 
-    public static function destroy()
+    public function destroy()
     {
         $_COOKIE['auto'] = null;
         setcookie('auto', null, -1, '/');
