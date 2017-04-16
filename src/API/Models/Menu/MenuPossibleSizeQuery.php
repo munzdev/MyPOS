@@ -2,16 +2,31 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuPossibleSize;
+use API\Lib\Interfaces\Models\Menu\IMenuPossibleSizeCollection;
 use API\Lib\Interfaces\Models\Menu\IMenuPossibleSizeQuery;
+use API\Models\ORM\Menu\MenuPossibleSizeQuery as MenuPossibleSizeQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'menu_possible_size' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class MenuPossibleSizeQuery extends Query implements IMenuPossibleSizeQuery
 {
+    public function find(): IMenuPossibleSizeCollection
+    {
+        $menuPossibleSizes = MenuPossibleSizeQueryORM::create()->find();
+
+        $menuPossibleSizeCollection = $this->container->get(IMenuPossibleSizeCollection::class);
+        $menuPossibleSizeCollection->setCollection($menuPossibleSizes);
+
+        return $menuPossibleSizeCollection;
+    }
+
+    public function findPk($id): IMenuPossibleSize
+    {
+        $menuPossibleSize = MenuPossibleSizeQueryORM::create()->findPk($id);
+
+        $menuPossibleSizeModel = $this->container->get(IMenuPossibleSize::class);
+        $menuPossibleSizeModel->setModel($menuPossibleSize);
+
+        return $menuPossibleSizeModel;
+    }
 }

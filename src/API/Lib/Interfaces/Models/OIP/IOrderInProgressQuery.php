@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\OIP;
 
-interface IOrderInProgressQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IOrderInProgressQuery extends IQuery {
 
 }

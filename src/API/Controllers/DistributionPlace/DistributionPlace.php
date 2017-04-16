@@ -294,7 +294,7 @@ class DistributionPlace extends SecurityController
             $order = OrderQuery::create()
                                 ->getNextForDistribution(
                                     $user->getUserid(),
-                                    $user->getEventUser()->getEventid(),
+                                    $user->getEventUsers()->getFirst()->getEventid(),
                                     true
                                 )
                                 ->joinWithOrderDetail()
@@ -311,7 +311,7 @@ class DistributionPlace extends SecurityController
                 $order = OrderQuery::create()
                                     ->getNextForDistribution(
                                         $user->getUserid(),
-                                        $user->getEventUser()->getEventid(),
+                                        $user->getEventUsers()->getFirst()->getEventid(),
                                         false
                                     )
                                     ->joinWithOrderDetail()
@@ -341,7 +341,7 @@ class DistributionPlace extends SecurityController
             $distributionPlaceGroups = DistributionPlaceGroupQuery::create()
                                                                     ->filterByMenuGroupid($menuGroupids)
                                                                     ->useDistributionPlaceQuery()
-                                                                        ->filterByEventid($user->getEventUser()->getEventid())
+                                                                        ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                                                         ->useDistributionPlaceUserQuery()
                                                                             ->filterByUserid($user->getUserid())
                                                                         ->endUse()
@@ -442,7 +442,7 @@ class DistributionPlace extends SecurityController
                                                     ->filterByDone()
                                                     ->useOrderQuery()
                                                         ->useEventTableQuery()
-                                                            ->filterByEventid($user->getEventUser()->getEventid())
+                                                            ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                                         ->endUse()
                                                         ->useOrderDetailQuery()
                                                             ->filterByAvailabilityid(ORDER_AVAILABILITY_AVAILABLE)
@@ -463,7 +463,7 @@ class DistributionPlace extends SecurityController
 
         $distributionPlaceGroups = DistributionPlaceGroupQuery::create()
                                                                     ->useDistributionPlaceQuery()
-                                                                        ->filterByEventid($user->getEventUser()->getEventid())
+                                                                        ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                                                         ->useDistributionPlaceUserQuery()
                                                                             ->filterByUserid($user->getUserid())
                                                                         ->endUse()
@@ -496,7 +496,7 @@ class DistributionPlace extends SecurityController
             $orders = OrderQuery::create()
                                     ->getNextForDistribution(
                                         $user->getUserid(),
-                                        $user->getEventUser()->getEventid(),
+                                        $user->getEventUsers()->getFirst()->getEventid(),
                                         true,
                                         $config['App']['Distribution']['AmountDisplayedInTodoList'] + 1
                                     )
@@ -517,7 +517,7 @@ class DistributionPlace extends SecurityController
                 $orders = OrderQuery::create()
                                         ->getNextForDistribution(
                                             $user->getUserid(),
-                                            $user->getEventUser()->getEventid(),
+                                            $user->getEventUsers()->getFirst()->getEventid(),
                                             false,
                                             $config['App']['Distribution']['AmountDisplayedInTodoList'] + 1
                                         )
@@ -631,7 +631,7 @@ class DistributionPlace extends SecurityController
         $user = $auth->getCurrentUser();
 
         $menuExtras = MenuExtraQuery::create()
-                                        ->filterByEventid($user->getEventUser()->getEventid())
+                                        ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                         ->find();
 
         return $menuExtras->toArray();
@@ -645,7 +645,7 @@ class DistributionPlace extends SecurityController
         $distributionPlaceUser = DistributionPlaceUserQuery::create()
                                                             ->filterByUserid($user->getUserid())
                                                             ->useDistributionPlaceQuery()
-                                                                ->filterByEventid($user->getEventUser()->getEventid())
+                                                                ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                                             ->endUse()
                                                             ->findOne();
 

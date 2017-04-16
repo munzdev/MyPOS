@@ -2,6 +2,7 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuType;
 use API\Lib\Interfaces\Models\Menu\IMenuTypeCollection;
 use API\Lib\Interfaces\Models\Menu\IMenuTypeQuery;
 use API\Models\ORM\Menu\Map\MenuExtraTableMap;
@@ -14,15 +15,28 @@ use API\Models\ORM\Menu\MenuTypeQuery as MenuTypeQueryORM;
 use API\Models\Query;
 use Propel\Runtime\ActiveQuery\Criteria;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'menu_type' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class MenuTypeQuery extends Query implements IMenuTypeQuery
 {
+    public function find(): IMenuTypeCollection
+    {
+        $menuTypes = MenuTypeQueryORM::create()->find();
+
+        $menuTypeCollection = $this->container->get(IMenuTypeCollection::class);
+        $menuTypeCollection->setCollection($menuTypes);
+
+        return $menuTypeCollection;
+    }
+
+    public function findPk($id): IMenuType
+    {
+        $menuType = MenuTypeQueryORM::create()->findPk($id);
+
+        $menuTypeModel = $this->container->get(IMenuType::class);
+        $menuTypeModel->setModel($menuType);
+
+        return $menuTypeModel;
+    }
+
     function getMenuTypesForEventid($eventid) : IMenuTypeCollection {
         $menuTypes = MenuTypeQueryORM::create()
                         ->useMenuGroupQuery()

@@ -76,7 +76,7 @@ class DistributionPlaceAvailability extends SecurityController
         $menu = MenuQuery::create()
                             ->useMenuGroupQuery()
                                ->useMenuTypeQuery()
-                                   ->filterByEventid($user->getEventUser()->getEventid())
+                                   ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                ->endUse()
                             ->endUse()
                             ->filterByMenuid($this->json['id'])
@@ -126,7 +126,7 @@ class DistributionPlaceAvailability extends SecurityController
         $user = $auth->getCurrentUser();
 
         $menuExtra = MenuExtraQuery::create()
-                                    ->filterByEventid($user->getEventUser()->getEventid())
+                                    ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                     ->filterByMenuExtraid($this->json['id'])
                                     ->findOne();
 
@@ -172,7 +172,7 @@ class DistributionPlaceAvailability extends SecurityController
         $orderDetail = OrderDetailQuery::create()
                                         ->useOrderQuery()
                                             ->useEventTableQuery()
-                                                ->filterByEventid($user->getEventUser()->getEventid())
+                                                ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                             ->endUse()
                                         ->endUse()
                                         ->filterByOrderDetailid($this->json['id'])

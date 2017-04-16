@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\Event;
 
-interface IEventBankinformationQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IEventBankinformationQuery extends IQuery {
 
 }

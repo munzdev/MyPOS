@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\Menu;
 
-interface IMenuExtraQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IMenuExtraQuery extends IQuery {
 
 }

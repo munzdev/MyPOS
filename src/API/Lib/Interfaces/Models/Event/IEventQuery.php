@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\Event;
 
-interface IEventQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IEventQuery extends IQuery {
 
 }

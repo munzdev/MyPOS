@@ -22,7 +22,7 @@ class Printer extends SecurityController
         $user = $auth->getCurrentUser();
 
         $printer = EventPrinterQuery::create()
-                                        ->findByEventid($user->getEventUser()->getEventid());
+                                        ->findByEventid($user->getEventUsers()->getFirst()->getEventid());
 
         $this->withJson($printer->toArray());
     }

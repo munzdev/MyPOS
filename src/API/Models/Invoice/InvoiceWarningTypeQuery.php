@@ -2,16 +2,31 @@
 
 namespace API\Models\Invoice;
 
+use API\Lib\Interfaces\Models\Invoice\IInvoiceWarningType;
+use API\Lib\Interfaces\Models\Invoice\IInvoiceWarningTypeCollection;
 use API\Lib\Interfaces\Models\Invoice\IInvoiceWarningTypeQuery;
+use API\Models\ORM\Invoice\InvoiceWarningTypeQuery as InvoiceWarningTypeQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'invoice_warning_type' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class InvoiceWarningTypeQuery extends Query implements IInvoiceWarningTypeQuery
 {
+    public function find(): IInvoiceWarningTypeCollection
+    {
+        $invoiceWarningTypes = InvoiceWarningTypeQueryORM::create()->find();
+
+        $invoiceWarningTypeCollection = $this->container->get(IInvoiceWarningTypeCollection::class);
+        $invoiceWarningTypeCollection->setCollection($invoiceWarningTypes);
+
+        return $invoiceWarningTypeCollection;
+    }
+
+    public function findPk($id): IInvoiceWarningType
+    {
+        $invoiceWarningType = InvoiceWarningTypeQueryORM::create()->findPk($id);
+
+        $invoiceWarningTypeModel = $this->container->get(IInvoiceWarningType::class);
+        $invoiceWarningTypeModel->setModel($invoiceWarningType);
+
+        return $invoiceWarningTypeModel;
+    }
 }

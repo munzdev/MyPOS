@@ -216,7 +216,7 @@ class OrderModify extends SecurityController
             $order = OrderQuery::create()
                                 ->setFirstPriority(
                                     $orderid,
-                                    $user->getEventUser()->getEventid()
+                                    $user->getEventUsers()->getFirst()->getEventid()
                                 );
 
             $connection->commit();

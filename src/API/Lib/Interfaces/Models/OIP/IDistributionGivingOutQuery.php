@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\OIP;
 
-interface IDistributionGivingOutQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IDistributionGivingOutQuery extends IQuery {
 
 }

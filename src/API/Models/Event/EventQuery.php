@@ -2,16 +2,31 @@
 
 namespace API\Models\Event;
 
+use API\Lib\Interfaces\Models\Event\IEvent;
+use API\Lib\Interfaces\Models\Event\IEventCollection;
 use API\Lib\Interfaces\Models\Event\IEventQuery;
+use API\Models\ORM\Event\EventQuery as EventQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'event' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class EventQuery extends Query implements IEventQuery
 {
+    public function find(): IEventCollection
+    {
+        $events = EventQueryORM::create()->find();
+
+        $eventCollection = $this->container->get(IEventCollection::class);
+        $eventCollection->setCollection($events);
+
+        return $eventCollection;
+    }
+
+    public function findPk($id): IEvent
+    {
+        $event = EventQueryORM::create()->findPk($id);
+
+        $eventModel = $this->container->get(IEvent::class);
+        $eventModel->setModel($event);
+
+        return $eventModel;
+    }
 }

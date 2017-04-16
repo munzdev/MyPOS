@@ -2,17 +2,31 @@
 
 namespace API\Models\Ordering;
 
+use API\Lib\Interfaces\Models\Ordering\IOrder;
+use API\Lib\Interfaces\Models\Ordering\IOrderCollection;
 use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
+use API\Models\ORM\Ordering\OrderQuery as OrderQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'order' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class OrderQuery extends Query implements IOrderQuery
 {
+    public function find(): IOrderCollection
+    {
+        $orders = OrderQueryORM::create()->find();
 
+        $orderCollection = $this->container->get(IOrderCollection::class);
+        $orderCollection->setCollection($orders);
+
+        return $orderCollection;
+    }
+
+    public function findPk($id): IOrder
+    {
+        $order = OrderQueryORM::create()->findPk($id);
+
+        $orderModel = $this->container->get(IOrder::class);
+        $orderModel->setModel($order);
+
+        return $orderModel;
+    }
 }

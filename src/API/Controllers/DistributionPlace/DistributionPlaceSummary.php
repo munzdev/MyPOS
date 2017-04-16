@@ -47,7 +47,7 @@ class DistributionPlaceSummary extends SecurityController
         $orders = OrderQuery::create()
                                 ->getNextForDistribution(
                                     $user->getUserid(),
-                                    $user->getEventUser()->getEventid(),
+                                    $user->getEventUsers()->getFirst()->getEventid(),
                                     true,
                                     $config['App']['Distribution']['AmountOrdersToPreShow']
                                 )
@@ -139,7 +139,7 @@ class DistributionPlaceSummary extends SecurityController
                                                     ->filterByDone()
                                                     ->useOrderQuery()
                                                         ->useEventTableQuery()
-                                                            ->filterByEventid($user->getEventUser()->getEventid())
+                                                            ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                                         ->endUse()
                                                         ->useOrderDetailQuery()
                                                             ->filterByAvailabilityid(ORDER_AVAILABILITY_AVAILABLE)
@@ -160,7 +160,7 @@ class DistributionPlaceSummary extends SecurityController
 
         $distributionPlaceGroups = DistributionPlaceGroupQuery::create()
                                                                     ->useDistributionPlaceQuery()
-                                                                        ->filterByEventid($user->getEventUser()->getEventid())
+                                                                        ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                                                         ->useDistributionPlaceUserQuery()
                                                                             ->filterByUserid($user->getUserid())
                                                                         ->endUse()

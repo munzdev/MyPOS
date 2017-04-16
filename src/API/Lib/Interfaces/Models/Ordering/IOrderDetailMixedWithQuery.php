@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\Ordering;
 
-interface IOrderDetailMixedWithQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IOrderDetailMixedWithQuery extends IQuery {
 
 }

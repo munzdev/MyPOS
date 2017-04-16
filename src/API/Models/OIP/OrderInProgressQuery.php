@@ -2,16 +2,31 @@
 
 namespace API\Models\OIP;
 
+use API\Lib\Interfaces\Models\OIP\IOrderInProgress;
+use API\Lib\Interfaces\Models\OIP\IOrderInProgressCollection;
 use API\Lib\Interfaces\Models\OIP\IOrderInProgressQuery;
+use API\Models\ORM\OIP\OrderInProgressQuery as OrderInProgressQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'order_in_progress' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class OrderInProgressQuery extends Query implements IOrderInProgressQuery
 {
+    public function find(): IOrderInProgressCollection
+    {
+        $orderInProgresss = OrderInProgressQueryORM::create()->find();
+
+        $orderInProgressCollection = $this->container->get(IOrderInProgressCollection::class);
+        $orderInProgressCollection->setCollection($orderInProgress);
+
+        return $orderInProgressCollection;
+    }
+
+    public function findPk($id): IOrderInProgress
+    {
+        $orderInProgress = OrderInProgressQueryORM::create()->findPk($id);
+
+        $orderInProgressModel = $this->container->get(IOrderInProgress::class);
+        $orderInProgressModel->setModel($orderInProgress);
+
+        return $orderInProgressModel;
+    }
 }

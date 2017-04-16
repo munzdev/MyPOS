@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\Payment;
 
-interface IPaymentRecievedQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IPaymentRecievedQuery extends IQuery {
 
 }

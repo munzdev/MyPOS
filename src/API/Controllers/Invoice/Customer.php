@@ -24,7 +24,7 @@ class Customer extends SecurityController
         $eventContact = new EventContact();
         $eventContact->fromArray($this->json);
         $eventContact->setActive(true)
-            ->setEventid($user->getEventUser()->getEventid())
+            ->setEventid($user->getEventUsers()->getFirst()->getEventid())
             ->save();
 
         $this->withJson($eventContact->toArray());

@@ -2,16 +2,31 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuGroup;
+use API\Lib\Interfaces\Models\Menu\IMenuGroupCollection;
 use API\Lib\Interfaces\Models\Menu\IMenuGroupQuery;
+use API\Models\ORM\Menu\MenuGroupQuery as MenuGroupQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'menu_group' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class MenuGroupQuery extends Query implements IMenuGroupQuery
 {
+    public function find(): IMenuGroupCollection
+    {
+        $menuGroups = MenuGroupQueryORM::create()->find();
+
+        $menuGroupCollection = $this->container->get(IMenuGroupCollection::class);
+        $menuGroupCollection->setCollection($menuGroups);
+
+        return $menuGroupCollection;
+    }
+
+    public function findPk($id): IMenuGroup
+    {
+        $menuGroup = MenuGroupQueryORM::create()->findPk($id);
+
+        $menuGroupModel = $this->container->get(IMenuGroup::class);
+        $menuGroupModel->setModel($menuGroup);
+
+        return $menuGroupModel;
+    }
 }

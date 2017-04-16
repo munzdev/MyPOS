@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\Menu;
 
-interface IAvailabilityQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IAvailabilityQuery extends IQuery {
 
 }

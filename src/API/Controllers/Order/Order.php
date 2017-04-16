@@ -165,7 +165,7 @@ class Order extends SecurityController
             $connection->beginTransaction();
 
             $eventTable = EventTableQuery::create()
-                                            ->filterByEventid($user->getEventUser()->getEventid())
+                                            ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                             ->filterByName($this->json['EventTable']['Name'])
                                             ->findOneOrCreate();
 

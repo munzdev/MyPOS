@@ -2,16 +2,31 @@
 
 namespace API\Models\OIP;
 
+use API\Lib\Interfaces\Models\OIP\IDistributionGivingOut;
+use API\Lib\Interfaces\Models\OIP\IDistributionGivingOutCollection;
 use API\Lib\Interfaces\Models\OIP\IDistributionGivingOutQuery;
+use API\Models\ORM\OIP\DistributionGivingOutQuery as DistributionGivingOutQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'distribution_giving_out' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class DistributionGivingOutQuery extends Query implements IDistributionGivingOutQuery
 {
+    public function find(): IDistributionGivingOutCollection
+    {
+        $distributionGivingOuts = DistributionGivingOutQueryORM::create()->find();
+
+        $distributionGivingOutCollection = $this->container->get(IDistributionGivingOutCollection::class);
+        $distributionGivingOutCollection->setCollection($distributionGivingOut);
+
+        return $distributionGivingOutCollection;
+    }
+
+    public function findPk($id): IDistributionGivingOut
+    {
+        $distributionGivingOut = DistributionGivingOutQueryORM::create()->findPk($id);
+
+        $distributionGivingOutModel = $this->container->get(IDistributionGivingOut::class);
+        $distributionGivingOutModel->setModel($distributionGivingOut);
+
+        return $distributionGivingOutModel;
+    }
 }

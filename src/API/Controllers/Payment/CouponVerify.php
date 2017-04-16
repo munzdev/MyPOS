@@ -38,7 +38,7 @@ class CouponVerify extends SecurityController
         $coupon = CouponQuery::create()
                                 ->leftJoinPaymentCoupon()
                                 ->withColumn(CouponTableMap::COL_VALUE . ' - SUM(IFNULL(' . PaymentCouponTableMap::COL_VALUE_USED . ', 0))', 'Value')
-                                ->filterByEventid($user->getEventUser()->getEventid())
+                                ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                 ->filterByCode($this->args['code'])
                                 ->groupBy(CouponTableMap::COL_COUPONID)
                                 ->find();

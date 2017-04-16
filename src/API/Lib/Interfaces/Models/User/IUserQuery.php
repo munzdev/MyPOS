@@ -2,7 +2,9 @@
 
 namespace API\Lib\Interfaces\Models\User;
 
-interface IUserQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IUserQuery extends IQuery {
     /**
      *
      * @param string $username
@@ -17,14 +19,7 @@ interface IUserQuery {
 
     /**
      *
-     * @param type $userid
-     * @return IUser
-     */
-    function findPk($userid) : IUser;
-
-    /**
-     *
-     * @param type $eventid
+     * @param int $eventid
      * @return IUserCollection
      */
     function getUsersByEventid($eventid) : IUserCollection;

@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\Menu;
 
-interface IMenuTypeQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IMenuTypeQuery extends IQuery {
      function getMenuTypesForEventid($eventid) : IMenuTypeCollection;
 }

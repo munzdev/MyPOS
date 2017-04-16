@@ -40,7 +40,7 @@ class InvoiceInfo extends SecurityController
 
         $invoice = InvoiceQuery::create()
                                 ->useEventContactRelatedByEventContactidQuery()
-                                    ->filterByEventid($user->getEventUser()->getEventid())
+                                    ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                 ->endUse()
                                 ->joinWithInvoiceType()
                                 ->joinWith('EventContactRelatedByEventContactid contact')

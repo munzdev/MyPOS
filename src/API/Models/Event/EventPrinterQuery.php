@@ -2,16 +2,31 @@
 
 namespace API\Models\Event;
 
+use API\Lib\Interfaces\Models\Event\IEventPrinter;
+use API\Lib\Interfaces\Models\Event\IEventPrinterCollection;
 use API\Lib\Interfaces\Models\Event\IEventPrinterQuery;
+use API\Models\ORM\Event\EventPrinterQuery as EventPrinterQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'event_printer' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class EventPrinterQuery extends Query implements IEventPrinterQuery
 {
+    public function find(): IEventPrinterCollection
+    {
+        $eventPrinters = EventPrinterQueryORM::create()->find();
+
+        $eventPrinterCollection = $this->container->get(IEventPrinterCollection::class);
+        $eventPrinterCollection->setCollection($eventPrinters);
+
+        return $eventPrinterCollection;
+    }
+
+    public function findPk($id): IEventPrinter
+    {
+        $eventPrinter = EventPrinterQueryORM::create()->findPk($id);
+
+        $eventPrinterModel = $this->container->get(IEventPrinter::class);
+        $eventPrinterModel->setModel($eventPrinter);
+
+        return $eventPrinterModel;
+    }
 }

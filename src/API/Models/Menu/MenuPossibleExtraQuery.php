@@ -2,16 +2,31 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\Menu\IMenuPossibleExtra;
+use API\Lib\Interfaces\Models\Menu\IMenuPossibleExtraCollection;
 use API\Lib\Interfaces\Models\Menu\IMenuPossibleExtraQuery;
+use API\Models\ORM\Menu\MenuPossibleExtraQuery as MenuPossibleExtraQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'menu_possible_extra' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class MenuPossibleExtraQuery extends Query implements IMenuPossibleExtraQuery
 {
+    public function find(): IMenuPossibleExtraCollection
+    {
+        $menuPossibleExtras = MenuPossibleExtraQueryORM::create()->find();
+
+        $menuPossibleExtraCollection = $this->container->get(IMenuPossibleExtraCollection::class);
+        $menuPossibleExtraCollection->setCollection($menuPossibleExtras);
+
+        return $menuPossibleExtraCollection;
+    }
+
+    public function findPk($id): IMenuPossibleExtra
+    {
+        $menuPossibleExtra = MenuPossibleExtraQueryORM::create()->findPk($id);
+
+        $menuPossibleExtraModel = $this->container->get(IMenuPossibleExtra::class);
+        $menuPossibleExtraModel->setModel($menuPossibleExtra);
+
+        return $menuPossibleExtraModel;
+    }
 }

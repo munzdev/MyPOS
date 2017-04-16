@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\DistributionPlace;
 
-interface IDistributionPlaceGroupQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IDistributionPlaceGroupQuery extends IQuery {
 
 }

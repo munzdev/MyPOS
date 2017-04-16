@@ -2,16 +2,31 @@
 
 namespace API\Models\Ordering;
 
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailMixedWith;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailMixedWithCollection;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailMixedWithQuery;
+use API\Models\ORM\Ordering\OrderDetailMixedWithQuery as OrderDetailMixedWithQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'order_detail_mixed_with' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class OrderDetailMixedWithQuery extends Query implements IOrderDetailMixedWithQuery
 {
+    public function find(): IOrderDetailMixedWithCollection
+    {
+        $orderDetailMixedWiths = OrderDetailMixedWithQueryORM::create()->find();
+
+        $orderDetailMixedWithCollection = $this->container->get(IOrderDetailMixedWithCollection::class);
+        $orderDetailMixedWithCollection->setCollection($orderDetailMixedWiths);
+
+        return $orderDetailMixedWithCollection;
+    }
+
+    public function findPk($id): IOrderDetailMixedWith
+    {
+        $orderDetailMixedWith = OrderDetailMixedWithQueryORM::create()->findPk($id);
+
+        $orderDetailMixedWithModel = $this->container->get(IOrderDetailMixedWith::class);
+        $orderDetailMixedWithModel->setModel($orderDetailMixedWith);
+
+        return $orderDetailMixedWithModel;
+    }
 }

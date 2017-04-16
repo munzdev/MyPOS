@@ -125,7 +125,7 @@ class OrderUnbilled extends SecurityController
 
         try {
             $eventContact = EventContactQuery::create()
-                                                ->filterByEventid($user->getEventUser()->getEventid())
+                                                ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                                 ->filterByDefault(true)
                                                 ->findOne();
 

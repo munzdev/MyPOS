@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\Menu;
 
-interface IMenuGroupQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IMenuGroupQuery extends IQuery {
 
 }

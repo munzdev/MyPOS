@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\Payment;
 
-interface IPaymentCouponQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IPaymentCouponQuery extends IQuery {
 
 }

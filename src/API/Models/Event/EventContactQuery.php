@@ -2,16 +2,31 @@
 
 namespace API\Models\Event;
 
+use API\Lib\Interfaces\Models\Event\IEventContact;
+use API\Lib\Interfaces\Models\Event\IEventContactCollection;
 use API\Lib\Interfaces\Models\Event\IEventContactQuery;
+use API\Models\ORM\Event\EventContactQuery as EventContactQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'event_contact' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class EventContactQuery extends Query implements IEventContactQuery
 {
+    public function find(): IEventContactCollection
+    {
+        $eventContacts = EventContactQueryORM::create()->find();
+
+        $eventContactCollection = $this->container->get(IEventContactCollection::class);
+        $eventContactCollection->setCollection($eventContacts);
+
+        return $eventContactCollection;
+    }
+
+    public function findPk($id): IEventContact
+    {
+        $eventContact = EventContactQueryORM::create()->findPk($id);
+
+        $eventContactModel = $this->container->get(IEventContact::class);
+        $eventContactModel->setModel($eventContact);
+
+        return $eventContactModel;
+    }
 }

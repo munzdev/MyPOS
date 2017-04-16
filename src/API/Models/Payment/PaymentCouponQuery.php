@@ -2,16 +2,31 @@
 
 namespace API\Models\Payment;
 
+use API\Lib\Interfaces\Models\Payment\IPaymentCoupon;
+use API\Lib\Interfaces\Models\Payment\IPaymentCouponCollection;
 use API\Lib\Interfaces\Models\Payment\IPaymentCouponQuery;
+use API\Models\ORM\PaymentCouponing\PaymentCouponQuery as PaymentCouponQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'payment_coupon' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class PaymentCouponQuery extends Query implements IPaymentCouponQuery
 {
+    public function find(): IPaymentCouponCollection
+    {
+        $paymentCoupons = PaymentCouponQueryORM::create()->find();
+
+        $paymentCouponCollection = $this->container->get(IPaymentCouponCollection::class);
+        $paymentCouponCollection->setCollection($paymentCoupons);
+
+        return $paymentCouponCollection;
+    }
+
+    public function findPk($id): IPaymentCoupon
+    {
+        $paymentCoupon = PaymentCouponQueryORM::create()->findPk($id);
+
+        $paymentCouponModel = $this->container->get(IPaymentCoupon::class);
+        $paymentCouponModel->setModel($paymentCoupon);
+
+        return $paymentCouponModel;
+    }
 }

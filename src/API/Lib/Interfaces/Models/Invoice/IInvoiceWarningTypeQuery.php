@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\Invoice;
 
-interface IInvoiceWarningTypeQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IInvoiceWarningTypeQuery extends IQuery {
 
 }

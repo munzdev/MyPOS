@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\Ordering;
 
-interface IOrderQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IOrderQuery extends IQuery {
 
 }

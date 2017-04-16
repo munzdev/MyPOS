@@ -35,7 +35,7 @@ class CustomerSearch extends SecurityController
         $user = $auth->getCurrentUser();
 
         $eventContacts = EventContactQuery::create()
-                                            ->filterByEventid($user->getEventUser()->getEventid())
+                                            ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                             ->filterByActive(true)
                                             ->filterByName('%'.$this->args['name'].'%', Criteria::LIKE)
                                             ->find();

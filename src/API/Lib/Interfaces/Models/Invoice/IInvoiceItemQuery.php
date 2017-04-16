@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\Invoice;
 
-interface IInvoiceItemQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IInvoiceItemQuery extends IQuery {
 
 }

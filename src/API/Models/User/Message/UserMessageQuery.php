@@ -2,16 +2,31 @@
 
 namespace API\Models\User\Message;
 
+use API\Lib\Interfaces\Models\User\Message\IUserMessage;
+use API\Lib\Interfaces\Models\User\Message\IUserMessageCollection;
 use API\Lib\Interfaces\Models\User\Message\IUserMessageQuery;
+use API\Models\ORM\User\UserMessageQuery as UserMessageQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'user_message' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class UserMessageQuery extends Query implements IUserMessageQuery
 {
+    public function find(): IUserMessageCollection
+    {
+        $userMessages = UserMessageQueryORM::create()->find();
+
+        $userMessageCollection = $this->container->get(IUserMessageCollection::class);
+        $userMessageCollection->setCollection($userMessages);
+
+        return $userMessageCollection;
+    }
+
+    public function findPk($id): IUserMessage
+    {
+        $userMessage = UserMessageQueryORM::create()->findPk($id);
+
+        $userMessageModel = $this->container->get(IUserMessage::class);
+        $userMessageModel->setModel($userMessage);
+
+        return $userMessageModel;
+    }
 }

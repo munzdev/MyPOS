@@ -2,6 +2,8 @@
 
 namespace API\Lib\Interfaces\Models\User\Message;
 
-interface IUserMessageQuery {
+use API\Lib\Interfaces\Models\IQuery;
+
+interface IUserMessageQuery extends IQuery {
 
 }

@@ -100,7 +100,7 @@ class Invoice extends SecurityController
 
         $searchCriteria = InvoiceQuery::create()
                                         ->useEventContactRelatedByEventContactidQuery()
-                                            ->filterByEventid($user->getEventUser()->getEventid())
+                                            ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                         ->endUse()
                                         ->_if($status == 'paid')
                                             ->filterByPaymentFinished(null, Criteria::NOT_EQUAL)
@@ -181,7 +181,7 @@ class Invoice extends SecurityController
             $invoiceTemplate->setMaturityDate(date("c", strtotime($this->json['MaturityDate'])));
 
             $eventContact = EventContactQuery::create()
-                                                ->filterByEventid($user->getEventUser()->getEventid())
+                                                ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
                                                 ->filterByDefault(true)
                                                 ->findOne();
 

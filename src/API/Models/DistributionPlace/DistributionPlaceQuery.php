@@ -2,16 +2,31 @@
 
 namespace API\Models\DistributionPlace;
 
+use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlace;
+use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceCollection;
 use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceQuery;
+use API\Models\ORM\DistributionPlace\DistributionPlaceQuery as DistributionPlaceQueryORM;
 use API\Models\Query;
 
-/**
- * Skeleton subclass for performing query and update operations on the 'distribution_place' table.
- *
- * You should add additional methods to this class to meet the
- * application requirements.  This class will only be generated as
- * long as it does not already exist in the output directory.
- */
 class DistributionPlaceQuery extends Query implements IDistributionPlaceQuery
 {
+    public function find(): IDistributionPlaceCollection
+    {
+        $distributionPlaceGroups = DistributionPlaceQueryORM::create()->find();
+
+        $distributionPlaceGroupCollection = $this->container->get(IDistributionPlaceCollection::class);
+        $distributionPlaceGroupCollection->setCollection($distributionPlaceGroups);
+
+        return $distributionPlaceGroupCollection;
+    }
+
+    public function findPk($id): IDistributionPlace
+    {
+        $distributionPlaceGroup = DistributionPlaceQueryORM::create()->findPk($id);
+
+        $distributionPlaceGroupModel = $this->container->get(IDistributionPlace::class);
+        $distributionPlaceGroupModel->setModel($distributionPlaceGroup);
+
+        return $distributionPlaceGroupModel;
+    }
 }
