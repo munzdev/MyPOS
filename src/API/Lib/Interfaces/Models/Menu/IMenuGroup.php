@@ -25,6 +25,10 @@ interface IMenuGroup extends IModel {
      */
     function getName();
 
+    /**
+     * @return IMenuCollection 
+     */
+    function getMenus();
 
     /**
      *

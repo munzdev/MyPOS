@@ -37,6 +37,11 @@ interface IMenuType extends IModel {
     function getAllowMixing();
 
     /**
+     * @return IMenuGroupCollection 
+     */
+    function getMenuGroups();
+
+    /**
      *
      * @param int $menuTypeid Description
      * @return IMenuType Description

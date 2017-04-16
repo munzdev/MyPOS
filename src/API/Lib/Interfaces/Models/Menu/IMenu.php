@@ -46,6 +46,16 @@ interface IMenu extends IModel {
     function getAvailabilityAmount();
 
     /**
+     * @return IMenuPossibleExtraCollection
+     */
+    function getMenuPossibleExtras();
+
+    /**
+     * @return IMenuPossibleSizeCollection
+     */
+    function getMenuPossibleSizes();
+
+    /**
      *
      * @param int $menuid Description
      * @return IMenu Description
