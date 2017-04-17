@@ -3,6 +3,7 @@
 namespace API\Controllers\Event;
 
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Models\ORM\Event\EventPrinterQuery;
 use Slim\App;
@@ -13,7 +14,7 @@ class Printer extends SecurityController
     {
         parent::__construct($app);
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     protected function get() : void

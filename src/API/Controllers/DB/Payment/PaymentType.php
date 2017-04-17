@@ -2,9 +2,9 @@
 
 namespace API\Controllers\DB\Payment;
 
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Interfaces\Models\Payment\IPaymentTypeQuery;
 use API\Lib\SecurityController;
-use API\Models\Payment\PaymentTypeQuery;
 use Slim\App;
 
 class PaymentType extends SecurityController
@@ -13,7 +13,7 @@ class PaymentType extends SecurityController
     {
         parent::__construct($app);
 
-        $this->container->get('db');
+        $this->container->get(IConnectionInterface::class);
     }
 
     protected function get() : void

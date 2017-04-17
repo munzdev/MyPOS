@@ -5,6 +5,7 @@ namespace API\Controllers\Order;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\ORM\Event\EventTableQuery;
@@ -36,7 +37,7 @@ class Order extends SecurityController
         $this->security = ['GET' => USER_ROLE_ORDER_OVERVIEW,
                            'POST' => USER_ROLE_ORDER_ADD];
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     protected function get() : void

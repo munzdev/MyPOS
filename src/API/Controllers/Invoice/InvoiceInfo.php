@@ -4,6 +4,7 @@ namespace API\Controllers\Invoice;
 
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Models\ORM\Invoice\InvoiceQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -20,7 +21,7 @@ class InvoiceInfo extends SecurityController
 
         $this->security = ['GET' => USER_ROLE_INVOICE_OVERVIEW];
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     public function any() : void

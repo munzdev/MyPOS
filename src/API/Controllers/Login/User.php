@@ -4,6 +4,7 @@ namespace API\Controllers\Login;
 
 use API\Lib\Controller;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use Slim\App;
 
 class User extends Controller
@@ -18,7 +19,7 @@ class User extends Controller
     {
         parent::__construct($app);
 
-        $this->container['db'];
+        $this->container->get(IConnectionInterface::class);
         $this->auth = $this->container->get(IAuth::class);
     }
 

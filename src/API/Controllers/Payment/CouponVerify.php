@@ -4,6 +4,7 @@ namespace API\Controllers\Payment;
 
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Models\ORM\Payment\CouponQuery;
 use API\Models\ORM\Payment\Map\CouponTableMap;
@@ -17,7 +18,7 @@ class CouponVerify extends SecurityController
     {
         parent::__construct($app);
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     public function any() : void

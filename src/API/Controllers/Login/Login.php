@@ -7,10 +7,8 @@ use API\Lib\Exceptions\GeneralException;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\IRememberMe;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Interfaces\Models\User\IUserQuery;
-use API\Lib\RememberMe;
-use API\Models\ORM\User\UserQuery;
-use Propel\Runtime\Propel;
 use Respect\Validation\Validator;
 use Slim\App;
 
@@ -26,8 +24,8 @@ class Login extends Controller
     {
         parent::__construct($app);
 
-        $this->container['db'];
-        $this->auth =$this->container->get(IAuth::class);
+        $this->container->get(IConnectionInterface::class);
+        $this->auth = $this->container->get(IAuth::class);
     }
 
     protected function post() : void

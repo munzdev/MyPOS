@@ -5,6 +5,7 @@ namespace API\Controllers\Invoice;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Models\ORM\Event\EventBankinformationQuery;
 use API\Models\ORM\Event\EventContactQuery;
@@ -30,7 +31,7 @@ class Invoice extends SecurityController
         $this->security = ['GET' => USER_ROLE_INVOICE_OVERVIEW,
                             'POST' => USER_ROLE_INVOICE_ADD];
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     protected function get() : void

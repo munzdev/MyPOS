@@ -38,6 +38,7 @@ use API\Lib\Interfaces\Models\Event\IEventTableQuery;
 use API\Lib\Interfaces\Models\Event\IEventUser;
 use API\Lib\Interfaces\Models\Event\IEventUserCollection;
 use API\Lib\Interfaces\Models\Event\IEventUserQuery;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Interfaces\Models\Invoice\IInvoice;
 use API\Lib\Interfaces\Models\Invoice\IInvoiceCollection;
 use API\Lib\Interfaces\Models\Invoice\IInvoiceItem;
@@ -128,6 +129,7 @@ use API\Lib\Printer\PrintingType\Order;
 use API\Lib\Printer\PrintingType\PaymentRecieved;
 use API\Lib\PrintingInformation;
 use API\Lib\RememberMe;
+use API\Models\Connection;
 use API\Models\DistributionPlace\DistributionPlace;
 use API\Models\DistributionPlace\DistributionPlaceCollection;
 use API\Models\DistributionPlace\DistributionPlaceGroup;
@@ -242,10 +244,8 @@ use API\Models\User\UserRoleQuery;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Monolog\Processor\UidProcessor;
-use Propel\Runtime\Connection\ConnectionManagerSingle;
 use Propel\Runtime\Connection\ConnectionWrapper;
 use Propel\Runtime\Connection\DebugPDO;
-use Propel\Runtime\Propel;
 use const API\DEBUG;
 use const API\PUBLIC_ROOT;
 
@@ -272,26 +272,15 @@ $container['i18n'] = function () {
     return json_decode($json);
 };
 
-// Propel
-$container['db'] = function ($c) {
+$container->registerService(IConnectionInterface::class, function ($c) {
     $settings = $c->get('settings');
     $dbConfig = $settings['database'];
 
     $extraConfig = array('classname' => (DEBUG) ? DebugPDO::class : ConnectionWrapper::class,
                          'model_paths' => array('src','vendor'));
 
-    $manager = new ConnectionManagerSingle();
-    $manager->setConfiguration(array_merge($dbConfig, $extraConfig));
-    $manager->setName('default');
-
-    $serviceContainer = Propel::getServiceContainer();
-    $serviceContainer->checkVersion('2.0.0-dev');
-    $serviceContainer->setAdapterClass('default', $dbConfig['adapter']);
-    $serviceContainer->setConnectionManager('default', $manager);
-    $serviceContainer->setDefaultDatasource('default');
-
-    return $serviceContainer->getConnection();
-};
+    return new Connection(array_merge($dbConfig, $extraConfig));
+});
 
 $container->registerService(IAuth::class, function ($c) {
     return new Auth($c->get(IUserQuery::class));

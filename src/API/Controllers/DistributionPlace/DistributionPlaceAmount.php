@@ -4,6 +4,7 @@ namespace API\Controllers\DistributionPlace;
 
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\ORM\Menu\MenuExtraQuery;
@@ -24,7 +25,7 @@ class DistributionPlaceAmount extends SecurityController
 
         $this->security = ['POST' => USER_ROLE_DISTRIBUTION_SET_AVAILABILITY];
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     public function any() : void

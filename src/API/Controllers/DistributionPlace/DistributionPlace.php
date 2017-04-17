@@ -4,6 +4,7 @@ namespace API\Controllers\DistributionPlace;
 
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\ORM\DistributionPlace\DistributionPlaceGroupQuery;
@@ -38,7 +39,7 @@ class DistributionPlace extends SecurityController
         $this->security = ['GET' => USER_ROLE_DISTRIBUTION_OVERVIEW,
                             'PUT' => USER_ROLE_DISTRIBUTION_OVERVIEW];
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     protected function put() : void

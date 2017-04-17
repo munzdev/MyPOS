@@ -4,6 +4,7 @@ namespace API\Controllers\Invoice;
 
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Models\ORM\Event\EventContactQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -16,7 +17,7 @@ class CustomerSearch extends SecurityController
     {
         parent::__construct($app);
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     public function any() : void

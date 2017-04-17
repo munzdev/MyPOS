@@ -5,6 +5,7 @@ namespace API\Controllers\Order;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\ORM\Event\EventBankinformationQuery;
@@ -43,7 +44,7 @@ class OrderUnbilled extends SecurityController
 
         $this->security = ['GET' => USER_ROLE_ORDER_ADD];
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     public function any() : void

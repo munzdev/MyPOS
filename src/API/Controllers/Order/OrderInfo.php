@@ -3,6 +3,7 @@
 namespace API\Controllers\Order;
 
 use API\Lib\Interfaces\Helpers\IValidate;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Models\ORM\Invoice\Map\InvoiceItemTableMap;
 use API\Models\ORM\OIP\Map\OrderInProgressRecievedTableMap;
@@ -22,7 +23,7 @@ class OrderInfo extends SecurityController
 
         $this->security = ['GET' => USER_ROLE_ORDER_OVERVIEW];
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     public function any() : void

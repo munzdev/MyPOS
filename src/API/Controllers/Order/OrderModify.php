@@ -5,6 +5,7 @@ namespace API\Controllers\Order;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\ORM\Ordering\Base\OrderDetailQuery;
@@ -33,7 +34,7 @@ class OrderModify extends SecurityController
                             'PUT' => USER_ROLE_ORDER_MODIFY,
                             'PATCH' => USER_ROLE_ORDER_MODIFY_PRICE | USER_ROLE_ORDER_MODIFY_PRIORITY];
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     public function any() : void

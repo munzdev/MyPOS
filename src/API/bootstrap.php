@@ -30,7 +30,7 @@ $container = new API\Lib\Container($settings);
 $app = new \Slim\App($container);
 
 // Set up dependencies
-require 'dependencies.php';
+require 'serviceLocator.php';
 
 // Register routes
 $routeDirectory = new RecursiveDirectoryIterator(

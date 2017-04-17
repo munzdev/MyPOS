@@ -3,10 +3,9 @@
 namespace API\Controllers\User;
 
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Interfaces\Models\User\IUserQuery;
 use API\Lib\SecurityController;
-use API\Models\ORM\User\UserQuery;
-use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Slim\App;
 
 class User extends SecurityController
@@ -17,7 +16,7 @@ class User extends SecurityController
     {
         parent::__construct($app);
 
-        $this->container['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     protected function get() : void

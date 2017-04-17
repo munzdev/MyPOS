@@ -4,6 +4,7 @@ namespace API\Controllers\Invoice;
 
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Models\ORM\Invoice\Invoice;
 use API\Models\ORM\Invoice\InvoiceItem;
@@ -24,7 +25,7 @@ class InvoiceModify extends SecurityController
 
         $this->security = ['PATCH' => USER_ROLE_INVOICE_CANCEL];
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     protected function any() : void

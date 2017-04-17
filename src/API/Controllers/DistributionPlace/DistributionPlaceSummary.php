@@ -3,6 +3,7 @@
 namespace API\Controllers\DistributionPlace;
 
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Models\ORM\DistributionPlace\DistributionPlaceGroupQuery;
 use API\Models\ORM\OIP\Base\OrderInProgressQuery;
@@ -20,11 +21,11 @@ class DistributionPlaceSummary extends SecurityController
 
         $this->security = ['GET' => USER_ROLE_DISTRIBUTION_PREVIEW];
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     protected function get() : void
-    {        
+    {
         $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
         $config = $this->app->getContainer()['settings'];
@@ -35,7 +36,7 @@ class DistributionPlaceSummary extends SecurityController
         if ($orderInProgress) {
             $orderidOfInProgress = $orderInProgress->getOrder()->getOrderid();
         }
-        
+
         $distributionPlaceGroups = $this->getMyDistributionPlaceGroups();
 
         $menuGroupids = [];
@@ -89,44 +90,44 @@ class DistributionPlaceSummary extends SecurityController
                             $orderDetail['Amount'] -= $orderInProgressRecieved['Amount'];
                         }
                     }
-                    
+
                     if ($orderDetail['Amount'] == 0) {
                         continue;
                     }
-                    
+
                     $index = $orderDetail['Menuid'] . '-' . $orderDetail['MenuGroupid'] . '-' . $orderDetail['ExtraDetail'] . '-';
-                    
+
                     foreach ($orderDetail['OrderDetailExtras'] as $orderDetailExtra) {
                         if (empty($orderDetailExtra['OrderDetailid'])) {
                             $orderDetail['OrderDetailExtras'] = [];
                             continue;
                         }
-                        
+
                         $index .= $orderDetailExtra['MenuPossibleExtraid'];
                     }
-                    
+
                     $index .= '-';
-                    
+
                     foreach ($orderDetail['OrderDetailMixedWiths'] as $orderDetailMixedWith) {
                         if (empty($orderDetailMixedWith)) {
                             $orderDetail['OrderDetailMixedWiths'] = [];
                             continue;
                         }
-                        
+
                         $index .= $orderDetailMixedWith['Menuid'];
                     }
-                    
+
                     if (isset($orderDetailsToReturn[$index])) {
                         $orderDetailsToReturn[$index]['Amount'] += $orderDetail['Amount'];
                         continue;
                     }
-                    
+
                     $orderDetailsToReturn[$index] = $orderDetail;
                 }
             }
         }
 
-        $this->withJson(array_values($orderDetailsToReturn));        
+        $this->withJson(array_values($orderDetailsToReturn));
     }
 
     private function getOpenOrderInProgress()

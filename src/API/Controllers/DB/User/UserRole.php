@@ -2,6 +2,7 @@
 
 namespace API\Controllers\DB\User;
 
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Interfaces\Models\User\IUserRoleQuery;
 use API\Lib\SecurityController;
 use Slim\App;
@@ -12,7 +13,7 @@ class UserRole extends SecurityController
     {
         parent::__construct($app);
 
-        $this->container->get('db');
+        $this->container->get(IConnectionInterface::class);
     }
 
     protected function get() : void

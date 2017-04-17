@@ -4,6 +4,7 @@ namespace API\Controllers\Payment;
 
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Models\ORM\Payment\PaymentCoupon;
 use API\Models\ORM\Payment\PaymentRecieved;
@@ -21,7 +22,7 @@ class Payment extends SecurityController
 
         $this->security = ['POST' => USER_ROLE_PAYMENT_ADD];
 
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     protected function post() : void

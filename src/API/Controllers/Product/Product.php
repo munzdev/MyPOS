@@ -3,6 +3,7 @@
 namespace API\Controllers\Product;
 
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Interfaces\Models\Menu\IMenuTypeQuery;
 use API\Lib\SecurityController;
 use Slim\App;
@@ -13,7 +14,7 @@ class Product extends SecurityController
     {
         parent::__construct($app);
 
-        $this->container['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     protected function get() : void

@@ -3,6 +3,7 @@
 namespace API\Controllers\Invoice;
 
 use API\Lib\Interfaces\Helpers\IValidate;
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Printer;
 use API\Lib\SecurityController;
 use API\Models\ORM\Event\Base\EventPrinterQuery;
@@ -23,7 +24,7 @@ class Printing extends SecurityController
         parent::__construct($app);
 
         $this->withPayments = $withPayments;
-        $app->getContainer()['db'];
+        $this->container->get(IConnectionInterface::class);
     }
 
     public function any() : void
