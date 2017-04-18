@@ -111,12 +111,17 @@ interface IOrderDetail extends IModel {
      */
     function getInvoiceFinished();
 
+    /**
+     *
+     * @return IOrderDetailExtraCollection
+     */
+    function getOrderDetailExtras() : IOrderDetailExtraCollection;
 
-
-
-
-
-
+    /**
+     *
+     * @return IOrderDetailMixedWithCollection
+     */
+    function getOrderDetailMixedWiths() : IOrderDetailMixedWithCollection;
 
     /**
      * @param int $orderDetailid Description

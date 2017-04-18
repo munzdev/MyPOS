@@ -4,28 +4,28 @@ namespace API\Controllers\DistributionPlace;
 
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceGroupQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Menu\IMenuQuery;
+use API\Lib\Interfaces\Models\OIP\IDistributionGivingOut;
+use API\Lib\Interfaces\Models\OIP\IOrderInProgress;
+use API\Lib\Interfaces\Models\OIP\IOrderInProgressQuery;
+use API\Lib\Interfaces\Models\OIP\IOrderInProgressRecieved;
+use API\Lib\Interfaces\Models\Ordering\IOrder;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
+use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\ORM\DistributionPlace\DistributionPlaceGroupQuery;
 use API\Models\ORM\DistributionPlace\DistributionPlaceUserQuery;
-use API\Models\ORM\Menu\Base\MenuQuery;
 use API\Models\ORM\Menu\MenuExtraQuery;
-use API\Models\ORM\OIP\Base\OrderInProgressQuery;
-use API\Models\ORM\OIP\DistributionGivingOut;
 use API\Models\ORM\OIP\DistributionGivingOutQuery;
-use API\Models\ORM\OIP\OrderInProgress;
-use API\Models\ORM\OIP\OrderInProgressRecieved;
-use API\Models\ORM\Ordering\Order;
 use API\Models\ORM\Ordering\OrderDetailQuery;
 use API\Models\ORM\Ordering\OrderQuery;
 use DateTime;
 use Exception;
-use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Propel;
 use Slim\App;
-use const API\ORDER_AVAILABILITY_AVAILABLE;
 use const API\ORDER_AVAILABILITY_DELAYED;
 use const API\ORDER_AVAILABILITY_OUT_OF_ORDER;
 use const API\USER_ROLE_DISTRIBUTION_OVERVIEW;
@@ -46,44 +46,29 @@ class DistributionPlace extends SecurityController
     {
         $auth = $this->app->getContainer()->get(IAuth::class);
         $user = $auth->getCurrentUser();
-        $connection = Propel::getConnection();
+        $connection = $this->container->get(IConnectionInterface::class);
 
         try {
             $connection->beginTransaction();
-            $orderTemplate = new Order();
+            $orderTemplate = $this->container->get(IOrder::class);
+            $orderQuery = $this->container->get(IOrderQuery::class);
+            $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
+            $orderInProgressQuery = $this->container->get(IOrderInProgressQuery::class);
 
             $jsonToModel = $this->container->get(IJsonToModel::class);
             $jsonToModel->convert($this->json, $orderTemplate);
 
-            $order = OrderQuery::create()
-                                   ->joinWithOrderDetail()
-                                   ->useOrderDetailQuery()
-                                        ->leftJoinWithMenu()
-                                        ->leftJoinWithOrderDetailExtra()
-                                        ->useOrderDetailExtraQuery(null, Criteria::LEFT_JOIN)
-                                            ->leftJoinWithMenuPossibleExtra()
-                                            ->useMenuPossibleExtraQuery(null, Criteria::LEFT_JOIN)
-                                                ->leftJoinWithMenuExtra()
-                                            ->endUse()
-                                        ->endUse()
-                                        ->leftJoinWithOrderDetailMixedWith()
-                                   ->endUse()
-                                   ->findPk($orderTemplate->getOrderid());
+            $order = $orderQuery->findPKWithAllOrderDetails($orderTemplate->getOrderid());
+            $orderInProgresses = $orderInProgressQuery->getActiveByUserAndOrder($user, $order);
 
-            $orderInProgresses = OrderInProgressQuery::create()
-                                        ->filterByUser($user)
-                                        ->filterByOrder($order)
-                                        ->filterByDone()
-                                        ->find();
-
-            $distributionGivingOut = new DistributionGivingOut();
+            $distributionGivingOut = $this->container->get(IDistributionGivingOut::class);
             $distributionGivingOut->setDate(new DateTime());
             $distributionGivingOut->save();
 
             foreach ($orderTemplate->getOrderDetails() as $orderDetailTemplate) {
                 foreach ($order->getOrderDetails() as $orderDetail) {
                     if ($orderDetailTemplate->getOrderDetailid() == $orderDetail->getOrderDetailid()) {
-                        $orderInProgressRecieved = new OrderInProgressRecieved();
+                        $orderInProgressRecieved = $this->container->get(IOrderInProgressRecieved::class);
                         $orderInProgressRecieved->setDistributionGivingOut($distributionGivingOut);
                         $orderInProgressRecieved->setAmount($orderDetailTemplate->getAmount());
                         $orderInProgressRecieved->setOrderDetail($orderDetail);
@@ -103,19 +88,7 @@ class DistributionPlace extends SecurityController
                                 $menu->save();
 
                                 // TODO Optimize performance
-                                $orderDetailFilter = OrderDetailQuery::create()
-                                                                        ->filterByDistributionFinished()
-                                                                        ->useMenuQuery()
-                                                                            ->filterByMenuid($menu->getMenuid())
-                                                                        ->endUse()
-                                                                        ->_or()
-                                                                        ->useOrderDetailMixedWithQuery(null, Criteria::LEFT_JOIN)
-                                                                            ->useMenuQuery('re', Criteria::LEFT_JOIN)
-                                                                                ->filterByMenuid($menu->getMenuid())
-                                                                            ->endUse()
-                                                                        ->endUse();
-
-                                $orderDetailsToCheck = $orderDetailFilter->find();
+                                $orderDetailsToCheck = $orderDetailQuery->getDistributionUnfinishedByMenuid($menu->getMenuid());
 
                                 foreach ($orderDetailsToCheck as $orderDetailToCheck) {
                                     StatusCheck::verifyAvailability($orderDetailToCheck->getOrderDetailid());
@@ -136,15 +109,7 @@ class DistributionPlace extends SecurityController
                                     $menuExtra->save();
 
                                     // TODO Optimize performance
-                                    $orderDetailFilter = OrderDetailQuery::create()
-                                                                            ->filterByDistributionFinished()
-                                                                            ->useOrderDetailExtraQuery()
-                                                                                ->useMenuPossibleExtraQuery()
-                                                                                    ->filterByMenuExtraid($menuExtra->getMenuExtraid())
-                                                                                ->endUse()
-                                                                            ->endUse();
-
-                                    $orderDetails = $orderDetailFilter->find();
+                                    $orderDetails = $orderDetailQuery->getDistributionUnfinishedByMenuExtraid($menuExtra->getMenuExtraid());
 
                                     if ($menuExtra->getAvailabilityid() == ORDER_AVAILABILITY_OUT_OF_ORDER) {
                                         $ids = [];
@@ -153,9 +118,7 @@ class DistributionPlace extends SecurityController
                                         }
 
                                         if (!empty($ids)) {
-                                            OrderDetailQuery::create()
-                                                                ->filterByOrderDetailid($ids)
-                                                                ->update(['Availabilityid' => $menuExtra->getAvailabilityid()]);
+                                            $orderDetailQuery->setAvailabilityidByOrderDetailIds($menuExtra->getAvailabilityid(), $ids);
                                         }
                                     } else {
                                         foreach ($orderDetails as $orderDetail) {
@@ -179,21 +142,9 @@ class DistributionPlace extends SecurityController
                                     $menu->save();
 
                                     // TODO Optimize performance
-                                    $orderDetailFilter = OrderDetailQuery::create()
-                                                                            ->filterByDistributionFinished()
-                                                                            ->useMenuQuery()
-                                                                                ->filterByMenuid($menu->getMenuid())
-                                                                            ->endUse()
-                                                                            ->_or()
-                                                                            ->useOrderDetailMixedWithQuery(null, Criteria::LEFT_JOIN)
-                                                                                ->useMenuQuery('re', Criteria::LEFT_JOIN)
-                                                                                    ->filterByMenuid($menu->getMenuid())
-                                                                                ->endUse()
-                                                                            ->endUse();
+                                    $orderDetailsToCheck = $orderDetailQuery->getDistributionUnfinishedByMenuid($menu->getMenuid());
 
-                                    $orderDetails = $orderDetailFilter->find();
-
-                                    foreach ($orderDetails as $orderDetail) {
+                                    foreach ($orderDetailsToCheck as $orderDetail) {
                                         StatusCheck::verifyAvailability($orderDetail->getOrderDetailid());
                                     }
                                 }
@@ -246,15 +197,19 @@ class DistributionPlace extends SecurityController
 
     protected function get() : void
     {
-        $connection = Propel::getConnection();
+        $connection = $this->container->get(IConnectionInterface::class);
+        $orderDetailQuery = $this->container->get(IOrderDetail::class);
+        $menuExtraQuery = $this->container->get(IMenuExtraQuery::class);
+        $auth = $this->app->getContainer()->get(IAuth::class);
 
         try {
             $connection->beginTransaction();
 
+            $user = $auth->getCurrentUser();
             $order = $this->getCurrentOrder();
             $ordersInTodo = $this->getOrdersInTodo();
-            $orderDetailwithSpecialExtra = $this->getOrderDetailWithSpecialExtra();
-            $menuExtras = $this->getMenuExtras();
+            $orderDetailwithSpecialExtra = $orderDetailQuery->getVerifiedDistributionUnfinishedWithSpecialExtras();
+            $menuExtras = $menuExtraQuery->findByEventid($user->getEventUsers()->getFirst()->getEventid())->toArray();
             $eventPrinterid = $this->getPrinterid();
 
             $orderStatistic = $this->getOrderStatisic();
@@ -281,46 +236,36 @@ class DistributionPlace extends SecurityController
     private function getCurrentOrder()
     {
         $auth = $this->app->getContainer()->get(IAuth::class);
+        $orderInProgressQuery = $this->app->getContainer()->get(IOrderInProgressQuery::class);
+
         $user = $auth->getCurrentUser();
         $config = $this->app->getContainer()['settings'];
         $assist = $config['App']['Distribution']['OnStandbyAssistOtherDistributionPlaces'];
 
+        $orderQuery = $this->container->get(IOrderQuery::class);
+        $menuQuery = $this->container->get(IMenuQuery::class);
+        $orderInProgressQuery = $this->container->get(IOrderInProgress::class);
+        $distributionPlaceGroupQuery = $this->container->get(IDistributionPlaceGroupQuery::class);
+
         //-- First try fetch allready started order to handle, witch is not finished yet
         //-- (like page reloaded or the status of a product has changed back to available)
-        $orderInProgress = $this->getOpenOrderInProgress();
+        $orderInProgress = $orderInProgressQuery->getOpenOrderInProgress($user->getUserid(),
+                                                                         $user->getEventUsers()->getFirst()->getEventid());
+
 
         //-- if no existing progress order found, take a new order from priority list
         if (!$orderInProgress) {
-            //-- first try to find a order that is associated to the distribution place tables
-            $order = OrderQuery::create()
-                                ->getNextForDistribution(
-                                    $user->getUserid(),
-                                    $user->getEventUsers()->getFirst()->getEventid(),
-                                    true
-                                )
-                                ->joinWithOrderDetail()
-                                ->useOrderDetailQuery()
-                                    ->leftJoinWithMenu()
-                                ->endUse()
-                                ->find()
-                                ->getFirst();
+            $order = $orderQuery->getNextForDistribution($user->getUserid(),
+                                                         $user->getEventUsers()->getFirst()->getEventid(),
+                                                         true);
 
             //-- Secondly try to find an order, which belongs to an other distribution place tables but
             //-- has the same menu_groupid and can also be handeled by the current user
             //-- this lets ordes be done faster
             if (!$order && $assist) {
-                $order = OrderQuery::create()
-                                    ->getNextForDistribution(
-                                        $user->getUserid(),
-                                        $user->getEventUsers()->getFirst()->getEventid(),
-                                        false
-                                    )
-                                    ->joinWithOrderDetail()
-                                    ->useOrderDetailQuery()
-                                        ->leftJoinWithMenu()
-                                    ->endUse()
-                                    ->find()
-                                    ->getFirst();
+                $order = $orderQuery->getNextForDistribution($user->getUserid(),
+                                                             $user->getEventUsers()->getFirst()->getEventid(),
+                                                             false);
             }
 
             if (!$order) {
@@ -339,18 +284,12 @@ class DistributionPlace extends SecurityController
 
             $menuGroupids = array_unique($menuGroupids);
 
-            $distributionPlaceGroups = DistributionPlaceGroupQuery::create()
-                                                                    ->filterByMenuGroupid($menuGroupids)
-                                                                    ->useDistributionPlaceQuery()
-                                                                        ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                                                        ->useDistributionPlaceUserQuery()
-                                                                            ->filterByUserid($user->getUserid())
-                                                                        ->endUse()
-                                                                    ->endUse()
-                                                                    ->find();
+            $distributionPlaceGroups = $distributionPlaceGroupQuery->getByMenuGroupsAndUser($menuGroupids,
+                                                                                            $user->getEventUsers()->getFirst()->getEventid(),
+                                                                                            $user->getUserid());
 
             foreach ($distributionPlaceGroups as $distributionPlaceGroup) {
-                $orderInProgress = new OrderInProgress();
+                $orderInProgress = $this->container->get(IOrderInProgress::class);
                 $orderInProgress->setOrder($order);
                 $orderInProgress->setUser($user);
                 $orderInProgress->setMenuGroupid($distributionPlaceGroup->getMenuGroupid());
@@ -361,41 +300,14 @@ class DistributionPlace extends SecurityController
             $order = $orderInProgress->getOrder();
         }
 
-        $orderInProgresses = OrderInProgressQuery::create()
-                                                    ->filterByOrder($order)
-                                                    ->filterByUser($user)
-                                                    ->filterByDone()
-                                                    ->find();
+        $orderInProgresses = $orderInProgressQuery->getActiveByUserAndOrder($user, $order);
 
         $menuGroupids = [];
         foreach ($orderInProgresses as $orderInProgress) {
             $menuGroupids[] = $orderInProgress->getMenuGroupid();
         }
 
-        $orderToReturn = OrderQuery::create()
-                                    ->filterByOrderid($order->getOrderid())
-                                    ->joinWithOrderDetail()
-                                    ->leftJoinWith('OrderDetail.Menu')
-                                    ->leftJoinWith('OrderDetail.MenuSize')
-                                    ->leftJoinWith('OrderDetail.OrderDetailExtra')
-                                    ->leftJoinWith('OrderDetailExtra.MenuPossibleExtra')
-                                    ->leftJoinWith('MenuPossibleExtra.MenuExtra')
-                                    ->useOrderDetailQuery()
-                                        ->filterByAvailabilityid(ORDER_AVAILABILITY_AVAILABLE)
-                                        ->useMenuQuery(null, Criteria::LEFT_JOIN)
-                                            ->filterByMenuGroupid($menuGroupids)
-                                        ->endUse()
-                                        ->_or()
-                                        ->filterByMenuGroupid($menuGroupids)
-                                        ->leftJoinWithOrderDetailMixedWith()
-                                        ->leftJoinWithOrderInProgressRecieved()
-                                    ->endUse()
-                                    ->joinWithEventTable()
-                                    ->joinWithUserRelatedByUserid()
-                                    ->joinOrderInProgress()
-                                    ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                    ->find()
-                                    ->getFirst();
+        $orderToReturn = $orderQuery->getInfosForDistribution($order->getOrderid(), $menuGroupids)->toArray();
 
         $orderToReturn['UserRelatedByUserid'] = $this->cleanupUserData($orderToReturn['UserRelatedByUserid']);
 
@@ -422,9 +334,7 @@ class DistributionPlace extends SecurityController
                     continue;
                 }
 
-                $menu = MenuQuery::create()
-                                    ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                    ->findPk($orderDetailMixedWith['Menuid']);
+                $menu = $menuQuery->findPk($orderDetailMixedWith['Menuid'])->toArray();
 
                 $orderDetailMixedWith['Menu'] = $menu;
             }
@@ -433,60 +343,24 @@ class DistributionPlace extends SecurityController
         return $orderToReturn;
     }
 
-    private function getOpenOrderInProgress()
-    {
-        $auth = $this->app->getContainer()->get(IAuth::class);
-        $user = $auth->getCurrentUser();
-
-        $ordersInProgress = OrderInProgressQuery::create()
-                                                    ->filterByUser($user)
-                                                    ->filterByDone()
-                                                    ->useOrderQuery()
-                                                        ->useEventTableQuery()
-                                                            ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                                        ->endUse()
-                                                        ->useOrderDetailQuery()
-                                                            ->filterByAvailabilityid(ORDER_AVAILABILITY_AVAILABLE)
-                                                        ->endUse()
-                                                        ->orderByPriority()
-                                                    ->endUse()
-                                                    ->joinWithOrder()
-                                                    ->find()
-                                                    ->getFirst();
-
-        return $ordersInProgress;
-    }
-
-    private function getMyDistributionPlaceGroups()
-    {
-        $auth = $this->app->getContainer()->get(IAuth::class);
-        $user = $auth->getCurrentUser();
-
-        $distributionPlaceGroups = DistributionPlaceGroupQuery::create()
-                                                                    ->useDistributionPlaceQuery()
-                                                                        ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                                                        ->useDistributionPlaceUserQuery()
-                                                                            ->filterByUserid($user->getUserid())
-                                                                        ->endUse()
-                                                                    ->endUse()
-                                                                    ->joinWithDistributionPlaceTable()
-                                                                    ->find();
-
-        return $distributionPlaceGroups;
-    }
-
     private function getOrdersInTodo()
     {
         $auth = $this->app->getContainer()->get(IAuth::class);
+        $distributionPlaceGroupQuery = $this->app->getContainer()->get(IDistributionPlaceGroupQuery::class);
+        $orderInProgressQuery = $this->app->getContainer()->get(IOrderInProgressQuery::class);
+        $orderQuery = $this->app->getContainer()->get(IOrderQuery::class);
+
         $user = $auth->getCurrentUser();
         $config = $this->app->getContainer()['settings'];
         $assist = $config['App']['Distribution']['OnStandbyAssistOtherDistributionPlaces'];
 
-        $orderInProgress = $this->getOpenOrderInProgress();
+        $orderInProgress = $orderInProgressQuery->getOpenOrderInProgress($user->getUserid(),
+                                                                         $user->getEventUsers()->getFirst()->getEventid());
 
         if ($orderInProgress) {
             $inProgressOrder = $orderInProgress->getOrder();
-            $distributionPlaceGroups = $this->getMyDistributionPlaceGroups();
+            $distributionPlaceGroups = $distributionPlaceGroupQuery->getUserDistributionPlaceGroups($user->getEventUsers()->getFirst()->getEventid(),
+                                                                                                    $user->getUserid());
 
             $menuGroupids = [];
             foreach ($distributionPlaceGroups as $distributionPlaceGroup) {
@@ -494,43 +368,21 @@ class DistributionPlace extends SecurityController
             }
 
             //-- first try to find a order that is associated to the distribution place tables
-            $orders = OrderQuery::create()
-                                    ->getNextForDistribution(
-                                        $user->getUserid(),
-                                        $user->getEventUsers()->getFirst()->getEventid(),
-                                        true,
-                                        $config['App']['Distribution']['AmountDisplayedInTodoList'] + 1
-                                    )
-                                    ->where('`order`.orderid <> ' . $inProgressOrder->getOrderid())
-                                    ->joinWithOrderDetail()
-                                    ->joinWithEventTable()
-                                    ->useOrderDetailQuery()
-                                        ->leftJoinWithOrderInProgressRecieved()
-                                        ->leftJoinWithMenu()
-                                    ->endUse()
-                                    ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                    ->find();
+            $orders = $orderQuery->getNextForTodoList($inProgressOrder->getOrderid(),
+                                                      $user->getUserid(),
+                                                      $user->getEventUsers()->getFirst()->getEventid(),
+                                                      true,
+                                                      $config['App']['Distribution']['AmountDisplayedInTodoList']);
 
             //-- Secondly try to find an order, which belongs to an other distribution place tables but
             //-- has the same menu_groupid and can also be handeled by the current user
             //-- this lets ordes be done faster
             if (!$orders && $assist) {
-                $orders = OrderQuery::create()
-                                        ->getNextForDistribution(
-                                            $user->getUserid(),
-                                            $user->getEventUsers()->getFirst()->getEventid(),
-                                            false,
-                                            $config['App']['Distribution']['AmountDisplayedInTodoList'] + 1
-                                        )
-                                        ->where('`order`.orderid <> ' . $inProgressOrder->getOrderid())
-                                        ->joinWithOrderDetail()
-                                        ->joinWithEventTable()
-                                        ->useOrderDetailQuery()
-                                            ->leftJoinWithOrderInProgressRecieved()
-                                            ->leftJoinWithMenu()
-                                        ->endUse()
-                                        ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                        ->find();
+                 $orders = $orderQuery->getNextForTodoList($inProgressOrder->getOrderid(),
+                                                           $user->getUserid(),
+                                                           $user->getEventUsers()->getFirst()->getEventid(),
+                                                           false,
+                                                           $config['App']['Distribution']['AmountDisplayedInTodoList']);
             }
 
             if (!$orders) {
@@ -561,26 +413,19 @@ class DistributionPlace extends SecurityController
         }
     }
 
-    private function getOrderDetailWithSpecialExtra()
-    {
-        $orderDetail = OrderDetailQuery::create()
-                                        ->filterByMenuid()
-                                        ->filterByDistributionFinished()
-                                        ->filterByVerified(true)
-                                        ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                        ->find();
-
-        return $orderDetail->toArray();
-    }
-
     private function getOrderStatisic()
     {
         $auth = $this->app->getContainer()->get(IAuth::class);
+        $distributionPlaceGroupQuery = $this->app->getContainer()->get(IDistributionPlaceGroupQuery::class);
+        $distributionGivingOutQuery = $this->app->getContainer()->get(IDistributionGivingOut::class);
+        $orderQuery = $this->app->getContainer()->get(IOrderQuery::class);
+
         $user = $auth->getCurrentUser();
         $config = $this->app->getContainer()['settings'];
         $minutes = $config['App']['Distribution']['OrderProgressTimeRangeMinutes'];
 
-        $distributionPlaceGroups = $this->getMyDistributionPlaceGroups();
+        $distributionPlaceGroups = $distributionPlaceGroupQuery->getUserDistributionPlaceGroups($user->getEventUsers()->getFirst()->getEventid(),
+                                                                                                $user->getUserid());
 
         $eventTableids = [];
         $menuGroupids = [];
@@ -593,32 +438,9 @@ class DistributionPlace extends SecurityController
 
         $eventTableids = array_unique($eventTableids);
 
-        $doneOrder = DistributionGivingOutQuery::create()
-                                                ->useOrderInProgressRecievedQuery()
-                                                    ->useOrderInProgressQuery()
-                                                        ->filterByUser($user)
-                                                    ->endUse()
-                                                ->endUse()
-                                                ->filterByDate(['min' => new DateTime("-$minutes minutes")])
-                                                ->count();
-
-        $openOrderFilter = OrderQuery::create()
-                                        ->useOrderDetailQuery()
-                                            ->useMenuQuery()
-                                                ->filterByMenuGroupid($menuGroupids)
-                                            ->endUse()
-                                            ->filterByMenuGroupid(array_merge([null], $menuGroupids))
-                                        ->endUse()
-                                        ->useEventTableQuery()
-                                            ->filterByEventTableid($eventTableids)
-                                        ->endUse()
-                                        ->filterByDistributionFinished()
-                                        ->filterByCancellation();
-
-        $openOrder = $openOrderFilter->count();
-
-        $newOrder = $openOrderFilter->filterByOrdertime(['min' => new DateTime("-$minutes minutes")])
-                                    ->count();
+        $doneOrder = $distributionGivingOutQuery->getDoneOrdersCount($user->getUserid(), $minutes);
+        $openOrder = $orderQuery->getOpenOrdersCount($menuGroupids, $eventTableids);
+        $newOrder = $orderQuery->getOpenOrdersCount($menuGroupids, $eventTableids, $minutes);
 
         return ['OpenOrders' => $openOrder,
                 'DoneOrders' => $doneOrder,
@@ -626,29 +448,14 @@ class DistributionPlace extends SecurityController
                 'Minutes' => $minutes];
     }
 
-    private function getMenuExtras()
-    {
-        $auth = $this->app->getContainer()->get(IAuth::class);
-        $user = $auth->getCurrentUser();
-
-        $menuExtras = MenuExtraQuery::create()
-                                        ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                        ->find();
-
-        return $menuExtras->toArray();
-    }
-
     private function getPrinterid()
     {
         $auth = $this->app->getContainer()->get(IAuth::class);
+        $distributionPlaceUserQuery = $this->app->getContainer()->get(IDistributionPlaceUserQuery::class);
         $user = $auth->getCurrentUser();
 
-        $distributionPlaceUser = DistributionPlaceUserQuery::create()
-                                                            ->filterByUserid($user->getUserid())
-                                                            ->useDistributionPlaceQuery()
-                                                                ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                                            ->endUse()
-                                                            ->findOne();
+        $distributionPlaceUser = $distributionPlaceUserQuery->getByUser($user->getUserid(),
+                                                                        $user->getEventUsers()->getFirst()->getEventid());
 
         if (!$distributionPlaceUser) {
             return;

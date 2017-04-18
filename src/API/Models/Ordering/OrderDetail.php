@@ -158,6 +158,26 @@ class OrderDetail extends Model implements IOrderDetail
         return $this->model->getVerified();
     }
 
+    public function getOrderDetailExtras() : IOrderDetailExtraCollection
+    {
+        $orderDetailExtras = $this->model->getOrderDetailExtras();
+
+        $orderDetailExtraCollection = $this->container->get(IOrderDetailExtraCollection::class);
+        $orderDetailExtraCollection->setCollection($orderDetailExtras);
+
+        return $orderDetailExtraCollection;
+    }
+
+    public function getOrderDetailMixedWiths() : IOrderDetailMixedWithCollection
+    {
+        $orderDetailMixedWiths = $this->model->getOrderDetailMixedWiths();
+
+        $orderDetailMixedWithCollection = $this->container->get(IOrderDetailMixedWithCollection::class);
+        $orderDetailMixedWithCollection->setCollection($orderDetailMixedWiths);
+
+        return $orderDetailMixedWithCollection;
+    }
+
     public function setAmount($amount): IOrderDetail
     {
         $this->model->setAmount($amount);

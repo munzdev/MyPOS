@@ -29,4 +29,18 @@ class DistributionGivingOutQuery extends Query implements IDistributionGivingOut
 
         return $distributionGivingOutModel;
     }
+
+
+    public function getDoneOrdersCount(int $userid, int $minutes) : int
+    {
+        return DistributionGivingOutQueryORM::create()
+                ->useOrderInProgressRecievedQuery()
+                    ->useOrderInProgressQuery()
+                        ->filterByUserid($userid)
+                    ->endUse()
+                ->endUse()
+                ->filterByDate(['min' => new DateTime("-$minutes minutes")])
+                ->count();
+    }
+   
 }

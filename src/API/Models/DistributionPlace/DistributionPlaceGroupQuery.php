@@ -30,4 +30,39 @@ class DistributionPlaceGroupQuery extends Query implements IDistributionPlaceGro
         return $distributionPlaceGroupModel;
     }
 
+    public function getByMenuGroupsAndUser(array $menuGroupids, int $eventid, int $userid) : IDistributionPlaceGroupCollection
+    {
+        $distributionPlaceGroups = DistributionPlaceGroupQueryORM::create()
+                                    ->filterByMenuGroupid($menuGroupids)
+                                    ->useDistributionPlaceQuery()
+                                        ->filterByEventid($eventid)
+                                        ->useDistributionPlaceUserQuery()
+                                            ->filterByUserid($userid)
+                                        ->endUse()
+                                    ->endUse()
+                                    ->find();
+
+        $distributionPlaceGroupCollection = $this->container->get(IDistributionPlaceGroupCollection::class);
+        $distributionPlaceGroupCollection->setCollection($distributionPlaceGroups);
+
+        return $distributionPlaceGroupCollection;
+    }
+
+    public function getUserDistributionPlaceGroups(int $eventid, int $userid) : IDistributionPlaceGroupCollection
+    {
+        $distributionPlaceGroups = DistributionPlaceGroupQueryORM::create()
+                                                                    ->useDistributionPlaceQuery()
+                                                                        ->filterByEventid($eventid)
+                                                                        ->useDistributionPlaceUserQuery()
+                                                                            ->filterByUserid($userid)
+                                                                        ->endUse()
+                                                                    ->endUse()
+                                                                    ->joinWithDistributionPlaceTable()
+                                                                    ->find();
+
+        $distributionPlaceGroupCollection = $this->container->get(IDistributionPlaceGroupCollection::class);
+        $distributionPlaceGroupCollection->setCollection($distributionPlaceGroups);
+
+        return $distributionPlaceGroupCollection;
+    }
 }

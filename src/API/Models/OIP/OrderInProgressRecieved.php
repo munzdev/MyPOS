@@ -97,9 +97,9 @@ class OrderInProgressRecieved extends Model implements IOrderInProgressRecieved
         return $this;
     }
 
-    public function setOrderDetail($orderDetail): IOrderInProgressRecieved
+    public function setOrderDetail(IOrderDetail $orderDetail): IOrderInProgressRecieved
     {
-        $this->model->setOrderDetail($orderDetail);
+        $this->model->setOrderDetail($orderDetail->getModel());
         return $this;
     }
 

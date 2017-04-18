@@ -109,9 +109,9 @@ class OrderInProgress extends Model implements IOrderInProgress
         return $this;
     }
 
-    public function setOrder($order): IOrderInProgress
+    public function setOrder(IOrder $order): IOrderInProgress
     {
-        $this->model->setOrder($order);
+        $this->model->setOrder($order->getModel());
         return $this;
     }
 
@@ -127,9 +127,9 @@ class OrderInProgress extends Model implements IOrderInProgress
         return $this;
     }
 
-    public function setUser($user): IOrderInProgress
+    public function setUser(IUser $user): IOrderInProgress
     {
-        $this->model->setUser($user);
+        $this->model->setUser($user->getModel());
         return $this;
     }
 

@@ -69,6 +69,12 @@ interface IOrder extends IModel {
     function getCancellationCreatedByUser();
 
     /**
+     *
+     * @return IOrderDetailCollection
+     */
+    function getOrderDetails() : IOrderDetailCollection;
+
+    /**
      * @param int $orderid Description
      * @return IOrder Description
      */

@@ -99,6 +99,15 @@ class Order extends Model implements IOrder
         return $this->model->getUserid();
     }
 
+    public function getOrderDetails() : IOrderDetailCollection {
+        $orderDetails = $this->model->getOrderDetails();
+
+        $orderDetailCollection = $this->container->get(IOrderDetailCollection::class);
+        $orderDetailCollection->setCollection($orderDetails);
+
+        return $orderDetailCollection;
+    }
+
     public function setCancellation($cancellation): IOrder
     {
         $this->model->setCancellation($cancellation);

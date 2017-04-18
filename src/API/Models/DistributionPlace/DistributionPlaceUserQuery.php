@@ -29,4 +29,19 @@ class DistributionPlaceUserQuery extends Query implements IDistributionPlaceUser
 
         return $distributionPlaceUserModel;
     }
+
+    public function getByUser(int $userid, int $eventid) : IDistributionPlaceUser
+    {
+        $distributionPlaceUser = DistributionPlaceUserQueryORM::create()
+                                    ->filterByUserid($userid)
+                                    ->useDistributionPlaceQuery()
+                                        ->filterByEventid($eventid)
+                                    ->endUse()
+                                    ->findOne();
+
+        $distributionPlaceUserModel = $this->container->get(IDistributionPlaceUser::class);
+        $distributionPlaceUserModel->setModel($distributionPlaceUser);
+
+        return $distributionPlaceUserModel;
+    }
 }
