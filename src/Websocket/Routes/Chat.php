@@ -2,18 +2,22 @@
 
 namespace Websocket\Routes;
 
-use API\Models\User\Messages\UserMessage;
+use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\User\Message\IUserMessage;
 use Ratchet\ConnectionInterface;
 use Slim\Container;
 
 class Chat extends WebsocketServer
 {
+    /**
+     *
+     * @var array
+     */
     private $subscribers = array();
 
     function __construct(Container $container) {
         parent::__construct($container);
-
-        $container->get('db');
+        $this->container->get(IConnectionInterface::class);
     }
 
     public function onPublish(ConnectionInterface $connection, $topic, $event, array $exclude, array $eligible)
@@ -24,11 +28,13 @@ class Chat extends WebsocketServer
 
         echo "Sending message from $senderUserid to userid $recieverUserid: $event\n";
 
-        (new UserMessage())->setFromEventUserid($senderUserid)
-                           ->setToEventUserid($recieverUserid)
-                           ->setMessage($event)
-                           ->setDate(time())
-                           ->save();
+        $userMessage = $this->container->get(IUserMessage::class);
+
+        $userMessage->setFromEventUserid($senderUserid)
+                    ->setToEventUserid($recieverUserid)
+                    ->setMessage($event)
+                    ->setDate(time())
+                    ->save();
 
         $message = array('sender' => $senderUserid,
                          'message' => $event);
@@ -44,10 +50,12 @@ class Chat extends WebsocketServer
 
             echo "Sending System Message to userid $recieverUserid: $message\n";
 
-            (new UserMessage())->setToEventUserid($recieverUserid)
-                               ->setMessage($message)
-                               ->setDate(time())
-                               ->save();
+            $userMessage = $this->container->get(IUserMessage::class);
+
+            $userMessage->setToEventUserid($recieverUserid)
+                          ->setMessage($message)
+                          ->setDate(time())
+                          ->save();
 
             $message = array('sender' => '',
                              'message' => $message);

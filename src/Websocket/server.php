@@ -1,7 +1,6 @@
 <?php
 
 use Ratchet\App;
-use Slim\Container;
 use Websocket\Routes\API;
 use Websocket\Routes\Chat;
 
@@ -20,10 +19,10 @@ $settings = include API_ROOT . 'settings.php';
 define("API\DEBUG", $settings['settings']['debug']);
 
 // Init Slim3 DI Container
-$container = new Container($settings);
+$container = new \API\Lib\Container($settings);
 
 // Set up dependencies
-require API_ROOT . 'dependencies.php';
+require API_ROOT . 'serviceLocator.php';
 
 // Instantiate the server
 $app = new App($settings['settings']['App']['Domain'], 8080, '0.0.0.0');
