@@ -20,9 +20,13 @@ class UserMessageQuery extends Query implements IUserMessageQuery
         return $userMessageCollection;
     }
 
-    public function findPk($id): IUserMessage
+    public function findPk($id): ?IUserMessage
     {
         $userMessage = UserMessageQueryORM::create()->findPk($id);
+
+        if(!$userMessage) {
+            return null;
+        }
 
         $userMessageModel = $this->container->get(IUserMessage::class);
         $userMessageModel->setModel($userMessage);

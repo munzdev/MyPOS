@@ -20,9 +20,13 @@ class AvailabilityQuery extends Query implements IAvailabilityQuery
         return $availbilityCollection;
     }
 
-    public function findPk($id): IAvailability
+    public function findPk($id): ?IAvailability
     {
         $availbility = AvailabilityQueryORM::create()->findPk($id);
+
+        if(!$availbility) {
+            return null;
+        }
 
         $availbilityModel = $this->container->get(IAvailability::class);
         $availbilityModel->setModel($availbility);

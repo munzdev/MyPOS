@@ -3,14 +3,12 @@
 namespace API\Controllers\DistributionPlace;
 
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceGroupQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\OIP\IOrderInProgressQuery;
+use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Lib\SecurityController;
-use API\Models\ORM\DistributionPlace\DistributionPlaceGroupQuery;
-use API\Models\ORM\OIP\Base\OrderInProgressQuery;
-use API\Models\ORM\Ordering\OrderQuery;
-use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Slim\App;
-use const API\ORDER_AVAILABILITY_AVAILABLE;
 use const API\USER_ROLE_DISTRIBUTION_PREVIEW;
 
 class DistributionPlaceSummary extends SecurityController
@@ -26,18 +24,24 @@ class DistributionPlaceSummary extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $distributionPlaceGroupQuery = $this->container->get(IDistributionPlaceGroupQuery::class);
+        $orderInProgressQuery = $this->container->get(IOrderInProgressQuery::class);
+        $orderQuery = $this->container->get(IOrderQuery::class);
+
         $user = $auth->getCurrentUser();
-        $config = $this->app->getContainer()['settings'];
+        $config = $this->container->get('settings');
 
-        $orderInProgress = $this->getOpenOrderInProgress();
+        $orderInProgress = $orderInProgressQuery->getOpenOrderInProgress($user->getUserid(),
+                                                                         $user->getEventUsers()->getFirst()->getEventid());
 
-        $orderidOfInProgress = null;
+        $orderidOfInProgress = 0;
         if ($orderInProgress) {
             $orderidOfInProgress = $orderInProgress->getOrder()->getOrderid();
         }
 
-        $distributionPlaceGroups = $this->getMyDistributionPlaceGroups();
+        $distributionPlaceGroups = $distributionPlaceGroupQuery->getUserDistributionPlaceGroups($user->getEventUsers()->getFirst()->getEventid(),
+                                                                                                $user->getUserid());
 
         $menuGroupids = [];
         foreach ($distributionPlaceGroups as $distributionPlaceGroup) {
@@ -45,34 +49,13 @@ class DistributionPlaceSummary extends SecurityController
         }
 
         //-- first try to find a order that is associated to the distribution place tables
-        $orders = OrderQuery::create()
-                                ->getNextForDistribution(
-                                    $user->getUserid(),
-                                    $user->getEventUsers()->getFirst()->getEventid(),
-                                    true,
-                                    $config['App']['Distribution']['AmountOrdersToPreShow']
-                                )
-                                ->_if($orderidOfInProgress)
-                                    ->where('`order`.orderid <> ' . $orderidOfInProgress)
-                                ->_endif()
-                                ->joinWithOrderDetail()
-                                ->joinWithEventTable()
-                                ->useOrderDetailQuery()
-                                    ->leftJoinWithOrderInProgressRecieved()
-                                    ->leftJoinWithMenu()
-                                    ->leftJoinWithOrderDetailExtra()
-                                    ->useOrderDetailExtraQuery(null, ModelCriteria::LEFT_JOIN)
-                                        ->leftJoinWithMenuPossibleExtra()
-                                        ->useMenuPossibleExtraQuery(null, ModelCriteria::LEFT_JOIN)
-                                            ->leftJoinWithMenuExtra()
-                                        ->endUse()
-                                    ->endUse()
-                                    ->leftJoinWithOrderDetailMixedWith()
-                                ->endUse()
-                                ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                ->find();
+        $orders = $orderQuery->getNextForTodoList($user->getUserid(),
+                                                  $user->getEventUsers()->getFirst()->getEventid(),
+                                                  true,
+                                                  $config['App']['Distribution']['AmountOrdersToPreShow'],
+                                                  $orderidOfInProgress);
 
-        if (!$orders) {
+        if ($orders->isEmpty()) {
             $this->withJson([]);
             return;
         }
@@ -128,47 +111,5 @@ class DistributionPlaceSummary extends SecurityController
         }
 
         $this->withJson(array_values($orderDetailsToReturn));
-    }
-
-    private function getOpenOrderInProgress()
-    {
-        $auth = $this->app->getContainer()->get(IAuth::class);
-        $user = $auth->getCurrentUser();
-
-        $ordersInProgress = OrderInProgressQuery::create()
-                                                    ->filterByUser($user)
-                                                    ->filterByDone()
-                                                    ->useOrderQuery()
-                                                        ->useEventTableQuery()
-                                                            ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                                        ->endUse()
-                                                        ->useOrderDetailQuery()
-                                                            ->filterByAvailabilityid(ORDER_AVAILABILITY_AVAILABLE)
-                                                        ->endUse()
-                                                        ->orderByPriority()
-                                                    ->endUse()
-                                                    ->joinWithOrder()
-                                                    ->find()
-                                                    ->getFirst();
-
-        return $ordersInProgress;
-    }
-
-    private function getMyDistributionPlaceGroups()
-    {
-        $auth = $this->app->getContainer()->get(IAuth::class);
-        $user = $auth->getCurrentUser();
-
-        $distributionPlaceGroups = DistributionPlaceGroupQuery::create()
-                                                                    ->useDistributionPlaceQuery()
-                                                                        ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                                                        ->useDistributionPlaceUserQuery()
-                                                                            ->filterByUserid($user->getUserid())
-                                                                        ->endUse()
-                                                                    ->endUse()
-                                                                    ->joinWithDistributionPlaceTable()
-                                                                    ->find();
-
-        return $distributionPlaceGroups;
     }
 }

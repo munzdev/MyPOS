@@ -9,6 +9,8 @@ use API\Lib\Interfaces\Models\Menu\IMenuGroup;
 use API\Lib\Interfaces\Models\Menu\IMenuSize;
 use API\Lib\Interfaces\Models\Ordering\IOrder;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetail;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailExtraCollection;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailMixedWithCollection;
 use API\Lib\Interfaces\Models\User\IUser;
 use API\Models\Model;
 use API\Models\ORM\Ordering\OrderDetail as OrderDetailORM;

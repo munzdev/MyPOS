@@ -20,9 +20,13 @@ class MenuQuery extends Query implements IMenuQuery
         return $menuCollection;
     }
 
-    public function findPk($id): IMenu
+    public function findPk($id): ?IMenu
     {
         $menu = MenuQueryORM::create()->findPk($id);
+
+        if(!$menu) {
+            return null;
+        }
 
         $menuModel = $this->container->get(IMenu::class);
         $menuModel->setModel($menu);

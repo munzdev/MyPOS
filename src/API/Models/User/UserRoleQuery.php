@@ -20,9 +20,13 @@ class UserRoleQuery extends Query implements IUserRoleQuery
         return $userRoleCollection;
     }
 
-    public function findPk($id): IUserRole
+    public function findPk($id): ?IUserRole
     {
         $userRole = UserRoleQueryORM::create()->findPk($id);
+
+        if(!$userRole) {
+            return null;
+        }
 
         $userRoleModel = $this->container->get(IUserRole::class);
         $userRoleModel->setModel($userRole);

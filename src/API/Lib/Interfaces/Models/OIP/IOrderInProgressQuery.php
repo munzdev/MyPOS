@@ -8,5 +8,5 @@ use API\Lib\Interfaces\Models\User\IUser;
 
 interface IOrderInProgressQuery extends IQuery {
     function getActiveByUserAndOrder(IUser $user, IOrder $order) : IOrderInProgressCollection;
-    function getOpenOrderInProgress(int $userid, int $eventid): IOrderInProgress;
+    function getOpenOrderInProgress(int $userid, int $eventid): ?IOrderInProgress;
 }

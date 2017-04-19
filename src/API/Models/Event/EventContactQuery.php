@@ -20,9 +20,13 @@ class EventContactQuery extends Query implements IEventContactQuery
         return $eventContactCollection;
     }
 
-    public function findPk($id): IEventContact
+    public function findPk($id): ?IEventContact
     {
         $eventContact = EventContactQueryORM::create()->findPk($id);
+
+        if(!$eventContact) {
+            return null;
+        }
 
         $eventContactModel = $this->container->get(IEventContact::class);
         $eventContactModel->setModel($eventContact);

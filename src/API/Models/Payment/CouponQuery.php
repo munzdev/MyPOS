@@ -20,9 +20,13 @@ class CouponQuery extends Query implements ICouponQuery
         return $couponCollection;
     }
 
-    public function findPk($id): ICoupon
+    public function findPk($id): ?ICoupon
     {
         $coupon = CouponQueryORM::create()->findPk($id);
+
+        if(!$coupon) {
+            return null;
+        }
 
         $couponModel = $this->container->get(ICoupon::class);
         $couponModel->setModel($coupon);

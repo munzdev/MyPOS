@@ -20,9 +20,13 @@ class MenuExtraQuery extends Query implements IMenuExtraQuery
         return $menuExtraCollection;
     }
 
-    public function findPk($id): IMenuExtra
+    public function findPk($id): ?IMenuExtra
     {
         $menuExtra = MenuExtraQueryORM::create()->findPk($id);
+
+        if(!$menuExtra) {
+            return null;
+        }
 
         $menuExtraModel = $this->container->get(IMenuExtra::class);
         $menuExtraModel->setModel($menuExtra);

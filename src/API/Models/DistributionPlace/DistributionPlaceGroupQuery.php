@@ -20,9 +20,13 @@ class DistributionPlaceGroupQuery extends Query implements IDistributionPlaceGro
         return $distributionPlaceGroupCollection;
     }
 
-    public function findPk($id): IDistributionPlaceGroup
+    public function findPk($id): ?IDistributionPlaceGroup
     {
         $distributionPlaceGroup = DistributionPlaceGroupQueryORM::create()->findPk($id);
+
+        if(!$distributionPlaceGroup) {
+            return null;
+        }
 
         $distributionPlaceGroupModel = $this->container->get(IDistributionPlaceGroup::class);
         $distributionPlaceGroupModel->setModel($distributionPlaceGroup);

@@ -20,9 +20,13 @@ class OrderDetailExtraQuery extends Query implements IOrderDetailExtraQuery
         return $orderDetailExtraCollection;
     }
 
-    public function findPk($id): IOrderDetailExtra
+    public function findPk($id): ?IOrderDetailExtra
     {
         $orderDetailExtra = OrderDetailExtraQueryORM::create()->findPk($id);
+
+        if(!$orderDetailExtra) {
+            return null;
+        }
 
         $orderDetailExtraModel = $this->container->get(IOrderDetailExtra::class);
         $orderDetailExtraModel->setModel($orderDetailExtra);

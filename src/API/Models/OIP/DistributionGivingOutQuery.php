@@ -7,6 +7,7 @@ use API\Lib\Interfaces\Models\OIP\IDistributionGivingOutCollection;
 use API\Lib\Interfaces\Models\OIP\IDistributionGivingOutQuery;
 use API\Models\ORM\OIP\DistributionGivingOutQuery as DistributionGivingOutQueryORM;
 use API\Models\Query;
+use DateTime;
 
 class DistributionGivingOutQuery extends Query implements IDistributionGivingOutQuery
 {
@@ -15,14 +16,18 @@ class DistributionGivingOutQuery extends Query implements IDistributionGivingOut
         $distributionGivingOuts = DistributionGivingOutQueryORM::create()->find();
 
         $distributionGivingOutCollection = $this->container->get(IDistributionGivingOutCollection::class);
-        $distributionGivingOutCollection->setCollection($distributionGivingOut);
+        $distributionGivingOutCollection->setCollection($distributionGivingOuts);
 
         return $distributionGivingOutCollection;
     }
 
-    public function findPk($id): IDistributionGivingOut
+    public function findPk($id): ?IDistributionGivingOut
     {
         $distributionGivingOut = DistributionGivingOutQueryORM::create()->findPk($id);
+
+        if(!$distributionGivingOut) {
+            return null;
+        }
 
         $distributionGivingOutModel = $this->container->get(IDistributionGivingOut::class);
         $distributionGivingOutModel->setModel($distributionGivingOut);
@@ -42,5 +47,5 @@ class DistributionGivingOutQuery extends Query implements IDistributionGivingOut
                 ->filterByDate(['min' => new DateTime("-$minutes minutes")])
                 ->count();
     }
-   
+
 }

@@ -20,9 +20,13 @@ class InvoiceItemQuery extends Query implements IInvoiceItemQuery
         return $invoiceItemCollection;
     }
 
-    public function findPk($id): IInvoiceItem
+    public function findPk($id): ?IInvoiceItem
     {
         $invoiceItem = InvoiceItemQueryORM::create()->findPk($id);
+
+        if(!$invoiceItem) {
+            return null;
+        }
 
         $invoiceItemModel = $this->container->get(IInvoiceItem::class);
         $invoiceItemModel->setModel($invoiceItem);

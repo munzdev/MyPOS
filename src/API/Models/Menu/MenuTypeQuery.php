@@ -27,9 +27,13 @@ class MenuTypeQuery extends Query implements IMenuTypeQuery
         return $menuTypeCollection;
     }
 
-    public function findPk($id): IMenuType
+    public function findPk($id): ?IMenuType
     {
         $menuType = MenuTypeQueryORM::create()->findPk($id);
+
+        if(!$menuType) {
+            return null;
+        }
 
         $menuTypeModel = $this->container->get(IMenuType::class);
         $menuTypeModel->setModel($menuType);

@@ -20,9 +20,13 @@ class EventTableQuery extends Query implements IEventTableQuery
         return $eventTableCollection;
     }
 
-    public function findPk($id): IEventTable
+    public function findPk($id): ?IEventTable
     {
         $eventTable = EventTableQueryORM::create()->findPk($id);
+
+        if($eventTable) {
+            return null;
+        }
 
         $eventTableModel = $this->container->get(IEventTable::class);
         $eventTableModel->setModel($eventTable);

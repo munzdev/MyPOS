@@ -30,7 +30,7 @@ interface IConnectionInterface
      *
      * @return boolean TRUE on success or FALSE on failure.
      */
-    public function beginTransaction();
+    public function beginTransaction() : bool;
 
     /**
      * Commits a transaction.
@@ -40,7 +40,7 @@ interface IConnectionInterface
      *
      * @return boolean TRUE on success or FALSE on failure.
      */
-    public function commit();
+    public function commit() : bool;
 
     /**
      * Rolls back a transaction.
@@ -52,12 +52,12 @@ interface IConnectionInterface
      *
      * @return boolean TRUE on success or FALSE on failure.
      */
-    public function rollBack();
+    public function rollBack() : bool;
 
     /**
      * Checks if inside a transaction.
      *
      * @return bool TRUE if a transaction is currently active, and FALSE if not.
      */
-    public function inTransaction();
+    public function inTransaction() : bool;
 }

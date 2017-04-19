@@ -20,9 +20,13 @@ class MenuPossibleSizeQuery extends Query implements IMenuPossibleSizeQuery
         return $menuPossibleSizeCollection;
     }
 
-    public function findPk($id): IMenuPossibleSize
+    public function findPk($id): ?IMenuPossibleSize
     {
         $menuPossibleSize = MenuPossibleSizeQueryORM::create()->findPk($id);
+
+        if(!$menuPossibleSize) {
+            return null;
+        }
 
         $menuPossibleSizeModel = $this->container->get(IMenuPossibleSize::class);
         $menuPossibleSizeModel->setModel($menuPossibleSize);

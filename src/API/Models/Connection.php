@@ -33,12 +33,12 @@ class Connection implements IConnectionInterface {
         $this->connection = $serviceContainer->getConnection();
     }
 
-    public function beginTransaction(): boolean
+    public function beginTransaction(): bool
     {
         return $this->connection->beginTransaction();
     }
 
-    public function commit(): boolean
+    public function commit(): bool
     {
         return $this->connection->commit();
     }
@@ -48,7 +48,7 @@ class Connection implements IConnectionInterface {
         return $this->connection->inTransaction();
     }
 
-    public function rollBack(): boolean
+    public function rollBack(): bool
     {
         return $this->connection->rollBack();
     }

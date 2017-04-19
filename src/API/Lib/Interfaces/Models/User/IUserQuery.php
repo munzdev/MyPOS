@@ -15,7 +15,7 @@ interface IUserQuery extends IQuery {
      *
      * @param string $username
      */
-    function getActiveAdminUserByUsername($username) : IUser;
+    function getActiveAdminUserByUsername($username) : ?IUser;
 
     /**
      *

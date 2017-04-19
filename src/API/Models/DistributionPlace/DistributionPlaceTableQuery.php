@@ -20,9 +20,13 @@ class DistributionPlaceTableQuery extends Query implements IDistributionPlaceTab
         return $distributionPlaceTableCollection;
     }
 
-    public function findPk($id): IDistributionPlaceTable
+    public function findPk($id): ?IDistributionPlaceTable
     {
         $distributionPlaceTable = DistributionPlaceTableQueryORM::create()->findPk($id);
+
+        if(!$distributionPlaceTable) {
+            return null;
+        }
 
         $distributionPlaceTableModel = $this->container->get(IDistributionPlaceTable::class);
         $distributionPlaceTableModel->setModel($distributionPlaceTable);

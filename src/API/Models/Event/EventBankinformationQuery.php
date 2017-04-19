@@ -20,9 +20,13 @@ class EventBankinformationQuery extends Query implements IEventBankinformationQu
         return $eventBankinformationCollection;
     }
 
-    public function findPk($id): IEventBankinformation
+    public function findPk($id): ?IEventBankinformation
     {
         $eventBankinformation = EventBankinformationQueryORM::create()->findPk($id);
+
+        if(!$eventBankinformation) {
+            return null;
+        }
 
         $eventBankinformationModel = $this->container->get(IEventBankinformation::class);
         $eventBankinformationModel->setModel($eventBankinformation);

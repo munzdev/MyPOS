@@ -9,6 +9,7 @@ use API\Lib\Interfaces\Models\Ordering\IOrder;
 use API\Lib\Interfaces\Models\User\IUser;
 use API\Models\ORM\OIP\OrderInProgressQuery as OrderInProgressQueryORM;
 use API\Models\Query;
+use const API\ORDER_AVAILABILITY_AVAILABLE;
 
 class OrderInProgressQuery extends Query implements IOrderInProgressQuery
 {
@@ -22,9 +23,13 @@ class OrderInProgressQuery extends Query implements IOrderInProgressQuery
         return $orderInProgressCollection;
     }
 
-    public function findPk($id): IOrderInProgress
+    public function findPk($id): ?IOrderInProgress
     {
         $orderInProgress = OrderInProgressQueryORM::create()->findPk($id);
+
+        if (!$orderInProgress) {
+            return null;
+        }
 
         $orderInProgressModel = $this->container->get(IOrderInProgress::class);
         $orderInProgressModel->setModel($orderInProgress);
@@ -32,7 +37,7 @@ class OrderInProgressQuery extends Query implements IOrderInProgressQuery
         return $orderInProgressModel;
     }
 
-    public function getActiveByUserAndOrder(IUser $user, IOrder $order)
+    public function getActiveByUserAndOrder(IUser $user, IOrder $order) : IOrderInProgressCollection
     {
         $orderInProgresses = OrderInProgressQueryORM::create()
                                 ->filterByUserid($user->getUserid())
@@ -46,7 +51,7 @@ class OrderInProgressQuery extends Query implements IOrderInProgressQuery
         return $orderInProgressCollection;
     }
 
-    public function getOpenOrderInProgress(int $userid, int $eventid): IOrderInProgress
+    public function getOpenOrderInProgress(int $userid, int $eventid): ?IOrderInProgress
     {
         $orderInProgress = OrderInProgressQueryORM::create()
                                 ->filterByUserid($userid)
@@ -63,6 +68,10 @@ class OrderInProgressQuery extends Query implements IOrderInProgressQuery
                                 ->joinWithOrder()
                                 ->find()
                                 ->getFirst();
+
+        if (!$orderInProgress) {
+            return null;
+        }
 
         $orderInProgressModel = $this->container->get(IOrderInProgress::class);
         $orderInProgressModel->setModel($orderInProgress);

@@ -20,9 +20,13 @@ class PaymentTypeQuery extends Query implements IPaymentTypeQuery
         return $paymentTypeCollection;
     }
 
-    public function findPk($id): IPaymentType
+    public function findPk($id): ?IPaymentType
     {
         $paymentType = PaymentTypeQueryORM::create()->findPk($id);
+
+        if(!$paymentType) {
+            return null;
+        }
 
         $paymentTypeModel = $this->container->get(IPaymentType::class);
         $paymentTypeModel->setModel($paymentType);

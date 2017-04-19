@@ -20,9 +20,13 @@ class OrderInProgressRecievedQuery extends Query implements IOrderInProgressReci
         return $orderInProgressRecievedCollection;
     }
 
-    public function findPk($id): IOrderInProgressRecieved
+    public function findPk($id): ?IOrderInProgressRecieved
     {
         $orderInProgressRecieved = OrderInProgressRecievedQueryORM::create()->findPk($id);
+
+        if(!$orderInProgressRecieved) {
+            return null;
+        }
 
         $orderInProgressRecievedModel = $this->container->get(IOrderInProgressRecieved::class);
         $orderInProgressRecievedModel->setModel($orderInProgressRecieved);

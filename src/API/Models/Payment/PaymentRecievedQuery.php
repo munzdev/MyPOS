@@ -20,9 +20,13 @@ class PaymentRecievedQuery extends Query implements IPaymentRecievedQuery
         return $paymentRecievedCollection;
     }
 
-    public function findPk($id): IPaymentRecieved
+    public function findPk($id): ?IPaymentRecieved
     {
         $paymentRecieved = PaymentRecievedQueryORM::create()->findPk($id);
+
+        if(!$paymentRecieved) {
+            return null;
+        }
 
         $paymentRecievedModel = $this->container->get(IPaymentRecieved::class);
         $paymentRecievedModel->setModel($paymentRecieved);

@@ -5,9 +5,12 @@ namespace API\Controllers\DistributionPlace;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceGroupQuery;
+use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceUserQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Menu\IMenuExtraQuery;
 use API\Lib\Interfaces\Models\Menu\IMenuQuery;
 use API\Lib\Interfaces\Models\OIP\IDistributionGivingOut;
+use API\Lib\Interfaces\Models\OIP\IDistributionGivingOutQuery;
 use API\Lib\Interfaces\Models\OIP\IOrderInProgress;
 use API\Lib\Interfaces\Models\OIP\IOrderInProgressQuery;
 use API\Lib\Interfaces\Models\OIP\IOrderInProgressRecieved;
@@ -16,15 +19,8 @@ use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
 use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
-use API\Models\ORM\DistributionPlace\DistributionPlaceGroupQuery;
-use API\Models\ORM\DistributionPlace\DistributionPlaceUserQuery;
-use API\Models\ORM\Menu\MenuExtraQuery;
-use API\Models\ORM\OIP\DistributionGivingOutQuery;
-use API\Models\ORM\Ordering\OrderDetailQuery;
-use API\Models\ORM\Ordering\OrderQuery;
 use DateTime;
 use Exception;
-use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Slim\App;
 use const API\ORDER_AVAILABILITY_DELAYED;
 use const API\ORDER_AVAILABILITY_OUT_OF_ORDER;
@@ -44,7 +40,7 @@ class DistributionPlace extends SecurityController
 
     protected function put() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
         $user = $auth->getCurrentUser();
         $connection = $this->container->get(IConnectionInterface::class);
 
@@ -198,9 +194,9 @@ class DistributionPlace extends SecurityController
     protected function get() : void
     {
         $connection = $this->container->get(IConnectionInterface::class);
-        $orderDetailQuery = $this->container->get(IOrderDetail::class);
+        $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
         $menuExtraQuery = $this->container->get(IMenuExtraQuery::class);
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
 
         try {
             $connection->beginTransaction();
@@ -235,16 +231,16 @@ class DistributionPlace extends SecurityController
 
     private function getCurrentOrder()
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
-        $orderInProgressQuery = $this->app->getContainer()->get(IOrderInProgressQuery::class);
+        $auth = $this->container->get(IAuth::class);
+        $orderInProgressQuery = $this->container->get(IOrderInProgressQuery::class);
 
         $user = $auth->getCurrentUser();
-        $config = $this->app->getContainer()['settings'];
+        $config = $this->container['settings'];
         $assist = $config['App']['Distribution']['OnStandbyAssistOtherDistributionPlaces'];
 
         $orderQuery = $this->container->get(IOrderQuery::class);
         $menuQuery = $this->container->get(IMenuQuery::class);
-        $orderInProgressQuery = $this->container->get(IOrderInProgress::class);
+        $orderInProgressQuery = $this->container->get(IOrderInProgressQuery::class);
         $distributionPlaceGroupQuery = $this->container->get(IDistributionPlaceGroupQuery::class);
 
         //-- First try fetch allready started order to handle, witch is not finished yet
@@ -345,13 +341,13 @@ class DistributionPlace extends SecurityController
 
     private function getOrdersInTodo()
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
-        $distributionPlaceGroupQuery = $this->app->getContainer()->get(IDistributionPlaceGroupQuery::class);
-        $orderInProgressQuery = $this->app->getContainer()->get(IOrderInProgressQuery::class);
-        $orderQuery = $this->app->getContainer()->get(IOrderQuery::class);
+        $auth = $this->container->get(IAuth::class);
+        $distributionPlaceGroupQuery = $this->container->get(IDistributionPlaceGroupQuery::class);
+        $orderInProgressQuery = $this->container->get(IOrderInProgressQuery::class);
+        $orderQuery = $this->container->get(IOrderQuery::class);
 
         $user = $auth->getCurrentUser();
-        $config = $this->app->getContainer()['settings'];
+        $config = $this->container['settings'];
         $assist = $config['App']['Distribution']['OnStandbyAssistOtherDistributionPlaces'];
 
         $orderInProgress = $orderInProgressQuery->getOpenOrderInProgress($user->getUserid(),
@@ -368,24 +364,24 @@ class DistributionPlace extends SecurityController
             }
 
             //-- first try to find a order that is associated to the distribution place tables
-            $orders = $orderQuery->getNextForTodoList($inProgressOrder->getOrderid(),
-                                                      $user->getUserid(),
+            $orders = $orderQuery->getNextForTodoList($user->getUserid(),
                                                       $user->getEventUsers()->getFirst()->getEventid(),
                                                       true,
-                                                      $config['App']['Distribution']['AmountDisplayedInTodoList']);
+                                                      $config['App']['Distribution']['AmountDisplayedInTodoList'] + 1,
+                                                      $inProgressOrder->getOrderid());
 
             //-- Secondly try to find an order, which belongs to an other distribution place tables but
             //-- has the same menu_groupid and can also be handeled by the current user
             //-- this lets ordes be done faster
-            if (!$orders && $assist) {
-                 $orders = $orderQuery->getNextForTodoList($inProgressOrder->getOrderid(),
-                                                           $user->getUserid(),
+            if ($orders->isEmpty() && $assist) {
+                 $orders = $orderQuery->getNextForTodoList($user->getUserid(),
                                                            $user->getEventUsers()->getFirst()->getEventid(),
                                                            false,
-                                                           $config['App']['Distribution']['AmountDisplayedInTodoList']);
+                                                           $config['App']['Distribution']['AmountDisplayedInTodoList'] + 1,
+                                                           $inProgressOrder->getOrderid());
             }
 
-            if (!$orders) {
+            if ($orders->isEmpty()) {
                 return null;
             }
 
@@ -415,13 +411,13 @@ class DistributionPlace extends SecurityController
 
     private function getOrderStatisic()
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
-        $distributionPlaceGroupQuery = $this->app->getContainer()->get(IDistributionPlaceGroupQuery::class);
-        $distributionGivingOutQuery = $this->app->getContainer()->get(IDistributionGivingOut::class);
-        $orderQuery = $this->app->getContainer()->get(IOrderQuery::class);
+        $auth = $this->container->get(IAuth::class);
+        $distributionPlaceGroupQuery = $this->container->get(IDistributionPlaceGroupQuery::class);
+        $distributionGivingOutQuery = $this->container->get(IDistributionGivingOutQuery::class);
+        $orderQuery = $this->container->get(IOrderQuery::class);
 
         $user = $auth->getCurrentUser();
-        $config = $this->app->getContainer()['settings'];
+        $config = $this->container['settings'];
         $minutes = $config['App']['Distribution']['OrderProgressTimeRangeMinutes'];
 
         $distributionPlaceGroups = $distributionPlaceGroupQuery->getUserDistributionPlaceGroups($user->getEventUsers()->getFirst()->getEventid(),
@@ -450,8 +446,8 @@ class DistributionPlace extends SecurityController
 
     private function getPrinterid()
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
-        $distributionPlaceUserQuery = $this->app->getContainer()->get(IDistributionPlaceUserQuery::class);
+        $auth = $this->container->get(IAuth::class);
+        $distributionPlaceUserQuery = $this->container->get(IDistributionPlaceUserQuery::class);
         $user = $auth->getCurrentUser();
 
         $distributionPlaceUser = $distributionPlaceUserQuery->getByUser($user->getUserid(),

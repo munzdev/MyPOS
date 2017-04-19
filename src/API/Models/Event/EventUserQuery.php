@@ -20,9 +20,13 @@ class EventUserQuery extends Query implements IEventUserQuery
         return $eventUserCollection;
     }
 
-    public function findPk($id): IEventUser
+    public function findPk($id): ?IEventUser
     {
         $eventUser = EventUserQueryORM::create()->findPk($id);
+
+        if(!$eventUser) {
+            return null;
+        }
 
         $eventUserModel = $this->container->get(IEventUser::class);
         $eventUserModel->setModel($eventUser);

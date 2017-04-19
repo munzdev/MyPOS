@@ -20,9 +20,13 @@ class DistributionPlaceUserQuery extends Query implements IDistributionPlaceUser
         return $distributionPlaceUserCollection;
     }
 
-    public function findPk($id): IDistributionPlaceUser
+    public function findPk($id): ?IDistributionPlaceUser
     {
         $distributionPlaceUser = DistributionPlaceUserQueryORM::create()->findPk($id);
+
+        if($distributionPlaceUser) {
+            return null;
+        }
 
         $distributionPlaceUserModel = $this->container->get(IDistributionPlaceUser::class);
         $distributionPlaceUserModel->setModel($distributionPlaceUser);
@@ -30,7 +34,7 @@ class DistributionPlaceUserQuery extends Query implements IDistributionPlaceUser
         return $distributionPlaceUserModel;
     }
 
-    public function getByUser(int $userid, int $eventid) : IDistributionPlaceUser
+    public function getByUser(int $userid, int $eventid) : ?IDistributionPlaceUser
     {
         $distributionPlaceUser = DistributionPlaceUserQueryORM::create()
                                     ->filterByUserid($userid)
@@ -38,6 +42,10 @@ class DistributionPlaceUserQuery extends Query implements IDistributionPlaceUser
                                         ->filterByEventid($eventid)
                                     ->endUse()
                                     ->findOne();
+
+        if(!$distributionPlaceUser) {
+            return null;
+        }
 
         $distributionPlaceUserModel = $this->container->get(IDistributionPlaceUser::class);
         $distributionPlaceUserModel->setModel($distributionPlaceUser);

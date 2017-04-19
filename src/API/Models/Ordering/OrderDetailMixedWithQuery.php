@@ -20,9 +20,13 @@ class OrderDetailMixedWithQuery extends Query implements IOrderDetailMixedWithQu
         return $orderDetailMixedWithCollection;
     }
 
-    public function findPk($id): IOrderDetailMixedWith
+    public function findPk($id): ?IOrderDetailMixedWith
     {
         $orderDetailMixedWith = OrderDetailMixedWithQueryORM::create()->findPk($id);
+
+        if(!$orderDetailMixedWith) {
+            return null;
+        }
 
         $orderDetailMixedWithModel = $this->container->get(IOrderDetailMixedWith::class);
         $orderDetailMixedWithModel->setModel($orderDetailMixedWith);

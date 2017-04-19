@@ -13,7 +13,7 @@ interface IQuery {
     /**
      *
      * @param int $id The Primary ID to retrieve
-     * @return IModel
+     * @return null|IModel
      */
     function findPk($id);
 }

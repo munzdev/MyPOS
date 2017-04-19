@@ -18,9 +18,13 @@ class InvoiceWarningQuery extends Query implements IInvoiceWarningQuery
         return $invoiceWarningCollection;
     }
 
-    public function findPk($id): IInvoiceWarning
+    public function findPk($id): ?IInvoiceWarning
     {
         $invoiceWarning = InvoiceWarningQueryORM::create()->findPk($id);
+
+        if(!$invoiceWarning) {
+            return null;
+        }
 
         $invoiceWarningModel = $this->container->get(IInvoiceWarning::class);
         $invoiceWarningModel->setModel($invoiceWarning);

@@ -5,6 +5,7 @@ namespace API\Models\Ordering;
 use API\Lib\Container;
 use API\Lib\Interfaces\Models\Event\IEventTable;
 use API\Lib\Interfaces\Models\Ordering\IOrder;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailCollection;
 use API\Lib\Interfaces\Models\User\IUser;
 use API\Models\Model;
 use API\Models\ORM\Ordering\Order as OrderORM;

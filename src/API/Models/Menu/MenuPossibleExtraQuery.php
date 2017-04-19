@@ -20,9 +20,13 @@ class MenuPossibleExtraQuery extends Query implements IMenuPossibleExtraQuery
         return $menuPossibleExtraCollection;
     }
 
-    public function findPk($id): IMenuPossibleExtra
+    public function findPk($id): ?IMenuPossibleExtra
     {
         $menuPossibleExtra = MenuPossibleExtraQueryORM::create()->findPk($id);
+
+        if(!$menuPossibleExtra) {
+            return null;
+        }
 
         $menuPossibleExtraModel = $this->container->get(IMenuPossibleExtra::class);
         $menuPossibleExtraModel->setModel($menuPossibleExtra);

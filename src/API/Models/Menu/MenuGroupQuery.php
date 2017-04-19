@@ -20,9 +20,13 @@ class MenuGroupQuery extends Query implements IMenuGroupQuery
         return $menuGroupCollection;
     }
 
-    public function findPk($id): IMenuGroup
+    public function findPk($id): ?IMenuGroup
     {
         $menuGroup = MenuGroupQueryORM::create()->findPk($id);
+
+        if(!$menuGroup) {
+            return null;
+        }
 
         $menuGroupModel = $this->container->get(IMenuGroup::class);
         $menuGroupModel->setModel($menuGroup);

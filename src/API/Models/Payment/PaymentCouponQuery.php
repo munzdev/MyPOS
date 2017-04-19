@@ -20,9 +20,13 @@ class PaymentCouponQuery extends Query implements IPaymentCouponQuery
         return $paymentCouponCollection;
     }
 
-    public function findPk($id): IPaymentCoupon
+    public function findPk($id): ?IPaymentCoupon
     {
         $paymentCoupon = PaymentCouponQueryORM::create()->findPk($id);
+
+        if(!$paymentCoupon) {
+            return null;
+        }
 
         $paymentCouponModel = $this->container->get(IPaymentCoupon::class);
         $paymentCouponModel->setModel($paymentCoupon);

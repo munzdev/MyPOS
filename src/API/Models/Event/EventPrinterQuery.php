@@ -20,9 +20,13 @@ class EventPrinterQuery extends Query implements IEventPrinterQuery
         return $eventPrinterCollection;
     }
 
-    public function findPk($id): IEventPrinter
+    public function findPk($id): ?IEventPrinter
     {
         $eventPrinter = EventPrinterQueryORM::create()->findPk($id);
+
+        if(!$eventPrinter) {
+            return null;
+        }
 
         $eventPrinterModel = $this->container->get(IEventPrinter::class);
         $eventPrinterModel->setModel($eventPrinter);

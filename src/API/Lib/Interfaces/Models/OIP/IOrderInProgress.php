@@ -70,7 +70,7 @@ interface IOrderInProgress extends IModel {
      * @param IOrder $order Description
      * @return IOrderInProgress Description
      */
-    function setOrder($order);
+    function setOrder(IOrder $order);
 
     /**
      * @param int $userid Description
@@ -82,7 +82,7 @@ interface IOrderInProgress extends IModel {
      * @param IUser $user Description
      * @return IOrderInProgress Description
      */
-    function setUser($user);
+    function setUser(IUser $user);
 
     /**
      * @param int $menuGroupid Description

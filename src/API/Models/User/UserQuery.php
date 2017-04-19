@@ -22,9 +22,13 @@ class UserQuery extends Query implements IUserQuery
         return $userCollection;
     }
 
-    public function findPk($id): IUser
+    public function findPk($id): ?IUser
     {
         $user = UserQueryORM::create()->findPk($id);
+
+        if(!$user) {
+            return null;
+        }
 
         $userModel = $this->container->get(IUser::class);
         $userModel->setModel($user);
@@ -32,13 +36,17 @@ class UserQuery extends Query implements IUserQuery
         return $userModel;
     }
 
-    public function getActiveAdminUserByUsername($username) : IUser
+    public function getActiveAdminUserByUsername($username) : ?IUser
     {
         $user = UserQueryORM::create()
                     ->filterByUsername($username)
                     ->filterByIsAdmin(true)
                     ->filterByActive(true)
                     ->findOne();
+
+        if(!$user) {
+            return null;
+        }
 
         $userModel = $this->container->get(IUser::class);
         $userModel->setModel($user);
