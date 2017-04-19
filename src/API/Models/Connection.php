@@ -27,6 +27,9 @@ class Connection implements IConnectionInterface {
         $serviceContainer->setConnectionManager('default', $manager);
         $serviceContainer->setDefaultDatasource('default');
 
+        // Disable pooling! Will create problems otherways..
+        Propel::disableInstancePooling();
+
         $this->connection = $serviceContainer->getConnection();
     }
 
