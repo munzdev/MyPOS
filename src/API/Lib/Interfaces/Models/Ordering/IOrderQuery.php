@@ -10,4 +10,5 @@ interface IOrderQuery extends IQuery {
     function getInfosForDistribution(int $orderid, array $menuGroupids) : ?IOrder;
     function getNextForTodoList(int $userid, int $eventid, bool $onlyUserTables, int $listAmount = 1, int $orderidToIgnore = 0) : IOrderCollection;
     function getOpenOrdersCount(array $menuGroupids, array $eventTableids, int $minutes = 0) : int;
+    public function getWithEventTableAndUser(int $orderid) : ?IOrder;
 }

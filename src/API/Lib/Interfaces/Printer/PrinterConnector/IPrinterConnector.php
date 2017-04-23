@@ -10,7 +10,8 @@ use DateTime;
 
 interface IPrinterConnector
 {
-    function __construct(EventPrinter $eventPrinter, stdClass $localization);
+    function __construct(?EventPrinter $eventPrinter, \stdClass $localization);
+    function setEventPrinter(EventPrinter $eventPrinter);
     function setLogo(string $logoFile, int $logoType);
     function setHeader(string $header);
     function setContactInformation(EventContact $contact);

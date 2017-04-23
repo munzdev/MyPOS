@@ -4,6 +4,7 @@ namespace API\Models\OIP;
 
 use API\Lib\Container;
 use API\Lib\Interfaces\Models\OIP\IDistributionGivingOut;
+use API\Lib\Interfaces\Models\OIP\IOrderInProgressCollection;
 use API\Models\Model;
 use API\Models\ORM\OIP\DistributionGivingOut as DistributionGivingOutORM;
 use DateTime;
@@ -30,6 +31,16 @@ class DistributionGivingOut extends Model implements IDistributionGivingOut
     public function getDistributionGivingOutid(): int
     {
         return $this->model->getDistributionGivingOutid();
+    }
+
+    public function getOrderInProgressRecieveds() : IOrderInProgressCollection
+    {
+        $orderInProgresses = $this->model->getOrderInProgressRecieveds();
+
+        $orderInProgressCollection = $this->container->get(IOrderInProgressCollection::class);
+        $orderInProgressCollection->setCollection($orderInProgresses);
+
+        return $orderInProgressCollection;
     }
 
     public function setDate($date): IDistributionGivingOut

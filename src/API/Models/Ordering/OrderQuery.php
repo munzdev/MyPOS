@@ -167,4 +167,23 @@ class OrderQuery extends Query implements IOrderQuery
                     ->_endif()
                     ->count();
     }
+
+    public function getWithEventTableAndUser(int $orderid) : ?IOrder
+    {
+        $order = OrderQueryORM::create()
+            ->joinWithEventTable()
+            ->joinUserRelatedByUserid()
+            ->filterByOrderid($orderid)
+            ->find()
+            ->getFirst();
+
+        if(!$order) {
+            return null;
+        }
+
+        $orderModel = $this->container->get(IOrder::class);
+        $orderModel->setModel($order);
+
+        return $orderModel;
+    }
 }

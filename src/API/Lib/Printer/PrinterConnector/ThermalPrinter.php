@@ -36,12 +36,29 @@ class ThermalPrinter implements IPrinterConnector
     const RIGHT_COLS = 8;
     const LEFT_PADDING = 4;
 
+    /**4
+     * @var Printer
+     */
     private $printer;
+
+    /**
+     * @var EventPrinter|null
+     */
     private $eventPrinter;
+
+    /**
+     * @var PrintConnector
+     */
     private $printConnector;
+
+    /**
+     * @var stdClass
+     */
+    private $localization;
+
     private $connectorOpen = false;
     private $paperRowLength;
-    private $localization;
+
 
     private $eventBankinformation;
     private $maturityDate;
@@ -60,10 +77,18 @@ class ThermalPrinter implements IPrinterConnector
     private $payments = array();
     private $taxes = array();
 
-    public function __construct(EventPrinter $eventPrinter, stdClass $localization)
+    public function __construct(?EventPrinter $eventPrinter, stdClass $localization)
+    {
+        $this->localization = $localization;
+
+        if($eventPrinter) {
+            $this->setEventPrinter($eventPrinter);
+        }
+    }
+
+    public function setEventPrinter(EventPrinter $eventPrinter)
     {
         $this->eventPrinter = $eventPrinter;
-        $this->localization = $localization;
         $this->printConnector = $this->getConnector();
         $this->paperRowLength = $eventPrinter->getCharactersPerRow();
         $this->printer = new Printer($this->printConnector);

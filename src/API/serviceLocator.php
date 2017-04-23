@@ -292,27 +292,27 @@ $container->registerService(IRememberMe::class, function ($c) {
 });
 
 $container->registerService(Order::class, $container->factory(function ($c) {
-    return new Order($c);
+    return new Order(null, null, $c->get('i18n'));
 }), IPrintingType::class);
 
 $container->registerService(Invoice::class, $container->factory(function ($c) {
-    return new Invoice($c);
+    return new Invoice(null, null, $c->get('i18n'));
 }), IPrintingType::class);
 
 $container->registerService(PaymentRecieved::class, $container->factory(function ($c) {
-    return new PaymentRecieved($c);
+    return new PaymentRecieved(null, null, $c->get('i18n'));
 }), IPrintingType::class);
 
 $container->registerService(IPrintingInformation::class, $container->factory(function () {
     return new PrintingInformation();
 }));
 
-$container->registerService(ThermalPrinter::class, $container->factory(function () {
-    return new ThermalPrinter();
+$container->registerService(ThermalPrinter::class, $container->factory(function ($c) {
+    return new ThermalPrinter(null, $c->get('i18n'));
 }), IPrinterConnector::class);
 
-$container->registerService(PdfPrinter::class, $container->factory(function () {
-    return new PdfPrinter();
+$container->registerService(PdfPrinter::class, $container->factory(function ($c) {
+    return new PdfPrinter(null, $c->get('i18n'));
 }), IPrinterConnector::class);
 
 $container->registerService(IJsonToModel::class, function () {

@@ -5,13 +5,13 @@ namespace API\Controllers\DistributionPlace;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Menu\IMenuExtraQuery;
+use API\Lib\Interfaces\Models\Menu\IMenuQuery;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\ORM\Menu\MenuExtraQuery;
-use API\Models\ORM\Menu\MenuQuery;
 use API\Models\ORM\Ordering\OrderDetailQuery;
-use Propel\Runtime\ActiveQuery\Criteria;
-use Propel\Runtime\Propel;
 use Respect\Validation\Validator as v;
 use Slim\App;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -24,8 +24,6 @@ class DistributionPlaceAmount extends SecurityController
         parent::__construct($app);
 
         $this->security = ['POST' => USER_ROLE_DISTRIBUTION_SET_AVAILABILITY];
-
-        $this->container->get(IConnectionInterface::class);
     }
 
     public function any() : void
@@ -42,7 +40,7 @@ class DistributionPlaceAmount extends SecurityController
 
     protected function post() : void
     {
-        $connection = Propel::getConnection();
+        $connection = $this->container->get(IConnectionInterface::class);
 
         try {
             $connection->beginTransaction();
@@ -74,36 +72,19 @@ class DistributionPlaceAmount extends SecurityController
 
     private function setMenu()
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $menuQuery = $this->container->get(IMenuQuery::class);
+        $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
         $user = $auth->getCurrentUser();
 
-        $menu = MenuQuery::create()
-                            ->useMenuGroupQuery()
-                               ->useMenuTypeQuery()
-                                   ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                               ->endUse()
-                            ->endUse()
-                            ->filterByMenuid($this->json['id'])
-                            ->findOne();
+        $menu = $menuQuery->getByEventid($this->json['id'], $user->getEventUsers()->getFirst()->getEventid());
 
         if ($menu) {
             $menu->setAvailabilityAmount($this->json['amount']);
             $menu->save();
 
             // TODO Optimize performance
-            $orderDetailFilter = OrderDetailQuery::create()
-                                                    ->filterByDistributionFinished()
-                                                    ->useMenuQuery()
-                                                        ->filterByMenuid($menu->getMenuid())
-                                                    ->endUse()
-                                                    ->_or()
-                                                    ->useOrderDetailMixedWithQuery(null, Criteria::LEFT_JOIN)
-                                                        ->useMenuQuery('re', Criteria::LEFT_JOIN)
-                                                            ->filterByMenuid($menu->getMenuid())
-                                                        ->endUse()
-                                                    ->endUse();
-
-            $orderDetails = $orderDetailFilter->find();
+            $orderDetails = $orderDetailQuery->getDistributionUnfinishedByMenuid($menu->getMenuid());
 
             foreach ($orderDetails as $orderDetail) {
                 StatusCheck::verifyAvailability($orderDetail->getOrderDetailid());
@@ -113,28 +94,19 @@ class DistributionPlaceAmount extends SecurityController
 
     private function setExtra()
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $menuExtraQuery = $this->container->get(IMenuExtraQuery::class);
+        $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
         $user = $auth->getCurrentUser();
 
-        $menuExtra = MenuExtraQuery::create()
-                                    ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                    ->filterByMenuExtraid($this->json['id'])
-                                    ->findOne();
+        $menuExtra = $menuExtraQuery->getByEventid($this->json['id'], $user->getEventUsers()->getFirst()->getEventid());
 
         if ($menuExtra) {
             $menuExtra->setAvailabilityAmount($this->json['amount']);
             $menuExtra->save();
 
             // TODO Optimize performance
-            $orderDetailFilter = OrderDetailQuery::create()
-                                                    ->filterByDistributionFinished()
-                                                    ->useOrderDetailExtraQuery()
-                                                        ->useMenuPossibleExtraQuery()
-                                                            ->filterByMenuExtraid($menuExtra->getMenuExtraid())
-                                                        ->endUse()
-                                                    ->endUse();
-
-            $orderDetails = $orderDetailFilter->find();
+            $orderDetails = $orderDetailQuery->getDistributionUnfinishedByMenuExtraid($menuExtra->getMenuExtraid());
 
             foreach ($orderDetails as $orderDetail) {
                 StatusCheck::verifyAvailability($orderDetail->getOrderDetailid());
@@ -144,17 +116,12 @@ class DistributionPlaceAmount extends SecurityController
 
     private function setSpecialExtra()
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
         $user = $auth->getCurrentUser();
 
-        $orderDetail = OrderDetailQuery::create()
-                                        ->useOrderQuery()
-                                            ->useEventTableQuery()
-                                                ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                            ->endUse()
-                                        ->endUse()
-                                        ->filterByOrderDetailid($this->json['id'])
-                                        ->findOne();
+        $orderDetail = $orderDetailQuery->getByEventid($this->json['id'], $user->getEventUsers()->getFirst()->getEventid());
+
         if ($orderDetail) {
             $orderDetail->setAvailabilityAmount($this->json['amount']);
             $orderDetail->save();

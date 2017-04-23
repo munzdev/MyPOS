@@ -34,6 +34,23 @@ class MenuExtraQuery extends Query implements IMenuExtraQuery
         return $menuExtraModel;
     }
 
+    public function getByEventid(int $menuExtraid, int $eventid) : ?IMenuExtra
+    {
+        $menuExtra = MenuExtraQueryORM::create()
+            ->filterByEventid($eventid)
+            ->filterByMenuExtraid($menuExtraid)
+            ->findOne();
+
+        if(!$menuExtra) {
+            return null;
+        }
+
+        $menuExtraModel = $this->container->get(IMenuExtra::class);
+        $menuExtraModel->setModel($menuExtra);
+
+        return $menuExtraModel;
+    }
+
     public function findByEventid(int $eventid) : IMenuExtraCollection
     {
         $menuExtras = MenuExtraQueryORM::create()

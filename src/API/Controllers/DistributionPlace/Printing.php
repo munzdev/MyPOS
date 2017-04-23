@@ -3,17 +3,17 @@
 namespace API\Controllers\DistributionPlace;
 
 use API\Lib\Interfaces\Helpers\IValidate;
+use API\Lib\Interfaces\Models\Event\IEventPrinterQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\OIP\IDistributionGivingOutQuery;
+use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Lib\Printer;
+use API\Lib\Printer\PrinterConnector\ThermalPrinter;
 use API\Lib\SecurityController;
-use API\Models\ORM\Event\Base\EventPrinterQuery;
-use API\Models\ORM\OIP\DistributionGivingOutQuery;
-use API\Models\ORM\Ordering\Base\OrderQuery;
-use Propel\Runtime\ActiveQuery\Criteria;
 use Respect\Validation\Validator as v;
 use Slim\App;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use const API\ORDER_DEFAULT_SIZEID;
+use API\Lib\Printer\PrintingType\Order;
 
 class Printing extends SecurityController
 {
@@ -41,52 +41,29 @@ class Printing extends SecurityController
 
     protected function post() : void
     {
-        $printer = EventPrinterQuery::create()
-                                        ->findOneByEventPrinterid($this->json['EventPrinterid']);
+        $eventPrinterQuery = $this->container->get(IEventPrinterQuery::class);
+        $distributionGivingOutQuery = $this->container->get(IDistributionGivingOutQuery::class);
+        $orderQuery = $this->container->get(IOrderQuery::class);
 
-        $distributionGivingOut = DistributionGivingOutQuery::create()
-                                                            ->joinWithOrderInProgressRecieved()
-                                                            ->useOrderInProgressRecievedQuery()
-                                                                ->joinWithOrderDetail()
-                                                                ->useOrderDetailQuery()
-                                                                    ->leftJoinWithMenu()
-                                                                    ->leftJoinWithMenuSize()
-                                                                    ->leftJoinWithOrderDetailExtra()
-                                                                    ->useOrderDetailExtraQuery(null, Criteria::LEFT_JOIN)
-                                                                        ->leftJoinWithMenuPossibleExtra()
-                                                                        ->useMenuPossibleExtraQuery(null, Criteria::LEFT_JOIN)
-                                                                            ->leftJoinWithMenuExtra()
-                                                                        ->endUse()
-                                                                    ->endUse()
-                                                                    ->leftJoinWithOrderDetailMixedWith()
-                                                                ->endUse()
-                                                            ->endUse()
-                                                            ->filterByDistributionGivingOutid($this->args['DistributionGivingOutid'])
-                                                            ->find()
-                                                            ->getFirst();
+        $eventPrinter = $eventPrinterQuery->findPk($this->json['EventPrinterid']);
+
+        $distributionGivingOut = $distributionGivingOutQuery->getWithOrderDetails($this->args['DistributionGivingOutid']);
 
         $orderid = $distributionGivingOut->getOrderInProgressRecieveds()
-                                        ->getFirst()
-                                        ->getOrderDetail()
-                                        ->getOrderid();
+                                         ->getFirst()
+                                         ->getOrderDetail()
+                                         ->getOrderid();
 
-        $order = OrderQuery::create()
-                            ->joinWithEventTable()
-                            ->joinUserRelatedByUserid()
-                            ->filterByOrderid($orderid)
-                            ->find()
-                            ->getFirst();
+        $order = $orderQuery->getWithEventTableAndUser($orderid);
 
-        $i18n = $this->app->getContainer()['i18n'];
+        $i18n = $this->container->get('i18n');
 
-        $connector = Printer::getConnector($printer);
-        $reciepPrint = new Printer($connector, $printer->getCharactersPerRow(), $i18n->ReciepPrint);
-
-        $reciepPrint->setOrderNr($orderid);
-        $reciepPrint->setTableNr($order->getEventTable()->getName());
-        $reciepPrint->setName($order->getUserRelatedByuserid()->getFirstname() . " " . $order->getUserRelatedByuserid()->getLastname());
-        $reciepPrint->setDate($order->getOrdertime());
-        $reciepPrint->setDateFooter($distributionGivingOut->getDate());
+        $printingInformation = $this->container->get(IPrintingInformation::class);
+        $printingInformation->setOrderNr($orderid);
+        $printingInformation->setTableNr($order->getEventTable()->getName());
+        $printingInformation->setName($order->getUser()->getFirstname() . " " . $order->getUser()->getLastname());
+        $printingInformation->setDate($order->getOrdertime());
+        $printingInformation->setDateFooter($distributionGivingOut->getDate());
 
         foreach ($distributionGivingOut->getOrderInProgressRecieveds() as $orderInProgressRecieved) {
             $name = "";
@@ -124,11 +101,18 @@ class Printing extends SecurityController
                 $name = $orderDetail->getExtraDetail();
             }
 
-            $reciepPrint->add($name, $orderInProgressRecieved->getAmount());
+            $printingInformation->addRow($name, $orderInProgressRecieved->getAmount());
         }
 
-        try {
-            $reciepPrint->printOrder();
+        try
+        {
+            $printerConnector = $this->container->get(ThermalPrinter::class);
+            $printerConnector->setEventPrinter($eventPrinter);
+
+            $order = $this->container->get(Order::class);
+            $order->setPrinterConnector($printerConnector);
+            $order->setPrintingInformation($printingInformation);
+            $order->printType();
 
             $this->withJson(true);
         } catch (Exception $exception) {

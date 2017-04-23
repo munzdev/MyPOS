@@ -17,6 +17,11 @@ interface IDistributionGivingOut extends IModel {
     function getDate();
 
     /**
+     * @return IOrderInProgressCollection
+     */
+    public function getOrderInProgressRecieveds() : IOrderInProgressCollection;
+
+    /**
      * @param int $distributionGivingOutid Description
      * @return IDistributionGivingOut Description
      */

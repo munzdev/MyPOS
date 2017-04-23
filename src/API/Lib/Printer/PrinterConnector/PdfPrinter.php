@@ -12,9 +12,18 @@ class PdfPrinter implements IPrinterConnector
 {
     private $eventPrinter;
 
-    public function __construct(EventPrinter $eventPrinter)
+    /**
+     * @var stdClass
+     */
+    private $localization;
+
+    public function __construct(?EventPrinter $eventPrinter, \stdClass $localization)
     {
-        $this->eventPrinter = $eventPrinter;
+        $this->localization = $localization;
+
+        if($eventPrinter) {
+            $this->setEventPrinter($eventPrinter);
+        }
 
         throw new Exception("PDF is not implemented yet!");
     }
@@ -29,7 +38,7 @@ class PdfPrinter implements IPrinterConnector
 
     }
 
-    public function addHeaderInfo(string $title, string $value)
+    public function addHeaderInfo(string $title, string $value, bool $bigFont = false)
     {
 
     }
@@ -109,4 +118,8 @@ class PdfPrinter implements IPrinterConnector
 
     }
 
+    function setEventPrinter(EventPrinter $eventPrinter)
+    {
+
+    }
 }

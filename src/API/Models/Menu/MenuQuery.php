@@ -24,7 +24,28 @@ class MenuQuery extends Query implements IMenuQuery
     {
         $menu = MenuQueryORM::create()->findPk($id);
 
-        if(!$menu) {
+        if (!$menu) {
+            return null;
+        }
+
+        $menuModel = $this->container->get(IMenu::class);
+        $menuModel->setModel($menu);
+
+        return $menuModel;
+    }
+
+    public function getByEventid(int $menuid, int $eventid) : ?IMenu
+    {
+        $menu = MenuQueryORM::create()
+            ->useMenuGroupQuery()
+                ->useMenuTypeQuery()
+                    ->filterByEventid($eventid)
+                ->endUse()
+            ->endUse()
+            ->filterByMenuid($menuid)
+            ->findOne();
+
+        if (!$menu) {
             return null;
         }
 

@@ -27,11 +27,21 @@ abstract class AbstractPrintingType implements IPrintingType
      */
     protected $localization;
 
-    public function __construct(IPrintingInformation $printingInformation, IPrinterConnector $printerConnector, stdClass $localization)
+    public function __construct(?IPrintingInformation $printingInformation, ?IPrinterConnector $printerConnector, stdClass $localization)
     {
         $this->printingInformation = $printingInformation;
         $this->printerConnector = $printerConnector;
         $this->localization = $localization;
+    }
+
+    public function setPrintingInformation(IPrintingInformation $printingInformation)
+    {
+        $this->printingInformation = $printingInformation;
+    }
+
+    public function setPrinterConnector(IPrinterConnector $printerConnector)
+    {
+        $this->printerConnector = $printerConnector;
     }
 
     abstract function printType();

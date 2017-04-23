@@ -48,4 +48,37 @@ class DistributionGivingOutQuery extends Query implements IDistributionGivingOut
                 ->count();
     }
 
+    public function getWithOrderDetails(int $distributionGivingOutid) : ?IDistributionGivingOut
+    {
+        $distributionGivingOut = DistributionGivingOutQueryORM::create()
+                                    ->joinWithOrderInProgressRecieved()
+                                    ->useOrderInProgressRecievedQuery()
+                                        ->joinWithOrderDetail()
+                                        ->useOrderDetailQuery()
+                                            ->leftJoinWithMenu()
+                                            ->leftJoinWithMenuSize()
+                                            ->leftJoinWithOrderDetailExtra()
+                                            ->useOrderDetailExtraQuery(null, Criteria::LEFT_JOIN)
+                                                ->leftJoinWithMenuPossibleExtra()
+                                                ->useMenuPossibleExtraQuery(null, Criteria::LEFT_JOIN)
+                                                    ->leftJoinWithMenuExtra()
+                                                ->endUse()
+                                            ->endUse()
+                                            ->leftJoinWithOrderDetailMixedWith()
+                                        ->endUse()
+                                    ->endUse()
+                                    ->filterByDistributionGivingOutid($distributionGivingOutid)
+                                    ->find()
+                                    ->getFirst();
+
+        if(!$distributionGivingOut) {
+            return null;
+        }
+
+        $distributionGivingOutModel = $this->container->get(IDistributionGivingOut::class);
+        $distributionGivingOutModel->setModel($distributionGivingOut);
+
+        return $distributionGivingOutModel;
+    }
+
 }

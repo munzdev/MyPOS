@@ -42,7 +42,7 @@ class Menu extends Model implements IMenu
 
     public function getAvailabilityid(): int
     {
-        return $this->model->getAvailabilityAmount();
+        return $this->model->getAvailabilityid();
     }
 
     public function getMenuGroup(): IMenuGroup

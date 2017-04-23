@@ -7,6 +7,7 @@ use API\Lib\Interfaces\Models\Ordering\IOrderDetailCollection;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
 use API\Models\ORM\Ordering\OrderDetailQuery as OrderDetailQueryORM;
 use API\Models\Query;
+use Propel\Runtime\ActiveQuery\Criteria;
 
 class OrderDetailQuery extends Query implements IOrderDetailQuery
 {
@@ -39,12 +40,12 @@ class OrderDetailQuery extends Query implements IOrderDetailQuery
         $orderDetails = OrderDetailQueryORM::create()
                                 ->filterByDistributionFinished()
                                 ->useMenuQuery()
-                                    ->filterByMenuid($menu->getMenuid())
+                                    ->filterByMenuid($menuid)
                                 ->endUse()
                                 ->_or()
                                 ->useOrderDetailMixedWithQuery(null, Criteria::LEFT_JOIN)
                                     ->useMenuQuery('re', Criteria::LEFT_JOIN)
-                                        ->filterByMenuid($menu->getMenuid())
+                                        ->filterByMenuid($menuid)
                                     ->endUse()
                                 ->endUse()
                                 ->find();
@@ -92,5 +93,26 @@ class OrderDetailQuery extends Query implements IOrderDetailQuery
         $orderDetailCollection->setCollection($orderDetails);
 
         return $orderDetailCollection;
+    }
+
+    public function getByEventid(int $orderDetailid, int $eventid) : ?IOrderDetail
+    {
+        $orderDetail = OrderDetailQueryORM::create()
+            ->useOrderQuery()
+                ->useEventTableQuery()
+                    ->filterByEventid($eventid)
+                ->endUse()
+            ->endUse()
+            ->filterByOrderDetailid($orderDetailid)
+            ->findOne();
+
+        if(!$orderDetail) {
+            return null;
+        }
+
+        $orderDetailModel = $this->container->get(IOrderDetail::class);
+        $orderDetailModel->setModel($orderDetail);
+
+        return $orderDetailModel;
     }
 }
