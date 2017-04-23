@@ -33,4 +33,21 @@ class EventBankinformationQuery extends Query implements IEventBankinformationQu
 
         return $eventBankinformationModel;
     }
+
+    public function getDefaultForEventid(int $eventid) : ?IEventBankinformation
+    {
+        $eventBankinformation = EventBankinformationQueryORM::create()
+            ->filterByEventid($eventid)
+            ->filterByActive(true)
+            ->findOne();
+
+        if(!$eventBankinformation) {
+            return null;
+        }
+
+        $eventBankinformationModel = $this->container->get(IEventBankinformation::class);
+        $eventBankinformationModel->setModel($eventBankinformation);
+
+        return $eventBankinformationModel;
+    }
 }

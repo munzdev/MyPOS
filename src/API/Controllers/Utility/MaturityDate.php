@@ -9,7 +9,7 @@ class MaturityDate extends Controller
 {
     protected function any() : void
     {
-        $config = $this->app->getContainer()['settings'];
+        $config = $this->container->get('settings');
 
         $maturityDate = new DateTime($config['Invoice']['MaturityDate']);
 

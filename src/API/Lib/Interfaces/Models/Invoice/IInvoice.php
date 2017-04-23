@@ -100,6 +100,11 @@ interface IInvoice extends IModel {
     function getAmountRecieved();
 
     /**
+     * @return IInvoiceItemCollection
+     */
+    public function getInvoiceItems() : IInvoiceItemCollection;
+
+    /**
      *
      * @param int $invoiceid Description
      * @return IInvoice Description

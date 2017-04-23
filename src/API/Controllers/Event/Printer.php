@@ -3,6 +3,7 @@
 namespace API\Controllers\Event;
 
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\Event\IEventPrinterQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Models\ORM\Event\EventPrinterQuery;
@@ -19,12 +20,13 @@ class Printer extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $eventPrinterQuery = $this->container->get(IEventPrinterQuery::class);
+
         $user = $auth->getCurrentUser();
 
-        $printer = EventPrinterQuery::create()
-                                        ->findByEventid($user->getEventUsers()->getFirst()->getEventid());
+        $printers = $eventPrinterQuery->findByEventid($user->getEventUsers()->getFirst()->getEventid());
 
-        $this->withJson($printer->toArray());
+        $this->withJson($printers->toArray());
     }
 }

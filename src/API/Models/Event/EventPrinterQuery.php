@@ -33,4 +33,15 @@ class EventPrinterQuery extends Query implements IEventPrinterQuery
 
         return $eventPrinterModel;
     }
+
+    public function findByEventid(int $eventid): IEventPrinterCollection
+    {
+        $eventPrinters = EventPrinterQueryORM::create()
+                            ->findByEventid($eventid);
+
+        $eventPrinterCollection = $this->container->get(IEventPrinterCollection::class);
+        $eventPrinterCollection->setCollection($eventPrinters);
+
+        return $eventPrinterCollection;
+    }
 }

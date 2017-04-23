@@ -5,6 +5,7 @@ namespace API\Controllers\Invoice;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Invoice\IInvoiceQuery;
 use API\Lib\SecurityController;
 use API\Models\ORM\Invoice\InvoiceQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
@@ -36,35 +37,11 @@ class InvoiceInfo extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $invoiceQuery = $this->container->get(IInvoiceQuery::class);
         $user = $auth->getCurrentUser();
 
-        $invoice = InvoiceQuery::create()
-                                ->useEventContactRelatedByEventContactidQuery()
-                                    ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                ->endUse()
-                                ->joinWithInvoiceType()
-                                ->joinWith('EventContactRelatedByEventContactid contact')
-                                ->joinWith('EventContactRelatedByCustomerEventContactid customer', Criteria::LEFT_JOIN)
-                                ->joinWithUser()
-                                ->joinWithEventBankinformation()
-                                ->joinWithInvoiceItem()
-                                ->leftJoinWithPaymentRecieved()
-                                ->usePaymentRecievedQuery(null, Criteria::LEFT_JOIN)
-                                    ->leftJoinWithPaymentType()
-                                    ->joinWith('User paymentUser', Criteria::LEFT_JOIN)
-                                    ->leftJoinWithPaymentCoupon()
-                                    ->usePaymentCouponQuery(null, Criteria::LEFT_JOIN)
-                                        ->leftJoinWithCoupon()
-                                    ->endUse()
-                                ->endUse()
-                                ->leftJoinWithInvoiceWarning()
-                                ->useInvoiceWarningQuery(null, Criteria::LEFT_JOIN)
-                                    ->leftJoinWithInvoiceWarningType()
-                                ->endUse()
-                                ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                ->findByInvoiceid($this->args['id'])
-                                ->getFirst();
+        $invoice = $invoiceQuery->getWithDetails($user->getEventUsers()->getFirst()->getEventid(), $this->args['id']);
 
         $this->withJson($invoice);
     }

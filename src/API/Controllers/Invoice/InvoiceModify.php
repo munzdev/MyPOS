@@ -5,6 +5,9 @@ namespace API\Controllers\Invoice;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Invoice\IInvoice;
+use API\Lib\Interfaces\Models\Invoice\IInvoiceItem;
+use API\Lib\Interfaces\Models\Invoice\IInvoiceQuery;
 use API\Lib\SecurityController;
 use API\Models\ORM\Invoice\Invoice;
 use API\Models\ORM\Invoice\InvoiceItem;
@@ -40,25 +43,22 @@ class InvoiceModify extends SecurityController
 
     protected function patch() : void
     {
-        $invoice = InvoiceQuery::create()
-                                ->innerJoinWithInvoiceItem()
-                                ->filterByInvoiceid($this->args['id'])
-                                ->find()
-                                ->getFirst();
+        $invoiceQuery = $this->container->get(IInvoiceQuery::class);
+        $invoice = $invoiceQuery->getWithItems($this->args['id']);
 
         //-- allready canceled
         if ($invoice->getCanceledInvoiceid()) {
             throw new Exception('Invoice allready canceled');
         }
 
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
         $user = $auth->getCurrentUser();
-        $connection = Propel::getConnection();
+        $connection = $this->container->get(IConnectionInterface::class);
 
         try {
             $connection->beginTransaction();
 
-            $newInvoice = new Invoice();
+            $newInvoice = $this->container->get(IInvoice::class);
             $newInvoice->setInvoiceTypeid(INVOICE_TYPE_CANCELLATION);
             $newInvoice->setEventContactid($invoice->getEventContactid());
             $newInvoice->setUser($user);
@@ -70,7 +70,7 @@ class InvoiceModify extends SecurityController
             $newInvoice->save();
 
             foreach ($invoice->getInvoiceItems() as $invoiceItem) {
-                $newInvoiceItem = new InvoiceItem();
+                $newInvoiceItem = $this->container->get(IInvoiceItem::class);
                 $newInvoiceItem->setInvoice($newInvoice);
                 $newInvoiceItem->setAmount($invoiceItem->getAmount());
                 $newInvoiceItem->setPrice($invoiceItem->getPrice() * -1);

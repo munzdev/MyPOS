@@ -6,6 +6,7 @@ use API\Lib\Container;
 use API\Lib\Interfaces\Models\Event\IEventBankinformation;
 use API\Lib\Interfaces\Models\Event\IEventContact;
 use API\Lib\Interfaces\Models\Invoice\IInvoice;
+use API\Lib\Interfaces\Models\Invoice\IInvoiceItemCollection;
 use API\Lib\Interfaces\Models\Invoice\IInvoiceType;
 use API\Lib\Interfaces\Models\User\IUser;
 use API\Models\Model;
@@ -144,6 +145,16 @@ class Invoice extends Model implements IInvoice
     public function getUserid(): int
     {
         return $this->model->getUserid();
+    }
+
+    public function getInvoiceItems() : IInvoiceItemCollection
+    {
+        $invoiceItems = $this->model->getInvoiceItems();
+
+        $invoiceItemCollection = $this->container->get(IInvoiceItemCollection::class);
+        $invoiceItemCollection->setCollection($invoiceItems);
+
+        return $invoiceItemCollection;
     }
 
     public function setAmount($amount): IInvoice

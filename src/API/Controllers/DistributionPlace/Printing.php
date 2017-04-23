@@ -3,6 +3,7 @@
 namespace API\Controllers\DistributionPlace;
 
 use API\Lib\Interfaces\Helpers\IValidate;
+use API\Lib\Interfaces\IPrintingInformation;
 use API\Lib\Interfaces\Models\Event\IEventPrinterQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Interfaces\Models\OIP\IDistributionGivingOutQuery;

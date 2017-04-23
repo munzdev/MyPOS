@@ -3,8 +3,14 @@
 namespace API\Controllers\Invoice;
 
 use API\Lib\Interfaces\Helpers\IValidate;
+use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\IPrintingInformation;
+use API\Lib\Interfaces\Models\Event\IEventPrinterQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Invoice\IInvoiceQuery;
+use API\Lib\Interfaces\Models\Payment\IPaymentRecievedQuery;
 use API\Lib\Printer;
+use API\Lib\Printer\PrinterConnector\ThermalPrinter;
 use API\Lib\SecurityController;
 use API\Models\ORM\Event\Base\EventPrinterQuery;
 use API\Models\ORM\Invoice\Base\InvoiceQuery;
@@ -14,6 +20,7 @@ use Propel\Runtime\ActiveQuery\Criteria;
 use Respect\Validation\Validator as v;
 use Slim\App;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use API\Lib\Printer\PrintingType\Invoice;
 
 class Printing extends SecurityController
 {
@@ -44,39 +51,25 @@ class Printing extends SecurityController
 
     protected function post() : void
     {
-        $printer = EventPrinterQuery::create()
-                                        ->findOneByEventPrinterid($this->json['EventPrinterid']);
+        $eventPrinterQuery = $this->container->get(IEventPrinterQuery::class);
+        $auth = $this->container->get(IAuth::class);
+        $invoiceQuery = $this->container->get(IInvoiceQuery::class);
+        $paymentRecievedQuery = $this->container->get(IPaymentRecievedQuery::class);
+        $user = $auth->getCurrentUser();
 
-        $invoice = InvoiceQuery::create()
-                                ->joinWithInvoiceItem()
-                                ->joinWithEventBankinformation()
-                                ->joinWithEventContactRelatedByEventContactid()
-                                //->leftJoinWithEventContactRelatedByCustomerEventContactid()
-                                ->leftJoinWith("EventContactRelatedByCustomerEventContactid b")
-                                ->joinWithUser()
-                                ->filterByInvoiceid($this->args['Invoiceid'])
-                                ->find()
-                                ->getFirst();
+        $eventPrinter = $eventPrinterQuery->findPk($this->json['EventPrinterid']);
+        $invoice = $invoiceQuery->getWithDetails($user->getEventUsers()->getFirst()->getEventid(), $this->args['Invoiceid']);
 
         if ($this->withPayments) {
-            $paymentsRecieved = PaymentRecievedQuery::create()
-                                                        ->joinWithUser()
-                                                        ->leftJoinWithPaymentCoupon()
-                                                        ->usePaymentCouponQuery(null, Criteria::LEFT_JOIN)
-                                                            ->leftJoinCoupon()
-                                                        ->endUse()
-                                                        ->with(PaymentCouponTableMap::getTableMap()->getPhpName())
-                                                        ->filterByInvoice($invoice)
-                                                        ->find();
+            $paymentsRecieveds = $paymentRecievedQuery->getDetailsForInvoice($invoice->getInvoiceid());
         }
 
-        $config = $this->app->getContainer()['settings'];
+        $config = $this->container->get('settings');
         $invoiceConfig = $config['Invoice'];
-        $i18n = $this->app->getContainer()['i18n'];
 
         $invoiceUser = $invoice->getUser();
-        $connector = Printer::getConnector($printer);
-        $reciepPrint = new Printer($connector, $printer->getCharactersPerRow(), $i18n->ReciepPrint);
+
+        $printingInformation = $this->container->get(IPrintingInformation::class);
 
         $tableNr = null;
 
@@ -85,7 +78,7 @@ class Printing extends SecurityController
                 $tableNr = $invoiceItem->getOrderDetail()->getOrder()->getEventTable()->getName();
             }
 
-            $reciepPrint->add(
+            $printingInformation->addRow(
                 $invoiceItem->getDescription(),
                 $invoiceItem->getAmount(),
                 $invoiceItem->getPrice(),
@@ -95,35 +88,42 @@ class Printing extends SecurityController
 
         if ($this->withPayments) {
             $paymentRecievedid = null;
-            foreach ($paymentsRecieved as $paymentRecieved) {
+            foreach ($paymentsRecieveds as $paymentRecieved) {
                 if (!$paymentRecievedid || $paymentRecieved->getPaymentRecievedid() > $paymentRecievedid) {
                     $paymentRecievedid = $paymentRecieved->getPaymentRecievedid();
                 }
 
-                $reciepPrint->addPaymentRecieved($paymentRecieved);
+                $printingInformation->addPaymentRecieved($paymentRecieved);
             }
-            $reciepPrint->setPaymentid($paymentRecievedid);
+            $printingInformation->setPaymentid($paymentRecievedid);
         }
 
         if ($invoice->getEventContactRelatedByCustomerEventContactid()) {
-            $reciepPrint->setCustomer($invoice->getEventContactRelatedByCustomerEventContactid());
+            $printingInformation->setCustomer($invoice->getCustomerEventContactid());
         }
 
         if ($invoiceConfig['Logo']['Use']) {
-            $reciepPrint->setLogo($invoiceConfig['Logo']['Path'], $invoiceConfig['Logo']['Type']);
+            $printingInformation->setLogoFile($invoiceConfig['Logo']['Path']);
+            $printingInformation->setLogoType($invoiceConfig['Logo']['Type']);
         }
 
-        $reciepPrint->setHeader($invoiceConfig['Header']);
-        $reciepPrint->setContact($invoice->getEventContactRelatedByEventContactid());
-        $reciepPrint->setInvoiceid($invoice->getInvoiceid());
-        $reciepPrint->setTableNr($tableNr);
-        $reciepPrint->setName($invoiceUser->getFirstname() . " " . $invoiceUser->getLastname());
-        $reciepPrint->setDate($invoice->getDate());
-        $reciepPrint->setBankinformation($invoice->getEventBankinformation());
-        $reciepPrint->setMaturityDate($invoice->getMaturityDate());
+        $printingInformation->setHeader($invoiceConfig['Header']);
+        $printingInformation->setContact($invoice->getEventContactRelatedByEventContactid());
+        $printingInformation->setInvoiceid($invoice->getInvoiceid());
+        $printingInformation->setTableNr($tableNr);
+        $printingInformation->setName($invoiceUser->getFirstname() . " " . $invoiceUser->getLastname());
+        $printingInformation->setDate($invoice->getDate());
+        $printingInformation->setBankinformation($invoice->getEventBankinformation());
+        $printingInformation->setMaturityDate($invoice->getMaturityDate());
 
         try {
-            $reciepPrint->printInvoice();
+            $printerConnector = $this->container->get(ThermalPrinter::class);
+            $printerConnector->setEventPrinter($eventPrinter);
+
+            $invoice = $this->container->get(Invoice::class);
+            $invoice->setPrinterConnector($printerConnector);
+            $invoice->setPrintingInformation($printingInformation);
+            $invoice->printType();
 
             $this->withJson(true);
         } catch (Exception $exception) {

@@ -3,6 +3,7 @@
 namespace API\Controllers\Invoice;
 
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\Event\IEventContact;
 use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Models\ORM\Event\EventContact;
@@ -19,12 +20,25 @@ class Customer extends SecurityController
 
     protected function post() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
         $user = $auth->getCurrentUser();
 
-        $eventContact = new EventContact();
-        $eventContact->fromArray($this->json);
-        $eventContact->setActive(true)
+        $customer = $this->json;
+
+        $eventContact = $this->container->get(IEventContact::class);
+
+        $eventContact->setTitle($customer['Title'])
+            ->setName($customer['Name'])
+            ->setContactPerson($customer['ContactPerson'])
+            ->setAddress($customer['Address'])
+            ->setAddress2($customer['Address2'])
+            ->setCity($customer['City'])
+            ->setZip($customer['Zip'])
+            ->setTaxIdentificationNr($customer['TaxIdentificationNr'])
+            ->setTelephon($customer['Telephon'])
+            ->setFax($customer['Fax'])
+            ->setEmail($customer['Email'])
+            ->setActive(true)
             ->setEventid($user->getEventUsers()->getFirst()->getEventid())
             ->save();
 

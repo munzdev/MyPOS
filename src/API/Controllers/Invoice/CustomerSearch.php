@@ -4,6 +4,7 @@ namespace API\Controllers\Invoice;
 
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\Event\IEventContactQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
 use API\Models\ORM\Event\EventContactQuery;
@@ -32,14 +33,12 @@ class CustomerSearch extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $eventContactQuery = $this->container->get(IEventContactQuery::class);
+
         $user = $auth->getCurrentUser();
 
-        $eventContacts = EventContactQuery::create()
-                                            ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                            ->filterByActive(true)
-                                            ->filterByName('%'.$this->args['name'].'%', Criteria::LIKE)
-                                            ->find();
+        $eventContacts = $eventContactQuery->findActiveByNameAndEvent($user->getEventUsers()->getFirst()->getEventid(), $this->args['name']);
 
         $this->withJson($eventContacts->toArray());
     }

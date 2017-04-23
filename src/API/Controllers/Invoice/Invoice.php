@@ -5,7 +5,13 @@ namespace API\Controllers\Invoice;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\Event\IEventBankinformationQuery;
+use API\Lib\Interfaces\Models\Event\IEventContact;
+use API\Lib\Interfaces\Models\Event\IEventContactQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Invoice\IInvoice;
+use API\Lib\Interfaces\Models\Invoice\IInvoiceItem;
+use API\Lib\Interfaces\Models\Invoice\IInvoiceQuery;
 use API\Lib\SecurityController;
 use API\Models\ORM\Event\EventBankinformationQuery;
 use API\Models\ORM\Event\EventContactQuery;
@@ -29,14 +35,16 @@ class Invoice extends SecurityController
         parent::__construct($app);
 
         $this->security = ['GET' => USER_ROLE_INVOICE_OVERVIEW,
-                            'POST' => USER_ROLE_INVOICE_ADD];
+                           'POST' => USER_ROLE_INVOICE_ADD];
 
         $this->container->get(IConnectionInterface::class);
     }
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $invoiceQuery = $this->container->get(IInvoiceQuery::class);
+
         $user = $auth->getCurrentUser();
 
         $status = 'unpaid';
@@ -99,39 +107,15 @@ class Invoice extends SecurityController
             }
         }
 
-        $searchCriteria = InvoiceQuery::create()
-                                        ->useEventContactRelatedByEventContactidQuery()
-                                            ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                        ->endUse()
-                                        ->_if($status == 'paid')
-                                            ->filterByPaymentFinished(null, Criteria::NOT_EQUAL)
-                                        ->_elseif($status == 'unpaid')
-                                            ->filterByPaymentFinished(null)
-                                        ->_endif()
-                                        ->_if($invoiceid)
-                                            ->filterByInvoiceid($invoiceid)
-                                        ->_endif()
-                                        ->_if($customerid)
-                                            ->filterByCustomerEventContactid($customerid)
-                                        ->_endif()
-                                        ->_if($canceled === true)
-                                            ->filterByCanceledInvoiceid(null, Criteria::NOT_EQUAL)
-                                        ->_elseif($canceled === false)
-                                            ->filterByCanceledInvoiceid(null)
-                                        ->_endif()
-                                        ->_if($typeid)
-                                            ->filterByInvoiceTypeid($typeid)
-                                        ->_endif()
-                                        ->_if($userid != '*')
-                                            ->filterByUserid($userid)
-                                        ->_endif()
-                                        ->_if($dateFrom)
-                                            ->filterByDate(array('min' => new DateTime($dateFrom)))
-                                        ->_endif()
-                                        ->_if($dateTo)
-                                            ->filterByDate(array('max' => new DateTime($dateTo)))
-                                        ->_endif()
-                                        ->orderByDate();
+        $invoiceCount = $invoiceQuery->getInvoiceCountBySearch($user->getEventUsers()->getFirst()->getEventid(),
+            $status,
+            $invoiceid,
+            $customerid,
+            $canceled,
+            $typeid,
+            $userid,
+            $dateFrom,
+            $dateTo);
 
         if (isset($_REQUEST['page']) && isset($_REQUEST['elementsPerPage'])) {
             $validators = array(
@@ -141,39 +125,51 @@ class Invoice extends SecurityController
 
             $validate->assert($validators, $_REQUEST);
 
-            $invoiceList = InvoiceQuery::create(null, clone $searchCriteria)
-                                        ->offset(($_REQUEST['elementsPerPage'] * $_REQUEST['page']) - $_REQUEST['elementsPerPage'])
-                                        ->limit($_REQUEST['elementsPerPage'])
-                                        ->find();
+            $invoices = $invoiceQuery->findWithPagingAndSearch(($_REQUEST['elementsPerPage'] * $_REQUEST['page']) - $_REQUEST['elementsPerPage'],
+                $_REQUEST['elementsPerPage'],
+                $user->getEventUsers()->getFirst()->getEventid(),
+                $status,
+                $invoiceid,
+                $customerid,
+                $canceled,
+                $typeid,
+                $userid,
+                $dateFrom,
+                $dateTo);
+        } else {
+            $invoices = $invoiceQuery->findWithPagingAndSearch(null,
+                null,
+                $user->getEventUsers()->getFirst()->getEventid(),
+                $status,
+                $invoiceid,
+                $customerid,
+                $canceled,
+                $typeid,
+                $userid,
+                $dateFrom,
+                $dateTo);
         }
-
-        $criteriaData = InvoiceQuery::create(null, $searchCriteria)
-                                        ->joinWithInvoiceType();
-
-        $invoiceCount = InvoiceQuery::create(null, clone $criteriaData)->count();
-
-        $invoice = InvoiceQuery::create(null, $criteriaData)
-                                ->_if(!empty($invoiceList))
-                                    ->where(InvoiceTableMap::COL_INVOICEID . " IN ?", $invoiceList->getColumnValues())
-                                ->_endif()
-                                ->find();
 
         $this->withJson(
             ["Count" => $invoiceCount,
-            "Invoice" => $invoice->toArray()]
+            "Invoice" => $invoices->toArray()]
         );
     }
 
     public function post() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $eventContactQuery = $this->container->get(IEventContactQuery::class);
+        $eventBankinformationQuery = $this->container->get(IEventBankinformationQuery::class);
+
         $user = $auth->getCurrentUser();
-        $connection = Propel::getConnection();
+
+        $connection = $this->container->get(IConnectionInterface::class);
 
         try {
             $connection->beginTransaction();
 
-            $invoiceTemplate = new InvoiceModel();
+            $invoiceTemplate = $this->container->get(IInvoice::class);
 
             $jsonToModel = $this->container->get(IJsonToModel::class);
             $jsonToModel->convert($this->json, $invoiceTemplate);
@@ -181,16 +177,12 @@ class Invoice extends SecurityController
             // fix given ISO Date
             $invoiceTemplate->setMaturityDate(date("c", strtotime($this->json['MaturityDate'])));
 
-            $eventContact = EventContactQuery::create()
-                                                ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                                ->filterByDefault(true)
-                                                ->findOne();
+            $eventContact = $eventContactQuery->getDefaultForEventid($user->getEventUsers()->getFirst()->getEventid());
 
-            $eventBankinformation = EventBankinformationQuery::create()
-                                                                ->findOneByActive(true);
+            $eventBankinformation = $eventBankinformationQuery->getDefaultForEventid($user->getEventUsers()->getFirst()->getEventid());
 
-            $invoice = new InvoiceModel();
-            $invoice->setEventContactRelatedByEventContactid($eventContact);
+            $invoice = $this->container->get(IInvoice::class);
+            $invoice->setEventContact($eventContact);
             $invoice->setUser($user);
             $invoice->setEventBankinformation($eventBankinformation);
             $invoice->setDate(new DateTime());
@@ -207,7 +199,7 @@ class Invoice extends SecurityController
             $amount = 0;
 
             foreach ($invoiceTemplate->getInvoiceItems() as $invoiceItemTemplate) {
-                $invoiceItem = new InvoiceItem();
+                $invoiceItem = $this->container->get(IInvoiceItem::class);
                 $invoiceItem->setInvoice($invoice);
                 $invoiceItem->setAmount($invoiceItemTemplate->getAmount());
                 $invoiceItem->setPrice($invoiceItemTemplate->getPrice());
