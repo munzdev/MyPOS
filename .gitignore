@@ -7,3 +7,4 @@
 /src/API/Plugins/*
 !/src/API/Plugins/.keepme
 .php_cs.cache
+/.idea/
