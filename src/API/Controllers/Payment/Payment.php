@@ -5,6 +5,9 @@ namespace API\Controllers\Payment;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Payment\IPaymentCoupon;
+use API\Lib\Interfaces\Models\Payment\IPaymentRecieved;
+use API\Lib\Interfaces\Models\Payment\IPaymentRecievedQuery;
 use API\Lib\SecurityController;
 use API\Models\ORM\Payment\PaymentCoupon;
 use API\Models\ORM\Payment\PaymentRecieved;
@@ -27,19 +30,19 @@ class Payment extends SecurityController
 
     protected function post() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
         $user = $auth->getCurrentUser();
-        $connection = Propel::getConnection();
+        $connection = $this->container->get(IConnectionInterface::class);
 
         try {
             $connection->beginTransaction();
 
-            $paymentRecievedTemplate = new PaymentRecieved();
+            $paymentRecievedTemplate = $this->container->get(IPaymentRecieved::class);
 
             $jsonToModel = $this->container->get(IJsonToModel::class);
             $jsonToModel->convert($this->json, $paymentRecievedTemplate);
 
-            $paymentRecieved = new PaymentRecieved();
+            $paymentRecieved = $this->container->get(IPaymentRecieved::class);
             $paymentRecieved->setInvoiceid($paymentRecievedTemplate->getInvoiceid());
             $paymentRecieved->setPaymentTypeid($paymentRecievedTemplate->getPaymentTypeid());
             $paymentRecieved->setUser($user);
@@ -48,7 +51,7 @@ class Payment extends SecurityController
             $paymentRecieved->save();
 
             foreach ($paymentRecievedTemplate->getPaymentCoupons() as $paymentCouponTemplate) {
-                $paymentCoupon = new PaymentCoupon();
+                $paymentCoupon = $this->container->get(IPaymentCoupon::class);
                 $paymentCoupon->setPaymentRecieved($paymentRecieved);
                 $paymentCoupon->setCouponid($paymentCouponTemplate->getCouponid());
                 $paymentCoupon->setValueUsed($paymentCouponTemplate->getValueUsed());

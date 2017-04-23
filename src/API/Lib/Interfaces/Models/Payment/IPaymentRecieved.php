@@ -54,6 +54,11 @@ interface IPaymentRecieved extends IModel {
     function getAmount();
 
     /**
+     * @return IPaymentCouponCollection
+     */
+    function getPaymentCoupons() : IPaymentCouponCollection;
+
+    /**
      *
      * @param int $paymentRecievedid Description
      * @return IPaymentRecieved Description

@@ -4,6 +4,7 @@ namespace API\Models\Payment;
 
 use API\Lib\Container;
 use API\Lib\Interfaces\Models\Invoice\IInvoice;
+use API\Lib\Interfaces\Models\Payment\IPaymentCouponCollection;
 use API\Lib\Interfaces\Models\Payment\IPaymentRecieved;
 use API\Lib\Interfaces\Models\Payment\IPaymentType;
 use API\Lib\Interfaces\Models\User\IUser;
@@ -83,6 +84,16 @@ class PaymentRecieved extends Model implements IPaymentRecieved
     public function getUserid(): int
     {
         return $this->model->getUserid();
+    }
+
+    public function getPaymentCoupons() : IPaymentCouponCollection
+    {
+        $paymentCoupons = $this->model->getPaymentCoupons();
+
+        $paymentCouponCollection = $this->container->get(IPaymentCouponCollection::class);
+        $paymentCouponCollection->setCollection($paymentCoupons);
+
+        return $paymentCouponCollection;
     }
 
     public function setAmount($amount): IPaymentRecieved

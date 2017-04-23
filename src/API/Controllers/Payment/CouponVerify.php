@@ -5,6 +5,7 @@ namespace API\Controllers\Payment;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Payment\ICouponQuery;
 use API\Lib\SecurityController;
 use API\Models\ORM\Payment\CouponQuery;
 use API\Models\ORM\Payment\Map\CouponTableMap;
@@ -33,23 +34,16 @@ class CouponVerify extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $couponQuery = $this->container->get(ICouponQuery::class);
         $user = $auth->getCurrentUser();
 
-        $coupon = CouponQuery::create()
-                                ->leftJoinPaymentCoupon()
-                                ->withColumn(CouponTableMap::COL_VALUE . ' - SUM(IFNULL(' . PaymentCouponTableMap::COL_VALUE_USED . ', 0))', 'Value')
-                                ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                ->filterByCode($this->args['code'])
-                                ->groupBy(CouponTableMap::COL_COUPONID)
-                                ->find();
+        $coupon = $couponQuery->getValidCoupon($user->getEventUsers()->getFirst()->getEventid(), $this->args['code']);
 
-        if ($coupon->count() == 0
-            || $coupon->getFirst()->getVirtualColumn('Value') == 0
-        ) {
+        if (!$coupon) {
             return;
         }
 
-        $this->withJson($coupon->getFirst()->toArray());
+        $this->withJson($coupon->toArray());
     }
 }
