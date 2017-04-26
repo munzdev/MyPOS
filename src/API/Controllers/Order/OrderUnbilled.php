@@ -5,7 +5,16 @@ namespace API\Controllers\Order;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\Event\IEventBankinformationQuery;
+use API\Lib\Interfaces\Models\Event\IEventContact;
+use API\Lib\Interfaces\Models\Event\IEventContactQuery;
+use API\Lib\Interfaces\Models\Event\IEventTableQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Invoice\IInvoice;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetail;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailCollection;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
+use API\Lib\Interfaces\Models\Payment\ICouponCollection;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\ORM\Event\EventBankinformationQuery;
@@ -69,17 +78,27 @@ class OrderUnbilled extends SecurityController
         // if all order from table are returned, merge same order types
         if ($unbilledOrderDetails->count() > 0) {
             foreach ($unbilledOrderDetails as $orderDetail) {
+
                 $index = $this->buildIndexFromOrderDetail($orderDetail);
 
-                if ($orderDetail['AmountLeft'] == 0) {
+                $allreadyInInvoice = 0;
+
+                foreach ($orderDetail->getInvoiceItems() as $invoiceItem) {
+                    $allreadyInInvoice += $invoiceItem->getAmount();
+                }
+
+                $amountLeft = $orderDetail->getAmount() - $allreadyInInvoice;
+
+                if ($amountLeft == 0) {
                     continue;
                 }
 
                 if (!isset($unbilledOrderDetailsArray[$index])) {
-                    $unbilledOrderDetailsArray[$index] = $orderDetail;
+                    $unbilledOrderDetailsArray[$index] = $orderDetail->toArray();
+                    $unbilledOrderDetailsArray[$index]['AmountLeft'] = $amountLeft;
                 } else {
-                    $unbilledOrderDetailsArray[$index]['Amount'] += $orderDetail['Amount'];
-                    $unbilledOrderDetailsArray[$index]['AmountLeft'] += $orderDetail['AmountLeft'];
+                    $unbilledOrderDetailsArray[$index]['Amount'] += $orderDetail->getAmount();
+                    $unbilledOrderDetailsArray[$index]['AmountLeft'] += $amountLeft;
                 }
             }
 
@@ -96,44 +115,39 @@ class OrderUnbilled extends SecurityController
 
     public function post() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $jsonToModel = $this->container->get(IJsonToModel::class);
+        $eventContactQuery = $this->container->get(IEventContactQuery::class);
+        $eventBankinformationQuery = $this->container->get(IEventBankinformationQuery::class);
+        $config = $this->container->get('settings');
+
         $user = $auth->getCurrentUser();
-        $config = $this->app->getContainer()['settings'];
 
         $orderid = intval($this->args['id']);
         $all = filter_var($this->args['all'], FILTER_VALIDATE_BOOLEAN);
 
         $customerEventContact = null;
         if ($this->json['Customer'] !== null) {
-            $customerEventContact = new EventContact();
-            $customerEventContact->fromArray($this->json['Customer']);
+            $customerEventContact = $this->container->get(IEventContact::class);
+            $jsonToModel->convert($this->json['Customer'], $customerEventContact);
         }
 
-        $invoiceOrderDetails = new ObjectCollection();
-        $invoiceOrderDetails->setModel(OrderDetail::class);
+        $invoiceOrderDetails = $this->container->get(IOrderDetailCollection::class);
+        $usedCoupons = $this->container->get(ICouponCollection::class);
 
-        $usedCoupons = new ObjectCollection();
-        $usedCoupons->setModel(Coupon::class);
-
-        $jsonToModel = $this->container->get(IJsonToModel::class);
         $jsonToModel->convert($this->json['UnbilledOrderDetails'], $invoiceOrderDetails);
         $jsonToModel->convert($this->json['UsedCoupons'], $usedCoupons);
 
         $unbilledOrderDetails = $this->getUnbilledOrderDetails($orderid, $all);
 
-        $connection = Propel::getConnection();
+        $connection = $this->container->get(IConnectionInterface::class);
         $connection->beginTransaction();
 
         try {
-            $eventContact = EventContactQuery::create()
-                                                ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                                ->filterByDefault(true)
-                                                ->findOne();
+            $eventContact = $eventContactQuery->getDefaultForEventid($user->getEventUsers()->getFirst()->getEventid());
+            $eventBankinformation = $eventBankinformationQuery->getDefaultForEventid($user->getEventUsers()->getFirst()->getEventid());
 
-            $eventBankinformation = EventBankinformationQuery::create()
-                                                                ->findOneByActive(true);
-
-            $invoice = new Invoice();
+            $invoice = $this->container->get(IInvoice::class);
             $invoice->setInvoiceTypeid(INVOICE_TYPE_INVOICE);
             $invoice->setEventContactid($eventContact->getEventContactid());
             $invoice->setUserid($user->getUserid());
@@ -353,73 +367,37 @@ class OrderUnbilled extends SecurityController
         }
     }
 
-    private function buildIndexFromOrderDetail(&$orderDetail) : string
+    private function buildIndexFromOrderDetail(IOrderDetail $orderDetail) : string
     {
-        $index = $orderDetail['Menuid'] . '-' .
-                $orderDetail['SinglePrice'] . '-' .
-                $orderDetail['ExtraDetail'] . '-' .
-                $orderDetail['MenuSizeid'] . '-';
+        $index = $orderDetail->getMenuid() . '-' .
+                $orderDetail->getSinglePrice() . '-' .
+                $orderDetail->getExtraDetail() . '-' .
+                $orderDetail->getMenuSizeid() . '-';
 
-        foreach ($orderDetail['OrderDetailExtras'] as $key => $orderDetailExtra) {
-            if (empty($orderDetailExtra)) {
-                unset($orderDetail['OrderDetailExtras'][$key]);
-                continue;
-            }
-
-            $index .= $orderDetailExtra['MenuPossibleExtraid'];
+        foreach ($orderDetail->getOrderDetailExtras() as $orderDetailExtra) {
+            $index .= $orderDetailExtra->getMenuPossibleExtraid();
         }
 
         $index .= '-';
 
-        foreach ($orderDetail['OrderDetailMixedWiths'] as $key => $orderDetailMixedWith) {
-            if (empty($orderDetailMixedWith)) {
-                unset($orderDetail['OrderDetailMixedWiths'][$key]);
-                continue;
-            }
-            $index .= $orderDetailMixedWith['Menuid'];
+        foreach ($orderDetail->getOrderDetailMixedWiths() as $orderDetailMixedWith) {
+            $index .= $orderDetailMixedWith->getMenuid();
         }
-
-        $allreadyInInvoice = 0;
-
-        foreach ($orderDetail['InvoiceItems'] as $key => $invoiceItem) {
-            if (empty($invoiceItem)) {
-                unset($orderDetail['InvoiceItems'][$key]);
-                continue;
-            }
-            $allreadyInInvoice += $invoiceItem['Amount'];
-        }
-
-        $orderDetail['AmountLeft'] = $orderDetail['Amount'] - $allreadyInInvoice;
 
         return $index;
     }
 
-    private function getUnbilledOrderDetails($orderid, $all)
+    private function getUnbilledOrderDetails($orderid, $all) : IOrderDetailCollection
     {
+        $eventTableQuery = $this->container->get(IEventTableQuery::class);
+        $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
+
         $eventTable = null;
         if ($all) {
-            $eventTable = EventTableQuery::create()
-                                            ->useOrderQuery()
-                                               ->filterByOrderid($orderid)
-                                            ->endUse()
-                                            ->findOne();
+            $eventTable = $eventTableQuery->findByOrderid($orderid);
         }
 
-        $unbilledOrderDetails = OrderDetailQuery::create()
-                                                    ->_if($all)
-                                                        ->useOrderQuery()
-                                                            ->filterByEventTable($eventTable)
-                                                        ->endUse()
-                                                    ->_else()
-                                                        ->filterByOrderid($orderid)
-                                                    ->_endIf()
-                                                    ->leftJoinWithMenuSize()
-                                                    ->leftJoinWithOrderDetailExtra()
-                                                    ->leftJoinWithOrderDetailMixedWith()
-                                                    ->leftJoinWithInvoiceItem()
-                                                    ->filterByInvoiceFinished(null)
-                                                    ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                                    ->find();
+        $unbilledOrderDetails = $orderDetailQuery->findUnbilled($orderid, $eventTable);
 
         return $unbilledOrderDetails;
     }

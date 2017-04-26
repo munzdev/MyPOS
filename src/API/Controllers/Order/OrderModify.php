@@ -6,6 +6,10 @@ use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Ordering\IOrder;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetail;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
+use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\ORM\Ordering\Base\OrderDetailQuery;
@@ -49,17 +53,10 @@ class OrderModify extends SecurityController
 
     protected function get() : void
     {
-        $order = OrderQuery::create()
-                                ->joinWithOrderDetail()
-                                ->useOrderDetailQuery()
-                                    ->leftJoinWithMenuSize()
-                                    ->leftJoinWithOrderDetailExtra()
-                                    ->leftJoinWithOrderDetailMixedWith()
-                                ->endUse()
-                                ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                ->findByOrderid($this->args['id']);
+        $orderQuery = $this->container->get(IOrderQuery::class);
+        $order = $orderQuery->getWithModifyDetails($this->args['id']);
 
-        $this->withJson($order->getFirst());
+        $this->withJson($order);
     }
 
     public function patch() : void
@@ -79,21 +76,15 @@ class OrderModify extends SecurityController
 
     public function put() : void
     {
-        $connection = Propel::getConnection();
+        $connection = $this->container->get(IConnectionInterface::class);
+        $orderQuery = $this->container->get(IOrderQuery::class);
 
         try {
             $connection->beginTransaction();
 
-            $order = OrderQuery::create()
-                                ->joinWithOrderDetail()
-                                ->useOrderDetailQuery()
-                                    ->leftJoinWithOrderDetailExtra()
-                                    ->leftJoinWithOrderDetailMixedWith()
-                                ->endUse()
-                                ->findByOrderid($this->args['id'])
-                                ->getFirst();
+            $order = $orderQuery->getWithModifyDetails($this->args['id']);
 
-            $orderTemplate = new Order();
+            $orderTemplate = $this->container->get(IOrder::class);
 
             $jsonToModel = $this->container->get(IJsonToModel::class);
             $jsonToModel->convert($this->json, $orderTemplate);
@@ -116,9 +107,20 @@ class OrderModify extends SecurityController
                         continue;
                     }
 
-                    $orderDetail = new OrderDetail();
-                    $orderDetail->fromArray($orderDetailTemplate->toArray());
+                    $orderDetail = $this->container->get(IOrderDetail::class);
+                    $orderDetail->setAmount($orderDetailTemplate->getAmount());
+                    $orderDetail->setExtraDetail($orderDetailTemplate->getExtraDetail());
+                    $orderDetail->setMenuid($orderDetailTemplate->getMenuid());
+                    $orderDetail->setMenuSizeid($orderDetailTemplate->getMenuSizeid());
+                    $orderDetail->setOrderid($orderDetailTemplate->getOrderid());
+                    $orderDetail->setSinglePrice($orderDetailTemplate->getSinglePrice());
                     $orderDetail->setOrder($order);
+
+                    if ($orderDetail->getMenuid()) {
+                        $orderDetail->setVerified(true);
+                        $orderDetail->setAvailabilityid(ORDER_AVAILABILITY_AVAILABLE);
+                    }
+
                     $orderDetail->save();
                 }
 
@@ -127,7 +129,7 @@ class OrderModify extends SecurityController
 
                     if (!$extraOrderDetailid) {
                         $orderDetailExtra = new OrderDetailExtra();
-                        $orderDetailExtra->fromArray($orderDetailExtraTemplate->toArray());
+                        $orderDetailExtra->setMenuPossibleExtraid($orderDetailExtraTemplate->getMenuPossibleExtraid());
                         $orderDetailExtra->setOrderDetail($orderDetail);
                         $orderDetailExtra->save();
                     }
@@ -138,7 +140,7 @@ class OrderModify extends SecurityController
 
                     if (!$extraOrderDetailid) {
                         $orderDetailMixedWith = new OrderDetailMixedWith();
-                        $orderDetailMixedWith->fromArray($orderDetailMixedWithTemplate->toArray());
+                        $orderDetailMixedWith->setMenuid($orderDetailMixedWithTemplate->getMenuid());
                         $orderDetailMixedWith->setOrderDetail($orderDetail);
                         $orderDetailMixedWith->save();
                     }
@@ -158,14 +160,17 @@ class OrderModify extends SecurityController
 
     private function cancelOrder($orderid)
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $orderQuery = $this->container->get(IOrderQuery::class);
+        $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
+        $connection = $this->container->get(IConnectionInterface::class);
+
         $user = $auth->getCurrentUser();
-        $connection = Propel::getConnection();
 
         try {
             $connection->beginTransaction();
 
-            $order = OrderQuery::create()->findPk($orderid);
+            $order = $orderQuery->findPk($orderid);
 
             if ($order->getCancellation()) {
                 return;
@@ -175,11 +180,7 @@ class OrderModify extends SecurityController
             $order->setCancellationCreatedByUserid($user->getUserid());
             $order->save();
 
-            $orderDetails = OrderDetailQuery::create()
-                                            ->filterByOrderid($orderid)
-                                            ->filterByDistributionFinished(null)
-                                            ->leftJoinWithOrderInProgressRecieved()
-                                            ->find();
+            $orderDetails = $orderDetailQuery->getUnrecievedOfOrder($orderid);
 
             foreach ($orderDetails as $orderDetail) {
                 $amountRecieved = 0;
@@ -194,7 +195,7 @@ class OrderModify extends SecurityController
 
             StatusCheck::verifyOrder($orderid);
 
-            $modifiedOrder = OrderQuery::create()->findPk($orderid);
+            $modifiedOrder = $orderQuery->findPk($orderid);
 
             $connection->commit();
 
@@ -207,18 +208,16 @@ class OrderModify extends SecurityController
 
     private function setPriority($orderid)
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $orderQuery = $this->container->get(IOrderQuery::class);
+        $connection = $this->container->get(IConnectionInterface::class);
+
         $user = $auth->getCurrentUser();
-        $connection = Propel::getConnection();
 
         try {
             $connection->beginTransaction();
 
-            $order = OrderQuery::create()
-                                ->setFirstPriority(
-                                    $orderid,
-                                    $user->getEventUsers()->getFirst()->getEventid()
-                                );
+            $order = $orderQuery->setFirstPriority($user->getEventUsers()->getFirst()->getEventid(), $orderid);
 
             $connection->commit();
 
@@ -231,21 +230,22 @@ class OrderModify extends SecurityController
 
     private function setPriceModifications($orderDetails)
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $connection = $this->container->get(IConnectionInterface::class);
+        $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
+
         $user = $auth->getCurrentUser();
-        $connection = Propel::getConnection();
 
         try {
             $connection->beginTransaction();
 
             foreach ($orderDetails as $orderDetail) {
-                $orderDetailTemplate = new OrderDetail();
+                $orderDetailTemplate = $this->container->get(IOrderDetail::class);
 
                 $jsonToModel = $this->container->get(IJsonToModel::class);
                 $jsonToModel->convert($orderDetail, $orderDetailTemplate);
 
-                $orderDetail = OrderDetailQuery::create()
-                                                ->findPk($orderDetailTemplate->getOrderDetailid());
+                $orderDetail = $orderDetailQuery->findPk($orderDetailTemplate->getOrderDetailid());
 
                 $orderDetail->setSinglePrice($orderDetailTemplate->getSinglePrice())
                     ->setSinglePriceModifiedByUserid($user->getUserid())

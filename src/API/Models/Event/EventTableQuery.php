@@ -33,4 +33,36 @@ class EventTableQuery extends Query implements IEventTableQuery
 
         return $eventTableModel;
     }
+
+    public function getByName(int $eventid, string $name) : ?IEventTable
+    {
+        $eventTable = EventTableQueryORM::create()
+            ->filterByEventid($eventid)
+            ->filterByName($name)
+            ->findOne();
+
+        if($eventTable) {
+            return null;
+        }
+
+        $eventTableModel = $this->container->get(IEventTable::class);
+        $eventTableModel->setModel($eventTable);
+
+        return $eventTableModel;
+
+    }
+
+    public function findByOrderid(int $orderid) : IEventTableCollection
+    {
+        $eventTables = EventTableQueryORM::create()
+            ->useOrderQuery()
+                ->filterByOrderid($orderid)
+            ->endUse()
+            ->findOne();
+
+        $eventTableCollection = $this->container->get(IEventTableCollection::class);
+        $eventTableCollection->setCollection($eventTables);
+
+        return $eventTableCollection;
+    }
 }

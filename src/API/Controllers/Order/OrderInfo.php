@@ -4,6 +4,7 @@ namespace API\Controllers\Order;
 
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Lib\SecurityController;
 use API\Models\ORM\Invoice\Map\InvoiceItemTableMap;
 use API\Models\ORM\OIP\Map\OrderInProgressRecievedTableMap;
@@ -38,49 +39,20 @@ class OrderInfo extends SecurityController
 
     protected function get() : void
     {
-        $orderInfo = OrderQuery::create()
-                        ->useOrderDetailQuery()
-                            ->useInvoiceItemQuery(null, ModelCriteria::LEFT_JOIN)
-                                ->useInvoiceQuery(null, ModelCriteria::LEFT_JOIN)
-                                    ->filterByCanceled(null)
-                                ->endUse()
-                            ->endUse()
-                        ->endUse()
-                        ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " * " . OrderDetailTableMap::COL_SINGLE_PRICE . ")", "price")
-                        ->withColumn("COUNT(" . OrderDetailTableMap::COL_ORDER_DETAILID . ") - COUNT(" . InvoiceItemTableMap::COL_INVOICE_ITEMID . ")", "open")
-                        ->withColumn("SUM(" . InvoiceItemTableMap::COL_AMOUNT . " * " . InvoiceItemTableMap::COL_PRICE . ")", "amountBilled")
-                        ->groupByOrderid()
-                        ->findByOrderid($this->args['id'])
-                        ->getFirst();
+        $orderQuery = $validate = $this->container->get(IOrderQuery::class);;
 
-        $orderDetailInfo = OrderQuery::create()
-                                ->joinWithEventTable()
-                                ->joinWithOrderDetail()
-                                ->joinWithUser()
-                                ->leftJoinWithOrderInProgress()
-                                ->useOrderDetailQuery()
-                                    ->useOrderInProgressRecievedQuery(null, Criteria::LEFT_JOIN)
-                                        ->leftJoinWithDistributionGivingOut()
-                                    ->endUse()
-                                    ->leftJoinWithMenuSize()
-                                    ->leftJoinWithOrderDetailExtra()
-                                    ->leftJoinWithOrderDetailMixedWith()
-                                    ->with(OrderInProgressRecievedTableMap::getTableMap()->getPhpName())
-                                ->endUse()
-                                ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                                ->findByOrderid($this->args['id'])
-                                ->getFirst();
+        $orderDetails = $orderQuery->getDetails($this->args['id']);
+        $orderDetailInfo = $orderQuery->getOrderDetails($this->args['id']);
 
-        $orderDetailInfo['price'] = $orderInfo->getVirtualColumn('price');
-        $orderDetailInfo['open'] = $orderInfo->getVirtualColumn('open');
-        $orderDetailInfo['amountBilled'] = $orderInfo->getVirtualColumn('amountBilled');
+        $orderDetailInfoArray = $orderDetailInfo->toArray();
+
+        $orderDetailInfoArray['price'] = $orderDetails->price;
+        $orderDetailInfoArray['open'] = $orderDetails->open;
+        $orderDetailInfoArray['amountBilled'] = $orderDetails->amountBilled;
 
         // Dont send secure critical datas
-        $orderDetailInfo['User']['Password'] = null;
-        $orderDetailInfo['User']['AutologinHash'] = null;
-        $orderDetailInfo['User']['IsAdmin'] = null;
-        $orderDetailInfo['User']['CallRequest'] = null;
+        $orderDetailInfoArray['User'] = $this->cleanupUserData($orderDetailInfoArray['User']);
 
-        $this->withJson($orderDetailInfo);
+        $this->withJson($orderDetailInfoArray);
     }
 }

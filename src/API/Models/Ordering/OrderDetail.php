@@ -3,10 +3,12 @@
 namespace API\Models\Ordering;
 
 use API\Lib\Container;
+use API\Lib\Interfaces\Models\Invoice\IInvoiceItemCollection;
 use API\Lib\Interfaces\Models\Menu\IAvailability;
 use API\Lib\Interfaces\Models\Menu\IMenu;
 use API\Lib\Interfaces\Models\Menu\IMenuGroup;
 use API\Lib\Interfaces\Models\Menu\IMenuSize;
+use API\Lib\Interfaces\Models\OIP\IOrderInProgressRecievedCollection;
 use API\Lib\Interfaces\Models\Ordering\IOrder;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetail;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailExtraCollection;
@@ -178,6 +180,26 @@ class OrderDetail extends Model implements IOrderDetail
         $orderDetailMixedWithCollection->setCollection($orderDetailMixedWiths);
 
         return $orderDetailMixedWithCollection;
+    }
+
+    public function getOrderInProgressRecieveds() : IOrderInProgressRecievedCollection
+    {
+        $orderInProgressRecieveds = $this->model->getOrderInProgressRecieveds();
+
+        $orderInProgressRecievedCollection = $this->container->get(IOrderInProgressRecievedCollection::class);
+        $orderInProgressRecievedCollection->setCollection($orderInProgressRecieveds);
+
+        return $orderInProgressRecievedCollection;
+    }
+
+    public function getInvoiceItems() : IInvoiceItemCollection
+    {
+        $invoiceItems = $this->model->getInvoiceItems();
+
+        $invoiceItemCollection = $this->container->get(IInvoiceItemCollection::class);
+        $invoiceItemCollection->setCollection($invoiceItems);
+
+        return $invoiceItemCollection;
     }
 
     public function setAmount($amount): IOrderDetail

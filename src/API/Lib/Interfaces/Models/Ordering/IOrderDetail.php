@@ -3,10 +3,12 @@
 namespace API\Lib\Interfaces\Models\Ordering;
 
 use API\Lib\Interfaces\Models\IModel;
+use API\Lib\Interfaces\Models\Invoice\IInvoiceItemCollection;
 use API\Lib\Interfaces\Models\Menu\IAvailability;
 use API\Lib\Interfaces\Models\Menu\IMenu;
 use API\Lib\Interfaces\Models\Menu\IMenuGroup;
 use API\Lib\Interfaces\Models\Menu\IMenuSize;
+use API\Lib\Interfaces\Models\OIP\IOrderInProgressRecievedCollection;
 use API\Lib\Interfaces\Models\User\IUser;
 use DateTime;
 
@@ -122,6 +124,16 @@ interface IOrderDetail extends IModel {
      * @return IOrderDetailMixedWithCollection
      */
     function getOrderDetailMixedWiths() : IOrderDetailMixedWithCollection;
+
+    /**
+     * @return IOrderInProgressRecievedCollection
+     */
+    function getOrderInProgressRecieveds() : IOrderInProgressRecievedCollection;
+
+    /**
+     * @return IInvoiceItemCollection
+     */
+    function getInvoiceItems() : IInvoiceItemCollection;
 
     /**
      * @param int $orderDetailid Description

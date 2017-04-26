@@ -5,7 +5,14 @@ namespace API\Controllers\Order;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\Models\Event\IEventTable;
+use API\Lib\Interfaces\Models\Event\IEventTableQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\Ordering\IOrder;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetail;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailExtra;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailMixedWith;
+use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Lib\SecurityController;
 use API\Lib\StatusCheck;
 use API\Models\ORM\Event\EventTableQuery;
@@ -42,7 +49,8 @@ class Order extends SecurityController
 
     protected function get() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $orderQuery = $this->container->get(IOrderQuery::class);
         $user = $auth->getCurrentUser();
 
         $status = 'open';
@@ -90,34 +98,13 @@ class Order extends SecurityController
             }
         }
 
-        $searchCriteria = OrderQuery::create()
-                                        ->useEventTableQuery()
-                                            ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                            ->_if($tablenr)
-                                                ->filterByName($tablenr)
-                                            ->_endif()
-                                        ->endUse()
-                                        ->_if($status == 'open')
-                                            ->filterByDistributionFinished(null)
-                                            ->_or()
-                                            ->filterByInvoiceFinished(null)
-                                        ->_elseif($status == 'completed')
-                                            ->filterByDistributionFinished(null, Criteria::NOT_EQUAL)
-                                            ->_and()
-                                            ->filterByInvoiceFinished(null, Criteria::NOT_EQUAL)
-                                        ->_endif()
-                                        ->_if($orderid)
-                                            ->filterByOrderid($orderid)
-                                        ->_endif()
-                                        ->_if($userid != '*')
-                                            ->filterByUserid($userid)
-                                        ->_endif()
-                                        ->_if($dateFrom)
-                                            ->filterByOrdertime(array('min' => DateTime::createFromFormat('H:i', $dateFrom)))
-                                        ->_endif()
-                                        ->_if($dateTo)
-                                            ->filterByOrdertime(array('max' => DateTime::createFromFormat('H:i', $dateTo)))
-                                        ->_endif();
+        $orderCount = $orderQuery->getOrderCountBySearch($user->getEventUsers()->getFirst()->getEventid(),
+            $status,
+            $orderid,
+            $tablenr,
+            $userid,
+            $dateFrom,
+            $dateTo);
 
         if (isset($_REQUEST['page']) && isset($_REQUEST['elementsPerPage'])) {
             $validators = array(
@@ -127,65 +114,68 @@ class Order extends SecurityController
 
             $validate->assert($validators, $_REQUEST);
 
-            $ordersList = OrderQuery::create(null, clone $searchCriteria)
-                                        ->offset(($_REQUEST['elementsPerPage'] * $_REQUEST['page']) - $_REQUEST['elementsPerPage'])
-                                        ->limit($_REQUEST['elementsPerPage'])
-                                        ->find();
+            $orders = $orderQuery->findWithPagingAndSearch(($_REQUEST['elementsPerPage'] * $_REQUEST['page']) - $_REQUEST['elementsPerPage'],
+                $_REQUEST['elementsPerPage'],
+                $user->getEventUsers()->getFirst()->getEventid(),
+                $status,
+                $orderid,
+                $tablenr,
+                $userid,
+                $dateFrom,
+                $dateTo);
+
+        } else {
+            $orders = $orderQuery->findWithPagingAndSearch(null,
+                null,
+                $user->getEventUsers()->getFirst()->getEventid(),
+                $status,
+                $orderid,
+                $tablenr,
+                $userid,
+                $dateFrom,
+                $dateTo);
         }
-
-        $criteriaData = OrderQuery::create(null, $searchCriteria)
-                                    ->joinOrderDetail()
-                                    ->leftJoinWithOrderInProgress()
-                                    ->with(EventTableTableMap::getTableMap()->getPhpName())
-                                    ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " * " . OrderDetailTableMap::COL_SINGLE_PRICE . ")", "price")
-                                    ->groupByOrderid()
-                                    ->orderByPriority();
-
-        $orderCount = OrderQuery::create(null, clone $criteriaData)->count();
-
-        $order = OrderQuery::create(null, $criteriaData)
-                            ->_if(!empty($ordersList))
-                                ->where(OrderTableMap::COL_ORDERID . " IN ?", $ordersList->getColumnValues())
-                            ->_endif()
-                            ->setFormatter(ModelCriteria::FORMAT_ARRAY)
-                            ->find();
 
         $this->withJson(
             ["Count" => $orderCount,
-            "Order" => $order->toArray()]
+            "Order" => $orders->toArray()]
         );
     }
 
     public function post() : void
     {
-        $auth = $this->app->getContainer()->get(IAuth::class);
+        $auth = $this->container->get(IAuth::class);
+        $eventTableQuery = $this->container->get(IEventTableQuery::class);
+        $orderQuery = $this->container->get(IOrderQuery::class);
+        $connection = $this->container->get(IConnectionInterface::class);
+
         $user = $auth->getCurrentUser();
-        $connection = Propel::getConnection();
+        $eventid = $user->getEventUsers()->getFirst()->getEventid();
+        $name = $this->json['EventTable']['Name'];
 
         try {
             $connection->beginTransaction();
 
-            $eventTable = EventTableQuery::create()
-                                            ->filterByEventid($user->getEventUsers()->getFirst()->getEventid())
-                                            ->filterByName($this->json['EventTable']['Name'])
-                                            ->findOneOrCreate();
+            $eventTable = $eventTableQuery->getByName($eventid, $name);
 
-            $orderTemplate = new ModelsOrder();
+            if(!$eventTable) {
+                $eventTable = $eventTableQuery = $this->container->get(IEventTable::class);
+                $eventTable->setEventid($eventid);
+                $eventTable->setName($name);
+                $eventTable->save();
+            }
+
+            $orderTemplate = $this->container->get(IOrder::class);
 
             $jsonToModel = $this->container->get(IJsonToModel::class);
             $jsonToModel->convert($this->json, $orderTemplate);
 
-            $orderDetailPriority = OrderQuery::create()
-                                                    ->useEventTableQuery()
-                                                        ->filterByEventid($eventTable->getEventid())
-                                                    ->endUse()
-                                                    ->addAsColumn('priority', 'MAX(' . OrderTableMap::COL_PRIORITY . ') + 1')
-                                                    ->findOne();
+            $priority = $orderQuery->getMaxPriority($eventid);
 
-            $order = new ModelsOrder();
+            $order = $this->container->get(IOrder::class);
             $order->setEventTable($eventTable);
             $order->setUser($user);
-            $order->setPriority($orderDetailPriority->getVirtualColumn('priority'));
+            $order->setPriority($priority + 1);
             $order->setOrdertime(new DateTime());
             $order->save();
 
@@ -194,8 +184,13 @@ class Order extends SecurityController
                     continue;
                 }
 
-                $orderDetail = new OrderDetail();
-                $orderDetail->fromArray($orderDetailTemplate->toArray());
+                $orderDetail = $this->container->get(IOrderDetail::class);
+                $orderDetail->setAmount($orderDetailTemplate->getAmount());
+                $orderDetail->setExtraDetail($orderDetailTemplate->getExtraDetail());
+                $orderDetail->setMenuid($orderDetailTemplate->getMenuid());
+                $orderDetail->setMenuSizeid($orderDetailTemplate->getMenuSizeid());
+                $orderDetail->setOrderid($orderDetailTemplate->getOrderid());
+                $orderDetail->setSinglePrice($orderDetailTemplate->getSinglePrice());
                 $orderDetail->setOrder($order);
 
                 if ($orderDetail->getMenuid()) {
@@ -206,15 +201,15 @@ class Order extends SecurityController
                 $orderDetail->save();
 
                 foreach ($orderDetailTemplate->getOrderDetailExtras() as $orderDetailExtraTemplate) {
-                    $orderDetailExtra = new OrderDetailExtra();
-                    $orderDetailExtra->fromArray($orderDetailExtraTemplate->toArray());
+                    $orderDetailExtra = $this->container->get(IOrderDetailExtra::class);
+                    $orderDetailExtra->setMenuPossibleExtraid($orderDetailExtraTemplate->getMenuPossibleExtraid());
                     $orderDetailExtra->setOrderDetail($orderDetail);
                     $orderDetailExtra->save();
                 }
 
                 foreach ($orderDetailTemplate->getOrderDetailMixedWiths() as $orderDetailMixedWithTemplate) {
-                    $orderDetailMixedWith = new OrderDetailMixedWith();
-                    $orderDetailMixedWith->fromArray($orderDetailMixedWithTemplate->toArray());
+                    $orderDetailMixedWith = $this->container->get(IOrderDetailMixedWith::class);
+                    $orderDetailMixedWith->setMenuid($orderDetailMixedWithTemplate->getMenuid());
                     $orderDetailMixedWith->setOrderDetail($orderDetail);
                     $orderDetailMixedWith->save();
                 }

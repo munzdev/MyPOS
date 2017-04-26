@@ -11,4 +11,6 @@ interface IOrderDetailQuery extends IQuery {
     function setAvailabilityidByOrderDetailIds(int $availabilityid, array $ids) : int;
     function getVerifiedDistributionUnfinishedWithSpecialExtras(): IOrderDetailCollection;
     public function getByEventid(int $orderDetailid, int $eventid): ?IOrderDetail;
+    public function getUnrecievedOfOrder(int $orderid) : IOrderDetailCollection;
+    public function findUnbilled($orderid, $eventTable = null) : IOrderDetailCollection;
 }

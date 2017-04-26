@@ -5,6 +5,10 @@ namespace API\Models\Ordering;
 use API\Lib\Interfaces\Models\Ordering\IOrder;
 use API\Lib\Interfaces\Models\Ordering\IOrderCollection;
 use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
+use API\Models\ORM\Event\Map\EventTableTableMap;
+use API\Models\ORM\OIP\Map\OrderInProgressRecievedTableMap;
+use API\Models\ORM\Ordering\Map\OrderDetailTableMap;
+use API\Models\ORM\Ordering\Map\OrderTableMap;
 use API\Models\ORM\Ordering\OrderQuery as OrderQueryORM;
 use API\Models\Query;
 use DateTime;
@@ -43,15 +47,15 @@ class OrderQuery extends Query implements IOrderQuery
         $order = OrderQueryORM::create()
                     ->joinWithOrderDetail()
                     ->useOrderDetailQuery()
-                         ->leftJoinWithMenu()
-                         ->leftJoinWithOrderDetailExtra()
-                         ->useOrderDetailExtraQuery(null, Criteria::LEFT_JOIN)
-                             ->leftJoinWithMenuPossibleExtra()
-                             ->useMenuPossibleExtraQuery(null, Criteria::LEFT_JOIN)
-                                 ->leftJoinWithMenuExtra()
-                             ->endUse()
-                         ->endUse()
-                         ->leftJoinWithOrderDetailMixedWith()
+                        ->leftJoinWithMenu()
+                        ->leftJoinWithOrderDetailExtra()
+                        ->useOrderDetailExtraQuery(null, Criteria::LEFT_JOIN)
+                            ->leftJoinWithMenuPossibleExtra()
+                            ->useMenuPossibleExtraQuery(null, Criteria::LEFT_JOIN)
+                                ->leftJoinWithMenuExtra()
+                            ->endUse()
+                        ->endUse()
+                        ->leftJoinWithOrderDetailMixedWith()
                     ->endUse()
                     ->findPk($orderid);
 
@@ -177,7 +181,7 @@ class OrderQuery extends Query implements IOrderQuery
             ->find()
             ->getFirst();
 
-        if(!$order) {
+        if (!$order) {
             return null;
         }
 
@@ -185,5 +189,187 @@ class OrderQuery extends Query implements IOrderQuery
         $orderModel->setModel($order);
 
         return $orderModel;
+    }
+
+
+    public function findWithPagingAndSearch($offset, $limit, $eventid, $status, $orderid, $tablenr, $userid, $dateFrom, $dateTo) : IOrderCollection
+    {
+        $searchCriteria = $this->getSearchCriteria($eventid, $status, $orderid, $tablenr, $userid, $dateFrom, $dateTo);
+
+        if($offset !== null && $limit !== null) {
+            $ordersList = OrderQueryORM::create(null, clone $searchCriteria)
+                            ->offset($offset)
+                            ->limit($limit)
+                            ->find();
+        }
+
+        $criteriaData = $this->extendSearchCriteriaWithData($searchCriteria);
+
+        $orders = $criteriaData
+            ->_if(!empty($ordersList))
+                ->where(OrderTableMap::COL_ORDERID . " IN ?", $ordersList->getColumnValues())
+            ->_endif()
+            //->setFormatter(ModelCriteria::FORMAT_ARRAY)
+            ->find();
+
+        $orderCollection = $this->container->get(IOrderCollection::class);
+        $orderCollection->setCollection($orders);
+
+        return $orderCollection;
+    }
+
+    public function getOrderCountBySearch($eventid, $status, $orderid, $tablenr, $userid, $dateFrom, $dateTo) : int
+    {
+        $searchCriteria = $this->getSearchCriteria($eventid, $status, $orderid, $tablenr, $userid, $dateFrom, $dateTo);
+        $criteriaData = $this->extendSearchCriteriaWithData($searchCriteria);
+
+        return $criteriaData->count();
+    }
+
+    public function getMaxPriority(int $eventid) : int
+    {
+        $orderDetailPriority = OrderQueryORM::create()
+            ->useEventTableQuery()
+            ->filterByEventid($eventid)
+            ->endUse()
+            ->addAsColumn('priority', 'MAX(' . OrderTableMap::COL_PRIORITY . ')')
+            ->findOne();
+
+        return $orderDetailPriority->getVirtualColumn('priority');
+    }
+
+    public function getDetails($orderid) : \stdClass
+    {
+        $orderInfo = OrderQueryORM::create()
+            ->useOrderDetailQuery()
+                ->useInvoiceItemQuery(null, ModelCriteria::LEFT_JOIN)
+                    ->useInvoiceQuery(null, ModelCriteria::LEFT_JOIN)
+                        ->filterByCanceled(null)
+                    ->endUse()
+                ->endUse()
+            ->endUse()
+            ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " * " . OrderDetailTableMap::COL_SINGLE_PRICE . ")", "price")
+            ->withColumn("COUNT(" . OrderDetailTableMap::COL_ORDER_DETAILID . ") - COUNT(" . InvoiceItemTableMap::COL_INVOICE_ITEMID . ")", "open")
+            ->withColumn("SUM(" . InvoiceItemTableMap::COL_AMOUNT . " * " . InvoiceItemTableMap::COL_PRICE . ")", "amountBilled")
+            ->groupByOrderid()
+            ->findByOrderid($orderid)
+            ->getFirst();
+
+        $return = new \stdClass();
+        $return->price = $orderInfo->getVirtualColumn('price');
+        $return->open = $orderInfo->getVirtualColumn('open');
+        $return->amountBilled = $orderInfo->getVirtualColumn('amountBilled');
+
+        return $return;
+    }
+
+    public function getOrderDetails($orderid) : ?IOrder
+    {
+        $order = OrderQueryORM::create()
+                    ->joinWithEventTable()
+                    ->joinWithOrderDetail()
+                    ->joinWithUser()
+                    ->leftJoinWithOrderInProgress()
+                    ->useOrderDetailQuery()
+                        ->useOrderInProgressRecievedQuery(null, Criteria::LEFT_JOIN)
+                            ->leftJoinWithDistributionGivingOut()
+                        ->endUse()
+                        ->leftJoinWithMenuSize()
+                        ->leftJoinWithOrderDetailExtra()
+                        ->leftJoinWithOrderDetailMixedWith()
+                        ->with(OrderInProgressRecievedTableMap::getTableMap()->getPhpName())
+                    ->endUse()
+                    //->setFormatter(ModelCriteria::FORMAT_ARRAY)
+                    ->findByOrderid($orderid)
+                    ->getFirst();
+
+        if (!$order) {
+            return null;
+        }
+
+        $orderModel = $this->container->get(IOrder::class);
+        $orderModel->setModel($order);
+
+        return $orderModel;
+    }
+
+    public function getWithModifyDetails(int $orderid) : ?IOrder
+    {
+        $order = OrderQueryORM::create()
+                    ->joinWithOrderDetail()
+                    ->useOrderDetailQuery()
+                        ->leftJoinWithMenuSize()
+                        ->leftJoinWithOrderDetailExtra()
+                        ->leftJoinWithOrderDetailMixedWith()
+                    ->endUse()
+                    //->setFormatter(ModelCriteria::FORMAT_ARRAY)
+                    ->findByOrderid($orderid)
+                    ->getFirst();
+
+        if (!$order) {
+            return null;
+        }
+
+        $orderModel = $this->container->get(IOrder::class);
+        $orderModel->setModel($order);
+
+        return $orderModel;
+    }
+
+    public function setFirstPriority(int $eventid, int $orderid) : IOrder
+    {
+        $order = OrderQueryORM::create()
+            ->setFirstPriority(
+                $orderid,
+                $eventid
+            );
+
+        $orderModel = $this->container->get(IOrder::class);
+        $orderModel->setModel($order);
+
+        return $orderModel;
+    }
+
+    private function getSearchCriteria($eventid, $status, $orderid, $tablenr, $userid, $dateFrom, $dateTo) : OrderQueryORM
+    {
+        return OrderQueryORM::create()
+            ->useEventTableQuery()
+                ->filterByEventid($eventid)
+                ->_if($tablenr)
+                    ->filterByName($tablenr)
+                ->_endif()
+            ->endUse()
+            ->_if($status == 'open')
+                ->filterByDistributionFinished(null)
+                ->_or()
+                ->filterByInvoiceFinished(null)
+            ->_elseif($status == 'completed')
+                ->filterByDistributionFinished(null, Criteria::NOT_EQUAL)
+                ->_and()
+                ->filterByInvoiceFinished(null, Criteria::NOT_EQUAL)
+            ->_endif()
+            ->_if($orderid)
+                ->filterByOrderid($orderid)
+            ->_endif()
+            ->_if($userid != '*')
+                ->filterByUserid($userid)
+            ->_endif()
+            ->_if($dateFrom)
+                ->filterByOrdertime(array('min' => DateTime::createFromFormat('H:i', $dateFrom)))
+            ->_endif()
+            ->_if($dateTo)
+                ->filterByOrdertime(array('max' => DateTime::createFromFormat('H:i', $dateTo)))
+            ->_endif();
+    }
+
+    private function extendSearchCriteriaWithData(OrderQueryORM $searchCriteria) : OrderQueryORM
+    {
+        return $searchCriteria
+            ->joinOrderDetail()
+            ->leftJoinWithOrderInProgress()
+            ->with(EventTableTableMap::getTableMap()->getPhpName())
+            ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " * " . OrderDetailTableMap::COL_SINGLE_PRICE . ")", "price")
+            ->groupByOrderid()
+            ->orderByPriority();
     }
 }

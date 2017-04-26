@@ -8,6 +8,7 @@ use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
 use API\Models\ORM\Ordering\OrderDetailQuery as OrderDetailQueryORM;
 use API\Models\Query;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\ActiveQuery\ModelCriteria;
 
 class OrderDetailQuery extends Query implements IOrderDetailQuery
 {
@@ -114,5 +115,43 @@ class OrderDetailQuery extends Query implements IOrderDetailQuery
         $orderDetailModel->setModel($orderDetail);
 
         return $orderDetailModel;
+    }
+
+    public function getUnrecievedOfOrder(int $orderid) : IOrderDetailCollection
+    {
+        $orderDetails = OrderDetailQueryORM::create()
+            ->filterByOrderid($orderid)
+            ->filterByDistributionFinished(null)
+            ->leftJoinWithOrderInProgressRecieved()
+            ->find();
+
+        $orderDetailCollection = $this->container->get(IOrderDetailCollection::class);
+        $orderDetailCollection->setCollection($orderDetails);
+
+        return $orderDetailCollection;
+    }
+
+    public function findUnbilled($orderid, $eventTable = null) : IOrderDetailCollection
+    {
+        $orderDetails = OrderDetailQueryORM::create()
+            ->_if($eventTable)
+                ->useOrderQuery()
+                    ->filterByEventTable($eventTable)
+                ->endUse()
+            ->_else()
+                ->filterByOrderid($orderid)
+            ->_endIf()
+            ->leftJoinWithMenuSize()
+            ->leftJoinWithOrderDetailExtra()
+            ->leftJoinWithOrderDetailMixedWith()
+            ->leftJoinWithInvoiceItem()
+            ->filterByInvoiceFinished(null)
+            //->setFormatter(ModelCriteria::FORMAT_ARRAY)
+            ->find();
+
+        $orderDetailCollection = $this->container->get(IOrderDetailCollection::class);
+        $orderDetailCollection->setCollection($orderDetails);
+
+        return $orderDetailCollection;
     }
 }
