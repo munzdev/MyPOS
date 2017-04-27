@@ -98,10 +98,13 @@ use API\Lib\Interfaces\Models\Ordering\IOrderDetailMixedWith;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailMixedWithCollection;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailMixedWithQuery;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailUnbilled;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailUnbilledCollection;
 use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Lib\Interfaces\Models\Payment\ICoupon;
 use API\Lib\Interfaces\Models\Payment\ICouponCollection;
 use API\Lib\Interfaces\Models\Payment\ICouponQuery;
+use API\Lib\Interfaces\Models\Payment\ICouponValue;
 use API\Lib\Interfaces\Models\Payment\IPaymentCoupon;
 use API\Lib\Interfaces\Models\Payment\IPaymentCouponCollection;
 use API\Lib\Interfaces\Models\Payment\IPaymentCouponQuery;
@@ -219,10 +222,13 @@ use API\Models\Ordering\OrderDetailMixedWith;
 use API\Models\Ordering\OrderDetailMixedWithCollection;
 use API\Models\Ordering\OrderDetailMixedWithQuery;
 use API\Models\Ordering\OrderDetailQuery;
+use API\Models\Ordering\OrderDetailUnbilled;
+use API\Models\Ordering\OrderDetailUnbilledCollection;
 use API\Models\Ordering\OrderQuery;
 use API\Models\Payment\Coupon;
 use API\Models\Payment\CouponCollection;
 use API\Models\Payment\CouponQuery;
+use API\Models\Payment\CouponValue;
 use API\Models\Payment\PaymentCoupon;
 use API\Models\Payment\PaymentCouponCollection;
 use API\Models\Payment\PaymentCouponQuery;
@@ -647,8 +653,16 @@ $container->registerService(IOrderDetail::class, $container->factory(function ($
     return new OrderDetail($c);
 }));
 
+$container->registerService(IOrderDetailUnbilled::class, $container->factory(function ($c) {
+    return new OrderDetailUnbilled($c);
+}));
+
 $container->registerService(IOrderDetailCollection::class, $container->factory(function ($c) {
     return new OrderDetailCollection($c);
+}));
+
+$container->registerService(IOrderDetailUnbilledCollection::class, $container->factory(function ($c) {
+    return new OrderDetailUnbilledCollection($c);
 }));
 
 $container->registerService(IOrderDetailExtra::class, $container->factory(function ($c) {
@@ -685,6 +699,10 @@ $container->registerService(IOrderQuery::class, $container->factory(function ($c
 
 $container->registerService(ICoupon::class, $container->factory(function ($c) {
     return new Coupon($c);
+}));
+
+$container->registerService(ICouponValue::class, $container->factory(function ($c) {
+    return new CouponValue($c);
 }));
 
 $container->registerService(ICouponCollection::class, $container->factory(function ($c) {

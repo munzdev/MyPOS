@@ -112,7 +112,7 @@ interface IUser extends IModel {
     function setPhonenumber($phonenumber);
 
     /**
-     * @param DateTime|null callRequest Description
+     * @param DateTime|null $callRequest Description
      * @return IUser Description
      */
     function setCallRequest($callRequest);

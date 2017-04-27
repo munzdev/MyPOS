@@ -5,10 +5,10 @@ namespace API\Models\Ordering;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetail;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailCollection;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailUnbilledCollection;
 use API\Models\ORM\Ordering\OrderDetailQuery as OrderDetailQueryORM;
 use API\Models\Query;
 use Propel\Runtime\ActiveQuery\Criteria;
-use Propel\Runtime\ActiveQuery\ModelCriteria;
 
 class OrderDetailQuery extends Query implements IOrderDetailQuery
 {
@@ -131,7 +131,7 @@ class OrderDetailQuery extends Query implements IOrderDetailQuery
         return $orderDetailCollection;
     }
 
-    public function findUnbilled($orderid, $eventTable = null) : IOrderDetailCollection
+    public function findUnbilled($orderid, $eventTable = null): IOrderDetailUnbilledCollection
     {
         $orderDetails = OrderDetailQueryORM::create()
             ->_if($eventTable)
@@ -149,7 +149,7 @@ class OrderDetailQuery extends Query implements IOrderDetailQuery
             //->setFormatter(ModelCriteria::FORMAT_ARRAY)
             ->find();
 
-        $orderDetailCollection = $this->container->get(IOrderDetailCollection::class);
+        $orderDetailCollection = $this->container->get(IOrderDetailUnbilledCollection::class);
         $orderDetailCollection->setCollection($orderDetails);
 
         return $orderDetailCollection;

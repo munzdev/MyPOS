@@ -24,13 +24,13 @@ abstract class Model implements IModel {
         $this->container = $container;
     }
 
+    public function getModel() : ActiveRecordInterface {
+        return $this->model;
+    }
+
     public function setModel(ActiveRecordInterface $model)
     {
         $this->model = $model;
-    }
-
-    public function getModel() : ActiveRecordInterface {
-        return $this->model;
     }
 
     public function clear() {
@@ -50,6 +50,6 @@ abstract class Model implements IModel {
     }
 
     public function toArray() {
-        return $this->model->toArray();
+        return $this->model->toArray(null, null, true);
     }
 }

@@ -5,6 +5,7 @@ namespace API\Models\Payment;
 use API\Lib\Interfaces\Models\Payment\ICoupon;
 use API\Lib\Interfaces\Models\Payment\ICouponCollection;
 use API\Lib\Interfaces\Models\Payment\ICouponQuery;
+use API\Lib\Interfaces\Models\Payment\ICouponValue;
 use API\Models\ORM\Payment\CouponQuery as CouponQueryORM;
 use API\Models\ORM\Payment\Map\CouponTableMap;
 use API\Models\ORM\Payment\Map\PaymentCouponTableMap;
@@ -36,7 +37,7 @@ class CouponQuery extends Query implements ICouponQuery
         return $couponModel;
     }
 
-    public function getValidCoupon(int $eventid, int $code) : ?ICoupon
+    public function getValidCoupon(int $eventid, int $code): ?ICouponValue
     {
         $coupons = CouponQueryORM::create()
             ->leftJoinPaymentCoupon()
@@ -52,7 +53,7 @@ class CouponQuery extends Query implements ICouponQuery
             return null;
         }
 
-        $couponModel = $this->container->get(ICoupon::class);
+        $couponModel = $this->container->get(ICouponValue::class);
         $couponModel->setModel($coupons->getFirst());
 
         return $couponModel;
