@@ -6,6 +6,7 @@ use API\Lib\Interfaces\Models\Ordering\IOrder;
 use API\Lib\Interfaces\Models\Ordering\IOrderCollection;
 use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Models\ORM\Event\Map\EventTableTableMap;
+use API\Models\ORM\Invoice\Map\InvoiceItemTableMap;
 use API\Models\ORM\OIP\Map\OrderInProgressRecievedTableMap;
 use API\Models\ORM\Ordering\Map\OrderDetailTableMap;
 use API\Models\ORM\Ordering\Map\OrderTableMap;
@@ -244,7 +245,7 @@ class OrderQuery extends Query implements IOrderQuery
             ->useOrderDetailQuery()
                 ->useInvoiceItemQuery(null, ModelCriteria::LEFT_JOIN)
                     ->useInvoiceQuery(null, ModelCriteria::LEFT_JOIN)
-                        ->filterByCanceled(null)
+                        ->filterByCanceledInvoiceid(null)
                     ->endUse()
                 ->endUse()
             ->endUse()
@@ -268,7 +269,7 @@ class OrderQuery extends Query implements IOrderQuery
         $order = OrderQueryORM::create()
                     ->joinWithEventTable()
                     ->joinWithOrderDetail()
-                    ->joinWithUser()
+                    ->joinWithUserRelatedByUserid()
                     ->leftJoinWithOrderInProgress()
                     ->useOrderDetailQuery()
                         ->useOrderInProgressRecievedQuery(null, Criteria::LEFT_JOIN)

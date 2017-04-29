@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/cboden/ratchet/tests/helpers" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/monolog/monolog/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/cboden/ratchet/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/nikic/fast-route/test" isTestSource="true" packagePrefix="FastRoute" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/guzzle/parser" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/propel/propel/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/psr/log" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/evenement/evenement/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/guzzle/http" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/guzzle/stream" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/monolog/monolog/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/guzzle/common" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/propel/propel/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/mike42/escpos-php/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/pimple/pimple/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/evenement/evenement/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/symfony/validator/Tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/nikic/fast-route/src" isTestSource="false" packagePrefix="FastRoute" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/propel/propel/tests/Fixtures/behavior-installer/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/slim/slim" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/container-interop/container-interop/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/vendor/cboden/ratchet/tests/unit" isTestSource="false" packagePrefix="Ratchet" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/cboden/ratchet" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/container-interop/container-interop" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/evenement/evenement" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/guzzle/common" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/guzzle/http" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/guzzle/parser" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/guzzle/stream" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/mike42/escpos-php" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/monolog/monolog" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/nikic/fast-route" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/pimple/pimple" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/propel/propel" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/psr/http-message" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/psr/log" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/react/event-loop" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/react/socket" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/react/stream" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/respect/validation" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/slim/slim" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/config" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/console" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/debug" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/event-dispatcher" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/filesystem" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/finder" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/http-foundation" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/routing" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/translation" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/validator" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/yaml" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="PHP" type="php">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/src/vendor/cboden/ratchet" />
+          <root url="file://$MODULE_DIR$/src/vendor/composer" />
+          <root url="file://$MODULE_DIR$/src/vendor/container-interop/container-interop" />
+          <root url="file://$MODULE_DIR$/src/vendor/evenement/evenement" />
+          <root url="file://$MODULE_DIR$/src/vendor/guzzle/common" />
+          <root url="file://$MODULE_DIR$/src/vendor/guzzle/http" />
+          <root url="file://$MODULE_DIR$/src/vendor/guzzle/parser" />
+          <root url="file://$MODULE_DIR$/src/vendor/guzzle/stream" />
+          <root url="file://$MODULE_DIR$/src/vendor/mike42/escpos-php" />
+          <root url="file://$MODULE_DIR$/src/vendor/monolog/monolog" />
+          <root url="file://$MODULE_DIR$/src/vendor/nikic/fast-route" />
+          <root url="file://$MODULE_DIR$/src/vendor/pimple/pimple" />
+          <root url="file://$MODULE_DIR$/src/vendor/propel/propel" />
+          <root url="file://$MODULE_DIR$/src/vendor/psr/http-message" />
+          <root url="file://$MODULE_DIR$/src/vendor/psr/log" />
+          <root url="file://$MODULE_DIR$/src/vendor/react/event-loop" />
+          <root url="file://$MODULE_DIR$/src/vendor/react/socket" />
+          <root url="file://$MODULE_DIR$/src/vendor/react/stream" />
+          <root url="file://$MODULE_DIR$/src/vendor/respect/validation" />
+          <root url="file://$MODULE_DIR$/src/vendor/slim/slim" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/config" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/console" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/debug" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/event-dispatcher" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/filesystem" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/finder" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/http-foundation" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/polyfill-mbstring" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/routing" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/translation" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/validator" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/yaml" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/src/vendor/cboden/ratchet" />
+          <root url="file://$MODULE_DIR$/src/vendor/composer" />
+          <root url="file://$MODULE_DIR$/src/vendor/container-interop/container-interop" />
+          <root url="file://$MODULE_DIR$/src/vendor/evenement/evenement" />
+          <root url="file://$MODULE_DIR$/src/vendor/guzzle/common" />
+          <root url="file://$MODULE_DIR$/src/vendor/guzzle/http" />
+          <root url="file://$MODULE_DIR$/src/vendor/guzzle/parser" />
+          <root url="file://$MODULE_DIR$/src/vendor/guzzle/stream" />
+          <root url="file://$MODULE_DIR$/src/vendor/mike42/escpos-php" />
+          <root url="file://$MODULE_DIR$/src/vendor/monolog/monolog" />
+          <root url="file://$MODULE_DIR$/src/vendor/nikic/fast-route" />
+          <root url="file://$MODULE_DIR$/src/vendor/pimple/pimple" />
+          <root url="file://$MODULE_DIR$/src/vendor/propel/propel" />
+          <root url="file://$MODULE_DIR$/src/vendor/psr/http-message" />
+          <root url="file://$MODULE_DIR$/src/vendor/psr/log" />
+          <root url="file://$MODULE_DIR$/src/vendor/react/event-loop" />
+          <root url="file://$MODULE_DIR$/src/vendor/react/socket" />
+          <root url="file://$MODULE_DIR$/src/vendor/react/stream" />
+          <root url="file://$MODULE_DIR$/src/vendor/respect/validation" />
+          <root url="file://$MODULE_DIR$/src/vendor/slim/slim" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/config" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/console" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/debug" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/event-dispatcher" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/filesystem" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/finder" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/http-foundation" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/polyfill-mbstring" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/routing" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/translation" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/validator" />
+          <root url="file://$MODULE_DIR$/src/vendor/symfony/yaml" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+</module>

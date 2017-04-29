@@ -9,7 +9,7 @@
         <li style="white-space: normal;">Status:
             <%  if(orderInfo.get('OrderInProgresses').length == 0) {
                     print(t.waiting);
-                } else if(orderInfo.get('Finished') == null) {
+                } else if(orderInfo.get('InvoiceFinished') == null) {
                     print(t.inProgress);
                 } else {
                     print(t.finished);
@@ -22,7 +22,7 @@
             <% } %>
         </li>
         <li style="white-space: normal;">Letzte Bezahlung: <% if(orderInfo.get('last_paydate')) { print($.format.date(MyPOS.DateFromMysql(orderInfo.get('last_paydate')), DATE_JS_TIMEFORMAT)) } %></li>
-        <li style="white-space: normal;">Fertig: <% if(orderInfo.get('Finished')) { print(orderInfo.get('Finished')) } %></li>
+        <li style="white-space: normal;">Fertig: <% if(orderInfo.get('InvoiceFinished')) { print(orderInfo.get('Finished')) } %></li>
         <li style="white-space: normal;">Bisher verrechnet: <%- orderInfo.get('amountBilled') %> €</li>
     </ul>
     <div>

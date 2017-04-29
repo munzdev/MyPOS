@@ -23,9 +23,9 @@ define(["models/BaseModel"
                 response.EventTable = new app.models.Event.EventTable(response.EventTable, {parse: true});
             }
 
-            if('UserRelatedByUserid' in response)
+            if('User' in response)
             {
-                response.UserRelatedByUserid = new app.models.User.User(response.UserRelatedByUserid, {parse: true});
+                response.User = new app.models.User.User(response.User, {parse: true});
             }
 
             if('UserRelatedByCancellationCreatedByUserid' in response)

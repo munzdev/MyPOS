@@ -41,7 +41,23 @@ class Collection implements ICollection {
     }
 
     public function toArray() {
-        return $this->collection->toArray();
+        $array =  $this->collection->toArray();
+        return $this->cleanupRecursionStringFromToArray($array);
+    }
+
+    private function cleanupRecursionStringFromToArray(array $array)
+    {
+        $relationsFound = [];
+        foreach ($array as $key => $item) {
+            if ($item === ["*RECURSION*"] || $item == "*RECURSION*") {
+                unset($array[$key]);
+            } elseif (is_array($item)) {
+                $array[$key] = $this->cleanupRecursionStringFromToArray($item);
+                $relationsFound[] = $key;
+            }
+        }
+
+        return $array;
     }
 
     public function count(): int {

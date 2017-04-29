@@ -44,7 +44,7 @@ class OrderInfo extends SecurityController
         $orderDetails = $orderQuery->getDetails($this->args['id']);
         $orderDetailInfo = $orderQuery->getOrderDetails($this->args['id']);
 
-        $orderDetailInfoArray = $orderDetailInfo->toArray();
+        $orderDetailInfoArray = $orderDetailInfo->toArray(true);
 
         $orderDetailInfoArray['price'] = $orderDetails->price;
         $orderDetailInfoArray['open'] = $orderDetails->open;

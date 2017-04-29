@@ -27,6 +27,9 @@ interface IModel {
 
     /**
      * Converts the Model datas into an Array where the Key is the CamlCase of the Repository Fieldname.
+     *
+     * @param bool $recursive Should the array build with sub models or just the main model
+     * @return array
      */
-    function toArray();
+    function toArray(bool $recursive = false);
 }

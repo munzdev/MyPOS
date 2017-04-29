@@ -5,6 +5,7 @@ namespace API\Models;
 use API\Lib\Container;
 use API\Lib\Interfaces\Models\IModel;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
+use Propel\Runtime\Map\TableMap;
 
 abstract class Model implements IModel {
 
@@ -49,7 +50,23 @@ abstract class Model implements IModel {
         return $this->model->save();
     }
 
-    public function toArray() {
-        return $this->model->toArray(null, null, true);
+    public function toArray(bool $recursive = false) {
+        $array = $this->model->toArray(TableMap::TYPE_PHPNAME, true, array(), $recursive);
+        return $this->cleanupRecursionStringFromToArray($array);
+    }
+
+    private function cleanupRecursionStringFromToArray(array $array)
+    {
+        $relationsFound = [];
+        foreach ($array as $key => $item) {
+            if ($item === ["*RECURSION*"] || $item == "*RECURSION*") {
+                unset($array[$key]);
+            } elseif (is_array($item)) {
+                $array[$key] = $this->cleanupRecursionStringFromToArray($item);
+                $relationsFound[] = $key;
+            }
+        }
+
+        return $array;
     }
 }
