@@ -4,14 +4,12 @@ namespace API\Controllers\DistributionPlace;
 
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\IStatusCheck;
 use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Interfaces\Models\Menu\IMenuExtraQuery;
 use API\Lib\Interfaces\Models\Menu\IMenuQuery;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
 use API\Lib\SecurityController;
-use API\Lib\StatusCheck;
-use API\Models\ORM\Menu\MenuExtraQuery;
-use API\Models\ORM\Ordering\OrderDetailQuery;
 use Respect\Validation\Validator as v;
 use Slim\App;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -73,6 +71,7 @@ class DistributionPlaceAmount extends SecurityController
     private function setMenu()
     {
         $auth = $this->container->get(IAuth::class);
+        $statusCheck = $this->container->get(IStatusCheck::class);
         $menuQuery = $this->container->get(IMenuQuery::class);
         $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
         $user = $auth->getCurrentUser();
@@ -87,7 +86,7 @@ class DistributionPlaceAmount extends SecurityController
             $orderDetails = $orderDetailQuery->getDistributionUnfinishedByMenuid($menu->getMenuid());
 
             foreach ($orderDetails as $orderDetail) {
-                StatusCheck::verifyAvailability($orderDetail->getOrderDetailid());
+                $statusCheck->verifyAvailability($orderDetail->getOrderDetailid());
             }
         }
     }
@@ -95,6 +94,7 @@ class DistributionPlaceAmount extends SecurityController
     private function setExtra()
     {
         $auth = $this->container->get(IAuth::class);
+        $statusCheck = $this->container->get(IStatusCheck::class);
         $menuExtraQuery = $this->container->get(IMenuExtraQuery::class);
         $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
         $user = $auth->getCurrentUser();
@@ -109,7 +109,7 @@ class DistributionPlaceAmount extends SecurityController
             $orderDetails = $orderDetailQuery->getDistributionUnfinishedByMenuExtraid($menuExtra->getMenuExtraid());
 
             foreach ($orderDetails as $orderDetail) {
-                StatusCheck::verifyAvailability($orderDetail->getOrderDetailid());
+                $statusCheck->verifyAvailability($orderDetail->getOrderDetailid());
             }
         }
     }

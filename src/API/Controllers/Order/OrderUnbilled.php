@@ -5,6 +5,7 @@ namespace API\Controllers\Order;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\IStatusCheck;
 use API\Lib\Interfaces\Models\Event\IEventBankinformationQuery;
 use API\Lib\Interfaces\Models\Event\IEventContact;
 use API\Lib\Interfaces\Models\Event\IEventContactQuery;
@@ -21,7 +22,6 @@ use API\Lib\Interfaces\Models\Payment\ICouponQuery;
 use API\Lib\Interfaces\Models\Payment\IPaymentCoupon;
 use API\Lib\Interfaces\Models\Payment\IPaymentRecieved;
 use API\Lib\SecurityController;
-use API\Lib\StatusCheck;
 use DateTime;
 use Exception;
 use Respect\Validation\Validator as v;
@@ -58,6 +58,7 @@ class OrderUnbilled extends SecurityController
     public function post() : void
     {
         $auth = $this->container->get(IAuth::class);
+        $statusCheck = $this->container->get(IStatusCheck::class);
         $jsonToModel = $this->container->get(IJsonToModel::class);
         $eventContactQuery = $this->container->get(IEventContactQuery::class);
         $eventBankinformationQuery = $this->container->get(IEventBankinformationQuery::class);
@@ -278,11 +279,11 @@ class OrderUnbilled extends SecurityController
                 $paymentRecievedid = $paymentRecieved->getPaymentRecievedid();
             }
 
-            StatusCheck::verifyInvoice($invoice->getInvoiceid());
+            $statusCheck->verifyInvoice($invoice->getInvoiceid());
 
             $orderidsToVerify = array_unique($orderidsToVerify);
             foreach ($orderidsToVerify as $orderid) {
-                StatusCheck::verifyOrder($orderid);
+                $statusCheck->verifyOrder($orderid);
             }
 
             $this->withJson([

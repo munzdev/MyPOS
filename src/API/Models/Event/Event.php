@@ -3,8 +3,8 @@
 namespace API\Models\Event;
 
 use API\Lib\Interfaces\Models\Event\IEvent;
-use API\Models\ORM\Event\Event as EventORM;
 use API\Models\Model;
+use API\Models\ORM\Event\Event as EventORM;
 
 /**
  * Skeleton subclass for representing a row from the 'event' table.

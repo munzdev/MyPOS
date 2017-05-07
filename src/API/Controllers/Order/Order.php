@@ -5,6 +5,7 @@ namespace API\Controllers\Order;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\IStatusCheck;
 use API\Lib\Interfaces\Models\Event\IEventTable;
 use API\Lib\Interfaces\Models\Event\IEventTableQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
@@ -14,20 +15,7 @@ use API\Lib\Interfaces\Models\Ordering\IOrderDetailExtra;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailMixedWith;
 use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Lib\SecurityController;
-use API\Lib\StatusCheck;
-use API\Models\ORM\Event\EventTableQuery;
-use API\Models\ORM\Event\Map\EventTableTableMap;
-use API\Models\ORM\Ordering\Map\OrderDetailTableMap;
-use API\Models\ORM\Ordering\Map\OrderTableMap;
-use API\Models\ORM\Ordering\Order as ModelsOrder;
-use API\Models\ORM\Ordering\OrderDetail;
-use API\Models\ORM\Ordering\OrderDetailExtra;
-use API\Models\ORM\Ordering\OrderDetailMixedWith;
-use API\Models\ORM\Ordering\OrderQuery;
 use DateTime;
-use Propel\Runtime\ActiveQuery\Criteria;
-use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Propel;
 use Respect\Validation\Validator as v;
 use Slim\App;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -145,6 +133,7 @@ class Order extends SecurityController
     public function post() : void
     {
         $auth = $this->container->get(IAuth::class);
+        $statusCheck = $this->container->get(IStatusCheck::class);
         $eventTableQuery = $this->container->get(IEventTableQuery::class);
         $orderQuery = $this->container->get(IOrderQuery::class);
         $connection = $this->container->get(IConnectionInterface::class);
@@ -214,7 +203,7 @@ class Order extends SecurityController
                     $orderDetailMixedWith->save();
                 }
 
-                StatusCheck::verifyAvailability($orderDetail->getOrderDetailid());
+                $statusCheck->verifyAvailability($orderDetail->getOrderDetailid());
             }
 
             $connection->commit();

@@ -6,9 +6,12 @@ use API\Lib\Interfaces\Models\Ordering\IOrderDetail;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailCollection;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailUnbilledCollection;
+use API\Models\ORM\Invoice\Map\InvoiceItemTableMap;
+use API\Models\ORM\Ordering\Map\OrderDetailTableMap;
 use API\Models\ORM\Ordering\OrderDetailQuery as OrderDetailQueryORM;
 use API\Models\Query;
 use Propel\Runtime\ActiveQuery\Criteria;
+use stdClass;
 
 class OrderDetailQuery extends Query implements IOrderDetailQuery
 {
@@ -153,5 +156,78 @@ class OrderDetailQuery extends Query implements IOrderDetailQuery
         $orderDetailCollection->setCollection($orderDetails);
 
         return $orderDetailCollection;
+    }
+
+    public function getMenuDetails(int $orderDetailid) : ?IOrderDetail
+    {
+        $orderDetail = OrderDetailQueryORM::create()
+            ->leftJoinWithMenu()
+            ->leftJoinWithOrderDetailExtra()
+            ->leftJoinWithOrderDetailMixedWith()
+            ->filterByOrderDetailid($orderDetailid)
+            ->find()
+            ->getFirst();
+
+        if(!$orderDetail) {
+            return null;
+        }
+
+        $orderDetailModel = $this->container->get(IOrderDetail::class);
+        $orderDetailModel->setModel($orderDetail);
+
+        return $orderDetailModel;
+    }
+
+    public function getWithDetails(int $orderDetailid) : ?IOrderDetail
+    {
+        $orderDetail = OrderDetailQueryORM::create()
+            ->useInvoiceItemQuery(null, Criteria::LEFT_JOIN)
+                ->useInvoiceQuery(null, Criteria::LEFT_JOIN)
+                    ->filterByCanceledInvoiceid(null)
+                ->endUse()
+            ->endUse()
+            ->joinWithOrder()
+            ->with(InvoiceItemTableMap::getTableMap()->getPhpName())
+            ->leftJoinWithOrderInProgressRecieved()
+            ->findByOrderDetailid($orderDetailid)
+            ->getFirst();
+
+        if(!$orderDetail) {
+            return null;
+        }
+
+        $orderDetailModel = $this->container->get(IOrderDetail::class);
+        $orderDetailModel->setModel($orderDetail);
+
+        return $orderDetailModel;
+    }
+
+    public function getDetailsSum(int $orderDetailid) : ?stdClass
+    {
+        $orderDetail = OrderDetailQueryORM::create()
+            ->useInvoiceItemQuery(null, Criteria::LEFT_JOIN)
+                ->useInvoiceQuery(null, Criteria::LEFT_JOIN)
+                    ->filterByCanceledInvoiceid(null)
+                ->endUse()
+            ->endUse()
+            //->joinWithOrder()
+            //->with(InvoiceItemTableMap::getTableMap()->getPhpName())
+            //->leftJoinWithOrderInProgressRecieved()
+            ->leftJoinOrderInProgressRecieved()
+            ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " - IFNULL(" . OrderInProgressRecievedTableMap::COL_AMOUNT . ", 0))", "DistribtuionLeft")
+            ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " - IFNULL(" . InvoiceItemTableMap::COL_AMOUNT . ", 0))", "InvoiceLeft")
+            ->groupByOrderDetailid()
+            ->findByOrderDetailid($orderDetailid)
+            ->getFirst();
+
+        if(!$orderDetail) {
+            return null;
+        }
+
+        $data = new stdClass();
+        $data->distribtuionLeft = $orderDetail->getVirtualColumn('DistribtuionLeft');
+        $data->invoiceLeft = $orderDetail->getVirtualColumn('InvoiceLeft');
+
+        return $data;
     }
 }

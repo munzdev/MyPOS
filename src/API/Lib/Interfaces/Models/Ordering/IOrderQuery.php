@@ -3,8 +3,6 @@
 namespace API\Lib\Interfaces\Models\Ordering;
 
 use API\Lib\Interfaces\Models\IQuery;
-use API\Models\ORM\Ordering\Map\OrderTableMap;
-use API\Models\ORM\Ordering\OrderQuery as OrderQueryORM;
 
 interface IOrderQuery extends IQuery {
     function findPKWithAllOrderDetails($orderid): ?IOrder;

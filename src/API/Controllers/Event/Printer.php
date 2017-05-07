@@ -6,7 +6,6 @@ use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\Models\Event\IEventPrinterQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
-use API\Models\ORM\Event\EventPrinterQuery;
 use Slim\App;
 
 class Printer extends SecurityController

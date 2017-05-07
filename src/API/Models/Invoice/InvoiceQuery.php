@@ -9,7 +9,6 @@ use API\Models\ORM\Invoice\InvoiceQuery as InvoiceQueryORM;
 use API\Models\Query;
 use DateTime;
 use Propel\Runtime\ActiveQuery\Criteria;
-use Propel\Runtime\ActiveQuery\ModelCriteria;
 
 class InvoiceQuery extends Query implements IInvoiceQuery
 {

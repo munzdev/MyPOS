@@ -6,7 +6,6 @@ use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\Models\Event\IEventContact;
 use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\SecurityController;
-use API\Models\ORM\Event\EventContact;
 use Slim\App;
 
 class Customer extends SecurityController

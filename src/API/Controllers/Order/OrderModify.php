@@ -5,22 +5,16 @@ namespace API\Controllers\Order;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\IStatusCheck;
 use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Interfaces\Models\Ordering\IOrder;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetail;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
 use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Lib\SecurityController;
-use API\Lib\StatusCheck;
-use API\Models\ORM\Ordering\Base\OrderDetailQuery;
-use API\Models\ORM\Ordering\Order;
-use API\Models\ORM\Ordering\OrderDetail;
 use API\Models\ORM\Ordering\OrderDetailExtra;
 use API\Models\ORM\Ordering\OrderDetailMixedWith;
-use API\Models\ORM\Ordering\OrderQuery;
 use DateTime;
-use Propel\Runtime\ActiveQuery\ModelCriteria;
-use Propel\Runtime\Propel;
 use Respect\Validation\Validator as v;
 use Slim\App;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -76,6 +70,7 @@ class OrderModify extends SecurityController
 
     public function put() : void
     {
+        $statusCheck = $this->container->get(IStatusCheck::class);
         $connection = $this->container->get(IConnectionInterface::class);
         $orderQuery = $this->container->get(IOrderQuery::class);
 
@@ -147,7 +142,7 @@ class OrderModify extends SecurityController
                 }
             }
 
-            StatusCheck::verifyOrder($order->getOrderid());
+            $statusCheck->verifyOrder($order->getOrderid());
 
             $connection->commit();
 
@@ -161,6 +156,7 @@ class OrderModify extends SecurityController
     private function cancelOrder($orderid)
     {
         $auth = $this->container->get(IAuth::class);
+        $statusCheck = $this->container->get(IStatusCheck::class);
         $orderQuery = $this->container->get(IOrderQuery::class);
         $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
         $connection = $this->container->get(IConnectionInterface::class);
@@ -193,7 +189,7 @@ class OrderModify extends SecurityController
                 $orderDetail->save();
             }
 
-            StatusCheck::verifyOrder($orderid);
+            $statusCheck->verifyOrder($orderid);
 
             $modifiedOrder = $orderQuery->findPk($orderid);
 

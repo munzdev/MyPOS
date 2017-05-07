@@ -4,6 +4,7 @@ namespace API\Controllers\DistributionPlace;
 
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\IAuth;
+use API\Lib\Interfaces\IStatusCheck;
 use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceGroupQuery;
 use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceUserQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
@@ -18,7 +19,6 @@ use API\Lib\Interfaces\Models\Ordering\IOrder;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
 use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Lib\SecurityController;
-use API\Lib\StatusCheck;
 use DateTime;
 use Exception;
 use Slim\App;
@@ -41,6 +41,7 @@ class DistributionPlace extends SecurityController
     protected function put() : void
     {
         $auth = $this->container->get(IAuth::class);
+        $statusCheck = $this->container->get(IStatusCheck::class);
         $user = $auth->getCurrentUser();
         $connection = $this->container->get(IConnectionInterface::class);
 
@@ -87,7 +88,7 @@ class DistributionPlace extends SecurityController
                                 $orderDetailsToCheck = $orderDetailQuery->getDistributionUnfinishedByMenuid($menu->getMenuid());
 
                                 foreach ($orderDetailsToCheck as $orderDetailToCheck) {
-                                    StatusCheck::verifyAvailability($orderDetailToCheck->getOrderDetailid());
+                                    $statusCheck->verifyAvailability($orderDetailToCheck->getOrderDetailid());
                                 }
                             }
 
@@ -118,7 +119,7 @@ class DistributionPlace extends SecurityController
                                         }
                                     } else {
                                         foreach ($orderDetails as $orderDetail) {
-                                            StatusCheck::verifyAvailability($orderDetail->getOrderDetailid());
+                                            $statusCheck->verifyAvailability($orderDetail->getOrderDetailid());
                                         }
                                     }
                                 }
@@ -141,7 +142,7 @@ class DistributionPlace extends SecurityController
                                     $orderDetailsToCheck = $orderDetailQuery->getDistributionUnfinishedByMenuid($menu->getMenuid());
 
                                     foreach ($orderDetailsToCheck as $orderDetail) {
-                                        StatusCheck::verifyAvailability($orderDetail->getOrderDetailid());
+                                        $statusCheck->verifyAvailability($orderDetail->getOrderDetailid());
                                     }
                                 }
                             }
@@ -180,7 +181,7 @@ class DistributionPlace extends SecurityController
                 }
             }
 
-            StatusCheck::verifyOrder($order->getOrderid());
+            $statusCheck->verifyOrder($order->getOrderid());
 
             $connection->commit();
 

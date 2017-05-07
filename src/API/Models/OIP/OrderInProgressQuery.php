@@ -78,4 +78,28 @@ class OrderInProgressQuery extends Query implements IOrderInProgressQuery
 
         return $orderInProgressModel;
     }
+
+    public function getWithDetails(int $orderInProgressid): ?IOrderInProgress
+    {
+        $orderInProgress = OrderInProgressQueryORM::create()
+            ->leftJoinWithOrderInProgressRecieved()
+            ->useOrderInProgressRecievedQuery(null, Criteria::LEFT_JOIN)
+                ->joinWithOrderDetail()
+                ->leftJoinWithOrderDetail()
+                //->withColumn(OrderDetailTableMap::COL_AMOUNT . " - IFNULL(SUM(" . OrderInProgressRecievedTableMap::COL_AMOUNT . "), 0)" , "AmountLeft")
+                //->groupByOrderDetailid()
+            ->endUse()
+            ->joinWithOrder()
+            ->findByOrderInProgressid($orderInProgressid)
+            ->getFirst();
+
+        if (!$orderInProgress) {
+            return null;
+        }
+
+        $orderInProgressModel = $this->container->get(IOrderInProgress::class);
+        $orderInProgressModel->setModel($orderInProgress);
+
+        return $orderInProgressModel;
+    }
 }

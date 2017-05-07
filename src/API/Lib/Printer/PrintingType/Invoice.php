@@ -2,8 +2,6 @@
 
 namespace API\Lib\Printer\PrintingType;
 
-use Mike42\Escpos\Printer;
-use const API\DATE_PHP_DATEFORMAT;
 use const API\DATE_PHP_TIMEFORMAT;
 
 class Invoice extends AbstractPrintingType

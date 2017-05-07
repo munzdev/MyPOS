@@ -1,13 +1,17 @@
 <?php
 namespace API\Lib;
 
-use API\Models\Invoice\Base\InvoiceQuery;
-use API\Models\Invoice\Map\InvoiceItemTableMap;
-use API\Models\OIP\Map\OrderInProgressRecievedTableMap;
-use API\Models\OIP\OrderInProgressQuery;
-use API\Models\Ordering\Map\OrderDetailTableMap;
-use API\Models\Ordering\OrderDetailQuery;
-use API\Models\Ordering\OrderQuery;
+use API\Lib\Interfaces\IStatusCheck;
+use API\Lib\Interfaces\Models\Invoice\IInvoiceQuery;
+use API\Lib\Interfaces\Models\OIP\IOrderInProgressQuery;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
+use API\Models\ORM\Invoice\Base\InvoiceQuery;
+use API\Models\ORM\Invoice\Map\InvoiceItemTableMap;
+use API\Models\ORM\OIP\Map\OrderInProgressRecievedTableMap;
+use API\Models\ORM\OIP\OrderInProgressQuery;
+use API\Models\ORM\Ordering\Map\OrderDetailTableMap;
+use API\Models\ORM\Ordering\OrderDetailQuery;
+use API\Models\ORM\Ordering\OrderQuery;
 use DateTime;
 use Propel\Runtime\ActiveQuery\Criteria;
 use const API\ORDER_AVAILABILITY_AVAILABLE;
@@ -16,28 +20,34 @@ use const API\ORDER_AVAILABILITY_OUT_OF_ORDER;
 /**
  * Checks status of different DB Table fields that depend on sub-tables.
  */
-abstract class StatusCheck
+class StatusCheck implements IStatusCheck
 {
+    /**
+     * @var Container
+     */
+    private $container;
+
+    function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * Checks if distribution and invoice of an order are finished and sets them in the table row.
      *
      * @param int $orderid
      */
-    public static function verifyOrder(int $orderid) : void
+    public function verifyOrder(int $orderid) : void
     {
-        $order = OrderQuery::create()
-                            ->joinWithOrderDetail()
-                            ->with(OrderDetailTableMap::getTableMap()->getPhpName())
-                            ->leftJoinWithOrderInProgress()
-                            ->filterByOrderid($orderid)
-                            ->find()
-                            ->getFirst();
+        $orderQuery = $this->container->get(IOrderQuery::class);
+
+        $order = $orderQuery->getOrderDetails($orderid);
 
         $distributionFinished = false;
         $invoiceFinished = false;
 
         foreach ($order->getOrderDetails() as $orderDetail) {
-            self::verifyOrderDetail($orderDetail->getOrderDetailid());
+            $this->verifyOrderDetail($orderDetail->getOrderDetailid());
 
             if ($distributionFinished === false || ($distributionFinished !== null && ($orderDetail->getDistributionFinished() == null
                 || $orderDetail->getDistributionFinished() > $distributionFinished))
@@ -62,47 +72,37 @@ abstract class StatusCheck
      *
      * @param int $orderDetailid
      */
-    public static function verifyOrderDetail(int $orderDetailid) : void
+    public function verifyOrderDetail(int $orderDetailid) : void
     {
-        $orderDetail = OrderDetailQuery::create()
-                                        ->useInvoiceItemQuery(null, Criteria::LEFT_JOIN)
-                                            ->useInvoiceQuery(null, Criteria::LEFT_JOIN)
-                                                ->filterByCanceledInvoiceid(null)
-                                            ->endUse()
-                                        ->endUse()
-                                        ->joinWithOrder()
-                                        ->with(InvoiceItemTableMap::getTableMap()->getPhpName())
-                                        ->leftJoinWithOrderInProgressRecieved()
-                                        ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " - IFNULL(" . OrderInProgressRecievedTableMap::COL_AMOUNT . ", 0))", "DistribtuionLeft")
-                                        ->withColumn("SUM(" . OrderDetailTableMap::COL_AMOUNT . " - IFNULL(" . InvoiceItemTableMap::COL_AMOUNT . ", 0))", "InvoiceLeft")
-                                        ->groupByOrderDetailid()
-                                        ->findByOrderDetailid($orderDetailid)
-                                        ->getFirst();
+        $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
+
+        $orderDetail = $orderDetailQuery->getWithDetails($orderDetailid);
+        $sumData = $orderDetailQuery->getDetailsSum($orderDetailid);
 
         foreach ($orderDetail->getInvoiceItems() as $invoiceItem) {
-            self::verifyInvoice($invoiceItem->getInvoiceid());
+            $this->verifyInvoice($invoiceItem->getInvoiceid());
         }
 
         foreach ($orderDetail->getOrderInProgressRecieveds() as $orderInProgressRecieved) {
-            self::verifyOrderInProgress($orderInProgressRecieved->getOrderInProgressid());
+            $this->verifyOrderInProgress($orderInProgressRecieved->getOrderInProgressid());
         }
 
         if ($orderDetail->getMenuid()) {
-            self::verifyAvailability($orderDetailid);
+            $this->verifyAvailability($orderDetailid);
         }
 
         $distribution = $orderDetail->getDistributionFinished();
         $invoice = $orderDetail->getInvoiceFinished();
 
-        if ($orderDetail->getVirtualColumn('DistribtuionLeft') == 0 && $distribution == null) {
+        if ($sumData->distribtuionLeft == 0 && $distribution == null) {
             $distribution = new DateTime();
-        } elseif ($orderDetail->getVirtualColumn('DistribtuionLeft') != 0 && $distribution != null) {
+        } elseif ($sumData->distribtuionLeft != 0 && $distribution != null) {
             $distribution = null;
         }
 
-        if ($orderDetail->getVirtualColumn('InvoiceLeft') == 0 && $invoice == null) {
+        if ($sumData->invoiceLeft == 0 && $invoice == null) {
             $invoice = new DateTime();
-        } elseif ($orderDetail->getVirtualColumn('InvoiceLeft') != 0 && $invoice != null) {
+        } elseif ($sumData->invoiceLeft != 0 && $invoice != null) {
             $invoice = null;
         }
 
@@ -120,12 +120,11 @@ abstract class StatusCheck
      *
      * @param int $invoiceid
      */
-    public static function verifyInvoice(int $invoiceid) : void
+    public function verifyInvoice(int $invoiceid) : void
     {
-        $invoice = InvoiceQuery::create()
-                                ->joinInvoiceItem()
-                                ->findByInvoiceid($invoiceid)
-                                ->getFirst();
+        $invoiceQuery = $this->container->get(IInvoiceQuery::class);
+
+        $invoice = $invoiceQuery->getWithItems($invoiceid);
 
         $paymentFinished = $invoice->getPaymentFinished();
 
@@ -144,19 +143,12 @@ abstract class StatusCheck
      *
      * @param int $orderInProgressid
      */
-    public static function verifyOrderInProgress(int $orderInProgressid) : void
+    public function verifyOrderInProgress(int $orderInProgressid) : void
     {
+        $orderInProgressQuery = $this->container->get(IOrderInProgressQuery::class);
+
         // TODO make use of SQL group by and SUM to retrieve amount left. But propel somehow creates a problem here
-        $orderInProgress = OrderInProgressQuery::create()
-                                                ->joinWithOrderInProgressRecieved()
-                                                ->useOrderInProgressRecievedQuery()
-                                                    ->joinWithOrderDetail()
-                                                    //->withColumn(OrderDetailTableMap::COL_AMOUNT . " - IFNULL(SUM(" . OrderInProgressRecievedTableMap::COL_AMOUNT . "), 0)" , "AmountLeft")
-                                                    //->groupByOrderDetailid()
-                                                ->endUse()
-                                                ->joinWithOrder()
-                                                ->findByOrderInProgressid($orderInProgressid)
-                                                ->getFirst();
+        $orderInProgress = $orderInProgressQuery->getWithDetails($orderInProgressid);
 
         $done = $orderInProgress->getDone();
         $amountLeft = null;
@@ -193,20 +185,15 @@ abstract class StatusCheck
      *
      * @param int $orderDetailid
      */
-    public static function verifyAvailability(int $orderDetailid) : void
+    public function verifyAvailability(int $orderDetailid) : void
     {
-        $orderDetailCollection = OrderDetailQuery::create()
-                                        ->leftJoinWithMenu()
-                                        ->leftJoinWithOrderDetailExtra()
-                                        ->leftJoinWithOrderDetailMixedWith()
-                                        ->filterByOrderDetailid($orderDetailid)
-                                        ->find();
+        $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
 
-        if (!$orderDetailCollection->count()) {
+        $orderDetail = $orderDetailQuery->getMenuDetails($orderDetailid);
+
+        if(!$orderDetail) {
             return;
         }
-
-        $orderDetail = $orderDetailCollection->getFirst();
 
         $menu = $orderDetail->getMenu();
 

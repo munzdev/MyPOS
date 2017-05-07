@@ -7,9 +7,6 @@ use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Interfaces\Models\Payment\ICouponQuery;
 use API\Lib\SecurityController;
-use API\Models\ORM\Payment\CouponQuery;
-use API\Models\ORM\Payment\Map\CouponTableMap;
-use API\Models\ORM\Payment\Map\PaymentCouponTableMap;
 use Respect\Validation\Validator as v;
 use Slim\App;
 

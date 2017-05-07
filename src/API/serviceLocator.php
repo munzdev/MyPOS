@@ -8,6 +8,7 @@ use API\Lib\Interfaces\Helpers\IValidate;
 use API\Lib\Interfaces\IAuth;
 use API\Lib\Interfaces\IPrintingInformation;
 use API\Lib\Interfaces\IRememberMe;
+use API\Lib\Interfaces\IStatusCheck;
 use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlace;
 use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceCollection;
 use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceGroup;
@@ -132,6 +133,7 @@ use API\Lib\Printer\PrintingType\Order;
 use API\Lib\Printer\PrintingType\PaymentRecieved;
 use API\Lib\PrintingInformation;
 use API\Lib\RememberMe;
+use API\Lib\StatusCheck;
 use API\Models\Connection;
 use API\Models\DistributionPlace\DistributionPlace;
 use API\Models\DistributionPlace\DistributionPlaceCollection;
@@ -327,6 +329,10 @@ $container->registerService(IJsonToModel::class, function () {
 
 $container->registerService(IValidate::class, function () {
     return new Validate();
+});
+
+$container->registerService(IStatusCheck::class, function ($c) {
+    return new StatusCheck($c);
 });
 
 $container->registerService(IDistributionPlace::class, $container->factory(function ($c) {

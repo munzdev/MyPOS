@@ -11,16 +11,11 @@ use API\Lib\Interfaces\Models\Invoice\IInvoiceQuery;
 use API\Lib\Interfaces\Models\Payment\IPaymentRecievedQuery;
 use API\Lib\Printer;
 use API\Lib\Printer\PrinterConnector\ThermalPrinter;
+use API\Lib\Printer\PrintingType\Invoice;
 use API\Lib\SecurityController;
-use API\Models\ORM\Event\Base\EventPrinterQuery;
-use API\Models\ORM\Invoice\Base\InvoiceQuery;
-use API\Models\ORM\Payment\Base\PaymentRecievedQuery;
-use API\Models\ORM\Payment\Map\PaymentCouponTableMap;
-use Propel\Runtime\ActiveQuery\Criteria;
 use Respect\Validation\Validator as v;
 use Slim\App;
 use Symfony\Component\Config\Definition\Exception\Exception;
-use API\Lib\Printer\PrintingType\Invoice;
 
 class Printing extends SecurityController
 {

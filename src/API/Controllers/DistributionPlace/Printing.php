@@ -10,11 +10,11 @@ use API\Lib\Interfaces\Models\OIP\IDistributionGivingOutQuery;
 use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use API\Lib\Printer;
 use API\Lib\Printer\PrinterConnector\ThermalPrinter;
+use API\Lib\Printer\PrintingType\Order;
 use API\Lib\SecurityController;
 use Respect\Validation\Validator as v;
 use Slim\App;
 use const API\ORDER_DEFAULT_SIZEID;
-use API\Lib\Printer\PrintingType\Order;
 
 class Printing extends SecurityController
 {

@@ -7,7 +7,7 @@ use API\Lib\Interfaces\Models\DistributionPlace\IDistributionPlaceUser;
 use API\Lib\Interfaces\Models\Event\IEventPrinter;
 use API\Lib\Interfaces\Models\User\IUser;
 use API\Models\Model;
-use \API\Models\ORM\DistributionPlace\DistributionPlaceUser as DistributionPlaceUserORM;
+use API\Models\ORM\DistributionPlace\DistributionPlaceUser as DistributionPlaceUserORM;
 
 /**
  * Skeleton subclass for representing a row from the 'distribution_place_user' table.

@@ -3,7 +3,6 @@
 namespace API\Models\User;
 
 use API\Lib\Container;
-use API\Lib\Interfaces\Models\Event\IEventUser;
 use API\Lib\Interfaces\Models\Event\IEventUserCollection;
 use API\Lib\Interfaces\Models\User\IUser;
 use API\Models\Model;
