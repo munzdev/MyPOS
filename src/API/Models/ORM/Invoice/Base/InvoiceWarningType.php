@@ -28,11 +28,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'invoice_warning_type' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Invoice.Base
  */
-abstract class InvoiceWarningType implements ActiveRecordInterface
+abstract class InvoiceWarningType implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -68,28 +68,28 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
 
     /**
      * The value for the invoice_warning_typeid field.
-     *
+     * 
      * @var        int
      */
     protected $invoice_warning_typeid;
 
     /**
      * The value for the eventid field.
-     *
+     * 
      * @var        int
      */
     protected $eventid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
 
     /**
      * The value for the extra_price field.
-     *
+     * 
      * @var        string
      */
     protected $extra_price;
@@ -336,17 +336,17 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [invoice_warning_typeid] column value.
-     *
+     * 
      * @return int
      */
     public function getInvoiceWarningTypeid()
@@ -356,7 +356,7 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
 
     /**
      * Get the [eventid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventid()
@@ -366,7 +366,7 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -376,7 +376,7 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
 
     /**
      * Get the [extra_price] column value.
-     *
+     * 
      * @return string
      */
     public function getExtraPrice()
@@ -386,7 +386,7 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
 
     /**
      * Set the value of [invoice_warning_typeid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceWarningType The current object (for fluent API support)
      */
@@ -406,7 +406,7 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceWarningType The current object (for fluent API support)
      */
@@ -430,7 +430,7 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceWarningType The current object (for fluent API support)
      */
@@ -450,7 +450,7 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
 
     /**
      * Set the value of [extra_price] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceWarningType The current object (for fluent API support)
      */
@@ -646,7 +646,7 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(InvoiceWarningTypeTableMap::DATABASE_NAME);
         }
@@ -782,16 +782,16 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'invoice_warning_typeid':
+                    case 'invoice_warning_typeid':                        
                         $stmt->bindValue($identifier, $this->invoice_warning_typeid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':
+                    case 'eventid':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'extra_price':
+                    case 'extra_price':                        
                         $stmt->bindValue($identifier, $this->extra_price, PDO::PARAM_STR);
                         break;
                 }
@@ -907,10 +907,10 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aEvent) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'event';
@@ -921,11 +921,11 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
                     default:
                         $key = 'Event';
                 }
-
+        
                 $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collInvoiceWarnings) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoiceWarnings';
@@ -936,7 +936,7 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
                     default:
                         $key = 'InvoiceWarnings';
                 }
-
+        
                 $result[$key] = $this->collInvoiceWarnings->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1119,7 +1119,7 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1393,7 +1393,7 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
         /** @var ChildInvoiceWarning[] $invoiceWarningsToDelete */
         $invoiceWarningsToDelete = $this->getInvoiceWarnings(new Criteria(), $con)->diff($invoiceWarnings);
 
-
+        
         $this->invoiceWarningsScheduledForDeletion = $invoiceWarningsToDelete;
 
         foreach ($invoiceWarningsToDelete as $invoiceWarningRemoved) {

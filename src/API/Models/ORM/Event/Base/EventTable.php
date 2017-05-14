@@ -35,11 +35,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'event_table' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Event.Base
  */
-abstract class EventTable implements ActiveRecordInterface
+abstract class EventTable implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -75,28 +75,28 @@ abstract class EventTable implements ActiveRecordInterface
 
     /**
      * The value for the event_tableid field.
-     *
+     * 
      * @var        int
      */
     protected $event_tableid;
 
     /**
      * The value for the eventid field.
-     *
+     * 
      * @var        int
      */
     protected $eventid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
 
     /**
      * The value for the data field.
-     *
+     * 
      * @var        string
      */
     protected $data;
@@ -371,17 +371,17 @@ abstract class EventTable implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [event_tableid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventTableid()
@@ -391,7 +391,7 @@ abstract class EventTable implements ActiveRecordInterface
 
     /**
      * Get the [eventid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventid()
@@ -401,7 +401,7 @@ abstract class EventTable implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -411,7 +411,7 @@ abstract class EventTable implements ActiveRecordInterface
 
     /**
      * Get the [data] column value.
-     *
+     * 
      * @return string
      */
     public function getData()
@@ -421,7 +421,7 @@ abstract class EventTable implements ActiveRecordInterface
 
     /**
      * Set the value of [event_tableid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventTable The current object (for fluent API support)
      */
@@ -441,7 +441,7 @@ abstract class EventTable implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventTable The current object (for fluent API support)
      */
@@ -465,7 +465,7 @@ abstract class EventTable implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventTable The current object (for fluent API support)
      */
@@ -485,7 +485,7 @@ abstract class EventTable implements ActiveRecordInterface
 
     /**
      * Set the value of [data] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventTable The current object (for fluent API support)
      */
@@ -684,7 +684,7 @@ abstract class EventTable implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventTableTableMap::DATABASE_NAME);
         }
@@ -866,16 +866,16 @@ abstract class EventTable implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'event_tableid':
+                    case 'event_tableid':                        
                         $stmt->bindValue($identifier, $this->event_tableid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':
+                    case 'eventid':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'data':
+                    case 'data':                        
                         $stmt->bindValue($identifier, $this->data, PDO::PARAM_STR);
                         break;
                 }
@@ -991,10 +991,10 @@ abstract class EventTable implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aEvent) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'event';
@@ -1005,11 +1005,11 @@ abstract class EventTable implements ActiveRecordInterface
                     default:
                         $key = 'Event';
                 }
-
+        
                 $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collDistributionPlaceTables) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'distributionPlaceTables';
@@ -1020,11 +1020,11 @@ abstract class EventTable implements ActiveRecordInterface
                     default:
                         $key = 'DistributionPlaceTables';
                 }
-
+        
                 $result[$key] = $this->collDistributionPlaceTables->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrders) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orders';
@@ -1035,7 +1035,7 @@ abstract class EventTable implements ActiveRecordInterface
                     default:
                         $key = 'Orders';
                 }
-
+        
                 $result[$key] = $this->collOrders->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1218,7 +1218,7 @@ abstract class EventTable implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1501,7 +1501,7 @@ abstract class EventTable implements ActiveRecordInterface
         /** @var DistributionPlaceTable[] $distributionPlaceTablesToDelete */
         $distributionPlaceTablesToDelete = $this->getDistributionPlaceTables(new Criteria(), $con)->diff($distributionPlaceTables);
 
-
+        
         //since at least one column in the foreign key is at the same time a PK
         //we can not just set a PK to NULL in the lines below. We have to store
         //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
@@ -1754,7 +1754,7 @@ abstract class EventTable implements ActiveRecordInterface
         /** @var Order[] $ordersToDelete */
         $ordersToDelete = $this->getOrders(new Criteria(), $con)->diff($orders);
 
-
+        
         $this->ordersScheduledForDeletion = $ordersToDelete;
 
         foreach ($ordersToDelete as $orderRemoved) {
@@ -2074,7 +2074,7 @@ abstract class EventTable implements ActiveRecordInterface
     /**
      * Associate a DistributionPlaceGroup to this object
      * through the distribution_place_table cross reference table.
-     *
+     * 
      * @param DistributionPlaceGroup $distributionPlaceGroup
      * @return ChildEventTable The current object (for fluent API support)
      */
@@ -2094,7 +2094,7 @@ abstract class EventTable implements ActiveRecordInterface
     }
 
     /**
-     *
+     * 
      * @param DistributionPlaceGroup $distributionPlaceGroup
      */
     protected function doAddDistributionPlaceGroup(DistributionPlaceGroup $distributionPlaceGroup)
@@ -2121,7 +2121,7 @@ abstract class EventTable implements ActiveRecordInterface
     /**
      * Remove distributionPlaceGroup of this object
      * through the distribution_place_table cross reference table.
-     *
+     * 
      * @param DistributionPlaceGroup $distributionPlaceGroup
      * @return ChildEventTable The current object (for fluent API support)
      */
@@ -2140,7 +2140,7 @@ abstract class EventTable implements ActiveRecordInterface
             $distributionPlaceTable->clear();
 
             $this->collDistributionPlaceGroups->remove($this->collDistributionPlaceGroups->search($distributionPlaceGroup));
-
+            
             if (null === $this->distributionPlaceGroupsScheduledForDeletion) {
                 $this->distributionPlaceGroupsScheduledForDeletion = clone $this->collDistributionPlaceGroups;
                 $this->distributionPlaceGroupsScheduledForDeletion->clear();

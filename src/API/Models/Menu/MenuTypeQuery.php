@@ -2,6 +2,7 @@
 
 namespace API\Models\Menu;
 
+use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Interfaces\Models\Menu\IMenuType;
 use API\Lib\Interfaces\Models\Menu\IMenuTypeCollection;
 use API\Lib\Interfaces\Models\Menu\IMenuTypeQuery;
@@ -14,6 +15,7 @@ use API\Models\ORM\Menu\Map\MenuTableMap;
 use API\Models\ORM\Menu\MenuTypeQuery as MenuTypeQueryORM;
 use API\Models\Query;
 use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Propel;
 
 class MenuTypeQuery extends Query implements IMenuTypeQuery
 {
@@ -42,6 +44,9 @@ class MenuTypeQuery extends Query implements IMenuTypeQuery
     }
 
     function getMenuTypesForEventid($eventid) : IMenuTypeCollection {
+
+        Propel::enableInstancePooling();
+
         $menuTypes = MenuTypeQueryORM::create()
                         ->useMenuGroupQuery()
                             ->useMenuQuery()
@@ -61,6 +66,8 @@ class MenuTypeQuery extends Query implements IMenuTypeQuery
                         ->with(MenuExtraTableMap::getTableMap()->getPhpName())
                         ->filterByEventid($eventid)
                         ->find();
+
+        Propel::disableInstancePooling();
 
         $menuTypeCollection = $this->container->get(IMenuTypeCollection::class);
         $menuTypeCollection->setCollection($menuTypes);

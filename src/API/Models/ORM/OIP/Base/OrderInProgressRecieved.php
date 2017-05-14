@@ -27,11 +27,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'order_in_progress_recieved' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.OIP.Base
  */
-abstract class OrderInProgressRecieved implements ActiveRecordInterface
+abstract class OrderInProgressRecieved implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -67,35 +67,35 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
 
     /**
      * The value for the order_in_progress_recievedid field.
-     *
+     * 
      * @var        int
      */
     protected $order_in_progress_recievedid;
 
     /**
      * The value for the order_detailid field.
-     *
+     * 
      * @var        int
      */
     protected $order_detailid;
 
     /**
      * The value for the order_in_progressid field.
-     *
+     * 
      * @var        int
      */
     protected $order_in_progressid;
 
     /**
      * The value for the distribution_giving_outid field.
-     *
+     * 
      * @var        int
      */
     protected $distribution_giving_outid;
 
     /**
      * The value for the amount field.
-     *
+     * 
      * @var        int
      */
     protected $amount;
@@ -340,17 +340,17 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [order_in_progress_recievedid] column value.
-     *
+     * 
      * @return int
      */
     public function getOrderInProgressRecievedid()
@@ -360,7 +360,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
 
     /**
      * Get the [order_detailid] column value.
-     *
+     * 
      * @return int
      */
     public function getOrderDetailid()
@@ -370,7 +370,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
 
     /**
      * Get the [order_in_progressid] column value.
-     *
+     * 
      * @return int
      */
     public function getOrderInProgressid()
@@ -380,7 +380,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
 
     /**
      * Get the [distribution_giving_outid] column value.
-     *
+     * 
      * @return int
      */
     public function getDistributionGivingOutid()
@@ -390,7 +390,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
 
     /**
      * Get the [amount] column value.
-     *
+     * 
      * @return int
      */
     public function getAmount()
@@ -400,7 +400,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
 
     /**
      * Set the value of [order_in_progress_recievedid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\OIP\OrderInProgressRecieved The current object (for fluent API support)
      */
@@ -420,7 +420,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
 
     /**
      * Set the value of [order_detailid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\OIP\OrderInProgressRecieved The current object (for fluent API support)
      */
@@ -444,7 +444,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
 
     /**
      * Set the value of [order_in_progressid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\OIP\OrderInProgressRecieved The current object (for fluent API support)
      */
@@ -468,7 +468,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
 
     /**
      * Set the value of [distribution_giving_outid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\OIP\OrderInProgressRecieved The current object (for fluent API support)
      */
@@ -492,7 +492,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
 
     /**
      * Set the value of [amount] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\OIP\OrderInProgressRecieved The current object (for fluent API support)
      */
@@ -697,7 +697,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderInProgressRecievedTableMap::DATABASE_NAME);
         }
@@ -833,19 +833,19 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'order_in_progress_recievedid':
+                    case 'order_in_progress_recievedid':                        
                         $stmt->bindValue($identifier, $this->order_in_progress_recievedid, PDO::PARAM_INT);
                         break;
-                    case 'order_detailid':
+                    case 'order_detailid':                        
                         $stmt->bindValue($identifier, $this->order_detailid, PDO::PARAM_INT);
                         break;
-                    case 'order_in_progressid':
+                    case 'order_in_progressid':                        
                         $stmt->bindValue($identifier, $this->order_in_progressid, PDO::PARAM_INT);
                         break;
-                    case 'distribution_giving_outid':
+                    case 'distribution_giving_outid':                        
                         $stmt->bindValue($identifier, $this->distribution_giving_outid, PDO::PARAM_INT);
                         break;
-                    case 'amount':
+                    case 'amount':                        
                         $stmt->bindValue($identifier, $this->amount, PDO::PARAM_INT);
                         break;
                 }
@@ -965,10 +965,10 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aOrderDetail) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetail';
@@ -979,11 +979,11 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetail';
                 }
-
+        
                 $result[$key] = $this->aOrderDetail->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aOrderInProgress) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderInProgress';
@@ -994,11 +994,11 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
                     default:
                         $key = 'OrderInProgress';
                 }
-
+        
                 $result[$key] = $this->aOrderInProgress->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aDistributionGivingOut) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'distributionGivingOut';
@@ -1009,7 +1009,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
                     default:
                         $key = 'DistributionGivingOut';
                 }
-
+        
                 $result[$key] = $this->aDistributionGivingOut->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -1201,7 +1201,7 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int

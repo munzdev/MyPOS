@@ -20,7 +20,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'distribution_place_user' table.
  *
- *
+ * 
  *
  * @method     ChildDistributionPlaceUserQuery orderByDistributionPlaceid($order = Criteria::ASC) Order by the distribution_placeid column
  * @method     ChildDistributionPlaceUserQuery orderByUserid($order = Criteria::ASC) Order by the userid column
@@ -188,9 +188,9 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
     {
         $sql = 'SELECT distribution_placeid, userid, event_printerid FROM distribution_place_user WHERE distribution_placeid = :p0 AND userid = :p1 AND event_printerid = :p2';
         try {
-            $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
-            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
+            $stmt = $con->prepare($sql);            
+            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);            
+            $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);            
             $stmt->bindValue(':p2', $key[2], PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -722,9 +722,9 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             DistributionPlaceUserTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             DistributionPlaceUserTableMap::clearRelatedInstancePool();
 

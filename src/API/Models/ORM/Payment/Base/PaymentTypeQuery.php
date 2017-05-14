@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'payment_type' table.
  *
- *
+ * 
  *
  * @method     ChildPaymentTypeQuery orderByPaymentTypeid($order = Criteria::ASC) Order by the payment_typeid column
  * @method     ChildPaymentTypeQuery orderByName($order = Criteria::ASC) Order by the name column
@@ -161,7 +161,7 @@ abstract class PaymentTypeQuery extends ModelCriteria
     {
         $sql = 'SELECT payment_typeid, name FROM payment_type WHERE payment_typeid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -455,9 +455,9 @@ abstract class PaymentTypeQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             PaymentTypeTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             PaymentTypeTableMap::clearRelatedInstancePool();
 

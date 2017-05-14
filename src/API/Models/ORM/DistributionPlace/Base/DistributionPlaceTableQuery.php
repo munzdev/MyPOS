@@ -19,7 +19,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'distribution_place_table' table.
  *
- *
+ * 
  *
  * @method     ChildDistributionPlaceTableQuery orderByEventTableid($order = Criteria::ASC) Order by the event_tableid column
  * @method     ChildDistributionPlaceTableQuery orderByDistributionPlaceGroupid($order = Criteria::ASC) Order by the distribution_place_groupid column
@@ -172,8 +172,8 @@ abstract class DistributionPlaceTableQuery extends ModelCriteria
     {
         $sql = 'SELECT event_tableid, distribution_place_groupid FROM distribution_place_table WHERE event_tableid = :p0 AND distribution_place_groupid = :p1';
         try {
-            $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
+            $stmt = $con->prepare($sql);            
+            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);            
             $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -581,9 +581,9 @@ abstract class DistributionPlaceTableQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             DistributionPlaceTableTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             DistributionPlaceTableTableMap::clearRelatedInstancePool();
 

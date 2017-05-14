@@ -25,7 +25,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'order_detail' table.
  *
- *
+ * 
  *
  * @method     ChildOrderDetailQuery orderByOrderDetailid($order = Criteria::ASC) Order by the order_detailid column
  * @method     ChildOrderDetailQuery orderByOrderid($order = Criteria::ASC) Order by the orderid column
@@ -318,7 +318,7 @@ abstract class OrderDetailQuery extends ModelCriteria
     {
         $sql = 'SELECT order_detailid, orderid, menuid, menu_sizeid, menu_groupid, amount, single_price, single_price_modified_by_userid, extra_detail, availabilityid, availability_amount, verified, distribution_finished, invoice_finished FROM order_detail WHERE order_detailid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -1804,9 +1804,9 @@ abstract class OrderDetailQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             OrderDetailTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             OrderDetailTableMap::clearRelatedInstancePool();
 

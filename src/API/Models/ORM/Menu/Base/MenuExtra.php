@@ -30,11 +30,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'menu_extra' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Menu.Base
  */
-abstract class MenuExtra implements ActiveRecordInterface
+abstract class MenuExtra implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -70,35 +70,35 @@ abstract class MenuExtra implements ActiveRecordInterface
 
     /**
      * The value for the menu_extraid field.
-     *
+     * 
      * @var        int
      */
     protected $menu_extraid;
 
     /**
      * The value for the eventid field.
-     *
+     * 
      * @var        int
      */
     protected $eventid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
 
     /**
      * The value for the availabilityid field.
-     *
+     * 
      * @var        int
      */
     protected $availabilityid;
 
     /**
      * The value for the availability_amount field.
-     *
+     * 
      * @var        int
      */
     protected $availability_amount;
@@ -350,17 +350,17 @@ abstract class MenuExtra implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [menu_extraid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuExtraid()
@@ -370,7 +370,7 @@ abstract class MenuExtra implements ActiveRecordInterface
 
     /**
      * Get the [eventid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventid()
@@ -380,7 +380,7 @@ abstract class MenuExtra implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -390,7 +390,7 @@ abstract class MenuExtra implements ActiveRecordInterface
 
     /**
      * Get the [availabilityid] column value.
-     *
+     * 
      * @return int
      */
     public function getAvailabilityid()
@@ -400,7 +400,7 @@ abstract class MenuExtra implements ActiveRecordInterface
 
     /**
      * Get the [availability_amount] column value.
-     *
+     * 
      * @return int
      */
     public function getAvailabilityAmount()
@@ -410,7 +410,7 @@ abstract class MenuExtra implements ActiveRecordInterface
 
     /**
      * Set the value of [menu_extraid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\MenuExtra The current object (for fluent API support)
      */
@@ -430,7 +430,7 @@ abstract class MenuExtra implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\MenuExtra The current object (for fluent API support)
      */
@@ -454,7 +454,7 @@ abstract class MenuExtra implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Menu\MenuExtra The current object (for fluent API support)
      */
@@ -474,7 +474,7 @@ abstract class MenuExtra implements ActiveRecordInterface
 
     /**
      * Set the value of [availabilityid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\MenuExtra The current object (for fluent API support)
      */
@@ -498,7 +498,7 @@ abstract class MenuExtra implements ActiveRecordInterface
 
     /**
      * Set the value of [availability_amount] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\MenuExtra The current object (for fluent API support)
      */
@@ -701,7 +701,7 @@ abstract class MenuExtra implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(MenuExtraTableMap::DATABASE_NAME);
         }
@@ -847,19 +847,19 @@ abstract class MenuExtra implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'menu_extraid':
+                    case 'menu_extraid':                        
                         $stmt->bindValue($identifier, $this->menu_extraid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':
+                    case 'eventid':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'availabilityid':
+                    case 'availabilityid':                        
                         $stmt->bindValue($identifier, $this->availabilityid, PDO::PARAM_INT);
                         break;
-                    case 'availability_amount':
+                    case 'availability_amount':                        
                         $stmt->bindValue($identifier, $this->availability_amount, PDO::PARAM_INT);
                         break;
                 }
@@ -979,10 +979,10 @@ abstract class MenuExtra implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aAvailability) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'availability';
@@ -993,11 +993,11 @@ abstract class MenuExtra implements ActiveRecordInterface
                     default:
                         $key = 'Availability';
                 }
-
+        
                 $result[$key] = $this->aAvailability->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aEvent) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'event';
@@ -1008,11 +1008,11 @@ abstract class MenuExtra implements ActiveRecordInterface
                     default:
                         $key = 'Event';
                 }
-
+        
                 $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collMenuPossibleExtras) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuPossibleExtras';
@@ -1023,7 +1023,7 @@ abstract class MenuExtra implements ActiveRecordInterface
                     default:
                         $key = 'MenuPossibleExtras';
                 }
-
+        
                 $result[$key] = $this->collMenuPossibleExtras->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1215,7 +1215,7 @@ abstract class MenuExtra implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1541,7 +1541,7 @@ abstract class MenuExtra implements ActiveRecordInterface
         /** @var ChildMenuPossibleExtra[] $menuPossibleExtrasToDelete */
         $menuPossibleExtrasToDelete = $this->getMenuPossibleExtras(new Criteria(), $con)->diff($menuPossibleExtras);
 
-
+        
         $this->menuPossibleExtrasScheduledForDeletion = $menuPossibleExtrasToDelete;
 
         foreach ($menuPossibleExtrasToDelete as $menuPossibleExtraRemoved) {

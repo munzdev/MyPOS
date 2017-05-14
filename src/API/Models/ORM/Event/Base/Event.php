@@ -64,11 +64,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'event' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Event.Base
  */
-abstract class Event implements ActiveRecordInterface
+abstract class Event implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -104,28 +104,28 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * The value for the eventid field.
-     *
+     * 
      * @var        int
      */
     protected $eventid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
 
     /**
      * The value for the date field.
-     *
+     * 
      * @var        DateTime
      */
     protected $date;
 
     /**
      * The value for the active field.
-     *
+     * 
      * @var        boolean
      */
     protected $active;
@@ -487,17 +487,17 @@ abstract class Event implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [eventid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventid()
@@ -507,7 +507,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -517,7 +517,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [date] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -537,7 +537,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Get the [active] column value.
-     *
+     * 
      * @return boolean
      */
     public function getActive()
@@ -547,7 +547,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Get the [active] column value.
-     *
+     * 
      * @return boolean
      */
     public function isActive()
@@ -557,7 +557,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\Event The current object (for fluent API support)
      */
@@ -577,7 +577,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\Event The current object (for fluent API support)
      */
@@ -597,7 +597,7 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * Sets the value of [date] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Event\Event The current object (for fluent API support)
@@ -621,7 +621,7 @@ abstract class Event implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
+     * 
      * @param  boolean|integer|string $v The new value
      * @return $this|\API\Models\ORM\Event\Event The current object (for fluent API support)
      */
@@ -840,7 +840,7 @@ abstract class Event implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventTableMap::DATABASE_NAME);
         }
@@ -1134,13 +1134,13 @@ abstract class Event implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'eventid':
+                    case 'eventid':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'date':
+                    case 'date':                        
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'active':
@@ -1258,15 +1258,15 @@ abstract class Event implements ActiveRecordInterface
         if ($result[$keys[2]] instanceof \DateTime) {
             $result[$keys[2]] = $result[$keys[2]]->format('c');
         }
-
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collCoupons) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'coupons';
@@ -1277,11 +1277,11 @@ abstract class Event implements ActiveRecordInterface
                     default:
                         $key = 'Coupons';
                 }
-
+        
                 $result[$key] = $this->collCoupons->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventBankinformations) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventBankinformations';
@@ -1292,11 +1292,11 @@ abstract class Event implements ActiveRecordInterface
                     default:
                         $key = 'EventBankinformations';
                 }
-
+        
                 $result[$key] = $this->collEventBankinformations->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventContacts) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventContacts';
@@ -1307,11 +1307,11 @@ abstract class Event implements ActiveRecordInterface
                     default:
                         $key = 'EventContacts';
                 }
-
+        
                 $result[$key] = $this->collEventContacts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collDistributionPlaces) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'distributionPlaces';
@@ -1322,11 +1322,11 @@ abstract class Event implements ActiveRecordInterface
                     default:
                         $key = 'DistributionPlaces';
                 }
-
+        
                 $result[$key] = $this->collDistributionPlaces->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventPrinters) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventPrinters';
@@ -1337,11 +1337,11 @@ abstract class Event implements ActiveRecordInterface
                     default:
                         $key = 'EventPrinters';
                 }
-
+        
                 $result[$key] = $this->collEventPrinters->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventTables) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventTables';
@@ -1352,11 +1352,11 @@ abstract class Event implements ActiveRecordInterface
                     default:
                         $key = 'EventTables';
                 }
-
+        
                 $result[$key] = $this->collEventTables->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventUsers) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventUsers';
@@ -1367,11 +1367,11 @@ abstract class Event implements ActiveRecordInterface
                     default:
                         $key = 'EventUsers';
                 }
-
+        
                 $result[$key] = $this->collEventUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collMenuExtras) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuExtras';
@@ -1382,11 +1382,11 @@ abstract class Event implements ActiveRecordInterface
                     default:
                         $key = 'MenuExtras';
                 }
-
+        
                 $result[$key] = $this->collMenuExtras->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collMenuSizes) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuSizes';
@@ -1397,11 +1397,11 @@ abstract class Event implements ActiveRecordInterface
                     default:
                         $key = 'MenuSizes';
                 }
-
+        
                 $result[$key] = $this->collMenuSizes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collMenuTypes) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuTypes';
@@ -1412,11 +1412,11 @@ abstract class Event implements ActiveRecordInterface
                     default:
                         $key = 'MenuTypes';
                 }
-
+        
                 $result[$key] = $this->collMenuTypes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collInvoiceWarningTypes) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoiceWarningTypes';
@@ -1427,7 +1427,7 @@ abstract class Event implements ActiveRecordInterface
                     default:
                         $key = 'InvoiceWarningTypes';
                 }
-
+        
                 $result[$key] = $this->collInvoiceWarningTypes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1610,7 +1610,7 @@ abstract class Event implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1923,7 +1923,7 @@ abstract class Event implements ActiveRecordInterface
         /** @var Coupon[] $couponsToDelete */
         $couponsToDelete = $this->getCoupons(new Criteria(), $con)->diff($coupons);
 
-
+        
         $this->couponsScheduledForDeletion = $couponsToDelete;
 
         foreach ($couponsToDelete as $couponRemoved) {
@@ -2173,7 +2173,7 @@ abstract class Event implements ActiveRecordInterface
         /** @var ChildEventBankinformation[] $eventBankinformationsToDelete */
         $eventBankinformationsToDelete = $this->getEventBankinformations(new Criteria(), $con)->diff($eventBankinformations);
 
-
+        
         $this->eventBankinformationsScheduledForDeletion = $eventBankinformationsToDelete;
 
         foreach ($eventBankinformationsToDelete as $eventBankinformationRemoved) {
@@ -2398,7 +2398,7 @@ abstract class Event implements ActiveRecordInterface
         /** @var ChildEventContact[] $eventContactsToDelete */
         $eventContactsToDelete = $this->getEventContacts(new Criteria(), $con)->diff($eventContacts);
 
-
+        
         $this->eventContactsScheduledForDeletion = $eventContactsToDelete;
 
         foreach ($eventContactsToDelete as $eventContactRemoved) {
@@ -2623,7 +2623,7 @@ abstract class Event implements ActiveRecordInterface
         /** @var DistributionPlace[] $distributionPlacesToDelete */
         $distributionPlacesToDelete = $this->getDistributionPlaces(new Criteria(), $con)->diff($distributionPlaces);
 
-
+        
         $this->distributionPlacesScheduledForDeletion = $distributionPlacesToDelete;
 
         foreach ($distributionPlacesToDelete as $distributionPlaceRemoved) {
@@ -2848,7 +2848,7 @@ abstract class Event implements ActiveRecordInterface
         /** @var ChildEventPrinter[] $eventPrintersToDelete */
         $eventPrintersToDelete = $this->getEventPrinters(new Criteria(), $con)->diff($eventPrinters);
 
-
+        
         $this->eventPrintersScheduledForDeletion = $eventPrintersToDelete;
 
         foreach ($eventPrintersToDelete as $eventPrinterRemoved) {
@@ -3073,7 +3073,7 @@ abstract class Event implements ActiveRecordInterface
         /** @var ChildEventTable[] $eventTablesToDelete */
         $eventTablesToDelete = $this->getEventTables(new Criteria(), $con)->diff($eventTables);
 
-
+        
         $this->eventTablesScheduledForDeletion = $eventTablesToDelete;
 
         foreach ($eventTablesToDelete as $eventTableRemoved) {
@@ -3298,7 +3298,7 @@ abstract class Event implements ActiveRecordInterface
         /** @var ChildEventUser[] $eventUsersToDelete */
         $eventUsersToDelete = $this->getEventUsers(new Criteria(), $con)->diff($eventUsers);
 
-
+        
         $this->eventUsersScheduledForDeletion = $eventUsersToDelete;
 
         foreach ($eventUsersToDelete as $eventUserRemoved) {
@@ -3548,7 +3548,7 @@ abstract class Event implements ActiveRecordInterface
         /** @var MenuExtra[] $menuExtrasToDelete */
         $menuExtrasToDelete = $this->getMenuExtras(new Criteria(), $con)->diff($menuExtras);
 
-
+        
         $this->menuExtrasScheduledForDeletion = $menuExtrasToDelete;
 
         foreach ($menuExtrasToDelete as $menuExtraRemoved) {
@@ -3798,7 +3798,7 @@ abstract class Event implements ActiveRecordInterface
         /** @var MenuSize[] $menuSizesToDelete */
         $menuSizesToDelete = $this->getMenuSizes(new Criteria(), $con)->diff($menuSizes);
 
-
+        
         $this->menuSizesScheduledForDeletion = $menuSizesToDelete;
 
         foreach ($menuSizesToDelete as $menuSizeRemoved) {
@@ -4023,7 +4023,7 @@ abstract class Event implements ActiveRecordInterface
         /** @var MenuType[] $menuTypesToDelete */
         $menuTypesToDelete = $this->getMenuTypes(new Criteria(), $con)->diff($menuTypes);
 
-
+        
         $this->menuTypesScheduledForDeletion = $menuTypesToDelete;
 
         foreach ($menuTypesToDelete as $menuTypeRemoved) {
@@ -4248,7 +4248,7 @@ abstract class Event implements ActiveRecordInterface
         /** @var InvoiceWarningType[] $invoiceWarningTypesToDelete */
         $invoiceWarningTypesToDelete = $this->getInvoiceWarningTypes(new Criteria(), $con)->diff($invoiceWarningTypes);
 
-
+        
         $this->invoiceWarningTypesScheduledForDeletion = $invoiceWarningTypesToDelete;
 
         foreach ($invoiceWarningTypesToDelete as $invoiceWarningTypeRemoved) {

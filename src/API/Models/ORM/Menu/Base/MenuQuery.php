@@ -20,7 +20,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'menu' table.
  *
- *
+ * 
  *
  * @method     ChildMenuQuery orderByMenuid($order = Criteria::ASC) Order by the menuid column
  * @method     ChildMenuQuery orderByMenuGroupid($order = Criteria::ASC) Order by the menu_groupid column
@@ -233,7 +233,7 @@ abstract class MenuQuery extends ModelCriteria
     {
         $sql = 'SELECT menuid, menu_groupid, name, price, availabilityid, availability_amount FROM menu WHERE menuid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -1068,9 +1068,9 @@ abstract class MenuQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             MenuTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             MenuTableMap::clearRelatedInstancePool();
 

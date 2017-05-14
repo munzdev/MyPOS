@@ -19,7 +19,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'invoice_warning_type' table.
  *
- *
+ * 
  *
  * @method     ChildInvoiceWarningTypeQuery orderByInvoiceWarningTypeid($order = Criteria::ASC) Order by the invoice_warning_typeid column
  * @method     ChildInvoiceWarningTypeQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
@@ -182,7 +182,7 @@ abstract class InvoiceWarningTypeQuery extends ModelCriteria
     {
         $sql = 'SELECT invoice_warning_typeid, eventid, name, extra_price FROM invoice_warning_type WHERE invoice_warning_typeid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -637,9 +637,9 @@ abstract class InvoiceWarningTypeQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             InvoiceWarningTypeTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             InvoiceWarningTypeTableMap::clearRelatedInstancePool();
 

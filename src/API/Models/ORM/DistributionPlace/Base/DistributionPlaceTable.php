@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'distribution_place_table' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.DistributionPlace.Base
  */
-abstract class DistributionPlaceTable implements ActiveRecordInterface
+abstract class DistributionPlaceTable implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -65,14 +65,14 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
 
     /**
      * The value for the event_tableid field.
-     *
+     * 
      * @var        int
      */
     protected $event_tableid;
 
     /**
      * The value for the distribution_place_groupid field.
-     *
+     * 
      * @var        int
      */
     protected $distribution_place_groupid;
@@ -312,17 +312,17 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [event_tableid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventTableid()
@@ -332,7 +332,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
 
     /**
      * Get the [distribution_place_groupid] column value.
-     *
+     * 
      * @return int
      */
     public function getDistributionPlaceGroupid()
@@ -342,7 +342,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
 
     /**
      * Set the value of [event_tableid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\DistributionPlace\DistributionPlaceTable The current object (for fluent API support)
      */
@@ -366,7 +366,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
 
     /**
      * Set the value of [distribution_place_groupid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\DistributionPlace\DistributionPlaceTable The current object (for fluent API support)
      */
@@ -562,7 +562,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(DistributionPlaceTableTableMap::DATABASE_NAME);
         }
@@ -678,10 +678,10 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'event_tableid':
+                    case 'event_tableid':                        
                         $stmt->bindValue($identifier, $this->event_tableid, PDO::PARAM_INT);
                         break;
-                    case 'distribution_place_groupid':
+                    case 'distribution_place_groupid':                        
                         $stmt->bindValue($identifier, $this->distribution_place_groupid, PDO::PARAM_INT);
                         break;
                 }
@@ -782,10 +782,10 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aDistributionPlaceGroup) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'distributionPlaceGroup';
@@ -796,11 +796,11 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
                     default:
                         $key = 'DistributionPlaceGroup';
                 }
-
+        
                 $result[$key] = $this->aDistributionPlaceGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aEventTable) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventTable';
@@ -811,7 +811,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
                     default:
                         $key = 'EventTable';
                 }
-
+        
                 $result[$key] = $this->aEventTable->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -992,7 +992,7 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the composite primary key for this object.
      * The array elements will be in same order as specified in XML.

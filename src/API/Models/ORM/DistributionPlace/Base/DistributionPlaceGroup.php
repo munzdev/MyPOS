@@ -32,11 +32,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'distribution_place_group' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.DistributionPlace.Base
  */
-abstract class DistributionPlaceGroup implements ActiveRecordInterface
+abstract class DistributionPlaceGroup implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -72,21 +72,21 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
 
     /**
      * The value for the distribution_place_groupid field.
-     *
+     * 
      * @var        int
      */
     protected $distribution_place_groupid;
 
     /**
      * The value for the distribution_placeid field.
-     *
+     * 
      * @var        int
      */
     protected $distribution_placeid;
 
     /**
      * The value for the menu_groupid field.
-     *
+     * 
      * @var        int
      */
     protected $menu_groupid;
@@ -354,17 +354,17 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [distribution_place_groupid] column value.
-     *
+     * 
      * @return int
      */
     public function getDistributionPlaceGroupid()
@@ -374,7 +374,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
 
     /**
      * Get the [distribution_placeid] column value.
-     *
+     * 
      * @return int
      */
     public function getDistributionPlaceid()
@@ -384,7 +384,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
 
     /**
      * Get the [menu_groupid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuGroupid()
@@ -394,7 +394,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
 
     /**
      * Set the value of [distribution_place_groupid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\DistributionPlace\DistributionPlaceGroup The current object (for fluent API support)
      */
@@ -414,7 +414,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
 
     /**
      * Set the value of [distribution_placeid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\DistributionPlace\DistributionPlaceGroup The current object (for fluent API support)
      */
@@ -438,7 +438,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
 
     /**
      * Set the value of [menu_groupid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\DistributionPlace\DistributionPlaceGroup The current object (for fluent API support)
      */
@@ -640,7 +640,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(DistributionPlaceGroupTableMap::DATABASE_NAME);
         }
@@ -809,13 +809,13 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'distribution_place_groupid':
+                    case 'distribution_place_groupid':                        
                         $stmt->bindValue($identifier, $this->distribution_place_groupid, PDO::PARAM_INT);
                         break;
-                    case 'distribution_placeid':
+                    case 'distribution_placeid':                        
                         $stmt->bindValue($identifier, $this->distribution_placeid, PDO::PARAM_INT);
                         break;
-                    case 'menu_groupid':
+                    case 'menu_groupid':                        
                         $stmt->bindValue($identifier, $this->menu_groupid, PDO::PARAM_INT);
                         break;
                 }
@@ -927,10 +927,10 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aDistributionPlace) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'distributionPlace';
@@ -941,11 +941,11 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
                     default:
                         $key = 'DistributionPlace';
                 }
-
+        
                 $result[$key] = $this->aDistributionPlace->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aMenuGroup) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuGroup';
@@ -956,11 +956,11 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
                     default:
                         $key = 'MenuGroup';
                 }
-
+        
                 $result[$key] = $this->aMenuGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collDistributionPlaceTables) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'distributionPlaceTables';
@@ -971,7 +971,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
                     default:
                         $key = 'DistributionPlaceTables';
                 }
-
+        
                 $result[$key] = $this->collDistributionPlaceTables->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1145,7 +1145,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1469,7 +1469,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
         /** @var ChildDistributionPlaceTable[] $distributionPlaceTablesToDelete */
         $distributionPlaceTablesToDelete = $this->getDistributionPlaceTables(new Criteria(), $con)->diff($distributionPlaceTables);
 
-
+        
         //since at least one column in the foreign key is at the same time a PK
         //we can not just set a PK to NULL in the lines below. We have to store
         //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
@@ -1767,7 +1767,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
     /**
      * Associate a EventTable to this object
      * through the distribution_place_table cross reference table.
-     *
+     * 
      * @param EventTable $eventTable
      * @return ChildDistributionPlaceGroup The current object (for fluent API support)
      */
@@ -1787,7 +1787,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
     }
 
     /**
-     *
+     * 
      * @param EventTable $eventTable
      */
     protected function doAddEventTable(EventTable $eventTable)
@@ -1814,7 +1814,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
     /**
      * Remove eventTable of this object
      * through the distribution_place_table cross reference table.
-     *
+     * 
      * @param EventTable $eventTable
      * @return ChildDistributionPlaceGroup The current object (for fluent API support)
      */
@@ -1833,7 +1833,7 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
             $distributionPlaceTable->clear();
 
             $this->collEventTables->remove($this->collEventTables->search($eventTable));
-
+            
             if (null === $this->eventTablesScheduledForDeletion) {
                 $this->eventTablesScheduledForDeletion = clone $this->collEventTables;
                 $this->eventTablesScheduledForDeletion->clear();

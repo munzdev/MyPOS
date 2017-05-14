@@ -26,11 +26,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'invoice_type' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Invoice.Base
  */
-abstract class InvoiceType implements ActiveRecordInterface
+abstract class InvoiceType implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -66,14 +66,14 @@ abstract class InvoiceType implements ActiveRecordInterface
 
     /**
      * The value for the invoice_typeid field.
-     *
+     * 
      * @var        int
      */
     protected $invoice_typeid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
@@ -315,17 +315,17 @@ abstract class InvoiceType implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [invoice_typeid] column value.
-     *
+     * 
      * @return int
      */
     public function getInvoiceTypeid()
@@ -335,7 +335,7 @@ abstract class InvoiceType implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -345,7 +345,7 @@ abstract class InvoiceType implements ActiveRecordInterface
 
     /**
      * Set the value of [invoice_typeid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceType The current object (for fluent API support)
      */
@@ -365,7 +365,7 @@ abstract class InvoiceType implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceType The current object (for fluent API support)
      */
@@ -551,7 +551,7 @@ abstract class InvoiceType implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(InvoiceTypeTableMap::DATABASE_NAME);
         }
@@ -669,10 +669,10 @@ abstract class InvoiceType implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'invoice_typeid':
+                    case 'invoice_typeid':                        
                         $stmt->bindValue($identifier, $this->invoice_typeid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                 }
@@ -780,10 +780,10 @@ abstract class InvoiceType implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collInvoices) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoices';
@@ -794,7 +794,7 @@ abstract class InvoiceType implements ActiveRecordInterface
                     default:
                         $key = 'Invoices';
                 }
-
+        
                 $result[$key] = $this->collInvoices->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -959,7 +959,7 @@ abstract class InvoiceType implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1180,7 +1180,7 @@ abstract class InvoiceType implements ActiveRecordInterface
         /** @var ChildInvoice[] $invoicesToDelete */
         $invoicesToDelete = $this->getInvoices(new Criteria(), $con)->diff($invoices);
 
-
+        
         $this->invoicesScheduledForDeletion = $invoicesToDelete;
 
         foreach ($invoicesToDelete as $invoiceRemoved) {

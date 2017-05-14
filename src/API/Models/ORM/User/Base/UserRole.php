@@ -21,11 +21,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'user_role' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.User.Base
  */
-abstract class UserRole implements ActiveRecordInterface
+abstract class UserRole implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -61,14 +61,14 @@ abstract class UserRole implements ActiveRecordInterface
 
     /**
      * The value for the user_roleid field.
-     *
+     * 
      * @var        int
      */
     protected $user_roleid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
@@ -298,17 +298,17 @@ abstract class UserRole implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [user_roleid] column value.
-     *
+     * 
      * @return int
      */
     public function getUserRoleid()
@@ -318,7 +318,7 @@ abstract class UserRole implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -328,7 +328,7 @@ abstract class UserRole implements ActiveRecordInterface
 
     /**
      * Set the value of [user_roleid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\User\UserRole The current object (for fluent API support)
      */
@@ -348,7 +348,7 @@ abstract class UserRole implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\User\UserRole The current object (for fluent API support)
      */
@@ -532,7 +532,7 @@ abstract class UserRole implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(UserRoleTableMap::DATABASE_NAME);
         }
@@ -629,10 +629,10 @@ abstract class UserRole implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'user_roleid':
+                    case 'user_roleid':                        
                         $stmt->bindValue($identifier, $this->user_roleid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                 }
@@ -732,7 +732,7 @@ abstract class UserRole implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
 
         return $result;
     }
@@ -894,7 +894,7 @@ abstract class UserRole implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int

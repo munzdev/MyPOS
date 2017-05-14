@@ -33,11 +33,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'availability' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Menu.Base
  */
-abstract class Availability implements ActiveRecordInterface
+abstract class Availability implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -73,14 +73,14 @@ abstract class Availability implements ActiveRecordInterface
 
     /**
      * The value for the availabilityid field.
-     *
+     * 
      * @var        int
      */
     protected $availabilityid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
@@ -346,17 +346,17 @@ abstract class Availability implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [availabilityid] column value.
-     *
+     * 
      * @return int
      */
     public function getAvailabilityid()
@@ -366,7 +366,7 @@ abstract class Availability implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -376,7 +376,7 @@ abstract class Availability implements ActiveRecordInterface
 
     /**
      * Set the value of [availabilityid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\Availability The current object (for fluent API support)
      */
@@ -396,7 +396,7 @@ abstract class Availability implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Menu\Availability The current object (for fluent API support)
      */
@@ -586,7 +586,7 @@ abstract class Availability implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(AvailabilityTableMap::DATABASE_NAME);
         }
@@ -738,10 +738,10 @@ abstract class Availability implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'availabilityid':
+                    case 'availabilityid':                        
                         $stmt->bindValue($identifier, $this->availabilityid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                 }
@@ -849,10 +849,10 @@ abstract class Availability implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collMenus) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menus';
@@ -863,11 +863,11 @@ abstract class Availability implements ActiveRecordInterface
                     default:
                         $key = 'Menus';
                 }
-
+        
                 $result[$key] = $this->collMenus->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collMenuExtras) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuExtras';
@@ -878,11 +878,11 @@ abstract class Availability implements ActiveRecordInterface
                     default:
                         $key = 'MenuExtras';
                 }
-
+        
                 $result[$key] = $this->collMenuExtras->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderDetails) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetails';
@@ -893,7 +893,7 @@ abstract class Availability implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetails';
                 }
-
+        
                 $result[$key] = $this->collOrderDetails->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1058,7 +1058,7 @@ abstract class Availability implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1297,7 +1297,7 @@ abstract class Availability implements ActiveRecordInterface
         /** @var ChildMenu[] $menusToDelete */
         $menusToDelete = $this->getMenus(new Criteria(), $con)->diff($menus);
 
-
+        
         $this->menusScheduledForDeletion = $menusToDelete;
 
         foreach ($menusToDelete as $menuRemoved) {
@@ -1547,7 +1547,7 @@ abstract class Availability implements ActiveRecordInterface
         /** @var ChildMenuExtra[] $menuExtrasToDelete */
         $menuExtrasToDelete = $this->getMenuExtras(new Criteria(), $con)->diff($menuExtras);
 
-
+        
         $this->menuExtrasScheduledForDeletion = $menuExtrasToDelete;
 
         foreach ($menuExtrasToDelete as $menuExtraRemoved) {
@@ -1797,7 +1797,7 @@ abstract class Availability implements ActiveRecordInterface
         /** @var OrderDetail[] $orderDetailsToDelete */
         $orderDetailsToDelete = $this->getOrderDetails(new Criteria(), $con)->diff($orderDetails);
 
-
+        
         $this->orderDetailsScheduledForDeletion = $orderDetailsToDelete;
 
         foreach ($orderDetailsToDelete as $orderDetailRemoved) {

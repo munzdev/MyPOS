@@ -19,7 +19,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'user_message' table.
  *
- *
+ * 
  *
  * @method     ChildUserMessageQuery orderByUserMessageid($order = Criteria::ASC) Order by the user_messageid column
  * @method     ChildUserMessageQuery orderByFromEventUserid($order = Criteria::ASC) Order by the from_event_userid column
@@ -192,7 +192,7 @@ abstract class UserMessageQuery extends ModelCriteria
     {
         $sql = 'SELECT user_messageid, from_event_userid, to_event_userid, message, date, readed FROM user_message WHERE user_messageid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -723,9 +723,9 @@ abstract class UserMessageQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             UserMessageTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             UserMessageTableMap::clearRelatedInstancePool();
 

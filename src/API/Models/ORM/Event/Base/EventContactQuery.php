@@ -19,7 +19,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'event_contact' table.
  *
- *
+ * 
  *
  * @method     ChildEventContactQuery orderByEventContactid($order = Criteria::ASC) Order by the event_contactid column
  * @method     ChildEventContactQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
@@ -247,7 +247,7 @@ abstract class EventContactQuery extends ModelCriteria
     {
         $sql = 'SELECT `event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `active`, `default` FROM `event_contact` WHERE `event_contactid` = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -1038,9 +1038,9 @@ abstract class EventContactQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             EventContactTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             EventContactTableMap::clearRelatedInstancePool();
 

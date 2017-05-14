@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'payment_coupon' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Payment.Base
  */
-abstract class PaymentCoupon implements ActiveRecordInterface
+abstract class PaymentCoupon implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -65,21 +65,21 @@ abstract class PaymentCoupon implements ActiveRecordInterface
 
     /**
      * The value for the couponid field.
-     *
+     * 
      * @var        int
      */
     protected $couponid;
 
     /**
      * The value for the payment_recievedid field.
-     *
+     * 
      * @var        int
      */
     protected $payment_recievedid;
 
     /**
      * The value for the value_used field.
-     *
+     * 
      * @var        string
      */
     protected $value_used;
@@ -319,17 +319,17 @@ abstract class PaymentCoupon implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [couponid] column value.
-     *
+     * 
      * @return int
      */
     public function getCouponid()
@@ -339,7 +339,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
 
     /**
      * Get the [payment_recievedid] column value.
-     *
+     * 
      * @return int
      */
     public function getPaymentRecievedid()
@@ -349,7 +349,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
 
     /**
      * Get the [value_used] column value.
-     *
+     * 
      * @return string
      */
     public function getValueUsed()
@@ -359,7 +359,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
 
     /**
      * Set the value of [couponid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Payment\PaymentCoupon The current object (for fluent API support)
      */
@@ -383,7 +383,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
 
     /**
      * Set the value of [payment_recievedid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Payment\PaymentCoupon The current object (for fluent API support)
      */
@@ -407,7 +407,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
 
     /**
      * Set the value of [value_used] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Payment\PaymentCoupon The current object (for fluent API support)
      */
@@ -602,7 +602,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(PaymentCouponTableMap::DATABASE_NAME);
         }
@@ -721,13 +721,13 @@ abstract class PaymentCoupon implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'couponid':
+                    case 'couponid':                        
                         $stmt->bindValue($identifier, $this->couponid, PDO::PARAM_INT);
                         break;
-                    case 'payment_recievedid':
+                    case 'payment_recievedid':                        
                         $stmt->bindValue($identifier, $this->payment_recievedid, PDO::PARAM_INT);
                         break;
-                    case 'value_used':
+                    case 'value_used':                        
                         $stmt->bindValue($identifier, $this->value_used, PDO::PARAM_STR);
                         break;
                 }
@@ -832,10 +832,10 @@ abstract class PaymentCoupon implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aCoupon) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'coupon';
@@ -846,11 +846,11 @@ abstract class PaymentCoupon implements ActiveRecordInterface
                     default:
                         $key = 'Coupon';
                 }
-
+        
                 $result[$key] = $this->aCoupon->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aPaymentRecieved) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'paymentRecieved';
@@ -861,7 +861,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
                     default:
                         $key = 'PaymentRecieved';
                 }
-
+        
                 $result[$key] = $this->aPaymentRecieved->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -1051,7 +1051,7 @@ abstract class PaymentCoupon implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the composite primary key for this object.
      * The array elements will be in same order as specified in XML.

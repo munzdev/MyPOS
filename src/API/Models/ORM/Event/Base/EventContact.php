@@ -29,11 +29,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'event_contact' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Event.Base
  */
-abstract class EventContact implements ActiveRecordInterface
+abstract class EventContact implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -69,105 +69,105 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * The value for the event_contactid field.
-     *
+     * 
      * @var        int
      */
     protected $event_contactid;
 
     /**
      * The value for the eventid field.
-     *
+     * 
      * @var        int
      */
     protected $eventid;
 
     /**
      * The value for the title field.
-     *
+     * 
      * @var        string
      */
     protected $title;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
 
     /**
      * The value for the contact_person field.
-     *
+     * 
      * @var        string
      */
     protected $contact_person;
 
     /**
      * The value for the address field.
-     *
+     * 
      * @var        string
      */
     protected $address;
 
     /**
      * The value for the address2 field.
-     *
+     * 
      * @var        string
      */
     protected $address2;
 
     /**
      * The value for the city field.
-     *
+     * 
      * @var        string
      */
     protected $city;
 
     /**
      * The value for the zip field.
-     *
+     * 
      * @var        string
      */
     protected $zip;
 
     /**
      * The value for the tax_identification_nr field.
-     *
+     * 
      * @var        string
      */
     protected $tax_identification_nr;
 
     /**
      * The value for the telephon field.
-     *
+     * 
      * @var        string
      */
     protected $telephon;
 
     /**
      * The value for the fax field.
-     *
+     * 
      * @var        string
      */
     protected $fax;
 
     /**
      * The value for the email field.
-     *
+     * 
      * @var        string
      */
     protected $email;
 
     /**
      * The value for the active field.
-     *
+     * 
      * @var        boolean
      */
     protected $active;
 
     /**
      * The value for the default field.
-     *
+     * 
      * @var        boolean
      */
     protected $default;
@@ -426,17 +426,17 @@ abstract class EventContact implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [event_contactid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventContactid()
@@ -446,7 +446,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [eventid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventid()
@@ -456,7 +456,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [title] column value.
-     *
+     * 
      * @return string
      */
     public function getTitle()
@@ -466,7 +466,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -476,7 +476,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [contact_person] column value.
-     *
+     * 
      * @return string
      */
     public function getContactPerson()
@@ -486,7 +486,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [address] column value.
-     *
+     * 
      * @return string
      */
     public function getAddress()
@@ -496,7 +496,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [address2] column value.
-     *
+     * 
      * @return string
      */
     public function getAddress2()
@@ -506,7 +506,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [city] column value.
-     *
+     * 
      * @return string
      */
     public function getCity()
@@ -516,7 +516,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [zip] column value.
-     *
+     * 
      * @return string
      */
     public function getZip()
@@ -526,7 +526,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [tax_identification_nr] column value.
-     *
+     * 
      * @return string
      */
     public function getTaxIdentificationNr()
@@ -536,7 +536,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [telephon] column value.
-     *
+     * 
      * @return string
      */
     public function getTelephon()
@@ -546,7 +546,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [fax] column value.
-     *
+     * 
      * @return string
      */
     public function getFax()
@@ -556,7 +556,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [email] column value.
-     *
+     * 
      * @return string
      */
     public function getEmail()
@@ -566,7 +566,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [active] column value.
-     *
+     * 
      * @return boolean
      */
     public function getActive()
@@ -576,7 +576,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [active] column value.
-     *
+     * 
      * @return boolean
      */
     public function isActive()
@@ -586,7 +586,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [default] column value.
-     *
+     * 
      * @return boolean
      */
     public function getDefault()
@@ -596,7 +596,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Get the [default] column value.
-     *
+     * 
      * @return boolean
      */
     public function isDefault()
@@ -606,7 +606,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [event_contactid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -626,7 +626,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -650,7 +650,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [title] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -670,7 +670,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -690,7 +690,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [contact_person] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -710,7 +710,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [address] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -730,7 +730,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [address2] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -750,7 +750,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [city] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -770,7 +770,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [zip] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -790,7 +790,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [tax_identification_nr] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -810,7 +810,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [telephon] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -830,7 +830,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [fax] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -850,7 +850,7 @@ abstract class EventContact implements ActiveRecordInterface
 
     /**
      * Set the value of [email] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -874,7 +874,7 @@ abstract class EventContact implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
+     * 
      * @param  boolean|integer|string $v The new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -902,7 +902,7 @@ abstract class EventContact implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
+     * 
      * @param  boolean|integer|string $v The new value
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
@@ -1137,7 +1137,7 @@ abstract class EventContact implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventContactTableMap::DATABASE_NAME);
         }
@@ -1324,43 +1324,43 @@ abstract class EventContact implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`event_contactid`':
+                    case '`event_contactid`':                        
                         $stmt->bindValue($identifier, $this->event_contactid, PDO::PARAM_INT);
                         break;
-                    case '`eventid`':
+                    case '`eventid`':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case '`title`':
+                    case '`title`':                        
                         $stmt->bindValue($identifier, $this->title, PDO::PARAM_STR);
                         break;
-                    case '`name`':
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case '`contact_person`':
+                    case '`contact_person`':                        
                         $stmt->bindValue($identifier, $this->contact_person, PDO::PARAM_STR);
                         break;
-                    case '`address`':
+                    case '`address`':                        
                         $stmt->bindValue($identifier, $this->address, PDO::PARAM_STR);
                         break;
-                    case '`address2`':
+                    case '`address2`':                        
                         $stmt->bindValue($identifier, $this->address2, PDO::PARAM_STR);
                         break;
-                    case '`city`':
+                    case '`city`':                        
                         $stmt->bindValue($identifier, $this->city, PDO::PARAM_STR);
                         break;
-                    case '`zip`':
+                    case '`zip`':                        
                         $stmt->bindValue($identifier, $this->zip, PDO::PARAM_STR);
                         break;
-                    case '`tax_identification_nr`':
+                    case '`tax_identification_nr`':                        
                         $stmt->bindValue($identifier, $this->tax_identification_nr, PDO::PARAM_STR);
                         break;
-                    case '`telephon`':
+                    case '`telephon`':                        
                         $stmt->bindValue($identifier, $this->telephon, PDO::PARAM_STR);
                         break;
-                    case '`fax`':
+                    case '`fax`':                        
                         $stmt->bindValue($identifier, $this->fax, PDO::PARAM_STR);
                         break;
-                    case '`email`':
+                    case '`email`':                        
                         $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
                         break;
                     case '`active`':
@@ -1526,10 +1526,10 @@ abstract class EventContact implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aEvent) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'event';
@@ -1540,11 +1540,11 @@ abstract class EventContact implements ActiveRecordInterface
                     default:
                         $key = 'Event';
                 }
-
+        
                 $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collInvoicesRelatedByCustomerEventContactid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoices';
@@ -1555,11 +1555,11 @@ abstract class EventContact implements ActiveRecordInterface
                     default:
                         $key = 'Invoices';
                 }
-
+        
                 $result[$key] = $this->collInvoicesRelatedByCustomerEventContactid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collInvoicesRelatedByEventContactid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoices';
@@ -1570,7 +1570,7 @@ abstract class EventContact implements ActiveRecordInterface
                     default:
                         $key = 'Invoices';
                 }
-
+        
                 $result[$key] = $this->collInvoicesRelatedByEventContactid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1852,7 +1852,7 @@ abstract class EventContact implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -2146,7 +2146,7 @@ abstract class EventContact implements ActiveRecordInterface
         /** @var Invoice[] $invoicesRelatedByCustomerEventContactidToDelete */
         $invoicesRelatedByCustomerEventContactidToDelete = $this->getInvoicesRelatedByCustomerEventContactid(new Criteria(), $con)->diff($invoicesRelatedByCustomerEventContactid);
 
-
+        
         $this->invoicesRelatedByCustomerEventContactidScheduledForDeletion = $invoicesRelatedByCustomerEventContactidToDelete;
 
         foreach ($invoicesRelatedByCustomerEventContactidToDelete as $invoiceRelatedByCustomerEventContactidRemoved) {
@@ -2471,7 +2471,7 @@ abstract class EventContact implements ActiveRecordInterface
         /** @var Invoice[] $invoicesRelatedByEventContactidToDelete */
         $invoicesRelatedByEventContactidToDelete = $this->getInvoicesRelatedByEventContactid(new Criteria(), $con)->diff($invoicesRelatedByEventContactid);
 
-
+        
         $this->invoicesRelatedByEventContactidScheduledForDeletion = $invoicesRelatedByEventContactidToDelete;
 
         foreach ($invoicesRelatedByEventContactidToDelete as $invoiceRelatedByEventContactidRemoved) {

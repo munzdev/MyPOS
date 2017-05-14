@@ -17,7 +17,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'user_role' table.
  *
- *
+ * 
  *
  * @method     ChildUserRoleQuery orderByUserRoleid($order = Criteria::ASC) Order by the user_roleid column
  * @method     ChildUserRoleQuery orderByName($order = Criteria::ASC) Order by the name column
@@ -148,7 +148,7 @@ abstract class UserRoleQuery extends ModelCriteria
     {
         $sql = 'SELECT user_roleid, name FROM user_role WHERE user_roleid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -369,9 +369,9 @@ abstract class UserRoleQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             UserRoleTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             UserRoleTableMap::clearRelatedInstancePool();
 

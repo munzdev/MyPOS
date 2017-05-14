@@ -57,11 +57,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'user' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.User.Base
  */
-abstract class User implements ActiveRecordInterface
+abstract class User implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -97,70 +97,70 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * The value for the userid field.
-     *
+     * 
      * @var        int
      */
     protected $userid;
 
     /**
      * The value for the username field.
-     *
+     * 
      * @var        string
      */
     protected $username;
 
     /**
      * The value for the password field.
-     *
+     * 
      * @var        string
      */
     protected $password;
 
     /**
      * The value for the firstname field.
-     *
+     * 
      * @var        string
      */
     protected $firstname;
 
     /**
      * The value for the lastname field.
-     *
+     * 
      * @var        string
      */
     protected $lastname;
 
     /**
      * The value for the autologin_hash field.
-     *
+     * 
      * @var        string
      */
     protected $autologin_hash;
 
     /**
      * The value for the active field.
-     *
+     * 
      * @var        int
      */
     protected $active;
 
     /**
      * The value for the phonenumber field.
-     *
+     * 
      * @var        string
      */
     protected $phonenumber;
 
     /**
      * The value for the call_request field.
-     *
+     * 
      * @var        DateTime
      */
     protected $call_request;
 
     /**
      * The value for the is_admin field.
-     *
+     * 
      * @var        boolean
      */
     protected $is_admin;
@@ -498,17 +498,17 @@ abstract class User implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [userid] column value.
-     *
+     * 
      * @return int
      */
     public function getUserid()
@@ -518,7 +518,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [username] column value.
-     *
+     * 
      * @return string
      */
     public function getUsername()
@@ -528,7 +528,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [password] column value.
-     *
+     * 
      * @return string
      */
     public function getPassword()
@@ -538,7 +538,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [firstname] column value.
-     *
+     * 
      * @return string
      */
     public function getFirstname()
@@ -548,7 +548,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [lastname] column value.
-     *
+     * 
      * @return string
      */
     public function getLastname()
@@ -558,7 +558,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [autologin_hash] column value.
-     *
+     * 
      * @return string
      */
     public function getAutologinHash()
@@ -568,7 +568,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [active] column value.
-     *
+     * 
      * @return int
      */
     public function getActive()
@@ -578,7 +578,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [phonenumber] column value.
-     *
+     * 
      * @return string
      */
     public function getPhonenumber()
@@ -588,7 +588,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [call_request] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -608,7 +608,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [is_admin] column value.
-     *
+     * 
      * @return boolean
      */
     public function getIsAdmin()
@@ -618,7 +618,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Get the [is_admin] column value.
-     *
+     * 
      * @return boolean
      */
     public function isAdmin()
@@ -628,7 +628,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Set the value of [userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\User\User The current object (for fluent API support)
      */
@@ -648,7 +648,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Set the value of [username] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\User\User The current object (for fluent API support)
      */
@@ -668,7 +668,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Set the value of [password] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\User\User The current object (for fluent API support)
      */
@@ -688,7 +688,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Set the value of [firstname] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\User\User The current object (for fluent API support)
      */
@@ -708,7 +708,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Set the value of [lastname] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\User\User The current object (for fluent API support)
      */
@@ -728,7 +728,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Set the value of [autologin_hash] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\User\User The current object (for fluent API support)
      */
@@ -748,7 +748,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Set the value of [active] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\User\User The current object (for fluent API support)
      */
@@ -768,7 +768,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Set the value of [phonenumber] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\User\User The current object (for fluent API support)
      */
@@ -788,7 +788,7 @@ abstract class User implements ActiveRecordInterface
 
     /**
      * Sets the value of [call_request] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\User\User The current object (for fluent API support)
@@ -812,7 +812,7 @@ abstract class User implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
+     * 
      * @param  boolean|integer|string $v The new value
      * @return $this|\API\Models\ORM\User\User The current object (for fluent API support)
      */
@@ -1045,7 +1045,7 @@ abstract class User implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(UserTableMap::DATABASE_NAME);
         }
@@ -1325,31 +1325,31 @@ abstract class User implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'userid':
+                    case 'userid':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'username':
+                    case 'username':                        
                         $stmt->bindValue($identifier, $this->username, PDO::PARAM_STR);
                         break;
-                    case 'password':
+                    case 'password':                        
                         $stmt->bindValue($identifier, $this->password, PDO::PARAM_STR);
                         break;
-                    case 'firstname':
+                    case 'firstname':                        
                         $stmt->bindValue($identifier, $this->firstname, PDO::PARAM_STR);
                         break;
-                    case 'lastname':
+                    case 'lastname':                        
                         $stmt->bindValue($identifier, $this->lastname, PDO::PARAM_STR);
                         break;
-                    case 'autologin_hash':
+                    case 'autologin_hash':                        
                         $stmt->bindValue($identifier, $this->autologin_hash, PDO::PARAM_STR);
                         break;
-                    case 'active':
+                    case 'active':                        
                         $stmt->bindValue($identifier, $this->active, PDO::PARAM_INT);
                         break;
-                    case 'phonenumber':
+                    case 'phonenumber':                        
                         $stmt->bindValue($identifier, $this->phonenumber, PDO::PARAM_STR);
                         break;
-                    case 'call_request':
+                    case 'call_request':                        
                         $stmt->bindValue($identifier, $this->call_request ? $this->call_request->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'is_admin':
@@ -1491,15 +1491,15 @@ abstract class User implements ActiveRecordInterface
         if ($result[$keys[8]] instanceof \DateTime) {
             $result[$keys[8]] = $result[$keys[8]]->format('c');
         }
-
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collCoupons) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'coupons';
@@ -1510,11 +1510,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'Coupons';
                 }
-
+        
                 $result[$key] = $this->collCoupons->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collDistributionPlaceUsers) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'distributionPlaceUsers';
@@ -1525,11 +1525,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'DistributionPlaceUsers';
                 }
-
+        
                 $result[$key] = $this->collDistributionPlaceUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventUsers) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventUsers';
@@ -1540,11 +1540,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'EventUsers';
                 }
-
+        
                 $result[$key] = $this->collEventUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collInvoices) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoices';
@@ -1555,11 +1555,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'Invoices';
                 }
-
+        
                 $result[$key] = $this->collInvoices->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrdersRelatedByCancellationCreatedByUserid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orders';
@@ -1570,11 +1570,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'Orders';
                 }
-
+        
                 $result[$key] = $this->collOrdersRelatedByCancellationCreatedByUserid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrdersRelatedByUserid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orders';
@@ -1585,11 +1585,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'Orders';
                 }
-
+        
                 $result[$key] = $this->collOrdersRelatedByUserid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderDetails) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetails';
@@ -1600,11 +1600,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetails';
                 }
-
+        
                 $result[$key] = $this->collOrderDetails->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderInProgresses) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderInProgresses';
@@ -1615,11 +1615,11 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'OrderInProgresses';
                 }
-
+        
                 $result[$key] = $this->collOrderInProgresses->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collPaymentRecieveds) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'paymentRecieveds';
@@ -1630,7 +1630,7 @@ abstract class User implements ActiveRecordInterface
                     default:
                         $key = 'PaymentRecieveds';
                 }
-
+        
                 $result[$key] = $this->collPaymentRecieveds->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1867,7 +1867,7 @@ abstract class User implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -2168,7 +2168,7 @@ abstract class User implements ActiveRecordInterface
         /** @var Coupon[] $couponsToDelete */
         $couponsToDelete = $this->getCoupons(new Criteria(), $con)->diff($coupons);
 
-
+        
         $this->couponsScheduledForDeletion = $couponsToDelete;
 
         foreach ($couponsToDelete as $couponRemoved) {
@@ -2418,7 +2418,7 @@ abstract class User implements ActiveRecordInterface
         /** @var DistributionPlaceUser[] $distributionPlaceUsersToDelete */
         $distributionPlaceUsersToDelete = $this->getDistributionPlaceUsers(new Criteria(), $con)->diff($distributionPlaceUsers);
 
-
+        
         //since at least one column in the foreign key is at the same time a PK
         //we can not just set a PK to NULL in the lines below. We have to store
         //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
@@ -2696,7 +2696,7 @@ abstract class User implements ActiveRecordInterface
         /** @var EventUser[] $eventUsersToDelete */
         $eventUsersToDelete = $this->getEventUsers(new Criteria(), $con)->diff($eventUsers);
 
-
+        
         $this->eventUsersScheduledForDeletion = $eventUsersToDelete;
 
         foreach ($eventUsersToDelete as $eventUserRemoved) {
@@ -2946,7 +2946,7 @@ abstract class User implements ActiveRecordInterface
         /** @var Invoice[] $invoicesToDelete */
         $invoicesToDelete = $this->getInvoices(new Criteria(), $con)->diff($invoices);
 
-
+        
         $this->invoicesScheduledForDeletion = $invoicesToDelete;
 
         foreach ($invoicesToDelete as $invoiceRemoved) {
@@ -3296,7 +3296,7 @@ abstract class User implements ActiveRecordInterface
         /** @var Order[] $ordersRelatedByCancellationCreatedByUseridToDelete */
         $ordersRelatedByCancellationCreatedByUseridToDelete = $this->getOrdersRelatedByCancellationCreatedByUserid(new Criteria(), $con)->diff($ordersRelatedByCancellationCreatedByUserid);
 
-
+        
         $this->ordersRelatedByCancellationCreatedByUseridScheduledForDeletion = $ordersRelatedByCancellationCreatedByUseridToDelete;
 
         foreach ($ordersRelatedByCancellationCreatedByUseridToDelete as $orderRelatedByCancellationCreatedByUseridRemoved) {
@@ -3546,7 +3546,7 @@ abstract class User implements ActiveRecordInterface
         /** @var Order[] $ordersRelatedByUseridToDelete */
         $ordersRelatedByUseridToDelete = $this->getOrdersRelatedByUserid(new Criteria(), $con)->diff($ordersRelatedByUserid);
 
-
+        
         $this->ordersRelatedByUseridScheduledForDeletion = $ordersRelatedByUseridToDelete;
 
         foreach ($ordersRelatedByUseridToDelete as $orderRelatedByUseridRemoved) {
@@ -3796,7 +3796,7 @@ abstract class User implements ActiveRecordInterface
         /** @var OrderDetail[] $orderDetailsToDelete */
         $orderDetailsToDelete = $this->getOrderDetails(new Criteria(), $con)->diff($orderDetails);
 
-
+        
         $this->orderDetailsScheduledForDeletion = $orderDetailsToDelete;
 
         foreach ($orderDetailsToDelete as $orderDetailRemoved) {
@@ -4146,7 +4146,7 @@ abstract class User implements ActiveRecordInterface
         /** @var OrderInProgress[] $orderInProgressesToDelete */
         $orderInProgressesToDelete = $this->getOrderInProgresses(new Criteria(), $con)->diff($orderInProgresses);
 
-
+        
         $this->orderInProgressesScheduledForDeletion = $orderInProgressesToDelete;
 
         foreach ($orderInProgressesToDelete as $orderInProgressRemoved) {
@@ -4421,7 +4421,7 @@ abstract class User implements ActiveRecordInterface
         /** @var PaymentRecieved[] $paymentRecievedsToDelete */
         $paymentRecievedsToDelete = $this->getPaymentRecieveds(new Criteria(), $con)->diff($paymentRecieveds);
 
-
+        
         $this->paymentRecievedsScheduledForDeletion = $paymentRecievedsToDelete;
 
         foreach ($paymentRecievedsToDelete as $paymentRecievedRemoved) {

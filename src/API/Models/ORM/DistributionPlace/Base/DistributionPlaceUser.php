@@ -27,11 +27,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'distribution_place_user' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.DistributionPlace.Base
  */
-abstract class DistributionPlaceUser implements ActiveRecordInterface
+abstract class DistributionPlaceUser implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -67,21 +67,21 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
 
     /**
      * The value for the distribution_placeid field.
-     *
+     * 
      * @var        int
      */
     protected $distribution_placeid;
 
     /**
      * The value for the userid field.
-     *
+     * 
      * @var        int
      */
     protected $userid;
 
     /**
      * The value for the event_printerid field.
-     *
+     * 
      * @var        int
      */
     protected $event_printerid;
@@ -326,17 +326,17 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [distribution_placeid] column value.
-     *
+     * 
      * @return int
      */
     public function getDistributionPlaceid()
@@ -346,7 +346,7 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
 
     /**
      * Get the [userid] column value.
-     *
+     * 
      * @return int
      */
     public function getUserid()
@@ -356,7 +356,7 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
 
     /**
      * Get the [event_printerid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventPrinterid()
@@ -366,7 +366,7 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
 
     /**
      * Set the value of [distribution_placeid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\DistributionPlace\DistributionPlaceUser The current object (for fluent API support)
      */
@@ -390,7 +390,7 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
 
     /**
      * Set the value of [userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\DistributionPlace\DistributionPlaceUser The current object (for fluent API support)
      */
@@ -414,7 +414,7 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
 
     /**
      * Set the value of [event_printerid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\DistributionPlace\DistributionPlaceUser The current object (for fluent API support)
      */
@@ -617,7 +617,7 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(DistributionPlaceUserTableMap::DATABASE_NAME);
         }
@@ -743,13 +743,13 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'distribution_placeid':
+                    case 'distribution_placeid':                        
                         $stmt->bindValue($identifier, $this->distribution_placeid, PDO::PARAM_INT);
                         break;
-                    case 'userid':
+                    case 'userid':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'event_printerid':
+                    case 'event_printerid':                        
                         $stmt->bindValue($identifier, $this->event_printerid, PDO::PARAM_INT);
                         break;
                 }
@@ -854,10 +854,10 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aDistributionPlace) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'distributionPlace';
@@ -868,11 +868,11 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
                     default:
                         $key = 'DistributionPlace';
                 }
-
+        
                 $result[$key] = $this->aDistributionPlace->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -883,11 +883,11 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aEventPrinter) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventPrinter';
@@ -898,7 +898,7 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
                     default:
                         $key = 'EventPrinter';
                 }
-
+        
                 $result[$key] = $this->aEventPrinter->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -1097,7 +1097,7 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the composite primary key for this object.
      * The array elements will be in same order as specified in XML.

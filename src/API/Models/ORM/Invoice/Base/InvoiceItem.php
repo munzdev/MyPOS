@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'invoice_item' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Invoice.Base
  */
-abstract class InvoiceItem implements ActiveRecordInterface
+abstract class InvoiceItem implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -65,49 +65,49 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * The value for the invoice_itemid field.
-     *
+     * 
      * @var        int
      */
     protected $invoice_itemid;
 
     /**
      * The value for the invoiceid field.
-     *
+     * 
      * @var        int
      */
     protected $invoiceid;
 
     /**
      * The value for the order_detailid field.
-     *
+     * 
      * @var        int
      */
     protected $order_detailid;
 
     /**
      * The value for the amount field.
-     *
+     * 
      * @var        int
      */
     protected $amount;
 
     /**
      * The value for the price field.
-     *
+     * 
      * @var        string
      */
     protected $price;
 
     /**
      * The value for the description field.
-     *
+     * 
      * @var        string
      */
     protected $description;
 
     /**
      * The value for the tax field.
-     *
+     * 
      * @var        int
      */
     protected $tax;
@@ -347,17 +347,17 @@ abstract class InvoiceItem implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [invoice_itemid] column value.
-     *
+     * 
      * @return int
      */
     public function getInvoiceItemid()
@@ -367,7 +367,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Get the [invoiceid] column value.
-     *
+     * 
      * @return int
      */
     public function getInvoiceid()
@@ -377,7 +377,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Get the [order_detailid] column value.
-     *
+     * 
      * @return int
      */
     public function getOrderDetailid()
@@ -387,7 +387,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Get the [amount] column value.
-     *
+     * 
      * @return int
      */
     public function getAmount()
@@ -397,7 +397,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Get the [price] column value.
-     *
+     * 
      * @return string
      */
     public function getPrice()
@@ -407,7 +407,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Get the [description] column value.
-     *
+     * 
      * @return string
      */
     public function getDescription()
@@ -417,7 +417,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Get the [tax] column value.
-     *
+     * 
      * @return int
      */
     public function getTax()
@@ -427,7 +427,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Set the value of [invoice_itemid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceItem The current object (for fluent API support)
      */
@@ -447,7 +447,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Set the value of [invoiceid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceItem The current object (for fluent API support)
      */
@@ -471,7 +471,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Set the value of [order_detailid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceItem The current object (for fluent API support)
      */
@@ -495,7 +495,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Set the value of [amount] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceItem The current object (for fluent API support)
      */
@@ -515,7 +515,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Set the value of [price] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceItem The current object (for fluent API support)
      */
@@ -535,7 +535,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Set the value of [description] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceItem The current object (for fluent API support)
      */
@@ -555,7 +555,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
     /**
      * Set the value of [tax] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\InvoiceItem The current object (for fluent API support)
      */
@@ -762,7 +762,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(InvoiceItemTableMap::DATABASE_NAME);
         }
@@ -897,25 +897,25 @@ abstract class InvoiceItem implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'invoice_itemid':
+                    case 'invoice_itemid':                        
                         $stmt->bindValue($identifier, $this->invoice_itemid, PDO::PARAM_INT);
                         break;
-                    case 'invoiceid':
+                    case 'invoiceid':                        
                         $stmt->bindValue($identifier, $this->invoiceid, PDO::PARAM_INT);
                         break;
-                    case 'order_detailid':
+                    case 'order_detailid':                        
                         $stmt->bindValue($identifier, $this->order_detailid, PDO::PARAM_INT);
                         break;
-                    case 'amount':
+                    case 'amount':                        
                         $stmt->bindValue($identifier, $this->amount, PDO::PARAM_INT);
                         break;
-                    case 'price':
+                    case 'price':                        
                         $stmt->bindValue($identifier, $this->price, PDO::PARAM_STR);
                         break;
-                    case 'description':
+                    case 'description':                        
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
-                    case 'tax':
+                    case 'tax':                        
                         $stmt->bindValue($identifier, $this->tax, PDO::PARAM_INT);
                         break;
                 }
@@ -1043,10 +1043,10 @@ abstract class InvoiceItem implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aInvoice) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoice';
@@ -1057,11 +1057,11 @@ abstract class InvoiceItem implements ActiveRecordInterface
                     default:
                         $key = 'Invoice';
                 }
-
+        
                 $result[$key] = $this->aInvoice->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aOrderDetail) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetail';
@@ -1072,7 +1072,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetail';
                 }
-
+        
                 $result[$key] = $this->aOrderDetail->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -1282,7 +1282,7 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int

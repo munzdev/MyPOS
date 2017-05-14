@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'distribution_giving_out' table.
  *
- *
+ * 
  *
  * @method     ChildDistributionGivingOutQuery orderByDistributionGivingOutid($order = Criteria::ASC) Order by the distribution_giving_outid column
  * @method     ChildDistributionGivingOutQuery orderByDate($order = Criteria::ASC) Order by the date column
@@ -161,7 +161,7 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
     {
         $sql = 'SELECT distribution_giving_outid, date FROM distribution_giving_out WHERE distribution_giving_outid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -473,9 +473,9 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             DistributionGivingOutTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             DistributionGivingOutTableMap::clearRelatedInstancePool();
 

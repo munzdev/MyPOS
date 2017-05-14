@@ -28,11 +28,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'distribution_giving_out' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.OIP.Base
  */
-abstract class DistributionGivingOut implements ActiveRecordInterface
+abstract class DistributionGivingOut implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -68,14 +68,14 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
 
     /**
      * The value for the distribution_giving_outid field.
-     *
+     * 
      * @var        int
      */
     protected $distribution_giving_outid;
 
     /**
      * The value for the date field.
-     *
+     * 
      * @var        DateTime
      */
     protected $date;
@@ -317,17 +317,17 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [distribution_giving_outid] column value.
-     *
+     * 
      * @return int
      */
     public function getDistributionGivingOutid()
@@ -337,7 +337,7 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [date] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -357,7 +357,7 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
 
     /**
      * Set the value of [distribution_giving_outid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\OIP\DistributionGivingOut The current object (for fluent API support)
      */
@@ -377,7 +377,7 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
 
     /**
      * Sets the value of [date] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\OIP\DistributionGivingOut The current object (for fluent API support)
@@ -566,7 +566,7 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(DistributionGivingOutTableMap::DATABASE_NAME);
         }
@@ -684,10 +684,10 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'distribution_giving_outid':
+                    case 'distribution_giving_outid':                        
                         $stmt->bindValue($identifier, $this->distribution_giving_outid, PDO::PARAM_INT);
                         break;
-                    case 'date':
+                    case 'date':                        
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
@@ -794,15 +794,15 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
         if ($result[$keys[1]] instanceof \DateTime) {
             $result[$keys[1]] = $result[$keys[1]]->format('c');
         }
-
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collOrderInProgressRecieveds) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderInProgressRecieveds';
@@ -813,7 +813,7 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
                     default:
                         $key = 'OrderInProgressRecieveds';
                 }
-
+        
                 $result[$key] = $this->collOrderInProgressRecieveds->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -978,7 +978,7 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1199,7 +1199,7 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
         /** @var ChildOrderInProgressRecieved[] $orderInProgressRecievedsToDelete */
         $orderInProgressRecievedsToDelete = $this->getOrderInProgressRecieveds(new Criteria(), $con)->diff($orderInProgressRecieveds);
 
-
+        
         $this->orderInProgressRecievedsScheduledForDeletion = $orderInProgressRecievedsToDelete;
 
         foreach ($orderInProgressRecievedsToDelete as $orderInProgressRecievedRemoved) {

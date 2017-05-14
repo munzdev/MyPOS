@@ -43,11 +43,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'invoice' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Invoice.Base
  */
-abstract class Invoice implements ActiveRecordInterface
+abstract class Invoice implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -83,84 +83,84 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * The value for the invoiceid field.
-     *
+     * 
      * @var        int
      */
     protected $invoiceid;
 
     /**
      * The value for the invoice_typeid field.
-     *
+     * 
      * @var        int
      */
     protected $invoice_typeid;
 
     /**
      * The value for the event_contactid field.
-     *
+     * 
      * @var        int
      */
     protected $event_contactid;
 
     /**
      * The value for the userid field.
-     *
+     * 
      * @var        int
      */
     protected $userid;
 
     /**
      * The value for the event_bankinformationid field.
-     *
+     * 
      * @var        int
      */
     protected $event_bankinformationid;
 
     /**
      * The value for the customer_event_contactid field.
-     *
+     * 
      * @var        int
      */
     protected $customer_event_contactid;
 
     /**
      * The value for the canceled_invoiceid field.
-     *
+     * 
      * @var        int
      */
     protected $canceled_invoiceid;
 
     /**
      * The value for the date field.
-     *
+     * 
      * @var        DateTime
      */
     protected $date;
 
     /**
      * The value for the amount field.
-     *
+     * 
      * @var        string
      */
     protected $amount;
 
     /**
      * The value for the maturity_date field.
-     *
+     * 
      * @var        DateTime
      */
     protected $maturity_date;
 
     /**
      * The value for the payment_finished field.
-     *
+     * 
      * @var        DateTime
      */
     protected $payment_finished;
 
     /**
      * The value for the amount_recieved field.
-     *
+     * 
      * @var        string
      */
     protected $amount_recieved;
@@ -468,17 +468,17 @@ abstract class Invoice implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [invoiceid] column value.
-     *
+     * 
      * @return int
      */
     public function getInvoiceid()
@@ -488,7 +488,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Get the [invoice_typeid] column value.
-     *
+     * 
      * @return int
      */
     public function getInvoiceTypeid()
@@ -498,7 +498,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Get the [event_contactid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventContactid()
@@ -508,7 +508,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Get the [userid] column value.
-     *
+     * 
      * @return int
      */
     public function getUserid()
@@ -518,7 +518,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Get the [event_bankinformationid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventBankinformationid()
@@ -528,7 +528,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Get the [customer_event_contactid] column value.
-     *
+     * 
      * @return int
      */
     public function getCustomerEventContactid()
@@ -538,7 +538,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Get the [canceled_invoiceid] column value.
-     *
+     * 
      * @return int
      */
     public function getCanceledInvoiceid()
@@ -548,7 +548,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [date] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -568,7 +568,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Get the [amount] column value.
-     *
+     * 
      * @return string
      */
     public function getAmount()
@@ -578,7 +578,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [maturity_date] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -598,7 +598,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [payment_finished] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -618,7 +618,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Get the [amount_recieved] column value.
-     *
+     * 
      * @return string
      */
     public function getAmountRecieved()
@@ -628,7 +628,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Set the value of [invoiceid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
      */
@@ -648,7 +648,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Set the value of [invoice_typeid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
      */
@@ -672,7 +672,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Set the value of [event_contactid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
      */
@@ -696,7 +696,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Set the value of [userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
      */
@@ -720,7 +720,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Set the value of [event_bankinformationid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
      */
@@ -744,7 +744,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Set the value of [customer_event_contactid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
      */
@@ -768,7 +768,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Set the value of [canceled_invoiceid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
      */
@@ -792,7 +792,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Sets the value of [date] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
@@ -812,7 +812,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Set the value of [amount] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
      */
@@ -832,7 +832,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Sets the value of [maturity_date] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
@@ -852,7 +852,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Sets the value of [payment_finished] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
@@ -872,7 +872,7 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * Set the value of [amount_recieved] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
      */
@@ -1127,7 +1127,7 @@ abstract class Invoice implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(InvoiceTableMap::DATABASE_NAME);
         }
@@ -1374,40 +1374,40 @@ abstract class Invoice implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'invoiceid':
+                    case 'invoiceid':                        
                         $stmt->bindValue($identifier, $this->invoiceid, PDO::PARAM_INT);
                         break;
-                    case 'invoice_typeid':
+                    case 'invoice_typeid':                        
                         $stmt->bindValue($identifier, $this->invoice_typeid, PDO::PARAM_INT);
                         break;
-                    case 'event_contactid':
+                    case 'event_contactid':                        
                         $stmt->bindValue($identifier, $this->event_contactid, PDO::PARAM_INT);
                         break;
-                    case 'userid':
+                    case 'userid':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'event_bankinformationid':
+                    case 'event_bankinformationid':                        
                         $stmt->bindValue($identifier, $this->event_bankinformationid, PDO::PARAM_INT);
                         break;
-                    case 'customer_event_contactid':
+                    case 'customer_event_contactid':                        
                         $stmt->bindValue($identifier, $this->customer_event_contactid, PDO::PARAM_INT);
                         break;
-                    case 'canceled_invoiceid':
+                    case 'canceled_invoiceid':                        
                         $stmt->bindValue($identifier, $this->canceled_invoiceid, PDO::PARAM_INT);
                         break;
-                    case 'date':
+                    case 'date':                        
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'amount':
+                    case 'amount':                        
                         $stmt->bindValue($identifier, $this->amount, PDO::PARAM_STR);
                         break;
-                    case 'maturity_date':
+                    case 'maturity_date':                        
                         $stmt->bindValue($identifier, $this->maturity_date ? $this->maturity_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'payment_finished':
+                    case 'payment_finished':                        
                         $stmt->bindValue($identifier, $this->payment_finished ? $this->payment_finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'amount_recieved':
+                    case 'amount_recieved':                        
                         $stmt->bindValue($identifier, $this->amount_recieved, PDO::PARAM_STR);
                         break;
                 }
@@ -1554,23 +1554,23 @@ abstract class Invoice implements ActiveRecordInterface
         if ($result[$keys[7]] instanceof \DateTime) {
             $result[$keys[7]] = $result[$keys[7]]->format('c');
         }
-
+        
         if ($result[$keys[9]] instanceof \DateTime) {
             $result[$keys[9]] = $result[$keys[9]]->format('c');
         }
-
+        
         if ($result[$keys[10]] instanceof \DateTime) {
             $result[$keys[10]] = $result[$keys[10]]->format('c');
         }
-
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aEventContactRelatedByCustomerEventContactid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventContact';
@@ -1581,11 +1581,11 @@ abstract class Invoice implements ActiveRecordInterface
                     default:
                         $key = 'EventContact';
                 }
-
+        
                 $result[$key] = $this->aEventContactRelatedByCustomerEventContactid->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aEventBankinformation) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventBankinformation';
@@ -1596,11 +1596,11 @@ abstract class Invoice implements ActiveRecordInterface
                     default:
                         $key = 'EventBankinformation';
                 }
-
+        
                 $result[$key] = $this->aEventBankinformation->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aEventContactRelatedByEventContactid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventContact';
@@ -1611,11 +1611,11 @@ abstract class Invoice implements ActiveRecordInterface
                     default:
                         $key = 'EventContact';
                 }
-
+        
                 $result[$key] = $this->aEventContactRelatedByEventContactid->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aInvoiceRelatedByCanceledInvoiceid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoice';
@@ -1626,11 +1626,11 @@ abstract class Invoice implements ActiveRecordInterface
                     default:
                         $key = 'Invoice';
                 }
-
+        
                 $result[$key] = $this->aInvoiceRelatedByCanceledInvoiceid->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aInvoiceType) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoiceType';
@@ -1641,11 +1641,11 @@ abstract class Invoice implements ActiveRecordInterface
                     default:
                         $key = 'InvoiceType';
                 }
-
+        
                 $result[$key] = $this->aInvoiceType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -1656,11 +1656,11 @@ abstract class Invoice implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collInvoicesRelatedByInvoiceid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoices';
@@ -1671,11 +1671,11 @@ abstract class Invoice implements ActiveRecordInterface
                     default:
                         $key = 'Invoices';
                 }
-
+        
                 $result[$key] = $this->collInvoicesRelatedByInvoiceid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collInvoiceItems) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoiceItems';
@@ -1686,11 +1686,11 @@ abstract class Invoice implements ActiveRecordInterface
                     default:
                         $key = 'InvoiceItems';
                 }
-
+        
                 $result[$key] = $this->collInvoiceItems->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collPaymentRecieveds) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'paymentRecieveds';
@@ -1701,11 +1701,11 @@ abstract class Invoice implements ActiveRecordInterface
                     default:
                         $key = 'PaymentRecieveds';
                 }
-
+        
                 $result[$key] = $this->collPaymentRecieveds->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collInvoiceWarnings) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoiceWarnings';
@@ -1716,7 +1716,7 @@ abstract class Invoice implements ActiveRecordInterface
                     default:
                         $key = 'InvoiceWarnings';
                 }
-
+        
                 $result[$key] = $this->collInvoiceWarnings->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1971,7 +1971,7 @@ abstract class Invoice implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -2535,7 +2535,7 @@ abstract class Invoice implements ActiveRecordInterface
         /** @var ChildInvoice[] $invoicesRelatedByInvoiceidToDelete */
         $invoicesRelatedByInvoiceidToDelete = $this->getInvoicesRelatedByInvoiceid(new Criteria(), $con)->diff($invoicesRelatedByInvoiceid);
 
-
+        
         $this->invoicesRelatedByInvoiceidScheduledForDeletion = $invoicesRelatedByInvoiceidToDelete;
 
         foreach ($invoicesRelatedByInvoiceidToDelete as $invoiceRelatedByInvoiceidRemoved) {
@@ -2885,7 +2885,7 @@ abstract class Invoice implements ActiveRecordInterface
         /** @var ChildInvoiceItem[] $invoiceItemsToDelete */
         $invoiceItemsToDelete = $this->getInvoiceItems(new Criteria(), $con)->diff($invoiceItems);
 
-
+        
         $this->invoiceItemsScheduledForDeletion = $invoiceItemsToDelete;
 
         foreach ($invoiceItemsToDelete as $invoiceItemRemoved) {
@@ -3135,7 +3135,7 @@ abstract class Invoice implements ActiveRecordInterface
         /** @var PaymentRecieved[] $paymentRecievedsToDelete */
         $paymentRecievedsToDelete = $this->getPaymentRecieveds(new Criteria(), $con)->diff($paymentRecieveds);
 
-
+        
         $this->paymentRecievedsScheduledForDeletion = $paymentRecievedsToDelete;
 
         foreach ($paymentRecievedsToDelete as $paymentRecievedRemoved) {
@@ -3410,7 +3410,7 @@ abstract class Invoice implements ActiveRecordInterface
         /** @var ChildInvoiceWarning[] $invoiceWarningsToDelete */
         $invoiceWarningsToDelete = $this->getInvoiceWarnings(new Criteria(), $con)->diff($invoiceWarnings);
 
-
+        
         $this->invoiceWarningsScheduledForDeletion = $invoiceWarningsToDelete;
 
         foreach ($invoiceWarningsToDelete as $invoiceWarningRemoved) {

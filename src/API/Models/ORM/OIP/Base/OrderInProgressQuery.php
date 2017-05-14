@@ -21,7 +21,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'order_in_progress' table.
  *
- *
+ * 
  *
  * @method     ChildOrderInProgressQuery orderByOrderInProgressid($order = Criteria::ASC) Order by the order_in_progressid column
  * @method     ChildOrderInProgressQuery orderByOrderid($order = Criteria::ASC) Order by the orderid column
@@ -214,7 +214,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
     {
         $sql = 'SELECT order_in_progressid, orderid, userid, menu_groupid, begin, done FROM order_in_progress WHERE order_in_progressid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -929,9 +929,9 @@ abstract class OrderInProgressQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             OrderInProgressTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             OrderInProgressTableMap::clearRelatedInstancePool();
 

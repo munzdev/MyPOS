@@ -29,11 +29,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'event_bankinformation' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Event.Base
  */
-abstract class EventBankinformation implements ActiveRecordInterface
+abstract class EventBankinformation implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -69,42 +69,42 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
     /**
      * The value for the event_bankinformationid field.
-     *
+     * 
      * @var        int
      */
     protected $event_bankinformationid;
 
     /**
      * The value for the eventid field.
-     *
+     * 
      * @var        int
      */
     protected $eventid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
 
     /**
      * The value for the iban field.
-     *
+     * 
      * @var        string
      */
     protected $iban;
 
     /**
      * The value for the bic field.
-     *
+     * 
      * @var        string
      */
     protected $bic;
 
     /**
      * The value for the active field.
-     *
+     * 
      * @var        boolean
      */
     protected $active;
@@ -351,17 +351,17 @@ abstract class EventBankinformation implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [event_bankinformationid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventBankinformationid()
@@ -371,7 +371,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
     /**
      * Get the [eventid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventid()
@@ -381,7 +381,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -391,7 +391,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
     /**
      * Get the [iban] column value.
-     *
+     * 
      * @return string
      */
     public function getIban()
@@ -401,7 +401,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
     /**
      * Get the [bic] column value.
-     *
+     * 
      * @return string
      */
     public function getBic()
@@ -411,7 +411,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
     /**
      * Get the [active] column value.
-     *
+     * 
      * @return boolean
      */
     public function getActive()
@@ -421,7 +421,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
     /**
      * Get the [active] column value.
-     *
+     * 
      * @return boolean
      */
     public function isActive()
@@ -431,7 +431,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
     /**
      * Set the value of [event_bankinformationid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventBankinformation The current object (for fluent API support)
      */
@@ -451,7 +451,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventBankinformation The current object (for fluent API support)
      */
@@ -475,7 +475,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventBankinformation The current object (for fluent API support)
      */
@@ -495,7 +495,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
     /**
      * Set the value of [iban] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventBankinformation The current object (for fluent API support)
      */
@@ -515,7 +515,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
     /**
      * Set the value of [bic] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventBankinformation The current object (for fluent API support)
      */
@@ -539,7 +539,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
+     * 
      * @param  boolean|integer|string $v The new value
      * @return $this|\API\Models\ORM\Event\EventBankinformation The current object (for fluent API support)
      */
@@ -745,7 +745,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventBankinformationTableMap::DATABASE_NAME);
         }
@@ -887,19 +887,19 @@ abstract class EventBankinformation implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'event_bankinformationid':
+                    case 'event_bankinformationid':                        
                         $stmt->bindValue($identifier, $this->event_bankinformationid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':
+                    case 'eventid':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'iban':
+                    case 'iban':                        
                         $stmt->bindValue($identifier, $this->iban, PDO::PARAM_STR);
                         break;
-                    case 'bic':
+                    case 'bic':                        
                         $stmt->bindValue($identifier, $this->bic, PDO::PARAM_STR);
                         break;
                     case 'active':
@@ -1026,10 +1026,10 @@ abstract class EventBankinformation implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aEvent) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'event';
@@ -1040,11 +1040,11 @@ abstract class EventBankinformation implements ActiveRecordInterface
                     default:
                         $key = 'Event';
                 }
-
+        
                 $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collInvoices) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoices';
@@ -1055,7 +1055,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
                     default:
                         $key = 'Invoices';
                 }
-
+        
                 $result[$key] = $this->collInvoices->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1256,7 +1256,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1532,7 +1532,7 @@ abstract class EventBankinformation implements ActiveRecordInterface
         /** @var Invoice[] $invoicesToDelete */
         $invoicesToDelete = $this->getInvoices(new Criteria(), $con)->diff($invoices);
 
-
+        
         $this->invoicesScheduledForDeletion = $invoicesToDelete;
 
         foreach ($invoicesToDelete as $invoiceRemoved) {

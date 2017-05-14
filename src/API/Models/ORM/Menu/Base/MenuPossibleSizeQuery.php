@@ -18,7 +18,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'menu_possible_size' table.
  *
- *
+ * 
  *
  * @method     ChildMenuPossibleSizeQuery orderByMenuPossibleSizeid($order = Criteria::ASC) Order by the menu_possible_sizeid column
  * @method     ChildMenuPossibleSizeQuery orderByMenuSizeid($order = Criteria::ASC) Order by the menu_sizeid column
@@ -181,7 +181,7 @@ abstract class MenuPossibleSizeQuery extends ModelCriteria
     {
         $sql = 'SELECT menu_possible_sizeid, menu_sizeid, menuid, price FROM menu_possible_size WHERE menu_possible_sizeid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -658,9 +658,9 @@ abstract class MenuPossibleSizeQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             MenuPossibleSizeTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             MenuPossibleSizeTableMap::clearRelatedInstancePool();
 

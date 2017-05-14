@@ -25,11 +25,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'user_message' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.User.Message.Base
  */
-abstract class UserMessage implements ActiveRecordInterface
+abstract class UserMessage implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -65,42 +65,42 @@ abstract class UserMessage implements ActiveRecordInterface
 
     /**
      * The value for the user_messageid field.
-     *
+     * 
      * @var        int
      */
     protected $user_messageid;
 
     /**
      * The value for the from_event_userid field.
-     *
+     * 
      * @var        int
      */
     protected $from_event_userid;
 
     /**
      * The value for the to_event_userid field.
-     *
+     * 
      * @var        int
      */
     protected $to_event_userid;
 
     /**
      * The value for the message field.
-     *
+     * 
      * @var        string
      */
     protected $message;
 
     /**
      * The value for the date field.
-     *
+     * 
      * @var        DateTime
      */
     protected $date;
 
     /**
      * The value for the readed field.
-     *
+     * 
      * @var        boolean
      */
     protected $readed;
@@ -340,17 +340,17 @@ abstract class UserMessage implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [user_messageid] column value.
-     *
+     * 
      * @return int
      */
     public function getUserMessageid()
@@ -360,7 +360,7 @@ abstract class UserMessage implements ActiveRecordInterface
 
     /**
      * Get the [from_event_userid] column value.
-     *
+     * 
      * @return int
      */
     public function getFromEventUserid()
@@ -370,7 +370,7 @@ abstract class UserMessage implements ActiveRecordInterface
 
     /**
      * Get the [to_event_userid] column value.
-     *
+     * 
      * @return int
      */
     public function getToEventUserid()
@@ -380,7 +380,7 @@ abstract class UserMessage implements ActiveRecordInterface
 
     /**
      * Get the [message] column value.
-     *
+     * 
      * @return string
      */
     public function getMessage()
@@ -390,7 +390,7 @@ abstract class UserMessage implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [date] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -410,7 +410,7 @@ abstract class UserMessage implements ActiveRecordInterface
 
     /**
      * Get the [readed] column value.
-     *
+     * 
      * @return boolean
      */
     public function getReaded()
@@ -420,7 +420,7 @@ abstract class UserMessage implements ActiveRecordInterface
 
     /**
      * Get the [readed] column value.
-     *
+     * 
      * @return boolean
      */
     public function isReaded()
@@ -430,7 +430,7 @@ abstract class UserMessage implements ActiveRecordInterface
 
     /**
      * Set the value of [user_messageid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\User\Message\UserMessage The current object (for fluent API support)
      */
@@ -450,7 +450,7 @@ abstract class UserMessage implements ActiveRecordInterface
 
     /**
      * Set the value of [from_event_userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\User\Message\UserMessage The current object (for fluent API support)
      */
@@ -474,7 +474,7 @@ abstract class UserMessage implements ActiveRecordInterface
 
     /**
      * Set the value of [to_event_userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\User\Message\UserMessage The current object (for fluent API support)
      */
@@ -498,7 +498,7 @@ abstract class UserMessage implements ActiveRecordInterface
 
     /**
      * Set the value of [message] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\User\Message\UserMessage The current object (for fluent API support)
      */
@@ -518,7 +518,7 @@ abstract class UserMessage implements ActiveRecordInterface
 
     /**
      * Sets the value of [date] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\User\Message\UserMessage The current object (for fluent API support)
@@ -542,7 +542,7 @@ abstract class UserMessage implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
+     * 
      * @param  boolean|integer|string $v The new value
      * @return $this|\API\Models\ORM\User\Message\UserMessage The current object (for fluent API support)
      */
@@ -753,7 +753,7 @@ abstract class UserMessage implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(UserMessageTableMap::DATABASE_NAME);
         }
@@ -881,19 +881,19 @@ abstract class UserMessage implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'user_messageid':
+                    case 'user_messageid':                        
                         $stmt->bindValue($identifier, $this->user_messageid, PDO::PARAM_INT);
                         break;
-                    case 'from_event_userid':
+                    case 'from_event_userid':                        
                         $stmt->bindValue($identifier, $this->from_event_userid, PDO::PARAM_INT);
                         break;
-                    case 'to_event_userid':
+                    case 'to_event_userid':                        
                         $stmt->bindValue($identifier, $this->to_event_userid, PDO::PARAM_INT);
                         break;
-                    case 'message':
+                    case 'message':                        
                         $stmt->bindValue($identifier, $this->message, PDO::PARAM_STR);
                         break;
-                    case 'date':
+                    case 'date':                        
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case 'readed':
@@ -1012,15 +1012,15 @@ abstract class UserMessage implements ActiveRecordInterface
         if ($result[$keys[4]] instanceof \DateTime) {
             $result[$keys[4]] = $result[$keys[4]]->format('c');
         }
-
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aEventUserRelatedByFromEventUserid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventUser';
@@ -1031,11 +1031,11 @@ abstract class UserMessage implements ActiveRecordInterface
                     default:
                         $key = 'EventUser';
                 }
-
+        
                 $result[$key] = $this->aEventUserRelatedByFromEventUserid->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aEventUserRelatedByToEventUserid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventUser';
@@ -1046,7 +1046,7 @@ abstract class UserMessage implements ActiveRecordInterface
                     default:
                         $key = 'EventUser';
                 }
-
+        
                 $result[$key] = $this->aEventUserRelatedByToEventUserid->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -1247,7 +1247,7 @@ abstract class UserMessage implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int

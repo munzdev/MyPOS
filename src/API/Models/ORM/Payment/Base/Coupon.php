@@ -34,11 +34,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'coupon' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Payment.Base
  */
-abstract class Coupon implements ActiveRecordInterface
+abstract class Coupon implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -74,42 +74,42 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * The value for the couponid field.
-     *
+     * 
      * @var        int
      */
     protected $couponid;
 
     /**
      * The value for the eventid field.
-     *
+     * 
      * @var        int
      */
     protected $eventid;
 
     /**
      * The value for the created_by_userid field.
-     *
+     * 
      * @var        int
      */
     protected $created_by_userid;
 
     /**
      * The value for the code field.
-     *
+     * 
      * @var        string
      */
     protected $code;
 
     /**
      * The value for the created field.
-     *
+     * 
      * @var        DateTime
      */
     protected $created;
 
     /**
      * The value for the value field.
-     *
+     * 
      * @var        string
      */
     protected $value;
@@ -377,17 +377,17 @@ abstract class Coupon implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [couponid] column value.
-     *
+     * 
      * @return int
      */
     public function getCouponid()
@@ -397,7 +397,7 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * Get the [eventid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventid()
@@ -407,7 +407,7 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * Get the [created_by_userid] column value.
-     *
+     * 
      * @return int
      */
     public function getCreatedByUserid()
@@ -417,7 +417,7 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * Get the [code] column value.
-     *
+     * 
      * @return string
      */
     public function getCode()
@@ -427,7 +427,7 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [created] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -447,7 +447,7 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * Get the [value] column value.
-     *
+     * 
      * @return string
      */
     public function getValue()
@@ -457,7 +457,7 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * Set the value of [couponid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Payment\Coupon The current object (for fluent API support)
      */
@@ -477,7 +477,7 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Payment\Coupon The current object (for fluent API support)
      */
@@ -501,7 +501,7 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * Set the value of [created_by_userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Payment\Coupon The current object (for fluent API support)
      */
@@ -525,7 +525,7 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * Set the value of [code] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Payment\Coupon The current object (for fluent API support)
      */
@@ -545,7 +545,7 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * Sets the value of [created] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Payment\Coupon The current object (for fluent API support)
@@ -565,7 +565,7 @@ abstract class Coupon implements ActiveRecordInterface
 
     /**
      * Set the value of [value] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Payment\Coupon The current object (for fluent API support)
      */
@@ -775,7 +775,7 @@ abstract class Coupon implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(CouponTableMap::DATABASE_NAME);
         }
@@ -953,22 +953,22 @@ abstract class Coupon implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'couponid':
+                    case 'couponid':                        
                         $stmt->bindValue($identifier, $this->couponid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':
+                    case 'eventid':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'created_by_userid':
+                    case 'created_by_userid':                        
                         $stmt->bindValue($identifier, $this->created_by_userid, PDO::PARAM_INT);
                         break;
-                    case 'code':
+                    case 'code':                        
                         $stmt->bindValue($identifier, $this->code, PDO::PARAM_STR);
                         break;
-                    case 'created':
+                    case 'created':                        
                         $stmt->bindValue($identifier, $this->created ? $this->created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'value':
+                    case 'value':                        
                         $stmt->bindValue($identifier, $this->value, PDO::PARAM_STR);
                         break;
                 }
@@ -1091,15 +1091,15 @@ abstract class Coupon implements ActiveRecordInterface
         if ($result[$keys[4]] instanceof \DateTime) {
             $result[$keys[4]] = $result[$keys[4]]->format('c');
         }
-
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aEvent) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'event';
@@ -1110,11 +1110,11 @@ abstract class Coupon implements ActiveRecordInterface
                     default:
                         $key = 'Event';
                 }
-
+        
                 $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -1125,11 +1125,11 @@ abstract class Coupon implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collPaymentCoupons) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'paymentCoupons';
@@ -1140,7 +1140,7 @@ abstract class Coupon implements ActiveRecordInterface
                     default:
                         $key = 'PaymentCoupons';
                 }
-
+        
                 $result[$key] = $this->collPaymentCoupons->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1341,7 +1341,7 @@ abstract class Coupon implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1668,7 +1668,7 @@ abstract class Coupon implements ActiveRecordInterface
         /** @var ChildPaymentCoupon[] $paymentCouponsToDelete */
         $paymentCouponsToDelete = $this->getPaymentCoupons(new Criteria(), $con)->diff($paymentCoupons);
 
-
+        
         //since at least one column in the foreign key is at the same time a PK
         //we can not just set a PK to NULL in the lines below. We have to store
         //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
@@ -1966,7 +1966,7 @@ abstract class Coupon implements ActiveRecordInterface
     /**
      * Associate a ChildPaymentRecieved to this object
      * through the payment_coupon cross reference table.
-     *
+     * 
      * @param ChildPaymentRecieved $paymentRecieved
      * @return ChildCoupon The current object (for fluent API support)
      */
@@ -1986,7 +1986,7 @@ abstract class Coupon implements ActiveRecordInterface
     }
 
     /**
-     *
+     * 
      * @param ChildPaymentRecieved $paymentRecieved
      */
     protected function doAddPaymentRecieved(ChildPaymentRecieved $paymentRecieved)
@@ -2013,7 +2013,7 @@ abstract class Coupon implements ActiveRecordInterface
     /**
      * Remove paymentRecieved of this object
      * through the payment_coupon cross reference table.
-     *
+     * 
      * @param ChildPaymentRecieved $paymentRecieved
      * @return ChildCoupon The current object (for fluent API support)
      */
@@ -2032,7 +2032,7 @@ abstract class Coupon implements ActiveRecordInterface
             $paymentCoupon->clear();
 
             $this->collPaymentRecieveds->remove($this->collPaymentRecieveds->search($paymentRecieved));
-
+            
             if (null === $this->paymentRecievedsScheduledForDeletion) {
                 $this->paymentRecievedsScheduledForDeletion = clone $this->collPaymentRecieveds;
                 $this->paymentRecievedsScheduledForDeletion->clear();

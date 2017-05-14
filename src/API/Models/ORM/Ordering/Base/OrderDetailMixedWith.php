@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'order_detail_mixed_with' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Ordering.Base
  */
-abstract class OrderDetailMixedWith implements ActiveRecordInterface
+abstract class OrderDetailMixedWith implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -65,14 +65,14 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
 
     /**
      * The value for the order_detailid field.
-     *
+     * 
      * @var        int
      */
     protected $order_detailid;
 
     /**
      * The value for the menuid field.
-     *
+     * 
      * @var        int
      */
     protected $menuid;
@@ -312,17 +312,17 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [order_detailid] column value.
-     *
+     * 
      * @return int
      */
     public function getOrderDetailid()
@@ -332,7 +332,7 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
 
     /**
      * Get the [menuid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuid()
@@ -342,7 +342,7 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
 
     /**
      * Set the value of [order_detailid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetailMixedWith The current object (for fluent API support)
      */
@@ -366,7 +366,7 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
 
     /**
      * Set the value of [menuid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetailMixedWith The current object (for fluent API support)
      */
@@ -562,7 +562,7 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderDetailMixedWithTableMap::DATABASE_NAME);
         }
@@ -678,10 +678,10 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'order_detailid':
+                    case 'order_detailid':                        
                         $stmt->bindValue($identifier, $this->order_detailid, PDO::PARAM_INT);
                         break;
-                    case 'menuid':
+                    case 'menuid':                        
                         $stmt->bindValue($identifier, $this->menuid, PDO::PARAM_INT);
                         break;
                 }
@@ -782,10 +782,10 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aMenu) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menu';
@@ -796,11 +796,11 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
                     default:
                         $key = 'Menu';
                 }
-
+        
                 $result[$key] = $this->aMenu->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aOrderDetail) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetail';
@@ -811,7 +811,7 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetail';
                 }
-
+        
                 $result[$key] = $this->aOrderDetail->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -992,7 +992,7 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the composite primary key for this object.
      * The array elements will be in same order as specified in XML.

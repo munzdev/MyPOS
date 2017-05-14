@@ -29,11 +29,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'event_printer' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Event.Base
  */
-abstract class EventPrinter implements ActiveRecordInterface
+abstract class EventPrinter implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -69,56 +69,56 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * The value for the event_printerid field.
-     *
+     * 
      * @var        int
      */
     protected $event_printerid;
 
     /**
      * The value for the eventid field.
-     *
+     * 
      * @var        int
      */
     protected $eventid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
 
     /**
      * The value for the type field.
-     *
+     * 
      * @var        int
      */
     protected $type;
 
     /**
      * The value for the attr1 field.
-     *
+     * 
      * @var        string
      */
     protected $attr1;
 
     /**
      * The value for the attr2 field.
-     *
+     * 
      * @var        string
      */
     protected $attr2;
 
     /**
      * The value for the default field.
-     *
+     * 
      * @var        boolean
      */
     protected $default;
 
     /**
      * The value for the characters_per_row field.
-     *
+     * 
      * @var        int
      */
     protected $characters_per_row;
@@ -365,17 +365,17 @@ abstract class EventPrinter implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [event_printerid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventPrinterid()
@@ -385,7 +385,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Get the [eventid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventid()
@@ -395,7 +395,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -405,7 +405,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Get the [type] column value.
-     *
+     * 
      * @return int
      */
     public function getType()
@@ -415,7 +415,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Get the [attr1] column value.
-     *
+     * 
      * @return string
      */
     public function getAttr1()
@@ -425,7 +425,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Get the [attr2] column value.
-     *
+     * 
      * @return string
      */
     public function getAttr2()
@@ -435,7 +435,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Get the [default] column value.
-     *
+     * 
      * @return boolean
      */
     public function getDefault()
@@ -445,7 +445,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Get the [default] column value.
-     *
+     * 
      * @return boolean
      */
     public function isDefault()
@@ -455,7 +455,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Get the [characters_per_row] column value.
-     *
+     * 
      * @return int
      */
     public function getCharactersPerRow()
@@ -465,7 +465,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Set the value of [event_printerid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventPrinter The current object (for fluent API support)
      */
@@ -485,7 +485,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventPrinter The current object (for fluent API support)
      */
@@ -509,7 +509,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventPrinter The current object (for fluent API support)
      */
@@ -529,7 +529,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Set the value of [type] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventPrinter The current object (for fluent API support)
      */
@@ -549,7 +549,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Set the value of [attr1] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventPrinter The current object (for fluent API support)
      */
@@ -569,7 +569,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Set the value of [attr2] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventPrinter The current object (for fluent API support)
      */
@@ -593,7 +593,7 @@ abstract class EventPrinter implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
+     * 
      * @param  boolean|integer|string $v The new value
      * @return $this|\API\Models\ORM\Event\EventPrinter The current object (for fluent API support)
      */
@@ -617,7 +617,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
     /**
      * Set the value of [characters_per_row] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventPrinter The current object (for fluent API support)
      */
@@ -825,7 +825,7 @@ abstract class EventPrinter implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventPrinterTableMap::DATABASE_NAME);
         }
@@ -973,28 +973,28 @@ abstract class EventPrinter implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'event_printerid':
+                    case 'event_printerid':                        
                         $stmt->bindValue($identifier, $this->event_printerid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':
+                    case 'eventid':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'type':
+                    case 'type':                        
                         $stmt->bindValue($identifier, $this->type, PDO::PARAM_INT);
                         break;
-                    case 'attr1':
+                    case 'attr1':                        
                         $stmt->bindValue($identifier, $this->attr1, PDO::PARAM_STR);
                         break;
-                    case 'attr2':
+                    case 'attr2':                        
                         $stmt->bindValue($identifier, $this->attr2, PDO::PARAM_STR);
                         break;
                     case 'default':
                         $stmt->bindValue($identifier, (int) $this->default, PDO::PARAM_INT);
                         break;
-                    case 'characters_per_row':
+                    case 'characters_per_row':                        
                         $stmt->bindValue($identifier, $this->characters_per_row, PDO::PARAM_INT);
                         break;
                 }
@@ -1126,10 +1126,10 @@ abstract class EventPrinter implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aEvent) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'event';
@@ -1140,11 +1140,11 @@ abstract class EventPrinter implements ActiveRecordInterface
                     default:
                         $key = 'Event';
                 }
-
+        
                 $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collDistributionPlaceUsers) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'distributionPlaceUsers';
@@ -1155,7 +1155,7 @@ abstract class EventPrinter implements ActiveRecordInterface
                     default:
                         $key = 'DistributionPlaceUsers';
                 }
-
+        
                 $result[$key] = $this->collDistributionPlaceUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1374,7 +1374,7 @@ abstract class EventPrinter implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1652,7 +1652,7 @@ abstract class EventPrinter implements ActiveRecordInterface
         /** @var DistributionPlaceUser[] $distributionPlaceUsersToDelete */
         $distributionPlaceUsersToDelete = $this->getDistributionPlaceUsers(new Criteria(), $con)->diff($distributionPlaceUsers);
 
-
+        
         //since at least one column in the foreign key is at the same time a PK
         //we can not just set a PK to NULL in the lines below. We have to store
         //a backup of all values, so we are able to manipulate these items based on the onDelete value later.

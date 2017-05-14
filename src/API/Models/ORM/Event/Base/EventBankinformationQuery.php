@@ -19,7 +19,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'event_bankinformation' table.
  *
- *
+ * 
  *
  * @method     ChildEventBankinformationQuery orderByEventBankinformationid($order = Criteria::ASC) Order by the event_bankinformationid column
  * @method     ChildEventBankinformationQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
@@ -192,7 +192,7 @@ abstract class EventBankinformationQuery extends ModelCriteria
     {
         $sql = 'SELECT event_bankinformationid, eventid, name, iban, bic, active FROM event_bankinformation WHERE event_bankinformationid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -683,9 +683,9 @@ abstract class EventBankinformationQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             EventBankinformationTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             EventBankinformationTableMap::clearRelatedInstancePool();
 

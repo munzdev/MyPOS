@@ -32,11 +32,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'menu_size' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Menu.Base
  */
-abstract class MenuSize implements ActiveRecordInterface
+abstract class MenuSize implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -72,28 +72,28 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * The value for the menu_sizeid field.
-     *
+     * 
      * @var        int
      */
     protected $menu_sizeid;
 
     /**
      * The value for the eventid field.
-     *
+     * 
      * @var        int
      */
     protected $eventid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
 
     /**
      * The value for the factor field.
-     *
+     * 
      * @var        string
      */
     protected $factor;
@@ -352,17 +352,17 @@ abstract class MenuSize implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [menu_sizeid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuSizeid()
@@ -372,7 +372,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Get the [eventid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventid()
@@ -382,7 +382,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -392,7 +392,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Get the [factor] column value.
-     *
+     * 
      * @return string
      */
     public function getFactor()
@@ -402,7 +402,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Set the value of [menu_sizeid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\MenuSize The current object (for fluent API support)
      */
@@ -422,7 +422,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\MenuSize The current object (for fluent API support)
      */
@@ -446,7 +446,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Menu\MenuSize The current object (for fluent API support)
      */
@@ -466,7 +466,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
     /**
      * Set the value of [factor] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Menu\MenuSize The current object (for fluent API support)
      */
@@ -664,7 +664,7 @@ abstract class MenuSize implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(MenuSizeTableMap::DATABASE_NAME);
         }
@@ -818,16 +818,16 @@ abstract class MenuSize implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'menu_sizeid':
+                    case 'menu_sizeid':                        
                         $stmt->bindValue($identifier, $this->menu_sizeid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':
+                    case 'eventid':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'factor':
+                    case 'factor':                        
                         $stmt->bindValue($identifier, $this->factor, PDO::PARAM_STR);
                         break;
                 }
@@ -943,10 +943,10 @@ abstract class MenuSize implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aEvent) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'event';
@@ -957,11 +957,11 @@ abstract class MenuSize implements ActiveRecordInterface
                     default:
                         $key = 'Event';
                 }
-
+        
                 $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collMenuPossibleSizes) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuPossibleSizes';
@@ -972,11 +972,11 @@ abstract class MenuSize implements ActiveRecordInterface
                     default:
                         $key = 'MenuPossibleSizes';
                 }
-
+        
                 $result[$key] = $this->collMenuPossibleSizes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderDetails) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetails';
@@ -987,7 +987,7 @@ abstract class MenuSize implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetails';
                 }
-
+        
                 $result[$key] = $this->collOrderDetails->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1170,7 +1170,7 @@ abstract class MenuSize implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1453,7 +1453,7 @@ abstract class MenuSize implements ActiveRecordInterface
         /** @var ChildMenuPossibleSize[] $menuPossibleSizesToDelete */
         $menuPossibleSizesToDelete = $this->getMenuPossibleSizes(new Criteria(), $con)->diff($menuPossibleSizes);
 
-
+        
         $this->menuPossibleSizesScheduledForDeletion = $menuPossibleSizesToDelete;
 
         foreach ($menuPossibleSizesToDelete as $menuPossibleSizeRemoved) {
@@ -1703,7 +1703,7 @@ abstract class MenuSize implements ActiveRecordInterface
         /** @var OrderDetail[] $orderDetailsToDelete */
         $orderDetailsToDelete = $this->getOrderDetails(new Criteria(), $con)->diff($orderDetails);
 
-
+        
         $this->orderDetailsScheduledForDeletion = $orderDetailsToDelete;
 
         foreach ($orderDetailsToDelete as $orderDetailRemoved) {

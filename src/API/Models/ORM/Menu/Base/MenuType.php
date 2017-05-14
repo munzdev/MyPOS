@@ -28,11 +28,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'menu_type' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Menu.Base
  */
-abstract class MenuType implements ActiveRecordInterface
+abstract class MenuType implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -68,35 +68,35 @@ abstract class MenuType implements ActiveRecordInterface
 
     /**
      * The value for the menu_typeid field.
-     *
+     * 
      * @var        int
      */
     protected $menu_typeid;
 
     /**
      * The value for the eventid field.
-     *
+     * 
      * @var        int
      */
     protected $eventid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
 
     /**
      * The value for the tax field.
-     *
+     * 
      * @var        int
      */
     protected $tax;
 
     /**
      * The value for the allowmixing field.
-     *
+     * 
      * @var        boolean
      */
     protected $allowmixing;
@@ -343,17 +343,17 @@ abstract class MenuType implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [menu_typeid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuTypeid()
@@ -363,7 +363,7 @@ abstract class MenuType implements ActiveRecordInterface
 
     /**
      * Get the [eventid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventid()
@@ -373,7 +373,7 @@ abstract class MenuType implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -383,7 +383,7 @@ abstract class MenuType implements ActiveRecordInterface
 
     /**
      * Get the [tax] column value.
-     *
+     * 
      * @return int
      */
     public function getTax()
@@ -393,7 +393,7 @@ abstract class MenuType implements ActiveRecordInterface
 
     /**
      * Get the [allowmixing] column value.
-     *
+     * 
      * @return boolean
      */
     public function getAllowmixing()
@@ -403,7 +403,7 @@ abstract class MenuType implements ActiveRecordInterface
 
     /**
      * Get the [allowmixing] column value.
-     *
+     * 
      * @return boolean
      */
     public function isAllowmixing()
@@ -413,7 +413,7 @@ abstract class MenuType implements ActiveRecordInterface
 
     /**
      * Set the value of [menu_typeid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\MenuType The current object (for fluent API support)
      */
@@ -433,7 +433,7 @@ abstract class MenuType implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\MenuType The current object (for fluent API support)
      */
@@ -457,7 +457,7 @@ abstract class MenuType implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Menu\MenuType The current object (for fluent API support)
      */
@@ -477,7 +477,7 @@ abstract class MenuType implements ActiveRecordInterface
 
     /**
      * Set the value of [tax] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\MenuType The current object (for fluent API support)
      */
@@ -501,7 +501,7 @@ abstract class MenuType implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
+     * 
      * @param  boolean|integer|string $v The new value
      * @return $this|\API\Models\ORM\Menu\MenuType The current object (for fluent API support)
      */
@@ -704,7 +704,7 @@ abstract class MenuType implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(MenuTypeTableMap::DATABASE_NAME);
         }
@@ -843,16 +843,16 @@ abstract class MenuType implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'menu_typeid':
+                    case 'menu_typeid':                        
                         $stmt->bindValue($identifier, $this->menu_typeid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':
+                    case 'eventid':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'tax':
+                    case 'tax':                        
                         $stmt->bindValue($identifier, $this->tax, PDO::PARAM_INT);
                         break;
                     case 'allowMixing':
@@ -975,10 +975,10 @@ abstract class MenuType implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aEvent) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'event';
@@ -989,11 +989,11 @@ abstract class MenuType implements ActiveRecordInterface
                     default:
                         $key = 'Event';
                 }
-
+        
                 $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collMenuGroups) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuGroups';
@@ -1004,7 +1004,7 @@ abstract class MenuType implements ActiveRecordInterface
                     default:
                         $key = 'MenuGroups';
                 }
-
+        
                 $result[$key] = $this->collMenuGroups->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1196,7 +1196,7 @@ abstract class MenuType implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1471,7 +1471,7 @@ abstract class MenuType implements ActiveRecordInterface
         /** @var ChildMenuGroup[] $menuGroupsToDelete */
         $menuGroupsToDelete = $this->getMenuGroups(new Criteria(), $con)->diff($menuGroups);
 
-
+        
         $this->menuGroupsScheduledForDeletion = $menuGroupsToDelete;
 
         foreach ($menuGroupsToDelete as $menuGroupRemoved) {

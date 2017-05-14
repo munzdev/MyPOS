@@ -26,11 +26,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'payment_type' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Payment.Base
  */
-abstract class PaymentType implements ActiveRecordInterface
+abstract class PaymentType implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -66,14 +66,14 @@ abstract class PaymentType implements ActiveRecordInterface
 
     /**
      * The value for the payment_typeid field.
-     *
+     * 
      * @var        int
      */
     protected $payment_typeid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
@@ -315,17 +315,17 @@ abstract class PaymentType implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [payment_typeid] column value.
-     *
+     * 
      * @return int
      */
     public function getPaymentTypeid()
@@ -335,7 +335,7 @@ abstract class PaymentType implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -345,7 +345,7 @@ abstract class PaymentType implements ActiveRecordInterface
 
     /**
      * Set the value of [payment_typeid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Payment\PaymentType The current object (for fluent API support)
      */
@@ -365,7 +365,7 @@ abstract class PaymentType implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Payment\PaymentType The current object (for fluent API support)
      */
@@ -551,7 +551,7 @@ abstract class PaymentType implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(PaymentTypeTableMap::DATABASE_NAME);
         }
@@ -669,10 +669,10 @@ abstract class PaymentType implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'payment_typeid':
+                    case 'payment_typeid':                        
                         $stmt->bindValue($identifier, $this->payment_typeid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                 }
@@ -780,10 +780,10 @@ abstract class PaymentType implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->collPaymentRecieveds) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'paymentRecieveds';
@@ -794,7 +794,7 @@ abstract class PaymentType implements ActiveRecordInterface
                     default:
                         $key = 'PaymentRecieveds';
                 }
-
+        
                 $result[$key] = $this->collPaymentRecieveds->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -959,7 +959,7 @@ abstract class PaymentType implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1180,7 +1180,7 @@ abstract class PaymentType implements ActiveRecordInterface
         /** @var ChildPaymentRecieved[] $paymentRecievedsToDelete */
         $paymentRecievedsToDelete = $this->getPaymentRecieveds(new Criteria(), $con)->diff($paymentRecieveds);
 
-
+        
         $this->paymentRecievedsScheduledForDeletion = $paymentRecievedsToDelete;
 
         foreach ($paymentRecievedsToDelete as $paymentRecievedRemoved) {

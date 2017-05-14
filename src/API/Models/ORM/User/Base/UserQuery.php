@@ -26,7 +26,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'user' table.
  *
- *
+ * 
  *
  * @method     ChildUserQuery orderByUserid($order = Criteria::ASC) Order by the userid column
  * @method     ChildUserQuery orderByUsername($order = Criteria::ASC) Order by the username column
@@ -289,7 +289,7 @@ abstract class UserQuery extends ModelCriteria
     {
         $sql = 'SELECT userid, username, password, firstname, lastname, autologin_hash, active, phonenumber, call_request, is_admin FROM user WHERE userid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -1403,9 +1403,9 @@ abstract class UserQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             UserTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             UserTableMap::clearRelatedInstancePool();
 

@@ -22,7 +22,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'invoice' table.
  *
- *
+ * 
  *
  * @method     ChildInvoiceQuery orderByInvoiceid($order = Criteria::ASC) Order by the invoiceid column
  * @method     ChildInvoiceQuery orderByInvoiceTypeid($order = Criteria::ASC) Order by the invoice_typeid column
@@ -305,7 +305,7 @@ abstract class InvoiceQuery extends ModelCriteria
     {
         $sql = 'SELECT invoiceid, invoice_typeid, event_contactid, userid, event_bankinformationid, customer_event_contactid, canceled_invoiceid, date, amount, maturity_date, payment_finished, amount_recieved FROM invoice WHERE invoiceid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -1724,9 +1724,9 @@ abstract class InvoiceQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             InvoiceTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             InvoiceTableMap::clearRelatedInstancePool();
 

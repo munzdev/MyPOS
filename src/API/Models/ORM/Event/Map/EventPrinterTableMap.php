@@ -235,7 +235,7 @@ class EventPrinterTableMap extends TableMap
                 : self::translateFieldName('EventPrinterid', TableMap::TYPE_PHPNAME, $indexType)
         ];
     }
-
+    
     /**
      * The class that the tableMap will make instances of.
      *
@@ -296,7 +296,7 @@ class EventPrinterTableMap extends TableMap
     public static function populateObjects(DataFetcherInterface $dataFetcher)
     {
         $results = array();
-
+    
         // set the class once to avoid overhead in the loop
         $cls = static::getOMClass(false);
         // populate the object(s)

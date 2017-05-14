@@ -31,11 +31,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'event_user' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Event.Base
  */
-abstract class EventUser implements ActiveRecordInterface
+abstract class EventUser implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -71,35 +71,35 @@ abstract class EventUser implements ActiveRecordInterface
 
     /**
      * The value for the event_userid field.
-     *
+     * 
      * @var        int
      */
     protected $event_userid;
 
     /**
      * The value for the eventid field.
-     *
+     * 
      * @var        int
      */
     protected $eventid;
 
     /**
      * The value for the userid field.
-     *
+     * 
      * @var        int
      */
     protected $userid;
 
     /**
      * The value for the user_roles field.
-     *
+     * 
      * @var        int
      */
     protected $user_roles;
 
     /**
      * The value for the begin_money field.
-     *
+     * 
      * @var        string
      */
     protected $begin_money;
@@ -363,17 +363,17 @@ abstract class EventUser implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [event_userid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventUserid()
@@ -383,7 +383,7 @@ abstract class EventUser implements ActiveRecordInterface
 
     /**
      * Get the [eventid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventid()
@@ -393,7 +393,7 @@ abstract class EventUser implements ActiveRecordInterface
 
     /**
      * Get the [userid] column value.
-     *
+     * 
      * @return int
      */
     public function getUserid()
@@ -403,7 +403,7 @@ abstract class EventUser implements ActiveRecordInterface
 
     /**
      * Get the [user_roles] column value.
-     *
+     * 
      * @return int
      */
     public function getUserRoles()
@@ -413,7 +413,7 @@ abstract class EventUser implements ActiveRecordInterface
 
     /**
      * Get the [begin_money] column value.
-     *
+     * 
      * @return string
      */
     public function getBeginMoney()
@@ -423,7 +423,7 @@ abstract class EventUser implements ActiveRecordInterface
 
     /**
      * Set the value of [event_userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventUser The current object (for fluent API support)
      */
@@ -443,7 +443,7 @@ abstract class EventUser implements ActiveRecordInterface
 
     /**
      * Set the value of [eventid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventUser The current object (for fluent API support)
      */
@@ -467,7 +467,7 @@ abstract class EventUser implements ActiveRecordInterface
 
     /**
      * Set the value of [userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventUser The current object (for fluent API support)
      */
@@ -491,7 +491,7 @@ abstract class EventUser implements ActiveRecordInterface
 
     /**
      * Set the value of [user_roles] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Event\EventUser The current object (for fluent API support)
      */
@@ -511,7 +511,7 @@ abstract class EventUser implements ActiveRecordInterface
 
     /**
      * Set the value of [begin_money] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Event\EventUser The current object (for fluent API support)
      */
@@ -716,7 +716,7 @@ abstract class EventUser implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(EventUserTableMap::DATABASE_NAME);
         }
@@ -880,19 +880,19 @@ abstract class EventUser implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'event_userid':
+                    case 'event_userid':                        
                         $stmt->bindValue($identifier, $this->event_userid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':
+                    case 'eventid':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'userid':
+                    case 'userid':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'user_roles':
+                    case 'user_roles':                        
                         $stmt->bindValue($identifier, $this->user_roles, PDO::PARAM_INT);
                         break;
-                    case 'begin_money':
+                    case 'begin_money':                        
                         $stmt->bindValue($identifier, $this->begin_money, PDO::PARAM_STR);
                         break;
                 }
@@ -1012,10 +1012,10 @@ abstract class EventUser implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aEvent) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'event';
@@ -1026,11 +1026,11 @@ abstract class EventUser implements ActiveRecordInterface
                     default:
                         $key = 'Event';
                 }
-
+        
                 $result[$key] = $this->aEvent->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -1041,11 +1041,11 @@ abstract class EventUser implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collUserMessagesRelatedByFromEventUserid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'userMessages';
@@ -1056,11 +1056,11 @@ abstract class EventUser implements ActiveRecordInterface
                     default:
                         $key = 'UserMessages';
                 }
-
+        
                 $result[$key] = $this->collUserMessagesRelatedByFromEventUserid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collUserMessagesRelatedByToEventUserid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'userMessages';
@@ -1071,7 +1071,7 @@ abstract class EventUser implements ActiveRecordInterface
                     default:
                         $key = 'UserMessages';
                 }
-
+        
                 $result[$key] = $this->collUserMessagesRelatedByToEventUserid->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1263,7 +1263,7 @@ abstract class EventUser implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1598,7 +1598,7 @@ abstract class EventUser implements ActiveRecordInterface
         /** @var UserMessage[] $userMessagesRelatedByFromEventUseridToDelete */
         $userMessagesRelatedByFromEventUseridToDelete = $this->getUserMessagesRelatedByFromEventUserid(new Criteria(), $con)->diff($userMessagesRelatedByFromEventUserid);
 
-
+        
         $this->userMessagesRelatedByFromEventUseridScheduledForDeletion = $userMessagesRelatedByFromEventUseridToDelete;
 
         foreach ($userMessagesRelatedByFromEventUseridToDelete as $userMessageRelatedByFromEventUseridRemoved) {
@@ -1823,7 +1823,7 @@ abstract class EventUser implements ActiveRecordInterface
         /** @var UserMessage[] $userMessagesRelatedByToEventUseridToDelete */
         $userMessagesRelatedByToEventUseridToDelete = $this->getUserMessagesRelatedByToEventUserid(new Criteria(), $con)->diff($userMessagesRelatedByToEventUserid);
 
-
+        
         $this->userMessagesRelatedByToEventUseridScheduledForDeletion = $userMessagesRelatedByToEventUseridToDelete;
 
         foreach ($userMessagesRelatedByToEventUseridToDelete as $userMessageRelatedByToEventUseridRemoved) {

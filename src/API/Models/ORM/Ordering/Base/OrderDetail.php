@@ -53,11 +53,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'order_detail' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Ordering.Base
  */
-abstract class OrderDetail implements ActiveRecordInterface
+abstract class OrderDetail implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -93,98 +93,98 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * The value for the order_detailid field.
-     *
+     * 
      * @var        int
      */
     protected $order_detailid;
 
     /**
      * The value for the orderid field.
-     *
+     * 
      * @var        int
      */
     protected $orderid;
 
     /**
      * The value for the menuid field.
-     *
+     * 
      * @var        int
      */
     protected $menuid;
 
     /**
      * The value for the menu_sizeid field.
-     *
+     * 
      * @var        int
      */
     protected $menu_sizeid;
 
     /**
      * The value for the menu_groupid field.
-     *
+     * 
      * @var        int
      */
     protected $menu_groupid;
 
     /**
      * The value for the amount field.
-     *
+     * 
      * @var        int
      */
     protected $amount;
 
     /**
      * The value for the single_price field.
-     *
+     * 
      * @var        string
      */
     protected $single_price;
 
     /**
      * The value for the single_price_modified_by_userid field.
-     *
+     * 
      * @var        int
      */
     protected $single_price_modified_by_userid;
 
     /**
      * The value for the extra_detail field.
-     *
+     * 
      * @var        string
      */
     protected $extra_detail;
 
     /**
      * The value for the availabilityid field.
-     *
+     * 
      * @var        int
      */
     protected $availabilityid;
 
     /**
      * The value for the availability_amount field.
-     *
+     * 
      * @var        int
      */
     protected $availability_amount;
 
     /**
      * The value for the verified field.
-     *
+     * 
      * @var        boolean
      */
     protected $verified;
 
     /**
      * The value for the distribution_finished field.
-     *
+     * 
      * @var        DateTime
      */
     protected $distribution_finished;
 
     /**
      * The value for the invoice_finished field.
-     *
+     * 
      * @var        DateTime
      */
     protected $invoice_finished;
@@ -508,17 +508,17 @@ abstract class OrderDetail implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [order_detailid] column value.
-     *
+     * 
      * @return int
      */
     public function getOrderDetailid()
@@ -528,7 +528,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [orderid] column value.
-     *
+     * 
      * @return int
      */
     public function getOrderid()
@@ -538,7 +538,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [menuid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuid()
@@ -548,7 +548,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [menu_sizeid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuSizeid()
@@ -558,7 +558,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [menu_groupid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuGroupid()
@@ -568,7 +568,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [amount] column value.
-     *
+     * 
      * @return int
      */
     public function getAmount()
@@ -578,7 +578,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [single_price] column value.
-     *
+     * 
      * @return string
      */
     public function getSinglePrice()
@@ -588,7 +588,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [single_price_modified_by_userid] column value.
-     *
+     * 
      * @return int
      */
     public function getSinglePriceModifiedByUserid()
@@ -598,7 +598,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [extra_detail] column value.
-     *
+     * 
      * @return string
      */
     public function getExtraDetail()
@@ -608,7 +608,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [availabilityid] column value.
-     *
+     * 
      * @return int
      */
     public function getAvailabilityid()
@@ -618,7 +618,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [availability_amount] column value.
-     *
+     * 
      * @return int
      */
     public function getAvailabilityAmount()
@@ -628,7 +628,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [verified] column value.
-     *
+     * 
      * @return boolean
      */
     public function getVerified()
@@ -638,7 +638,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [verified] column value.
-     *
+     * 
      * @return boolean
      */
     public function isVerified()
@@ -648,7 +648,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [distribution_finished] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -668,7 +668,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [invoice_finished] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -688,7 +688,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Set the value of [order_detailid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
      */
@@ -708,7 +708,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Set the value of [orderid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
      */
@@ -732,7 +732,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Set the value of [menuid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
      */
@@ -756,7 +756,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Set the value of [menu_sizeid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
      */
@@ -780,7 +780,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Set the value of [menu_groupid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
      */
@@ -804,7 +804,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Set the value of [amount] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
      */
@@ -824,7 +824,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Set the value of [single_price] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
      */
@@ -844,7 +844,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Set the value of [single_price_modified_by_userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
      */
@@ -868,7 +868,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Set the value of [extra_detail] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
      */
@@ -888,7 +888,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Set the value of [availabilityid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
      */
@@ -912,7 +912,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Set the value of [availability_amount] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
      */
@@ -936,7 +936,7 @@ abstract class OrderDetail implements ActiveRecordInterface
      *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
      *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
      * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
-     *
+     * 
      * @param  boolean|integer|string $v The new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
      */
@@ -960,7 +960,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Sets the value of [distribution_finished] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
@@ -980,7 +980,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
     /**
      * Sets the value of [invoice_finished] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Ordering\OrderDetail The current object (for fluent API support)
@@ -1239,7 +1239,7 @@ abstract class OrderDetail implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderDetailTableMap::DATABASE_NAME);
         }
@@ -1521,46 +1521,46 @@ abstract class OrderDetail implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'order_detailid':
+                    case 'order_detailid':                        
                         $stmt->bindValue($identifier, $this->order_detailid, PDO::PARAM_INT);
                         break;
-                    case 'orderid':
+                    case 'orderid':                        
                         $stmt->bindValue($identifier, $this->orderid, PDO::PARAM_INT);
                         break;
-                    case 'menuid':
+                    case 'menuid':                        
                         $stmt->bindValue($identifier, $this->menuid, PDO::PARAM_INT);
                         break;
-                    case 'menu_sizeid':
+                    case 'menu_sizeid':                        
                         $stmt->bindValue($identifier, $this->menu_sizeid, PDO::PARAM_INT);
                         break;
-                    case 'menu_groupid':
+                    case 'menu_groupid':                        
                         $stmt->bindValue($identifier, $this->menu_groupid, PDO::PARAM_INT);
                         break;
-                    case 'amount':
+                    case 'amount':                        
                         $stmt->bindValue($identifier, $this->amount, PDO::PARAM_INT);
                         break;
-                    case 'single_price':
+                    case 'single_price':                        
                         $stmt->bindValue($identifier, $this->single_price, PDO::PARAM_STR);
                         break;
-                    case 'single_price_modified_by_userid':
+                    case 'single_price_modified_by_userid':                        
                         $stmt->bindValue($identifier, $this->single_price_modified_by_userid, PDO::PARAM_INT);
                         break;
-                    case 'extra_detail':
+                    case 'extra_detail':                        
                         $stmt->bindValue($identifier, $this->extra_detail, PDO::PARAM_STR);
                         break;
-                    case 'availabilityid':
+                    case 'availabilityid':                        
                         $stmt->bindValue($identifier, $this->availabilityid, PDO::PARAM_INT);
                         break;
-                    case 'availability_amount':
+                    case 'availability_amount':                        
                         $stmt->bindValue($identifier, $this->availability_amount, PDO::PARAM_INT);
                         break;
                     case 'verified':
                         $stmt->bindValue($identifier, (int) $this->verified, PDO::PARAM_INT);
                         break;
-                    case 'distribution_finished':
+                    case 'distribution_finished':                        
                         $stmt->bindValue($identifier, $this->distribution_finished ? $this->distribution_finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'invoice_finished':
+                    case 'invoice_finished':                        
                         $stmt->bindValue($identifier, $this->invoice_finished ? $this->invoice_finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
@@ -1715,19 +1715,19 @@ abstract class OrderDetail implements ActiveRecordInterface
         if ($result[$keys[12]] instanceof \DateTime) {
             $result[$keys[12]] = $result[$keys[12]]->format('c');
         }
-
+        
         if ($result[$keys[13]] instanceof \DateTime) {
             $result[$keys[13]] = $result[$keys[13]]->format('c');
         }
-
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aAvailability) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'availability';
@@ -1738,11 +1738,11 @@ abstract class OrderDetail implements ActiveRecordInterface
                     default:
                         $key = 'Availability';
                 }
-
+        
                 $result[$key] = $this->aAvailability->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aMenuGroup) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuGroup';
@@ -1753,11 +1753,11 @@ abstract class OrderDetail implements ActiveRecordInterface
                     default:
                         $key = 'MenuGroup';
                 }
-
+        
                 $result[$key] = $this->aMenuGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aMenuSize) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuSize';
@@ -1768,11 +1768,11 @@ abstract class OrderDetail implements ActiveRecordInterface
                     default:
                         $key = 'MenuSize';
                 }
-
+        
                 $result[$key] = $this->aMenuSize->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aMenu) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menu';
@@ -1783,11 +1783,11 @@ abstract class OrderDetail implements ActiveRecordInterface
                     default:
                         $key = 'Menu';
                 }
-
+        
                 $result[$key] = $this->aMenu->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aOrder) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'order';
@@ -1798,11 +1798,11 @@ abstract class OrderDetail implements ActiveRecordInterface
                     default:
                         $key = 'Order';
                 }
-
+        
                 $result[$key] = $this->aOrder->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -1813,11 +1813,11 @@ abstract class OrderDetail implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collInvoiceItems) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoiceItems';
@@ -1828,11 +1828,11 @@ abstract class OrderDetail implements ActiveRecordInterface
                     default:
                         $key = 'InvoiceItems';
                 }
-
+        
                 $result[$key] = $this->collInvoiceItems->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderDetailExtras) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetailExtras';
@@ -1843,11 +1843,11 @@ abstract class OrderDetail implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetailExtras';
                 }
-
+        
                 $result[$key] = $this->collOrderDetailExtras->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderDetailMixedWiths) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetailMixedWiths';
@@ -1858,11 +1858,11 @@ abstract class OrderDetail implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetailMixedWiths';
                 }
-
+        
                 $result[$key] = $this->collOrderDetailMixedWiths->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderInProgressRecieveds) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderInProgressRecieveds';
@@ -1873,7 +1873,7 @@ abstract class OrderDetail implements ActiveRecordInterface
                     default:
                         $key = 'OrderInProgressRecieveds';
                 }
-
+        
                 $result[$key] = $this->collOrderInProgressRecieveds->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -2146,7 +2146,7 @@ abstract class OrderDetail implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -2712,7 +2712,7 @@ abstract class OrderDetail implements ActiveRecordInterface
         /** @var InvoiceItem[] $invoiceItemsToDelete */
         $invoiceItemsToDelete = $this->getInvoiceItems(new Criteria(), $con)->diff($invoiceItems);
 
-
+        
         $this->invoiceItemsScheduledForDeletion = $invoiceItemsToDelete;
 
         foreach ($invoiceItemsToDelete as $invoiceItemRemoved) {
@@ -2962,7 +2962,7 @@ abstract class OrderDetail implements ActiveRecordInterface
         /** @var ChildOrderDetailExtra[] $orderDetailExtrasToDelete */
         $orderDetailExtrasToDelete = $this->getOrderDetailExtras(new Criteria(), $con)->diff($orderDetailExtras);
 
-
+        
         //since at least one column in the foreign key is at the same time a PK
         //we can not just set a PK to NULL in the lines below. We have to store
         //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
@@ -3215,7 +3215,7 @@ abstract class OrderDetail implements ActiveRecordInterface
         /** @var ChildOrderDetailMixedWith[] $orderDetailMixedWithsToDelete */
         $orderDetailMixedWithsToDelete = $this->getOrderDetailMixedWiths(new Criteria(), $con)->diff($orderDetailMixedWiths);
 
-
+        
         //since at least one column in the foreign key is at the same time a PK
         //we can not just set a PK to NULL in the lines below. We have to store
         //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
@@ -3468,7 +3468,7 @@ abstract class OrderDetail implements ActiveRecordInterface
         /** @var OrderInProgressRecieved[] $orderInProgressRecievedsToDelete */
         $orderInProgressRecievedsToDelete = $this->getOrderInProgressRecieveds(new Criteria(), $con)->diff($orderInProgressRecieveds);
 
-
+        
         $this->orderInProgressRecievedsScheduledForDeletion = $orderInProgressRecievedsToDelete;
 
         foreach ($orderInProgressRecievedsToDelete as $orderInProgressRecievedRemoved) {
@@ -3788,7 +3788,7 @@ abstract class OrderDetail implements ActiveRecordInterface
     /**
      * Associate a MenuPossibleExtra to this object
      * through the order_detail_extra cross reference table.
-     *
+     * 
      * @param MenuPossibleExtra $menuPossibleExtra
      * @return ChildOrderDetail The current object (for fluent API support)
      */
@@ -3808,7 +3808,7 @@ abstract class OrderDetail implements ActiveRecordInterface
     }
 
     /**
-     *
+     * 
      * @param MenuPossibleExtra $menuPossibleExtra
      */
     protected function doAddMenuPossibleExtra(MenuPossibleExtra $menuPossibleExtra)
@@ -3835,7 +3835,7 @@ abstract class OrderDetail implements ActiveRecordInterface
     /**
      * Remove menuPossibleExtra of this object
      * through the order_detail_extra cross reference table.
-     *
+     * 
      * @param MenuPossibleExtra $menuPossibleExtra
      * @return ChildOrderDetail The current object (for fluent API support)
      */
@@ -3854,7 +3854,7 @@ abstract class OrderDetail implements ActiveRecordInterface
             $orderDetailExtra->clear();
 
             $this->collMenuPossibleExtras->remove($this->collMenuPossibleExtras->search($menuPossibleExtra));
-
+            
             if (null === $this->menuPossibleExtrasScheduledForDeletion) {
                 $this->menuPossibleExtrasScheduledForDeletion = clone $this->collMenuPossibleExtras;
                 $this->menuPossibleExtrasScheduledForDeletion->clear();

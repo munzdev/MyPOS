@@ -40,11 +40,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'menu_group' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Menu.Base
  */
-abstract class MenuGroup implements ActiveRecordInterface
+abstract class MenuGroup implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -80,21 +80,21 @@ abstract class MenuGroup implements ActiveRecordInterface
 
     /**
      * The value for the menu_groupid field.
-     *
+     * 
      * @var        int
      */
     protected $menu_groupid;
 
     /**
      * The value for the menu_typeid field.
-     *
+     * 
      * @var        int
      */
     protected $menu_typeid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
@@ -377,17 +377,17 @@ abstract class MenuGroup implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [menu_groupid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuGroupid()
@@ -397,7 +397,7 @@ abstract class MenuGroup implements ActiveRecordInterface
 
     /**
      * Get the [menu_typeid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuTypeid()
@@ -407,7 +407,7 @@ abstract class MenuGroup implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -417,7 +417,7 @@ abstract class MenuGroup implements ActiveRecordInterface
 
     /**
      * Set the value of [menu_groupid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\MenuGroup The current object (for fluent API support)
      */
@@ -437,7 +437,7 @@ abstract class MenuGroup implements ActiveRecordInterface
 
     /**
      * Set the value of [menu_typeid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\MenuGroup The current object (for fluent API support)
      */
@@ -461,7 +461,7 @@ abstract class MenuGroup implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Menu\MenuGroup The current object (for fluent API support)
      */
@@ -660,7 +660,7 @@ abstract class MenuGroup implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(MenuGroupTableMap::DATABASE_NAME);
         }
@@ -845,13 +845,13 @@ abstract class MenuGroup implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'menu_groupid':
+                    case 'menu_groupid':                        
                         $stmt->bindValue($identifier, $this->menu_groupid, PDO::PARAM_INT);
                         break;
-                    case 'menu_typeid':
+                    case 'menu_typeid':                        
                         $stmt->bindValue($identifier, $this->menu_typeid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                 }
@@ -963,10 +963,10 @@ abstract class MenuGroup implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aMenuType) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuType';
@@ -977,11 +977,11 @@ abstract class MenuGroup implements ActiveRecordInterface
                     default:
                         $key = 'MenuType';
                 }
-
+        
                 $result[$key] = $this->aMenuType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collDistributionPlaceGroups) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'distributionPlaceGroups';
@@ -992,11 +992,11 @@ abstract class MenuGroup implements ActiveRecordInterface
                     default:
                         $key = 'DistributionPlaceGroups';
                 }
-
+        
                 $result[$key] = $this->collDistributionPlaceGroups->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collMenus) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menus';
@@ -1007,11 +1007,11 @@ abstract class MenuGroup implements ActiveRecordInterface
                     default:
                         $key = 'Menus';
                 }
-
+        
                 $result[$key] = $this->collMenus->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderDetails) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetails';
@@ -1022,11 +1022,11 @@ abstract class MenuGroup implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetails';
                 }
-
+        
                 $result[$key] = $this->collOrderDetails->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderInProgresses) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderInProgresses';
@@ -1037,7 +1037,7 @@ abstract class MenuGroup implements ActiveRecordInterface
                     default:
                         $key = 'OrderInProgresses';
                 }
-
+        
                 $result[$key] = $this->collOrderInProgresses->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1211,7 +1211,7 @@ abstract class MenuGroup implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1511,7 +1511,7 @@ abstract class MenuGroup implements ActiveRecordInterface
         /** @var DistributionPlaceGroup[] $distributionPlaceGroupsToDelete */
         $distributionPlaceGroupsToDelete = $this->getDistributionPlaceGroups(new Criteria(), $con)->diff($distributionPlaceGroups);
 
-
+        
         $this->distributionPlaceGroupsScheduledForDeletion = $distributionPlaceGroupsToDelete;
 
         foreach ($distributionPlaceGroupsToDelete as $distributionPlaceGroupRemoved) {
@@ -1761,7 +1761,7 @@ abstract class MenuGroup implements ActiveRecordInterface
         /** @var ChildMenu[] $menusToDelete */
         $menusToDelete = $this->getMenus(new Criteria(), $con)->diff($menus);
 
-
+        
         $this->menusScheduledForDeletion = $menusToDelete;
 
         foreach ($menusToDelete as $menuRemoved) {
@@ -2011,7 +2011,7 @@ abstract class MenuGroup implements ActiveRecordInterface
         /** @var OrderDetail[] $orderDetailsToDelete */
         $orderDetailsToDelete = $this->getOrderDetails(new Criteria(), $con)->diff($orderDetails);
 
-
+        
         $this->orderDetailsScheduledForDeletion = $orderDetailsToDelete;
 
         foreach ($orderDetailsToDelete as $orderDetailRemoved) {
@@ -2361,7 +2361,7 @@ abstract class MenuGroup implements ActiveRecordInterface
         /** @var OrderInProgress[] $orderInProgressesToDelete */
         $orderInProgressesToDelete = $this->getOrderInProgresses(new Criteria(), $con)->diff($orderInProgresses);
 
-
+        
         $this->orderInProgressesScheduledForDeletion = $orderInProgressesToDelete;
 
         foreach ($orderInProgressesToDelete as $orderInProgressRemoved) {

@@ -41,11 +41,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'menu' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Menu.Base
  */
-abstract class Menu implements ActiveRecordInterface
+abstract class Menu implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -81,42 +81,42 @@ abstract class Menu implements ActiveRecordInterface
 
     /**
      * The value for the menuid field.
-     *
+     * 
      * @var        int
      */
     protected $menuid;
 
     /**
      * The value for the menu_groupid field.
-     *
+     * 
      * @var        int
      */
     protected $menu_groupid;
 
     /**
      * The value for the name field.
-     *
+     * 
      * @var        string
      */
     protected $name;
 
     /**
      * The value for the price field.
-     *
+     * 
      * @var        string
      */
     protected $price;
 
     /**
      * The value for the availabilityid field.
-     *
+     * 
      * @var        int
      */
     protected $availabilityid;
 
     /**
      * The value for the availability_amount field.
-     *
+     * 
      * @var        int
      */
     protected $availability_amount;
@@ -404,17 +404,17 @@ abstract class Menu implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [menuid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuid()
@@ -424,7 +424,7 @@ abstract class Menu implements ActiveRecordInterface
 
     /**
      * Get the [menu_groupid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuGroupid()
@@ -434,7 +434,7 @@ abstract class Menu implements ActiveRecordInterface
 
     /**
      * Get the [name] column value.
-     *
+     * 
      * @return string
      */
     public function getName()
@@ -444,7 +444,7 @@ abstract class Menu implements ActiveRecordInterface
 
     /**
      * Get the [price] column value.
-     *
+     * 
      * @return string
      */
     public function getPrice()
@@ -454,7 +454,7 @@ abstract class Menu implements ActiveRecordInterface
 
     /**
      * Get the [availabilityid] column value.
-     *
+     * 
      * @return int
      */
     public function getAvailabilityid()
@@ -464,7 +464,7 @@ abstract class Menu implements ActiveRecordInterface
 
     /**
      * Get the [availability_amount] column value.
-     *
+     * 
      * @return int
      */
     public function getAvailabilityAmount()
@@ -474,7 +474,7 @@ abstract class Menu implements ActiveRecordInterface
 
     /**
      * Set the value of [menuid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\Menu The current object (for fluent API support)
      */
@@ -494,7 +494,7 @@ abstract class Menu implements ActiveRecordInterface
 
     /**
      * Set the value of [menu_groupid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\Menu The current object (for fluent API support)
      */
@@ -518,7 +518,7 @@ abstract class Menu implements ActiveRecordInterface
 
     /**
      * Set the value of [name] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Menu\Menu The current object (for fluent API support)
      */
@@ -538,7 +538,7 @@ abstract class Menu implements ActiveRecordInterface
 
     /**
      * Set the value of [price] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Menu\Menu The current object (for fluent API support)
      */
@@ -558,7 +558,7 @@ abstract class Menu implements ActiveRecordInterface
 
     /**
      * Set the value of [availabilityid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\Menu The current object (for fluent API support)
      */
@@ -582,7 +582,7 @@ abstract class Menu implements ActiveRecordInterface
 
     /**
      * Set the value of [availability_amount] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Menu\Menu The current object (for fluent API support)
      */
@@ -794,7 +794,7 @@ abstract class Menu implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(MenuTableMap::DATABASE_NAME);
         }
@@ -995,22 +995,22 @@ abstract class Menu implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'menuid':
+                    case 'menuid':                        
                         $stmt->bindValue($identifier, $this->menuid, PDO::PARAM_INT);
                         break;
-                    case 'menu_groupid':
+                    case 'menu_groupid':                        
                         $stmt->bindValue($identifier, $this->menu_groupid, PDO::PARAM_INT);
                         break;
-                    case 'name':
+                    case 'name':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'price':
+                    case 'price':                        
                         $stmt->bindValue($identifier, $this->price, PDO::PARAM_STR);
                         break;
-                    case 'availabilityid':
+                    case 'availabilityid':                        
                         $stmt->bindValue($identifier, $this->availabilityid, PDO::PARAM_INT);
                         break;
-                    case 'availability_amount':
+                    case 'availability_amount':                        
                         $stmt->bindValue($identifier, $this->availability_amount, PDO::PARAM_INT);
                         break;
                 }
@@ -1134,10 +1134,10 @@ abstract class Menu implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aAvailability) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'availability';
@@ -1148,11 +1148,11 @@ abstract class Menu implements ActiveRecordInterface
                     default:
                         $key = 'Availability';
                 }
-
+        
                 $result[$key] = $this->aAvailability->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aMenuGroup) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuGroup';
@@ -1163,11 +1163,11 @@ abstract class Menu implements ActiveRecordInterface
                     default:
                         $key = 'MenuGroup';
                 }
-
+        
                 $result[$key] = $this->aMenuGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collMenuPossibleExtras) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuPossibleExtras';
@@ -1178,11 +1178,11 @@ abstract class Menu implements ActiveRecordInterface
                     default:
                         $key = 'MenuPossibleExtras';
                 }
-
+        
                 $result[$key] = $this->collMenuPossibleExtras->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collMenuPossibleSizes) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuPossibleSizes';
@@ -1193,11 +1193,11 @@ abstract class Menu implements ActiveRecordInterface
                     default:
                         $key = 'MenuPossibleSizes';
                 }
-
+        
                 $result[$key] = $this->collMenuPossibleSizes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderDetails) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetails';
@@ -1208,11 +1208,11 @@ abstract class Menu implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetails';
                 }
-
+        
                 $result[$key] = $this->collOrderDetails->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderDetailMixedWiths) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetailMixedWiths';
@@ -1223,7 +1223,7 @@ abstract class Menu implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetailMixedWiths';
                 }
-
+        
                 $result[$key] = $this->collOrderDetailMixedWiths->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1424,7 +1424,7 @@ abstract class Menu implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1778,7 +1778,7 @@ abstract class Menu implements ActiveRecordInterface
         /** @var ChildMenuPossibleExtra[] $menuPossibleExtrasToDelete */
         $menuPossibleExtrasToDelete = $this->getMenuPossibleExtras(new Criteria(), $con)->diff($menuPossibleExtras);
 
-
+        
         $this->menuPossibleExtrasScheduledForDeletion = $menuPossibleExtrasToDelete;
 
         foreach ($menuPossibleExtrasToDelete as $menuPossibleExtraRemoved) {
@@ -2028,7 +2028,7 @@ abstract class Menu implements ActiveRecordInterface
         /** @var ChildMenuPossibleSize[] $menuPossibleSizesToDelete */
         $menuPossibleSizesToDelete = $this->getMenuPossibleSizes(new Criteria(), $con)->diff($menuPossibleSizes);
 
-
+        
         $this->menuPossibleSizesScheduledForDeletion = $menuPossibleSizesToDelete;
 
         foreach ($menuPossibleSizesToDelete as $menuPossibleSizeRemoved) {
@@ -2278,7 +2278,7 @@ abstract class Menu implements ActiveRecordInterface
         /** @var OrderDetail[] $orderDetailsToDelete */
         $orderDetailsToDelete = $this->getOrderDetails(new Criteria(), $con)->diff($orderDetails);
 
-
+        
         $this->orderDetailsScheduledForDeletion = $orderDetailsToDelete;
 
         foreach ($orderDetailsToDelete as $orderDetailRemoved) {
@@ -2628,7 +2628,7 @@ abstract class Menu implements ActiveRecordInterface
         /** @var OrderDetailMixedWith[] $orderDetailMixedWithsToDelete */
         $orderDetailMixedWithsToDelete = $this->getOrderDetailMixedWiths(new Criteria(), $con)->diff($orderDetailMixedWiths);
 
-
+        
         //since at least one column in the foreign key is at the same time a PK
         //we can not just set a PK to NULL in the lines below. We have to store
         //a backup of all values, so we are able to manipulate these items based on the onDelete value later.

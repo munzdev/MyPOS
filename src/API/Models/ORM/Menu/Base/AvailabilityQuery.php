@@ -19,7 +19,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'availability' table.
  *
- *
+ * 
  *
  * @method     ChildAvailabilityQuery orderByAvailabilityid($order = Criteria::ASC) Order by the availabilityid column
  * @method     ChildAvailabilityQuery orderByName($order = Criteria::ASC) Order by the name column
@@ -182,7 +182,7 @@ abstract class AvailabilityQuery extends ModelCriteria
     {
         $sql = 'SELECT availabilityid, name FROM availability WHERE availabilityid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -622,9 +622,9 @@ abstract class AvailabilityQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             AvailabilityTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             AvailabilityTableMap::clearRelatedInstancePool();
 

@@ -36,11 +36,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'payment_recieved' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Payment.Base
  */
-abstract class PaymentRecieved implements ActiveRecordInterface
+abstract class PaymentRecieved implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -76,42 +76,42 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
     /**
      * The value for the payment_recievedid field.
-     *
+     * 
      * @var        int
      */
     protected $payment_recievedid;
 
     /**
      * The value for the invoiceid field.
-     *
+     * 
      * @var        int
      */
     protected $invoiceid;
 
     /**
      * The value for the payment_typeid field.
-     *
+     * 
      * @var        int
      */
     protected $payment_typeid;
 
     /**
      * The value for the userid field.
-     *
+     * 
      * @var        int
      */
     protected $userid;
 
     /**
      * The value for the date field.
-     *
+     * 
      * @var        DateTime
      */
     protected $date;
 
     /**
      * The value for the amount field.
-     *
+     * 
      * @var        string
      */
     protected $amount;
@@ -384,17 +384,17 @@ abstract class PaymentRecieved implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [payment_recievedid] column value.
-     *
+     * 
      * @return int
      */
     public function getPaymentRecievedid()
@@ -404,7 +404,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
     /**
      * Get the [invoiceid] column value.
-     *
+     * 
      * @return int
      */
     public function getInvoiceid()
@@ -414,7 +414,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
     /**
      * Get the [payment_typeid] column value.
-     *
+     * 
      * @return int
      */
     public function getPaymentTypeid()
@@ -424,7 +424,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
     /**
      * Get the [userid] column value.
-     *
+     * 
      * @return int
      */
     public function getUserid()
@@ -434,7 +434,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [date] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -454,7 +454,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
     /**
      * Get the [amount] column value.
-     *
+     * 
      * @return string
      */
     public function getAmount()
@@ -464,7 +464,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
     /**
      * Set the value of [payment_recievedid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Payment\PaymentRecieved The current object (for fluent API support)
      */
@@ -484,7 +484,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
     /**
      * Set the value of [invoiceid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Payment\PaymentRecieved The current object (for fluent API support)
      */
@@ -508,7 +508,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
     /**
      * Set the value of [payment_typeid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Payment\PaymentRecieved The current object (for fluent API support)
      */
@@ -532,7 +532,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
     /**
      * Set the value of [userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Payment\PaymentRecieved The current object (for fluent API support)
      */
@@ -556,7 +556,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
     /**
      * Sets the value of [date] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Payment\PaymentRecieved The current object (for fluent API support)
@@ -576,7 +576,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
     /**
      * Set the value of [amount] column.
-     *
+     * 
      * @param string $v new value
      * @return $this|\API\Models\ORM\Payment\PaymentRecieved The current object (for fluent API support)
      */
@@ -790,7 +790,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(PaymentRecievedTableMap::DATABASE_NAME);
         }
@@ -975,22 +975,22 @@ abstract class PaymentRecieved implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'payment_recievedid':
+                    case 'payment_recievedid':                        
                         $stmt->bindValue($identifier, $this->payment_recievedid, PDO::PARAM_INT);
                         break;
-                    case 'invoiceid':
+                    case 'invoiceid':                        
                         $stmt->bindValue($identifier, $this->invoiceid, PDO::PARAM_INT);
                         break;
-                    case 'payment_typeid':
+                    case 'payment_typeid':                        
                         $stmt->bindValue($identifier, $this->payment_typeid, PDO::PARAM_INT);
                         break;
-                    case 'userid':
+                    case 'userid':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'date':
+                    case 'date':                        
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'amount':
+                    case 'amount':                        
                         $stmt->bindValue($identifier, $this->amount, PDO::PARAM_STR);
                         break;
                 }
@@ -1113,15 +1113,15 @@ abstract class PaymentRecieved implements ActiveRecordInterface
         if ($result[$keys[4]] instanceof \DateTime) {
             $result[$keys[4]] = $result[$keys[4]]->format('c');
         }
-
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aInvoice) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'invoice';
@@ -1132,11 +1132,11 @@ abstract class PaymentRecieved implements ActiveRecordInterface
                     default:
                         $key = 'Invoice';
                 }
-
+        
                 $result[$key] = $this->aInvoice->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aPaymentType) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'paymentType';
@@ -1147,11 +1147,11 @@ abstract class PaymentRecieved implements ActiveRecordInterface
                     default:
                         $key = 'PaymentType';
                 }
-
+        
                 $result[$key] = $this->aPaymentType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -1162,11 +1162,11 @@ abstract class PaymentRecieved implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collPaymentCoupons) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'paymentCoupons';
@@ -1177,7 +1177,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
                     default:
                         $key = 'PaymentCoupons';
                 }
-
+        
                 $result[$key] = $this->collPaymentCoupons->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1378,7 +1378,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1756,7 +1756,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
         /** @var ChildPaymentCoupon[] $paymentCouponsToDelete */
         $paymentCouponsToDelete = $this->getPaymentCoupons(new Criteria(), $con)->diff($paymentCoupons);
 
-
+        
         //since at least one column in the foreign key is at the same time a PK
         //we can not just set a PK to NULL in the lines below. We have to store
         //a backup of all values, so we are able to manipulate these items based on the onDelete value later.
@@ -2054,7 +2054,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
     /**
      * Associate a ChildCoupon to this object
      * through the payment_coupon cross reference table.
-     *
+     * 
      * @param ChildCoupon $coupon
      * @return ChildPaymentRecieved The current object (for fluent API support)
      */
@@ -2074,7 +2074,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
     }
 
     /**
-     *
+     * 
      * @param ChildCoupon $coupon
      */
     protected function doAddCoupon(ChildCoupon $coupon)
@@ -2101,7 +2101,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
     /**
      * Remove coupon of this object
      * through the payment_coupon cross reference table.
-     *
+     * 
      * @param ChildCoupon $coupon
      * @return ChildPaymentRecieved The current object (for fluent API support)
      */
@@ -2120,7 +2120,7 @@ abstract class PaymentRecieved implements ActiveRecordInterface
             $paymentCoupon->clear();
 
             $this->collCoupons->remove($this->collCoupons->search($coupon));
-
+            
             if (null === $this->couponsScheduledForDeletion) {
                 $this->couponsScheduledForDeletion = clone $this->collCoupons;
                 $this->couponsScheduledForDeletion->clear();

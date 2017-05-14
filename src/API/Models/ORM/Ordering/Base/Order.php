@@ -36,11 +36,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'order' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Ordering.Base
  */
-abstract class Order implements ActiveRecordInterface
+abstract class Order implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -76,63 +76,63 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * The value for the orderid field.
-     *
+     * 
      * @var        int
      */
     protected $orderid;
 
     /**
      * The value for the event_tableid field.
-     *
+     * 
      * @var        int
      */
     protected $event_tableid;
 
     /**
      * The value for the userid field.
-     *
+     * 
      * @var        int
      */
     protected $userid;
 
     /**
      * The value for the ordertime field.
-     *
+     * 
      * @var        DateTime
      */
     protected $ordertime;
 
     /**
      * The value for the priority field.
-     *
+     * 
      * @var        int
      */
     protected $priority;
 
     /**
      * The value for the distribution_finished field.
-     *
+     * 
      * @var        DateTime
      */
     protected $distribution_finished;
 
     /**
      * The value for the invoice_finished field.
-     *
+     * 
      * @var        DateTime
      */
     protected $invoice_finished;
 
     /**
      * The value for the cancellation field.
-     *
+     * 
      * @var        DateTime
      */
     protected $cancellation;
 
     /**
      * The value for the cancellation_created_by_userid field.
-     *
+     * 
      * @var        int
      */
     protected $cancellation_created_by_userid;
@@ -401,17 +401,17 @@ abstract class Order implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [orderid] column value.
-     *
+     * 
      * @return int
      */
     public function getOrderid()
@@ -421,7 +421,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Get the [event_tableid] column value.
-     *
+     * 
      * @return int
      */
     public function getEventTableid()
@@ -431,7 +431,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Get the [userid] column value.
-     *
+     * 
      * @return int
      */
     public function getUserid()
@@ -441,7 +441,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [ordertime] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -461,7 +461,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Get the [priority] column value.
-     *
+     * 
      * @return int
      */
     public function getPriority()
@@ -471,7 +471,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [distribution_finished] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -491,7 +491,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [invoice_finished] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -511,7 +511,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [cancellation] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -531,7 +531,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Get the [cancellation_created_by_userid] column value.
-     *
+     * 
      * @return int
      */
     public function getCancellationCreatedByUserid()
@@ -541,7 +541,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Set the value of [orderid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\Order The current object (for fluent API support)
      */
@@ -561,7 +561,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Set the value of [event_tableid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\Order The current object (for fluent API support)
      */
@@ -585,7 +585,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Set the value of [userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\Order The current object (for fluent API support)
      */
@@ -609,7 +609,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Sets the value of [ordertime] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Ordering\Order The current object (for fluent API support)
@@ -629,7 +629,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Set the value of [priority] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\Order The current object (for fluent API support)
      */
@@ -649,7 +649,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Sets the value of [distribution_finished] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Ordering\Order The current object (for fluent API support)
@@ -669,7 +669,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Sets the value of [invoice_finished] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Ordering\Order The current object (for fluent API support)
@@ -689,7 +689,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Sets the value of [cancellation] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Ordering\Order The current object (for fluent API support)
@@ -709,7 +709,7 @@ abstract class Order implements ActiveRecordInterface
 
     /**
      * Set the value of [cancellation_created_by_userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\Order The current object (for fluent API support)
      */
@@ -946,7 +946,7 @@ abstract class Order implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderTableMap::DATABASE_NAME);
         }
@@ -1128,31 +1128,31 @@ abstract class Order implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case '`orderid`':
+                    case '`orderid`':                        
                         $stmt->bindValue($identifier, $this->orderid, PDO::PARAM_INT);
                         break;
-                    case '`event_tableid`':
+                    case '`event_tableid`':                        
                         $stmt->bindValue($identifier, $this->event_tableid, PDO::PARAM_INT);
                         break;
-                    case '`userid`':
+                    case '`userid`':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case '`ordertime`':
+                    case '`ordertime`':                        
                         $stmt->bindValue($identifier, $this->ordertime ? $this->ordertime->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case '`priority`':
+                    case '`priority`':                        
                         $stmt->bindValue($identifier, $this->priority, PDO::PARAM_INT);
                         break;
-                    case '`distribution_finished`':
+                    case '`distribution_finished`':                        
                         $stmt->bindValue($identifier, $this->distribution_finished ? $this->distribution_finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case '`invoice_finished`':
+                    case '`invoice_finished`':                        
                         $stmt->bindValue($identifier, $this->invoice_finished ? $this->invoice_finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case '`cancellation`':
+                    case '`cancellation`':                        
                         $stmt->bindValue($identifier, $this->cancellation ? $this->cancellation->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case '`cancellation_created_by_userid`':
+                    case '`cancellation_created_by_userid`':                        
                         $stmt->bindValue($identifier, $this->cancellation_created_by_userid, PDO::PARAM_INT);
                         break;
                 }
@@ -1287,27 +1287,27 @@ abstract class Order implements ActiveRecordInterface
         if ($result[$keys[3]] instanceof \DateTime) {
             $result[$keys[3]] = $result[$keys[3]]->format('c');
         }
-
+        
         if ($result[$keys[5]] instanceof \DateTime) {
             $result[$keys[5]] = $result[$keys[5]]->format('c');
         }
-
+        
         if ($result[$keys[6]] instanceof \DateTime) {
             $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
-
+        
         if ($result[$keys[7]] instanceof \DateTime) {
             $result[$keys[7]] = $result[$keys[7]]->format('c');
         }
-
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aUserRelatedByCancellationCreatedByUserid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -1318,11 +1318,11 @@ abstract class Order implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUserRelatedByCancellationCreatedByUserid->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aEventTable) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'eventTable';
@@ -1333,11 +1333,11 @@ abstract class Order implements ActiveRecordInterface
                     default:
                         $key = 'EventTable';
                 }
-
+        
                 $result[$key] = $this->aEventTable->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUserRelatedByUserid) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -1348,11 +1348,11 @@ abstract class Order implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUserRelatedByUserid->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collOrderDetails) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetails';
@@ -1363,11 +1363,11 @@ abstract class Order implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetails';
                 }
-
+        
                 $result[$key] = $this->collOrderDetails->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collOrderInProgresses) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderInProgresses';
@@ -1378,7 +1378,7 @@ abstract class Order implements ActiveRecordInterface
                     default:
                         $key = 'OrderInProgresses';
                 }
-
+        
                 $result[$key] = $this->collOrderInProgresses->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1606,7 +1606,7 @@ abstract class Order implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1996,7 +1996,7 @@ abstract class Order implements ActiveRecordInterface
         /** @var ChildOrderDetail[] $orderDetailsToDelete */
         $orderDetailsToDelete = $this->getOrderDetails(new Criteria(), $con)->diff($orderDetails);
 
-
+        
         $this->orderDetailsScheduledForDeletion = $orderDetailsToDelete;
 
         foreach ($orderDetailsToDelete as $orderDetailRemoved) {
@@ -2346,7 +2346,7 @@ abstract class Order implements ActiveRecordInterface
         /** @var OrderInProgress[] $orderInProgressesToDelete */
         $orderInProgressesToDelete = $this->getOrderInProgresses(new Criteria(), $con)->diff($orderInProgresses);
 
-
+        
         $this->orderInProgressesScheduledForDeletion = $orderInProgressesToDelete;
 
         foreach ($orderInProgressesToDelete as $orderInProgressRemoved) {

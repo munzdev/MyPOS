@@ -25,11 +25,11 @@ use Propel\Runtime\Parser\AbstractParser;
 /**
  * Base class that represents a row from the 'order_detail_extra' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.Ordering.Base
  */
-abstract class OrderDetailExtra implements ActiveRecordInterface
+abstract class OrderDetailExtra implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -65,14 +65,14 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
 
     /**
      * The value for the order_detailid field.
-     *
+     * 
      * @var        int
      */
     protected $order_detailid;
 
     /**
      * The value for the menu_possible_extraid field.
-     *
+     * 
      * @var        int
      */
     protected $menu_possible_extraid;
@@ -312,17 +312,17 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [order_detailid] column value.
-     *
+     * 
      * @return int
      */
     public function getOrderDetailid()
@@ -332,7 +332,7 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
 
     /**
      * Get the [menu_possible_extraid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuPossibleExtraid()
@@ -342,7 +342,7 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
 
     /**
      * Set the value of [order_detailid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetailExtra The current object (for fluent API support)
      */
@@ -366,7 +366,7 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
 
     /**
      * Set the value of [menu_possible_extraid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\Ordering\OrderDetailExtra The current object (for fluent API support)
      */
@@ -562,7 +562,7 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderDetailExtraTableMap::DATABASE_NAME);
         }
@@ -678,10 +678,10 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'order_detailid':
+                    case 'order_detailid':                        
                         $stmt->bindValue($identifier, $this->order_detailid, PDO::PARAM_INT);
                         break;
-                    case 'menu_possible_extraid':
+                    case 'menu_possible_extraid':                        
                         $stmt->bindValue($identifier, $this->menu_possible_extraid, PDO::PARAM_INT);
                         break;
                 }
@@ -782,10 +782,10 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aMenuPossibleExtra) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuPossibleExtra';
@@ -796,11 +796,11 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
                     default:
                         $key = 'MenuPossibleExtra';
                 }
-
+        
                 $result[$key] = $this->aMenuPossibleExtra->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aOrderDetail) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderDetail';
@@ -811,7 +811,7 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
                     default:
                         $key = 'OrderDetail';
                 }
-
+        
                 $result[$key] = $this->aOrderDetail->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
         }
@@ -992,7 +992,7 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the composite primary key for this object.
      * The array elements will be in same order as specified in XML.

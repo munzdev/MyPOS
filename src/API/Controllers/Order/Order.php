@@ -56,8 +56,8 @@ class Order extends SecurityController
                     'status' => v::alnum()->noWhitespace()->length(1),
                     'orderid' => v::optional(v::intVal()->length(1)->positive()),
                     'tableNr' => v::optional(v::alnum()->noWhitespace()->length(1)),
-                    'from' => v::optional(v::date('H:i')),
-                    'to' => v::optional(v::date('H:i')),
+                    'from' => v::optional(v::dateTime('H:i')),
+                    'to' => v::optional(v::dateTime('H:i')),
                     'userid' => v::oneOf(
                         v::intVal()->length(1)->positive(),
                         v::equals('*')

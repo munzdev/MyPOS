@@ -19,7 +19,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'order_detail_mixed_with' table.
  *
- *
+ * 
  *
  * @method     ChildOrderDetailMixedWithQuery orderByOrderDetailid($order = Criteria::ASC) Order by the order_detailid column
  * @method     ChildOrderDetailMixedWithQuery orderByMenuid($order = Criteria::ASC) Order by the menuid column
@@ -172,8 +172,8 @@ abstract class OrderDetailMixedWithQuery extends ModelCriteria
     {
         $sql = 'SELECT order_detailid, menuid FROM order_detail_mixed_with WHERE order_detailid = :p0 AND menuid = :p1';
         try {
-            $stmt = $con->prepare($sql);
-            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);
+            $stmt = $con->prepare($sql);            
+            $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);            
             $stmt->bindValue(':p1', $key[1], PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -581,9 +581,9 @@ abstract class OrderDetailMixedWithQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             OrderDetailMixedWithTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             OrderDetailMixedWithTableMap::clearRelatedInstancePool();
 

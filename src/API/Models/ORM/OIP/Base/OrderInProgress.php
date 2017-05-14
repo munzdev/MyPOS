@@ -34,11 +34,11 @@ use Propel\Runtime\Util\PropelDateTime;
 /**
  * Base class that represents a row from the 'order_in_progress' table.
  *
- *
+ * 
  *
  * @package    propel.generator.API.Models.ORM.OIP.Base
  */
-abstract class OrderInProgress implements ActiveRecordInterface
+abstract class OrderInProgress implements ActiveRecordInterface 
 {
     /**
      * TableMap class name
@@ -74,42 +74,42 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
     /**
      * The value for the order_in_progressid field.
-     *
+     * 
      * @var        int
      */
     protected $order_in_progressid;
 
     /**
      * The value for the orderid field.
-     *
+     * 
      * @var        int
      */
     protected $orderid;
 
     /**
      * The value for the userid field.
-     *
+     * 
      * @var        int
      */
     protected $userid;
 
     /**
      * The value for the menu_groupid field.
-     *
+     * 
      * @var        int
      */
     protected $menu_groupid;
 
     /**
      * The value for the begin field.
-     *
+     * 
      * @var        DateTime
      */
     protected $begin;
 
     /**
      * The value for the done field.
-     *
+     * 
      * @var        DateTime
      */
     protected $done;
@@ -366,17 +366,17 @@ abstract class OrderInProgress implements ActiveRecordInterface
         $cls = new \ReflectionClass($this);
         $propertyNames = [];
         $serializableProperties = array_diff($cls->getProperties(), $cls->getProperties(\ReflectionProperty::IS_STATIC));
-
+        
         foreach($serializableProperties as $property) {
             $propertyNames[] = $property->getName();
         }
-
+        
         return $propertyNames;
     }
 
     /**
      * Get the [order_in_progressid] column value.
-     *
+     * 
      * @return int
      */
     public function getOrderInProgressid()
@@ -386,7 +386,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
     /**
      * Get the [orderid] column value.
-     *
+     * 
      * @return int
      */
     public function getOrderid()
@@ -396,7 +396,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
     /**
      * Get the [userid] column value.
-     *
+     * 
      * @return int
      */
     public function getUserid()
@@ -406,7 +406,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
     /**
      * Get the [menu_groupid] column value.
-     *
+     * 
      * @return int
      */
     public function getMenuGroupid()
@@ -416,7 +416,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [begin] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -436,7 +436,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
     /**
      * Get the [optionally formatted] temporal [done] column value.
-     *
+     * 
      *
      * @param      string $format The date/time format string (either date()-style or strftime()-style).
      *                            If format is NULL, then the raw DateTime object will be returned.
@@ -456,7 +456,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
     /**
      * Set the value of [order_in_progressid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\OIP\OrderInProgress The current object (for fluent API support)
      */
@@ -476,7 +476,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
     /**
      * Set the value of [orderid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\OIP\OrderInProgress The current object (for fluent API support)
      */
@@ -500,7 +500,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
     /**
      * Set the value of [userid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\OIP\OrderInProgress The current object (for fluent API support)
      */
@@ -524,7 +524,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
     /**
      * Set the value of [menu_groupid] column.
-     *
+     * 
      * @param int $v new value
      * @return $this|\API\Models\ORM\OIP\OrderInProgress The current object (for fluent API support)
      */
@@ -548,7 +548,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
     /**
      * Sets the value of [begin] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\OIP\OrderInProgress The current object (for fluent API support)
@@ -568,7 +568,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
     /**
      * Sets the value of [done] column to a normalized version of the date/time value specified.
-     *
+     * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
      *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\OIP\OrderInProgress The current object (for fluent API support)
@@ -784,7 +784,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
         if ($this->alreadyInSave) {
             return 0;
         }
-
+ 
         if ($con === null) {
             $con = Propel::getServiceContainer()->getWriteConnection(OrderInProgressTableMap::DATABASE_NAME);
         }
@@ -940,22 +940,22 @@ abstract class OrderInProgress implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'order_in_progressid':
+                    case 'order_in_progressid':                        
                         $stmt->bindValue($identifier, $this->order_in_progressid, PDO::PARAM_INT);
                         break;
-                    case 'orderid':
+                    case 'orderid':                        
                         $stmt->bindValue($identifier, $this->orderid, PDO::PARAM_INT);
                         break;
-                    case 'userid':
+                    case 'userid':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'menu_groupid':
+                    case 'menu_groupid':                        
                         $stmt->bindValue($identifier, $this->menu_groupid, PDO::PARAM_INT);
                         break;
-                    case 'begin':
+                    case 'begin':                        
                         $stmt->bindValue($identifier, $this->begin ? $this->begin->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'done':
+                    case 'done':                        
                         $stmt->bindValue($identifier, $this->done ? $this->done->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
@@ -1078,19 +1078,19 @@ abstract class OrderInProgress implements ActiveRecordInterface
         if ($result[$keys[4]] instanceof \DateTime) {
             $result[$keys[4]] = $result[$keys[4]]->format('c');
         }
-
+        
         if ($result[$keys[5]] instanceof \DateTime) {
             $result[$keys[5]] = $result[$keys[5]]->format('c');
         }
-
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
         }
-
+        
         if ($includeForeignObjects) {
             if (null !== $this->aMenuGroup) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'menuGroup';
@@ -1101,11 +1101,11 @@ abstract class OrderInProgress implements ActiveRecordInterface
                     default:
                         $key = 'MenuGroup';
                 }
-
+        
                 $result[$key] = $this->aMenuGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aOrder) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'order';
@@ -1116,11 +1116,11 @@ abstract class OrderInProgress implements ActiveRecordInterface
                     default:
                         $key = 'Order';
                 }
-
+        
                 $result[$key] = $this->aOrder->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->aUser) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'user';
@@ -1131,11 +1131,11 @@ abstract class OrderInProgress implements ActiveRecordInterface
                     default:
                         $key = 'User';
                 }
-
+        
                 $result[$key] = $this->aUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
             if (null !== $this->collOrderInProgressRecieveds) {
-
+                
                 switch ($keyType) {
                     case TableMap::TYPE_CAMELNAME:
                         $key = 'orderInProgressRecieveds';
@@ -1146,7 +1146,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
                     default:
                         $key = 'OrderInProgressRecieveds';
                 }
-
+        
                 $result[$key] = $this->collOrderInProgressRecieveds->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
@@ -1347,7 +1347,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
         return spl_object_hash($this);
     }
-
+        
     /**
      * Returns the primary key for this object (row).
      * @return int
@@ -1725,7 +1725,7 @@ abstract class OrderInProgress implements ActiveRecordInterface
         /** @var ChildOrderInProgressRecieved[] $orderInProgressRecievedsToDelete */
         $orderInProgressRecievedsToDelete = $this->getOrderInProgressRecieveds(new Criteria(), $con)->diff($orderInProgressRecieveds);
 
-
+        
         $this->orderInProgressRecievedsScheduledForDeletion = $orderInProgressRecievedsToDelete;
 
         foreach ($orderInProgressRecievedsToDelete as $orderInProgressRecievedRemoved) {

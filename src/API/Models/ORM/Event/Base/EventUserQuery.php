@@ -20,7 +20,7 @@ use Propel\Runtime\Exception\PropelException;
 /**
  * Base class that represents a query for the 'event_user' table.
  *
- *
+ * 
  *
  * @method     ChildEventUserQuery orderByEventUserid($order = Criteria::ASC) Order by the event_userid column
  * @method     ChildEventUserQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
@@ -208,7 +208,7 @@ abstract class EventUserQuery extends ModelCriteria
     {
         $sql = 'SELECT event_userid, eventid, userid, user_roles, begin_money FROM event_user WHERE event_userid = :p0';
         try {
-            $stmt = $con->prepare($sql);
+            $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
             $stmt->execute();
         } catch (Exception $e) {
@@ -872,9 +872,9 @@ abstract class EventUserQuery extends ModelCriteria
         // for more than one table or we could emulating ON DELETE CASCADE, etc.
         return $con->transaction(function () use ($con, $criteria) {
             $affectedRows = 0; // initialize var to track total num of affected rows
-
+            
             EventUserTableMap::removeInstanceFromPool($criteria);
-
+        
             $affectedRows += ModelCriteria::delete($con);
             EventUserTableMap::clearRelatedInstancePool();
 

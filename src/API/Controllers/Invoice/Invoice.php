@@ -60,8 +60,8 @@ class Invoice extends SecurityController
                         v::nullType()
                     ),
                     'typeid' => v::optional(v::intVal()->length(1)->positive()),
-                    'from' => v::optional(v::date()),
-                    'to' => v::optional(v::date()),
+                    'from' => v::optional(v::dateTime()),
+                    'to' => v::optional(v::dateTime()),
                     'userid' => v::oneOf(
                         v::intVal()->length(1)->positive(),
                         v::equals('*')
