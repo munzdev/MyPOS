@@ -3,6 +3,10 @@
     "errorLoadingAppRouteText": "Es wurde keine Startseite gefunden. Haben Sie irgendeine Berechtigung bekommen?",
     "errorLoadingAppText": "Bitte laden Sie die App neu",
     "currency": "€",
+    "SideMenuView": {
+        "callRequestSuccessfully": "Anfrage erfolgreich",
+        "callRequestDone": "Rückruf wurde erfolgreich angefordert!"
+    },
     "InvoiceType": {
         "INVOICE": "Rechnung",
         "CANCELLATION": "Stornobuchung",

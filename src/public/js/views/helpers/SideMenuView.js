@@ -34,15 +34,17 @@ define(['text!templates/helpers/side-menu.phtml',
 
             this.changeHash(href);
         }        
-        
+
         callRequest()
         {
+            let i18n = this.i18n();
+
             var webservice = new Webservice();
-            webservice.action = "Users/CallRequest";
+            webservice.action = "User/CallRequest";
             webservice.call().done(() => {
                 this.$el.panel("close");
                 app.ws.api.Trigger("manager-callback");
-                app.error.showAlert("Rückruf wurde erfolgreich angefordert!");
+                app.error.showAlert(i18n.callRequestSuccessfully, i18n.callRequestDone);
             });
         }
         

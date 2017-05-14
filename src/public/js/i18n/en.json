@@ -3,6 +3,10 @@
     "errorLoadingAppRouteText": "There was no initial route found! Do you have any permission set?",
     "errorLoadingAppText": "Please reload the App",
     "currency": "$",
+    "SideMenuView": {
+        "callRequestSuccessfully": "Request successfully",
+        "callRequestDone": "Call successfully requested!"
+    },
     "InvoiceType": {
         "INVOICE": "Invoice",
         "CANCELLATION": "Cancellation",

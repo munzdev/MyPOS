@@ -17,8 +17,10 @@ define(["views/dialoges/LoginView",
         "views/pages/InvoicePaymentView",
         "views/pages/DistributionView",
         "views/pages/DistributionSummaryView",
-        /*"views/pages/ManagerView",
-        "views/pages/ManagerCallbackView",
+
+        "views/manager/ManagerOverviewView",
+
+        /*"views/pages/ManagerCallbackView",
         "views/pages/ManagerCheckView",
         "views/pages/ManagerGroupmessageView",
         "views/pages/ManagerStatisticView",
@@ -60,11 +62,13 @@ define(["views/dialoges/LoginView",
             InvoicePaymentView,
             DistributionView,
             DistributionSummaryView,
-            ManagerView,
+
+            ManagerOverviewView,
             ManagerCallbackView,
             ManagerCheckView,
             ManagerGroupmessageView,
             ManagerStatisticView,
+
             AdminView,
             AdminEventView,
             AdminEventCopyView,
@@ -284,7 +288,7 @@ define(["views/dialoges/LoginView",
         }
 
         manager() {
-            this.show(new ManagerView());
+            this.show(new ManagerOverviewView());
         }
 
         manager_callback() {

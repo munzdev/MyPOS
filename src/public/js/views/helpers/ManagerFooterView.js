@@ -1,38 +1,31 @@
-// Login View
-// =============
-
-// Includes file dependencies
 define(['text!templates/helpers/manager-footer.phtml'],
  function(Template ) {
     "use strict";
 
-    // Extends Backbone.View
-    var ManagerFooterView = Backbone.View.extend( {
+    return class ManagerFooterView extends app.FooterView {
 
-    	defaults: {
-            activeButton: ''
-    	},
-        events: {
-            'click .footer-link': 'clicked'
-        },
+        defaults() {
+            return {activeButton: ''}
+    	}
 
-        clicked: function(e) {
-            e.preventDefault();
-            
-            var href = $(e.currentTarget).attr('href');
+        events() {
+            return {'click .footer-link': 'clicked'};
+        }
 
-            MyPOS.ChangePage(href);
-        },
+        clicked(event) {
+            event.preventDefault();
+
+            var href = $(event.currentTarget).attr('href');
+
+            this.changeHash(href);
+        }
 
         // Renders all of the Category models on the UI
-        render: function() {
-            var template =  _.template(Template)({activeButton: this.activeButton});
+        render() {
+            this.renderTemplate(Template, {activeButton: this.activeButton});
 
-            return template;
+            return this;
         }
-    } );
-
-    // Returns the View class
-    return ManagerFooterView;
+    };
 
 } );

@@ -4,6 +4,7 @@
 define(["views/AbstractView",
         "views/PageView",
         "views/HeaderView",
+        "views/FooterView",
         "views/DialogView",
         "views/PopupView",
         "views/PanelView",
@@ -89,6 +90,7 @@ define(["views/AbstractView",
 ], function(AbstractView,
             PageView,
             HeaderView,
+            FooterView,
             DialogView,
             PopupView,
             PanelView,
@@ -176,6 +178,7 @@ define(["views/AbstractView",
     app.AbstractView = AbstractView;
     app.PageView = PageView;
     app.HeaderView = HeaderView;
+    app.FooterView = FooterView;
     app.DialogView = DialogView;
     app.PopupView = PopupView;
     app.PanelView = PanelView;
