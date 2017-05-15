@@ -1,11 +1,9 @@
-define(['Webservice',
-        'collections/custom/manager/CallbackCollection',
+define(['collections/custom/manager/CallbackCollection',
         'views/helpers/HeaderView',
         'views/helpers/ManagerFooterView',
-        'text!templates/pages/manager-callback.phtml',
+        'text!templates/manager/manager-callback.phtml',
         'jquery-dateFormat'],
-function( Webservice,
-          CallbackCollection,
+function( CallbackCollection,
           HeaderView,
           ManagerFooterView,
           Template ) {
@@ -30,16 +28,16 @@ function( Webservice,
 
         click_btn_done(event)
         {
-            var userid = $(event.currentTarget).attr('data-user-id');
+            var cid = $(event.currentTarget).attr('data-user-cid');
+            var i18n = this.i18n();
 
-            var webservice = new Webservice();
-            webservice.action = "Manager/ResetCallback";
-            webservice.formData = {userid: userid};
-            webservice.call()
-                      .done(() => {
-                          app.ws.chat.SystemMessage(userid, "Ihr Rückruf wurde als erledigt markiert von " + app.session.user.get('firstname') + " " + app.session.user.get('lastname'));
-                          this.reload();
-                      });
+            var user = this.callbacks.get({cid: cid});
+            user.set('CallRequest', null);
+            user.save()
+                .done(() => {
+                    app.ws.chat.SystemMessage(user.get('Userid'), sprintf(i18n.systemMessage, {name: app.auth.authUser.get('Firstname') + " " + app.auth.authUser.get('Lastname')}));
+                    this.reload();
+                });
         }
 
         apiCommandReciever(command)

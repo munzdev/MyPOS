@@ -19,9 +19,8 @@ define(["views/dialoges/LoginView",
         "views/pages/DistributionSummaryView",
 
         "views/manager/ManagerOverviewView",
-
-        /*"views/pages/ManagerCallbackView",
-        "views/pages/ManagerCheckView",
+        "views/manager/ManagerCallbackView",
+        /*"views/pages/ManagerCheckView",
         "views/pages/ManagerGroupmessageView",
         "views/pages/ManagerStatisticView",
         "views/admin/AdminView",

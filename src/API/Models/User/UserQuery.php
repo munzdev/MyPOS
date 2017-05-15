@@ -8,6 +8,7 @@ use API\Lib\Interfaces\Models\User\IUserQuery;
 use API\Models\ORM\Event\Map\EventUserTableMap;
 use API\Models\ORM\User\UserQuery as UserQueryORM;
 use API\Models\Query;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 
 class UserQuery extends Query implements IUserQuery
@@ -88,4 +89,17 @@ class UserQuery extends Query implements IUserQuery
         return $userCollection;
     }
 
+    public function getCallbacks(int $eventid) : IUserCollection {
+        $users = UserQueryORM::create()
+                    ->filterByCallRequest(null, Criteria::NOT_EQUAL)
+                    ->useEventUserQuery()
+                        ->filterByEventid($eventid)
+                    ->endUse()
+                    ->find();
+
+        $userCollection = $this->container->get(IUserCollection::class);
+        $userCollection->setCollection($users);
+
+        return $userCollection;
+    }
 }

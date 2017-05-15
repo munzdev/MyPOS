@@ -23,4 +23,10 @@ interface IUserQuery extends IQuery {
      * @return IUserCollection
      */
     function getUsersByEventid($eventid) : IUserCollection;
+
+    /**
+     * @param int $eventid
+     * @return IUserCollection
+     */
+    function getCallbacks(int $eventid) : IUserCollection;
 }

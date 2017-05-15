@@ -423,5 +423,19 @@
         "orderDoneVerifyText": "Are you sure that this order is finished?",
         "abort": "Abort",
         "continue": "Continue"
+    },
+    "DistributionSummaryView": {
+        "noOrder": "No open order at the moment for this distribution place!",
+        "orders": "Orders",
+        "specialOrder": "Spezial orders",
+        "mixedWith": "Mixed with"
+    },
+    "ManagerCallbackView": {
+        "user": "User",
+        "callRequest": "Callrequest time",
+        "phonenumber": "Phonenumber",
+        "options": "Options",
+        "markDone": "Mark as done",
+        "systemMessage": "Your callback request is marked as done from %(name)s"
     }
 }

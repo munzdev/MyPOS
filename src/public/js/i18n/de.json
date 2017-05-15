@@ -435,5 +435,13 @@
         "orders": "Bestellungen",
         "specialOrder": "Sonderwunsch",
         "mixedWith": "Gemischt mit"
+    },
+    "ManagerCallbackView": {
+        "user": "Benutzer",
+        "callRequest": "Anforderungszeit",
+        "phonenumber": "Telefonnummer",
+        "options": "Optionen",
+        "markDone": "Als erledigt markieren",
+        "systemMessage": "Ihr Rückruf wurde als erledigt markiert von %(name)s"
     }
 }

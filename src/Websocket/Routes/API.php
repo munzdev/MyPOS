@@ -6,6 +6,8 @@ use Ratchet\ConnectionInterface;
 use const API\USER_ROLE_DISTRIBUTION;
 use const API\USER_ROLE_DISTRIBUTION_PREVIEW;
 use const API\USER_ROLE_MANAGER;
+use const API\USER_ROLE_MANAGER_CALLBACK;
+use const API\USER_ROLE_MANAGER_CHECK_SPECIAL_ORDER;
 
 class API extends WebsocketServer
 {
@@ -22,8 +24,8 @@ class API extends WebsocketServer
 
         switch ($topic->getId()) {
             case 'manager-callback':
-                if (isset($this->subscribers[USER_ROLE_MANAGER])) {
-                    $targetTopic = $this->subscribers[USER_ROLE_MANAGER]['topic'];
+                if (isset($this->subscribers[USER_ROLE_MANAGER_CALLBACK])) {
+                    $targetTopic = $this->subscribers[USER_ROLE_MANAGER_CALLBACK]['topic'];
 
                     $message = array('command' => $topic->getId(),
                                      'options' => array('systemMessage' => 'Eine Rückrufanforderung wurde hinzugefügt!'));
@@ -33,8 +35,8 @@ class API extends WebsocketServer
                 break;
 
             case 'manager-check':
-                if (isset($this->subscribers[USER_ROLE_MANAGER])) {
-                    $targetTopic = $this->subscribers[USER_ROLE_MANAGER]['topic'];
+                if (isset($this->subscribers[USER_ROLE_MANAGER_CHECK_SPECIAL_ORDER])) {
+                    $targetTopic = $this->subscribers[USER_ROLE_MANAGER_CHECK_SPECIAL_ORDER]['topic'];
 
                     $message = array('command' => $topic->getId(),
                                      'options' => array('systemMessage' => 'Ein Sonderwunsch wurde hinzugefügt!'));
