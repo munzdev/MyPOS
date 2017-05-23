@@ -28,7 +28,7 @@ class Callback extends SecurityController
         parent::__construct($app);
 
         $this->security = ['GET' => USER_ROLE_MANAGER_CALLBACK,
-                           'POST' => USER_ROLE_MANAGER_CALLBACK];
+                           'PUT' => USER_ROLE_MANAGER_CALLBACK];
 
         $this->container->get(IConnectionInterface::class);
     }
