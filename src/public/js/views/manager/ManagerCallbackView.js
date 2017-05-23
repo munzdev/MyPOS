@@ -17,8 +17,6 @@ function( CallbackCollection,
 
         // The View Constructor
         initialize() {
-            _.bindAll(this, "render");
-
             this.callbacks = new CallbackCollection();
             this.callbacks.fetch()
                           .done(() => {

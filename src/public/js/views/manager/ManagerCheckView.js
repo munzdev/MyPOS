@@ -1,89 +1,85 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'Webservice',
-         'collections/manager/CheckCollection',
-         'views/headers/HeaderView',
-         'views/footers/ManagerFooterView',
-         'text!templates/pages/manager-check.phtml',
-         'jquery-dateFormat'],
-function( Webservice,
-          CheckCollection,
-          HeaderView,
-          ManagerFooterView,
-          Template ) {
+define(['collections/custom/manager/CheckCollection',
+        'views/helpers/HeaderView',
+        'views/helpers/ManagerFooterView',
+        'text!templates/manager/manager-check.phtml',
+        'jquery-dateFormat'
+], function(CheckCollection,
+            HeaderView,
+            ManagerFooterView,
+            Template) {
     "use strict";
 
-    // Extends Backbone.View
-    var ManagerCheckView = Backbone.View.extend( {
+    // TODO: Also check new tables orders here. New tables need to be associated to a distribution place for products
+    return class ManagerCheckView extends app.PageView {
 
-    	title: 'manager-check',
-    	el: 'body',
-        events: {
-            'click #manager-check-verified-status .manager-check-verify-status-btn': 'click_btn_status',
-            'click .manager-check-info-btn' : 'click_btn_info',
-            'click .manager-check-verify-btn' : 'click_btn_verify',
-            'click #manager-check-verify-finished-btn': 'click_btn_verify_finished'
-        },
+    	events() {
+            return {'click #verified-status .verify-status-btn': 'click_btn_status',
+                    'click .info-btn' : 'click_btn_info',
+                    'click .verify-btn' : 'click_btn_verify',
+                    'click #verify-finished-btn': 'click_btn_verify_finished'}
+        }
 
         // The View Constructor
-        initialize: function(options) {
-            _.bindAll(this, "render");
-
+        initialize(options) {
             if(options.verified == null)
                 this.verifiedStatus = '0';
             else
                 this.verifiedStatus = options.verified;
 
             this.checkCollection = new CheckCollection();
+            this.checkCollection.verified = this.verifiedStatus;
+            this.checkCollection.fetch()
+                                .done(() => {
+                                    this.render();
+                                });
+        }
 
-            this.fetchList();
-        },
-
-        click_btn_status: function(event)
+        click_btn_status(event)
         {
             var verified = $(event.currentTarget).attr('data-value');
+            this.changeHash(this.id() + '/verified/' + verified);
+        }
 
-            MyPOS.ChangePage('#' + this.title + '/verified/' + $(event.currentTarget).attr('data-value'));
-        },
-
-        click_btn_info: function(event)
+        click_btn_info(event)
         {
-            var id = $(event.currentTarget).attr('data-id');
+            var cid = $(event.currentTarget).attr('data-cid');
+            var orderDetail = this.checkCollection.get({cid: cid});
 
-            var info = this.checkCollection.findWhere({orders_details_special_extraid: id});
+            this.$('#info-tablenr').text(orderDetail.get('Order').get('EventTable').get('Name'));
+            this.$('#info-orderid').text(orderDetail.get('Orderid'));
+            this.$('#info-nameUser').text(orderDetail.get('Userid'));
+            this.$('#info-amount').text(orderDetail.get('Amount'));
 
-            $('#manager-check-info-tablenr').text(info.get('nameTable'));
-            $('#manager-check-info-orderid').text(info.get('orderid'));
-            $('#manager-check-info-nameUser').text(info.get('nameUser'));
-            $('#manager-check-info-menu-group').text(info.get('nameGroup'));
-            $('#manager-check-info-amount').text(info.get('amount'));
-
-            if(info.get('single_price'))
-                $('#manager-check-info-single-price').text(parseFloat(info.get('single_price')).toFixed(2) + ' €');
+            if (orderDetail.get('MenuGroup'))
+                this.$('#info-menu-group').text(orderDetail.get('MenuGroup').get('Name'));
             else
-                $('#manager-check-info-single-price').text("");
+                this.$('#info-menu-group').text('');
 
-            $('#manager-check-info-single-price-modified-by').text(info.get('single_price_modified_by'));
-            $('#manager-check-info-extra-detail').text(info.get('extra_detail'));
-            $('#manager-check-info-verified').text(info.get('verified') == 1 ? 'Ja' : 'Nein');
+
+
+            if(orderDetail.get('SinglePrice'))
+                this.$('#info-single-price').text(parseFloat(orderDetail.get('SinglePrice')).toFixed(2));
+            else
+                this.$('#info-single-price').text('');
+
+            this.$('#info-single-price-modified-by').text(orderDetail.get('SinglePriceModifiedByUserid'));
+            this.$('#info-extra-detail').text(orderDetail.get('ExtraDetail'));
+            this.$('#info-verified').text(orderDetail.get('Verified') == 1 ? 'Ja' : 'Nein');
 
             var finished = '';
 
-            if(info.get('finished') != '')
-                finished = $.format.date(MyPOS.DateFromMysql(info.get('finished')), DATE_JS_TIMEFORMAT);
+            if(orderDetail.get('DistributionFinished') != null)
+                finished = app.i18n.toDateTime(orderDetail.get('DistributionFinished'));
 
-            $('#manager-check-info-finished').text(finished);
+            this.$('#info-finished').text(finished);
 
             var availability = '';
 
-            switch(info.get('availability'))
+            switch(orderDetail.get('Availabilityid'))
             {
                 case ORDER_AVAILABILITY_AVAILABLE:
                     availability = 'Verfügbar';
                     break;
-
                 case ORDER_AVAILABILITY_DELAYED:
                     availability = 'Verspätet';
                     break;
@@ -92,36 +88,36 @@ function( Webservice,
                     break;
             }
 
-            $('#manager-check-info-availability').text(availability);
-            $('#manager-check-info-availability-amount').text(info.get('availability_amount'));
-            $('#manager-check-info-dialog').popup('open');
-        },
+            this.$('#info-availability').text(availability);
+            this.$('#info-availability-amount').text(orderDetail.get('AvailabilityAmount'));
+            this.$('#info-dialog').popup('open');
+        }
 
-        click_btn_verify: function(event)
+        click_btn_verify(event)
         {
-            var id = $(event.currentTarget).attr('data-id');
-            var info = this.checkCollection.findWhere({orders_details_special_extraid: id});
+            var cid = $(event.currentTarget).attr('data-cid');
+            var orderDetail = this.checkCollection.get({cid: cid});
 
-            $('#manager-check-verify-tablenr').text(info.get('nameTable'));
-            $('#manager-check-verify-orderid').text(info.get('orderid'));
-            $('#manager-check-verify-single-price').val(info.get('single_price'));
-            $('#manager-check-verify-menu-group').val(info.get('menu_groupid')).selectmenu('refresh');
-            $('#manager-check-verify-availability').val(info.get('availability')).selectmenu('refresh');
-            $('#manager-check-verify-availability-amount').val(info.get('availability_amount'));
-            $('#manager-check-verify-finished-btn').attr('data-id', id);
+            this.$('#verify-tablenr').text(orderDetail.get('Order').get('EventTable').get('Name'));
+            this.$('#verify-orderid').text(orderDetail.get('Orderid'));
+            this.$('#verify-single-price').val(orderDetail.get('SinglePrice'));
+            this.$('#verify-menu-group').val(orderDetail.get('MenuGroupid')).selectmenu('refresh');
+            this.$('#verify-availability').val(orderDetail.get('Availabilityid')).selectmenu('refresh');
+            this.$('#verify-availability-amount').val(orderDetail.get('AvailabilityAmount'));
+            this.$('#verify-finished-btn').attr('data-cid', cid);
 
-            $('#manager-check-verify-dialog').popup('open');
-        },
+            this.$('#verify-dialog').popup('open');
+        }
 
-        click_btn_verify_finished: function(event)
+        click_btn_verify_finished(event)
         {
-            var id = $(event.currentTarget).attr('data-id');
-            var info = this.checkCollection.findWhere({orders_details_special_extraid: id});
+            var cid = $(event.currentTarget).attr('data-cid');
+            var orderDetail = this.checkCollection.get({cid: cid});
 
-            var single_price = $('#manager-check-verify-single-price').val();
-            var menu_groupid = $('#manager-check-verify-menu-group option:selected').val();
-            var availability = $('#manager-check-verify-availability option:selected').val();
-            var availability_amount = $('#manager-check-verify-availability-amount').val();
+            var single_price = this.$('#verify-single-price').val();
+            var menu_groupid = this.$('#verify-menu-group option:selected').val();
+            var availability = this.$('#verify-availability option:selected').val();
+            var availability_amount = this.$('#verify-availability-amount').val();
 
             if(single_price == '' || !$.isNumeric(single_price))
             {
@@ -158,51 +154,36 @@ function( Webservice,
                 success: function() {
                     app.ws.chat.SystemMessage(info.get('userid'), "Ihre aufgenommene Bestellung mit Sonderwunsch vom Tisch " + info.get('nameTable') + " mit der Bestellnummer " + info.get('orderid') + " wurde von " + app.session.user.get('firstname') + " " + app.session.user.get('lastname') + " geprüft und kann nun kassiert werden.");
 
-                    MyPOS.ReloadPage();
+                    this.reload();
                 }
             };
             webservice.call();
-        },
+        }
 
-        fetchList: function()
-        {
-            this.checkCollection.fetch({data: {verified: this.verifiedStatus},
-                                        success: this.render});
-        },
-
-        apiCommandReciever: function(command)
+        apiCommandReciever(command)
         {
             if(command == 'manager-check')
             {
-                MyPOS.ReloadPage();
+                this.reload();
             }
-        },
+        }
 
         // Renders all of the Category models on the UI
-        render: function() {
+        render() {
             var header = new HeaderView();
             var footer = new ManagerFooterView();
+            this.registerSubview(".nav-header", header);
+            this.registerSubview(".manager-footer", footer);
 
-            header.activeButton = 'manager';
-            footer.activeButton = 'check';
+            this.renderTemplate(Template, {verifiedStatus: this.verifiedStatus,
+                                           checks: this.checkCollection,
+                                           products: app.productList});
 
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  footer: footer.render(),
-                                                                  verifiedStatus: this.verifiedStatus,
-                                                                  checks: this.checkCollection,
-                                                                  products: app.session.products});
+            this.changePage(this);
 
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-            footer.setElement("#" + this.title + " .nav-footer");
-
-            $.mobile.changePage( "#" + this.title);
             return this;
         }
 
-    } );
-
-    // Returns the View class
-    return ManagerCheckView;
+    }
 
 } );

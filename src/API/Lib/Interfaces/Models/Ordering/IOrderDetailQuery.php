@@ -21,4 +21,5 @@ interface IOrderDetailQuery extends IQuery {
     public function getWithDetails(int $orderDetailid): ?IOrderDetail;
     public function getDetailsSum(int $orderDetailid): ?stdClass;
     public function getMenuDetails(int $orderDetailid) : ?IOrderDetail;
+    public function getUnverifiedOrders(int $verified, int $eventid): IOrderDetailCollection;
 }

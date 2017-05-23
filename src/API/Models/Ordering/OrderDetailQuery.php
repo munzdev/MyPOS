@@ -230,4 +230,25 @@ class OrderDetailQuery extends Query implements IOrderDetailQuery
 
         return $data;
     }
+
+    public function getUnverifiedOrders(int $verified, int $eventid) : IOrderDetailCollection
+    {
+        $orderDetails = OrderDetailQueryORM::create()
+            ->joinWithOrder()
+            ->useOrderQuery()
+                ->joinWithEventTable()
+                ->useEventTableQuery()
+                    ->filterByEventid($eventid)
+                ->endUse()
+            ->endUse()
+            ->leftJoinWithMenuGroup()
+            ->filterByVerified($verified)
+            ->filterByMenuid(null)
+            ->find();
+
+        $orderDetailCollection = $this->container->get(IOrderDetailCollection::class);
+        $orderDetailCollection->setCollection($orderDetails);
+
+        return $orderDetailCollection;
+    }
 }
