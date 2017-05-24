@@ -87,6 +87,11 @@ define(["models/BaseModel"
                     response.OrderInProgressRecieveds = new app.collections.OIP.OrderInProgressRecievedCollection(response.OrderInProgressRecieveds, {parse: true});
             }
 
+            if('User' in response)
+            {
+                response.User = new app.models.User.User(response.User, {parse: true});
+            }
+
             return super.parse(response);
         }
 
