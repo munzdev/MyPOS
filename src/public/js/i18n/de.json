@@ -473,5 +473,12 @@
         "yes": "Ja",
         "no": "Nein",
         "systemMessage": "Ihre aufgenommene Bestellung mit Sonderwunsch vom Tisch %(table)s mit der Bestellnummer %(orderid)s wurde von %(name)s geprüft und kann nun kassiert werden."
+    },
+    "ManagerGroupmessageView": {
+        "userRoles": "Benutzergruppen",
+        "message": "Nachricht",
+        "send": "Senden",
+        "errorMessage": "Bitte eine Nachricht eingeben!",
+        "errorUserRole": "Bitte Ziel Benutzergruppen auswählen!"
     }
 }

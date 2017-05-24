@@ -1,55 +1,31 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'Webservice',
-         'views/headers/HeaderView',
-         'views/footers/ManagerFooterView',
-         'text!templates/pages/manager-statistic.phtml'],
-function( Webservice,
-          HeaderView,
-          ManagerFooterView,
-          Template ) {
+define(['views/helpers/HeaderView',
+    'views/helpers/ManagerFooterView',
+        'text!templates/manager/manager-statistic.phtml'
+], function(HeaderView,
+            ManagerFooterView,
+            Template ) {
     "use strict";
 
-    // Extends Backbone.View
-    var ManagerStatisticView = Backbone.View.extend( {
+    return class ManagerStatisticView extends app.PageView {
 
-    	title: 'manager-statistic',
-    	el: 'body',
-        events: {
-
-        },
-
-        // The View Constructor
-        initialize: function() {
-            //_.bindAll(this, "finished");
-
+    	initialize() {
             this.render();
-        },
+        }
 
         // Renders all of the Category models on the UI
-        render: function() {
+        render() {
             var header = new HeaderView();
             var footer = new ManagerFooterView();
+            this.registerSubview(".nav-header", header);
+            this.registerSubview(".manager-footer", footer);
 
-            header.activeButton = 'manager';
-            footer.activeButton = 'statistic';
+            this.renderTemplate(Template);
 
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  footer: footer.render()});
+            this.changePage(this);
 
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-            footer.setElement("#" + this.title + " .nav-footer");
-
-            $.mobile.changePage( "#" + this.title);
             return this;
         }
 
-    } );
-
-    // Returns the View class
-    return ManagerStatisticView;
+    }
 
 } );

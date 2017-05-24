@@ -467,5 +467,12 @@
         "yes": "Yes",
         "no": "No",
         "systemMessage": "Your registered order with special wish of table %(table)s with orderid %(orderid)s has been aproved by %(name)s and can be cashed now."
+    },
+    "ManagerGroupmessageView": {
+        "userRoles": "User roles",
+        "message": "Message",
+        "send": "Send",
+        "errorMessage": "Please enter a message!",
+        "errorUserRole": "Please choose target user roles!"
     }
 }

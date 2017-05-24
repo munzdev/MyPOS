@@ -1,9 +1,9 @@
-define([ 'views/helpers/HeaderView',
-         'views/helpers/ManagerFooterView',
-         'text!templates/manager/manager-overview.phtml'],
-function( HeaderView,
-          ManagerFooterView,
-          Template ) {
+define(['views/helpers/HeaderView',
+        'views/helpers/ManagerFooterView',
+        'text!templates/manager/manager-overview.phtml'
+], function(HeaderView,
+            ManagerFooterView,
+            Template ) {
     "use strict";
 
     return class ManagerOverviewView extends app.PageView {
