@@ -49,7 +49,7 @@ class Collection implements ICollection {
     {
         $relationsFound = [];
         foreach ($array as $key => $item) {
-            if ($item === ["*RECURSION*"] || $item == "*RECURSION*") {
+            if ($item === ["*RECURSION*"] || $item === "*RECURSION*") {
                 unset($array[$key]);
             } elseif (is_array($item)) {
                 $array[$key] = $this->cleanupRecursionStringFromToArray($item);
