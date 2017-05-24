@@ -1,0 +1,14 @@
+<tr>
+    <th><%- orderItem.get('Order').get('EventTable').get('Name') %></th>
+    <td><%- orderItem.get('Orderid') %></td>
+    <td><% if(orderItem.get('MenuGroup') != null) { %> <%- orderItem.get('MenuGroup').get('Name') %> <% } %></td>
+    <td><%- orderItem.get('Amount') %></td>
+    <td><% if(orderItem.get('SinglePrice') != null) { %>  <%- parseFloat(orderItem.get('SinglePrice')).toFixed(2) %> <%= i18n.currency %> <% } %></td>
+    <td><%- orderItem.get('ExtraDetail') %></td>
+    <td>
+        <a data-cid="<%- orderItem.cid %>" class="info-btn ui-btn ui-icon-info ui-mini ui-btn-icon-left"><%= t.details %></a>
+        <% if(orderItem.get('Verified') == 0) { %>
+            <a data-cid="<%- orderItem.cid %>" class="verify-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left"><%= t.edit %></a>
+        <% } %>
+    </td>
+</tr>

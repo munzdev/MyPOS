@@ -11,6 +11,7 @@ use API\Lib\Interfaces\Models\IConnectionInterface;
 use API\Lib\Interfaces\Models\Invoice\IInvoice;
 use API\Lib\Interfaces\Models\Invoice\IInvoiceItem;
 use API\Lib\Interfaces\Models\Invoice\IInvoiceQuery;
+use API\Lib\Interfaces\Models\Ordering\IOrderDetail;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
 use API\Lib\Interfaces\Models\User\IUserQuery;
 use API\Lib\SecurityController;
@@ -40,9 +41,42 @@ class Check extends SecurityController
         $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
         $user = $auth->getCurrentUser();
 
-        $orderDetails = $orderDetailQuery->getUnverifiedOrders($this->args['verified'], $user->getEventUsers()->getFirst()->getEventid());
+        $verified = $this->request->getQueryParam('verified', 0);
 
-        $this->withJson($orderDetails->toArray());
+        $orderDetails = $orderDetailQuery->getUnverifiedOrders($verified, $user->getEventUsers()->getFirst()->getEventid());
+        $orderDetailsArray = $orderDetails->toArray();
+
+        foreach($orderDetailsArray as &$item) {
+            if (isset($item['User'])){
+                $item['User'] = $this->cleanupUserData($item['User']);
+            }
+
+            $item['Order']['User'] = $this->cleanupUserData($item['Order']['User']);
+        }
+
+        $this->withJson($orderDetailsArray);
     }
 
+    public function put() : void
+    {
+        $id = $this->args['id'];
+        $auth = $this->container->get(IAuth::class);
+        $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
+        $user = $auth->getCurrentUser();
+
+        $availablityAmount = null;
+        if (!empty($this->json['AvailabilityAmount']))
+            $availablityAmount = $this->json['AvailabilityAmount'];
+
+        $orderDetail = $orderDetailQuery->findPk($id);
+        $orderDetail->setSinglePrice($this->json['SinglePrice']);
+        $orderDetail->setSinglePriceModifiedByUserid($user->getUserid());
+        $orderDetail->setMenuGroupid($this->json['MenuGroupid']);
+        $orderDetail->setAvailabilityid($this->json['Availabilityid']);
+        $orderDetail->setAvailabilityAmount($availablityAmount);
+        $orderDetail->setVerified(true);
+        $orderDetail->save();
+
+        $this->withJson($orderDetail->toArray());
+    }
 }
