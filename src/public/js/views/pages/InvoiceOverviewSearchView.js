@@ -128,7 +128,7 @@ define(['views/helpers/CustomerSelectView',
             this.registerSubview(".nav-header", header);
             this.registerAppendview(this.customerSelectView);
 
-            this.renderTemplate(Template, {userList: app.userList,
+            this.renderTemplate(Template, {user: app.user,
                                            invoiceTypeList: this.invoiceTypeCollection});
 
             this.changePage(this);

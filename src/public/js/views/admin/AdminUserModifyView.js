@@ -1,35 +1,55 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'Webservice',
-         'views/headers/AdminHeaderView',
-         'text!templates/pages/admin/admin-user-modify.phtml',
-         'jquerymobile-datebox'],
-function( Webservice,
-          AdminHeaderView,
-          Template ) {
+define(['views/helpers/HeaderView',
+        'text!templates/admin/admin-user-modify.phtml'
+], function(HeaderView,
+            Template ) {
     "use strict";
 
-    // Extends Backbone.View
-    var AdminUserModifyView = Backbone.View.extend( {
+    return class AdminUserModifyView extends app.PageView {
 
-    	title: 'admin-user-modify',
-    	el: 'body',
-        events: {
-            'click #admin-user-modify-save-btn': 'click_save_btn'
-        },
+    	events() {
+            return {'click #save-btn': 'click_save_btn'}
+        }
 
-        click_save_btn: function()
-        {
-            var username = $.trim($('#admin-user-modify-username').val());
-            var password = $.trim($('#admin-user-modify-password').val());
-            var password2 = $.trim($('#admin-user-modify-password2').val());
-            var firstname = $.trim($('#admin-user-modify-firstname').val());
-            var lastname = $.trim($('#admin-user-modify-lastname').val());
-            var phonenumber = $.trim($('#admin-user-modify-phonenumber').val());
-            var isAdmin = $('#admin-user-modify-isAdmin').prop('checked');
-            var active = $('#admin-user-modify-active').prop('checked');
+        initialize(options) {
+            this.usernameValue = "";
+            this.firstnameValue = "";
+            this.lastnameValue = "";
+            this.phonenumberValue = "";
+            this.isAdminValue = 0;
+            this.activeValue = 0;
+
+            if(options.userid === 'new') {
+                this.mode = 'new';
+                this.userid = 0;
+                this.render();
+            } else {
+                this.mode = 'edit';
+                this.userid = options.userid;
+
+                let userCollection = new app.collections.User.UserCollection();
+                this.user = new app.models.User.User();
+                this.user.fetch({url: userCollection.url() + '/' + this.userid})
+                        .done((user) => {
+                           this.usernameValue = this.user.get('Username');
+                           this.firstnameValue = this.user.get('Firstname');
+                           this.lastnameValue = this.user.get('Lastname');
+                           this.phonenumberValue = this.user.get('Phonenumber');
+                           this.isAdminValue = this.user.get('IsAdmin');
+                           this.activeValue = this.user.get('Active');
+                           this.render();
+                        });
+            }
+        }
+
+        click_save_btn() {
+            var username = $.trim($('#username').val());
+            var password = $.trim($('#password').val());
+            var password2 = $.trim($('#password2').val());
+            var firstname = $.trim($('#firstname').val());
+            var lastname = $.trim($('#lastname').val());
+            var phonenumber = $.trim($('#phonenumber').val());
+            var isAdmin = $('#isAdmin').prop('checked');
+            var active = $('#active').prop('checked');
 
             if(username == '')
             {
@@ -127,80 +147,24 @@ function( Webservice,
             }
 
 
-        },
+        }
 
-        // The View Constructor
-        initialize: function(options) {
-            _.bindAll(this, "render",
-                            "click_save_btn");
+        render() {
+            var header = new HeaderView();
+            this.registerSubview(".nav-header", header);
 
-            var self = this;
+            this.renderTemplate(Template, {mode: this.mode,
+                                           username: this.usernameValue,
+                                           firstname: this.firstnameValue,
+                                           lastname: this.lastnameValue,
+                                           phonenumber: this.phonenumberValue,
+                                           isAdmin: this.isAdminValue,
+                                           active: this.activeValue});
 
-            this.usernameValue = "";
-            this.firstnameValue = "";
-            this.lastnameValue = "";
-            this.phonenumberValue = "";
-            this.isAdminValue = 0;
-            this.activeValue = 0;
+            this.changePage(this);
 
-            if(options.id === 'new')
-            {
-                this.mode = 'new';
-                this.userid = 0;
-                this.render();
-            }
-            else
-            {
-                this.mode = 'edit';
-                this.userid = options.id;
-
-
-
-                var webservice = new Webservice();
-                webservice.action = "Admin/GetUser";
-                webservice.formData = {userid: this.userid};
-                webservice.callback = {
-                    success: function(data)
-                    {
-                        self.usernameValue = data.username;
-                        self.firstnameValue = data.firstname;
-                        self.lastnameValue = data.lastname;
-                        self.phonenumberValue = data.phonenumber;
-                        self.isAdminValue = data.is_admin;
-                        self.activeValue = data.active;
-                        self.render();
-                    }
-                };
-                webservice.call();
-            }
-        },
-
-        // Renders all of the Category models on the UI
-        render: function() {
-            var header = new AdminHeaderView();
-
-            header.activeButton = 'user';
-
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  mode: this.mode,
-                                                                  username: this.usernameValue,
-                                                                  firstname: this.firstnameValue,
-                                                                  lastname: this.lastnameValue,
-                                                                  phonenumber: this.phonenumberValue,
-                                                                  isAdmin: this.isAdminValue,
-                                                                  active: this.activeValue,
-                                                                  });
-
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-
-            $.mobile.changePage( "#" + this.title);
             return this;
         }
 
-    } );
-
-    // Returns the View class
-    return AdminUserModifyView;
-
+    }
 } );

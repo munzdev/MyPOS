@@ -32,8 +32,8 @@ function( Webservice,
 
             this.id = options.id;
 
-            this.userList = new EventUserCollection();
-            this.userList.fetch({data: {eventid: this.id},
+            this.user = new EventUserCollection();
+            this.user.fetch({data: {eventid: this.id},
                                  success: this.render});
         },
 
@@ -84,7 +84,7 @@ function( Webservice,
 
             MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
                                                                   footer: footer.render(),
-                                                                  users: this.userList});
+                                                                  users: this.user});
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");

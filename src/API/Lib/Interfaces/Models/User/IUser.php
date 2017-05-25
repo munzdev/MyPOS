@@ -38,7 +38,7 @@ interface IUser extends IModel {
     function getAutologinHash();
 
     /**
-     * @return boolean Description
+     * @return bool Description
      */
     function getActive();
 
@@ -53,7 +53,7 @@ interface IUser extends IModel {
     function getCallRequest();
 
     /**
-     * @return boolean Description
+     * @return bool Description
      */
     function getIsAdmin();
 

@@ -22,7 +22,7 @@ class User extends Model implements IUser
         $this->setModel(new UserORM());
     }
 
-    public function getActive(): boolean
+    public function getActive(): bool
     {
         return $this->model->getActive();
     }
@@ -52,7 +52,7 @@ class User extends Model implements IUser
         return $this->model->getFirstname();
     }
 
-    public function getIsAdmin(): boolean
+    public function getIsAdmin(): bool
     {
         return $this->model->getIsAdmin();
     }

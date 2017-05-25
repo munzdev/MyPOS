@@ -1,49 +1,49 @@
 <div data-role="content">
-    <div class="nav-header"><%= header %></div>
+    <div class="nav-header"></div>
     <div data-role="header">
         <h2><% if(mode == 'new') { print('Neuer Benutzer'); } else { print('Benutzer Bearbeiten'); } %></h2>
     </div>
     <fieldset data-role="controlgroup">
         <legend>Benutzername:</legend>
-        <input type="text" id="admin-user-modify-username" value="<%- username %>">
-        <label for="admin-user-modify-username"></label>
+        <input type="text" id="username" value="<%- username %>">
+        <label for="username"></label>
     </fieldset>
 
     <fieldset data-role="controlgroup">
         <legend>Password und Passwort wiederhollen:</legend>
-        <input type="password" id="admin-user-modify-password">
-        <label for="admin-user-modify-password"></label>
-        <input type="password" id="admin-user-modify-password2">
-        <label for="admin-user-modify-password2"></label>
+        <input type="password" id="password">
+        <label for="password"></label>
+        <input type="password" id="password2">
+        <label for="password2"></label>
     </fieldset>
 
     <fieldset data-role="controlgroup">
         <legend>Vorname:</legend>
-        <input type="text" id="admin-user-modify-firstname" value="<%- firstname %>">
-        <label for="admin-user-modify-firstname"></label>
+        <input type="text" id="firstname" value="<%- firstname %>">
+        <label for="firstname"></label>
     </fieldset>
 
     <fieldset data-role="controlgroup">
         <legend>Nachname:</legend>
-        <input type="text" id="admin-user-modify-lastname" value="<%- lastname %>">
-        <label for="admin-user-modify-lastname"></label>
+        <input type="text" id="lastname" value="<%- lastname %>">
+        <label for="lastname"></label>
     </fieldset>
 
     <fieldset data-role="controlgroup">
         <legend>Telefonnummer:</legend>
-        <input type="text" id="admin-user-modify-phonenumber" value="<%- phonenumber %>">
-        <label for="admin-user-modify-phonenumber"></label>
+        <input type="text" id="phonenumber" value="<%- phonenumber %>">
+        <label for="phonenumber"></label>
     </fieldset>
 
     <fieldset data-role="controlgroup">
         <legend>Optionen:</legend>
-        <input type="checkbox" id="admin-user-modify-isAdmin" <% if(isAdmin == 1) { print('checked="checked"'); } %>>
-        <label for="admin-user-modify-isAdmin">Administrator</label>
-        <input type="checkbox" id="admin-user-modify-active"  <% if(active == 1) { print('checked="checked"'); } %>>
-        <label for="admin-user-modify-active">Aktiv</label>
+        <input type="checkbox" id="isAdmin" <% if(isAdmin == 1) { print('checked="checked"'); } %>>
+        <label for="isAdmin">Administrator</label>
+        <input type="checkbox" id="active"  <% if(active == 1) { print('checked="checked"'); } %>>
+        <label for="active">Aktiv</label>
     </fieldset>
 
     <div class="ui-field-contain">
-        <a id="admin-user-modify-save-btn" class="ui-btn ui-btn-inline">Speichern</a>
+        <a id="save-btn" class="ui-btn ui-btn-inline">Speichern</a>
     </div>
 </div>

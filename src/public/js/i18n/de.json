@@ -480,5 +480,21 @@
         "send": "Senden",
         "errorMessage": "Bitte eine Nachricht eingeben!",
         "errorUserRole": "Bitte Ziel Benutzergruppen auswählen!"
+    },
+    "AdminUserView": {
+        "add": "Hinzufügen",
+        "username": "Benutzername",
+        "name": "Name",
+        "active": "Aktiv",
+        "admin": "Admin",
+        "options": "Optionen",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "yes": "Ja",
+        "no": "Nein",
+        "userDelete": "User löschen?",
+        "userDeleteVerifyText": "Sind Sie sicher das Sie den Benutzer deaktivieren wollen?",
+        "cancel": "Abbrechen",
+        "continue": "Fortfahren"
     }
 }

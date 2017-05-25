@@ -474,5 +474,21 @@
         "send": "Send",
         "errorMessage": "Please enter a message!",
         "errorUserRole": "Please choose target user roles!"
+    },
+    "AdminUserView": {
+        "add": "Add",
+        "username": "Username",
+        "name": "Name",
+        "active": "Activ",
+        "admin": "Admin",
+        "options": "Options",
+        "edit": "Edit",
+        "delete": "Delete",
+        "yes": "Yes",
+        "no": "No",
+        "userDelete": "Delete user?",
+        "userDeleteVerifyText": "Are your sure you want to deactivate the user?",
+        "cancel": "Cancel",
+        "continue": "Continue"
     }
 }

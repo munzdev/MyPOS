@@ -25,6 +25,8 @@ define(["views/dialoges/LoginView",
         "views/manager/ManagerStatisticView",
 
         "views/admin/AdminView",
+        "views/admin/AdminUserView",
+        "views/admin/AdminUserModifyView",
         /*"views/admin/AdminEventView",
         "views/admin/AdminEventCopyView",
         "views/admin/AdminEventModifyDetailView",
@@ -36,8 +38,6 @@ define(["views/dialoges/LoginView",
         "views/admin/AdminEventModifyPrinterModifyView",
         "views/admin/AdminEventModifyUserView",
         "views/admin/AdminEventModifyUserModifyView",
-        "views/admin/AdminUserView",
-        "views/admin/AdminUserModifyView",
         "views/admin/AdminMenuView",
         "views/admin/AdminMenuModifyGroupView",
         "views/admin/AdminMenuModifyTypeView",
@@ -70,6 +70,8 @@ define(["views/dialoges/LoginView",
             ManagerStatisticView,
 
             AdminView,
+            AdminUserView,
+            AdminUserModifyView,
             AdminEventView,
             AdminEventCopyView,
             AdminEventModifyDetailView,
@@ -81,8 +83,6 @@ define(["views/dialoges/LoginView",
             AdminEventModifyPrinterModifyView,
             AdminEventModifyUserView,
             AdminEventModifyUserModifyView,
-            AdminUserView,
-            AdminUserModifyView,
             AdminMenuView,
             AdminMenuModifyGroupView,
             AdminMenuModifyTypeView,
@@ -181,7 +181,7 @@ define(["views/dialoges/LoginView",
                 "admin/event/modify/:id/user/modify/:events_userid": "admin_event_modify_user_modify",
                 "admin/user": "admin_user",
                 "admin/user/add": "admin_user_add",
-                "admin/user/modify/:id": "admin_user_modify",
+                "admin/user/:userid": "admin_user_modify",
                 "admin/menu": "admin_menu",
                 "admin/menu/add": "admin_menu_type_add",
                 "admin/menu/add/:id": "admin_menu_group_add",
@@ -391,11 +391,11 @@ define(["views/dialoges/LoginView",
         }
 
         admin_user_add() {
-            this.show(new AdminUserModifyView({id: 'new'}));
+            this.show(new AdminUserModifyView({userid: 'new'}));
         }
 
-        admin_user_modify(id) {
-            this.show(new AdminUserModifyView({id: id}));
+        admin_user_modify(userid) {
+            this.show(new AdminUserModifyView({userid: userid}));
         }
 
         admin_menu() {

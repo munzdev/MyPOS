@@ -109,13 +109,13 @@ function( Webservice,
 
             this.existingUserList = new EventUserCollection();
 
-            this.userList = new UserCollection();
-            this.userList.url = app.API + "Admin/GetUsersList/";
+            this.user = new UserCollection();
+            this.user.url = app.API + "Admin/GetUsersList/";
 
             this.userRoleList = new UserRoleCollection();
 
             $.when(this.existingUserList.fetch({data: {eventid: this.eventid}}),
-                   this.userList.fetch({data: {eventid: this.eventid}}),
+                   this.user.fetch({data: {eventid: this.eventid}}),
                    this.userRoleList.fetch()).then(function() {
                 if(typeof options.events_userid === 'undefined')
                 {
@@ -154,7 +154,7 @@ function( Webservice,
 
             var self = this;
 
-            this.userList.remove(this.userList.filter(function(user) {
+            this.user.remove(this.user.filter(function(user) {
                 return self.existingUserList.findWhere({userid: user.get('userid')});
             }));
 
@@ -163,7 +163,7 @@ function( Webservice,
                                                                   mode: this.mode,
                                                                   beginMoney: this.beginMoneyValue,
                                                                   roles: parseInt(this.rolesValue),
-                                                                  userList: this.userList,
+                                                                  user: this.user,
                                                                   userRoleList: this.userRoleList,
                                                                   });
 

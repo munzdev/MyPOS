@@ -86,7 +86,7 @@ function(Webservice,
         popupafteropen() {
             if(!this.userListInited)
             {
-                app.userList.each((user) => {
+                app.user.each((user) => {
                     this.$('#select-add').append("<option value='" + user.get('EventUser').get('EventUserid') + "'>" + user.get('Firstname') + " " + user.get('Lastname')  + "</option>");
                 })
                 this.userListInited = true;
@@ -148,7 +148,7 @@ function(Webservice,
 
             if(openChats.find("option[value='" + eventUserid + "']").length == 0)
             {
-                var user = app.userList.find((user) => {return user.get('EventUser').get('EventUserid') == eventUserid});
+                var user = app.user.find((user) => {return user.get('EventUser').get('EventUserid') == eventUserid});
 
                 openChats.append("<option value='" + eventUserid + "'>" + user.get('Firstname') + " " + user.get('Lastname')  + "</option>");
 
@@ -259,7 +259,7 @@ function(Webservice,
             }
             else
             {
-                user = app.userList.find((user) => {return user.get('EventUser').get('EventUserid') == channel});
+                user = app.user.find((user) => {return user.get('EventUser').get('EventUserid') == channel});
                 color = 'red';
             }
 

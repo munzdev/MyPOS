@@ -1,39 +1,39 @@
 <div data-role="content">
-    <div class="nav-header"><%= header %></div>
-    <a id="admin-user-add-btn" class="ui-btn ui-icon-plus ui-mini ui-btn-icon-left">Hinzufügen</a>
-    <table data-role="table" id="admin-user-table" class="ui-responsive table-stroke table-stripe">
+    <div class="nav-header"></div>
+    <a id="add-btn" class="ui-btn ui-icon-plus ui-mini ui-btn-icon-left"><%= t.add %></a>
+    <table data-role="table" id="table" class="ui-responsive table-stroke table-stripe">
         <thead>
             <tr>
-                <th>Benutzername</th>
-                <th>Name</th>
-                <th>Aktiv</th>
-                <th>Admin</th>
-                <th>Optionen</th>
+                <th><%= t.username %></th>
+                <th><%= t.name %></th>
+                <th><%= t.active %></th>
+                <th><%= t.admin %></th>
+                <th><%= t.options %></th>
             </tr>
         </thead>
         <tbody>
             <% users.each(function(user){ %>
                 <tr>
-                    <th><%- user.get('username') %></th>
-                    <td><%- user.get('firstname') %> <%- user.get('lastname') %></td>
-                    <td><% if(user.get('active') == 1) { print('Ja'); } else { print('Nein'); } %></td>
-                    <td><% if(user.get('is_admin') == 1) { print('Ja'); } else { print('Nein'); } %></td>
+                    <th><%- user.get('Username') %></th>
+                    <td><%- user.get('Firstname') %> <%- user.get('Lastname') %></td>
+                    <td><% if(user.get('Active') ) { print(t.yes); } else { print(t.no); } %></td>
+                    <td><% if(user.get('IsAdmin')) { print(t.yes); } else { print(t.no); } %></td>
                     <td>
-                        <a data-user-id="<%- user.get('userid') %>" class="admin-user-edit-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
-                        <a data-user-id="<%- user.get('userid') %>" class="admin-user-delete-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left">Löschen</a>
+                        <a data-user-cid="<%- user.cid %>" class="edit-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left"><%= t.edit %></a>
+                        <a data-user-cid="<%- user.cid %>" class="delete-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left"><%= t.delete %></a>
                     </td>
                 </tr>
             <% }); %>
         </tbody>
     </table>
 </div>
-<div data-role="popup" id="admin-user-delete-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+<div data-role="popup" id="delete-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
     <div data-role="header" data-theme="a">
-        <h1>User löschen?</h1>
+        <h1><%= t.userDelete %></h1>
     </div>
     <div role="main" class="ui-content">
-        <h3 class="ui-title">Sind Sie sicher das Sie den Benutzer löschen wollen? Es werden alle Menüs, Bestellungen, Rechnungen, Statistiken, etc. aus der Datenbank entfernt, die zu diesem Benutzer gehören</h3>
-        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Abbrechen</a>
-        <a id='admin-user-delete-dialog-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
+        <h3 class="ui-title"><%= t.userDeleteVerifyText %></h3>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back"><%= t.cancel %></a>
+        <a id='delete-dialog-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.continue %></a>
     </div>
 </div>

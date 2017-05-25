@@ -46,7 +46,7 @@ function( Webservice,
             this.usersValue = {};
 
             this.menuList = new MenuTypeCollection();
-            this.userList = new EventUserCollection();
+            this.user = new EventUserCollection();
             this.userListData = {};
             this.tableList = new TableCollection();
             this.tableListData = {};
@@ -55,7 +55,7 @@ function( Webservice,
             this.printerList.url = app.API + "Admin/GetEventPrinterList/";
 
             $.when(this.menuList.fetch(),
-                   this.userList.fetch({data: {eventid: this.eventid}}),
+                   this.user.fetch({data: {eventid: this.eventid}}),
                    this.printerList.fetch({data: {eventid: this.id}}),
                    this.tableList.fetch()).then(function() {
 
@@ -252,7 +252,7 @@ function( Webservice,
 
             users.each(function()
             {
-                var user = self.userList.findWhere({userid: $(this).val()});
+                var user = self.user.findWhere({userid: $(this).val()});
 
                 html += "<div class='ui-field-contain'><label for='admin-event-modify-distribution-modify-users-printer-" + user.get('userid') + "'>" + user.get('name') + " Drucker:</lable><select data-mini='true' data-userid='" + user.get('userid') + "' class='admin-event-modify-distribution-modify-users-printer-group' id='admin-event-modify-distribution-modify-users-printer-" + user.get('userid') + "'>" + options + "</select></div>";
             });
@@ -283,7 +283,7 @@ function( Webservice,
                                                                   footer: footer.render(),
                                                                   mode: this.mode,                                                                  
                                                                   menu: this.menuList,
-                                                                  users: this.userList,
+                                                                  users: this.user,
                                                                   printers: this.printerList,
                                                                   name: this.nameValue,
                                                                   menuesValue: this.menuesValue,

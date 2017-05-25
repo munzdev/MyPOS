@@ -1,94 +1,68 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'Webservice',
-         'views/headers/AdminHeaderView',
-         'collections/user/UserCollection',
-         'text!templates/pages/admin/admin-user.phtml'],
-function( Webservice,
-          AdminHeaderView,
-          UserCollection,
-          Template ) {
+define(['views/helpers/HeaderView',
+        'text!templates/admin/admin-user.phtml'
+], function(HeaderView,
+            Template) {
     "use strict";
 
-    // Extends Backbone.View
-    var AdminUserView = Backbone.View.extend( {
+    return class AdminUserView extends app.PageView {
 
-    	title: 'admin-user',
-    	el: 'body',
-        events: {
-            'click #admin-user-add-btn': 'click_add_btn',
-            'click .admin-user-edit-btn': 'click_edit_btn',
-            'click .admin-user-delete-btn': 'click_delete_btn',
-            'click #admin-user-delete-dialog-finished': 'click_delete_finished_btn'
-        },
+        events() {
+            return {'click #add-btn': 'click_add_btn',
+                    'click .edit-btn': 'click_edit_btn',
+                    'click .delete-btn': 'click_delete_btn',
+                    'click #delete-dialog-finished': 'click_delete_finished_btn'}
+        }
 
-        // The View Constructor
-        initialize: function() {
-            _.bindAll(this, "render");
+        initialize() {
+            this.user = new app.collections.User.UserCollection();
+            this.user.fetch()
+                               .done(() => {
+                                   this.render();
+                               });
+        }
 
-            this.userList = new UserCollection();
-            this.userList.url = app.API + "Admin/GetUsersList/";
-            this.userList.fetch({success: this.render});
-        },
-
-        click_add_btn: function()
+        click_add_btn()
         {
-            MyPOS.ChangePage('admin/user/add');
-        },
+            this.changeHash("admin/user/add");
+        }
 
-        click_edit_btn: function(event)
+        click_edit_btn(event)
         {
-            var id = $(event.currentTarget).attr('data-user-id');
+            var user = this.user.get({cid: $(event.currentTarget).attr('data-user-cid')});
 
-            MyPOS.ChangePage('admin/user/modify/'+id);
-        },
+            this.changeHash("admin/user/" + user.get('Userid'));
+        }
 
-        click_delete_btn: function(event)
+        click_delete_btn(event)
         {
-            var id = $(event.currentTarget).attr('data-user-id');
+            var cid = $(event.currentTarget).attr('data-user-cid');
 
-            this.deleteId = id;
+            this.deleteId = cid;
 
-            $('#admin-user-delete-dialog').popup('open');
-        },
+            this.$('#delete-dialog').popup('open');
+        }
 
-        click_delete_finished_btn: function()
+        click_delete_finished_btn()
         {
-            $('#admin-user-delete-dialog').popup('close');
+            this.$('#delete-dialog').popup('close');
 
-            var webservice = new Webservice();
-            webservice.action = "Admin/UserDelete";
-            webservice.formData = {userid: this.deleteId};
-            webservice.callback = {
-                success: function()
-                {
-                    MyPOS.ReloadPage();
-                }
-            };
-            webservice.call();
-        },
+            var user = this.user.get({cid: this.deleteId});
+            user.destroy()
+                .done(() => {
+                    this.reload();
+                });
+        }
 
-        // Renders all of the Category models on the UI
-        render: function() {
-            var header = new AdminHeaderView();
+        render() {
+            var header = new HeaderView();
+            this.registerSubview(".nav-header", header);
 
-            header.activeButton = 'user';
+            this.renderTemplate(Template, {users: this.user});
 
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  users: this.userList});
+            this.changePage(this);
 
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-
-            $.mobile.changePage( "#" + this.title);
             return this;
         }
 
-    } );
-
-    // Returns the View class
-    return AdminUserView;
-
+    }
 } );
