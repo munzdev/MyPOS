@@ -1,11 +1,9 @@
 define(['collections/custom/manager/CallbackCollection',
         'views/helpers/HeaderView',
-        'views/helpers/ManagerFooterView',
         'text!templates/manager/manager-callback.phtml',
         'jquery-dateFormat'],
 function( CallbackCollection,
           HeaderView,
-          ManagerFooterView,
           Template ) {
     "use strict";
 
@@ -49,9 +47,7 @@ function( CallbackCollection,
         // Renders all of the Category models on the UI
         render() {
             var header = new HeaderView();
-            var footer = new ManagerFooterView();
             this.registerSubview(".nav-header", header);
-            this.registerSubview(".manager-footer", footer);
 
             this.renderTemplate(Template, {callbacks: this.callbacks});
 

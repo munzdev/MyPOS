@@ -1,49 +1,25 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'Webservice',
-         'views/headers/AdminHeaderView',
-         'text!templates/pages/admin/admin.phtml'],
-function( Webservice,
-          AdminHeaderView,
-          Template ) {
+define(['views/helpers/HeaderView',
+        'text!templates/admin/admin.phtml'
+], function(HeaderView,
+            Template) {
     "use strict";
 
-    // Extends Backbone.View
-    var AdminView = Backbone.View.extend( {
+    return class AdminView extends app.PageView {
 
-    	title: 'admin',
-    	el: 'body',
-        events: {
-
-        },
-
-        // The View Constructor
-        initialize: function() {
-            //_.bindAll(this, "finished");
-
+    	initialize() {
             this.render();
-        },
-
-        // Renders all of the Category models on the UI
-        render: function() {
-            var header = new AdminHeaderView();
-
-            header.activeButton = '';
-
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render()});
-
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-
-            $.mobile.changePage( "#" + this.title);
-            return this;
         }
 
-    } );
+        render() {
+            var header = new HeaderView();
+            this.registerSubview(".nav-header", header);
 
-    // Returns the View class
-    return AdminView;
+            this.renderTemplate(Template);
+
+            this.changePage(this);
+
+            return this;
+        }
+    }
 
 } );

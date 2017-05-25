@@ -1,12 +1,10 @@
 define(['collections/custom/manager/CheckCollection',
         'views/helpers/HeaderView',
-        'views/helpers/ManagerFooterView',
         'text!templates/manager/manager-check.phtml',
         'text!templates/manager/manager-check-item.phtml',
         'jquery-dateFormat'
 ], function(CheckCollection,
             HeaderView,
-            ManagerFooterView,
             Template,
             TemplateItem) {
     "use strict";
@@ -180,9 +178,7 @@ define(['collections/custom/manager/CheckCollection',
         render() {
             let t = this.i18n();
             let header = new HeaderView();
-            let footer = new ManagerFooterView();
             this.registerSubview(".nav-header", header);
-            this.registerSubview(".manager-footer", footer);
 
             this.renderTemplate(Template, {verifiedStatus: this.verifiedStatus,
                                            checks: this.checkCollection,

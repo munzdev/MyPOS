@@ -14,12 +14,46 @@
     <% } %>
     <% if(rights & USER_ROLE_DISTRIBUTION_PREVIEW) { %>
         <li><a href="#distribution-summary" class="header-link ui-btn ui-btn-icon-left ui-icon-table">Ausgabe Übersicht</a></li>
-    <% } %>    
-    <% if(rights & USER_ROLE_MANAGER_OVERVIEW) { %>
-        <li><a href="#manager" class="header-link ui-btn ui-btn-icon-left ui-icon-eye">Manager</a></li>
+    <% } %>
+    <% if(rights & USER_ROLE_MANAGER_OVERVIEW ||
+          rights & USER_ROLE_MANAGER_CALLBACK ||
+          rights & USER_ROLE_MANAGER_CHECK_SPECIAL_ORDER ||
+          rights & USER_ROLE_MANAGER_CHECK_NEW_TABLE ||
+          rights & USER_ROLE_MANAGER_GROUPMESSAGE ||
+          rights & USER_ROLE_MANAGER_STATISTIC) { %>
+        <li data-role="collapsible" data-iconpos="left" data-shadow="false" data-corners="false">
+            <h2>Manager</h2>
+            <ul data-role="listview" data-shadow="false" data-inset="false" data-corners="false">
+                <% if(rights & USER_ROLE_MANAGER_OVERVIEW) { %>
+                    <li><a href="#manager" class="header-link ui-btn ui-btn-icon-left ui-icon-dashboard">Dashboard</a></li>
+                <% } %>
+                <% if(rights & USER_ROLE_MANAGER_CALLBACK) { %>
+                    <li><a href="#manager-callback" class="header-link ui-btn ui-btn-icon-left ui-icon-phone">Rückfragen</a></li>
+                <% } %>
+                <% if(rights & USER_ROLE_MANAGER_CHECK_SPECIAL_ORDER || rights & USER_ROLE_MANAGER_CHECK_NEW_TABLE) { %>
+                    <li><a href="#manager-check" class="header-link ui-btn ui-btn-icon-left ui-icon-eye">Prüfungen</a></li>
+                <% } %>
+                <% if(rights & USER_ROLE_MANAGER_GROUPMESSAGE) { %>
+                    <li><a href="#manager-groupmessage" class="header-link ui-btn ui-btn-icon-left ui-icon-comment">Gruppennachrichten</a></li>
+                <% } %>
+                <% if(rights & USER_ROLE_MANAGER_STATISTIC) { %>
+                    <li><a href="#manager-statistic" class="header-link ui-btn ui-btn-icon-left ui-icon-bar-chart-o">Statistik</a></li>
+                <% } %>
+            </ul>
+        </li>
     <% } %>
     <% if(isAdmin) { %>
-        <li><a href="#admin" class="header-link ui-btn ui-btn-icon-left ui-icon-cloud">Admin</a></li>    
+        <li data-role="collapsible" data-iconpos="left" data-shadow="false" data-corners="false">
+            <h2>Admin</h2>
+            <ul data-role="listview" data-shadow="false" data-inset="false" data-corners="false">
+                <li><a href="#admin" class="header-link ui-btn ui-btn-icon-left ui-icon-cloud">Übersicht</a></li>
+                <li><a href="#admin/event" class="header-link ui-btn ui-btn-icon-left ui-icon-calendar">Events</a></li>
+                <li><a href="#admin/user" class="header-link ui-btn ui-btn-icon-left ui-icon-user">Benutzer</a></li>
+                <li><a href="#admin/menu" class="header-link ui-btn ui-btn-icon-left ui-icon-cutlery">Menüs</a></li>
+                <li><a href="#admin/size" class="header-link ui-btn ui-btn-icon-left ui-icon-cutlery">Größen</a></li>
+                <li><a href="#admin/table" class="header-link ui-btn ui-btn-icon-left ui-icon-grid">Tische</a></li>
+            </ul>
+        </li>
     <% } %>
     <li><a id="callRequest" class="ui-btn ui-btn-icon-left ui-icon-phone">Rückruf anfordern</a></li>
     <li><a id="logout" class="ui-btn ui-btn-icon-left ui-icon-power">Logout</a></li>

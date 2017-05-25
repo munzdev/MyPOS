@@ -1,8 +1,6 @@
 define(['views/helpers/HeaderView',
-        'views/helpers/ManagerFooterView',
         'text!templates/manager/manager-groupmessage.phtml'
 ], function(HeaderView,
-            ManagerFooterView,
             Template) {
     "use strict";
 
@@ -66,10 +64,8 @@ define(['views/helpers/HeaderView',
         // Renders all of the Category models on the UI
         render() {
             let t = this.i18n();
-            let header = new HeaderView();
-            let footer = new ManagerFooterView();
+            let header = new HeaderView()
             this.registerSubview(".nav-header", header);
-            this.registerSubview(".manager-footer", footer);
 
             this.renderTemplate(Template, {userRoleCollection: this.userRoleCollection});
 

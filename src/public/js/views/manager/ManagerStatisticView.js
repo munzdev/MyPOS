@@ -1,8 +1,6 @@
 define(['views/helpers/HeaderView',
-    'views/helpers/ManagerFooterView',
         'text!templates/manager/manager-statistic.phtml'
 ], function(HeaderView,
-            ManagerFooterView,
             Template ) {
     "use strict";
 
@@ -15,9 +13,7 @@ define(['views/helpers/HeaderView',
         // Renders all of the Category models on the UI
         render() {
             var header = new HeaderView();
-            var footer = new ManagerFooterView();
             this.registerSubview(".nav-header", header);
-            this.registerSubview(".manager-footer", footer);
 
             this.renderTemplate(Template);
 
