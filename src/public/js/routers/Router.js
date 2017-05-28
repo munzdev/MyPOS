@@ -27,10 +27,11 @@ define(["views/dialoges/LoginView",
         "views/admin/AdminView",
         "views/admin/AdminUserView",
         "views/admin/AdminUserModifyView",
-        /*"views/admin/AdminEventView",
+        "views/admin/AdminEventView",
         "views/admin/AdminEventCopyView",
-        "views/admin/AdminEventModifyDetailView",
-        "views/admin/AdminEventModifyMenuView",
+        "views/admin/AdminEventModifyView",
+        "views/admin/event/AdminEventModifyOverviewView",
+        /*"views/admin/AdminEventModifyMenuView",
         "views/admin/AdminEventModifyMenuModifyView",
         "views/admin/AdminEventModifyDistributionView",
         "views/admin/AdminEventModifyDistributionModifyView",
@@ -74,7 +75,8 @@ define(["views/dialoges/LoginView",
             AdminUserModifyView,
             AdminEventView,
             AdminEventCopyView,
-            AdminEventModifyDetailView,
+            AdminEventModifyView,
+            AdminEventModifyOverviewView,
             AdminEventModifyMenuView,
             AdminEventModifyMenuModifyView,
             AdminEventModifyDistributionView,
@@ -165,20 +167,21 @@ define(["views/dialoges/LoginView",
                 "admin": "admin",
                 "admin/event": "admin_event",
                 "admin/event/add": "admin_event_add",
-                "admin/event/copy/:id": "admin_event_copy",
-                "admin/event/modify/:id/detail": "admin_event_modify_detail",
-                "admin/event/modify/:id/menu": "admin_event_modify_menu",
-                "admin/event/modify/:id/menu/add/:groupid": "admin_event_modify_menu_add",
-                "admin/event/modify/:id/menu/:menuid": "admin_event_modify_menu_modify",
-                "admin/event/modify/:id/distribution": "admin_event_modify_distribution",
-                "admin/event/modify/:id/distribution/add": "admin_event_modify_distribution_add",
-                "admin/event/modify/:id/distribution/modify/:distributions_placeid": "admin_event_modify_distribution_modify",
-                "admin/event/modify/:id/printer": "admin_event_modify_printer",
-                "admin/event/modify/:id/printer/add": "admin_event_modify_printer_add",
-                "admin/event/modify/:id/printer/modify/:events_printerid": "admin_event_modify_printer_modify",
-                "admin/event/modify/:id/user": "admin_event_modify_user",
-                "admin/event/modify/:id/user/add": "admin_event_modify_user_add",
-                "admin/event/modify/:id/user/modify/:events_userid": "admin_event_modify_user_modify",
+                "admin/event/copy/:eventid": "admin_event_copy",
+                "admin/event/:eventid": "admin_event_modify",
+                "admin/event/modify/:eventid": "admin_event_modify_overview",
+                "admin/event/modify/:eventid/menu": "admin_event_modify_menu",
+                "admin/event/modify/:eventid/menu/add/:groupid": "admin_event_modify_menu_add",
+                "admin/event/modify/:eventid/menu/:menuid": "admin_event_modify_menu_modify",
+                "admin/event/modify/:eventid/distribution": "admin_event_modify_distribution",
+                "admin/event/modify/:eventid/distribution/add": "admin_event_modify_distribution_add",
+                "admin/event/modify/:eventid/distribution/modify/:distributions_placeid": "admin_event_modify_distribution_modify",
+                "admin/event/modify/:eventid/printer": "admin_event_modify_printer",
+                "admin/event/modify/:eventid/printer/add": "admin_event_modify_printer_add",
+                "admin/event/modify/:eventid/printer/modify/:events_printerid": "admin_event_modify_printer_modify",
+                "admin/event/modify/:eventid/user": "admin_event_modify_user",
+                "admin/event/modify/:eventid/user/add": "admin_event_modify_user_add",
+                "admin/event/modify/:eventid/user/modify/:events_userid": "admin_event_modify_user_modify",
                 "admin/user": "admin_user",
                 "admin/user/add": "admin_user_add",
                 "admin/user/:userid": "admin_user_modify",
@@ -322,67 +325,71 @@ define(["views/dialoges/LoginView",
         }
 
         admin_event_add() {
-            this.show(new AdminEventModifyDetailView({id: 'new'}));
+            this.show(new AdminEventModifyView({eventid: 'new'}));
         }
 
-        admin_event_copy(id) {
-            this.show(new AdminEventCopyView({id: id}));
+        admin_event_copy(eventid) {
+            this.show(new AdminEventCopyView({eventid: eventid}));
         }
 
-        admin_event_modify_detail(id) {
-            this.show(new AdminEventModifyDetailView({id: id}));
+        admin_event_modify(eventid) {
+            this.show(new AdminEventModifyView({eventid: eventid}));
+        }
+        
+        admin_event_modify_overview(eventid) {
+            this.show(new AdminEventModifyOverviewView({eventid: eventid}));
         }
 
-        admin_event_modify_menu(id) {
-            this.show(new AdminEventModifyMenuView({id: id}));
+        admin_event_modify_menu(eventid) {
+            this.show(new AdminEventModifyMenuView({eventid: eventid}));
         }
 
-        admin_event_modify_menu_add(id, groupid) {
-            this.show(new AdminEventModifyMenuModifyView({id: id,
+        admin_event_modify_menu_add(eventid, groupid) {
+            this.show(new AdminEventModifyMenuModifyView({eventid: eventid,
                 groupid: groupid}));
         }
 
-        admin_event_modify_menu_modify(id, menuid) {
-            this.show(new AdminEventModifyMenuModifyView({id: id,
+        admin_event_modify_menu_modify(eventid, menuid) {
+            this.show(new AdminEventModifyMenuModifyView({eventid: eventid,
                 menuid: menuid}));
         }
 
-        admin_event_modify_distribution(id) {
-            this.show(new AdminEventModifyDistributionView({id: id}));
+        admin_event_modify_distribution(eventid) {
+            this.show(new AdminEventModifyDistributionView({eventid: eventid}));
         }
 
-        admin_event_modify_distribution_add(id) {
-            this.show(new AdminEventModifyDistributionModifyView({id: id}));
+        admin_event_modify_distribution_add(eventid) {
+            this.show(new AdminEventModifyDistributionModifyView({eventid: eventid}));
         }
 
-        admin_event_modify_distribution_modify(id, distributions_placeid) {
-            this.show(new AdminEventModifyDistributionModifyView({id: id,
+        admin_event_modify_distribution_modify(eventid, distributions_placeid) {
+            this.show(new AdminEventModifyDistributionModifyView({eventid: eventid,
                 distributions_placeid: distributions_placeid}));
         }
 
-        admin_event_modify_printer(id) {
-            this.show(new AdminEventModifyPrinterView({id: id}));
+        admin_event_modify_printer(eventid) {
+            this.show(new AdminEventModifyPrinterView({eventid: eventid}));
         }
 
-        admin_event_modify_printer_add(id) {
-            this.show(new AdminEventModifyPrinterModifyView({id: id}));
+        admin_event_modify_printer_add(eventid) {
+            this.show(new AdminEventModifyPrinterModifyView({eventid: eventid}));
         }
 
-        admin_event_modify_printer_modify(id, events_printerid) {
-            this.show(new AdminEventModifyPrinterModifyView({id: id,
+        admin_event_modify_printer_modify(eventid, events_printerid) {
+            this.show(new AdminEventModifyPrinterModifyView({eventid: eventid,
                 events_printerid: events_printerid}));
         }
 
-        admin_event_modify_user(id) {
-            this.show(new AdminEventModifyUserView({id: id}));
+        admin_event_modify_user(eventid) {
+            this.show(new AdminEventModifyUserView({eventid: eventid}));
         }
 
-        admin_event_modify_user_add(id) {
-            this.show(new AdminEventModifyUserModifyView({id: id}));
+        admin_event_modify_user_add(eventid) {
+            this.show(new AdminEventModifyUserModifyView({eventid: eventid}));
         }
 
-        admin_event_modify_user_modify(id, events_userid) {
-            this.show(new AdminEventModifyUserModifyView({id: id,
+        admin_event_modify_user_modify(eventid, events_userid) {
+            this.show(new AdminEventModifyUserModifyView({eventid: eventid,
                 events_userid: events_userid}));
         }
 

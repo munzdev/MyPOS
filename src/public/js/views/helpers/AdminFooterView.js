@@ -1,44 +1,35 @@
-// Login View
-// =============
-
-// Includes file dependencies
 define(['text!templates/helpers/admin-footer.phtml'],
  function(Template ) {
     "use strict";
 
-    // Extends Backbone.View
-    var AdminFooterView = Backbone.View.extend( {
+    return class AdminFooterView extends app.FooterView {
 
-    	defaults: {
+    	defaults() {
             activeButton: ''
-    	},
+    	}
 
-        initialize: function(options) {
-            this.id = options.id;
-        },
+        initialize(eventid) {
+            this.eventid = eventid;
+        }
 
-        events: {
-            'click .admin-footer-link': 'clicked'
-        },
+        events() {
+            return {'click .link': 'clicked'};
+        }
 
-        clicked: function(e) {
+        clicked(e) {
             e.preventDefault();
 
             var href = $(e.currentTarget).attr('href');
 
-            MyPOS.ChangePage(href);
-        },
-
-        // Renders all of the Category models on the UI
-        render: function() {
-            var template =  _.template(Template)({activeButton: this.activeButton,
-                                                  link: "#admin/event/modify/" + this.id});
-
-            return template;
+            this.changeHash(href);
         }
-    } );
 
-    // Returns the View class
-    return AdminFooterView;
+        render() {
+            this.renderTemplate(Template, {activeButton: this.activeButton,
+                                           link: "#admin/event/modify/" + this.eventid});
+
+            return this;
+        }
+    }
 
 } );

@@ -1,7 +1,7 @@
 <div data-role="content">
-    <div class="nav-header"><%= header %></div>
-    <a class="admin-event-add-btn ui-btn ui-icon-plus ui-mini ui-btn-icon-left">Hinzufügen</a>
-    <table data-role="table" id="admin-event-table" class="ui-responsive table-stroke table-stripe">
+    <div class="nav-header"></div>
+    <a class="add-btn ui-btn ui-icon-plus ui-mini ui-btn-icon-left">Hinzufügen</a>
+    <table data-role="table" id="table" class="ui-responsive table-stroke table-stripe">
         <thead>
             <tr>
                 <th>Name</th>
@@ -13,27 +13,27 @@
         <tbody>
             <% events.each(function(event){ %>
                 <tr>
-                    <th><%- event.get('name') %></th>
-                    <td><%- $.format.date(MyPOS.DateFromMysql(event.get('date')), DATE_JS_DATEFORMAT) %></td>
-                    <td><% if(event.get('active') == 1) { print('Ja'); } else { print('Nein'); } %></td>
+                    <th><%- event.get('Name') %></th>
+                    <td><%- app.i18n.toDate(event.get('Date')) %></td>
+                    <td><% if(event.get('Active') == 1) { print('Ja'); } else { print('Nein'); } %></td>
                     <td>
-                        <a data-event-id="<%- event.get('eventid') %>" class="admin-event-copy-btn ui-btn ui-icon-files-o ui-mini ui-btn-icon-left">Kopieren</a>
-                        <a data-event-id="<%- event.get('eventid') %>" class="admin-event-edit-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
-                        <a data-event-id="<%- event.get('eventid') %>" class="admin-event-delete-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left">Löschen</a>
-                        <a data-event-id="<%- event.get('eventid') %>" class="admin-event-active-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left">Aktiv setzen</a>
+                        <a data-event-cid="<%- event.cid %>" class="copy-btn ui-btn ui-icon-files-o ui-mini ui-btn-icon-left">Kopieren</a>
+                        <a data-event-cid="<%- event.cid %>" class="edit-settings-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Einstellungen Bearbeiten</a>
+                        <a data-event-cid="<%- event.cid %>" class="edit-details-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Details Bearbeiten</a>
+                        <a data-event-cid="<%- event.cid %>" class="active-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left">Aktiv setzen</a>
                     </td>
                 </tr>
             <% }); %>
         </tbody>
     </table>
 </div>
-<div data-role="popup" id="admin-event-delete-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+<div data-role="popup" id="activate-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
     <div data-role="header" data-theme="a">
-        <h1>Event löschen?</h1>
+        <h1>Event aktivieren?</h1>
     </div>
     <div role="main" class="ui-content">
-        <h3 class="ui-title">Sind Sie sicher das Sie das Event löschen wollen? Es werden alle Menüs, Bestellungen, Rechnungen, Statistiken, etc. aus der Datenbank entfernt, die zu diesem Event gehören</h3>
+        <h3 class="ui-title">Sind Sie sicher, dass Sie dieses Event aktivieren wollen?</h3>
         <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Abbrechen</a>
-        <a id='admin-event-delete-dialog-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
+        <a id='activate-dialog-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
     </div>
 </div>

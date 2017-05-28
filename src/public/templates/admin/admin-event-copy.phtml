@@ -1,34 +1,34 @@
 <div data-role="content">
-    <div class="nav-header"><%= header %></div>
+    <div class="nav-header"></div>
     <div data-role="header">
         <h2>Event Kopieren</h2>
     </div>
     <fieldset data-role="controlgroup">
         <legend>Name:</legend>
-        <input type="text" id="admin-event-copy-name" value="<%- name %>">
+        <input type="text" id="name" value="<%- event.get('Name') %>">
         <label for="admin-event-modify-name"></label>
     </fieldset>
 
     <fieldset data-role="controlgroup">
         <legend>Datum:</legend>
-        <input type="text" id="admin-event-copy-date" data-role="datebox" data-options='{"mode":"calbox", "overrideDateFormat": "%d.%m.%Y"}'  value="<% if(date != '') { print($.format.date(MyPOS.DateFromMysql(date), DATE_JS_DATEFORMAT)); } %>">
+        <input type="text" id="date" name="date" data-role="datebox" data-options='{"mode":"calbox", "overrideDateFormat": "%d.%m.%Y"}'  value="<% if(!event.isNew()) { print(app.i18n.toDate(event.get('Date'))); } %>">
     </fieldset>
 
      <fieldset data-role="controlgroup">
         <legend>Eigenschaften kopieren:</legend>
-        <input type="checkbox" id="admin-event-copy-date">
-        <label for="admin-event-copy-date">Menüs</label>
-        <input type="checkbox" id="admin-event-copy-table">
-        <label for="admin-event-copy-table">Tische</label>
-        <input type="checkbox" id="admin-event-copy-distribution">
-        <label for="admin-event-copy-distribution">Ausgabestellen</label>
-        <input type="checkbox" id="admin-event-copy-printer">
-        <label for="admin-event-copy-printer">Drucker</label>
-        <input type="checkbox" id="admin-event-copy-user">
-        <label for="admin-event-copy-user">Berechtigungen</label>
+        <input type="checkbox" id="date">
+        <label for="date">Menüs</label>
+        <input type="checkbox" id="table">
+        <label for="table">Tische</label>
+        <input type="checkbox" id="distribution">
+        <label for="distribution">Ausgabestellen</label>
+        <input type="checkbox" id="printer">
+        <label for="printer">Drucker</label>
+        <input type="checkbox" id="user">
+        <label for="user">Berechtigungen</label>
     </fieldset>
 
     <div class="ui-field-contain">
-        <a id="admin-event-copy-finished-btn" class="ui-btn ui-btn-inline">Kopieren</a>
+        <a id="finished-btn" class="ui-btn ui-btn-inline">Kopieren</a>
     </div>
 </div>

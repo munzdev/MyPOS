@@ -1,0 +1,21 @@
+<div data-role="content">
+    <div class="nav-header"></div>
+    <div data-role="header">
+        <h2><% if(event.isNew()) { print('Neues Event'); } else { print('Event Bearbeiten'); } %></h2>
+    </div>
+    <form id="form">
+        <fieldset data-role="controlgroup">
+            <legend>Name:</legend>
+            <input type="text" id="name" name="name" value="<%- event.get('Name') %>">
+            <label for="admin-event-modify-name"></label>
+        </fieldset>
+
+        <fieldset data-role="controlgroup">
+            <legend>Datum:</legend>
+            <input type="text" id="date" name="date" data-role="datebox" data-options='{"mode":"calbox", "overrideDateFormat": "%d.%m.%Y"}'  value="<% if(!event.isNew()) { print(app.i18n.toDate(event.get('Date'))); } %>">
+        </fieldset>
+        <div class="ui-field-contain">
+            <a id="save-btn" class="ui-btn ui-btn-inline">Speichern</a>
+        </div>
+    </form>
+</div>
