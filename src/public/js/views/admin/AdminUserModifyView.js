@@ -7,159 +7,67 @@ define(['views/helpers/HeaderView',
     return class AdminUserModifyView extends app.PageView {
 
     	events() {
-            return {'click #save-btn': 'click_save_btn'}
+            return {'click #save-btn': 'click_save_btn'};
         }
 
         initialize(options) {
-            this.usernameValue = "";
-            this.firstnameValue = "";
-            this.lastnameValue = "";
-            this.phonenumberValue = "";
-            this.isAdminValue = 0;
-            this.activeValue = 0;
+            this.user = new app.models.User.User();
 
             if(options.userid === 'new') {
-                this.mode = 'new';
-                this.userid = 0;
                 this.render();
             } else {
-                this.mode = 'edit';
-                this.userid = options.userid;
-
-                let userCollection = new app.collections.User.UserCollection();
-                this.user = new app.models.User.User();
-                this.user.fetch({url: userCollection.url() + '/' + this.userid})
-                        .done((user) => {
-                           this.usernameValue = this.user.get('Username');
-                           this.firstnameValue = this.user.get('Firstname');
-                           this.lastnameValue = this.user.get('Lastname');
-                           this.phonenumberValue = this.user.get('Phonenumber');
-                           this.isAdminValue = this.user.get('IsAdmin');
-                           this.activeValue = this.user.get('Active');
+                this.user.set('Userid', options.userid);
+                this.user.fetch()
+                        .done(() => {
                            this.render();
                         });
             }
         }
 
         click_save_btn() {
-            var username = $.trim($('#username').val());
-            var password = $.trim($('#password').val());
-            var password2 = $.trim($('#password2').val());
-            var firstname = $.trim($('#firstname').val());
-            var lastname = $.trim($('#lastname').val());
-            var phonenumber = $.trim($('#phonenumber').val());
-            var isAdmin = $('#isAdmin').prop('checked');
-            var active = $('#active').prop('checked');
-
-            if(username == '')
-            {
-                MyPOS.DisplayError('Bitte einen Benutzername eingeben!');
+            if (!this.$('#form').valid()) {
                 return;
             }
-
-            if(this.mode == 'new')
-            {
-                if(password == '')
-                {
-                    MyPOS.DisplayError('Bitte ein Passwort eingeben!');
-                    return;
-                }
-
-                if(password2 == '')
-                {
-                    MyPOS.DisplayError('Bitte das Passwort wiederhollen!');
-                    return;
-                }
-            }
-            else
-            {
-                if(password != '' && password2 == '')
-                {
-                    MyPOS.DisplayError('Bitte das Passwort wiederhollen!');
-                    return;
-                }
-            }
-
-
-
-            if(password != password2)
-            {
-                MyPOS.DisplayError('Die Passwörter stimmen nicht überein!');
-                return;
-            }
-
-            if(firstname == '')
-            {
-                MyPOS.DisplayError('Bitte einen Vornamen eingeben!');
-                return;
-            }
-
-            if(lastname == '')
-            {
-                MyPOS.DisplayError('Bitte einen Nachnamen eingeben!');
-                return;
-            }
-
-            if(phonenumber == '')
-            {
-                MyPOS.DisplayError('Bitte eine Telefonnummer eingeben!');
-                return;
-            }
-
-            if(this.mode == 'new')
-            {
-                var webservice = new Webservice();
-                webservice.action = "Admin/AddUser";
-                webservice.formData = {username: username,
-                                       password: password,
-                                       firstname: firstname,
-                                       lastname: lastname,
-                                       phonenumber: phonenumber,
-                                       isAdmin: isAdmin,
-                                       active: active};
-                webservice.callback = {
-                    success: function()
-                    {
-                        MyPOS.ChangePage('#admin/user');
-                    }
-                };
-                webservice.call();
-            }
-            else
-            {
-                var webservice = new Webservice();
-                webservice.action = "Admin/SetUser";
-                webservice.formData = {userid: this.userid,
-                                       username: username,
-                                       password: password,
-                                       firstname: firstname,
-                                       lastname: lastname,
-                                       phonenumber: phonenumber,
-                                       isAdmin: isAdmin,
-                                       active: active};
-                webservice.callback = {
-                    success: function()
-                    {
-                        MyPOS.ChangePage('#admin/user');
-                    }
-                };
-                webservice.call();
-            }
-
-
+            
+            this.user.set('Username', $.trim(this.$('#username').val()));
+            this.user.set('Password', $.trim(this.$('#password').val()));
+            this.user.set('Firstname', $.trim(this.$('#firstname').val()));
+            this.user.set('Lastname', $.trim(this.$('#lastname').val()));
+            this.user.set('Phonenumber', $.trim(this.$('#phonenumber').val()));
+            this.user.set('IsAdmin', this.$('#isAdmin').prop('checked'));
+            this.user.set('Active', this.$('#active').prop('checked'));
+            this.user.save()
+                    .done(() => {
+                        this.changePage('#admin/user');
+                    });
         }
 
         render() {
             var header = new HeaderView();
             this.registerSubview(".nav-header", header);
 
-            this.renderTemplate(Template, {mode: this.mode,
-                                           username: this.usernameValue,
-                                           firstname: this.firstnameValue,
-                                           lastname: this.lastnameValue,
-                                           phonenumber: this.phonenumberValue,
-                                           isAdmin: this.isAdminValue,
-                                           active: this.activeValue});
+            this.renderTemplate(Template, {user: this.user});
+            
+            this.$('#form').validate({
+                rules: {
+                    username: {required: true},
+                    firstname: {required: true},
+                    lastname: {required: true},
+                    phonenumber: {required: true},
+                    password: {required: this.user.isNew()},
+                    password2: {required: this.user.isNew(),
+                                equalTo: '#password'}
+                },
+                messages: {
+                    username: "Bitte einen Benutzername eingeben!",
+                    firstname: 'Bitte einen Vornamen eingeben!',
+                    lastname: "Bitte einen Nachnamen eingeben!",
+                    phonenumber: "Bitte eine Telefonnummer eingeben!",
+                    password: "Bitte ein Passwort eingeben!",
+                    password2: {required: 'Bitte das Passwort wiederhollen!',
+                                equalTo: 'Die Passwörter stimmen nicht überein!'}
+                }
+            });
 
             this.changePage(this);
 

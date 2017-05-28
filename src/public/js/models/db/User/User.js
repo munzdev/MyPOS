@@ -5,6 +5,7 @@ define(["models/BaseModel"
     return class User extends BaseModel {
 
         idAttribute() { return 'Userid'; }
+        urlRoot() {return app.API + "DB/User";}
 
         defaults() {
             return {Userid: null,

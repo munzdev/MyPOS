@@ -3,7 +3,9 @@
 namespace API\Controllers\DB\User;
 
 use API\Lib\AdminController;
+use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Models\IConnectionInterface;
+use API\Lib\Interfaces\Models\User\IUser;
 use API\Lib\Interfaces\Models\User\IUserQuery;
 use Slim\App;
 
@@ -29,5 +31,15 @@ class User extends AdminController
         }
 
         $this->withJson($usersArray);
+    }
+    
+    protected function post() : void {
+        $jsonToModel = $this->container->get(IJsonToModel::class);
+        $user = $this->container->get(IUser::class);
+        
+        $jsonToModel->convert($this->json, $user);
+        $user->save();
+        
+        $this->withJson($user->toArray());
     }
 }
