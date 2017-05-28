@@ -5,6 +5,8 @@ namespace API\Models\Event;
 use API\Lib\Interfaces\Models\Event\IEvent;
 use API\Models\Model;
 use API\Models\ORM\Event\Event as EventORM;
+use DateTime;
+use Slim\Container;
 
 /**
  * Skeleton subclass for representing a row from the 'event' table.
@@ -24,7 +26,7 @@ class Event extends Model implements IEvent
         return $this->model->getActive();
     }
 
-    public function getDate(): \DateTime {
+    public function getDate(): DateTime {
         return $this->model->getDate();
     }
 
