@@ -4,14 +4,14 @@
 // Includes file dependencies
 define([ 'Webservice',
          'views/headers/AdminHeaderView',
-         'text!templates/pages/admin/admin-table-modify.phtml'],
+         'text!templates/pages/admin/event/table-modify.phtml'],
 function( Webservice,
           AdminHeaderView,
           Template ) {
     "use strict";
 
     // Extends Backbone.View
-    var AdminTableModifyView = Backbone.View.extend( {
+    var TableModifyView = Backbone.View.extend( {
 
     	title: 'admin-table-modify',
     	el: 'body',

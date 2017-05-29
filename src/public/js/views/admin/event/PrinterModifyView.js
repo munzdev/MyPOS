@@ -5,7 +5,7 @@
 define([ 'Webservice',
          'views/headers/AdminHeaderView',
          'views/footers/AdminFooterView',
-         'text!templates/pages/admin/admin-event-modify-printer-modify.phtml'],
+         'text!templates/pages/admin/event/printer-modify.phtml'],
 function( Webservice,
           AdminHeaderView,
           AdminFooterView,
@@ -13,7 +13,7 @@ function( Webservice,
     "use strict";
 
     // Extends Backbone.View
-    var AdminEventModifyPrinterModifyView = Backbone.View.extend( {
+    var PrinterModifyView = Backbone.View.extend( {
 
     	title: 'admin-event-modify-printer-modify',
     	el: 'body',

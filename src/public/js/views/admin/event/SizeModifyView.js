@@ -4,50 +4,48 @@
 // Includes file dependencies
 define([ 'Webservice',
          'views/headers/AdminHeaderView',
-         'text!templates/pages/admin/admin-menu-modify-type.phtml'],
+         'text!templates/pages/admin/event/size-modify.phtml'],
 function( Webservice,
           AdminHeaderView,
           Template ) {
     "use strict";
 
     // Extends Backbone.View
-    var AdminMenuModifyTypeView = Backbone.View.extend( {
+    var SizeModifyView = Backbone.View.extend( {
 
-    	title: 'admin-menu-modify-type',
+    	title: 'admin-size-modify',
     	el: 'body',
         events: {
-            'click #admin-menu-modify-type-save-btn': 'click_save_btn'
+            'click #admin-size-modify-save-btn': 'click_save_btn'
         },
 
         click_save_btn: function()
         {
-            var name = $.trim($('#admin-menu-modify-type-name').val());
-            var tax = $.trim($('#admin-menu-modify-type-tax').val());
-            var allowMixing = $('#admin-menu-modify-type-allowMixing').prop('checked');
+            var name = $.trim($('#admin-size-modify-name').val());
+            var factor = $.trim($('#admin-size-modify-factor').val());
 
             if(name == '')
             {
                 MyPOS.DisplayError('Bitte einen Namen eingeben!');
                 return;
             }
-
-            if(tax == '' || tax < 0 || tax > 100)
+            
+            if(factor == '')
             {
-                MyPOS.DisplayError('Bitte einen gültigen Steuersatz eingeben! (0 - 100%)');
+                MyPOS.DisplayError('Bitte einen Faktor eingeben!');
                 return;
             }
 
             if(this.mode == 'new')
             {
                 var webservice = new Webservice();
-                webservice.action = "Admin/AddMenuType";
+                webservice.action = "Admin/AddSize";
                 webservice.formData = {name: name,
-                                       tax: tax,
-                                       allowMixing: allowMixing};
+                                       factor: factor};
                 webservice.callback = {
                     success: function()
                     {
-                        MyPOS.ChangePage('#admin/menu');
+                        MyPOS.ChangePage('#admin/size');
                     }
                 };
                 webservice.call();
@@ -55,15 +53,14 @@ function( Webservice,
             else
             {
                 var webservice = new Webservice();
-                webservice.action = "Admin/SetMenuType";
-                webservice.formData = {id: this.typeid,
+                webservice.action = "Admin/SetSize";
+                webservice.formData = {menu_sizeid: this.sizeid,
                                        name: name,
-                                       tax: tax,
-                                       allowMixing: allowMixing};
+                                       factor: factor};
                 webservice.callback = {
                     success: function()
                     {
-                        MyPOS.ChangePage('#admin/menu');
+                        MyPOS.ChangePage('#admin/size');
                     }
                 };
                 webservice.call();
@@ -80,29 +77,27 @@ function( Webservice,
             var self = this;
 
             this.nameValue = "";
-            this.taxValue = "";
-            this.allowMixingValue = 0;
+            this.factorValue = "";
 
             if(options.id === 'new')
             {
                 this.mode = 'new';
-                this.typeid = 0;
+                this.sizeid = 0;
                 this.render();
             }
             else
             {
                 this.mode = 'edit';
-                this.typeid = options.id;
+                this.sizeid = options.id;
 
                 var webservice = new Webservice();
-                webservice.action = "Admin/GetMenuType";
-                webservice.formData = {id: this.typeid};
+                webservice.action = "Admin/GetSize";
+                webservice.formData = {menu_sizeid: this.sizeid};
                 webservice.callback = {
                     success: function(data)
                     {
                         self.nameValue = data.name;
-                        self.taxValue = data.tax;
-                        self.allowMixingValue = data.allowMixing;
+                        self.factorValue = data.factor;
                         self.render();
                     }
                 };
@@ -114,13 +109,13 @@ function( Webservice,
         render: function() {
             var header = new AdminHeaderView();
 
-            header.activeButton = 'menu';
+            header.activeButton = 'size';
 
             MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
                                                                   mode: this.mode,
                                                                   name: this.nameValue,
-                                                                  tax: this.taxValue,
-                                                                  allowMixing: this.allowMixingValue});
+                                                                  factor: this.factorValue
+                                                                  });
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");
@@ -132,6 +127,6 @@ function( Webservice,
     } );
 
     // Returns the View class
-    return AdminMenuModifyTypeView;
+    return AdminSizeModifyView;
 
 } );

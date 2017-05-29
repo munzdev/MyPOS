@@ -3,6 +3,8 @@
 // Includes File Dependencies
 define(["views/AbstractView",
         "views/PageView",
+        "views/ManagerView",
+        "views/AdminView",
         "views/HeaderView",
         "views/FooterView",
         "views/DialogView",
@@ -89,6 +91,8 @@ define(["views/AbstractView",
         "models/db/User/Message/UserMessage"
 ], function(AbstractView,
             PageView,
+            ManagerView,
+            AdminView,
             HeaderView,
             FooterView,
             DialogView,
@@ -177,6 +181,8 @@ define(["views/AbstractView",
     // Define views
     app.AbstractView = AbstractView;
     app.PageView = PageView;
+    app.ManagerView = ManagerView;
+    app.AdminView = AdminView;
     app.HeaderView = HeaderView;
     app.FooterView = FooterView;
     app.DialogView = DialogView;

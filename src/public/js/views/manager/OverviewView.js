@@ -1,12 +1,13 @@
 define(['views/helpers/HeaderView',
-        'text!templates/manager/manager-statistic.phtml'
+        'text!templates/manager/overview.phtml'
 ], function(HeaderView,
-            Template ) {
+            Template) {
     "use strict";
 
-    return class ManagerStatisticView extends app.PageView {
+    return class OverviewView extends app.ManagerView {
 
-    	initialize() {
+        // The View Constructor
+        initialize() {
             this.render();
         }
 
@@ -21,7 +22,5 @@ define(['views/helpers/HeaderView',
 
             return this;
         }
-
     }
-
-} );
+});

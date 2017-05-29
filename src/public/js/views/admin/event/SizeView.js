@@ -4,62 +4,63 @@
 // Includes file dependencies
 define([ 'Webservice',
          'views/headers/AdminHeaderView',
-         'collections/admin/TableCollection',
-         'text!templates/pages/admin/admin-table.phtml'],
+         'collections/admin/SizeCollection',
+         'text!templates/pages/admin/event/size.phtml'],
 function( Webservice,
           AdminHeaderView,
-          TableCollection,
+          SizeCollection,
           Template ) {
     "use strict";
 
     // Extends Backbone.View
-    var AdminTableView = Backbone.View.extend( {
+    var SizeView = Backbone.View.extend( {
 
-    	title: 'admin-table',
+    	title: 'admin-size',
     	el: 'body',
         events: {
-            'click #admin-table-add-btn': 'click_add_btn',
-            'click .admin-table-edit-btn': 'click_edit_btn',
-            'click .admin-table-delete-btn': 'click_delete_btn',
-            'click #admin-table-delete-dialog-finished': 'click_delete_finished_btn'
+            'click #admin-size-add-btn': 'click_add_btn',
+            'click .admin-size-edit-btn': 'click_edit_btn',
+            'click .admin-size-delete-btn': 'click_delete_btn',
+            'click #admin-size-delete-dialog-finished': 'click_delete_finished_btn'
         },
 
         // The View Constructor
         initialize: function() {
             _.bindAll(this, "render");
 
-            this.tableList = new TableCollection();
-            this.tableList.fetch({success: this.render});
+            this.sizeList = new SizeCollection();
+            this.sizeList.url = app.API + "Admin/GetMenuSizes/";
+            this.sizeList.fetch({success: this.render});
         },
 
         click_add_btn: function()
         {
-            MyPOS.ChangePage('admin/table/add');
+            MyPOS.ChangePage('admin/size/add');
         },
 
         click_edit_btn: function(event)
         {
-            var id = $(event.currentTarget).attr('data-table-id');
+            var id = $(event.currentTarget).attr('data-size-id');
 
-            MyPOS.ChangePage('admin/table/modify/'+id);
+            MyPOS.ChangePage('admin/size/modify/'+id);
         },
 
         click_delete_btn: function(event)
         {
-            var id = $(event.currentTarget).attr('data-table-id');
+            var id = $(event.currentTarget).attr('data-size-id');
 
             this.deleteId = id;
 
-            $('#admin-table-delete-dialog').popup('open');
+            $('#admin-size-delete-dialog').popup('open');
         },
 
         click_delete_finished_btn: function()
         {
-            $('#admin-table-delete-dialog').popup('close');
+            $('#admin-size-delete-dialog').popup('close');
 
             var webservice = new Webservice();
-            webservice.action = "Admin/TableDelete";
-            webservice.formData = {tableid: this.deleteId};
+            webservice.action = "Admin/DeleteSize";
+            webservice.formData = {menu_sizeid: this.deleteId};
             webservice.callback = {
                 success: function()
                 {
@@ -73,10 +74,10 @@ function( Webservice,
         render: function() {
             var header = new AdminHeaderView();
 
-            header.activeButton = 'table';
+            header.activeButton = 'size';
 
             MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  tables: this.tableList});
+                                                                  sizes: this.sizeList});
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");
@@ -88,6 +89,6 @@ function( Webservice,
     } );
 
     // Returns the View class
-    return AdminTableView;
+    return AdminSizeView;
 
 } );

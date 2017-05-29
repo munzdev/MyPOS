@@ -7,7 +7,7 @@ define([ 'Webservice',
          'views/footers/AdminFooterView',
          'collections/admin/ExtraCollection',
          'collections/admin/SizeCollection',
-         'text!templates/pages/admin/admin-event-modify-menu-modify.phtml'],
+         'text!templates/pages/admin/event/menu-modify.phtml'],
 function( Webservice,
           AdminHeaderView,
           AdminFooterView,
@@ -17,7 +17,7 @@ function( Webservice,
     "use strict";
 
     // Extends Backbone.View
-    var AdminEventModifyMenuModifyView = Backbone.View.extend( {
+    var MenuModifyView = Backbone.View.extend( {
 
     	title: 'admin-event-modify-menu-modify',
     	el: 'body',

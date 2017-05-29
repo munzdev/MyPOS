@@ -1,10 +1,10 @@
 define(['views/helpers/HeaderView',
-        'text!templates/admin/admin-event-modify.phtml'
+        'text!templates/admin/event-modify.phtml'
 ], function(HeaderView,
             Template ) {
     "use strict";
 
-    return class AdminEventModifyView extends app.PageView {
+    return class EventModifyView extends app.AdminView {
 
         events() {
             return {'click #save-btn': 'click_save_btn'}
@@ -33,7 +33,7 @@ define(['views/helpers/HeaderView',
             this.event.set('Date', $.trim(this.$('#date').val()));
             this.event.save()
                     .done(() => {
-                        this.changePage('#admin/event');
+                        this.changeHash('admin/event');
                     });
         }       
 

@@ -1,7 +1,7 @@
 define(['collections/custom/manager/CheckCollection',
         'views/helpers/HeaderView',
-        'text!templates/manager/manager-check.phtml',
-        'text!templates/manager/manager-check-item.phtml',
+        'text!templates/manager/check.phtml',
+        'text!templates/manager/check-item.phtml',
         'jquery-dateFormat'
 ], function(CheckCollection,
             HeaderView,
@@ -10,7 +10,7 @@ define(['collections/custom/manager/CheckCollection',
     "use strict";
 
     // TODO: Also check new tables orders here. New tables need to be associated to a distribution place for products
-    return class ManagerCheckView extends app.PageView {
+    return class CheckView extends app.ManagerView {
 
     	events() {
             return {'click #verified-status .verify-status-btn': 'click_btn_status',
@@ -147,14 +147,13 @@ define(['collections/custom/manager/CheckCollection',
         }
 
         refresh() {
-            if(!this.rendered) {
+            if (!this.rendered) {
                 this.render();
                 this.rendered = true;
             }
 
             this.$('#check-list').empty();
             $.mobile.loading("show");
-
 
             this.checkCollection.fetch({data: {verified: this.verifiedStatus}})
                 .done(() => {

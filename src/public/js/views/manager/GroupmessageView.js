@@ -1,10 +1,10 @@
 define(['views/helpers/HeaderView',
-        'text!templates/manager/manager-groupmessage.phtml'
+        'text!templates/manager/groupmessage.phtml'
 ], function(HeaderView,
             Template) {
     "use strict";
 
-    return class ManagerGroupmessageView extends app.PageView {
+    return class GroupmessageView extends app.ManagerView {
 
         events() {
             return {'click #send': 'click_btn_send',

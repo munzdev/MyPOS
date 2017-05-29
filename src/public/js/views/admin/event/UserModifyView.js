@@ -8,7 +8,7 @@ define([ 'Webservice',
          'collections/admin/EventUserCollection',
          'collections/user/UserCollection',
          'collections/manager/UserRoleCollection',
-         'text!templates/pages/admin/admin-event-modify-user-modify.phtml'],
+         'text!templates/pages/admin/event/user-modify.phtml'],
 function( Webservice,
           AdminHeaderView,
           AdminFooterView,
@@ -19,7 +19,7 @@ function( Webservice,
     "use strict";
 
     // Extends Backbone.View
-    var AdminEventModifyUserModifyView = Backbone.View.extend( {
+    var UserModifyView = Backbone.View.extend( {
 
     	title: 'admin-event-modify-user-modify',
     	el: 'body',

@@ -5,25 +5,25 @@
 define([ 'Webservice',
          'views/headers/AdminHeaderView',
          'views/footers/AdminFooterView',
-         'collections/admin/DistributionPlaceCollection',
-         'text!templates/pages/admin/admin-event-modify-distribution.phtml'],
+         'collections/admin/EventUserCollection',
+         'text!templates/pages/admin/event/user.phtml'],
 function( Webservice,
           AdminHeaderView,
           AdminFooterView,
-          DistributionPlaceCollection,
+          EventUserCollection,
           Template ) {
     "use strict";
 
     // Extends Backbone.View
-    var AdminEventModifyDistributionView = Backbone.View.extend( {
+    var UserView = Backbone.View.extend( {
 
-    	title: 'admin-event-modify-distribution',
+    	title: 'admin-event-modify-user',
     	el: 'body',
         events: {
-            'click #admin-event-modify-distribution-add-btn': 'click_add_btn',
-            'click .admin-event-modify-distribution-edit-btn': 'click_edit_btn',
-            'click .admin-event-modify-distribution-delete-btn': 'click_delete_btn',
-            'click #admin-event-modify-distribution-delete-dialog-finished': 'click_delete_finished_btn'
+            'click #admin-event-modify-user-add-btn': 'click_add_btn',
+            'click .admin-event-modify-user-edit-btn': 'click_edit_btn',
+            'click .admin-event-modify-user-delete-btn': 'click_delete_btn',
+            'click #admin-event-modify-user-delete-dialog-finished': 'click_delete_finished_btn'
         },
 
         // The View Constructor
@@ -32,39 +32,39 @@ function( Webservice,
 
             this.id = options.id;
 
-            this.distributionList = new DistributionPlaceCollection();
-            this.distributionList.fetch({data: {eventid: this.id},
-                                        success: this.render});
+            this.user = new EventUserCollection();
+            this.user.fetch({data: {eventid: this.id},
+                                 success: this.render});
         },
 
         click_add_btn: function()
         {
-            MyPOS.ChangePage('#admin/event/modify/' + this.id + '/distribution/add');
+            MyPOS.ChangePage('#admin/event/modify/' + this.id + '/user/add');
         },
 
         click_edit_btn: function(event)
         {
-            var id = $(event.currentTarget).attr('data-distribution-id');
+            var id = $(event.currentTarget).attr('data-events-user-id');
 
-            MyPOS.ChangePage('#admin/event/modify/' + this.id + '/distribution/modify/' + id);
+            MyPOS.ChangePage('#admin/event/modify/' + this.id + '/user/modify/' + id);
         },
 
         click_delete_btn: function(event)
         {
-            var id = $(event.currentTarget).attr('data-distribution-id');
+            var id = $(event.currentTarget).attr('data-events-user-id');
 
             this.deleteId = id;
 
-            $('#admin-event-modify-distribution-delete-dialog').popup('open');
+            $('#admin-event-modify-user-delete-dialog').popup('open');
         },
 
         click_delete_finished_btn: function()
         {
-            $('#admin-event-modify-distribution-delete-dialog').popup('close');
+            $('#admin-event-modify-user-delete-dialog').popup('close');
 
             var webservice = new Webservice();
-            webservice.action = "Admin/DeleteEventDistribution";
-            webservice.formData = {distributions_placeid: this.deleteId};
+            webservice.action = "Admin/DeleteEventUser";
+            webservice.formData = {events_userid: this.deleteId};
             webservice.callback = {
                 success: function()
                 {
@@ -80,11 +80,11 @@ function( Webservice,
             var footer = new AdminFooterView({id: this.id});
 
             header.activeButton = 'event';
-            footer.activeButton = 'distribution';
+            footer.activeButton = 'user';
 
             MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
                                                                   footer: footer.render(),
-                                                                  distributions: this.distributionList});
+                                                                  users: this.user});
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");
@@ -97,6 +97,6 @@ function( Webservice,
     } );
 
     // Returns the View class
-    return AdminEventModifyDistributionView;
+    return AdminEventModifyUserView;
 
 } );

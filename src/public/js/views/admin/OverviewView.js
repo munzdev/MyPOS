@@ -1,17 +1,15 @@
 define(['views/helpers/HeaderView',
-        'text!templates/manager/manager-overview.phtml'
+        'text!templates/admin/overview.phtml'
 ], function(HeaderView,
-            Template ) {
+            Template) {
     "use strict";
 
-    return class ManagerOverviewView extends app.PageView {
+    return class OverviewView extends app.AdminView {
 
-        // The View Constructor
-        initialize() {
+    	initialize() {
             this.render();
         }
 
-        // Renders all of the Category models on the UI
         render() {
             var header = new HeaderView();
             this.registerSubview(".nav-header", header);
@@ -23,4 +21,5 @@ define(['views/helpers/HeaderView',
             return this;
         }
     }
-});
+
+} );

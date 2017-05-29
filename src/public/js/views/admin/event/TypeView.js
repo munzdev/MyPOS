@@ -4,24 +4,26 @@
 // Includes file dependencies
 define([ 'Webservice',
          'views/headers/AdminHeaderView',
-         'text!templates/pages/admin/admin-menu-modify-group.phtml'],
+         'text!templates/pages/admin/event/type.phtml'],
 function( Webservice,
           AdminHeaderView,
           Template ) {
     "use strict";
 
     // Extends Backbone.View
-    var AdminMenuModifyGroupView = Backbone.View.extend( {
+    var TypeView = Backbone.View.extend( {
 
-    	title: 'admin-menu-modify-group',
+    	title: 'admin-menu-modify-type',
     	el: 'body',
         events: {
-            'click #admin-menu-modify-group-save-btn': 'click_save_btn'
+            'click #admin-menu-modify-type-save-btn': 'click_save_btn'
         },
 
         click_save_btn: function()
         {
-            var name = $.trim($('#admin-menu-modify-group-name').val());
+            var name = $.trim($('#admin-menu-modify-type-name').val());
+            var tax = $.trim($('#admin-menu-modify-type-tax').val());
+            var allowMixing = $('#admin-menu-modify-type-allowMixing').prop('checked');
 
             if(name == '')
             {
@@ -29,12 +31,19 @@ function( Webservice,
                 return;
             }
 
+            if(tax == '' || tax < 0 || tax > 100)
+            {
+                MyPOS.DisplayError('Bitte einen gültigen Steuersatz eingeben! (0 - 100%)');
+                return;
+            }
+
             if(this.mode == 'new')
             {
                 var webservice = new Webservice();
-                webservice.action = "Admin/AddMenuGroup";
+                webservice.action = "Admin/AddMenuType";
                 webservice.formData = {name: name,
-                                       menu_typeid: this.menu_typeid};
+                                       tax: tax,
+                                       allowMixing: allowMixing};
                 webservice.callback = {
                     success: function()
                     {
@@ -46,9 +55,11 @@ function( Webservice,
             else
             {
                 var webservice = new Webservice();
-                webservice.action = "Admin/SetMenuGroup";
-                webservice.formData = {id: this.groupid,
-                                       name: name};
+                webservice.action = "Admin/SetMenuType";
+                webservice.formData = {id: this.typeid,
+                                       name: name,
+                                       tax: tax,
+                                       allowMixing: allowMixing};
                 webservice.callback = {
                     success: function()
                     {
@@ -69,26 +80,29 @@ function( Webservice,
             var self = this;
 
             this.nameValue = "";
-            this.menu_typeid = options.menu_typeid;
+            this.taxValue = "";
+            this.allowMixingValue = 0;
 
             if(options.id === 'new')
             {
                 this.mode = 'new';
-                this.groupid = 0;
+                this.typeid = 0;
                 this.render();
             }
             else
             {
                 this.mode = 'edit';
-                this.groupid = options.id;
+                this.typeid = options.id;
 
                 var webservice = new Webservice();
-                webservice.action = "Admin/GetMenuGroup";
-                webservice.formData = {id: this.groupid};
+                webservice.action = "Admin/GetMenuType";
+                webservice.formData = {id: this.typeid};
                 webservice.callback = {
                     success: function(data)
                     {
                         self.nameValue = data.name;
+                        self.taxValue = data.tax;
+                        self.allowMixingValue = data.allowMixing;
                         self.render();
                     }
                 };
@@ -104,7 +118,9 @@ function( Webservice,
 
             MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
                                                                   mode: this.mode,
-                                                                  name: this.nameValue});
+                                                                  name: this.nameValue,
+                                                                  tax: this.taxValue,
+                                                                  allowMixing: this.allowMixingValue});
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");
@@ -116,6 +132,6 @@ function( Webservice,
     } );
 
     // Returns the View class
-    return AdminMenuModifyGroupView;
+    return AdminMenuModifyTypeView;
 
 } );

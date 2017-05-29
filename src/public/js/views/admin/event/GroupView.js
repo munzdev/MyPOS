@@ -4,48 +4,41 @@
 // Includes file dependencies
 define([ 'Webservice',
          'views/headers/AdminHeaderView',
-         'text!templates/pages/admin/admin-size-modify.phtml'],
+         'text!templates/pages/admin/event/group.phtml'],
 function( Webservice,
           AdminHeaderView,
           Template ) {
     "use strict";
 
     // Extends Backbone.View
-    var AdminSizeModifyView = Backbone.View.extend( {
+    var GroupView = Backbone.View.extend( {
 
-    	title: 'admin-size-modify',
+    	title: 'admin-menu-modify-group',
     	el: 'body',
         events: {
-            'click #admin-size-modify-save-btn': 'click_save_btn'
+            'click #admin-menu-modify-group-save-btn': 'click_save_btn'
         },
 
         click_save_btn: function()
         {
-            var name = $.trim($('#admin-size-modify-name').val());
-            var factor = $.trim($('#admin-size-modify-factor').val());
+            var name = $.trim($('#admin-menu-modify-group-name').val());
 
             if(name == '')
             {
                 MyPOS.DisplayError('Bitte einen Namen eingeben!');
                 return;
             }
-            
-            if(factor == '')
-            {
-                MyPOS.DisplayError('Bitte einen Faktor eingeben!');
-                return;
-            }
 
             if(this.mode == 'new')
             {
                 var webservice = new Webservice();
-                webservice.action = "Admin/AddSize";
+                webservice.action = "Admin/AddMenuGroup";
                 webservice.formData = {name: name,
-                                       factor: factor};
+                                       menu_typeid: this.menu_typeid};
                 webservice.callback = {
                     success: function()
                     {
-                        MyPOS.ChangePage('#admin/size');
+                        MyPOS.ChangePage('#admin/menu');
                     }
                 };
                 webservice.call();
@@ -53,14 +46,13 @@ function( Webservice,
             else
             {
                 var webservice = new Webservice();
-                webservice.action = "Admin/SetSize";
-                webservice.formData = {menu_sizeid: this.sizeid,
-                                       name: name,
-                                       factor: factor};
+                webservice.action = "Admin/SetMenuGroup";
+                webservice.formData = {id: this.groupid,
+                                       name: name};
                 webservice.callback = {
                     success: function()
                     {
-                        MyPOS.ChangePage('#admin/size');
+                        MyPOS.ChangePage('#admin/menu');
                     }
                 };
                 webservice.call();
@@ -77,27 +69,26 @@ function( Webservice,
             var self = this;
 
             this.nameValue = "";
-            this.factorValue = "";
+            this.menu_typeid = options.menu_typeid;
 
             if(options.id === 'new')
             {
                 this.mode = 'new';
-                this.sizeid = 0;
+                this.groupid = 0;
                 this.render();
             }
             else
             {
                 this.mode = 'edit';
-                this.sizeid = options.id;
+                this.groupid = options.id;
 
                 var webservice = new Webservice();
-                webservice.action = "Admin/GetSize";
-                webservice.formData = {menu_sizeid: this.sizeid};
+                webservice.action = "Admin/GetMenuGroup";
+                webservice.formData = {id: this.groupid};
                 webservice.callback = {
                     success: function(data)
                     {
                         self.nameValue = data.name;
-                        self.factorValue = data.factor;
                         self.render();
                     }
                 };
@@ -109,13 +100,11 @@ function( Webservice,
         render: function() {
             var header = new AdminHeaderView();
 
-            header.activeButton = 'size';
+            header.activeButton = 'menu';
 
             MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
                                                                   mode: this.mode,
-                                                                  name: this.nameValue,
-                                                                  factor: this.factorValue
-                                                                  });
+                                                                  name: this.nameValue});
 
             this.setElement("#" + this.title);
             header.setElement("#" + this.title + " .nav-header");
@@ -127,6 +116,6 @@ function( Webservice,
     } );
 
     // Returns the View class
-    return AdminSizeModifyView;
+    return AdminMenuModifyGroupView;
 
 } );

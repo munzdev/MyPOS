@@ -1,10 +1,10 @@
 define(['views/helpers/HeaderView',
-        'text!templates/admin/admin-event.phtml'
+        'text!templates/admin/event.phtml'
 ], function(HeaderView,
             Template) {
     "use strict";
 
-    return class AdminEventView extends app.PageView {
+    return class EventView extends app.AdminView {
         
         events() {
             return {'click .add-btn': 'click_add_btn',

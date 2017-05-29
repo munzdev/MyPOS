@@ -1,15 +1,16 @@
 define(['views/helpers/HeaderView',
-        'text!templates/admin/admin.phtml'
+        'text!templates/manager/statistic.phtml'
 ], function(HeaderView,
-            Template) {
+            Template ) {
     "use strict";
 
-    return class AdminView extends app.PageView {
+    return class StatisticView extends app.ManagerView {
 
     	initialize() {
             this.render();
         }
 
+        // Renders all of the Category models on the UI
         render() {
             var header = new HeaderView();
             this.registerSubview(".nav-header", header);
@@ -20,6 +21,7 @@ define(['views/helpers/HeaderView',
 
             return this;
         }
+
     }
 
 } );

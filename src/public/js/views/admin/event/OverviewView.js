@@ -1,12 +1,14 @@
-define(['views/helpers/HeaderView',
+define(['views/admin/event/AdminEventView',
+        'views/helpers/HeaderView',
         'views/helpers/AdminFooterView',
-        'text!templates/admin/event/admin-event-modify-overview.phtml'
-], function(HeaderView,
+        'text!templates/admin/event/overview.phtml'
+], function(AdminEventView,
+            HeaderView,
             AdminFooterView,
             Template) {
     "use strict";
 
-    return class AdminEventModifyOverviewView extends app.PageView {
+    return class OverviewView extends AdminEventView {
     
         initialize(options) {
             this.eventid = options.eventid;

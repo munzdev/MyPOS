@@ -1,10 +1,10 @@
 define(['views/helpers/HeaderView',
-        'text!templates/admin/admin-user-modify.phtml'
+        'text!templates/admin/user-modify.phtml'
 ], function(HeaderView,
             Template ) {
     "use strict";
 
-    return class AdminUserModifyView extends app.PageView {
+    return class UserModifyView extends app.AdminView {
 
     	events() {
             return {'click #save-btn': 'click_save_btn'};

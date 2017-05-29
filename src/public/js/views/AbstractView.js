@@ -32,13 +32,27 @@ define(function() {
             this.appendViews.set(view, type);
         }
 
-        i18n()
-        {
-            var i18n = {};
+        i18n(subNamespace) {
+            var i18n = app.i18n.template;
             var i18nNamespace = this.id();
 
-            if(i18nNamespace in app.i18n.template)
-                i18n = app.i18n.template[i18nNamespace];
+            if (subNamespace) {
+                let namespaces = subNamespace.split('.');
+
+                for (let i = 0, length = namespaces.length; i < length; i++) {
+                    if (namespaces[i] in i18n) {
+                        i18n = i18n[namespaces[i]];
+                    }
+                }
+            }
+
+            if (i18nNamespace in i18n) {
+                i18n = i18n[i18nNamespace];
+            }
+
+            if (i18n === app.i18n.template) {
+                i18n = null;
+            }
 
             return i18n;
         }

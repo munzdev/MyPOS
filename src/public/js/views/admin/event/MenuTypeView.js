@@ -5,7 +5,7 @@
 define([ 'Webservice',
          'views/headers/AdminHeaderView',
          'collections/admin/MenuTypeCollection',
-         'text!templates/pages/admin/admin-menu.phtml'],
+         'text!templates/pages/admin/event/menu-type.phtml'],
 function( Webservice,
           AdminHeaderView,
           MenuTypeCollection,
@@ -13,7 +13,7 @@ function( Webservice,
     "use strict";
 
     // Extends Backbone.View
-    var AdminMenuView = Backbone.View.extend( {
+    var MenuTypeView = Backbone.View.extend( {
 
     	title: 'admin-menu',
     	el: 'body',

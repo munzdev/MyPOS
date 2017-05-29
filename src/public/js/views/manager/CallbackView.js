@@ -1,13 +1,13 @@
 define(['collections/custom/manager/CallbackCollection',
         'views/helpers/HeaderView',
-        'text!templates/manager/manager-callback.phtml',
-        'jquery-dateFormat'],
-function( CallbackCollection,
-          HeaderView,
-          Template ) {
+        'text!templates/manager/callback.phtml',
+        'jquery-dateFormat'
+], function(CallbackCollection,
+            HeaderView,
+            Template) {
     "use strict";
 
-    return class ManagerCallbackView extends app.PageView {
+    return class CallbackView extends app.ManagerView {
 
         events() {
             return {'click .done-btn': 'click_btn_done'};

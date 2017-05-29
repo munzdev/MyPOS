@@ -1,10 +1,10 @@
 define(['views/helpers/HeaderView',
-        'text!templates/admin/admin-event-copy.phtml'
+        'text!templates/admin/event-copy.phtml'
 ], function(HeaderView,
             Template) {
     "use strict";
 
-    return class AdminEventCopyView extends app.PageView {
+    return class EventCopyView extends app.AdminView {
 
         events() {
             return {'click #finished-btn': 'click_finished_btn'};
