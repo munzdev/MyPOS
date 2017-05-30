@@ -499,6 +499,66 @@
             "userDeleteVerifyText": "Sind Sie sicher das Sie den Benutzer deaktivieren wollen?",
             "cancel": "Abbrechen",
             "continue": "Fortfahren"
+        },
+        "UserModifyView": {
+            "newUser": "Neuer Benutzer",
+            "editUser": "Benutzer Bearbeiten",
+            "username": "Benutzername",
+            "passwords": "Passwort und Passwort wiederhollen",
+            "firstname": "Vorname",
+            "lastname": "Nachname",
+            "phonenumber": "Telefonnummer",
+            "options": "Optionen",
+            "admin": "Administrator",
+            "active": "Aktiv",
+            "save": "Speichern",
+            "errorUsername": "Bitte einen Benutzername eingeben!",
+            "errorFirstname": "Bitte einen Vornamen eingeben!",
+            "errorLastname": "Bitte einen Nachnamen eingeben!",
+            "errorPhonenumber": "Bitte eine Telefonnummer eingeben!",
+            "errorPassword": "Bitte ein Passwort eingeben!",
+            "errorPassword2Required": "Bitte das Passwort wiederhollen!",
+            "errorPassword2EqualTo": "Die Passwörter stimmen nicht überein!"
+        },
+        "EventView": {
+            "add": "Hinzufügen",
+            "name": "Name",
+            "date": "Datum",
+            "active": "Aktiv",
+            "options": "Optionen",
+            "yes": "Ja",
+            "no": "Nein",
+            "copy": "Kopieren",
+            "editSettings": "Einstellungen Bearbeiten",
+            "editDetails": "Details Bearbeiten",
+            "setActive": "Aktiv setzen",
+            "eventActivate": "Event aktivieren?",
+            "eventActivateVerifyText": "Sind Sie sicher, dass Sie dieses Event aktivieren wollen?",
+            "cancel": "Abbrechen",
+            "continue": "Fortfahren"
+        },
+        "EventCopyView": {
+            "eventCopy": "Event Kopieren",
+            "name": "Name",
+            "date": "Datum",
+            "copySettings": "Eigenschaften kopieren",
+            "menu": "Menüs",
+            "table": "Tische",
+            "distribution": "Ausgabestellen",
+            "printer": "Drucker",
+            "permission": "Berechtigungen",
+            "copy": "Kopieren",
+            "errorName": "Bitte einen Namen eingeben!",
+            "errorDate": "Bitte ein Datum auswählen!"
+        },
+        "EventModifyView": {
+            "newEvent": "Neues Event",
+            "editEvent": "Event Bearbeiten",
+            "name": "Name",
+            "date": "Datum",
+            "save": "Speichern",
+            "errorName": "Bitte einen Namen eingeben!",
+            "errorDate": "Bitte ein Datum auswählen!"
         }
     }
 }

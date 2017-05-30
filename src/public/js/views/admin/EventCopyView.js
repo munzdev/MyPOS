@@ -27,7 +27,8 @@ define(['views/helpers/HeaderView',
         }
        
         render() {
-            var header = new HeaderView();
+            let t = this.i18n();
+            let header = new HeaderView();
             this.registerSubview(".nav-header", header);
 
             this.renderTemplate(Template, {event: this.event});
@@ -38,8 +39,8 @@ define(['views/helpers/HeaderView',
                     date: {required: true}
                 },
                 messages: {
-                    name: "Bitte einen Namen eingeben!",
-                    date: 'Bitte ein Datum auswählen!'
+                    name: t.errorName,
+                    date: t.errorDate
                 }
             });
 

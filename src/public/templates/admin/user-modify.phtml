@@ -1,17 +1,17 @@
 <div data-role="content">
     <div class="nav-header"></div>
     <div data-role="header">
-        <h2><% if(user.isNew()) { print('Neuer Benutzer'); } else { print('Benutzer Bearbeiten'); } %></h2>
+        <h2><% if(user.isNew()) { print(t.newUser); } else { print(t.editUser); } %></h2>
     </div>
     <form id='form'>
         <fieldset data-role="controlgroup">
-            <legend>Benutzername:</legend>
+            <legend><%= t.username %>:</legend>
             <input type="text" id="username" name='username' value="<%- user.get('Username') %>">
             <label for="username"></label>
         </fieldset>
 
         <fieldset data-role="controlgroup">
-            <legend>Password und Passwort wiederhollen:</legend>
+            <legend><%= t.passwords %>:</legend>
             <input type="password" id="password" name="password">
             <label for="password"></label>
             <input type="password" id="password2" name="password2">
@@ -19,33 +19,33 @@
         </fieldset>
 
         <fieldset data-role="controlgroup">
-            <legend>Vorname:</legend>
+            <legend><%= t.firstname %>:</legend>
             <input type="text" id="firstname" name='firstname' value="<%- user.get('Firstname') %>">
             <label for="firstname"></label>
         </fieldset>
 
         <fieldset data-role="controlgroup">
-            <legend>Nachname:</legend>
+            <legend><%= t.lastname %>:</legend>
             <input type="text" id="lastname" name='lastname' value="<%- user.get('Lastname') %>">
             <label for="lastname"></label>
         </fieldset>
 
         <fieldset data-role="controlgroup">
-            <legend>Telefonnummer:</legend>
+            <legend><%= t.phonenumber %>:</legend>
             <input type="text" id="phonenumber" name='phonenumber' value="<%- user.get('Phonenumber') %>">
             <label for="phonenumber"></label>
         </fieldset>
 
         <fieldset data-role="controlgroup">
-            <legend>Optionen:</legend>
+            <legend><%= t.options %>:</legend>
             <input type="checkbox" name="isAdmin" id="isAdmin" <% if(user.get('IsAdmin')) { print('checked="checked"'); } %>>
-            <label for="isAdmin">Administrator</label>
+            <label for="isAdmin"><%= t.admin %></label>
             <input type="checkbox" name="active" id="active"  <% if(user.get('Active')) { print('checked="checked"'); } %>>
-            <label for="active">Aktiv</label>
+            <label for="active"><%= t.active %></label>
         </fieldset>
 
         <div class="ui-field-contain">
-            <a id="save-btn" class="ui-btn ui-btn-inline">Speichern</a>
+            <a id="save-btn" class="ui-btn ui-btn-inline"><%= t.save %></a>
         </div>
     </form>
 </div>

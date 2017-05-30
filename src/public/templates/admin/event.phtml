@@ -1,13 +1,13 @@
 <div data-role="content">
     <div class="nav-header"></div>
-    <a class="add-btn ui-btn ui-icon-plus ui-mini ui-btn-icon-left">Hinzufügen</a>
+    <a class="add-btn ui-btn ui-icon-plus ui-mini ui-btn-icon-left"><%= t.add %></a>
     <table data-role="table" id="table" class="ui-responsive table-stroke table-stripe">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Datum</th>
-                <th>Aktiv</th>
-                <th>Optionen</th>
+                <th><%= t.name %></th>
+                <th><%= t.date %></th>
+                <th><%= t.active %></th>
+                <th><%= t.options %></th>
             </tr>
         </thead>
         <tbody>
@@ -15,12 +15,12 @@
                 <tr>
                     <th><%- event.get('Name') %></th>
                     <td><%- app.i18n.toDate(event.get('Date')) %></td>
-                    <td><% if(event.get('Active') == 1) { print('Ja'); } else { print('Nein'); } %></td>
+                    <td><% if(event.get('Active') == 1) { print(t.yes); } else { print(t.no); } %></td>
                     <td>
-                        <a data-event-cid="<%- event.cid %>" class="copy-btn ui-btn ui-icon-files-o ui-mini ui-btn-icon-left">Kopieren</a>
-                        <a data-event-cid="<%- event.cid %>" class="edit-settings-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Einstellungen Bearbeiten</a>
-                        <a data-event-cid="<%- event.cid %>" class="edit-details-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Details Bearbeiten</a>
-                        <a data-event-cid="<%- event.cid %>" class="active-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left">Aktiv setzen</a>
+                        <a data-event-cid="<%- event.cid %>" class="copy-btn ui-btn ui-icon-files-o ui-mini ui-btn-icon-left"><%= t.copy %></a>
+                        <a data-event-cid="<%- event.cid %>" class="edit-settings-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left"><%= t.editSettings %></a>
+                        <a data-event-cid="<%- event.cid %>" class="edit-details-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left"><%= t.editDetails %></a>
+                        <a data-event-cid="<%- event.cid %>" class="active-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left"><%= t.setActive %></a>
                     </td>
                 </tr>
             <% }); %>
@@ -29,11 +29,11 @@
 </div>
 <div data-role="popup" id="activate-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
     <div data-role="header" data-theme="a">
-        <h1>Event aktivieren?</h1>
+        <h1><%= t.eventActivate %></h1>
     </div>
     <div role="main" class="ui-content">
-        <h3 class="ui-title">Sind Sie sicher, dass Sie dieses Event aktivieren wollen?</h3>
-        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Abbrechen</a>
-        <a id='activate-dialog-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
+        <h3 class="ui-title"><%= t.eventActivateVerifyText %></h3>
+        <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back"><%= t.cancel %></a>
+        <a id='activate-dialog-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.continue %></a>
     </div>
 </div>

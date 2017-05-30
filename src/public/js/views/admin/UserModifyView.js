@@ -43,6 +43,7 @@ define(['views/helpers/HeaderView',
         }
 
         render() {
+            let t = this.i18n();
             var header = new HeaderView();
             this.registerSubview(".nav-header", header);
 
@@ -59,13 +60,13 @@ define(['views/helpers/HeaderView',
                                 equalTo: '#password'}
                 },
                 messages: {
-                    username: "Bitte einen Benutzername eingeben!",
-                    firstname: 'Bitte einen Vornamen eingeben!',
-                    lastname: "Bitte einen Nachnamen eingeben!",
-                    phonenumber: "Bitte eine Telefonnummer eingeben!",
-                    password: "Bitte ein Passwort eingeben!",
-                    password2: {required: 'Bitte das Passwort wiederhollen!',
-                                equalTo: 'Die Passwörter stimmen nicht überein!'}
+                    username: t.errorUsername,
+                    firstname: t.errorFirstname,
+                    lastname: t.errorLastname,
+                    phonenumber: t.errorPhonenumber,
+                    password: t.errorPassword,
+                    password2: {required: t.errorPassword2Required,
+                                equalTo: t.errorPassword2EqualTo}
                 }
             });
 

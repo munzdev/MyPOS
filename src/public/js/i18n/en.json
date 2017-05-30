@@ -493,6 +493,66 @@
             "userDeleteVerifyText": "Are your sure you want to deactivate the user?",
             "cancel": "Cancel",
             "continue": "Continue"
+        },
+        "UserModifyView": {
+            "newUser": "New User",
+            "editUser": "Edit User",
+            "username": "Username",
+            "passwords": "Password and repeat password",
+            "firstname": "Firstname",
+            "lastname": "Lastname",
+            "phonenumber": "Phonenumber",
+            "options": "Options",
+            "admin": "Administrator",
+            "active": "Active",
+            "save": "Save",
+            "errorUsername": "Please enter a Username!",
+            "errorFirstname": "Please enter a Firstname!",
+            "errorLastname": "Please enter a Lastname!",
+            "errorPhonenumber": "Please enter a Phonenumber!",
+            "errorPassword": "Please enter a Password!",
+            "errorPassword2Required": "Please repeat your Password!",
+            "errorPassword2EqualTo": "The passwords to not match!"
+        },
+        "EventView": {
+            "add": "Add",
+            "name": "Name",
+            "date": "Date",
+            "active": "Active",
+            "options": "Options",
+            "yes": "Yes",
+            "no": "No",
+            "copy": "Copy",
+            "editSettings": "Edit Settings",
+            "editDetails": "Edit Details",
+            "setActive": "Set Active",
+            "eventActivate": "Activate Event?",
+            "eventActivateVerifyText": "Are you sure, you wan't to activate this Event?",
+            "cancel": "Cancel",
+            "continue": "Continue"
+        },
+        "EventCopyView": {
+            "eventCopy": "Event Copy",
+            "name": "Name",
+            "date": "Date",
+            "copySettings": "Copy Settings",
+            "menu": "Menues",
+            "table": "Tables",
+            "distribution": "Distributions",
+            "printer": "Printers",
+            "permission": "Permissions",
+            "copy": "Copy",
+            "errorName": "PLease enter a Name!",
+            "errorDate": "Please enter a Date!"
+        },
+        "EventModifyView": {
+            "newEvent": "New Event",
+            "editEvent": "Edit Event",
+            "name": "Name",
+            "date": "Date",
+            "save": "Save",
+            "errorName": "PLease enter a Name!",
+            "errorDate": "Please enter a Date!"
         }
     }
 }
