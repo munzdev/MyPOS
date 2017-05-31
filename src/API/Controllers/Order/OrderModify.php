@@ -50,7 +50,7 @@ class OrderModify extends SecurityController
         $orderQuery = $this->container->get(IOrderQuery::class);
         $order = $orderQuery->getWithModifyDetails($this->args['id']);
 
-        $this->withJson($order);
+        $this->withJson($order->toArray(true));
     }
 
     public function patch() : void
