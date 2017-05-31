@@ -24,7 +24,7 @@ class EventTableQuery extends Query implements IEventTableQuery
     {
         $eventTable = EventTableQueryORM::create()->findPk($id);
 
-        if($eventTable) {
+        if(!$eventTable) {
             return null;
         }
 
@@ -41,7 +41,7 @@ class EventTableQuery extends Query implements IEventTableQuery
             ->filterByName($name)
             ->findOne();
 
-        if($eventTable) {
+        if(!$eventTable) {
             return null;
         }
 
@@ -59,6 +59,17 @@ class EventTableQuery extends Query implements IEventTableQuery
                 ->filterByOrderid($orderid)
             ->endUse()
             ->findOne();
+
+        $eventTableCollection = $this->container->get(IEventTableCollection::class);
+        $eventTableCollection->setCollection($eventTables);
+
+        return $eventTableCollection;
+    }
+
+    public function findByEventid(int $eventid) : IEventTableCollection
+    {
+        $eventTables = EventTableQueryORM::create()
+            ->findByEventid($eventid);
 
         $eventTableCollection = $this->container->get(IEventTableCollection::class);
         $eventTableCollection->setCollection($eventTables);

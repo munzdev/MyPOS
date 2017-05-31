@@ -5,6 +5,7 @@ define(["models/BaseModel"
     return class EventTable extends BaseModel {
 
         idAttribute() { return 'EventTableid'; }
+        urlRoot() {return app.API + "DB/Event/EventTable";}
 
         defaults() {
             return {EventTableid: null,

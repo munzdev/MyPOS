@@ -31,6 +31,8 @@ define(["views/dialoges/LoginView",
         "views/admin/EventCopyView",
         "views/admin/EventModifyView",
         "views/admin/event/OverviewView",
+        "views/admin/event/TableView",
+        "views/admin/event/TableModifyView",
         /*"views/admin/event/MenuView",
         "views/admin/event/MenuModifyView",
         "views/admin/event/DistributionView",
@@ -42,8 +44,6 @@ define(["views/dialoges/LoginView",
         "views/admin/event/MenuTypeView",
         "views/admin/event/GroupView",
         "views/admin/event/TypeView",
-        "views/admin/event/TableView",
-        "views/admin/event/TableModifyView",
         "views/admin/event/SizeView",
         "views/admin/event/SizeModifyView",*/
 ], function(
@@ -77,6 +77,8 @@ define(["views/dialoges/LoginView",
             AdminEventCopyView,
             AdminEventModifyView,
             AdminEventModifyOverviewView,
+            AdminEventModifyTableView,
+            AdminEventModifyTableModifyView,
             AdminEventModifyMenuView,
             AdminEventModifyMenuModifyView,
             AdminEventModifyDistributionView,
@@ -88,8 +90,6 @@ define(["views/dialoges/LoginView",
             AdminMenuView,
             AdminMenuModifyGroupView,
             AdminMenuModifyTypeView,
-            AdminTableView,
-            AdminTableModifyView,
             AdminSizeView,
             AdminSizeModifyView
             //</editor-fold>
@@ -182,6 +182,9 @@ define(["views/dialoges/LoginView",
                 "admin/event/modify/:eventid/user": "admin_event_modify_user",
                 "admin/event/modify/:eventid/user/add": "admin_event_modify_user_add",
                 "admin/event/modify/:eventid/user/modify/:events_userid": "admin_event_modify_user_modify",
+                "admin/event/modify/:eventid/table": "admin_event_modify_table",
+                "admin/event/modify/:eventid/table/add": "admin_event_modify_table_add",
+                "admin/event/modify/:eventid/table/:id": "admin_event_modify_table_modify",
                 "admin/user": "admin_user",
                 "admin/user/add": "admin_user_add",
                 "admin/user/:userid": "admin_user_modify",
@@ -190,9 +193,6 @@ define(["views/dialoges/LoginView",
                 "admin/menu/add/:id": "admin_menu_group_add",
                 "admin/menu/modify/type/:id": "admin_menu_type_modify",
                 "admin/menu/modify/group/:id": "admin_menu_group_modify",
-                "admin/table": "admin_table",
-                "admin/table/add": "admin_table_add",
-                "admin/table/modify/:id": "admin_table_modify",
                 "admin/size": "admin_size",
                 "admin/size/add": "admin_size_add",
                 "admin/size/modify/:id": "admin_size_modify"
@@ -426,16 +426,18 @@ define(["views/dialoges/LoginView",
             this.show(new AdminMenuModifyGroupView({id: id}));
         }
 
-        admin_table() {
-            this.show(new AdminTableView());
+        admin_event_modify_table(eventid) {
+            this.show(new AdminEventModifyTableView({eventid: eventid}));
         }
 
-        admin_table_add() {
-            this.show(new AdminTableModifyView({id: 'new'}));
+        admin_event_modify_table_add(eventid) {
+            this.show(new AdminEventModifyTableModifyView({eventid: eventid,
+                                                           tableid: 'new'}));
         }
 
-        admin_table_modify(id) {
-            this.show(new AdminTableModifyView({id: id}));
+        admin_event_modify_table_modify(eventid, tableid) {
+            this.show(new AdminEventModifyTableModifyView({eventid: eventid,
+                                                           tableid: tableid}));
         }
 
         admin_size() {

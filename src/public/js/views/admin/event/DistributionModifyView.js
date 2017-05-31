@@ -48,7 +48,7 @@ function( Webservice,
             this.menuList = new MenuTypeCollection();
             this.user = new EventUserCollection();
             this.userListData = {};
-            this.tableList = new TableCollection();
+            this.tables = new TableCollection();
             this.tableListData = {};
 
             this.printerList = new PrinterCollection();
@@ -57,7 +57,7 @@ function( Webservice,
             $.when(this.menuList.fetch(),
                    this.user.fetch({data: {eventid: this.eventid}}),
                    this.printerList.fetch({data: {eventid: this.id}}),
-                   this.tableList.fetch()).then(function() {
+                   this.tables.fetch()).then(function() {
 
                 if(typeof options.distributions_placeid === 'undefined')
                 {
@@ -189,7 +189,7 @@ function( Webservice,
 
             var options = "";
 
-            self.tableList.each(function(table) {
+            self.tables.each(function(table) {
                 options += "<option value='" + table.get('tableid') + "'>" + table.get('name') + "</option>";
             });
 

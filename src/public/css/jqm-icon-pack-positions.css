@@ -5,3 +5,15 @@
 .ui-icon-table:after {
     background-position: 0.22em 0.22em;
 }
+
+.ui-icon-print:after {
+    background-position: 0.28em 0.27em;
+}
+
+.ui-icon-cutlery:after {
+    background-position: 0.3em 0.3em;
+}
+
+.ui-icon-truck:after {
+    background-position: 0.19em 0.2em;
+}

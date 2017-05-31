@@ -1,128 +1,60 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'Webservice',
-         'views/headers/AdminHeaderView',
-         'text!templates/pages/admin/event/table-modify.phtml'],
-function( Webservice,
-          AdminHeaderView,
-          Template ) {
+define(['views/admin/event/AdminEventView',
+        'text!templates/admin/event/table-modify.phtml'
+], function(AdminEventView,
+            Template) {
     "use strict";
 
-    // Extends Backbone.View
-    var TableModifyView = Backbone.View.extend( {
+    return class TableModifyView extends AdminEventView {
 
-    	title: 'admin-table-modify',
-    	el: 'body',
-        events: {
-            'click #admin-table-modify-save-btn': 'click_save_btn'
-        },
+        events() {
+            return {'click #save-btn': 'click_save_btn'};
+        }
 
-        click_save_btn: function()
-        {
-            var name = $.trim($('#admin-table-modify-name').val());
-            var data = $.trim($('#admin-table-modify-data').val());
+        initialize(options) {
+            super.initialize(options);
 
-            if(name == '')
-            {
-                MyPOS.DisplayError('Bitte eine Tischnummer eingeben!');
+            this.eventTable = new app.models.Event.EventTable();
+
+            if(options.tableid === 'new') {
+                this.render();
+            } else {
+                this.eventTable.set('EventTableid', options.tableid);
+                this.eventTable.fetch()
+                    .done(() => {
+                        this.render();
+                    });
+            }
+        }
+
+        click_save_btn() {
+            if (!this.$('#form').valid()) {
                 return;
             }
 
-            if(this.mode == 'new')
-            {
-                var webservice = new Webservice();
-                webservice.action = "Admin/AddTable";
-                webservice.formData = {name: name,
-                                       data: data};
-                webservice.callback = {
-                    success: function()
-                    {
-                        MyPOS.ChangePage('#admin/table');
-                    }
-                };
-                webservice.call();
-            }
-            else
-            {
-                var webservice = new Webservice();
-                webservice.action = "Admin/SetTable";
-                webservice.formData = {tableid: this.tableid,
-                                       name: name,
-                                       data: data};
-                webservice.callback = {
-                    success: function()
-                    {
-                        MyPOS.ChangePage('#admin/table');
-                    }
-                };
-                webservice.call();
-            }
-
-
-        },
-
-        // The View Constructor
-        initialize: function(options) {
-            _.bindAll(this, "render",
-                            "click_save_btn");
-
-            var self = this;
-
-            this.nameValue = "";
-            this.dataValue = "";
-
-            if(options.id === 'new')
-            {
-                this.mode = 'new';
-                this.tableid = 0;
-                this.render();
-            }
-            else
-            {
-                this.mode = 'edit';
-                this.tableid = options.id;
-
-
-
-                var webservice = new Webservice();
-                webservice.action = "Admin/GetTable";
-                webservice.formData = {tableid: this.tableid};
-                webservice.callback = {
-                    success: function(data)
-                    {
-                        self.nameValue = data.name;
-                        self.dataValue = data.data;
-                        self.render();
-                    }
-                };
-                webservice.call();
-            }
-        },
-
-        // Renders all of the Category models on the UI
-        render: function() {
-            var header = new AdminHeaderView();
-
-            header.activeButton = 'table';
-
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  mode: this.mode,
-                                                                  name: this.nameValue,
-                                                                  data: this.dataValue
-                                                                  });
-
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-
-            $.mobile.changePage( "#" + this.title);
-            return this;
+            this.eventTable.set('Name', $.trim(this.$('#name').val()));
+            this.eventTable.set('Data', $.trim(this.$('#data').val()));
+            this.eventTable.save()
+                .done(() => {
+                    this.changeHash(this.getMenuLink() + '/table');
+                });
         }
 
-    } );
+        render() {
+            let t = this.i18n();
+            this.renderTemplate(Template, {eventTable: this.eventTable});
 
-    // Returns the View class
-    return AdminTableModifyView;
+            this.$('#form').validate({
+                rules: {
+                    name: {required: true}
+                },
+                messages: {
+                    name: t.errorName
+                }
+            });
 
+            this.changePage(this);
+
+            return this;
+        }
+    }
 } );

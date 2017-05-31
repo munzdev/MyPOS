@@ -1,93 +1,62 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'Webservice',
-         'views/headers/AdminHeaderView',
-         'collections/admin/TableCollection',
-         'text!templates/pages/admin/event/table.phtml'],
-function( Webservice,
-          AdminHeaderView,
-          TableCollection,
-          Template ) {
+define(['views/admin/event/AdminEventView',
+        'text!templates/admin/event/table.phtml'
+], function(AdminEventView,
+            Template) {
     "use strict";
 
-    // Extends Backbone.View
-    var TableView = Backbone.View.extend( {
+    return class TableView extends AdminEventView {
 
-    	title: 'admin-table',
-    	el: 'body',
-        events: {
-            'click #admin-table-add-btn': 'click_add_btn',
-            'click .admin-table-edit-btn': 'click_edit_btn',
-            'click .admin-table-delete-btn': 'click_delete_btn',
-            'click #admin-table-delete-dialog-finished': 'click_delete_finished_btn'
-        },
-
-        // The View Constructor
-        initialize: function() {
-            _.bindAll(this, "render");
-
-            this.tableList = new TableCollection();
-            this.tableList.fetch({success: this.render});
-        },
-
-        click_add_btn: function()
-        {
-            MyPOS.ChangePage('admin/table/add');
-        },
-
-        click_edit_btn: function(event)
-        {
-            var id = $(event.currentTarget).attr('data-table-id');
-
-            MyPOS.ChangePage('admin/table/modify/'+id);
-        },
-
-        click_delete_btn: function(event)
-        {
-            var id = $(event.currentTarget).attr('data-table-id');
-
-            this.deleteId = id;
-
-            $('#admin-table-delete-dialog').popup('open');
-        },
-
-        click_delete_finished_btn: function()
-        {
-            $('#admin-table-delete-dialog').popup('close');
-
-            var webservice = new Webservice();
-            webservice.action = "Admin/TableDelete";
-            webservice.formData = {tableid: this.deleteId};
-            webservice.callback = {
-                success: function()
-                {
-                    MyPOS.ReloadPage();
-                }
-            };
-            webservice.call();
-        },
-
-        // Renders all of the Category models on the UI
-        render: function() {
-            var header = new AdminHeaderView();
-
-            header.activeButton = 'table';
-
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  tables: this.tableList});
-
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-
-            $.mobile.changePage( "#" + this.title);
-            return this;
+        events() {
+            return {'click #add-btn': 'click_add_btn',
+                    'click .edit-btn': 'click_edit_btn',
+                    'click .delete-btn': 'click_delete_btn',
+                    'click #delete-dialog-finished': 'click_delete_finished_btn'}
         }
 
-    } );
+        initialize(options) {
+            super.initialize(options);
 
-    // Returns the View class
-    return AdminTableView;
+            this.tables = new app.collections.Event.EventTableCollection();
+            this.tables.fetch({url: this.tables.url() + '/Eventid/' + this.eventid})
+                        .done(() => {
+                            this.render();
+                        });
+        }
 
+        click_add_btn() {
+            this.changeHash(this.getMenuLink() + '/table/add');
+        }
+
+        click_edit_btn(event) {
+            let table = this.tables.get({cid: $(event.currentTarget).attr('data-table-cid')});
+
+            this.changeHash(this.getMenuLink() + '/table/' + table.get('EventTableid'));
+        }
+
+        click_delete_btn(event) {
+            let cid = $(event.currentTarget).attr('data-table-cid');
+
+            this.deleteId = cid;
+
+            this.$('#delete-dialog').popup('open');
+        }
+
+        click_delete_finished_btn() {
+            this.$('#delete-dialog').popup('close');
+
+            let table = this.tables.get({cid: this.deleteId});
+            table.destroy()
+                .done(() => {
+                    this.reload();
+                });
+        }
+
+        render() {
+            this.renderTemplate(Template, {tables: this.tables});
+
+            this.changePage(this);
+
+            return this;
+        }
+    }
 } );

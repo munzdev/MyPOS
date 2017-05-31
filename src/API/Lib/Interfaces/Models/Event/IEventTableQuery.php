@@ -7,4 +7,5 @@ use API\Lib\Interfaces\Models\IQuery;
 interface IEventTableQuery extends IQuery {
     public function getByName(int $eventid, string $name) : ?IEventTable;
     public function findByOrderid(int $orderid) : IEventTableCollection;
+    public function findByEventid(int $eventid) : IEventTableCollection;
 }

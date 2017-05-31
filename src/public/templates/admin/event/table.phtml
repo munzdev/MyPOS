@@ -1,6 +1,6 @@
 <div data-role="content">
-    <div class="nav-header"><%= header %></div>
-    <a id="admin-table-add-btn" class="ui-btn ui-icon-plus ui-mini ui-btn-icon-left">Hinzufügen</a>
+    <div class="nav-header"></div>
+    <a id="add-btn" class="ui-btn ui-icon-plus ui-mini ui-btn-icon-left">Hinzufügen</a>
     <table data-role="table" id="admin-user-table" class="ui-responsive table-stroke table-stripe">
         <thead>
             <tr>
@@ -11,23 +11,24 @@
         <tbody>
             <% tables.each(function(table){ %>
                 <tr>
-                    <th><%- table.get('name') %></th>
+                    <th><%- table.get('Name') %></th>
                     <td>
-                        <a data-table-id="<%- table.get('tableid') %>" class="admin-table-edit-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
-                        <a data-table-id="<%- table.get('tableid') %>" class="admin-table-delete-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left">Löschen</a>
+                        <a data-table-cid="<%- table.cid %>" class="edit-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
+                        <a data-table-cid="<%- table.cid %>" class="delete-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left">Löschen</a>
                     </td>
                 </tr>
             <% }); %>
         </tbody>
     </table>
 </div>
-<div data-role="popup" id="admin-table-delete-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+<div class="nav-footer"></div>
+<div data-role="popup" id="delete-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
     <div data-role="header" data-theme="a">
         <h1>Tisch löschen?</h1>
     </div>
     <div role="main" class="ui-content">
         <h3 class="ui-title">Sind Sie sicher das Sie den Tisch löschen wollen? Es werden alle Menüs, Bestellungen, Rechnungen, Statistiken, etc. aus der Datenbank entfernt, die zu diesem Tisch gehören</h3>
         <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Abbrechen</a>
-        <a id='admin-table-delete-dialog-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
+        <a id='delete-dialog-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
     </div>
 </div>
