@@ -1,20 +1,18 @@
 <?php
 namespace API\Lib\Helpers;
 
-use API\Lib\Exceptions\GeneralException;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
-use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
-use Propel\Runtime\Collection\Collection;
-use function mb_substr;
+use API\Lib\Interfaces\Models\ICollection;
+use API\Lib\Interfaces\Models\IModel;
 
 class JsonToModel implements IJsonToModel
 {
     public function convert(array $json, $model)
     {
         foreach ($json as $key => $value) {
-            if (is_numeric($key) && is_array($value) && $model instanceof Collection) {
+            if (is_numeric($key) && is_array($value) && $model instanceof ICollection) {
                 $this->handleCollection($value, $model);
-            } elseif (is_array($value) && $model instanceof ActiveRecordInterface) {
+            } elseif (is_array($value) && $model instanceof IModel) {
                 $this->handleRow($key, $value, $model);
             } elseif ($value !== null && $value !== 0) {
                 $this->setValue($key, $value, $model);
@@ -24,68 +22,45 @@ class JsonToModel implements IJsonToModel
         return $model;
     }
 
-    private function handleCollection(array $value, Collection $collection)
+    private function handleCollection(array $value, ICollection $collection)
     {
-        $modelClassName = $collection->getFullyQualifiedModel();
-        $tableMapClassName = $modelClassName::TABLE_MAP;
-        $modelTableMap = $tableMapClassName::getTableMap();
-        $columns = $modelTableMap->getColumns();
-        $primaryKey = reset($columns);
-        $primaryKeyName = $primaryKey->getPhpName();
-
-        $existingKeys = $collection->getPrimaryKeys(false);
+        $modelTemplate = $collection->getModel();
+        $primaryKeyName = $modelTemplate->getPrimaryKeyName();
 
         $model = null;
 
         foreach ($value as $item) {
-            if (isset($item[$primaryKeyName]) && $key = array_search($item[$primaryKeyName], $existingKeys)) {
-                $model = $collection[$key];
+            if (isset($item[$primaryKeyName]) && $collection->offsetExists($item[$primaryKeyName])) {
+                $model = $collection[$item[$primaryKeyName]];
                 break;
             }
         }
 
         if ($model === null) {
-            $model = new $modelClassName();
+            $model = $collection->getModel();
             $collection->append($model);
         }
 
         $this->convert($value, $model);
     }
 
-    private function handleRow(string $key, array $value, ActiveRecordInterface $propelModel)
+    private function handleRow(string $key, array $value, IModel $model)
     {
-        $tableMapName = $propelModel::TABLE_MAP;
-        $tableMap = $tableMapName::getTableMap();
+        $methodName = "get$key";
 
-        if (!$tableMap->hasRelation($key) && mb_substr($key, -1) == 's') {
-            $key = mb_substr($key, 0, -1);
-        } elseif (!$tableMap->hasRelation($key)) {
-            throw new GeneralException('Invalid Array Format given');
-        }
-
-        $relation = $tableMap->getRelation($key);
-
-        $name = $key;
-        if ($relation->getPluralName() !== null) {
-            $name = $relation->getPluralName();
-        }
-
-        $methodName = "get$name";
-
-        if (method_exists($propelModel, $methodName)) {
-            $this->convert($value, $propelModel->$methodName());
+        if (method_exists($model, $methodName)) {
+            $this->convert($value, $model->$methodName());
+            return;
         }
     }
 
-    private function setValue(string $key, $value, ActiveRecordInterface $propelModel)
+    private function setValue(string $key, $value, IModel $model)
     {
         $methodName = "set$key";
 
-        if (method_exists($propelModel, $methodName)) {
-            $propelModel->$methodName($value);
+        if (method_exists($model, $methodName)) {
+            $model->$methodName($value);
             return;
         }
-
-        $$propelModel->setVirtualColumn($key, $value);
     }
 }

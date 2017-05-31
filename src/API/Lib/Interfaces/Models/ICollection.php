@@ -22,4 +22,5 @@ interface ICollection extends \ArrayAccess, \IteratorAggregate, \Countable, \Ser
     function setData($data);
     function getData();
     function getArrayCopy();
+    function getModel();
 }

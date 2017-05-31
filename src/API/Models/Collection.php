@@ -40,6 +40,10 @@ class Collection implements ICollection {
         $this->modelServiceName = $model;
     }
 
+    public function getModel() {
+        return $this->container->get($this->modelServiceName);
+    }
+
     public function toArray() {
         $array =  $this->collection->toArray();
         return $this->cleanupRecursionStringFromToArray($array);

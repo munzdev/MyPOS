@@ -55,6 +55,14 @@ abstract class Model implements IModel {
         return $this->cleanupRecursionStringFromToArray($array);
     }
 
+    public function getPrimaryKeyName() : string {
+        $tableMapClassName = $this->model::TABLE_MAP;
+        $modelTableMap = $tableMapClassName::getTableMap();
+        $columns = $modelTableMap->getColumns();
+        $primaryKey = reset($columns);
+        return $primaryKey->getPhpName();
+    }
+
     private function cleanupRecursionStringFromToArray(array $array)
     {
         $relationsFound = [];

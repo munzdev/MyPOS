@@ -32,4 +32,11 @@ interface IModel {
      * @return array
      */
     function toArray(bool $recursive = false);
+
+    /**
+     * Returns the Primary Key Name for an Array index
+     *
+     * @return string
+     */
+    public function getPrimaryKeyName() : string;
 }
