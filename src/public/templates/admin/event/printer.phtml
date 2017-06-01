@@ -1,6 +1,6 @@
 <div data-role="content">
-    <div class="nav-header"><%= header %></div>
-    <a id="admin-event-modify-printer-add-btn" class="ui-btn ui-icon-plus ui-mini ui-btn-icon-left">Hinzufügen</a>
+    <div class="nav-header"></div>
+    <a id="add-btn" class="ui-btn ui-icon-plus ui-mini ui-btn-icon-left">Hinzufügen</a>
     <table data-role="table" id="admin-event-modify-user-table" class="ui-responsive table-stroke table-stripe">
         <thead>
             <tr>
@@ -15,29 +15,29 @@
         <tbody>
             <% printers.each(function(printer){ %>
                 <tr>
-                    <th><%- printer.get('name') %></th>
-                    <td><% if(printer.get('default') == 1) { print('Ja'); } else { print('Nein'); } %></td>
-                    <td><%- printer.get('ip') %></td>
-                    <td><%- printer.get('port') %></td>
-                    <td><%- printer.get('characters_per_row') %></td>
+                    <th><%- printer.get('Name') %></th>
+                    <td><% if(printer.get('Default') == 1) { print('Ja'); } else { print('Nein'); } %></td>
+                    <td><%- printer.get('Attr1') %></td>
+                    <td><%- printer.get('Attr2') %></td>
+                    <td><%- printer.get('CharactersPerRow') %></td>
                     <td>
-                        <a data-printer-id="<%- printer.get('events_printerid') %>" class="admin-event-modify-printer-default-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left">Als Standard setzen</a>
-                        <a data-printer-id="<%- printer.get('events_printerid') %>" class="admin-event-modify-printer-edit-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
-                        <a data-printer-id="<%- printer.get('events_printerid') %>" class="admin-event-modify-printer-delete-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left">Löschen</a>
+                        <a data-printer-cid="<%- printer.cid %>" class="default-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left">Als Standard setzen</a>
+                        <a data-printer-cid="<%- printer.cid %>" class="edit-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
+                        <a data-printer-cid="<%- printer.cid %>" class="delete-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left">Löschen</a>
                     </td>
                 </tr>
             <% }); %>
         </tbody>
     </table>
 </div>
-<div data-role="popup" id="admin-event-modify-printer-delete-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+<div class="nav-footer"></div>
+<div data-role="popup" id="delete-dialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
     <div data-role="header" data-theme="a">
         <h1>Drucker löschen?</h1>
     </div>
     <div role="main" class="ui-content">
         <h3 class="ui-title">Sind Sie sicher, dass Sie den Drucker löschen wollen? Der Drucker kann nicht mehr verwendet werden!</h3>
         <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back">Abbrechen</a>
-        <a id='admin-event-modify-printer-delete-dialog-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
+        <a id='delete-dialog-finished' class="ui-btn ui-corner-all ui-shadow ui-btn-b">Fortfahren</a>
     </div>
 </div>
-<%= footer %>

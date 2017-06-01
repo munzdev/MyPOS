@@ -1,120 +1,72 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'Webservice',
-         'views/headers/AdminHeaderView',
-         'views/footers/AdminFooterView',
-         'collections/PrinterCollection',
-         'text!templates/pages/admin/event/printer.phtml'],
-function( Webservice,
-          AdminHeaderView,
-          AdminFooterView,
-          PrinterCollection,
-          Template ) {
+define(['views/admin/event/AdminEventView',
+        'text!templates/admin/event/printer.phtml'
+], function(AdminEventView,
+            Template) {
     "use strict";
 
-    // Extends Backbone.View
-    var PrinterView = Backbone.View.extend( {
+    return class PrinterView extends AdminEventView {
 
-    	title: 'admin-event-modify-printer',
-    	el: 'body',
-        events: {
-            'click #admin-event-modify-printer-add-btn': 'click_add_btn',
-            'click .admin-event-modify-printer-default-btn': 'click_default_btn',
-            'click .admin-event-modify-printer-edit-btn': 'click_edit_btn',
-            'click .admin-event-modify-printer-delete-btn': 'click_delete_btn',
-            'click #admin-event-modify-printer-delete-dialog-finished': 'click_delete_finished_btn'
-        },
-
-        // The View Constructor
-        initialize: function(options) {
-            _.bindAll(this, "render");
-
-            this.id = options.id;
-
-            this.printerList = new PrinterCollection();
-            this.printerList.url = app.API + "Admin/GetEventPrinterList/";
-            this.printerList.fetch({data: {eventid: this.id},
-                                    success: this.render});
-        },
-
-        click_add_btn: function()
-        {
-            MyPOS.ChangePage('#admin/event/modify/' + this.id + '/printer/add');
-        },
-
-        click_default_btn: function(event)
-        {
-            var id = $(event.currentTarget).attr('data-printer-id');
-
-            var webservice = new Webservice();
-            webservice.action = "Admin/SetEventPrinterDefault";
-            webservice.formData = {events_printerid: id};
-            webservice.callback = {
-                success: function()
-                {
-                    MyPOS.ReloadPage();
-                }
-            };
-            webservice.call();
-        },
-
-        click_edit_btn: function(event)
-        {
-            var id = $(event.currentTarget).attr('data-printer-id');
-
-            MyPOS.ChangePage('#admin/event/modify/' + this.id + '/printer/modify/' + id);
-        },
-
-        click_delete_btn: function(event)
-        {
-            var id = $(event.currentTarget).attr('data-printer-id');
-
-            this.deleteId = id;
-
-            $('#admin-event-modify-printer-delete-dialog').popup('open');
-        },
-
-        click_delete_finished_btn: function()
-        {
-            $('#admin-event-modify-printer-delete-dialog').popup('close');
-
-            var webservice = new Webservice();
-            webservice.action = "Admin/DeleteEventPrinter";
-            webservice.formData = {events_printerid: this.deleteId};
-            webservice.callback = {
-                success: function()
-                {
-                    MyPOS.ReloadPage();
-                }
-            };
-            webservice.call();
-        },
-
-        // Renders all of the Category models on the UI
-        render: function() {
-            var header = new AdminHeaderView();
-            var footer = new AdminFooterView({id: this.id});
-
-            header.activeButton = 'event';
-            footer.activeButton = 'printer';
-
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  footer: footer.render(),
-                                                                  printers: this.printerList});
-
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-            footer.setElement("#" + this.title + " .nav-footer");
-
-            $.mobile.changePage( "#" + this.title);
-            return this;
+        events() {
+            return {'click #add-btn': 'click_add_btn',
+                    'click .default-btn': 'click_default_btn',
+                    'click .edit-btn': 'click_edit_btn',
+                    'click .delete-btn': 'click_delete_btn',
+                    'click #delete-dialog-finished': 'click_delete_finished_btn'};
         }
 
-    } );
+        initialize(options) {
+            super.initialize(options);
 
-    // Returns the View class
-    return AdminEventModifyPrinterView;
+            this.printers = new app.collections.Event.EventPrinterCollection();
+            this.printers.fetch({url: this.printers.url() + '/Eventid/' + this.eventid})
+                .done(() => {
+                    this.render();
+                });
+        }
 
+        click_add_btn() {
+            this.changeHash(this.getMenuLink() + '/printer/add');
+        }
+
+        click_default_btn(event) {
+            let printer = this.printers.get({cid: $(event.currentTarget).attr('data-printer-cid')});
+
+            printer.save({put: true})
+                    .done(() => {
+                        this.reload();
+                    });
+        }
+
+        click_edit_btn(event) {
+            let printer = this.printers.get({cid: $(event.currentTarget).attr('data-printer-cid')});
+
+            this.changeHash(this.getMenuLink() + '/printer/' + printer.get('EventPrinterid'));
+        }
+
+        click_delete_btn(event) {
+            let cid = $(event.currentTarget).attr('data-printer-cid');
+
+            this.deleteId = cid;
+
+            this.$('#delete-dialog').popup('open');
+        }
+
+        click_delete_finished_btn() {
+            this.$('#delete-dialog').popup('close');
+
+            let printer = this.printers.get({cid: this.deleteId});
+            printer.destroy()
+                    .done(() => {
+                        this.reload();
+                    });
+        }
+
+        render() {
+            this.renderTemplate(Template, {printers: this.printers});
+
+            this.changePage(this);
+
+            return this;
+        }
+    }
 } );

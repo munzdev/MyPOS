@@ -33,12 +33,12 @@ define(["views/dialoges/LoginView",
         "views/admin/event/OverviewView",
         "views/admin/event/TableView",
         "views/admin/event/TableModifyView",
+        "views/admin/event/PrinterView",
+        "views/admin/event/PrinterModifyView",
         /*"views/admin/event/MenuView",
         "views/admin/event/MenuModifyView",
         "views/admin/event/DistributionView",
         "views/admin/event/DistributionModifyView",
-        "views/admin/event/PrinterView",
-        "views/admin/event/PrinterModifyView",
         "views/admin/event/UserView",
         "views/admin/event/UserModifyView",
         "views/admin/event/MenuTypeView",
@@ -79,12 +79,12 @@ define(["views/dialoges/LoginView",
             AdminEventModifyOverviewView,
             AdminEventModifyTableView,
             AdminEventModifyTableModifyView,
+            AdminEventModifyPrinterView,
+            AdminEventModifyPrinterModifyView,
             AdminEventModifyMenuView,
             AdminEventModifyMenuModifyView,
             AdminEventModifyDistributionView,
             AdminEventModifyDistributionModifyView,
-            AdminEventModifyPrinterView,
-            AdminEventModifyPrinterModifyView,
             AdminEventModifyUserView,
             AdminEventModifyUserModifyView,
             AdminMenuView,
@@ -178,7 +178,7 @@ define(["views/dialoges/LoginView",
                 "admin/event/modify/:eventid/distribution/modify/:distributions_placeid": "admin_event_modify_distribution_modify",
                 "admin/event/modify/:eventid/printer": "admin_event_modify_printer",
                 "admin/event/modify/:eventid/printer/add": "admin_event_modify_printer_add",
-                "admin/event/modify/:eventid/printer/modify/:events_printerid": "admin_event_modify_printer_modify",
+                "admin/event/modify/:eventid/printer/:printerid": "admin_event_modify_printer_modify",
                 "admin/event/modify/:eventid/user": "admin_event_modify_user",
                 "admin/event/modify/:eventid/user/add": "admin_event_modify_user_add",
                 "admin/event/modify/:eventid/user/modify/:events_userid": "admin_event_modify_user_modify",
@@ -372,12 +372,13 @@ define(["views/dialoges/LoginView",
         }
 
         admin_event_modify_printer_add(eventid) {
-            this.show(new AdminEventModifyPrinterModifyView({eventid: eventid}));
+            this.show(new AdminEventModifyPrinterModifyView({eventid: eventid,
+                                                             printerid: 'new'}));
         }
 
-        admin_event_modify_printer_modify(eventid, events_printerid) {
+        admin_event_modify_printer_modify(eventid, printerid) {
             this.show(new AdminEventModifyPrinterModifyView({eventid: eventid,
-                events_printerid: events_printerid}));
+                                                             printerid: printerid}));
         }
 
         admin_event_modify_user(eventid) {

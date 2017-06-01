@@ -5,6 +5,7 @@ define(["models/BaseModel"
     return class EventPrinter extends BaseModel {
 
         idAttribute() { return 'EventPrinterid'; }
+        urlRoot() {return app.API + "DB/Event/EventPrinter";}
 
         defaults() {
             return {EventPrinterid: null,

@@ -5,12 +5,12 @@ namespace API\Controllers\DB\Event;
 use API\Lib\AdminController;
 use API\Lib\Interfaces\Helpers\IJsonToModel;
 use API\Lib\Interfaces\Helpers\IValidate;
-use API\Lib\Interfaces\Models\Event\IEventTableQuery;
+use API\Lib\Interfaces\Models\Event\IEventPrinterQuery;
 use API\Lib\Interfaces\Models\IConnectionInterface;
 use Respect\Validation\Validator;
 use Slim\App;
 
-class EventTableModify extends AdminController
+class EventPrinterModify extends AdminController
 {
     public function __construct(App $app)
     {
@@ -29,27 +29,27 @@ class EventTableModify extends AdminController
     }
 
     protected function get() : void {
-        $eventTableQuery = $this->container->get(IEventTableQuery::class);
-        $eventTable = $eventTableQuery->findPk($this->args['id']);
+        $eventPrinterQuery = $this->container->get(IEventPrinterQuery::class);
+        $eventPrinter = $eventPrinterQuery->findPk($this->args['id']);
 
-        $this->withJson($eventTable->toArray());
+        $this->withJson($eventPrinter->toArray());
     }
     
     protected function put() : void {
         $jsonToModel = $this->container->get(IJsonToModel::class);
-        $eventTableQuery = $this->container->get(IEventTableQuery::class);
-        $eventTable = $eventTableQuery->findPk($this->args['id']);
+        $eventPrinterQuery = $this->container->get(IEventPrinterQuery::class);
+        $eventPrinter = $eventPrinterQuery->findPk($this->args['id']);
         
-        $jsonToModel->convert($this->json, $eventTable);
-        $eventTable->save();
+        $jsonToModel->convert($this->json, $eventPrinter);
+        $eventPrinter->save();
         
-        $this->withJson($eventTable->toArray());
+        $this->withJson($eventPrinter->toArray());
     }
 
     protected function delete() : void {
-        $eventTableQuery = $this->container->get(IEventTableQuery::class);
-        $eventTable = $eventTableQuery->findPk($this->args['id']);
+        $eventPrinterQuery = $this->container->get(IEventPrinterQuery::class);
+        $eventPrinter = $eventPrinterQuery->findPk($this->args['id']);
 
-        $this->withJson($eventTable->delete());
+        $this->withJson($eventPrinter->delete());
     }
 }

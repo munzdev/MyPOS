@@ -19,7 +19,7 @@ class Constants extends Controller
             if (0 === strpos($name, $namespace)) {
                 $name = substr($name, $start);
 
-                if (0 === strpos($name, "PRINTER_")) {
+                if (0 === strpos($name, "PRINTER_CHARACTER_EURO")) {
                     continue;
                 }
 

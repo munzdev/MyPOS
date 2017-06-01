@@ -11,5 +11,9 @@ $app->group(
             ->setName('DB-Event-EventTable');
         $this->any('/EventTable/{id:[0-9]+}', new API\Controllers\DB\Event\EventTableModify($this))
             ->setName('DB-Event-EventTable-Modify');
+        $this->any('/EventPrinter/Eventid/{id:[0-9]+}', new API\Controllers\DB\Event\EventPrinter($this))
+            ->setName('DB-Event-EventPrinter');
+        $this->any('/EventPrinter/{id:[0-9]+}', new API\Controllers\DB\Event\EventPrinterModify($this))
+            ->setName('DB-Event-EventPrinter-Modify');
     }
 );

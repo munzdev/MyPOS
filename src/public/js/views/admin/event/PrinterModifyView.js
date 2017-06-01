@@ -1,167 +1,75 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'Webservice',
-         'views/headers/AdminHeaderView',
-         'views/footers/AdminFooterView',
-         'text!templates/pages/admin/event/printer-modify.phtml'],
-function( Webservice,
-          AdminHeaderView,
-          AdminFooterView,
-          Template ) {
+define(['views/admin/event/AdminEventView',
+        'text!templates/admin/event/printer-modify.phtml'
+], function(AdminEventView,
+            Template) {
     "use strict";
 
-    // Extends Backbone.View
-    var PrinterModifyView = Backbone.View.extend( {
+    return class PrinterModifyView extends AdminEventView {
 
-    	title: 'admin-event-modify-printer-modify',
-    	el: 'body',
-        events: {
-            'click #admin-event-modify-printer-modify-save-btn': 'click_save_btn'
-        },
+        events() {
+            return {'click #save-btn': 'click_save_btn'};
+        }
 
-        click_save_btn: function()
-        {
-            var self = this;
+        initialize(options) {
+            super.initialize(options);
 
-            var name = $.trim($('#admin-event-modify-printer-modify-name').val());
-            var ip = $.trim($('#admin-event-modify-printer-modify-ip').val());
-            var port = $.trim($('#admin-event-modify-printer-modify-port').val());
-            var charactersPerRow = $.trim($('#admin-event-modify-printer-modify-characters-per-row').val());
+            this.eventPrinter = new app.models.Event.EventPrinter();
 
-            if(name == '')
-            {
-                MyPOS.DisplayError('Bitte eine Namen eingebe!');
+            if(options.printerid === 'new') {
+                this.render();
+            } else {
+                this.eventPrinter.set('EventPrinterid', options.printerid);
+                this.eventPrinter.fetch()
+                                    .done(() => {
+                                        this.render();
+                                    });
+            }
+        }
+
+        click_save_btn() {
+            if (!this.$('#form').valid()) {
                 return;
             }
 
-            if(ip == '')
-            {
-                MyPOS.DisplayError('Bitte eine gültige IP eingebe!');
-                return;
-            }
+            this.eventPrinter.set('Eventid', this.eventid);
+            this.eventPrinter.set('Name', $.trim(this.$('#name').val()));
+            this.eventPrinter.set('Type', $.trim(this.$('#type').val()));
+            this.eventPrinter.set('Attr1', $.trim(this.$('#attr1').val()));
+            this.eventPrinter.set('Attr2', $.trim(this.$('#attr2').val()));
+            this.eventPrinter.set('CharactersPerRow', $.trim(this.$('#charactersPerRow').val()));
+            this.eventPrinter.save()
+                            .done(() => {
+                                this.changeHash(this.getMenuLink() + '/printer');
+                            });
+        }
 
-            if(port == '' || port <= 0)
-            {
-                MyPOS.DisplayError('Bitte einen gültigen Port eingebe!');
-                return;
-            }
+        render() {
+            let t = this.i18n();
+            this.renderTemplate(Template, {eventPrinter: this.eventPrinter});
 
-            if(charactersPerRow == '' || parseInt(charactersPerRow) <= 0)
-            {
-                MyPOS.DisplayError('Bitte eine gültige Druckergröße eingebe!');
-                return;
-            }
+            this.$('#form').validate({
+                rules: {
+                    name: {required: true},
+                    type: {required: true},
+                    charactersPerRow: {required: true}
+                },
+                messages: {
+                    name: t.errorName,
+                    type: t.errorType,
+                    charactersPerRow: t.errorCharactersPerRow
+                },
+                /*errorPlacement: function (error, element) {
+                    if(element.is('select'))
+                        error.appendTo(element.parent().parent().prev());
+                    else
+                        error.appendTo(element.parent().prev());
+                }*/
+            });
 
-            if(this.mode == 'new')
-            {
-                var webservice = new Webservice();
-                webservice.action = "Admin/AddEventPrinter";
-                webservice.formData = {eventid: this.eventid,
-                                       name: name,
-                                       ip: ip,
-                                       port: port,
-                                       characters_per_row: charactersPerRow};
-                webservice.callback = {
-                    success: function()
-                    {
-                        MyPOS.ChangePage('#admin/event/modify/' + self.eventid + "/printer");
-                    }
-                };
-                webservice.call();
-            }
-            else
-            {
-                var webservice = new Webservice();
-                webservice.action = "Admin/SetEventPrinter";
-                webservice.formData = {events_printerid: this.events_printerid,
-                                       name: name,
-                                       ip: ip,
-                                       port: port,
-                                       characters_per_row: charactersPerRow};
-                webservice.callback = {
-                    success: function()
-                    {
-                        MyPOS.ChangePage('#admin/event/modify/' + self.eventid + "/printer");
-                    }
-                };
-                webservice.call();
-            }
+            this.changePage(this);
 
-
-        },
-
-        // The View Constructor
-        initialize: function(options) {
-            _.bindAll(this, "render",
-                            "click_save_btn");
-
-            var self = this;
-
-            this.eventid = options.id;
-
-            this.nameValue = "";
-            this.ipValue = "";
-            this.portValue = "";
-            this.charactersPerRowValue = "";
-
-            if(typeof options.events_printerid === 'undefined')
-            {
-                self.mode = 'new';
-                self.events_printerid = 0;
-                self.render();
-            }
-            else
-            {
-                self.mode = 'edit';
-                self.events_printerid = options.events_printerid;
-
-                var webservice = new Webservice();
-                webservice.action = "Admin/GetEventPrinter";
-                webservice.formData = {events_printerid: self.events_printerid};
-                webservice.callback = {
-                    success: function(data)
-                    {
-                        self.nameValue = data.name;
-                        self.ipValue = data.ip;
-                        self.portValue = data.port;
-                        self.charactersPerRowValue = data.characters_per_row;
-                        self.render();
-                    }
-                };
-                webservice.call();
-            }
-        },
-
-        // Renders all of the Category models on the UI
-        render: function() {
-            var header = new AdminHeaderView();
-            var footer = new AdminFooterView({id: this.eventid});
-
-            header.activeButton = 'event';
-            footer.activeButton = 'printer';
-
-            MyPOS.RenderPageTemplate(this, this.title, Template, {header: header.render(),
-                                                                  footer: footer.render(),
-                                                                  mode: this.mode,
-                                                                  name: this.nameValue,
-                                                                  ip: this.ipValue,
-                                                                  port: this.portValue,
-                                                                  charactersPerRow: this.charactersPerRowValue,
-                                                                  });
-
-            this.setElement("#" + this.title);
-            header.setElement("#" + this.title + " .nav-header");
-            footer.setElement("#" + this.title + " .nav-footer");
-
-            $.mobile.changePage( "#" + this.title);
             return this;
         }
 
-    } );
-
-    // Returns the View class
-    return AdminEventModifyPrinterModifyView;
-
+    }
 } );
