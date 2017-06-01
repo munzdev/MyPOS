@@ -212,7 +212,7 @@ abstract class OrderInProgressQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT order_in_progressid, orderid, userid, menu_groupid, begin, done FROM order_in_progress WHERE order_in_progressid = :p0';
+        $sql = 'SELECT `order_in_progressid`, `orderid`, `userid`, `menu_groupid`, `begin`, `done` FROM `order_in_progress` WHERE `order_in_progressid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

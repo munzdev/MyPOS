@@ -822,23 +822,23 @@ abstract class MenuExtra implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(MenuExtraTableMap::COL_MENU_EXTRAID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_extraid';
+            $modifiedColumns[':p' . $index++]  = '`menu_extraid`';
         }
         if ($this->isColumnModified(MenuExtraTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventid';
+            $modifiedColumns[':p' . $index++]  = '`eventid`';
         }
         if ($this->isColumnModified(MenuExtraTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
         if ($this->isColumnModified(MenuExtraTableMap::COL_AVAILABILITYID)) {
-            $modifiedColumns[':p' . $index++]  = 'availabilityid';
+            $modifiedColumns[':p' . $index++]  = '`availabilityid`';
         }
         if ($this->isColumnModified(MenuExtraTableMap::COL_AVAILABILITY_AMOUNT)) {
-            $modifiedColumns[':p' . $index++]  = 'availability_amount';
+            $modifiedColumns[':p' . $index++]  = '`availability_amount`';
         }
 
         $sql = sprintf(
-            'INSERT INTO menu_extra (%s) VALUES (%s)',
+            'INSERT INTO `menu_extra` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -847,19 +847,19 @@ abstract class MenuExtra implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'menu_extraid':                        
+                    case '`menu_extraid`':                        
                         $stmt->bindValue($identifier, $this->menu_extraid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':                        
+                    case '`eventid`':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'availabilityid':                        
+                    case '`availabilityid`':                        
                         $stmt->bindValue($identifier, $this->availabilityid, PDO::PARAM_INT);
                         break;
-                    case 'availability_amount':                        
+                    case '`availability_amount`':                        
                         $stmt->bindValue($identifier, $this->availability_amount, PDO::PARAM_INT);
                         break;
                 }

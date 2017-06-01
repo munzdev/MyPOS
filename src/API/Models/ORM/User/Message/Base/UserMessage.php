@@ -853,26 +853,26 @@ abstract class UserMessage implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(UserMessageTableMap::COL_USER_MESSAGEID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_messageid';
+            $modifiedColumns[':p' . $index++]  = '`user_messageid`';
         }
         if ($this->isColumnModified(UserMessageTableMap::COL_FROM_EVENT_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'from_event_userid';
+            $modifiedColumns[':p' . $index++]  = '`from_event_userid`';
         }
         if ($this->isColumnModified(UserMessageTableMap::COL_TO_EVENT_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'to_event_userid';
+            $modifiedColumns[':p' . $index++]  = '`to_event_userid`';
         }
         if ($this->isColumnModified(UserMessageTableMap::COL_MESSAGE)) {
-            $modifiedColumns[':p' . $index++]  = 'message';
+            $modifiedColumns[':p' . $index++]  = '`message`';
         }
         if ($this->isColumnModified(UserMessageTableMap::COL_DATE)) {
-            $modifiedColumns[':p' . $index++]  = 'date';
+            $modifiedColumns[':p' . $index++]  = '`date`';
         }
         if ($this->isColumnModified(UserMessageTableMap::COL_READED)) {
-            $modifiedColumns[':p' . $index++]  = 'readed';
+            $modifiedColumns[':p' . $index++]  = '`readed`';
         }
 
         $sql = sprintf(
-            'INSERT INTO user_message (%s) VALUES (%s)',
+            'INSERT INTO `user_message` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -881,22 +881,22 @@ abstract class UserMessage implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'user_messageid':                        
+                    case '`user_messageid`':                        
                         $stmt->bindValue($identifier, $this->user_messageid, PDO::PARAM_INT);
                         break;
-                    case 'from_event_userid':                        
+                    case '`from_event_userid`':                        
                         $stmt->bindValue($identifier, $this->from_event_userid, PDO::PARAM_INT);
                         break;
-                    case 'to_event_userid':                        
+                    case '`to_event_userid`':                        
                         $stmt->bindValue($identifier, $this->to_event_userid, PDO::PARAM_INT);
                         break;
-                    case 'message':                        
+                    case '`message`':                        
                         $stmt->bindValue($identifier, $this->message, PDO::PARAM_STR);
                         break;
-                    case 'date':                        
+                    case '`date`':                        
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'readed':
+                    case '`readed`':
                         $stmt->bindValue($identifier, (int) $this->readed, PDO::PARAM_INT);
                         break;
                 }

@@ -653,14 +653,14 @@ abstract class PaymentType implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(PaymentTypeTableMap::COL_PAYMENT_TYPEID)) {
-            $modifiedColumns[':p' . $index++]  = 'payment_typeid';
+            $modifiedColumns[':p' . $index++]  = '`payment_typeid`';
         }
         if ($this->isColumnModified(PaymentTypeTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
 
         $sql = sprintf(
-            'INSERT INTO payment_type (%s) VALUES (%s)',
+            'INSERT INTO `payment_type` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -669,10 +669,10 @@ abstract class PaymentType implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'payment_typeid':                        
+                    case '`payment_typeid`':                        
                         $stmt->bindValue($identifier, $this->payment_typeid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                 }

@@ -796,20 +796,20 @@ abstract class MenuSize implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(MenuSizeTableMap::COL_MENU_SIZEID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_sizeid';
+            $modifiedColumns[':p' . $index++]  = '`menu_sizeid`';
         }
         if ($this->isColumnModified(MenuSizeTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventid';
+            $modifiedColumns[':p' . $index++]  = '`eventid`';
         }
         if ($this->isColumnModified(MenuSizeTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
         if ($this->isColumnModified(MenuSizeTableMap::COL_FACTOR)) {
-            $modifiedColumns[':p' . $index++]  = 'factor';
+            $modifiedColumns[':p' . $index++]  = '`factor`';
         }
 
         $sql = sprintf(
-            'INSERT INTO menu_size (%s) VALUES (%s)',
+            'INSERT INTO `menu_size` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -818,16 +818,16 @@ abstract class MenuSize implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'menu_sizeid':                        
+                    case '`menu_sizeid`':                        
                         $stmt->bindValue($identifier, $this->menu_sizeid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':                        
+                    case '`eventid`':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'factor':                        
+                    case '`factor`':                        
                         $stmt->bindValue($identifier, $this->factor, PDO::PARAM_STR);
                         break;
                 }

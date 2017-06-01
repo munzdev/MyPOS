@@ -126,7 +126,7 @@ class DistributionGivingOutTableMap extends TableMap
         // attributes
         $this->setName('distribution_giving_out');
         $this->setPhpName('DistributionGivingOut');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\OIP\\DistributionGivingOut');
         $this->setPackage('API.Models.ORM.OIP');
         $this->setUseIdGenerator(true);

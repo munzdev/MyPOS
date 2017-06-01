@@ -925,26 +925,26 @@ abstract class Coupon implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(CouponTableMap::COL_COUPONID)) {
-            $modifiedColumns[':p' . $index++]  = 'couponid';
+            $modifiedColumns[':p' . $index++]  = '`couponid`';
         }
         if ($this->isColumnModified(CouponTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventid';
+            $modifiedColumns[':p' . $index++]  = '`eventid`';
         }
         if ($this->isColumnModified(CouponTableMap::COL_CREATED_BY_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'created_by_userid';
+            $modifiedColumns[':p' . $index++]  = '`created_by_userid`';
         }
         if ($this->isColumnModified(CouponTableMap::COL_CODE)) {
-            $modifiedColumns[':p' . $index++]  = 'code';
+            $modifiedColumns[':p' . $index++]  = '`code`';
         }
         if ($this->isColumnModified(CouponTableMap::COL_CREATED)) {
-            $modifiedColumns[':p' . $index++]  = 'created';
+            $modifiedColumns[':p' . $index++]  = '`created`';
         }
         if ($this->isColumnModified(CouponTableMap::COL_VALUE)) {
-            $modifiedColumns[':p' . $index++]  = 'value';
+            $modifiedColumns[':p' . $index++]  = '`value`';
         }
 
         $sql = sprintf(
-            'INSERT INTO coupon (%s) VALUES (%s)',
+            'INSERT INTO `coupon` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -953,22 +953,22 @@ abstract class Coupon implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'couponid':                        
+                    case '`couponid`':                        
                         $stmt->bindValue($identifier, $this->couponid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':                        
+                    case '`eventid`':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'created_by_userid':                        
+                    case '`created_by_userid`':                        
                         $stmt->bindValue($identifier, $this->created_by_userid, PDO::PARAM_INT);
                         break;
-                    case 'code':                        
+                    case '`code`':                        
                         $stmt->bindValue($identifier, $this->code, PDO::PARAM_STR);
                         break;
-                    case 'created':                        
+                    case '`created`':                        
                         $stmt->bindValue($identifier, $this->created ? $this->created->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'value':                        
+                    case '`value`':                        
                         $stmt->bindValue($identifier, $this->value, PDO::PARAM_STR);
                         break;
                 }

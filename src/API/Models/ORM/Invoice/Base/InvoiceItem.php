@@ -866,29 +866,29 @@ abstract class InvoiceItem implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(InvoiceItemTableMap::COL_INVOICE_ITEMID)) {
-            $modifiedColumns[':p' . $index++]  = 'invoice_itemid';
+            $modifiedColumns[':p' . $index++]  = '`invoice_itemid`';
         }
         if ($this->isColumnModified(InvoiceItemTableMap::COL_INVOICEID)) {
-            $modifiedColumns[':p' . $index++]  = 'invoiceid';
+            $modifiedColumns[':p' . $index++]  = '`invoiceid`';
         }
         if ($this->isColumnModified(InvoiceItemTableMap::COL_ORDER_DETAILID)) {
-            $modifiedColumns[':p' . $index++]  = 'order_detailid';
+            $modifiedColumns[':p' . $index++]  = '`order_detailid`';
         }
         if ($this->isColumnModified(InvoiceItemTableMap::COL_AMOUNT)) {
-            $modifiedColumns[':p' . $index++]  = 'amount';
+            $modifiedColumns[':p' . $index++]  = '`amount`';
         }
         if ($this->isColumnModified(InvoiceItemTableMap::COL_PRICE)) {
-            $modifiedColumns[':p' . $index++]  = 'price';
+            $modifiedColumns[':p' . $index++]  = '`price`';
         }
         if ($this->isColumnModified(InvoiceItemTableMap::COL_DESCRIPTION)) {
-            $modifiedColumns[':p' . $index++]  = 'description';
+            $modifiedColumns[':p' . $index++]  = '`description`';
         }
         if ($this->isColumnModified(InvoiceItemTableMap::COL_TAX)) {
-            $modifiedColumns[':p' . $index++]  = 'tax';
+            $modifiedColumns[':p' . $index++]  = '`tax`';
         }
 
         $sql = sprintf(
-            'INSERT INTO invoice_item (%s) VALUES (%s)',
+            'INSERT INTO `invoice_item` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -897,25 +897,25 @@ abstract class InvoiceItem implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'invoice_itemid':                        
+                    case '`invoice_itemid`':                        
                         $stmt->bindValue($identifier, $this->invoice_itemid, PDO::PARAM_INT);
                         break;
-                    case 'invoiceid':                        
+                    case '`invoiceid`':                        
                         $stmt->bindValue($identifier, $this->invoiceid, PDO::PARAM_INT);
                         break;
-                    case 'order_detailid':                        
+                    case '`order_detailid`':                        
                         $stmt->bindValue($identifier, $this->order_detailid, PDO::PARAM_INT);
                         break;
-                    case 'amount':                        
+                    case '`amount`':                        
                         $stmt->bindValue($identifier, $this->amount, PDO::PARAM_INT);
                         break;
-                    case 'price':                        
+                    case '`price`':                        
                         $stmt->bindValue($identifier, $this->price, PDO::PARAM_STR);
                         break;
-                    case 'description':                        
+                    case '`description`':                        
                         $stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
                         break;
-                    case 'tax':                        
+                    case '`tax`':                        
                         $stmt->bindValue($identifier, $this->tax, PDO::PARAM_INT);
                         break;
                 }

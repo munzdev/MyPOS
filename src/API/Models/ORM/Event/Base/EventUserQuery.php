@@ -206,7 +206,7 @@ abstract class EventUserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT event_userid, eventid, userid, user_roles, begin_money FROM event_user WHERE event_userid = :p0';
+        $sql = 'SELECT `event_userid`, `eventid`, `userid`, `user_roles`, `begin_money` FROM `event_user` WHERE `event_userid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

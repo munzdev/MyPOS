@@ -702,17 +702,17 @@ abstract class PaymentCoupon implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(PaymentCouponTableMap::COL_COUPONID)) {
-            $modifiedColumns[':p' . $index++]  = 'couponid';
+            $modifiedColumns[':p' . $index++]  = '`couponid`';
         }
         if ($this->isColumnModified(PaymentCouponTableMap::COL_PAYMENT_RECIEVEDID)) {
-            $modifiedColumns[':p' . $index++]  = 'payment_recievedid';
+            $modifiedColumns[':p' . $index++]  = '`payment_recievedid`';
         }
         if ($this->isColumnModified(PaymentCouponTableMap::COL_VALUE_USED)) {
-            $modifiedColumns[':p' . $index++]  = 'value_used';
+            $modifiedColumns[':p' . $index++]  = '`value_used`';
         }
 
         $sql = sprintf(
-            'INSERT INTO payment_coupon (%s) VALUES (%s)',
+            'INSERT INTO `payment_coupon` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -721,13 +721,13 @@ abstract class PaymentCoupon implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'couponid':                        
+                    case '`couponid`':                        
                         $stmt->bindValue($identifier, $this->couponid, PDO::PARAM_INT);
                         break;
-                    case 'payment_recievedid':                        
+                    case '`payment_recievedid`':                        
                         $stmt->bindValue($identifier, $this->payment_recievedid, PDO::PARAM_INT);
                         break;
-                    case 'value_used':                        
+                    case '`value_used`':                        
                         $stmt->bindValue($identifier, $this->value_used, PDO::PARAM_STR);
                         break;
                 }

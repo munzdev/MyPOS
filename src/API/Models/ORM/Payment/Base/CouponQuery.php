@@ -201,7 +201,7 @@ abstract class CouponQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT couponid, eventid, created_by_userid, code, created, value FROM coupon WHERE couponid = :p0';
+        $sql = 'SELECT `couponid`, `eventid`, `created_by_userid`, `code`, `created`, `value` FROM `coupon` WHERE `couponid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

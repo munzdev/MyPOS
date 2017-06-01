@@ -159,7 +159,7 @@ abstract class PaymentTypeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT payment_typeid, name FROM payment_type WHERE payment_typeid = :p0';
+        $sql = 'SELECT `payment_typeid`, `name` FROM `payment_type` WHERE `payment_typeid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

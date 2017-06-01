@@ -211,7 +211,7 @@ abstract class PaymentRecievedQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT payment_recievedid, invoiceid, payment_typeid, userid, date, amount FROM payment_recieved WHERE payment_recievedid = :p0';
+        $sql = 'SELECT `payment_recievedid`, `invoiceid`, `payment_typeid`, `userid`, `date`, `amount` FROM `payment_recieved` WHERE `payment_recievedid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

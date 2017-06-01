@@ -170,7 +170,7 @@ abstract class OrderDetailExtraQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT order_detailid, menu_possible_extraid FROM order_detail_extra WHERE order_detailid = :p0 AND menu_possible_extraid = :p1';
+        $sql = 'SELECT `order_detailid`, `menu_possible_extraid` FROM `order_detail_extra` WHERE `order_detailid` = :p0 AND `menu_possible_extraid` = :p1';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);            

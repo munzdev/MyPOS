@@ -180,7 +180,7 @@ abstract class InvoiceWarningTypeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT invoice_warning_typeid, eventid, name, extra_price FROM invoice_warning_type WHERE invoice_warning_typeid = :p0';
+        $sql = 'SELECT `invoice_warning_typeid`, `eventid`, `name`, `extra_price` FROM `invoice_warning_type` WHERE `invoice_warning_typeid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

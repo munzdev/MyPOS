@@ -760,20 +760,20 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(InvoiceWarningTypeTableMap::COL_INVOICE_WARNING_TYPEID)) {
-            $modifiedColumns[':p' . $index++]  = 'invoice_warning_typeid';
+            $modifiedColumns[':p' . $index++]  = '`invoice_warning_typeid`';
         }
         if ($this->isColumnModified(InvoiceWarningTypeTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventid';
+            $modifiedColumns[':p' . $index++]  = '`eventid`';
         }
         if ($this->isColumnModified(InvoiceWarningTypeTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
         if ($this->isColumnModified(InvoiceWarningTypeTableMap::COL_EXTRA_PRICE)) {
-            $modifiedColumns[':p' . $index++]  = 'extra_price';
+            $modifiedColumns[':p' . $index++]  = '`extra_price`';
         }
 
         $sql = sprintf(
-            'INSERT INTO invoice_warning_type (%s) VALUES (%s)',
+            'INSERT INTO `invoice_warning_type` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -782,16 +782,16 @@ abstract class InvoiceWarningType implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'invoice_warning_typeid':                        
+                    case '`invoice_warning_typeid`':                        
                         $stmt->bindValue($identifier, $this->invoice_warning_typeid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':                        
+                    case '`eventid`':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'extra_price':                        
+                    case '`extra_price`':                        
                         $stmt->bindValue($identifier, $this->extra_price, PDO::PARAM_STR);
                         break;
                 }

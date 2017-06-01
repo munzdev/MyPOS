@@ -207,7 +207,7 @@ abstract class MenuGroupQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT menu_groupid, menu_typeid, name FROM menu_group WHERE menu_groupid = :p0';
+        $sql = 'SELECT `menu_groupid`, `menu_typeid`, `name` FROM `menu_group` WHERE `menu_groupid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

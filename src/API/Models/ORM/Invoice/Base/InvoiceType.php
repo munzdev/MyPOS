@@ -653,14 +653,14 @@ abstract class InvoiceType implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(InvoiceTypeTableMap::COL_INVOICE_TYPEID)) {
-            $modifiedColumns[':p' . $index++]  = 'invoice_typeid';
+            $modifiedColumns[':p' . $index++]  = '`invoice_typeid`';
         }
         if ($this->isColumnModified(InvoiceTypeTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
 
         $sql = sprintf(
-            'INSERT INTO invoice_type (%s) VALUES (%s)',
+            'INSERT INTO `invoice_type` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -669,10 +669,10 @@ abstract class InvoiceType implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'invoice_typeid':                        
+                    case '`invoice_typeid`':                        
                         $stmt->bindValue($identifier, $this->invoice_typeid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                 }

@@ -146,7 +146,7 @@ class CouponTableMap extends TableMap
         // attributes
         $this->setName('coupon');
         $this->setPhpName('Coupon');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Payment\\Coupon');
         $this->setPackage('API.Models.ORM.Payment');
         $this->setUseIdGenerator(true);

@@ -746,20 +746,20 @@ abstract class MenuPossibleSize implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(MenuPossibleSizeTableMap::COL_MENU_POSSIBLE_SIZEID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_possible_sizeid';
+            $modifiedColumns[':p' . $index++]  = '`menu_possible_sizeid`';
         }
         if ($this->isColumnModified(MenuPossibleSizeTableMap::COL_MENU_SIZEID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_sizeid';
+            $modifiedColumns[':p' . $index++]  = '`menu_sizeid`';
         }
         if ($this->isColumnModified(MenuPossibleSizeTableMap::COL_MENUID)) {
-            $modifiedColumns[':p' . $index++]  = 'menuid';
+            $modifiedColumns[':p' . $index++]  = '`menuid`';
         }
         if ($this->isColumnModified(MenuPossibleSizeTableMap::COL_PRICE)) {
-            $modifiedColumns[':p' . $index++]  = 'price';
+            $modifiedColumns[':p' . $index++]  = '`price`';
         }
 
         $sql = sprintf(
-            'INSERT INTO menu_possible_size (%s) VALUES (%s)',
+            'INSERT INTO `menu_possible_size` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -768,16 +768,16 @@ abstract class MenuPossibleSize implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'menu_possible_sizeid':                        
+                    case '`menu_possible_sizeid`':                        
                         $stmt->bindValue($identifier, $this->menu_possible_sizeid, PDO::PARAM_INT);
                         break;
-                    case 'menu_sizeid':                        
+                    case '`menu_sizeid`':                        
                         $stmt->bindValue($identifier, $this->menu_sizeid, PDO::PARAM_INT);
                         break;
-                    case 'menuid':                        
+                    case '`menuid`':                        
                         $stmt->bindValue($identifier, $this->menuid, PDO::PARAM_INT);
                         break;
-                    case 'price':                        
+                    case '`price`':                        
                         $stmt->bindValue($identifier, $this->price, PDO::PARAM_STR);
                         break;
                 }

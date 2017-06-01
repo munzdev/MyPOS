@@ -126,7 +126,7 @@ class AvailabilityTableMap extends TableMap
         // attributes
         $this->setName('availability');
         $this->setPhpName('Availability');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Menu\\Availability');
         $this->setPackage('API.Models.ORM.Menu');
         $this->setUseIdGenerator(true);

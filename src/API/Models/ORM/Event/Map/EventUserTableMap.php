@@ -141,7 +141,7 @@ class EventUserTableMap extends TableMap
         // attributes
         $this->setName('event_user');
         $this->setPhpName('EventUser');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Event\\EventUser');
         $this->setPackage('API.Models.ORM.Event');
         $this->setUseIdGenerator(true);

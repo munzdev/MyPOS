@@ -912,26 +912,26 @@ abstract class OrderInProgress implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(OrderInProgressTableMap::COL_ORDER_IN_PROGRESSID)) {
-            $modifiedColumns[':p' . $index++]  = 'order_in_progressid';
+            $modifiedColumns[':p' . $index++]  = '`order_in_progressid`';
         }
         if ($this->isColumnModified(OrderInProgressTableMap::COL_ORDERID)) {
-            $modifiedColumns[':p' . $index++]  = 'orderid';
+            $modifiedColumns[':p' . $index++]  = '`orderid`';
         }
         if ($this->isColumnModified(OrderInProgressTableMap::COL_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'userid';
+            $modifiedColumns[':p' . $index++]  = '`userid`';
         }
         if ($this->isColumnModified(OrderInProgressTableMap::COL_MENU_GROUPID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_groupid';
+            $modifiedColumns[':p' . $index++]  = '`menu_groupid`';
         }
         if ($this->isColumnModified(OrderInProgressTableMap::COL_BEGIN)) {
-            $modifiedColumns[':p' . $index++]  = 'begin';
+            $modifiedColumns[':p' . $index++]  = '`begin`';
         }
         if ($this->isColumnModified(OrderInProgressTableMap::COL_DONE)) {
-            $modifiedColumns[':p' . $index++]  = 'done';
+            $modifiedColumns[':p' . $index++]  = '`done`';
         }
 
         $sql = sprintf(
-            'INSERT INTO order_in_progress (%s) VALUES (%s)',
+            'INSERT INTO `order_in_progress` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -940,22 +940,22 @@ abstract class OrderInProgress implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'order_in_progressid':                        
+                    case '`order_in_progressid`':                        
                         $stmt->bindValue($identifier, $this->order_in_progressid, PDO::PARAM_INT);
                         break;
-                    case 'orderid':                        
+                    case '`orderid`':                        
                         $stmt->bindValue($identifier, $this->orderid, PDO::PARAM_INT);
                         break;
-                    case 'userid':                        
+                    case '`userid`':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'menu_groupid':                        
+                    case '`menu_groupid`':                        
                         $stmt->bindValue($identifier, $this->menu_groupid, PDO::PARAM_INT);
                         break;
-                    case 'begin':                        
+                    case '`begin`':                        
                         $stmt->bindValue($identifier, $this->begin ? $this->begin->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'done':                        
+                    case '`done`':                        
                         $stmt->bindValue($identifier, $this->done ? $this->done->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }

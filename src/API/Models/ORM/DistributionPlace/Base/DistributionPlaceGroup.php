@@ -790,17 +790,17 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACE_GROUPID)) {
-            $modifiedColumns[':p' . $index++]  = 'distribution_place_groupid';
+            $modifiedColumns[':p' . $index++]  = '`distribution_place_groupid`';
         }
         if ($this->isColumnModified(DistributionPlaceGroupTableMap::COL_DISTRIBUTION_PLACEID)) {
-            $modifiedColumns[':p' . $index++]  = 'distribution_placeid';
+            $modifiedColumns[':p' . $index++]  = '`distribution_placeid`';
         }
         if ($this->isColumnModified(DistributionPlaceGroupTableMap::COL_MENU_GROUPID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_groupid';
+            $modifiedColumns[':p' . $index++]  = '`menu_groupid`';
         }
 
         $sql = sprintf(
-            'INSERT INTO distribution_place_group (%s) VALUES (%s)',
+            'INSERT INTO `distribution_place_group` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -809,13 +809,13 @@ abstract class DistributionPlaceGroup implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'distribution_place_groupid':                        
+                    case '`distribution_place_groupid`':                        
                         $stmt->bindValue($identifier, $this->distribution_place_groupid, PDO::PARAM_INT);
                         break;
-                    case 'distribution_placeid':                        
+                    case '`distribution_placeid`':                        
                         $stmt->bindValue($identifier, $this->distribution_placeid, PDO::PARAM_INT);
                         break;
-                    case 'menu_groupid':                        
+                    case '`menu_groupid`':                        
                         $stmt->bindValue($identifier, $this->menu_groupid, PDO::PARAM_INT);
                         break;
                 }

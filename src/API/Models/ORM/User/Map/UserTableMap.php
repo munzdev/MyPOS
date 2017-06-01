@@ -166,7 +166,7 @@ class UserTableMap extends TableMap
         // attributes
         $this->setName('user');
         $this->setPhpName('User');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\User\\User');
         $this->setPackage('API.Models.ORM.User');
         $this->setUseIdGenerator(true);

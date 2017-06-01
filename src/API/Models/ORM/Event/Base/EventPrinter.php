@@ -939,32 +939,32 @@ abstract class EventPrinter implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(EventPrinterTableMap::COL_EVENT_PRINTERID)) {
-            $modifiedColumns[':p' . $index++]  = 'event_printerid';
+            $modifiedColumns[':p' . $index++]  = '`event_printerid`';
         }
         if ($this->isColumnModified(EventPrinterTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventid';
+            $modifiedColumns[':p' . $index++]  = '`eventid`';
         }
         if ($this->isColumnModified(EventPrinterTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
         if ($this->isColumnModified(EventPrinterTableMap::COL_TYPE)) {
-            $modifiedColumns[':p' . $index++]  = 'type';
+            $modifiedColumns[':p' . $index++]  = '`type`';
         }
         if ($this->isColumnModified(EventPrinterTableMap::COL_ATTR1)) {
-            $modifiedColumns[':p' . $index++]  = 'attr1';
+            $modifiedColumns[':p' . $index++]  = '`attr1`';
         }
         if ($this->isColumnModified(EventPrinterTableMap::COL_ATTR2)) {
-            $modifiedColumns[':p' . $index++]  = 'attr2';
+            $modifiedColumns[':p' . $index++]  = '`attr2`';
         }
         if ($this->isColumnModified(EventPrinterTableMap::COL_DEFAULT)) {
-            $modifiedColumns[':p' . $index++]  = 'default';
+            $modifiedColumns[':p' . $index++]  = '`default`';
         }
         if ($this->isColumnModified(EventPrinterTableMap::COL_CHARACTERS_PER_ROW)) {
-            $modifiedColumns[':p' . $index++]  = 'characters_per_row';
+            $modifiedColumns[':p' . $index++]  = '`characters_per_row`';
         }
 
         $sql = sprintf(
-            'INSERT INTO event_printer (%s) VALUES (%s)',
+            'INSERT INTO `event_printer` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -973,28 +973,28 @@ abstract class EventPrinter implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'event_printerid':                        
+                    case '`event_printerid`':                        
                         $stmt->bindValue($identifier, $this->event_printerid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':                        
+                    case '`eventid`':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'type':                        
+                    case '`type`':                        
                         $stmt->bindValue($identifier, $this->type, PDO::PARAM_INT);
                         break;
-                    case 'attr1':                        
+                    case '`attr1`':                        
                         $stmt->bindValue($identifier, $this->attr1, PDO::PARAM_STR);
                         break;
-                    case 'attr2':                        
+                    case '`attr2`':                        
                         $stmt->bindValue($identifier, $this->attr2, PDO::PARAM_STR);
                         break;
-                    case 'default':
+                    case '`default`':
                         $stmt->bindValue($identifier, (int) $this->default, PDO::PARAM_INT);
                         break;
-                    case 'characters_per_row':                        
+                    case '`characters_per_row`':                        
                         $stmt->bindValue($identifier, $this->characters_per_row, PDO::PARAM_INT);
                         break;
                 }

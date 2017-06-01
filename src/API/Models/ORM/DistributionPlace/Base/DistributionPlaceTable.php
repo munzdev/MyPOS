@@ -662,14 +662,14 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(DistributionPlaceTableTableMap::COL_EVENT_TABLEID)) {
-            $modifiedColumns[':p' . $index++]  = 'event_tableid';
+            $modifiedColumns[':p' . $index++]  = '`event_tableid`';
         }
         if ($this->isColumnModified(DistributionPlaceTableTableMap::COL_DISTRIBUTION_PLACE_GROUPID)) {
-            $modifiedColumns[':p' . $index++]  = 'distribution_place_groupid';
+            $modifiedColumns[':p' . $index++]  = '`distribution_place_groupid`';
         }
 
         $sql = sprintf(
-            'INSERT INTO distribution_place_table (%s) VALUES (%s)',
+            'INSERT INTO `distribution_place_table` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -678,10 +678,10 @@ abstract class DistributionPlaceTable implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'event_tableid':                        
+                    case '`event_tableid`':                        
                         $stmt->bindValue($identifier, $this->event_tableid, PDO::PARAM_INT);
                         break;
-                    case 'distribution_place_groupid':                        
+                    case '`distribution_place_groupid`':                        
                         $stmt->bindValue($identifier, $this->distribution_place_groupid, PDO::PARAM_INT);
                         break;
                 }

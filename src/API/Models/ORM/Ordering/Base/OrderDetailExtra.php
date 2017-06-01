@@ -662,14 +662,14 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(OrderDetailExtraTableMap::COL_ORDER_DETAILID)) {
-            $modifiedColumns[':p' . $index++]  = 'order_detailid';
+            $modifiedColumns[':p' . $index++]  = '`order_detailid`';
         }
         if ($this->isColumnModified(OrderDetailExtraTableMap::COL_MENU_POSSIBLE_EXTRAID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_possible_extraid';
+            $modifiedColumns[':p' . $index++]  = '`menu_possible_extraid`';
         }
 
         $sql = sprintf(
-            'INSERT INTO order_detail_extra (%s) VALUES (%s)',
+            'INSERT INTO `order_detail_extra` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -678,10 +678,10 @@ abstract class OrderDetailExtra implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'order_detailid':                        
+                    case '`order_detailid`':                        
                         $stmt->bindValue($identifier, $this->order_detailid, PDO::PARAM_INT);
                         break;
-                    case 'menu_possible_extraid':                        
+                    case '`menu_possible_extraid`':                        
                         $stmt->bindValue($identifier, $this->menu_possible_extraid, PDO::PARAM_INT);
                         break;
                 }

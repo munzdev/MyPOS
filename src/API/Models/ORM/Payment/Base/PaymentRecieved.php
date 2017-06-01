@@ -947,26 +947,26 @@ abstract class PaymentRecieved implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(PaymentRecievedTableMap::COL_PAYMENT_RECIEVEDID)) {
-            $modifiedColumns[':p' . $index++]  = 'payment_recievedid';
+            $modifiedColumns[':p' . $index++]  = '`payment_recievedid`';
         }
         if ($this->isColumnModified(PaymentRecievedTableMap::COL_INVOICEID)) {
-            $modifiedColumns[':p' . $index++]  = 'invoiceid';
+            $modifiedColumns[':p' . $index++]  = '`invoiceid`';
         }
         if ($this->isColumnModified(PaymentRecievedTableMap::COL_PAYMENT_TYPEID)) {
-            $modifiedColumns[':p' . $index++]  = 'payment_typeid';
+            $modifiedColumns[':p' . $index++]  = '`payment_typeid`';
         }
         if ($this->isColumnModified(PaymentRecievedTableMap::COL_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'userid';
+            $modifiedColumns[':p' . $index++]  = '`userid`';
         }
         if ($this->isColumnModified(PaymentRecievedTableMap::COL_DATE)) {
-            $modifiedColumns[':p' . $index++]  = 'date';
+            $modifiedColumns[':p' . $index++]  = '`date`';
         }
         if ($this->isColumnModified(PaymentRecievedTableMap::COL_AMOUNT)) {
-            $modifiedColumns[':p' . $index++]  = 'amount';
+            $modifiedColumns[':p' . $index++]  = '`amount`';
         }
 
         $sql = sprintf(
-            'INSERT INTO payment_recieved (%s) VALUES (%s)',
+            'INSERT INTO `payment_recieved` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -975,22 +975,22 @@ abstract class PaymentRecieved implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'payment_recievedid':                        
+                    case '`payment_recievedid`':                        
                         $stmt->bindValue($identifier, $this->payment_recievedid, PDO::PARAM_INT);
                         break;
-                    case 'invoiceid':                        
+                    case '`invoiceid`':                        
                         $stmt->bindValue($identifier, $this->invoiceid, PDO::PARAM_INT);
                         break;
-                    case 'payment_typeid':                        
+                    case '`payment_typeid`':                        
                         $stmt->bindValue($identifier, $this->payment_typeid, PDO::PARAM_INT);
                         break;
-                    case 'userid':                        
+                    case '`userid`':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'date':                        
+                    case '`date`':                        
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'amount':                        
+                    case '`amount`':                        
                         $stmt->bindValue($identifier, $this->amount, PDO::PARAM_STR);
                         break;
                 }

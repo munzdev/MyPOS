@@ -1328,44 +1328,44 @@ abstract class Invoice implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(InvoiceTableMap::COL_INVOICEID)) {
-            $modifiedColumns[':p' . $index++]  = 'invoiceid';
+            $modifiedColumns[':p' . $index++]  = '`invoiceid`';
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_INVOICE_TYPEID)) {
-            $modifiedColumns[':p' . $index++]  = 'invoice_typeid';
+            $modifiedColumns[':p' . $index++]  = '`invoice_typeid`';
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_EVENT_CONTACTID)) {
-            $modifiedColumns[':p' . $index++]  = 'event_contactid';
+            $modifiedColumns[':p' . $index++]  = '`event_contactid`';
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'userid';
+            $modifiedColumns[':p' . $index++]  = '`userid`';
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_EVENT_BANKINFORMATIONID)) {
-            $modifiedColumns[':p' . $index++]  = 'event_bankinformationid';
+            $modifiedColumns[':p' . $index++]  = '`event_bankinformationid`';
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_CUSTOMER_EVENT_CONTACTID)) {
-            $modifiedColumns[':p' . $index++]  = 'customer_event_contactid';
+            $modifiedColumns[':p' . $index++]  = '`customer_event_contactid`';
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_CANCELED_INVOICEID)) {
-            $modifiedColumns[':p' . $index++]  = 'canceled_invoiceid';
+            $modifiedColumns[':p' . $index++]  = '`canceled_invoiceid`';
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_DATE)) {
-            $modifiedColumns[':p' . $index++]  = 'date';
+            $modifiedColumns[':p' . $index++]  = '`date`';
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_AMOUNT)) {
-            $modifiedColumns[':p' . $index++]  = 'amount';
+            $modifiedColumns[':p' . $index++]  = '`amount`';
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_MATURITY_DATE)) {
-            $modifiedColumns[':p' . $index++]  = 'maturity_date';
+            $modifiedColumns[':p' . $index++]  = '`maturity_date`';
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_PAYMENT_FINISHED)) {
-            $modifiedColumns[':p' . $index++]  = 'payment_finished';
+            $modifiedColumns[':p' . $index++]  = '`payment_finished`';
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_AMOUNT_RECIEVED)) {
-            $modifiedColumns[':p' . $index++]  = 'amount_recieved';
+            $modifiedColumns[':p' . $index++]  = '`amount_recieved`';
         }
 
         $sql = sprintf(
-            'INSERT INTO invoice (%s) VALUES (%s)',
+            'INSERT INTO `invoice` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -1374,40 +1374,40 @@ abstract class Invoice implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'invoiceid':                        
+                    case '`invoiceid`':                        
                         $stmt->bindValue($identifier, $this->invoiceid, PDO::PARAM_INT);
                         break;
-                    case 'invoice_typeid':                        
+                    case '`invoice_typeid`':                        
                         $stmt->bindValue($identifier, $this->invoice_typeid, PDO::PARAM_INT);
                         break;
-                    case 'event_contactid':                        
+                    case '`event_contactid`':                        
                         $stmt->bindValue($identifier, $this->event_contactid, PDO::PARAM_INT);
                         break;
-                    case 'userid':                        
+                    case '`userid`':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'event_bankinformationid':                        
+                    case '`event_bankinformationid`':                        
                         $stmt->bindValue($identifier, $this->event_bankinformationid, PDO::PARAM_INT);
                         break;
-                    case 'customer_event_contactid':                        
+                    case '`customer_event_contactid`':                        
                         $stmt->bindValue($identifier, $this->customer_event_contactid, PDO::PARAM_INT);
                         break;
-                    case 'canceled_invoiceid':                        
+                    case '`canceled_invoiceid`':                        
                         $stmt->bindValue($identifier, $this->canceled_invoiceid, PDO::PARAM_INT);
                         break;
-                    case 'date':                        
+                    case '`date`':                        
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'amount':                        
+                    case '`amount`':                        
                         $stmt->bindValue($identifier, $this->amount, PDO::PARAM_STR);
                         break;
-                    case 'maturity_date':                        
+                    case '`maturity_date`':                        
                         $stmt->bindValue($identifier, $this->maturity_date ? $this->maturity_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'payment_finished':                        
+                    case '`payment_finished`':                        
                         $stmt->bindValue($identifier, $this->payment_finished ? $this->payment_finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'amount_recieved':                        
+                    case '`amount_recieved`':                        
                         $stmt->bindValue($identifier, $this->amount_recieved, PDO::PARAM_STR);
                         break;
                 }

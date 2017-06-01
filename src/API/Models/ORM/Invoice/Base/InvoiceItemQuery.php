@@ -195,7 +195,7 @@ abstract class InvoiceItemQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT invoice_itemid, invoiceid, order_detailid, amount, price, description, tax FROM invoice_item WHERE invoice_itemid = :p0';
+        $sql = 'SELECT `invoice_itemid`, `invoiceid`, `order_detailid`, `amount`, `price`, `description`, `tax` FROM `invoice_item` WHERE `invoice_itemid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

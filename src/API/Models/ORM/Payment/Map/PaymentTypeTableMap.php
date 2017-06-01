@@ -126,7 +126,7 @@ class PaymentTypeTableMap extends TableMap
         // attributes
         $this->setName('payment_type');
         $this->setPhpName('PaymentType');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Payment\\PaymentType');
         $this->setPackage('API.Models.ORM.Payment');
         $this->setUseIdGenerator(true);

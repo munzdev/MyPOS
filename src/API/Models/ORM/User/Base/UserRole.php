@@ -613,14 +613,14 @@ abstract class UserRole implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(UserRoleTableMap::COL_USER_ROLEID)) {
-            $modifiedColumns[':p' . $index++]  = 'user_roleid';
+            $modifiedColumns[':p' . $index++]  = '`user_roleid`';
         }
         if ($this->isColumnModified(UserRoleTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
 
         $sql = sprintf(
-            'INSERT INTO user_role (%s) VALUES (%s)',
+            'INSERT INTO `user_role` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -629,10 +629,10 @@ abstract class UserRole implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'user_roleid':                        
+                    case '`user_roleid`':                        
                         $stmt->bindValue($identifier, $this->user_roleid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                 }

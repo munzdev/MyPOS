@@ -126,7 +126,7 @@ class UserRoleTableMap extends TableMap
         // attributes
         $this->setName('user_role');
         $this->setPhpName('UserRole');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\User\\UserRole');
         $this->setPackage('API.Models.ORM.User');
         $this->setUseIdGenerator(false);

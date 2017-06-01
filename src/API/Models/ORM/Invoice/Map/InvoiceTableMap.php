@@ -176,7 +176,7 @@ class InvoiceTableMap extends TableMap
         // attributes
         $this->setName('invoice');
         $this->setPhpName('Invoice');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Invoice\\Invoice');
         $this->setPackage('API.Models.ORM.Invoice');
         $this->setUseIdGenerator(true);

@@ -136,7 +136,7 @@ class EventTableTableMap extends TableMap
         // attributes
         $this->setName('event_table');
         $this->setPhpName('EventTable');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Event\\EventTable');
         $this->setPackage('API.Models.ORM.Event');
         $this->setUseIdGenerator(true);

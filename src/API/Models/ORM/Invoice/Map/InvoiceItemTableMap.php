@@ -151,7 +151,7 @@ class InvoiceItemTableMap extends TableMap
         // attributes
         $this->setName('invoice_item');
         $this->setPhpName('InvoiceItem');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Invoice\\InvoiceItem');
         $this->setPackage('API.Models.ORM.Invoice');
         $this->setUseIdGenerator(true);

@@ -722,14 +722,14 @@ abstract class Availability implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(AvailabilityTableMap::COL_AVAILABILITYID)) {
-            $modifiedColumns[':p' . $index++]  = 'availabilityid';
+            $modifiedColumns[':p' . $index++]  = '`availabilityid`';
         }
         if ($this->isColumnModified(AvailabilityTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
 
         $sql = sprintf(
-            'INSERT INTO availability (%s) VALUES (%s)',
+            'INSERT INTO `availability` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -738,10 +738,10 @@ abstract class Availability implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'availabilityid':                        
+                    case '`availabilityid`':                        
                         $stmt->bindValue($identifier, $this->availabilityid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                 }

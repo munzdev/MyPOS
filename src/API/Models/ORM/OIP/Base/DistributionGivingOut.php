@@ -668,14 +668,14 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(DistributionGivingOutTableMap::COL_DISTRIBUTION_GIVING_OUTID)) {
-            $modifiedColumns[':p' . $index++]  = 'distribution_giving_outid';
+            $modifiedColumns[':p' . $index++]  = '`distribution_giving_outid`';
         }
         if ($this->isColumnModified(DistributionGivingOutTableMap::COL_DATE)) {
-            $modifiedColumns[':p' . $index++]  = 'date';
+            $modifiedColumns[':p' . $index++]  = '`date`';
         }
 
         $sql = sprintf(
-            'INSERT INTO distribution_giving_out (%s) VALUES (%s)',
+            'INSERT INTO `distribution_giving_out` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -684,10 +684,10 @@ abstract class DistributionGivingOut implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'distribution_giving_outid':                        
+                    case '`distribution_giving_outid`':                        
                         $stmt->bindValue($identifier, $this->distribution_giving_outid, PDO::PARAM_INT);
                         break;
-                    case 'date':                        
+                    case '`date`':                        
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }

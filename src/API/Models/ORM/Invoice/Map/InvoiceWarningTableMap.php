@@ -146,7 +146,7 @@ class InvoiceWarningTableMap extends TableMap
         // attributes
         $this->setName('invoice_warning');
         $this->setPhpName('InvoiceWarning');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Invoice\\InvoiceWarning');
         $this->setPackage('API.Models.ORM.Invoice');
         $this->setUseIdGenerator(true);

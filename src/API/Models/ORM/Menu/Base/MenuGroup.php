@@ -826,17 +826,17 @@ abstract class MenuGroup implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(MenuGroupTableMap::COL_MENU_GROUPID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_groupid';
+            $modifiedColumns[':p' . $index++]  = '`menu_groupid`';
         }
         if ($this->isColumnModified(MenuGroupTableMap::COL_MENU_TYPEID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_typeid';
+            $modifiedColumns[':p' . $index++]  = '`menu_typeid`';
         }
         if ($this->isColumnModified(MenuGroupTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
 
         $sql = sprintf(
-            'INSERT INTO menu_group (%s) VALUES (%s)',
+            'INSERT INTO `menu_group` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -845,13 +845,13 @@ abstract class MenuGroup implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'menu_groupid':                        
+                    case '`menu_groupid`':                        
                         $stmt->bindValue($identifier, $this->menu_groupid, PDO::PARAM_INT);
                         break;
-                    case 'menu_typeid':                        
+                    case '`menu_typeid`':                        
                         $stmt->bindValue($identifier, $this->menu_typeid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
                 }

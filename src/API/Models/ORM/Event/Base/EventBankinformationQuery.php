@@ -190,7 +190,7 @@ abstract class EventBankinformationQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT event_bankinformationid, eventid, name, iban, bic, active FROM event_bankinformation WHERE event_bankinformationid = :p0';
+        $sql = 'SELECT `event_bankinformationid`, `eventid`, `name`, `iban`, `bic`, `active` FROM `event_bankinformation` WHERE `event_bankinformationid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

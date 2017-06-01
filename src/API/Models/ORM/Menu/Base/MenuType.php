@@ -818,23 +818,23 @@ abstract class MenuType implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(MenuTypeTableMap::COL_MENU_TYPEID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_typeid';
+            $modifiedColumns[':p' . $index++]  = '`menu_typeid`';
         }
         if ($this->isColumnModified(MenuTypeTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventid';
+            $modifiedColumns[':p' . $index++]  = '`eventid`';
         }
         if ($this->isColumnModified(MenuTypeTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
         if ($this->isColumnModified(MenuTypeTableMap::COL_TAX)) {
-            $modifiedColumns[':p' . $index++]  = 'tax';
+            $modifiedColumns[':p' . $index++]  = '`tax`';
         }
         if ($this->isColumnModified(MenuTypeTableMap::COL_ALLOWMIXING)) {
-            $modifiedColumns[':p' . $index++]  = 'allowMixing';
+            $modifiedColumns[':p' . $index++]  = '`allowMixing`';
         }
 
         $sql = sprintf(
-            'INSERT INTO menu_type (%s) VALUES (%s)',
+            'INSERT INTO `menu_type` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -843,19 +843,19 @@ abstract class MenuType implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'menu_typeid':                        
+                    case '`menu_typeid`':                        
                         $stmt->bindValue($identifier, $this->menu_typeid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':                        
+                    case '`eventid`':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'tax':                        
+                    case '`tax`':                        
                         $stmt->bindValue($identifier, $this->tax, PDO::PARAM_INT);
                         break;
-                    case 'allowMixing':
+                    case '`allowMixing`':
                         $stmt->bindValue($identifier, (int) $this->allowmixing, PDO::PARAM_INT);
                         break;
                 }

@@ -126,7 +126,7 @@ class DistributionPlaceTableTableMap extends TableMap
         // attributes
         $this->setName('distribution_place_table');
         $this->setPhpName('DistributionPlaceTable');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\DistributionPlace\\DistributionPlaceTable');
         $this->setPackage('API.Models.ORM.DistributionPlace');
         $this->setUseIdGenerator(false);

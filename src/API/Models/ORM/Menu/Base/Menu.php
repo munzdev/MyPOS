@@ -967,26 +967,26 @@ abstract class Menu implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(MenuTableMap::COL_MENUID)) {
-            $modifiedColumns[':p' . $index++]  = 'menuid';
+            $modifiedColumns[':p' . $index++]  = '`menuid`';
         }
         if ($this->isColumnModified(MenuTableMap::COL_MENU_GROUPID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_groupid';
+            $modifiedColumns[':p' . $index++]  = '`menu_groupid`';
         }
         if ($this->isColumnModified(MenuTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
         if ($this->isColumnModified(MenuTableMap::COL_PRICE)) {
-            $modifiedColumns[':p' . $index++]  = 'price';
+            $modifiedColumns[':p' . $index++]  = '`price`';
         }
         if ($this->isColumnModified(MenuTableMap::COL_AVAILABILITYID)) {
-            $modifiedColumns[':p' . $index++]  = 'availabilityid';
+            $modifiedColumns[':p' . $index++]  = '`availabilityid`';
         }
         if ($this->isColumnModified(MenuTableMap::COL_AVAILABILITY_AMOUNT)) {
-            $modifiedColumns[':p' . $index++]  = 'availability_amount';
+            $modifiedColumns[':p' . $index++]  = '`availability_amount`';
         }
 
         $sql = sprintf(
-            'INSERT INTO menu (%s) VALUES (%s)',
+            'INSERT INTO `menu` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -995,22 +995,22 @@ abstract class Menu implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'menuid':                        
+                    case '`menuid`':                        
                         $stmt->bindValue($identifier, $this->menuid, PDO::PARAM_INT);
                         break;
-                    case 'menu_groupid':                        
+                    case '`menu_groupid`':                        
                         $stmt->bindValue($identifier, $this->menu_groupid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'price':                        
+                    case '`price`':                        
                         $stmt->bindValue($identifier, $this->price, PDO::PARAM_STR);
                         break;
-                    case 'availabilityid':                        
+                    case '`availabilityid`':                        
                         $stmt->bindValue($identifier, $this->availabilityid, PDO::PARAM_INT);
                         break;
-                    case 'availability_amount':                        
+                    case '`availability_amount`':                        
                         $stmt->bindValue($identifier, $this->availability_amount, PDO::PARAM_INT);
                         break;
                 }

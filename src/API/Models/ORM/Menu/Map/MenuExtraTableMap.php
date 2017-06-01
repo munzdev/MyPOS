@@ -141,7 +141,7 @@ class MenuExtraTableMap extends TableMap
         // attributes
         $this->setName('menu_extra');
         $this->setPhpName('MenuExtra');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Menu\\MenuExtra');
         $this->setPackage('API.Models.ORM.Menu');
         $this->setUseIdGenerator(true);

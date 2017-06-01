@@ -195,7 +195,7 @@ abstract class OrderInProgressRecievedQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT order_in_progress_recievedid, order_detailid, order_in_progressid, distribution_giving_outid, amount FROM order_in_progress_recieved WHERE order_in_progress_recievedid = :p0';
+        $sql = 'SELECT `order_in_progress_recievedid`, `order_detailid`, `order_in_progressid`, `distribution_giving_outid`, `amount` FROM `order_in_progress_recieved` WHERE `order_in_progress_recievedid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

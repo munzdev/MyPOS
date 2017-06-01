@@ -174,7 +174,7 @@ abstract class PaymentCouponQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT couponid, payment_recievedid, value_used FROM payment_coupon WHERE couponid = :p0 AND payment_recievedid = :p1';
+        $sql = 'SELECT `couponid`, `payment_recievedid`, `value_used` FROM `payment_coupon` WHERE `couponid` = :p0 AND `payment_recievedid` = :p1';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);            

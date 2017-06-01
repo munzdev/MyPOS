@@ -662,14 +662,14 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(OrderDetailMixedWithTableMap::COL_ORDER_DETAILID)) {
-            $modifiedColumns[':p' . $index++]  = 'order_detailid';
+            $modifiedColumns[':p' . $index++]  = '`order_detailid`';
         }
         if ($this->isColumnModified(OrderDetailMixedWithTableMap::COL_MENUID)) {
-            $modifiedColumns[':p' . $index++]  = 'menuid';
+            $modifiedColumns[':p' . $index++]  = '`menuid`';
         }
 
         $sql = sprintf(
-            'INSERT INTO order_detail_mixed_with (%s) VALUES (%s)',
+            'INSERT INTO `order_detail_mixed_with` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -678,10 +678,10 @@ abstract class OrderDetailMixedWith implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'order_detailid':                        
+                    case '`order_detailid`':                        
                         $stmt->bindValue($identifier, $this->order_detailid, PDO::PARAM_INT);
                         break;
-                    case 'menuid':                        
+                    case '`menuid`':                        
                         $stmt->bindValue($identifier, $this->menuid, PDO::PARAM_INT);
                         break;
                 }

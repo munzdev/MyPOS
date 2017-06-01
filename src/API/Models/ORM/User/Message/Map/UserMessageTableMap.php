@@ -146,7 +146,7 @@ class UserMessageTableMap extends TableMap
         // attributes
         $this->setName('user_message');
         $this->setPhpName('UserMessage');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\User\\Message\\UserMessage');
         $this->setPackage('API.Models.ORM.User.Message');
         $this->setUseIdGenerator(false);

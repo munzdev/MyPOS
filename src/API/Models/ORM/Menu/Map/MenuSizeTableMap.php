@@ -136,7 +136,7 @@ class MenuSizeTableMap extends TableMap
         // attributes
         $this->setName('menu_size');
         $this->setPhpName('MenuSize');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Menu\\MenuSize');
         $this->setPackage('API.Models.ORM.Menu');
         $this->setUseIdGenerator(true);

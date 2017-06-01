@@ -1469,50 +1469,50 @@ abstract class OrderDetail implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(OrderDetailTableMap::COL_ORDER_DETAILID)) {
-            $modifiedColumns[':p' . $index++]  = 'order_detailid';
+            $modifiedColumns[':p' . $index++]  = '`order_detailid`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_ORDERID)) {
-            $modifiedColumns[':p' . $index++]  = 'orderid';
+            $modifiedColumns[':p' . $index++]  = '`orderid`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_MENUID)) {
-            $modifiedColumns[':p' . $index++]  = 'menuid';
+            $modifiedColumns[':p' . $index++]  = '`menuid`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_MENU_SIZEID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_sizeid';
+            $modifiedColumns[':p' . $index++]  = '`menu_sizeid`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_MENU_GROUPID)) {
-            $modifiedColumns[':p' . $index++]  = 'menu_groupid';
+            $modifiedColumns[':p' . $index++]  = '`menu_groupid`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_AMOUNT)) {
-            $modifiedColumns[':p' . $index++]  = 'amount';
+            $modifiedColumns[':p' . $index++]  = '`amount`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_SINGLE_PRICE)) {
-            $modifiedColumns[':p' . $index++]  = 'single_price';
+            $modifiedColumns[':p' . $index++]  = '`single_price`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_SINGLE_PRICE_MODIFIED_BY_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'single_price_modified_by_userid';
+            $modifiedColumns[':p' . $index++]  = '`single_price_modified_by_userid`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_EXTRA_DETAIL)) {
-            $modifiedColumns[':p' . $index++]  = 'extra_detail';
+            $modifiedColumns[':p' . $index++]  = '`extra_detail`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_AVAILABILITYID)) {
-            $modifiedColumns[':p' . $index++]  = 'availabilityid';
+            $modifiedColumns[':p' . $index++]  = '`availabilityid`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_AVAILABILITY_AMOUNT)) {
-            $modifiedColumns[':p' . $index++]  = 'availability_amount';
+            $modifiedColumns[':p' . $index++]  = '`availability_amount`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_VERIFIED)) {
-            $modifiedColumns[':p' . $index++]  = 'verified';
+            $modifiedColumns[':p' . $index++]  = '`verified`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_DISTRIBUTION_FINISHED)) {
-            $modifiedColumns[':p' . $index++]  = 'distribution_finished';
+            $modifiedColumns[':p' . $index++]  = '`distribution_finished`';
         }
         if ($this->isColumnModified(OrderDetailTableMap::COL_INVOICE_FINISHED)) {
-            $modifiedColumns[':p' . $index++]  = 'invoice_finished';
+            $modifiedColumns[':p' . $index++]  = '`invoice_finished`';
         }
 
         $sql = sprintf(
-            'INSERT INTO order_detail (%s) VALUES (%s)',
+            'INSERT INTO `order_detail` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -1521,46 +1521,46 @@ abstract class OrderDetail implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'order_detailid':                        
+                    case '`order_detailid`':                        
                         $stmt->bindValue($identifier, $this->order_detailid, PDO::PARAM_INT);
                         break;
-                    case 'orderid':                        
+                    case '`orderid`':                        
                         $stmt->bindValue($identifier, $this->orderid, PDO::PARAM_INT);
                         break;
-                    case 'menuid':                        
+                    case '`menuid`':                        
                         $stmt->bindValue($identifier, $this->menuid, PDO::PARAM_INT);
                         break;
-                    case 'menu_sizeid':                        
+                    case '`menu_sizeid`':                        
                         $stmt->bindValue($identifier, $this->menu_sizeid, PDO::PARAM_INT);
                         break;
-                    case 'menu_groupid':                        
+                    case '`menu_groupid`':                        
                         $stmt->bindValue($identifier, $this->menu_groupid, PDO::PARAM_INT);
                         break;
-                    case 'amount':                        
+                    case '`amount`':                        
                         $stmt->bindValue($identifier, $this->amount, PDO::PARAM_INT);
                         break;
-                    case 'single_price':                        
+                    case '`single_price`':                        
                         $stmt->bindValue($identifier, $this->single_price, PDO::PARAM_STR);
                         break;
-                    case 'single_price_modified_by_userid':                        
+                    case '`single_price_modified_by_userid`':                        
                         $stmt->bindValue($identifier, $this->single_price_modified_by_userid, PDO::PARAM_INT);
                         break;
-                    case 'extra_detail':                        
+                    case '`extra_detail`':                        
                         $stmt->bindValue($identifier, $this->extra_detail, PDO::PARAM_STR);
                         break;
-                    case 'availabilityid':                        
+                    case '`availabilityid`':                        
                         $stmt->bindValue($identifier, $this->availabilityid, PDO::PARAM_INT);
                         break;
-                    case 'availability_amount':                        
+                    case '`availability_amount`':                        
                         $stmt->bindValue($identifier, $this->availability_amount, PDO::PARAM_INT);
                         break;
-                    case 'verified':
+                    case '`verified`':
                         $stmt->bindValue($identifier, (int) $this->verified, PDO::PARAM_INT);
                         break;
-                    case 'distribution_finished':                        
+                    case '`distribution_finished`':                        
                         $stmt->bindValue($identifier, $this->distribution_finished ? $this->distribution_finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'invoice_finished':                        
+                    case '`invoice_finished`':                        
                         $stmt->bindValue($identifier, $this->invoice_finished ? $this->invoice_finished->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }

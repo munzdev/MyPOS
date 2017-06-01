@@ -186,7 +186,7 @@ abstract class DistributionPlaceUserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT distribution_placeid, userid, event_printerid FROM distribution_place_user WHERE distribution_placeid = :p0 AND userid = :p1 AND event_printerid = :p2';
+        $sql = 'SELECT `distribution_placeid`, `userid`, `event_printerid` FROM `distribution_place_user` WHERE `distribution_placeid` = :p0 AND `userid` = :p1 AND `event_printerid` = :p2';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);            

@@ -185,7 +185,7 @@ abstract class MenuTypeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT menu_typeid, eventid, name, tax, allowMixing FROM menu_type WHERE menu_typeid = :p0';
+        $sql = 'SELECT `menu_typeid`, `eventid`, `name`, `tax`, `allowMixing` FROM `menu_type` WHERE `menu_typeid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

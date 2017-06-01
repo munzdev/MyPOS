@@ -126,7 +126,7 @@ class OrderDetailMixedWithTableMap extends TableMap
         // attributes
         $this->setName('order_detail_mixed_with');
         $this->setPhpName('OrderDetailMixedWith');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Ordering\\OrderDetailMixedWith');
         $this->setPackage('API.Models.ORM.Ordering');
         $this->setUseIdGenerator(false);

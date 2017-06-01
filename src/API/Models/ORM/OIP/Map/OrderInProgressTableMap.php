@@ -146,7 +146,7 @@ class OrderInProgressTableMap extends TableMap
         // attributes
         $this->setName('order_in_progress');
         $this->setPhpName('OrderInProgress');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\OIP\\OrderInProgress');
         $this->setPackage('API.Models.ORM.OIP');
         $this->setUseIdGenerator(true);

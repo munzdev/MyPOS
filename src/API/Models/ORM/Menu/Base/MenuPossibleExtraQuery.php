@@ -190,7 +190,7 @@ abstract class MenuPossibleExtraQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT menu_possible_extraid, menu_extraid, menuid, price FROM menu_possible_extra WHERE menu_possible_extraid = :p0';
+        $sql = 'SELECT `menu_possible_extraid`, `menu_extraid`, `menuid`, `price` FROM `menu_possible_extra` WHERE `menu_possible_extraid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

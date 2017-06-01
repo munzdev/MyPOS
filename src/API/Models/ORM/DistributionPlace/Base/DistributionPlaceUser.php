@@ -724,17 +724,17 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(DistributionPlaceUserTableMap::COL_DISTRIBUTION_PLACEID)) {
-            $modifiedColumns[':p' . $index++]  = 'distribution_placeid';
+            $modifiedColumns[':p' . $index++]  = '`distribution_placeid`';
         }
         if ($this->isColumnModified(DistributionPlaceUserTableMap::COL_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'userid';
+            $modifiedColumns[':p' . $index++]  = '`userid`';
         }
         if ($this->isColumnModified(DistributionPlaceUserTableMap::COL_EVENT_PRINTERID)) {
-            $modifiedColumns[':p' . $index++]  = 'event_printerid';
+            $modifiedColumns[':p' . $index++]  = '`event_printerid`';
         }
 
         $sql = sprintf(
-            'INSERT INTO distribution_place_user (%s) VALUES (%s)',
+            'INSERT INTO `distribution_place_user` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -743,13 +743,13 @@ abstract class DistributionPlaceUser implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'distribution_placeid':                        
+                    case '`distribution_placeid`':                        
                         $stmt->bindValue($identifier, $this->distribution_placeid, PDO::PARAM_INT);
                         break;
-                    case 'userid':                        
+                    case '`userid`':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'event_printerid':                        
+                    case '`event_printerid`':                        
                         $stmt->bindValue($identifier, $this->event_printerid, PDO::PARAM_INT);
                         break;
                 }

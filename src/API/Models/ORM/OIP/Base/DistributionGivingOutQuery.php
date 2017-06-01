@@ -159,7 +159,7 @@ abstract class DistributionGivingOutQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT distribution_giving_outid, date FROM distribution_giving_out WHERE distribution_giving_outid = :p0';
+        $sql = 'SELECT `distribution_giving_outid`, `date` FROM `distribution_giving_out` WHERE `distribution_giving_outid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

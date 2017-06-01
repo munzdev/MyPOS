@@ -859,26 +859,26 @@ abstract class EventBankinformation implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(EventBankinformationTableMap::COL_EVENT_BANKINFORMATIONID)) {
-            $modifiedColumns[':p' . $index++]  = 'event_bankinformationid';
+            $modifiedColumns[':p' . $index++]  = '`event_bankinformationid`';
         }
         if ($this->isColumnModified(EventBankinformationTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventid';
+            $modifiedColumns[':p' . $index++]  = '`eventid`';
         }
         if ($this->isColumnModified(EventBankinformationTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
         if ($this->isColumnModified(EventBankinformationTableMap::COL_IBAN)) {
-            $modifiedColumns[':p' . $index++]  = 'iban';
+            $modifiedColumns[':p' . $index++]  = '`iban`';
         }
         if ($this->isColumnModified(EventBankinformationTableMap::COL_BIC)) {
-            $modifiedColumns[':p' . $index++]  = 'bic';
+            $modifiedColumns[':p' . $index++]  = '`bic`';
         }
         if ($this->isColumnModified(EventBankinformationTableMap::COL_ACTIVE)) {
-            $modifiedColumns[':p' . $index++]  = 'active';
+            $modifiedColumns[':p' . $index++]  = '`active`';
         }
 
         $sql = sprintf(
-            'INSERT INTO event_bankinformation (%s) VALUES (%s)',
+            'INSERT INTO `event_bankinformation` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -887,22 +887,22 @@ abstract class EventBankinformation implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'event_bankinformationid':                        
+                    case '`event_bankinformationid`':                        
                         $stmt->bindValue($identifier, $this->event_bankinformationid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':                        
+                    case '`eventid`':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'iban':                        
+                    case '`iban`':                        
                         $stmt->bindValue($identifier, $this->iban, PDO::PARAM_STR);
                         break;
-                    case 'bic':                        
+                    case '`bic`':                        
                         $stmt->bindValue($identifier, $this->bic, PDO::PARAM_STR);
                         break;
-                    case 'active':
+                    case '`active`':
                         $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
                         break;
                 }

@@ -855,23 +855,23 @@ abstract class EventUser implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(EventUserTableMap::COL_EVENT_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'event_userid';
+            $modifiedColumns[':p' . $index++]  = '`event_userid`';
         }
         if ($this->isColumnModified(EventUserTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventid';
+            $modifiedColumns[':p' . $index++]  = '`eventid`';
         }
         if ($this->isColumnModified(EventUserTableMap::COL_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'userid';
+            $modifiedColumns[':p' . $index++]  = '`userid`';
         }
         if ($this->isColumnModified(EventUserTableMap::COL_USER_ROLES)) {
-            $modifiedColumns[':p' . $index++]  = 'user_roles';
+            $modifiedColumns[':p' . $index++]  = '`user_roles`';
         }
         if ($this->isColumnModified(EventUserTableMap::COL_BEGIN_MONEY)) {
-            $modifiedColumns[':p' . $index++]  = 'begin_money';
+            $modifiedColumns[':p' . $index++]  = '`begin_money`';
         }
 
         $sql = sprintf(
-            'INSERT INTO event_user (%s) VALUES (%s)',
+            'INSERT INTO `event_user` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -880,19 +880,19 @@ abstract class EventUser implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'event_userid':                        
+                    case '`event_userid`':                        
                         $stmt->bindValue($identifier, $this->event_userid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':                        
+                    case '`eventid`':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'userid':                        
+                    case '`userid`':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'user_roles':                        
+                    case '`user_roles`':                        
                         $stmt->bindValue($identifier, $this->user_roles, PDO::PARAM_INT);
                         break;
-                    case 'begin_money':                        
+                    case '`begin_money`':                        
                         $stmt->bindValue($identifier, $this->begin_money, PDO::PARAM_STR);
                         break;
                 }

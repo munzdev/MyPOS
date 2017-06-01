@@ -844,20 +844,20 @@ abstract class EventTable implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(EventTableTableMap::COL_EVENT_TABLEID)) {
-            $modifiedColumns[':p' . $index++]  = 'event_tableid';
+            $modifiedColumns[':p' . $index++]  = '`event_tableid`';
         }
         if ($this->isColumnModified(EventTableTableMap::COL_EVENTID)) {
-            $modifiedColumns[':p' . $index++]  = 'eventid';
+            $modifiedColumns[':p' . $index++]  = '`eventid`';
         }
         if ($this->isColumnModified(EventTableTableMap::COL_NAME)) {
-            $modifiedColumns[':p' . $index++]  = 'name';
+            $modifiedColumns[':p' . $index++]  = '`name`';
         }
         if ($this->isColumnModified(EventTableTableMap::COL_DATA)) {
-            $modifiedColumns[':p' . $index++]  = 'data';
+            $modifiedColumns[':p' . $index++]  = '`data`';
         }
 
         $sql = sprintf(
-            'INSERT INTO event_table (%s) VALUES (%s)',
+            'INSERT INTO `event_table` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -866,16 +866,16 @@ abstract class EventTable implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'event_tableid':                        
+                    case '`event_tableid`':                        
                         $stmt->bindValue($identifier, $this->event_tableid, PDO::PARAM_INT);
                         break;
-                    case 'eventid':                        
+                    case '`eventid`':                        
                         $stmt->bindValue($identifier, $this->eventid, PDO::PARAM_INT);
                         break;
-                    case 'name':                        
+                    case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
                         break;
-                    case 'data':                        
+                    case '`data`':                        
                         $stmt->bindValue($identifier, $this->data, PDO::PARAM_STR);
                         break;
                 }

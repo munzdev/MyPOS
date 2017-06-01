@@ -170,7 +170,7 @@ abstract class DistributionPlaceTableQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT event_tableid, distribution_place_groupid FROM distribution_place_table WHERE event_tableid = :p0 AND distribution_place_groupid = :p1';
+        $sql = 'SELECT `event_tableid`, `distribution_place_groupid` FROM `distribution_place_table` WHERE `event_tableid` = :p0 AND `distribution_place_groupid` = :p1';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);            

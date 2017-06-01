@@ -131,7 +131,7 @@ class DistributionPlaceUserTableMap extends TableMap
         // attributes
         $this->setName('distribution_place_user');
         $this->setPhpName('DistributionPlaceUser');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\DistributionPlace\\DistributionPlaceUser');
         $this->setPackage('API.Models.ORM.DistributionPlace');
         $this->setUseIdGenerator(false);

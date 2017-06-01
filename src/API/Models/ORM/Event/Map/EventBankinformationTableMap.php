@@ -146,7 +146,7 @@ class EventBankinformationTableMap extends TableMap
         // attributes
         $this->setName('event_bankinformation');
         $this->setPhpName('EventBankinformation');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Event\\EventBankinformation');
         $this->setPackage('API.Models.ORM.Event');
         $this->setUseIdGenerator(true);

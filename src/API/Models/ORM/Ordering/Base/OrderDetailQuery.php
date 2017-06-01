@@ -316,7 +316,7 @@ abstract class OrderDetailQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT order_detailid, orderid, menuid, menu_sizeid, menu_groupid, amount, single_price, single_price_modified_by_userid, extra_detail, availabilityid, availability_amount, verified, distribution_finished, invoice_finished FROM order_detail WHERE order_detailid = :p0';
+        $sql = 'SELECT `order_detailid`, `orderid`, `menuid`, `menu_sizeid`, `menu_groupid`, `amount`, `single_price`, `single_price_modified_by_userid`, `extra_detail`, `availabilityid`, `availability_amount`, `verified`, `distribution_finished`, `invoice_finished` FROM `order_detail` WHERE `order_detailid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

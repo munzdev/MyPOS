@@ -131,7 +131,7 @@ class MenuGroupTableMap extends TableMap
         // attributes
         $this->setName('menu_group');
         $this->setPhpName('MenuGroup');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Menu\\MenuGroup');
         $this->setPackage('API.Models.ORM.Menu');
         $this->setUseIdGenerator(true);

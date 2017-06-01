@@ -186,7 +186,7 @@ class OrderDetailTableMap extends TableMap
         // attributes
         $this->setName('order_detail');
         $this->setPhpName('OrderDetail');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Ordering\\OrderDetail');
         $this->setPackage('API.Models.ORM.Ordering');
         $this->setUseIdGenerator(true);

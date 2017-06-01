@@ -156,7 +156,7 @@ class EventPrinterTableMap extends TableMap
         // attributes
         $this->setName('event_printer');
         $this->setPhpName('EventPrinter');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Event\\EventPrinter');
         $this->setPackage('API.Models.ORM.Event');
         $this->setUseIdGenerator(true);

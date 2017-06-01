@@ -146,7 +146,7 @@ abstract class UserRoleQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT user_roleid, name FROM user_role WHERE user_roleid = :p0';
+        $sql = 'SELECT `user_roleid`, `name` FROM `user_role` WHERE `user_roleid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

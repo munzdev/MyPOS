@@ -808,23 +808,23 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESS_RECIEVEDID)) {
-            $modifiedColumns[':p' . $index++]  = 'order_in_progress_recievedid';
+            $modifiedColumns[':p' . $index++]  = '`order_in_progress_recievedid`';
         }
         if ($this->isColumnModified(OrderInProgressRecievedTableMap::COL_ORDER_DETAILID)) {
-            $modifiedColumns[':p' . $index++]  = 'order_detailid';
+            $modifiedColumns[':p' . $index++]  = '`order_detailid`';
         }
         if ($this->isColumnModified(OrderInProgressRecievedTableMap::COL_ORDER_IN_PROGRESSID)) {
-            $modifiedColumns[':p' . $index++]  = 'order_in_progressid';
+            $modifiedColumns[':p' . $index++]  = '`order_in_progressid`';
         }
         if ($this->isColumnModified(OrderInProgressRecievedTableMap::COL_DISTRIBUTION_GIVING_OUTID)) {
-            $modifiedColumns[':p' . $index++]  = 'distribution_giving_outid';
+            $modifiedColumns[':p' . $index++]  = '`distribution_giving_outid`';
         }
         if ($this->isColumnModified(OrderInProgressRecievedTableMap::COL_AMOUNT)) {
-            $modifiedColumns[':p' . $index++]  = 'amount';
+            $modifiedColumns[':p' . $index++]  = '`amount`';
         }
 
         $sql = sprintf(
-            'INSERT INTO order_in_progress_recieved (%s) VALUES (%s)',
+            'INSERT INTO `order_in_progress_recieved` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -833,19 +833,19 @@ abstract class OrderInProgressRecieved implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'order_in_progress_recievedid':                        
+                    case '`order_in_progress_recievedid`':                        
                         $stmt->bindValue($identifier, $this->order_in_progress_recievedid, PDO::PARAM_INT);
                         break;
-                    case 'order_detailid':                        
+                    case '`order_detailid`':                        
                         $stmt->bindValue($identifier, $this->order_detailid, PDO::PARAM_INT);
                         break;
-                    case 'order_in_progressid':                        
+                    case '`order_in_progressid`':                        
                         $stmt->bindValue($identifier, $this->order_in_progressid, PDO::PARAM_INT);
                         break;
-                    case 'distribution_giving_outid':                        
+                    case '`distribution_giving_outid`':                        
                         $stmt->bindValue($identifier, $this->distribution_giving_outid, PDO::PARAM_INT);
                         break;
-                    case 'amount':                        
+                    case '`amount`':                        
                         $stmt->bindValue($identifier, $this->amount, PDO::PARAM_INT);
                         break;
                 }

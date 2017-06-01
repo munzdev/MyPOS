@@ -1285,38 +1285,38 @@ abstract class User implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(UserTableMap::COL_USERID)) {
-            $modifiedColumns[':p' . $index++]  = 'userid';
+            $modifiedColumns[':p' . $index++]  = '`userid`';
         }
         if ($this->isColumnModified(UserTableMap::COL_USERNAME)) {
-            $modifiedColumns[':p' . $index++]  = 'username';
+            $modifiedColumns[':p' . $index++]  = '`username`';
         }
         if ($this->isColumnModified(UserTableMap::COL_PASSWORD)) {
-            $modifiedColumns[':p' . $index++]  = 'password';
+            $modifiedColumns[':p' . $index++]  = '`password`';
         }
         if ($this->isColumnModified(UserTableMap::COL_FIRSTNAME)) {
-            $modifiedColumns[':p' . $index++]  = 'firstname';
+            $modifiedColumns[':p' . $index++]  = '`firstname`';
         }
         if ($this->isColumnModified(UserTableMap::COL_LASTNAME)) {
-            $modifiedColumns[':p' . $index++]  = 'lastname';
+            $modifiedColumns[':p' . $index++]  = '`lastname`';
         }
         if ($this->isColumnModified(UserTableMap::COL_AUTOLOGIN_HASH)) {
-            $modifiedColumns[':p' . $index++]  = 'autologin_hash';
+            $modifiedColumns[':p' . $index++]  = '`autologin_hash`';
         }
         if ($this->isColumnModified(UserTableMap::COL_ACTIVE)) {
-            $modifiedColumns[':p' . $index++]  = 'active';
+            $modifiedColumns[':p' . $index++]  = '`active`';
         }
         if ($this->isColumnModified(UserTableMap::COL_PHONENUMBER)) {
-            $modifiedColumns[':p' . $index++]  = 'phonenumber';
+            $modifiedColumns[':p' . $index++]  = '`phonenumber`';
         }
         if ($this->isColumnModified(UserTableMap::COL_CALL_REQUEST)) {
-            $modifiedColumns[':p' . $index++]  = 'call_request';
+            $modifiedColumns[':p' . $index++]  = '`call_request`';
         }
         if ($this->isColumnModified(UserTableMap::COL_IS_ADMIN)) {
-            $modifiedColumns[':p' . $index++]  = 'is_admin';
+            $modifiedColumns[':p' . $index++]  = '`is_admin`';
         }
 
         $sql = sprintf(
-            'INSERT INTO user (%s) VALUES (%s)',
+            'INSERT INTO `user` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -1325,34 +1325,34 @@ abstract class User implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'userid':                        
+                    case '`userid`':                        
                         $stmt->bindValue($identifier, $this->userid, PDO::PARAM_INT);
                         break;
-                    case 'username':                        
+                    case '`username`':                        
                         $stmt->bindValue($identifier, $this->username, PDO::PARAM_STR);
                         break;
-                    case 'password':                        
+                    case '`password`':                        
                         $stmt->bindValue($identifier, $this->password, PDO::PARAM_STR);
                         break;
-                    case 'firstname':                        
+                    case '`firstname`':                        
                         $stmt->bindValue($identifier, $this->firstname, PDO::PARAM_STR);
                         break;
-                    case 'lastname':                        
+                    case '`lastname`':                        
                         $stmt->bindValue($identifier, $this->lastname, PDO::PARAM_STR);
                         break;
-                    case 'autologin_hash':                        
+                    case '`autologin_hash`':                        
                         $stmt->bindValue($identifier, $this->autologin_hash, PDO::PARAM_STR);
                         break;
-                    case 'active':                        
+                    case '`active`':                        
                         $stmt->bindValue($identifier, $this->active, PDO::PARAM_INT);
                         break;
-                    case 'phonenumber':                        
+                    case '`phonenumber`':                        
                         $stmt->bindValue($identifier, $this->phonenumber, PDO::PARAM_STR);
                         break;
-                    case 'call_request':                        
+                    case '`call_request`':                        
                         $stmt->bindValue($identifier, $this->call_request ? $this->call_request->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'is_admin':
+                    case '`is_admin`':
                         $stmt->bindValue($identifier, (int) $this->is_admin, PDO::PARAM_INT);
                         break;
                 }

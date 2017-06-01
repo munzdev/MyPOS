@@ -159,7 +159,7 @@ abstract class InvoiceTypeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT invoice_typeid, name FROM invoice_type WHERE invoice_typeid = :p0';
+        $sql = 'SELECT `invoice_typeid`, `name` FROM `invoice_type` WHERE `invoice_typeid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

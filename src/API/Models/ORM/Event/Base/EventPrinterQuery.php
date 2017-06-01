@@ -200,7 +200,7 @@ abstract class EventPrinterQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT event_printerid, eventid, name, type, attr1, attr2, default, characters_per_row FROM event_printer WHERE event_printerid = :p0';
+        $sql = 'SELECT `event_printerid`, `eventid`, `name`, `type`, `attr1`, `attr2`, `default`, `characters_per_row` FROM `event_printer` WHERE `event_printerid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

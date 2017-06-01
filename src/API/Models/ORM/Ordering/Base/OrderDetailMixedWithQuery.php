@@ -170,7 +170,7 @@ abstract class OrderDetailMixedWithQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT order_detailid, menuid FROM order_detail_mixed_with WHERE order_detailid = :p0 AND menuid = :p1';
+        $sql = 'SELECT `order_detailid`, `menuid` FROM `order_detail_mixed_with` WHERE `order_detailid` = :p0 AND `menuid` = :p1';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key[0], PDO::PARAM_INT);            

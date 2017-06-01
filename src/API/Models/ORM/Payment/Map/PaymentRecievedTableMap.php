@@ -146,7 +146,7 @@ class PaymentRecievedTableMap extends TableMap
         // attributes
         $this->setName('payment_recieved');
         $this->setPhpName('PaymentRecieved');
-        $this->setIdentifierQuoting(false);
+        $this->setIdentifierQuoting(true);
         $this->setClassName('\\API\\Models\\ORM\\Payment\\PaymentRecieved');
         $this->setPackage('API.Models.ORM.Payment');
         $this->setUseIdGenerator(true);

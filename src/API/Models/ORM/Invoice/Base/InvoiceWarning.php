@@ -854,26 +854,26 @@ abstract class InvoiceWarning implements ActiveRecordInterface
 
          // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(InvoiceWarningTableMap::COL_INVOICE_WARNINGID)) {
-            $modifiedColumns[':p' . $index++]  = 'invoice_warningid';
+            $modifiedColumns[':p' . $index++]  = '`invoice_warningid`';
         }
         if ($this->isColumnModified(InvoiceWarningTableMap::COL_INVOICEID)) {
-            $modifiedColumns[':p' . $index++]  = 'invoiceid';
+            $modifiedColumns[':p' . $index++]  = '`invoiceid`';
         }
         if ($this->isColumnModified(InvoiceWarningTableMap::COL_INVOICE_WARNING_TYPEID)) {
-            $modifiedColumns[':p' . $index++]  = 'invoice_warning_typeid';
+            $modifiedColumns[':p' . $index++]  = '`invoice_warning_typeid`';
         }
         if ($this->isColumnModified(InvoiceWarningTableMap::COL_WARNING_DATE)) {
-            $modifiedColumns[':p' . $index++]  = 'warning_date';
+            $modifiedColumns[':p' . $index++]  = '`warning_date`';
         }
         if ($this->isColumnModified(InvoiceWarningTableMap::COL_MATURITY_DATE)) {
-            $modifiedColumns[':p' . $index++]  = 'maturity_date';
+            $modifiedColumns[':p' . $index++]  = '`maturity_date`';
         }
         if ($this->isColumnModified(InvoiceWarningTableMap::COL_WARNING_VALUE)) {
-            $modifiedColumns[':p' . $index++]  = 'warning_value';
+            $modifiedColumns[':p' . $index++]  = '`warning_value`';
         }
 
         $sql = sprintf(
-            'INSERT INTO invoice_warning (%s) VALUES (%s)',
+            'INSERT INTO `invoice_warning` (%s) VALUES (%s)',
             implode(', ', $modifiedColumns),
             implode(', ', array_keys($modifiedColumns))
         );
@@ -882,22 +882,22 @@ abstract class InvoiceWarning implements ActiveRecordInterface
             $stmt = $con->prepare($sql);
             foreach ($modifiedColumns as $identifier => $columnName) {
                 switch ($columnName) {
-                    case 'invoice_warningid':                        
+                    case '`invoice_warningid`':                        
                         $stmt->bindValue($identifier, $this->invoice_warningid, PDO::PARAM_INT);
                         break;
-                    case 'invoiceid':                        
+                    case '`invoiceid`':                        
                         $stmt->bindValue($identifier, $this->invoiceid, PDO::PARAM_INT);
                         break;
-                    case 'invoice_warning_typeid':                        
+                    case '`invoice_warning_typeid`':                        
                         $stmt->bindValue($identifier, $this->invoice_warning_typeid, PDO::PARAM_INT);
                         break;
-                    case 'warning_date':                        
+                    case '`warning_date`':                        
                         $stmt->bindValue($identifier, $this->warning_date ? $this->warning_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'maturity_date':                        
+                    case '`maturity_date`':                        
                         $stmt->bindValue($identifier, $this->maturity_date ? $this->maturity_date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
-                    case 'warning_value':                        
+                    case '`warning_value`':                        
                         $stmt->bindValue($identifier, $this->warning_value, PDO::PARAM_STR);
                         break;
                 }

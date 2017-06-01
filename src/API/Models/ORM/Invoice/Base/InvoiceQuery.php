@@ -303,7 +303,7 @@ abstract class InvoiceQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT invoiceid, invoice_typeid, event_contactid, userid, event_bankinformationid, customer_event_contactid, canceled_invoiceid, date, amount, maturity_date, payment_finished, amount_recieved FROM invoice WHERE invoiceid = :p0';
+        $sql = 'SELECT `invoiceid`, `invoice_typeid`, `event_contactid`, `userid`, `event_bankinformationid`, `customer_event_contactid`, `canceled_invoiceid`, `date`, `amount`, `maturity_date`, `payment_finished`, `amount_recieved` FROM `invoice` WHERE `invoiceid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);

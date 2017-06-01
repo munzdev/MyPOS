@@ -190,7 +190,7 @@ abstract class UserMessageQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT user_messageid, from_event_userid, to_event_userid, message, date, readed FROM user_message WHERE user_messageid = :p0';
+        $sql = 'SELECT `user_messageid`, `from_event_userid`, `to_event_userid`, `message`, `date`, `readed` FROM `user_message` WHERE `user_messageid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
