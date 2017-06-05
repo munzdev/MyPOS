@@ -12,7 +12,8 @@ define(["models/BaseModel"
                     Name: '',
                     Price: 0,
                     Availabilityid: null,
-                    AvailabilityAmount: 0};
+                    AvailabilityAmount: 0,
+                    IsDeleted: null};
         }
 
         parse(response)

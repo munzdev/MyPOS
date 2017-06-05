@@ -9,7 +9,8 @@ define(["models/BaseModel"
         defaults() {
             return {MenuGroupid: null,
                     MenuTypeid: null,
-                    Name: ''};
+                    Name: '',
+                    IsDeleted: null};
         }
 
         parse(response)

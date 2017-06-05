@@ -11,7 +11,8 @@ define(["models/BaseModel"
                     Eventid: null,
                     Name: '',
                     Availabilityid: null,
-                    AvailabilityAmount: 0};
+                    AvailabilityAmount: 0,
+                    IsDeleted: null};
         }
 
         parse(response)

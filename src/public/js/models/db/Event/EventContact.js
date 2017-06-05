@@ -20,7 +20,7 @@ define(["models/BaseModel"
                     Telephon: '',
                     Fax: '',
                     Email: '',
-                    Active: false,
+                    IsDeleted: null,
                     Default: false};
         }
 

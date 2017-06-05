@@ -11,7 +11,8 @@ define(["models/BaseModel"
             return {Eventid: null,
                     Name: '',
                     Date: '',
-                    Active: false};
+                    Active: false,
+                    IsDeleted: null};
         }
 
     }

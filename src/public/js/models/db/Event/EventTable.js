@@ -11,7 +11,8 @@ define(["models/BaseModel"
             return {EventTableid: null,
                     Eventid: null,
                     Name: '',
-                    Data: ''};
+                    Data: '',
+                    IsDeleted: null};
         }
 
         parse(response)

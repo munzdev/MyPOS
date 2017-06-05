@@ -11,7 +11,8 @@ define(["models/BaseModel"
                     Eventid: null,
                     Userid: null,
                     UserRoles: 0,
-                    BeginMoney: 0};
+                    BeginMoney: 0,
+                    IsDeleted: null};
         }
 
         parse(response)

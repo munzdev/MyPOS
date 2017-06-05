@@ -11,7 +11,8 @@ define(["models/BaseModel"
                     Eventid: null,
                     Name: '',
                     Tax: 0,
-                    Allowmixing: false};
+                    Allowmixing: false,
+                    IsDeleted: null};
         }
 
         parse(response)

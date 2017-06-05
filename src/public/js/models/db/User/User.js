@@ -14,7 +14,7 @@ define(["models/BaseModel"
                     Firstname: '',
                     Lastname: '',
                     AutologinHash: '',
-                    Active: false,
+                    IsDeleted: null,
                     Phonenumber: '',
                     CallRequest: null,
                     IsAdmin: false};

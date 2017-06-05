@@ -12,7 +12,8 @@ define(["models/BaseModel"
                     CreatedByUserid: null,
                     Code: '',
                     Created: null,
-                    Value: 0};
+                    Value: 0,
+                    IsDeleted: null};
         }
 
         parse(response)

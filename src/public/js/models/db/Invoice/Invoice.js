@@ -14,6 +14,7 @@ define(["models/BaseModel"
                     EventBankinformationid: null,
                     CustomerEventContactid: null,
                     CanceledInvoiceid: null,
+                    Orderid: null,
                     Date: null,
                     Amount: 0,
                     MaturityDate: null,
@@ -51,6 +52,11 @@ define(["models/BaseModel"
             if('CanceledInvoice' in response)
             {
                 response.CanceledInvoice = new app.models.Invoice.Invoice(response.CanceledInvoice, {parse: true});
+            }
+
+            if('Order' in response)
+            {
+                response.Order = new app.models.Order.Order(response.Order, {parse: true});
             }
 
             if('InvoiceItems' in response)

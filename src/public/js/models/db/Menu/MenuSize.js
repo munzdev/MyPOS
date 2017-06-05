@@ -10,7 +10,8 @@ define(["models/BaseModel"
             return {MenuSizeid: null,
                     Eventid: null,
                     Name: '',
-                    Factor: 0};
+                    Factor: 0,
+                    IsDeleted: null};
         }
 
         parse(response)

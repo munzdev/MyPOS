@@ -10,7 +10,8 @@ define(["models/BaseModel"
             return {MenuPossibleExtraid: null,
                     MenuExtraid: null,
                     Menuid: null,
-                    Price: 0};
+                    Price: 0,
+                    IsDeleted: null};
         }
 
         parse(response)
