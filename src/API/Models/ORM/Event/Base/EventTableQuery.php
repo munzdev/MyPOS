@@ -26,11 +26,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventTableQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
  * @method     ChildEventTableQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     ChildEventTableQuery orderByData($order = Criteria::ASC) Order by the data column
+ * @method     ChildEventTableQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
  *
  * @method     ChildEventTableQuery groupByEventTableid() Group by the event_tableid column
  * @method     ChildEventTableQuery groupByEventid() Group by the eventid column
  * @method     ChildEventTableQuery groupByName() Group by the name column
  * @method     ChildEventTableQuery groupByData() Group by the data column
+ * @method     ChildEventTableQuery groupByIsDeleted() Group by the is_deleted column
  *
  * @method     ChildEventTableQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildEventTableQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -78,7 +80,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventTable findOneByEventTableid(int $event_tableid) Return the first ChildEventTable filtered by the event_tableid column
  * @method     ChildEventTable findOneByEventid(int $eventid) Return the first ChildEventTable filtered by the eventid column
  * @method     ChildEventTable findOneByName(string $name) Return the first ChildEventTable filtered by the name column
- * @method     ChildEventTable findOneByData(string $data) Return the first ChildEventTable filtered by the data column *
+ * @method     ChildEventTable findOneByData(string $data) Return the first ChildEventTable filtered by the data column
+ * @method     ChildEventTable findOneByIsDeleted(string $is_deleted) Return the first ChildEventTable filtered by the is_deleted column *
 
  * @method     ChildEventTable requirePk($key, ConnectionInterface $con = null) Return the ChildEventTable by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventTable requireOne(ConnectionInterface $con = null) Return the first ChildEventTable matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -87,12 +90,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventTable requireOneByEventid(int $eventid) Return the first ChildEventTable filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventTable requireOneByName(string $name) Return the first ChildEventTable filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventTable requireOneByData(string $data) Return the first ChildEventTable filtered by the data column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEventTable requireOneByIsDeleted(string $is_deleted) Return the first ChildEventTable filtered by the is_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEventTable[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEventTable objects based on current ModelCriteria
  * @method     ChildEventTable[]|ObjectCollection findByEventTableid(int $event_tableid) Return ChildEventTable objects filtered by the event_tableid column
  * @method     ChildEventTable[]|ObjectCollection findByEventid(int $eventid) Return ChildEventTable objects filtered by the eventid column
  * @method     ChildEventTable[]|ObjectCollection findByName(string $name) Return ChildEventTable objects filtered by the name column
  * @method     ChildEventTable[]|ObjectCollection findByData(string $data) Return ChildEventTable objects filtered by the data column
+ * @method     ChildEventTable[]|ObjectCollection findByIsDeleted(string $is_deleted) Return ChildEventTable objects filtered by the is_deleted column
  * @method     ChildEventTable[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -191,7 +196,7 @@ abstract class EventTableQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT `event_tableid`, `eventid`, `name`, `data` FROM `event_table` WHERE `event_tableid` = :p0';
+        $sql = 'SELECT `event_tableid`, `eventid`, `name`, `data`, `is_deleted` FROM `event_table` WHERE `event_tableid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -413,6 +418,49 @@ abstract class EventTableQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EventTableTableMap::COL_DATA, $data, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_deleted column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsDeleted('2011-03-14'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted('now'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted(array('max' => 'yesterday')); // WHERE is_deleted > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $isDeleted The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildEventTableQuery The current query, for fluid interface
+     */
+    public function filterByIsDeleted($isDeleted = null, $comparison = null)
+    {
+        if (is_array($isDeleted)) {
+            $useMinMax = false;
+            if (isset($isDeleted['min'])) {
+                $this->addUsingAlias(EventTableTableMap::COL_IS_DELETED, $isDeleted['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($isDeleted['max'])) {
+                $this->addUsingAlias(EventTableTableMap::COL_IS_DELETED, $isDeleted['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EventTableTableMap::COL_IS_DELETED, $isDeleted, $comparison);
     }
 
     /**

@@ -27,7 +27,7 @@ class User extends Model implements IUser
         return $this->model->getActive();
     }
 
-    public function getAutologinHash(): string
+    public function getAutologinHash(): ?string
     {
         return $this->model->getAutologinHash();
     }
@@ -80,6 +80,11 @@ class User extends Model implements IUser
     public function getUsername(): string
     {
         return $this->model->getUsername();
+    }
+
+    public function getIsDeleted(): ?\DateTime
+    {
+        return $this->model->getIsDeleted();
     }
 
     public function setActive($active): IUser
@@ -139,6 +144,12 @@ class User extends Model implements IUser
     public function setUsername($username): IUser
     {
         $this->model->setUsername($username);
+        return $this;
+    }
+
+    public function setIsDeleted($isDeleted): IUser
+    {
+        $this->model->setIsDeleted($isDeleted);
         return $this;
     }
 }

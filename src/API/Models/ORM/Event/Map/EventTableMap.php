@@ -59,7 +59,7 @@ class EventTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 5;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class EventTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /**
      * the column name for the eventid field
@@ -92,6 +92,11 @@ class EventTableMap extends TableMap
     const COL_ACTIVE = 'event.active';
 
     /**
+     * the column name for the is_deleted field
+     */
+    const COL_IS_DELETED = 'event.is_deleted';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -103,11 +108,11 @@ class EventTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Eventid', 'Name', 'Date', 'Active', ),
-        self::TYPE_CAMELNAME     => array('eventid', 'name', 'date', 'active', ),
-        self::TYPE_COLNAME       => array(EventTableMap::COL_EVENTID, EventTableMap::COL_NAME, EventTableMap::COL_DATE, EventTableMap::COL_ACTIVE, ),
-        self::TYPE_FIELDNAME     => array('eventid', 'name', 'date', 'active', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('Eventid', 'Name', 'Date', 'Active', 'IsDeleted', ),
+        self::TYPE_CAMELNAME     => array('eventid', 'name', 'date', 'active', 'isDeleted', ),
+        self::TYPE_COLNAME       => array(EventTableMap::COL_EVENTID, EventTableMap::COL_NAME, EventTableMap::COL_DATE, EventTableMap::COL_ACTIVE, EventTableMap::COL_IS_DELETED, ),
+        self::TYPE_FIELDNAME     => array('eventid', 'name', 'date', 'active', 'is_deleted', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -117,11 +122,11 @@ class EventTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Eventid' => 0, 'Name' => 1, 'Date' => 2, 'Active' => 3, ),
-        self::TYPE_CAMELNAME     => array('eventid' => 0, 'name' => 1, 'date' => 2, 'active' => 3, ),
-        self::TYPE_COLNAME       => array(EventTableMap::COL_EVENTID => 0, EventTableMap::COL_NAME => 1, EventTableMap::COL_DATE => 2, EventTableMap::COL_ACTIVE => 3, ),
-        self::TYPE_FIELDNAME     => array('eventid' => 0, 'name' => 1, 'date' => 2, 'active' => 3, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('Eventid' => 0, 'Name' => 1, 'Date' => 2, 'Active' => 3, 'IsDeleted' => 4, ),
+        self::TYPE_CAMELNAME     => array('eventid' => 0, 'name' => 1, 'date' => 2, 'active' => 3, 'isDeleted' => 4, ),
+        self::TYPE_COLNAME       => array(EventTableMap::COL_EVENTID => 0, EventTableMap::COL_NAME => 1, EventTableMap::COL_DATE => 2, EventTableMap::COL_ACTIVE => 3, EventTableMap::COL_IS_DELETED => 4, ),
+        self::TYPE_FIELDNAME     => array('eventid' => 0, 'name' => 1, 'date' => 2, 'active' => 3, 'is_deleted' => 4, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -145,6 +150,7 @@ class EventTableMap extends TableMap
         $this->addColumn('name', 'Name', 'VARCHAR', true, 45, null);
         $this->addColumn('date', 'Date', 'TIMESTAMP', true, null, null);
         $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, null);
+        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -159,6 +165,13 @@ class EventTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, 'Coupons', false);
+        $this->addRelation('DistributionPlace', '\\API\\Models\\ORM\\DistributionPlace\\DistributionPlace', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':eventid',
+    1 => ':eventid',
+  ),
+), null, null, 'DistributionPlaces', false);
         $this->addRelation('EventBankinformation', '\\API\\Models\\ORM\\Event\\EventBankinformation', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -173,13 +186,6 @@ class EventTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, 'EventContacts', false);
-        $this->addRelation('DistributionPlace', '\\API\\Models\\ORM\\DistributionPlace\\DistributionPlace', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'DistributionPlaces', false);
         $this->addRelation('EventPrinter', '\\API\\Models\\ORM\\Event\\EventPrinter', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -201,6 +207,13 @@ class EventTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, 'EventUsers', false);
+        $this->addRelation('InvoiceWarningType', '\\API\\Models\\ORM\\Invoice\\InvoiceWarningType', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':eventid',
+    1 => ':eventid',
+  ),
+), null, null, 'InvoiceWarningTypes', false);
         $this->addRelation('MenuExtra', '\\API\\Models\\ORM\\Menu\\MenuExtra', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (
@@ -222,13 +235,6 @@ class EventTableMap extends TableMap
     1 => ':eventid',
   ),
 ), null, null, 'MenuTypes', false);
-        $this->addRelation('InvoiceWarningType', '\\API\\Models\\ORM\\Invoice\\InvoiceWarningType', RelationMap::ONE_TO_MANY, array (
-  0 =>
-  array (
-    0 => ':eventid',
-    1 => ':eventid',
-  ),
-), null, null, 'InvoiceWarningTypes', false);
     } // buildRelations()
 
     /**
@@ -376,11 +382,13 @@ class EventTableMap extends TableMap
             $criteria->addSelectColumn(EventTableMap::COL_NAME);
             $criteria->addSelectColumn(EventTableMap::COL_DATE);
             $criteria->addSelectColumn(EventTableMap::COL_ACTIVE);
+            $criteria->addSelectColumn(EventTableMap::COL_IS_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.eventid');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.date');
             $criteria->addSelectColumn($alias . '.active');
+            $criteria->addSelectColumn($alias . '.is_deleted');
         }
     }
 

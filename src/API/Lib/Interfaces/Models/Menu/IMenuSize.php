@@ -32,6 +32,11 @@ interface IMenuSize extends IModel {
     function getFactor();
 
     /**
+     * @return \DateTime
+     */
+    function getIsDeleted();
+
+    /**
      *
      * @param int $menuSizeid Description
      * @return IMenuSize Description
@@ -65,4 +70,11 @@ interface IMenuSize extends IModel {
      * @return IMenuSize Description
      */
     function setFactor($factor);
+
+    /**
+     *
+     * @param \DateTime $deleted Description
+     * @return IMenuSize Description
+     */
+    function setIsDeleted($isDeleted);
 }

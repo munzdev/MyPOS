@@ -2,6 +2,7 @@
 
 namespace API\Models\ORM\Event\Base;
 
+use \DateTime;
 use \Exception;
 use \PDO;
 use API\Models\ORM\Event\Event as ChildEvent;
@@ -27,6 +28,7 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Propel\Runtime\Util\PropelDateTime;
 
 /**
  * Base class that represents a row from the 'event_user' table.
@@ -103,6 +105,13 @@ abstract class EventUser implements ActiveRecordInterface
      * @var        string
      */
     protected $begin_money;
+
+    /**
+     * The value for the is_deleted field.
+     * 
+     * @var        DateTime
+     */
+    protected $is_deleted;
 
     /**
      * @var        ChildEvent
@@ -422,6 +431,26 @@ abstract class EventUser implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [is_deleted] column value.
+     * 
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getIsDeleted($format = NULL)
+    {
+        if ($format === null) {
+            return $this->is_deleted;
+        } else {
+            return $this->is_deleted instanceof \DateTimeInterface ? $this->is_deleted->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [event_userid] column.
      * 
      * @param int $v new value
@@ -530,6 +559,26 @@ abstract class EventUser implements ActiveRecordInterface
     } // setBeginMoney()
 
     /**
+     * Sets the value of [is_deleted] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\ORM\Event\EventUser The current object (for fluent API support)
+     */
+    public function setIsDeleted($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->is_deleted !== null || $dt !== null) {
+            if ($this->is_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->is_deleted->format("Y-m-d H:i:s.u")) {
+                $this->is_deleted = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[EventUserTableMap::COL_IS_DELETED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setIsDeleted()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -579,6 +628,12 @@ abstract class EventUser implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : EventUserTableMap::translateFieldName('BeginMoney', TableMap::TYPE_PHPNAME, $indexType)];
             $this->begin_money = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : EventUserTableMap::translateFieldName('IsDeleted', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->is_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -587,7 +642,7 @@ abstract class EventUser implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 5; // 5 = EventUserTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 6; // 6 = EventUserTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\ORM\\Event\\EventUser'), 0, $e);
@@ -869,6 +924,9 @@ abstract class EventUser implements ActiveRecordInterface
         if ($this->isColumnModified(EventUserTableMap::COL_BEGIN_MONEY)) {
             $modifiedColumns[':p' . $index++]  = '`begin_money`';
         }
+        if ($this->isColumnModified(EventUserTableMap::COL_IS_DELETED)) {
+            $modifiedColumns[':p' . $index++]  = '`is_deleted`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `event_user` (%s) VALUES (%s)',
@@ -894,6 +952,9 @@ abstract class EventUser implements ActiveRecordInterface
                         break;
                     case '`begin_money`':                        
                         $stmt->bindValue($identifier, $this->begin_money, PDO::PARAM_STR);
+                        break;
+                    case '`is_deleted`':                        
+                        $stmt->bindValue($identifier, $this->is_deleted ? $this->is_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -972,6 +1033,9 @@ abstract class EventUser implements ActiveRecordInterface
             case 4:
                 return $this->getBeginMoney();
                 break;
+            case 5:
+                return $this->getIsDeleted();
+                break;
             default:
                 return null;
                 break;
@@ -1007,7 +1071,12 @@ abstract class EventUser implements ActiveRecordInterface
             $keys[2] => $this->getUserid(),
             $keys[3] => $this->getUserRoles(),
             $keys[4] => $this->getBeginMoney(),
+            $keys[5] => $this->getIsDeleted(),
         );
+        if ($result[$keys[5]] instanceof \DateTime) {
+            $result[$keys[5]] = $result[$keys[5]]->format('c');
+        }
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
@@ -1123,6 +1192,9 @@ abstract class EventUser implements ActiveRecordInterface
             case 4:
                 $this->setBeginMoney($value);
                 break;
+            case 5:
+                $this->setIsDeleted($value);
+                break;
         } // switch()
 
         return $this;
@@ -1163,6 +1235,9 @@ abstract class EventUser implements ActiveRecordInterface
         }
         if (array_key_exists($keys[4], $arr)) {
             $this->setBeginMoney($arr[$keys[4]]);
+        }
+        if (array_key_exists($keys[5], $arr)) {
+            $this->setIsDeleted($arr[$keys[5]]);
         }
     }
 
@@ -1219,6 +1294,9 @@ abstract class EventUser implements ActiveRecordInterface
         }
         if ($this->isColumnModified(EventUserTableMap::COL_BEGIN_MONEY)) {
             $criteria->add(EventUserTableMap::COL_BEGIN_MONEY, $this->begin_money);
+        }
+        if ($this->isColumnModified(EventUserTableMap::COL_IS_DELETED)) {
+            $criteria->add(EventUserTableMap::COL_IS_DELETED, $this->is_deleted);
         }
 
         return $criteria;
@@ -1310,6 +1388,7 @@ abstract class EventUser implements ActiveRecordInterface
         $copyObj->setUserid($this->getUserid());
         $copyObj->setUserRoles($this->getUserRoles());
         $copyObj->setBeginMoney($this->getBeginMoney());
+        $copyObj->setIsDeleted($this->getIsDeleted());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1947,6 +2026,7 @@ abstract class EventUser implements ActiveRecordInterface
         $this->userid = null;
         $this->user_roles = null;
         $this->begin_money = null;
+        $this->is_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

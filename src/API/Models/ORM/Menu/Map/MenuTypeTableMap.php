@@ -59,7 +59,7 @@ class MenuTypeTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class MenuTypeTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
      * the column name for the menu_typeid field
@@ -97,6 +97,11 @@ class MenuTypeTableMap extends TableMap
     const COL_ALLOWMIXING = 'menu_type.allowMixing';
 
     /**
+     * the column name for the is_deleted field
+     */
+    const COL_IS_DELETED = 'menu_type.is_deleted';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -108,11 +113,11 @@ class MenuTypeTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('MenuTypeid', 'Eventid', 'Name', 'Tax', 'Allowmixing', ),
-        self::TYPE_CAMELNAME     => array('menuTypeid', 'eventid', 'name', 'tax', 'allowmixing', ),
-        self::TYPE_COLNAME       => array(MenuTypeTableMap::COL_MENU_TYPEID, MenuTypeTableMap::COL_EVENTID, MenuTypeTableMap::COL_NAME, MenuTypeTableMap::COL_TAX, MenuTypeTableMap::COL_ALLOWMIXING, ),
-        self::TYPE_FIELDNAME     => array('menu_typeid', 'eventid', 'name', 'tax', 'allowMixing', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('MenuTypeid', 'Eventid', 'Name', 'Tax', 'Allowmixing', 'IsDeleted', ),
+        self::TYPE_CAMELNAME     => array('menuTypeid', 'eventid', 'name', 'tax', 'allowmixing', 'isDeleted', ),
+        self::TYPE_COLNAME       => array(MenuTypeTableMap::COL_MENU_TYPEID, MenuTypeTableMap::COL_EVENTID, MenuTypeTableMap::COL_NAME, MenuTypeTableMap::COL_TAX, MenuTypeTableMap::COL_ALLOWMIXING, MenuTypeTableMap::COL_IS_DELETED, ),
+        self::TYPE_FIELDNAME     => array('menu_typeid', 'eventid', 'name', 'tax', 'allowMixing', 'is_deleted', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -122,11 +127,11 @@ class MenuTypeTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('MenuTypeid' => 0, 'Eventid' => 1, 'Name' => 2, 'Tax' => 3, 'Allowmixing' => 4, ),
-        self::TYPE_CAMELNAME     => array('menuTypeid' => 0, 'eventid' => 1, 'name' => 2, 'tax' => 3, 'allowmixing' => 4, ),
-        self::TYPE_COLNAME       => array(MenuTypeTableMap::COL_MENU_TYPEID => 0, MenuTypeTableMap::COL_EVENTID => 1, MenuTypeTableMap::COL_NAME => 2, MenuTypeTableMap::COL_TAX => 3, MenuTypeTableMap::COL_ALLOWMIXING => 4, ),
-        self::TYPE_FIELDNAME     => array('menu_typeid' => 0, 'eventid' => 1, 'name' => 2, 'tax' => 3, 'allowMixing' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('MenuTypeid' => 0, 'Eventid' => 1, 'Name' => 2, 'Tax' => 3, 'Allowmixing' => 4, 'IsDeleted' => 5, ),
+        self::TYPE_CAMELNAME     => array('menuTypeid' => 0, 'eventid' => 1, 'name' => 2, 'tax' => 3, 'allowmixing' => 4, 'isDeleted' => 5, ),
+        self::TYPE_COLNAME       => array(MenuTypeTableMap::COL_MENU_TYPEID => 0, MenuTypeTableMap::COL_EVENTID => 1, MenuTypeTableMap::COL_NAME => 2, MenuTypeTableMap::COL_TAX => 3, MenuTypeTableMap::COL_ALLOWMIXING => 4, MenuTypeTableMap::COL_IS_DELETED => 5, ),
+        self::TYPE_FIELDNAME     => array('menu_typeid' => 0, 'eventid' => 1, 'name' => 2, 'tax' => 3, 'allowMixing' => 4, 'is_deleted' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -151,6 +156,7 @@ class MenuTypeTableMap extends TableMap
         $this->addColumn('name', 'Name', 'VARCHAR', true, 64, null);
         $this->addColumn('tax', 'Tax', 'SMALLINT', true, null, null);
         $this->addColumn('allowMixing', 'Allowmixing', 'BOOLEAN', true, 1, null);
+        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -320,12 +326,14 @@ class MenuTypeTableMap extends TableMap
             $criteria->addSelectColumn(MenuTypeTableMap::COL_NAME);
             $criteria->addSelectColumn(MenuTypeTableMap::COL_TAX);
             $criteria->addSelectColumn(MenuTypeTableMap::COL_ALLOWMIXING);
+            $criteria->addSelectColumn(MenuTypeTableMap::COL_IS_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.menu_typeid');
             $criteria->addSelectColumn($alias . '.eventid');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.tax');
             $criteria->addSelectColumn($alias . '.allowMixing');
+            $criteria->addSelectColumn($alias . '.is_deleted');
         }
     }
 

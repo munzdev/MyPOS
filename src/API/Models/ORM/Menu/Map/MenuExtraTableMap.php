@@ -59,7 +59,7 @@ class MenuExtraTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class MenuExtraTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
      * the column name for the menu_extraid field
@@ -97,6 +97,11 @@ class MenuExtraTableMap extends TableMap
     const COL_AVAILABILITY_AMOUNT = 'menu_extra.availability_amount';
 
     /**
+     * the column name for the is_deleted field
+     */
+    const COL_IS_DELETED = 'menu_extra.is_deleted';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -108,11 +113,11 @@ class MenuExtraTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('MenuExtraid', 'Eventid', 'Name', 'Availabilityid', 'AvailabilityAmount', ),
-        self::TYPE_CAMELNAME     => array('menuExtraid', 'eventid', 'name', 'availabilityid', 'availabilityAmount', ),
-        self::TYPE_COLNAME       => array(MenuExtraTableMap::COL_MENU_EXTRAID, MenuExtraTableMap::COL_EVENTID, MenuExtraTableMap::COL_NAME, MenuExtraTableMap::COL_AVAILABILITYID, MenuExtraTableMap::COL_AVAILABILITY_AMOUNT, ),
-        self::TYPE_FIELDNAME     => array('menu_extraid', 'eventid', 'name', 'availabilityid', 'availability_amount', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('MenuExtraid', 'Eventid', 'Name', 'Availabilityid', 'AvailabilityAmount', 'IsDeleted', ),
+        self::TYPE_CAMELNAME     => array('menuExtraid', 'eventid', 'name', 'availabilityid', 'availabilityAmount', 'isDeleted', ),
+        self::TYPE_COLNAME       => array(MenuExtraTableMap::COL_MENU_EXTRAID, MenuExtraTableMap::COL_EVENTID, MenuExtraTableMap::COL_NAME, MenuExtraTableMap::COL_AVAILABILITYID, MenuExtraTableMap::COL_AVAILABILITY_AMOUNT, MenuExtraTableMap::COL_IS_DELETED, ),
+        self::TYPE_FIELDNAME     => array('menu_extraid', 'eventid', 'name', 'availabilityid', 'availability_amount', 'is_deleted', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -122,11 +127,11 @@ class MenuExtraTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('MenuExtraid' => 0, 'Eventid' => 1, 'Name' => 2, 'Availabilityid' => 3, 'AvailabilityAmount' => 4, ),
-        self::TYPE_CAMELNAME     => array('menuExtraid' => 0, 'eventid' => 1, 'name' => 2, 'availabilityid' => 3, 'availabilityAmount' => 4, ),
-        self::TYPE_COLNAME       => array(MenuExtraTableMap::COL_MENU_EXTRAID => 0, MenuExtraTableMap::COL_EVENTID => 1, MenuExtraTableMap::COL_NAME => 2, MenuExtraTableMap::COL_AVAILABILITYID => 3, MenuExtraTableMap::COL_AVAILABILITY_AMOUNT => 4, ),
-        self::TYPE_FIELDNAME     => array('menu_extraid' => 0, 'eventid' => 1, 'name' => 2, 'availabilityid' => 3, 'availability_amount' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('MenuExtraid' => 0, 'Eventid' => 1, 'Name' => 2, 'Availabilityid' => 3, 'AvailabilityAmount' => 4, 'IsDeleted' => 5, ),
+        self::TYPE_CAMELNAME     => array('menuExtraid' => 0, 'eventid' => 1, 'name' => 2, 'availabilityid' => 3, 'availabilityAmount' => 4, 'isDeleted' => 5, ),
+        self::TYPE_COLNAME       => array(MenuExtraTableMap::COL_MENU_EXTRAID => 0, MenuExtraTableMap::COL_EVENTID => 1, MenuExtraTableMap::COL_NAME => 2, MenuExtraTableMap::COL_AVAILABILITYID => 3, MenuExtraTableMap::COL_AVAILABILITY_AMOUNT => 4, MenuExtraTableMap::COL_IS_DELETED => 5, ),
+        self::TYPE_FIELDNAME     => array('menu_extraid' => 0, 'eventid' => 1, 'name' => 2, 'availabilityid' => 3, 'availability_amount' => 4, 'is_deleted' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -151,6 +156,7 @@ class MenuExtraTableMap extends TableMap
         $this->addColumn('name', 'Name', 'VARCHAR', true, 64, null);
         $this->addForeignKey('availabilityid', 'Availabilityid', 'INTEGER', 'availability', 'availabilityid', true, null, null);
         $this->addColumn('availability_amount', 'AvailabilityAmount', 'SMALLINT', false, 5, null);
+        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -327,12 +333,14 @@ class MenuExtraTableMap extends TableMap
             $criteria->addSelectColumn(MenuExtraTableMap::COL_NAME);
             $criteria->addSelectColumn(MenuExtraTableMap::COL_AVAILABILITYID);
             $criteria->addSelectColumn(MenuExtraTableMap::COL_AVAILABILITY_AMOUNT);
+            $criteria->addSelectColumn(MenuExtraTableMap::COL_IS_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.menu_extraid');
             $criteria->addSelectColumn($alias . '.eventid');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.availabilityid');
             $criteria->addSelectColumn($alias . '.availability_amount');
+            $criteria->addSelectColumn($alias . '.is_deleted');
         }
     }
 

@@ -59,7 +59,7 @@ class EventTableTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 5;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class EventTableTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /**
      * the column name for the event_tableid field
@@ -92,6 +92,11 @@ class EventTableTableMap extends TableMap
     const COL_DATA = 'event_table.data';
 
     /**
+     * the column name for the is_deleted field
+     */
+    const COL_IS_DELETED = 'event_table.is_deleted';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -103,11 +108,11 @@ class EventTableTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('EventTableid', 'Eventid', 'Name', 'Data', ),
-        self::TYPE_CAMELNAME     => array('eventTableid', 'eventid', 'name', 'data', ),
-        self::TYPE_COLNAME       => array(EventTableTableMap::COL_EVENT_TABLEID, EventTableTableMap::COL_EVENTID, EventTableTableMap::COL_NAME, EventTableTableMap::COL_DATA, ),
-        self::TYPE_FIELDNAME     => array('event_tableid', 'eventid', 'name', 'data', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('EventTableid', 'Eventid', 'Name', 'Data', 'IsDeleted', ),
+        self::TYPE_CAMELNAME     => array('eventTableid', 'eventid', 'name', 'data', 'isDeleted', ),
+        self::TYPE_COLNAME       => array(EventTableTableMap::COL_EVENT_TABLEID, EventTableTableMap::COL_EVENTID, EventTableTableMap::COL_NAME, EventTableTableMap::COL_DATA, EventTableTableMap::COL_IS_DELETED, ),
+        self::TYPE_FIELDNAME     => array('event_tableid', 'eventid', 'name', 'data', 'is_deleted', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -117,11 +122,11 @@ class EventTableTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('EventTableid' => 0, 'Eventid' => 1, 'Name' => 2, 'Data' => 3, ),
-        self::TYPE_CAMELNAME     => array('eventTableid' => 0, 'eventid' => 1, 'name' => 2, 'data' => 3, ),
-        self::TYPE_COLNAME       => array(EventTableTableMap::COL_EVENT_TABLEID => 0, EventTableTableMap::COL_EVENTID => 1, EventTableTableMap::COL_NAME => 2, EventTableTableMap::COL_DATA => 3, ),
-        self::TYPE_FIELDNAME     => array('event_tableid' => 0, 'eventid' => 1, 'name' => 2, 'data' => 3, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('EventTableid' => 0, 'Eventid' => 1, 'Name' => 2, 'Data' => 3, 'IsDeleted' => 4, ),
+        self::TYPE_CAMELNAME     => array('eventTableid' => 0, 'eventid' => 1, 'name' => 2, 'data' => 3, 'isDeleted' => 4, ),
+        self::TYPE_COLNAME       => array(EventTableTableMap::COL_EVENT_TABLEID => 0, EventTableTableMap::COL_EVENTID => 1, EventTableTableMap::COL_NAME => 2, EventTableTableMap::COL_DATA => 3, EventTableTableMap::COL_IS_DELETED => 4, ),
+        self::TYPE_FIELDNAME     => array('event_tableid' => 0, 'eventid' => 1, 'name' => 2, 'data' => 3, 'is_deleted' => 4, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -145,6 +150,7 @@ class EventTableTableMap extends TableMap
         $this->addForeignKey('eventid', 'Eventid', 'INTEGER', 'event', 'eventid', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 32, null);
         $this->addColumn('data', 'Data', 'VARCHAR', false, 255, null);
+        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -321,11 +327,13 @@ class EventTableTableMap extends TableMap
             $criteria->addSelectColumn(EventTableTableMap::COL_EVENTID);
             $criteria->addSelectColumn(EventTableTableMap::COL_NAME);
             $criteria->addSelectColumn(EventTableTableMap::COL_DATA);
+            $criteria->addSelectColumn(EventTableTableMap::COL_IS_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.event_tableid');
             $criteria->addSelectColumn($alias . '.eventid');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.data');
+            $criteria->addSelectColumn($alias . '.is_deleted');
         }
     }
 

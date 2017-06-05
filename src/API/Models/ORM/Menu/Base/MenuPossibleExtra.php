@@ -2,6 +2,7 @@
 
 namespace API\Models\ORM\Menu\Base;
 
+use \DateTime;
 use \Exception;
 use \PDO;
 use API\Models\ORM\Menu\Menu as ChildMenu;
@@ -29,6 +30,7 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Propel\Runtime\Util\PropelDateTime;
 
 /**
  * Base class that represents a row from the 'menu_possible_extra' table.
@@ -98,6 +100,13 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
      * @var        string
      */
     protected $price;
+
+    /**
+     * The value for the is_deleted field.
+     * 
+     * @var        DateTime
+     */
+    protected $is_deleted;
 
     /**
      * @var        ChildMenuExtra
@@ -411,6 +420,26 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [is_deleted] column value.
+     * 
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getIsDeleted($format = NULL)
+    {
+        if ($format === null) {
+            return $this->is_deleted;
+        } else {
+            return $this->is_deleted instanceof \DateTimeInterface ? $this->is_deleted->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [menu_possible_extraid] column.
      * 
      * @param int $v new value
@@ -499,6 +528,26 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
     } // setPrice()
 
     /**
+     * Sets the value of [is_deleted] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\ORM\Menu\MenuPossibleExtra The current object (for fluent API support)
+     */
+    public function setIsDeleted($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->is_deleted !== null || $dt !== null) {
+            if ($this->is_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->is_deleted->format("Y-m-d H:i:s.u")) {
+                $this->is_deleted = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[MenuPossibleExtraTableMap::COL_IS_DELETED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setIsDeleted()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -545,6 +594,12 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : MenuPossibleExtraTableMap::translateFieldName('Price', TableMap::TYPE_PHPNAME, $indexType)];
             $this->price = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : MenuPossibleExtraTableMap::translateFieldName('IsDeleted', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->is_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -553,7 +608,7 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = MenuPossibleExtraTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = MenuPossibleExtraTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\ORM\\Menu\\MenuPossibleExtra'), 0, $e);
@@ -842,6 +897,9 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
         if ($this->isColumnModified(MenuPossibleExtraTableMap::COL_PRICE)) {
             $modifiedColumns[':p' . $index++]  = '`price`';
         }
+        if ($this->isColumnModified(MenuPossibleExtraTableMap::COL_IS_DELETED)) {
+            $modifiedColumns[':p' . $index++]  = '`is_deleted`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `menu_possible_extra` (%s) VALUES (%s)',
@@ -864,6 +922,9 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
                         break;
                     case '`price`':                        
                         $stmt->bindValue($identifier, $this->price, PDO::PARAM_STR);
+                        break;
+                    case '`is_deleted`':                        
+                        $stmt->bindValue($identifier, $this->is_deleted ? $this->is_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -939,6 +1000,9 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
             case 3:
                 return $this->getPrice();
                 break;
+            case 4:
+                return $this->getIsDeleted();
+                break;
             default:
                 return null;
                 break;
@@ -973,7 +1037,12 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
             $keys[1] => $this->getMenuExtraid(),
             $keys[2] => $this->getMenuid(),
             $keys[3] => $this->getPrice(),
+            $keys[4] => $this->getIsDeleted(),
         );
+        if ($result[$keys[4]] instanceof \DateTime) {
+            $result[$keys[4]] = $result[$keys[4]]->format('c');
+        }
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
@@ -1071,6 +1140,9 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
             case 3:
                 $this->setPrice($value);
                 break;
+            case 4:
+                $this->setIsDeleted($value);
+                break;
         } // switch()
 
         return $this;
@@ -1108,6 +1180,9 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setPrice($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setIsDeleted($arr[$keys[4]]);
         }
     }
 
@@ -1161,6 +1236,9 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
         }
         if ($this->isColumnModified(MenuPossibleExtraTableMap::COL_PRICE)) {
             $criteria->add(MenuPossibleExtraTableMap::COL_PRICE, $this->price);
+        }
+        if ($this->isColumnModified(MenuPossibleExtraTableMap::COL_IS_DELETED)) {
+            $criteria->add(MenuPossibleExtraTableMap::COL_IS_DELETED, $this->is_deleted);
         }
 
         return $criteria;
@@ -1251,6 +1329,7 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
         $copyObj->setMenuExtraid($this->getMenuExtraid());
         $copyObj->setMenuid($this->getMenuid());
         $copyObj->setPrice($this->getPrice());
+        $copyObj->setIsDeleted($this->getIsDeleted());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1924,6 +2003,7 @@ abstract class MenuPossibleExtra implements ActiveRecordInterface
         $this->menu_extraid = null;
         $this->menuid = null;
         $this->price = null;
+        $this->is_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

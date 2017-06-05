@@ -38,6 +38,10 @@ class Event extends Model implements IEvent
         return $this->model->getName();
     }
 
+    public function getIsDeleted() : ?DateTime {
+        return $this->model->getIsDeleted();
+    }
+
     public function setActive($active): IEvent {
         $this->model->setActive($active);
         return $this;
@@ -58,4 +62,8 @@ class Event extends Model implements IEvent
         return $this;
     }
 
+    public function setIsDeleted($isDeleted) : IEvent {
+        $this->model->setIsDeleted($isDeleted);
+        return $this;
+    }
 }

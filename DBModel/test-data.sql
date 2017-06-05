@@ -2,14 +2,14 @@
 -- Data for table `user`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `active`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'admin', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Administrator', 'Cool', NULL, 1, '0664 / 1234567', NULL, true);
-INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `active`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'kellner', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Kellner', 'Schnell', NULL, 1, '0664 / 7654321', NULL, false);
-INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `active`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'essen', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Ausgabe', 'Essen', NULL, 1, '0664 5555555', NULL, false);
-INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `active`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'trinken1-1', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Ausgabe', 'Trinken 1-1', NULL, 1, '0664 1111111', NULL, false);
-INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `active`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'manager', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Manager', 'Nur', NULL, 1, '0664 8888888', NULL, false);
-INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `active`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'managerAll', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Manager', 'Alles', NULL, 1, '0664 9999999', NULL, false);
-INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `active`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'trinken2', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Ausgabe', 'Trinken 2', NULL, 1, '0664 2222222', NULL, false);
-INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `active`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'trinken1-2', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Ausgabe', 'Trinken 1-2', NULL, 1, '0664 3333333', NULL, false);
+INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `is_deleted`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'admin', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Administrator', 'Cool', NULL, NULL, '0664 / 1234567', NULL, true);
+INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `is_deleted`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'kellner', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Kellner', 'Schnell', NULL, NULL, '0664 / 7654321', NULL, false);
+INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `is_deleted`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'essen', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Ausgabe', 'Essen', NULL, NULL, '0664 5555555', NULL, false);
+INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `is_deleted`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'trinken1-1', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Ausgabe', 'Trinken 1-1', NULL, NULL, '0664 1111111', NULL, false);
+INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `is_deleted`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'manager', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Manager', 'Nur', NULL, NULL, '0664 8888888', NULL, false);
+INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `is_deleted`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'managerAll', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Manager', 'Alles', NULL, NULL, '0664 9999999', NULL, false);
+INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `is_deleted`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'trinken2', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Ausgabe', 'Trinken 2', NULL, NULL, '0664 2222222', NULL, false);
+INSERT INTO `user` (`userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `is_deleted`, `phonenumber`, `call_request`, `is_admin`) VALUES (DEFAULT, 'trinken1-2', '$2y$10$og9U0.a3fLAalSfUwwCRl.IHfcLoX.E11GpoiOJ7ZhUuDHSaFCZHy', 'Ausgabe', 'Trinken 1-2', NULL, NULL, '0664 3333333', NULL, false);
 
 COMMIT;
 
@@ -18,7 +18,7 @@ COMMIT;
 -- Data for table `event`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `event` (`eventid`, `name`, `date`, `active`) VALUES (DEFAULT, 'Frühschoppen', '2016-01-01 00:00:00', true);
+INSERT INTO `event` (`eventid`, `name`, `date`, `active`, `is_deleted`) VALUES (DEFAULT, 'Frühschoppen', '2016-01-01 00:00:00', true, NULL);
 
 COMMIT;
 
@@ -27,10 +27,10 @@ COMMIT;
 -- Data for table `event_table`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `event_table` (`event_tableid`, `eventid`, `name`, `data`) VALUES (DEFAULT, 1, 'A1', NULL);
-INSERT INTO `event_table` (`event_tableid`, `eventid`, `name`, `data`) VALUES (DEFAULT, 1, 'B32', NULL);
-INSERT INTO `event_table` (`event_tableid`, `eventid`, `name`, `data`) VALUES (DEFAULT, 1, 'C32', NULL);
-INSERT INTO `event_table` (`event_tableid`, `eventid`, `name`, `data`) VALUES (DEFAULT, 1, 'A4', NULL);
+INSERT INTO `event_table` (`event_tableid`, `eventid`, `name`, `data`, `is_deleted`) VALUES (DEFAULT, 1, 'A1', NULL, NULL);
+INSERT INTO `event_table` (`event_tableid`, `eventid`, `name`, `data`, `is_deleted`) VALUES (DEFAULT, 1, 'B32', NULL, NULL);
+INSERT INTO `event_table` (`event_tableid`, `eventid`, `name`, `data`, `is_deleted`) VALUES (DEFAULT, 1, 'C32', NULL, NULL);
+INSERT INTO `event_table` (`event_tableid`, `eventid`, `name`, `data`, `is_deleted`) VALUES (DEFAULT, 1, 'A4', NULL, NULL);
 
 COMMIT;
 
@@ -39,10 +39,10 @@ COMMIT;
 -- Data for table `order`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 1, 1, NOW(), 1, NULL, NULL);
-INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 3, 1, NOW(), 2, NULL, NULL);
-INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 2, 1, NOW(), 3, NULL, NULL);
-INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished`) VALUES (DEFAULT, 1, 1, NOW(), 4, NULL, NULL);
+INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished`, `cancellation`, `cancellation_created_by_userid`) VALUES (DEFAULT, 1, 1, NOW(), 1, NULL, NULL, NULL, NULL);
+INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished`, `cancellation`, `cancellation_created_by_userid`) VALUES (DEFAULT, 3, 1, NOW(), 2, NULL, NULL, NULL, NULL);
+INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished`, `cancellation`, `cancellation_created_by_userid`) VALUES (DEFAULT, 2, 1, NOW(), 3, NULL, NULL, NULL, NULL);
+INSERT INTO `order` (`orderid`, `event_tableid`, `userid`, `ordertime`, `priority`, `distribution_finished`, `invoice_finished`, `cancellation`, `cancellation_created_by_userid`) VALUES (DEFAULT, 1, 1, NOW(), 4, NULL, NULL, NULL, NULL);
 
 COMMIT;
 
@@ -51,8 +51,8 @@ COMMIT;
 -- Data for table `menu_type`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `menu_type` (`menu_typeid`, `eventid`, `name`, `tax`, `allowMixing`) VALUES (DEFAULT, 1, 'Essen', 20, false);
-INSERT INTO `menu_type` (`menu_typeid`, `eventid`, `name`, `tax`, `allowMixing`) VALUES (DEFAULT, 1, 'Trinken', 10, true);
+INSERT INTO `menu_type` (`menu_typeid`, `eventid`, `name`, `tax`, `allowMixing`, `is_deleted`) VALUES (DEFAULT, 1, 'Essen', 20, false, NULL);
+INSERT INTO `menu_type` (`menu_typeid`, `eventid`, `name`, `tax`, `allowMixing`, `is_deleted`) VALUES (DEFAULT, 1, 'Trinken', 10, true, NULL);
 
 COMMIT;
 
@@ -61,11 +61,11 @@ COMMIT;
 -- Data for table `menu_group`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `menu_group` (`menu_groupid`, `menu_typeid`, `name`) VALUES (DEFAULT, 1, 'Hauptspeisen');
-INSERT INTO `menu_group` (`menu_groupid`, `menu_typeid`, `name`) VALUES (DEFAULT, 1, 'Beilagen');
-INSERT INTO `menu_group` (`menu_groupid`, `menu_typeid`, `name`) VALUES (DEFAULT, 2, 'Antigetränke');
-INSERT INTO `menu_group` (`menu_groupid`, `menu_typeid`, `name`) VALUES (DEFAULT, 2, 'Bier');
-INSERT INTO `menu_group` (`menu_groupid`, `menu_typeid`, `name`) VALUES (DEFAULT, 2, 'Wein');
+INSERT INTO `menu_group` (`menu_groupid`, `menu_typeid`, `name`, `is_deleted`) VALUES (DEFAULT, 1, 'Hauptspeisen', NULL);
+INSERT INTO `menu_group` (`menu_groupid`, `menu_typeid`, `name`, `is_deleted`) VALUES (DEFAULT, 1, 'Beilagen', NULL);
+INSERT INTO `menu_group` (`menu_groupid`, `menu_typeid`, `name`, `is_deleted`) VALUES (DEFAULT, 2, 'Antigetränke', NULL);
+INSERT INTO `menu_group` (`menu_groupid`, `menu_typeid`, `name`, `is_deleted`) VALUES (DEFAULT, 2, 'Bier', NULL);
+INSERT INTO `menu_group` (`menu_groupid`, `menu_typeid`, `name`, `is_deleted`) VALUES (DEFAULT, 2, 'Wein', NULL);
 
 COMMIT;
 
@@ -74,24 +74,24 @@ COMMIT;
 -- Data for table `menu`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'Wiener Schnitzel', 7.50, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'Schweinsbraten', 9, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'Pommes', 4, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'Bratwürstel', 5, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'Gemüselaibchen', 6.5, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 2, 'Gemischter Salat', 2.5, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 2, 'Kartoffelsalat', 2.5, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 3, 'Cola', 2.5, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 3, 'Sprite', 2.5, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 3, 'Fanta', 2.5, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 3, 'Cola-Mix', 2.5, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 3, 'Mineral', 1.5, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 3, 'Wasser', 1, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 4, 'Märzen', 2.8, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 4, 'Ratsherrn', 2.8, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 4, 'Radler', 2.5, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 5, 'Rot', 2.6, 1, NULL);
-INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 5, 'Weis', 2.6, 1, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'Wiener Schnitzel', 7.50, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'Schweinsbraten', 9, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'Pommes', 4, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'Bratwürstel', 5, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'Gemüselaibchen', 6.5, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 2, 'Gemischter Salat', 2.5, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 2, 'Kartoffelsalat', 2.5, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 3, 'Cola', 2.5, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 3, 'Sprite', 2.5, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 3, 'Fanta', 2.5, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 3, 'Cola-Mix', 2.5, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 3, 'Mineral', 1.5, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 3, 'Wasser', 1, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 4, 'Märzen', 2.8, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 4, 'Ratsherrn', 2.8, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 4, 'Radler', 2.5, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 5, 'Rot', 2.6, 1, NULL, NULL);
+INSERT INTO `menu` (`menuid`, `menu_groupid`, `name`, `price`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 5, 'Weis', 2.6, 1, NULL, NULL);
 
 COMMIT;
 
@@ -100,12 +100,12 @@ COMMIT;
 -- Data for table `menu_size`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`) VALUES (DEFAULT, 1, '0,2L', 0.2);
-INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`) VALUES (DEFAULT, 1, '0,25L', 0.25);
-INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`) VALUES (DEFAULT, 1, '0,5L', 0.5);
-INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`) VALUES (DEFAULT, 1, '0,33L', 0.33);
-INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`) VALUES (DEFAULT, 1, 'Klein', 1);
-INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`) VALUES (DEFAULT, 1, 'Groß', 1);
+INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`, `is_deleted`) VALUES (DEFAULT, 1, '0,2L', 0.2, NULL);
+INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`, `is_deleted`) VALUES (DEFAULT, 1, '0,25L', 0.25, NULL);
+INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`, `is_deleted`) VALUES (DEFAULT, 1, '0,5L', 0.5, NULL);
+INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`, `is_deleted`) VALUES (DEFAULT, 1, '0,33L', 0.33, NULL);
+INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`, `is_deleted`) VALUES (DEFAULT, 1, 'Klein', 1, NULL);
+INSERT INTO `menu_size` (`menu_sizeid`, `eventid`, `name`, `factor`, `is_deleted`) VALUES (DEFAULT, 1, 'Groß', 1, NULL);
 
 COMMIT;
 
@@ -130,18 +130,18 @@ COMMIT;
 -- Data for table `menu_extra`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'mit Pommes', 1, NULL);
-INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'mit Reis', 1, NULL);
-INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'mit Kartoffel', 1, NULL);
-INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'mit Salat', 1, NULL);
-INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'mit Knödel', 1, NULL);
-INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'ohne Pommes', 1, NULL);
-INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'ohne Reis', 1, NULL);
-INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'ohne Kartoffel', 1, NULL);
-INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'ohne Salat', 1, NULL);
-INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'mit Zitrone', 1, NULL);
-INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'ohne Kraut', 1, NULL);
-INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`) VALUES (DEFAULT, 1, 'mit Kraut', 1, NULL);
+INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'mit Pommes', 1, NULL, NULL);
+INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'mit Reis', 1, NULL, NULL);
+INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'mit Kartoffel', 1, NULL, NULL);
+INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'mit Salat', 1, NULL, NULL);
+INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'mit Knödel', 1, NULL, NULL);
+INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'ohne Pommes', 1, NULL, NULL);
+INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'ohne Reis', 1, NULL, NULL);
+INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'ohne Kartoffel', 1, NULL, NULL);
+INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'ohne Salat', 1, NULL, NULL);
+INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'mit Zitrone', 1, NULL, NULL);
+INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'ohne Kraut', 1, NULL, NULL);
+INSERT INTO `menu_extra` (`menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted`) VALUES (DEFAULT, 1, 'mit Kraut', 1, NULL, NULL);
 
 COMMIT;
 
@@ -150,41 +150,41 @@ COMMIT;
 -- Data for table `menu_possible_size`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 1, 1, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 6, 1, -1);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 1, 2, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 6, 2, -1);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 1, 3, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 6, 3, -1);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 1, 4, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 6, 4, -1);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 1, 5, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 6, 5, -1);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 7, 1, 1);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 3, 8, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 4, 8, 2.5);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 3, 9, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 4, 9, 1);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 3, 10, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 4, 10, 1);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 3, 11, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 4, 11, 1);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 3, 12, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 4, 12, 0.8);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 3, 13, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 4, 13, 0.5);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 4, 14, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 5, 14, 2);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 4, 15, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 5, 15, 2);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 4, 16, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 5, 16, 2);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 2, 17, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 2, 18, 1.5);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 3, 17, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 3, 18, 1.5);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 1, 6, 0);
-INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`) VALUES (DEFAULT, 1, 7, 0);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 1, 1, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 6, 1, -1, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 1, 2, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 6, 2, -1, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 1, 3, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 6, 3, -1, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 1, 4, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 6, 4, -1, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 1, 5, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 6, 5, -1, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 7, 1, 1, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 3, 8, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 4, 8, 2.5, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 3, 9, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 4, 9, 1, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 3, 10, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 4, 10, 1, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 3, 11, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 4, 11, 1, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 3, 12, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 4, 12, 0.8, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 3, 13, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 4, 13, 0.5, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 4, 14, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 5, 14, 2, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 4, 15, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 5, 15, 2, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 4, 16, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 5, 16, 2, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 2, 17, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 2, 18, 1.5, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 3, 17, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 3, 18, 1.5, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 1, 6, 0, NULL);
+INSERT INTO `menu_possible_size` (`menu_possible_sizeid`, `menu_sizeid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 1, 7, 0, NULL);
 
 COMMIT;
 
@@ -193,14 +193,14 @@ COMMIT;
 -- Data for table `menu_possible_extra`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`) VALUES (DEFAULT, 2, 1, 0);
-INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`) VALUES (DEFAULT, 3, 1, 0);
-INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`) VALUES (DEFAULT, 8, 2, 0);
-INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`) VALUES (DEFAULT, 11, 2, 0);
-INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`) VALUES (DEFAULT, 5, 3, 1);
-INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`) VALUES (DEFAULT, 11, 4, DEFAULT);
-INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`) VALUES (DEFAULT, 4, 4, 1.5);
-INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`) VALUES (DEFAULT, 5, 5, -0.5);
+INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 2, 1, 0, NULL);
+INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 3, 1, 0, NULL);
+INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 8, 2, 0, NULL);
+INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 11, 2, 0, NULL);
+INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 5, 3, 1, NULL);
+INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 11, 4, DEFAULT, NULL);
+INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 4, 4, 1.5, NULL);
+INSERT INTO `menu_possible_extra` (`menu_possible_extraid`, `menu_extraid`, `menuid`, `price`, `is_deleted`) VALUES (DEFAULT, 5, 5, -0.5, NULL);
 
 COMMIT;
 
@@ -230,14 +230,14 @@ COMMIT;
 -- Data for table `event_user`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 1, 2147483647, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 2, 106319, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 3, 1879154479, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 4, 1879154479, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 5, 266338304, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 6, 268435455, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 7, 1879154479, DEFAULT);
-INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`) VALUES (DEFAULT, 1, 8, 1879154479, DEFAULT);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`, `is_deleted`) VALUES (DEFAULT, 1, 1, 2147483647, DEFAULT, NULL);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`, `is_deleted`) VALUES (DEFAULT, 1, 2, 106319, DEFAULT, NULL);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`, `is_deleted`) VALUES (DEFAULT, 1, 3, 1879154479, DEFAULT, NULL);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`, `is_deleted`) VALUES (DEFAULT, 1, 4, 1879154479, DEFAULT, NULL);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`, `is_deleted`) VALUES (DEFAULT, 1, 5, 266338304, DEFAULT, NULL);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`, `is_deleted`) VALUES (DEFAULT, 1, 6, 268435455, DEFAULT, NULL);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`, `is_deleted`) VALUES (DEFAULT, 1, 7, 1879154479, DEFAULT, NULL);
+INSERT INTO `event_user` (`event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`, `is_deleted`) VALUES (DEFAULT, 1, 8, 1879154479, DEFAULT, NULL);
 
 COMMIT;
 
@@ -321,8 +321,8 @@ COMMIT;
 -- Data for table `event_contact`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `event_contact` (`event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `active`, `default`) VALUES (DEFAULT, 1, 'Herr', 'Max Mustermann', NULL, 'Strasse 1', NULL, 'Olstadt', '21123', '1213', NULL, NULL, 'customer@email.com', true, false);
-INSERT INTO `event_contact` (`event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `active`, `default`) VALUES (DEFAULT, 1, 'Firma', 'Company Test', NULL, 'Street whatever 1', NULL, 'City', '1234', '141231', '0664/123456', NULL, 'company@test.at', true, true);
+INSERT INTO `event_contact` (`event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `is_deleted`, `default`) VALUES (DEFAULT, 1, 'Herr', 'Max Mustermann', NULL, 'Strasse 1', NULL, 'Olstadt', '21123', '1213', NULL, NULL, 'customer@email.com', 'true', false);
+INSERT INTO `event_contact` (`event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `is_deleted`, `default`) VALUES (DEFAULT, 1, 'Firma', 'Company Test', NULL, 'Street whatever 1', NULL, 'City', '1234', '141231', '0664/123456', NULL, 'company@test.at', 'true', true);
 
 COMMIT;
 
@@ -340,6 +340,6 @@ COMMIT;
 -- Data for table `coupon`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `coupon` (`couponid`, `eventid`, `created_by_userid`, `code`, `created`, `value`) VALUES (DEFAULT, 1, 1, '1234', 'NOW', 20);
+INSERT INTO `coupon` (`couponid`, `eventid`, `created_by_userid`, `code`, `created`, `value`, `is_deleted`) VALUES (DEFAULT, 1, 1, '1234', 'NOW', 20, NULL);
 
 COMMIT;

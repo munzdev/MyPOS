@@ -74,6 +74,11 @@ class Coupon extends Model implements ICoupon
         return $this->model->getValue();
     }
 
+    public function getIsDeleted() : ?DateTime
+    {
+        return $this->model->getIsDeleted();
+    }
+
     public function setCode($code): ICoupon
     {
         $this->model->setCode($code);
@@ -122,4 +127,9 @@ class Coupon extends Model implements ICoupon
         return $this;
     }
 
+    public function setIsDeleted($isDeleted): ICoupon
+    {
+        $this->model->setIsDeleted($isDeleted);
+        return $this;
+    }
 }

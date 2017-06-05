@@ -26,10 +26,12 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuGroupQuery orderByMenuGroupid($order = Criteria::ASC) Order by the menu_groupid column
  * @method     ChildMenuGroupQuery orderByMenuTypeid($order = Criteria::ASC) Order by the menu_typeid column
  * @method     ChildMenuGroupQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     ChildMenuGroupQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
  *
  * @method     ChildMenuGroupQuery groupByMenuGroupid() Group by the menu_groupid column
  * @method     ChildMenuGroupQuery groupByMenuTypeid() Group by the menu_typeid column
  * @method     ChildMenuGroupQuery groupByName() Group by the name column
+ * @method     ChildMenuGroupQuery groupByIsDeleted() Group by the is_deleted column
  *
  * @method     ChildMenuGroupQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildMenuGroupQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -96,7 +98,8 @@ use Propel\Runtime\Exception\PropelException;
  *
  * @method     ChildMenuGroup findOneByMenuGroupid(int $menu_groupid) Return the first ChildMenuGroup filtered by the menu_groupid column
  * @method     ChildMenuGroup findOneByMenuTypeid(int $menu_typeid) Return the first ChildMenuGroup filtered by the menu_typeid column
- * @method     ChildMenuGroup findOneByName(string $name) Return the first ChildMenuGroup filtered by the name column *
+ * @method     ChildMenuGroup findOneByName(string $name) Return the first ChildMenuGroup filtered by the name column
+ * @method     ChildMenuGroup findOneByIsDeleted(string $is_deleted) Return the first ChildMenuGroup filtered by the is_deleted column *
 
  * @method     ChildMenuGroup requirePk($key, ConnectionInterface $con = null) Return the ChildMenuGroup by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMenuGroup requireOne(ConnectionInterface $con = null) Return the first ChildMenuGroup matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -104,11 +107,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuGroup requireOneByMenuGroupid(int $menu_groupid) Return the first ChildMenuGroup filtered by the menu_groupid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMenuGroup requireOneByMenuTypeid(int $menu_typeid) Return the first ChildMenuGroup filtered by the menu_typeid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMenuGroup requireOneByName(string $name) Return the first ChildMenuGroup filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMenuGroup requireOneByIsDeleted(string $is_deleted) Return the first ChildMenuGroup filtered by the is_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildMenuGroup[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMenuGroup objects based on current ModelCriteria
  * @method     ChildMenuGroup[]|ObjectCollection findByMenuGroupid(int $menu_groupid) Return ChildMenuGroup objects filtered by the menu_groupid column
  * @method     ChildMenuGroup[]|ObjectCollection findByMenuTypeid(int $menu_typeid) Return ChildMenuGroup objects filtered by the menu_typeid column
  * @method     ChildMenuGroup[]|ObjectCollection findByName(string $name) Return ChildMenuGroup objects filtered by the name column
+ * @method     ChildMenuGroup[]|ObjectCollection findByIsDeleted(string $is_deleted) Return ChildMenuGroup objects filtered by the is_deleted column
  * @method     ChildMenuGroup[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -207,7 +212,7 @@ abstract class MenuGroupQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT `menu_groupid`, `menu_typeid`, `name` FROM `menu_group` WHERE `menu_groupid` = :p0';
+        $sql = 'SELECT `menu_groupid`, `menu_typeid`, `name`, `is_deleted` FROM `menu_group` WHERE `menu_groupid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -404,6 +409,49 @@ abstract class MenuGroupQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MenuGroupTableMap::COL_NAME, $name, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_deleted column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsDeleted('2011-03-14'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted('now'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted(array('max' => 'yesterday')); // WHERE is_deleted > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $isDeleted The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildMenuGroupQuery The current query, for fluid interface
+     */
+    public function filterByIsDeleted($isDeleted = null, $comparison = null)
+    {
+        if (is_array($isDeleted)) {
+            $useMinMax = false;
+            if (isset($isDeleted['min'])) {
+                $this->addUsingAlias(MenuGroupTableMap::COL_IS_DELETED, $isDeleted['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($isDeleted['max'])) {
+                $this->addUsingAlias(MenuGroupTableMap::COL_IS_DELETED, $isDeleted['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(MenuGroupTableMap::COL_IS_DELETED, $isDeleted, $comparison);
     }
 
     /**

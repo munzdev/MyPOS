@@ -36,6 +36,11 @@ interface IMenuPossibleSize extends IModel {
     function getPrice();
 
     /**
+     * @return \DateTime
+     */
+    function getIsDeleted();
+
+    /**
      *
      * @param int $menuPossibleSizeid Description
      * @return IMenuPossibleSize Description
@@ -76,4 +81,11 @@ interface IMenuPossibleSize extends IModel {
      * @return IMenuPossibleSize Description
      */
     function setPrice($price);
+
+    /**
+     *
+     * @param \DateTime $deleted Description
+     * @return IMenuPossibleSize Description
+     */
+    function setIsDeleted($isDeleted);
 }

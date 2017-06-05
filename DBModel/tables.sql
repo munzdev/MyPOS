@@ -20,13 +20,13 @@ CREATE TABLE IF NOT EXISTS `user` (
   `firstname` VARCHAR(64) NOT NULL,
   `lastname` VARCHAR(64) NOT NULL,
   `autologin_hash` VARCHAR(255) NULL,
-  `active` TINYINT NOT NULL,
+  `is_deleted` DATETIME NULL,
   `phonenumber` VARCHAR(45) NOT NULL,
   `call_request` DATETIME NULL,
   `is_admin` TINYINT(1) NULL,
   PRIMARY KEY (`userid`),
   UNIQUE INDEX `user_name` (`username` ASC),
-  INDEX `active` (`active` ASC),
+  INDEX `deleted` (`deleted` ASC),
   UNIQUE INDEX `userid_UNIQUE` (`userid` ASC))
 ENGINE = InnoDB
 COMMENT = 'Enthält alle Benutzer, die Zugriff auf die App haben';
@@ -42,9 +42,11 @@ CREATE TABLE IF NOT EXISTS `event` (
   `name` VARCHAR(45) NOT NULL,
   `date` DATETIME NOT NULL,
   `active` TINYINT(1) NOT NULL,
+  `is_deleted` DATETIME NULL,
   PRIMARY KEY (`eventid`),
   UNIQUE INDEX `eventsid_UNIQUE` (`eventid` ASC),
-  INDEX `events_active` (`active` ASC))
+  INDEX `events_active` (`active` ASC),
+  INDEX `deleted` (`deleted` ASC))
 ENGINE = InnoDB
 COMMENT = 'Enthält die verschiedene Events, bei dem das POS System verwendet wird';
 
@@ -59,10 +61,12 @@ CREATE TABLE IF NOT EXISTS `event_table` (
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(32) NOT NULL,
   `data` VARCHAR(255) NULL,
+  `is_deleted` DATETIME NULL,
   UNIQUE INDEX `tableid_UNIQUE` (`event_tableid` ASC),
   INDEX `tables_name` (`name` ASC),
   PRIMARY KEY (`event_tableid`),
   INDEX `fk_tables_events1_idx` (`eventid` ASC),
+  INDEX `deleted` (`deleted` ASC),
   CONSTRAINT `fk_tables_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `event` (`eventid`)
@@ -126,9 +130,11 @@ CREATE TABLE IF NOT EXISTS `menu_type` (
   `name` VARCHAR(64) NOT NULL,
   `tax` SMALLINT NOT NULL,
   `allowMixing` TINYINT(1) NOT NULL,
+  `is_deleted` DATETIME NULL,
   PRIMARY KEY (`menu_typeid`),
   UNIQUE INDEX `menu_typeid_UNIQUE` (`menu_typeid` ASC),
   INDEX `fk_menu_types_events1_idx` (`eventid` ASC),
+  INDEX `deleted` (`deleted` ASC),
   CONSTRAINT `fk_menu_types_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `event` (`eventid`)
@@ -147,9 +153,11 @@ CREATE TABLE IF NOT EXISTS `menu_group` (
   `menu_groupid` INT(11) NOT NULL AUTO_INCREMENT,
   `menu_typeid` INT(11) NOT NULL,
   `name` VARCHAR(64) NOT NULL,
+  `is_deleted` DATETIME NULL,
   PRIMARY KEY (`menu_groupid`),
   UNIQUE INDEX `menu_groupid_UNIQUE` (`menu_groupid` ASC),
   INDEX `fk_menu_groupes_menu_types1_idx` (`menu_typeid` ASC),
+  INDEX `deleted` (`deleted` ASC),
   CONSTRAINT `fk_menu_groupes_menu_types1`
     FOREIGN KEY (`menu_typeid`)
     REFERENCES `menu_type` (`menu_typeid`)
@@ -185,10 +193,12 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `price` DECIMAL(7,2) NOT NULL,
   `availabilityid` INT NOT NULL,
   `availability_amount` SMALLINT UNSIGNED NULL,
+  `is_deleted` DATETIME NULL,
   UNIQUE INDEX `menuid_UNIQUE` (`menuid` ASC),
   INDEX `fk_menues_menu_groupes1_idx` (`menu_groupid` ASC),
   PRIMARY KEY (`menuid`),
   INDEX `fk_menues_availabilitys1_idx` (`availabilityid` ASC),
+  INDEX `deleted` (`deleted` ASC),
   CONSTRAINT `fk_menues_menu_groupes1`
     FOREIGN KEY (`menu_groupid`)
     REFERENCES `menu_group` (`menu_groupid`)
@@ -213,9 +223,11 @@ CREATE TABLE IF NOT EXISTS `menu_size` (
   `eventid` INT(11) NOT NULL,
   `name` VARCHAR(32) NOT NULL,
   `factor` DECIMAL(3,2) NOT NULL,
+  `is_deleted` DATETIME NULL,
   PRIMARY KEY (`menu_sizeid`),
   UNIQUE INDEX `menu_sizeid_UNIQUE` (`menu_sizeid` ASC),
   INDEX `fk_menu_sizes_events1_idx` (`eventid` ASC),
+  INDEX `deleted` (`deleted` ASC),
   CONSTRAINT `fk_menu_sizes_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `event` (`eventid`)
@@ -301,10 +313,12 @@ CREATE TABLE IF NOT EXISTS `menu_extra` (
   `name` VARCHAR(64) NOT NULL,
   `availabilityid` INT NOT NULL,
   `availability_amount` SMALLINT UNSIGNED NULL,
+  `is_deleted` DATETIME NULL,
   PRIMARY KEY (`menu_extraid`),
   UNIQUE INDEX `menu_extraid_UNIQUE` (`menu_extraid` ASC),
   INDEX `fk_menu_extras_events1_idx` (`eventid` ASC),
   INDEX `fk_menu_extras_availabilitys1_idx` (`availabilityid` ASC),
+  INDEX `deleted` (`deleted` ASC),
   CONSTRAINT `fk_menu_extras_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `event` (`eventid`)
@@ -329,9 +343,11 @@ CREATE TABLE IF NOT EXISTS `menu_possible_size` (
   `menu_sizeid` INT(11) NOT NULL,
   `menuid` INT(11) NOT NULL,
   `price` DECIMAL(7,2) NULL,
+  `is_deleted` DATETIME NULL,
   PRIMARY KEY (`menu_possible_sizeid`),
   INDEX `fk_menues_possible_sizes_menues1_idx` (`menuid` ASC),
   UNIQUE INDEX `menues_possible_sizeid_UNIQUE` (`menu_possible_sizeid` ASC),
+  INDEX `deleted` (`deleted` ASC),
   CONSTRAINT `fk_menues_possible_sizes_menu_sizes1`
     FOREIGN KEY (`menu_sizeid`)
     REFERENCES `menu_size` (`menu_sizeid`)
@@ -356,9 +372,11 @@ CREATE TABLE IF NOT EXISTS `menu_possible_extra` (
   `menu_extraid` INT(11) NOT NULL,
   `menuid` INT(11) NOT NULL,
   `price` DECIMAL(7,2) NOT NULL,
+  `is_deleted` DATETIME NULL,
   PRIMARY KEY (`menu_possible_extraid`),
   INDEX `fk_menues_possible_extras_menues1_idx` (`menuid` ASC),
   UNIQUE INDEX `menues_possible_extraid_UNIQUE` (`menu_possible_extraid` ASC),
+  INDEX `deleted` (`deleted` ASC),
   CONSTRAINT `fk_menues_possible_extras_menu_extras1`
     FOREIGN KEY (`menu_extraid`)
     REFERENCES `menu_extra` (`menu_extraid`)
@@ -484,11 +502,13 @@ CREATE TABLE IF NOT EXISTS `event_user` (
   `userid` INT(11) NOT NULL,
   `user_roles` INT(11) UNSIGNED NOT NULL,
   `begin_money` DECIMAL NOT NULL,
+  `is_deleted` DATETIME NULL,
   PRIMARY KEY (`event_userid`),
   INDEX `fk_events_has_users_users1_idx` (`userid` ASC),
   INDEX `fk_events_has_users_events1_idx` (`eventid` ASC),
   UNIQUE INDEX `UNIQUE` (`eventid` ASC, `userid` ASC),
   UNIQUE INDEX `events_userid_UNIQUE` (`event_userid` ASC),
+  INDEX `deleted` (`deleted` ASC),
   CONSTRAINT `fk_events_has_users_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `event` (`eventid`)
@@ -653,13 +673,13 @@ CREATE TABLE IF NOT EXISTS `event_contact` (
   `telephon` VARCHAR(32) NULL,
   `fax` VARCHAR(32) NULL,
   `email` VARCHAR(254) NULL,
-  `active` TINYINT(1) NOT NULL,
+  `is_deleted` DATETIME NULL,
   `default` TINYINT(1) NOT NULL,
   PRIMARY KEY (`event_contactid`),
   UNIQUE INDEX `customerid_UNIQUE` (`event_contactid` ASC),
   INDEX `fk_customer_event1_idx` (`eventid` ASC),
   INDEX `name` (`name` ASC),
-  INDEX `active` (`active` ASC),
+  INDEX `deleted` (`deleted` ASC),
   INDEX `default` (`default` ASC),
   CONSTRAINT `fk_customer_event1`
     FOREIGN KEY (`eventid`)
@@ -719,6 +739,7 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   `event_bankinformationid` INT(11) NOT NULL,
   `customer_event_contactid` INT(11) NULL,
   `canceled_invoiceid` INT(11) NULL,
+  `orderid` INT(11) NULL,
   `date` DATETIME NOT NULL,
   `amount` DECIMAL(7,2) NOT NULL,
   `maturity_date` DATETIME NOT NULL,
@@ -733,6 +754,7 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   INDEX `fk_invoice_invoice_type1_idx` (`invoice_typeid` ASC),
   INDEX `fk_invoice_invoice1_idx` (`canceled_invoiceid` ASC),
   INDEX `fk_invoice_event_bankinformation1_idx` (`event_bankinformationid` ASC),
+  INDEX `fk_invoice_order1_idx` (`orderid` ASC),
   CONSTRAINT `fk_invoices_users1`
     FOREIGN KEY (`userid`)
     REFERENCES `user` (`userid`)
@@ -761,6 +783,11 @@ CREATE TABLE IF NOT EXISTS `invoice` (
   CONSTRAINT `fk_invoice_event_bankinformation1`
     FOREIGN KEY (`event_bankinformationid`)
     REFERENCES `event_bankinformation` (`event_bankinformationid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_invoice_order1`
+    FOREIGN KEY (`orderid`)
+    REFERENCES `order` (`orderid`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -905,11 +932,13 @@ CREATE TABLE IF NOT EXISTS `coupon` (
   `code` VARCHAR(24) NOT NULL,
   `created` DATETIME NOT NULL,
   `value` DECIMAL(7,2) NOT NULL,
+  `is_deleted` DATETIME NULL,
   PRIMARY KEY (`couponid`),
   INDEX `fk_Coupons_events1_idx` (`eventid` ASC),
   INDEX `fk_Coupons_users1_idx` (`created_by_userid` ASC),
   INDEX `code` (`code` ASC),
   UNIQUE INDEX `couponid_UNIQUE` (`couponid` ASC),
+  INDEX `deleted` (`deleted` ASC),
   CONSTRAINT `fk_Coupons_events1`
     FOREIGN KEY (`eventid`)
     REFERENCES `event` (`eventid`)
@@ -1034,35 +1063,6 @@ CREATE TABLE IF NOT EXISTS `invoice_warning` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- procedure open_order_priority
--- -----------------------------------------------------
-DROP procedure IF EXISTS `open_order_priority`;
-
-DELIMITER $$
-CREATE PROCEDURE `open_order_priority` ()
-BEGIN
-SET @rank:=0, @last_menu_groupid:=0, @last_orderid:=0;
-DROP TABLE IF EXISTS tmp_open_order_priority;
-CREATE TEMPORARY TABLE tmp_open_order_priority AS (
-SELECT t.order_detailid, t.menu_groupid, t.orderid,
-		IF(@last_menu_groupid != t.menu_groupid, @rank:=0, null) AS tmp1,
-        IF(@last_orderid != t.orderid, @rank:=@rank+1, null) AS tmp2,
-		IF(@last_menu_groupid != t.menu_groupid, @last_menu_groupid := t.menu_groupid, null) AS tmp3,
-        IF(@last_orderid != t.orderid, @last_orderid := t.orderid, null) AS tmp4,
-        @rank AS rank
-FROM (SELECT order_detailid, menu_groupid, priority, orderid
-FROM (SELECT od.order_detailid, m.menu_groupid, o.priority, o.orderid
-			 FROM `order` o
-			 INNER JOIN order_details od ON od.orderid = o.orderid AND od.finished IS NULL
-			 INNER JOIN menu m ON m.menuid = od.menuid
-			 WHERE o.finished IS NULL) f
-	  ORDER BY  menu_groupid ASC, priority ASC
-      LIMIT 18446744073709551615) t);
-END$$
-
-DELIMITER ;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

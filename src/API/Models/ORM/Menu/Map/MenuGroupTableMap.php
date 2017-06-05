@@ -59,7 +59,7 @@ class MenuGroupTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 3;
+    const NUM_COLUMNS = 4;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class MenuGroupTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 3;
+    const NUM_HYDRATE_COLUMNS = 4;
 
     /**
      * the column name for the menu_groupid field
@@ -87,6 +87,11 @@ class MenuGroupTableMap extends TableMap
     const COL_NAME = 'menu_group.name';
 
     /**
+     * the column name for the is_deleted field
+     */
+    const COL_IS_DELETED = 'menu_group.is_deleted';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -98,11 +103,11 @@ class MenuGroupTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('MenuGroupid', 'MenuTypeid', 'Name', ),
-        self::TYPE_CAMELNAME     => array('menuGroupid', 'menuTypeid', 'name', ),
-        self::TYPE_COLNAME       => array(MenuGroupTableMap::COL_MENU_GROUPID, MenuGroupTableMap::COL_MENU_TYPEID, MenuGroupTableMap::COL_NAME, ),
-        self::TYPE_FIELDNAME     => array('menu_groupid', 'menu_typeid', 'name', ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('MenuGroupid', 'MenuTypeid', 'Name', 'IsDeleted', ),
+        self::TYPE_CAMELNAME     => array('menuGroupid', 'menuTypeid', 'name', 'isDeleted', ),
+        self::TYPE_COLNAME       => array(MenuGroupTableMap::COL_MENU_GROUPID, MenuGroupTableMap::COL_MENU_TYPEID, MenuGroupTableMap::COL_NAME, MenuGroupTableMap::COL_IS_DELETED, ),
+        self::TYPE_FIELDNAME     => array('menu_groupid', 'menu_typeid', 'name', 'is_deleted', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -112,11 +117,11 @@ class MenuGroupTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('MenuGroupid' => 0, 'MenuTypeid' => 1, 'Name' => 2, ),
-        self::TYPE_CAMELNAME     => array('menuGroupid' => 0, 'menuTypeid' => 1, 'name' => 2, ),
-        self::TYPE_COLNAME       => array(MenuGroupTableMap::COL_MENU_GROUPID => 0, MenuGroupTableMap::COL_MENU_TYPEID => 1, MenuGroupTableMap::COL_NAME => 2, ),
-        self::TYPE_FIELDNAME     => array('menu_groupid' => 0, 'menu_typeid' => 1, 'name' => 2, ),
-        self::TYPE_NUM           => array(0, 1, 2, )
+        self::TYPE_PHPNAME       => array('MenuGroupid' => 0, 'MenuTypeid' => 1, 'Name' => 2, 'IsDeleted' => 3, ),
+        self::TYPE_CAMELNAME     => array('menuGroupid' => 0, 'menuTypeid' => 1, 'name' => 2, 'isDeleted' => 3, ),
+        self::TYPE_COLNAME       => array(MenuGroupTableMap::COL_MENU_GROUPID => 0, MenuGroupTableMap::COL_MENU_TYPEID => 1, MenuGroupTableMap::COL_NAME => 2, MenuGroupTableMap::COL_IS_DELETED => 3, ),
+        self::TYPE_FIELDNAME     => array('menu_groupid' => 0, 'menu_typeid' => 1, 'name' => 2, 'is_deleted' => 3, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, )
     );
 
     /**
@@ -139,6 +144,7 @@ class MenuGroupTableMap extends TableMap
         $this->addPrimaryKey('menu_groupid', 'MenuGroupid', 'INTEGER', true, null, null);
         $this->addForeignKey('menu_typeid', 'MenuTypeid', 'INTEGER', 'menu_type', 'menu_typeid', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 64, null);
+        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -327,10 +333,12 @@ class MenuGroupTableMap extends TableMap
             $criteria->addSelectColumn(MenuGroupTableMap::COL_MENU_GROUPID);
             $criteria->addSelectColumn(MenuGroupTableMap::COL_MENU_TYPEID);
             $criteria->addSelectColumn(MenuGroupTableMap::COL_NAME);
+            $criteria->addSelectColumn(MenuGroupTableMap::COL_IS_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.menu_groupid');
             $criteria->addSelectColumn($alias . '.menu_typeid');
             $criteria->addSelectColumn($alias . '.name');
+            $criteria->addSelectColumn($alias . '.is_deleted');
         }
     }
 

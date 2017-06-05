@@ -59,7 +59,7 @@ class CouponTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 6;
+    const NUM_COLUMNS = 7;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class CouponTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 6;
+    const NUM_HYDRATE_COLUMNS = 7;
 
     /**
      * the column name for the couponid field
@@ -102,6 +102,11 @@ class CouponTableMap extends TableMap
     const COL_VALUE = 'coupon.value';
 
     /**
+     * the column name for the is_deleted field
+     */
+    const COL_IS_DELETED = 'coupon.is_deleted';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -113,11 +118,11 @@ class CouponTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Couponid', 'Eventid', 'CreatedByUserid', 'Code', 'Created', 'Value', ),
-        self::TYPE_CAMELNAME     => array('couponid', 'eventid', 'createdByUserid', 'code', 'created', 'value', ),
-        self::TYPE_COLNAME       => array(CouponTableMap::COL_COUPONID, CouponTableMap::COL_EVENTID, CouponTableMap::COL_CREATED_BY_USERID, CouponTableMap::COL_CODE, CouponTableMap::COL_CREATED, CouponTableMap::COL_VALUE, ),
-        self::TYPE_FIELDNAME     => array('couponid', 'eventid', 'created_by_userid', 'code', 'created', 'value', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Couponid', 'Eventid', 'CreatedByUserid', 'Code', 'Created', 'Value', 'IsDeleted', ),
+        self::TYPE_CAMELNAME     => array('couponid', 'eventid', 'createdByUserid', 'code', 'created', 'value', 'isDeleted', ),
+        self::TYPE_COLNAME       => array(CouponTableMap::COL_COUPONID, CouponTableMap::COL_EVENTID, CouponTableMap::COL_CREATED_BY_USERID, CouponTableMap::COL_CODE, CouponTableMap::COL_CREATED, CouponTableMap::COL_VALUE, CouponTableMap::COL_IS_DELETED, ),
+        self::TYPE_FIELDNAME     => array('couponid', 'eventid', 'created_by_userid', 'code', 'created', 'value', 'is_deleted', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -127,11 +132,11 @@ class CouponTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Couponid' => 0, 'Eventid' => 1, 'CreatedByUserid' => 2, 'Code' => 3, 'Created' => 4, 'Value' => 5, ),
-        self::TYPE_CAMELNAME     => array('couponid' => 0, 'eventid' => 1, 'createdByUserid' => 2, 'code' => 3, 'created' => 4, 'value' => 5, ),
-        self::TYPE_COLNAME       => array(CouponTableMap::COL_COUPONID => 0, CouponTableMap::COL_EVENTID => 1, CouponTableMap::COL_CREATED_BY_USERID => 2, CouponTableMap::COL_CODE => 3, CouponTableMap::COL_CREATED => 4, CouponTableMap::COL_VALUE => 5, ),
-        self::TYPE_FIELDNAME     => array('couponid' => 0, 'eventid' => 1, 'created_by_userid' => 2, 'code' => 3, 'created' => 4, 'value' => 5, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
+        self::TYPE_PHPNAME       => array('Couponid' => 0, 'Eventid' => 1, 'CreatedByUserid' => 2, 'Code' => 3, 'Created' => 4, 'Value' => 5, 'IsDeleted' => 6, ),
+        self::TYPE_CAMELNAME     => array('couponid' => 0, 'eventid' => 1, 'createdByUserid' => 2, 'code' => 3, 'created' => 4, 'value' => 5, 'isDeleted' => 6, ),
+        self::TYPE_COLNAME       => array(CouponTableMap::COL_COUPONID => 0, CouponTableMap::COL_EVENTID => 1, CouponTableMap::COL_CREATED_BY_USERID => 2, CouponTableMap::COL_CODE => 3, CouponTableMap::COL_CREATED => 4, CouponTableMap::COL_VALUE => 5, CouponTableMap::COL_IS_DELETED => 6, ),
+        self::TYPE_FIELDNAME     => array('couponid' => 0, 'eventid' => 1, 'created_by_userid' => 2, 'code' => 3, 'created' => 4, 'value' => 5, 'is_deleted' => 6, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, )
     );
 
     /**
@@ -157,6 +162,7 @@ class CouponTableMap extends TableMap
         $this->addColumn('code', 'Code', 'VARCHAR', true, 24, null);
         $this->addColumn('created', 'Created', 'TIMESTAMP', true, null, null);
         $this->addColumn('value', 'Value', 'DECIMAL', true, 7, null);
+        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -335,6 +341,7 @@ class CouponTableMap extends TableMap
             $criteria->addSelectColumn(CouponTableMap::COL_CODE);
             $criteria->addSelectColumn(CouponTableMap::COL_CREATED);
             $criteria->addSelectColumn(CouponTableMap::COL_VALUE);
+            $criteria->addSelectColumn(CouponTableMap::COL_IS_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.couponid');
             $criteria->addSelectColumn($alias . '.eventid');
@@ -342,6 +349,7 @@ class CouponTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.code');
             $criteria->addSelectColumn($alias . '.created');
             $criteria->addSelectColumn($alias . '.value');
+            $criteria->addSelectColumn($alias . '.is_deleted');
         }
     }
 

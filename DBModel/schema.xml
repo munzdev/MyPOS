@@ -17,6 +17,7 @@
     <column name="code" phpName="Code" type="VARCHAR" size="24" required="true"/>
     <column name="created" phpName="Created" type="TIMESTAMP" required="true"/>
     <column name="value" phpName="Value" type="DECIMAL" size="7" scale="2" required="true"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
     <foreign-key foreignTable="event" name="fk_Coupons_events1">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
@@ -32,63 +33,11 @@
     <index name="code">
       <index-column name="code"/>
     </index>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
-  <table name="event_bankinformation" idMethod="native" phpName="EventBankinformation" namespace="API\Models\ORM\Event">
-    <column name="event_bankinformationid" phpName="EventBankinformationid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
-    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
-    <column name="iban" phpName="Iban" type="VARCHAR" size="32" required="true"/>
-    <column name="bic" phpName="Bic" type="VARCHAR" size="16" required="true"/>
-    <column name="active" phpName="Active" type="BOOLEAN" size="1" required="true"/>
-    <foreign-key foreignTable="event" name="fk_event_bankinformation_event1">
-      <reference local="eventid" foreign="eventid"/>
-    </foreign-key>
-    <index name="fk_event_bankinformation_event1_idx">
-      <index-column name="eventid"/>
+    <index name="deleted">
+      <index-column name="deleted"/>
     </index>
-    <unique name="event_bankinformation_UNIQUE">
-      <unique-column name="event_bankinformationid"/>
-    </unique>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
-  <table name="event_contact" idMethod="native" phpName="EventContact" namespace="API\Models\ORM\Event" identifierQuoting="true">
-    <column name="event_contactid" phpName="EventContactid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
-    <column name="title" phpName="Title" type="VARCHAR" size="32" required="true"/>
-    <column name="name" phpName="Name" type="VARCHAR" size="128" required="true"/>
-    <column name="contact_person" phpName="ContactPerson" type="VARCHAR" size="128"/>
-    <column name="address" phpName="Address" type="VARCHAR" size="128" required="true"/>
-    <column name="address2" phpName="Address2" type="VARCHAR" size="128"/>
-    <column name="city" phpName="City" type="VARCHAR" size="64" required="true"/>
-    <column name="zip" phpName="Zip" type="VARCHAR" size="10" required="true"/>
-    <column name="tax_identification_nr" phpName="TaxIdentificationNr" type="VARCHAR" size="32"/>
-    <column name="telephon" phpName="Telephon" type="VARCHAR" size="32"/>
-    <column name="fax" phpName="Fax" type="VARCHAR" size="32"/>
-    <column name="email" phpName="Email" type="VARCHAR" size="254"/>
-    <column name="active" phpName="Active" type="BOOLEAN" size="1" required="true"/>
-    <column name="default" phpName="Default" type="BOOLEAN" size="1" required="true"/>
-    <foreign-key foreignTable="event" name="fk_customer_event1">
-      <reference local="eventid" foreign="eventid"/>
-    </foreign-key>
-    <index name="fk_customer_event1_idx">
-      <index-column name="eventid"/>
-    </index>
-    <index name="name">
-      <index-column name="name"/>
-    </index>
-    <index name="active">
-      <index-column name="active"/>
-    </index>
-    <index name="default">
-      <index-column name="default"/>
-    </index>
-    <unique name="customerid_UNIQUE">
-      <unique-column name="event_contactid"/>
+    <unique name="couponid_UNIQUE">
+      <unique-column name="couponid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -194,11 +143,73 @@
     <column name="name" phpName="Name" type="VARCHAR" size="45" required="true"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <column name="active" phpName="Active" type="BOOLEAN" size="1" required="true"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
     <index name="events_active">
       <index-column name="active"/>
     </index>
+    <index name="deleted">
+      <index-column name="deleted"/>
+    </index>
     <unique name="eventsid_UNIQUE">
       <unique-column name="eventid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="event_bankinformation" idMethod="native" phpName="EventBankinformation" namespace="API\Models\ORM\Event">
+    <column name="event_bankinformationid" phpName="EventBankinformationid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
+    <column name="iban" phpName="Iban" type="VARCHAR" size="32" required="true"/>
+    <column name="bic" phpName="Bic" type="VARCHAR" size="16" required="true"/>
+    <column name="active" phpName="Active" type="BOOLEAN" size="1" required="true"/>
+    <foreign-key foreignTable="event" name="fk_event_bankinformation_event1">
+      <reference local="eventid" foreign="eventid"/>
+    </foreign-key>
+    <index name="fk_event_bankinformation_event1_idx">
+      <index-column name="eventid"/>
+    </index>
+    <unique name="event_bankinformation_UNIQUE">
+      <unique-column name="event_bankinformationid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="event_contact" idMethod="native" phpName="EventContact" namespace="API\Models\ORM\Event">
+    <column name="event_contactid" phpName="EventContactid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
+    <column name="title" phpName="Title" type="VARCHAR" size="32" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="128" required="true"/>
+    <column name="contact_person" phpName="ContactPerson" type="VARCHAR" size="128"/>
+    <column name="address" phpName="Address" type="VARCHAR" size="128" required="true"/>
+    <column name="address2" phpName="Address2" type="VARCHAR" size="128"/>
+    <column name="city" phpName="City" type="VARCHAR" size="64" required="true"/>
+    <column name="zip" phpName="Zip" type="VARCHAR" size="10" required="true"/>
+    <column name="tax_identification_nr" phpName="TaxIdentificationNr" type="VARCHAR" size="32"/>
+    <column name="telephon" phpName="Telephon" type="VARCHAR" size="32"/>
+    <column name="fax" phpName="Fax" type="VARCHAR" size="32"/>
+    <column name="email" phpName="Email" type="VARCHAR" size="254"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
+    <column name="default" phpName="Default" type="BOOLEAN" size="1" required="true"/>
+    <foreign-key foreignTable="event" name="fk_customer_event1">
+      <reference local="eventid" foreign="eventid"/>
+    </foreign-key>
+    <index name="fk_customer_event1_idx">
+      <index-column name="eventid"/>
+    </index>
+    <index name="name">
+      <index-column name="name"/>
+    </index>
+    <index name="deleted">
+      <index-column name="deleted"/>
+    </index>
+    <index name="default">
+      <index-column name="default"/>
+    </index>
+    <unique name="customerid_UNIQUE">
+      <unique-column name="event_contactid"/>
     </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
@@ -231,6 +242,7 @@
     <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="32" required="true"/>
     <column name="data" phpName="Data" type="VARCHAR" size="255"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
     <foreign-key foreignTable="event" name="fk_tables_events1">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
@@ -239,6 +251,9 @@
     </index>
     <index name="fk_tables_events1_idx">
       <index-column name="eventid"/>
+    </index>
+    <index name="deleted">
+      <index-column name="deleted"/>
     </index>
     <unique name="tableid_UNIQUE">
       <unique-column name="event_tableid"/>
@@ -253,6 +268,7 @@
     <column name="userid" phpName="Userid" type="INTEGER" required="true"/>
     <column name="user_roles" phpName="UserRoles" type="INTEGER" sqlType="int(11) unsigned" required="true"/>
     <column name="begin_money" phpName="BeginMoney" type="DECIMAL" scale="0" required="true"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
     <foreign-key foreignTable="event" name="fk_events_has_users_events1">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
@@ -264,6 +280,9 @@
     </index>
     <index name="fk_events_has_users_events1_idx">
       <index-column name="eventid"/>
+    </index>
+    <index name="deleted">
+      <index-column name="deleted"/>
     </index>
     <unique name="UNIQUE">
       <unique-column name="eventid"/>
@@ -284,6 +303,7 @@
     <column name="event_bankinformationid" phpName="EventBankinformationid" type="INTEGER" required="true"/>
     <column name="customer_event_contactid" phpName="CustomerEventContactid" type="INTEGER"/>
     <column name="canceled_invoiceid" phpName="CanceledInvoiceid" type="INTEGER"/>
+    <column name="orderid" phpName="Orderid" type="INTEGER"/>
     <column name="date" phpName="Date" type="TIMESTAMP" required="true"/>
     <column name="amount" phpName="Amount" type="DECIMAL" size="7" scale="2" required="true"/>
     <column name="maturity_date" phpName="MaturityDate" type="TIMESTAMP" required="true"/>
@@ -303,6 +323,9 @@
     </foreign-key>
     <foreign-key foreignTable="invoice_type" name="fk_invoice_invoice_type1">
       <reference local="invoice_typeid" foreign="invoice_typeid"/>
+    </foreign-key>
+    <foreign-key foreignTable="order" name="fk_invoice_order1">
+      <reference local="orderid" foreign="orderid"/>
     </foreign-key>
     <foreign-key foreignTable="user" name="fk_invoices_users1">
       <reference local="userid" foreign="userid"/>
@@ -327,6 +350,9 @@
     </index>
     <index name="fk_invoice_event_bankinformation1_idx">
       <index-column name="event_bankinformationid"/>
+    </index>
+    <index name="fk_invoice_order1_idx">
+      <index-column name="orderid"/>
     </index>
     <unique name="invoiceid_UNIQUE">
       <unique-column name="invoiceid"/>
@@ -375,6 +401,50 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
+  <table name="invoice_warning" idMethod="native" phpName="InvoiceWarning" namespace="API\Models\ORM\Invoice">
+    <column name="invoice_warningid" phpName="InvoiceWarningid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="invoiceid" phpName="Invoiceid" type="INTEGER" required="true"/>
+    <column name="invoice_warning_typeid" phpName="InvoiceWarningTypeid" type="INTEGER" required="true"/>
+    <column name="warning_date" phpName="WarningDate" type="TIMESTAMP" required="true"/>
+    <column name="maturity_date" phpName="MaturityDate" type="TIMESTAMP" required="true"/>
+    <column name="warning_value" phpName="WarningValue" type="DECIMAL" size="7" scale="2" required="true"/>
+    <foreign-key foreignTable="invoice" name="fk_payment_warning_invoice1">
+      <reference local="invoiceid" foreign="invoiceid"/>
+    </foreign-key>
+    <foreign-key foreignTable="invoice_warning_type" name="fk_payment_warning_payment_warning_type1">
+      <reference local="invoice_warning_typeid" foreign="invoice_warning_typeid"/>
+    </foreign-key>
+    <index name="fk_payment_warning_payment_warning_type1_idx">
+      <index-column name="invoice_warning_typeid"/>
+    </index>
+    <index name="fk_payment_warning_invoice1_idx">
+      <index-column name="invoiceid"/>
+    </index>
+    <unique name="payment_warningid_UNIQUE">
+      <unique-column name="invoice_warningid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
+  <table name="invoice_warning_type" idMethod="native" phpName="InvoiceWarningType" namespace="API\Models\ORM\Invoice">
+    <column name="invoice_warning_typeid" phpName="InvoiceWarningTypeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
+    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
+    <column name="extra_price" phpName="ExtraPrice" type="DECIMAL" size="7" scale="2" required="true"/>
+    <foreign-key foreignTable="event" name="fk_payment_warning_type_event1">
+      <reference local="eventid" foreign="eventid"/>
+    </foreign-key>
+    <index name="fk_payment_warning_type_event1_idx">
+      <index-column name="eventid"/>
+    </index>
+    <unique name="payment_warning_typeid_UNIQUE">
+      <unique-column name="invoice_warning_typeid"/>
+    </unique>
+    <vendor type="mysql">
+      <parameter name="Engine" value="InnoDB"/>
+    </vendor>
+  </table>
   <table name="menu" idMethod="native" phpName="Menu" namespace="API\Models\ORM\Menu">
     <column name="menuid" phpName="Menuid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" required="true"/>
@@ -382,6 +452,7 @@
     <column name="price" phpName="Price" type="DECIMAL" size="7" scale="2" required="true"/>
     <column name="availabilityid" phpName="Availabilityid" type="INTEGER" required="true"/>
     <column name="availability_amount" phpName="AvailabilityAmount" type="SMALLINT" size="5" sqlType="smallint(5) unsigned"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
     <foreign-key foreignTable="availability" name="fk_menues_availabilitys1">
       <reference local="availabilityid" foreign="availabilityid"/>
     </foreign-key>
@@ -393,6 +464,9 @@
     </index>
     <index name="fk_menues_availabilitys1_idx">
       <index-column name="availabilityid"/>
+    </index>
+    <index name="deleted">
+      <index-column name="deleted"/>
     </index>
     <unique name="menuid_UNIQUE">
       <unique-column name="menuid"/>
@@ -407,6 +481,7 @@
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
     <column name="availabilityid" phpName="Availabilityid" type="INTEGER" required="true"/>
     <column name="availability_amount" phpName="AvailabilityAmount" type="SMALLINT" size="5" sqlType="smallint(5) unsigned"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
     <foreign-key foreignTable="availability" name="fk_menu_extras_availabilitys1">
       <reference local="availabilityid" foreign="availabilityid"/>
     </foreign-key>
@@ -419,6 +494,9 @@
     <index name="fk_menu_extras_availabilitys1_idx">
       <index-column name="availabilityid"/>
     </index>
+    <index name="deleted">
+      <index-column name="deleted"/>
+    </index>
     <unique name="menu_extraid_UNIQUE">
       <unique-column name="menu_extraid"/>
     </unique>
@@ -430,11 +508,15 @@
     <column name="menu_groupid" phpName="MenuGroupid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="menu_typeid" phpName="MenuTypeid" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
     <foreign-key foreignTable="menu_type" name="fk_menu_groupes_menu_types1">
       <reference local="menu_typeid" foreign="menu_typeid"/>
     </foreign-key>
     <index name="fk_menu_groupes_menu_types1_idx">
       <index-column name="menu_typeid"/>
+    </index>
+    <index name="deleted">
+      <index-column name="deleted"/>
     </index>
     <unique name="menu_groupid_UNIQUE">
       <unique-column name="menu_groupid"/>
@@ -448,6 +530,7 @@
     <column name="menu_extraid" phpName="MenuExtraid" type="INTEGER" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" required="true"/>
     <column name="price" phpName="Price" type="DECIMAL" size="7" scale="2" required="true"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
     <foreign-key foreignTable="menu_extra" name="fk_menues_possible_extras_menu_extras1">
       <reference local="menu_extraid" foreign="menu_extraid"/>
     </foreign-key>
@@ -456,6 +539,9 @@
     </foreign-key>
     <index name="fk_menues_possible_extras_menues1_idx">
       <index-column name="menuid"/>
+    </index>
+    <index name="deleted">
+      <index-column name="deleted"/>
     </index>
     <index name="fk_menues_possible_extras_menu_extras1">
       <index-column name="menu_extraid"/>
@@ -472,6 +558,7 @@
     <column name="menu_sizeid" phpName="MenuSizeid" type="INTEGER" required="true"/>
     <column name="menuid" phpName="Menuid" type="INTEGER" required="true"/>
     <column name="price" phpName="Price" type="DECIMAL" size="7" scale="2"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
     <foreign-key foreignTable="menu_size" name="fk_menues_possible_sizes_menu_sizes1">
       <reference local="menu_sizeid" foreign="menu_sizeid"/>
     </foreign-key>
@@ -480,6 +567,9 @@
     </foreign-key>
     <index name="fk_menues_possible_sizes_menues1_idx">
       <index-column name="menuid"/>
+    </index>
+    <index name="deleted">
+      <index-column name="deleted"/>
     </index>
     <index name="fk_menues_possible_sizes_menu_sizes1">
       <index-column name="menu_sizeid"/>
@@ -496,11 +586,15 @@
     <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
     <column name="name" phpName="Name" type="VARCHAR" size="32" required="true"/>
     <column name="factor" phpName="Factor" type="DECIMAL" size="3" scale="2" required="true"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
     <foreign-key foreignTable="event" name="fk_menu_sizes_events1">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
     <index name="fk_menu_sizes_events1_idx">
       <index-column name="eventid"/>
+    </index>
+    <index name="deleted">
+      <index-column name="deleted"/>
     </index>
     <unique name="menu_sizeid_UNIQUE">
       <unique-column name="menu_sizeid"/>
@@ -515,11 +609,15 @@
     <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
     <column name="tax" phpName="Tax" type="SMALLINT" required="true"/>
     <column name="allowMixing" phpName="Allowmixing" type="BOOLEAN" size="1" required="true"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
     <foreign-key foreignTable="event" name="fk_menu_types_events1">
       <reference local="eventid" foreign="eventid"/>
     </foreign-key>
     <index name="fk_menu_types_events1_idx">
       <index-column name="eventid"/>
+    </index>
+    <index name="deleted">
+      <index-column name="deleted"/>
     </index>
     <unique name="menu_typeid_UNIQUE">
       <unique-column name="menu_typeid"/>
@@ -528,7 +626,7 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="order" idMethod="native" phpName="Order" namespace="API\Models\ORM\Ordering" identifierQuoting="true">
+  <table name="order" idMethod="native" phpName="Order" namespace="API\Models\ORM\Ordering">
     <column name="orderid" phpName="Orderid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="event_tableid" phpName="EventTableid" type="INTEGER" required="true"/>
     <column name="userid" phpName="Userid" type="INTEGER" required="true"/>
@@ -803,50 +901,6 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="invoice_warning" idMethod="native" phpName="InvoiceWarning" namespace="API\Models\ORM\Invoice">
-    <column name="invoice_warningid" phpName="InvoiceWarningid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="invoiceid" phpName="Invoiceid" type="INTEGER" required="true"/>
-    <column name="invoice_warning_typeid" phpName="InvoiceWarningTypeid" type="INTEGER" required="true"/>
-    <column name="warning_date" phpName="WarningDate" type="TIMESTAMP" required="true"/>
-    <column name="maturity_date" phpName="MaturityDate" type="TIMESTAMP" required="true"/>
-    <column name="warning_value" phpName="WarningValue" type="DECIMAL" size="7" scale="2" required="true"/>
-    <foreign-key foreignTable="invoice" name="fk_payment_warning_invoice1">
-      <reference local="invoiceid" foreign="invoiceid"/>
-    </foreign-key>
-    <foreign-key foreignTable="invoice_warning_type" name="fk_payment_warning_payment_warning_type1">
-      <reference local="invoice_warning_typeid" foreign="invoice_warning_typeid"/>
-    </foreign-key>
-    <index name="fk_payment_warning_payment_warning_type1_idx">
-      <index-column name="invoice_warning_typeid"/>
-    </index>
-    <index name="fk_payment_warning_invoice1_idx">
-      <index-column name="invoiceid"/>
-    </index>
-    <unique name="payment_warningid_UNIQUE">
-      <unique-column name="invoice_warningid"/>
-    </unique>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
-  <table name="invoice_warning_type" idMethod="native" phpName="InvoiceWarningType" namespace="API\Models\ORM\Invoice">
-    <column name="invoice_warning_typeid" phpName="InvoiceWarningTypeid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="eventid" phpName="Eventid" type="INTEGER" required="true"/>
-    <column name="name" phpName="Name" type="VARCHAR" size="64" required="true"/>
-    <column name="extra_price" phpName="ExtraPrice" type="DECIMAL" size="7" scale="2" required="true"/>
-    <foreign-key foreignTable="event" name="fk_payment_warning_type_event1">
-      <reference local="eventid" foreign="eventid"/>
-    </foreign-key>
-    <index name="fk_payment_warning_type_event1_idx">
-      <index-column name="eventid"/>
-    </index>
-    <unique name="payment_warning_typeid_UNIQUE">
-      <unique-column name="invoice_warning_typeid"/>
-    </unique>
-    <vendor type="mysql">
-      <parameter name="Engine" value="InnoDB"/>
-    </vendor>
-  </table>
   <table name="user" idMethod="native" phpName="User" namespace="API\Models\ORM\User">
     <column name="userid" phpName="Userid" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="username" phpName="Username" type="VARCHAR" size="64" required="true"/>
@@ -854,12 +908,12 @@
     <column name="firstname" phpName="Firstname" type="VARCHAR" size="64" required="true"/>
     <column name="lastname" phpName="Lastname" type="VARCHAR" size="64" required="true"/>
     <column name="autologin_hash" phpName="AutologinHash" type="VARCHAR" size="255"/>
-    <column name="active" phpName="Active" type="TINYINT" required="true"/>
+    <column name="is_deleted" phpName="IsDeleted" type="TIMESTAMP"/>
     <column name="phonenumber" phpName="Phonenumber" type="VARCHAR" size="45" required="true"/>
     <column name="call_request" phpName="CallRequest" type="TIMESTAMP"/>
     <column name="is_admin" phpName="IsAdmin" type="BOOLEAN" size="1"/>
-    <index name="active">
-      <index-column name="active"/>
+    <index name="deleted">
+      <index-column name="deleted"/>
     </index>
     <unique name="user_name">
       <unique-column name="username"/>

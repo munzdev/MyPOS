@@ -138,11 +138,11 @@ abstract class User implements ActiveRecordInterface
     protected $autologin_hash;
 
     /**
-     * The value for the active field.
+     * The value for the is_deleted field.
      * 
-     * @var        int
+     * @var        DateTime
      */
-    protected $active;
+    protected $is_deleted;
 
     /**
      * The value for the phonenumber field.
@@ -567,13 +567,23 @@ abstract class User implements ActiveRecordInterface
     }
 
     /**
-     * Get the [active] column value.
+     * Get the [optionally formatted] temporal [is_deleted] column value.
      * 
-     * @return int
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getActive()
+    public function getIsDeleted($format = NULL)
     {
-        return $this->active;
+        if ($format === null) {
+            return $this->is_deleted;
+        } else {
+            return $this->is_deleted instanceof \DateTimeInterface ? $this->is_deleted->format($format) : null;
+        }
     }
 
     /**
@@ -747,24 +757,24 @@ abstract class User implements ActiveRecordInterface
     } // setAutologinHash()
 
     /**
-     * Set the value of [active] column.
+     * Sets the value of [is_deleted] column to a normalized version of the date/time value specified.
      * 
-     * @param int $v new value
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\User\User The current object (for fluent API support)
      */
-    public function setActive($v)
+    public function setIsDeleted($v)
     {
-        if ($v !== null) {
-            $v = (int) $v;
-        }
-
-        if ($this->active !== $v) {
-            $this->active = $v;
-            $this->modifiedColumns[UserTableMap::COL_ACTIVE] = true;
-        }
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->is_deleted !== null || $dt !== null) {
+            if ($this->is_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->is_deleted->format("Y-m-d H:i:s.u")) {
+                $this->is_deleted = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[UserTableMap::COL_IS_DELETED] = true;
+            }
+        } // if either are not null
 
         return $this;
-    } // setActive()
+    } // setIsDeleted()
 
     /**
      * Set the value of [phonenumber] column.
@@ -888,8 +898,11 @@ abstract class User implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : UserTableMap::translateFieldName('AutologinHash', TableMap::TYPE_PHPNAME, $indexType)];
             $this->autologin_hash = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->active = (null !== $col) ? (int) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : UserTableMap::translateFieldName('IsDeleted', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->is_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : UserTableMap::translateFieldName('Phonenumber', TableMap::TYPE_PHPNAME, $indexType)];
             $this->phonenumber = (null !== $col) ? (string) $col : null;
@@ -1302,8 +1315,8 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_AUTOLOGIN_HASH)) {
             $modifiedColumns[':p' . $index++]  = '`autologin_hash`';
         }
-        if ($this->isColumnModified(UserTableMap::COL_ACTIVE)) {
-            $modifiedColumns[':p' . $index++]  = '`active`';
+        if ($this->isColumnModified(UserTableMap::COL_IS_DELETED)) {
+            $modifiedColumns[':p' . $index++]  = '`is_deleted`';
         }
         if ($this->isColumnModified(UserTableMap::COL_PHONENUMBER)) {
             $modifiedColumns[':p' . $index++]  = '`phonenumber`';
@@ -1343,8 +1356,8 @@ abstract class User implements ActiveRecordInterface
                     case '`autologin_hash`':                        
                         $stmt->bindValue($identifier, $this->autologin_hash, PDO::PARAM_STR);
                         break;
-                    case '`active`':                        
-                        $stmt->bindValue($identifier, $this->active, PDO::PARAM_INT);
+                    case '`is_deleted`':                        
+                        $stmt->bindValue($identifier, $this->is_deleted ? $this->is_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case '`phonenumber`':                        
                         $stmt->bindValue($identifier, $this->phonenumber, PDO::PARAM_STR);
@@ -1436,7 +1449,7 @@ abstract class User implements ActiveRecordInterface
                 return $this->getAutologinHash();
                 break;
             case 6:
-                return $this->getActive();
+                return $this->getIsDeleted();
                 break;
             case 7:
                 return $this->getPhonenumber();
@@ -1483,11 +1496,15 @@ abstract class User implements ActiveRecordInterface
             $keys[3] => $this->getFirstname(),
             $keys[4] => $this->getLastname(),
             $keys[5] => $this->getAutologinHash(),
-            $keys[6] => $this->getActive(),
+            $keys[6] => $this->getIsDeleted(),
             $keys[7] => $this->getPhonenumber(),
             $keys[8] => $this->getCallRequest(),
             $keys[9] => $this->getIsAdmin(),
         );
+        if ($result[$keys[6]] instanceof \DateTime) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
+        }
+        
         if ($result[$keys[8]] instanceof \DateTime) {
             $result[$keys[8]] = $result[$keys[8]]->format('c');
         }
@@ -1686,7 +1703,7 @@ abstract class User implements ActiveRecordInterface
                 $this->setAutologinHash($value);
                 break;
             case 6:
-                $this->setActive($value);
+                $this->setIsDeleted($value);
                 break;
             case 7:
                 $this->setPhonenumber($value);
@@ -1742,7 +1759,7 @@ abstract class User implements ActiveRecordInterface
             $this->setAutologinHash($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setActive($arr[$keys[6]]);
+            $this->setIsDeleted($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
             $this->setPhonenumber($arr[$keys[7]]);
@@ -1812,8 +1829,8 @@ abstract class User implements ActiveRecordInterface
         if ($this->isColumnModified(UserTableMap::COL_AUTOLOGIN_HASH)) {
             $criteria->add(UserTableMap::COL_AUTOLOGIN_HASH, $this->autologin_hash);
         }
-        if ($this->isColumnModified(UserTableMap::COL_ACTIVE)) {
-            $criteria->add(UserTableMap::COL_ACTIVE, $this->active);
+        if ($this->isColumnModified(UserTableMap::COL_IS_DELETED)) {
+            $criteria->add(UserTableMap::COL_IS_DELETED, $this->is_deleted);
         }
         if ($this->isColumnModified(UserTableMap::COL_PHONENUMBER)) {
             $criteria->add(UserTableMap::COL_PHONENUMBER, $this->phonenumber);
@@ -1915,7 +1932,7 @@ abstract class User implements ActiveRecordInterface
         $copyObj->setFirstname($this->getFirstname());
         $copyObj->setLastname($this->getLastname());
         $copyObj->setAutologinHash($this->getAutologinHash());
-        $copyObj->setActive($this->getActive());
+        $copyObj->setIsDeleted($this->getIsDeleted());
         $copyObj->setPhonenumber($this->getPhonenumber());
         $copyObj->setCallRequest($this->getCallRequest());
         $copyObj->setIsAdmin($this->getIsAdmin());
@@ -3173,6 +3190,31 @@ abstract class User implements ActiveRecordInterface
     {
         $query = InvoiceQuery::create(null, $criteria);
         $query->joinWith('InvoiceType', $joinBehavior);
+
+        return $this->getInvoices($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this User is new, it will return
+     * an empty collection; or if this User has previously
+     * been saved, it will retrieve related Invoices from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in User.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|Invoice[] List of Invoice objects
+     */
+    public function getInvoicesJoinOrder(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = InvoiceQuery::create(null, $criteria);
+        $query->joinWith('Order', $joinBehavior);
 
         return $this->getInvoices($query, $con);
     }
@@ -4590,7 +4632,7 @@ abstract class User implements ActiveRecordInterface
         $this->firstname = null;
         $this->lastname = null;
         $this->autologin_hash = null;
-        $this->active = null;
+        $this->is_deleted = null;
         $this->phonenumber = null;
         $this->call_request = null;
         $this->is_admin = null;

@@ -42,6 +42,11 @@ interface IMenuExtra extends IModel {
     function getAvailabilityAmount();
 
     /**
+     * @return \DateTime
+     */
+    function getIsDeleted();
+
+    /**
      *
      * @param int $menuExtraid Description
      * @return IMenuExtra Description
@@ -89,4 +94,11 @@ interface IMenuExtra extends IModel {
      * @return IMenuExtra Description
      */
     function setAvailabilityAmount($availabilityAmount);
+
+    /**
+     *
+     * @param \DateTime $deleted Description
+     * @return IMenuExtra Description
+     */
+    function setIsDeleted($isDeleted);
 }

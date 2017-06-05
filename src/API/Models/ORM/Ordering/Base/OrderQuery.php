@@ -5,6 +5,7 @@ namespace API\Models\ORM\Ordering\Base;
 use \Exception;
 use \PDO;
 use API\Models\ORM\Event\EventTable;
+use API\Models\ORM\Invoice\Invoice;
 use API\Models\ORM\OIP\OrderInProgress;
 use API\Models\ORM\Ordering\Order as ChildOrder;
 use API\Models\ORM\Ordering\OrderQuery as ChildOrderQuery;
@@ -81,6 +82,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery rightJoinWithUserRelatedByUserid() Adds a RIGHT JOIN clause and with to the query using the UserRelatedByUserid relation
  * @method     ChildOrderQuery innerJoinWithUserRelatedByUserid() Adds a INNER JOIN clause and with to the query using the UserRelatedByUserid relation
  *
+ * @method     ChildOrderQuery leftJoinInvoice($relationAlias = null) Adds a LEFT JOIN clause to the query using the Invoice relation
+ * @method     ChildOrderQuery rightJoinInvoice($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Invoice relation
+ * @method     ChildOrderQuery innerJoinInvoice($relationAlias = null) Adds a INNER JOIN clause to the query using the Invoice relation
+ *
+ * @method     ChildOrderQuery joinWithInvoice($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Invoice relation
+ *
+ * @method     ChildOrderQuery leftJoinWithInvoice() Adds a LEFT JOIN clause and with to the query using the Invoice relation
+ * @method     ChildOrderQuery rightJoinWithInvoice() Adds a RIGHT JOIN clause and with to the query using the Invoice relation
+ * @method     ChildOrderQuery innerJoinWithInvoice() Adds a INNER JOIN clause and with to the query using the Invoice relation
+ *
  * @method     ChildOrderQuery leftJoinOrderDetail($relationAlias = null) Adds a LEFT JOIN clause to the query using the OrderDetail relation
  * @method     ChildOrderQuery rightJoinOrderDetail($relationAlias = null) Adds a RIGHT JOIN clause to the query using the OrderDetail relation
  * @method     ChildOrderQuery innerJoinOrderDetail($relationAlias = null) Adds a INNER JOIN clause to the query using the OrderDetail relation
@@ -101,7 +112,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildOrderQuery rightJoinWithOrderInProgress() Adds a RIGHT JOIN clause and with to the query using the OrderInProgress relation
  * @method     ChildOrderQuery innerJoinWithOrderInProgress() Adds a INNER JOIN clause and with to the query using the OrderInProgress relation
  *
- * @method     \API\Models\ORM\User\UserQuery|\API\Models\ORM\Event\EventTableQuery|\API\Models\ORM\Ordering\OrderDetailQuery|\API\Models\ORM\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\ORM\User\UserQuery|\API\Models\ORM\Event\EventTableQuery|\API\Models\ORM\Invoice\InvoiceQuery|\API\Models\ORM\Ordering\OrderDetailQuery|\API\Models\ORM\OIP\OrderInProgressQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildOrder findOne(ConnectionInterface $con = null) Return the first ChildOrder matching the query
  * @method     ChildOrder findOneOrCreate(ConnectionInterface $con = null) Return the first ChildOrder matching the query, or a new ChildOrder object populated from the query conditions when no match is found
@@ -939,6 +950,79 @@ abstract class OrderQuery extends ModelCriteria
         return $this
             ->joinUserRelatedByUserid($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'UserRelatedByUserid', '\API\Models\ORM\User\UserQuery');
+    }
+
+    /**
+     * Filter the query by a related \API\Models\ORM\Invoice\Invoice object
+     *
+     * @param \API\Models\ORM\Invoice\Invoice|ObjectCollection $invoice the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildOrderQuery The current query, for fluid interface
+     */
+    public function filterByInvoice($invoice, $comparison = null)
+    {
+        if ($invoice instanceof \API\Models\ORM\Invoice\Invoice) {
+            return $this
+                ->addUsingAlias(OrderTableMap::COL_ORDERID, $invoice->getOrderid(), $comparison);
+        } elseif ($invoice instanceof ObjectCollection) {
+            return $this
+                ->useInvoiceQuery()
+                ->filterByPrimaryKeys($invoice->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByInvoice() only accepts arguments of type \API\Models\ORM\Invoice\Invoice or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Invoice relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildOrderQuery The current query, for fluid interface
+     */
+    public function joinInvoice($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Invoice');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Invoice');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Invoice relation Invoice object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\ORM\Invoice\InvoiceQuery A secondary query class using the current class as primary query
+     */
+    public function useInvoiceQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinInvoice($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Invoice', '\API\Models\ORM\Invoice\InvoiceQuery');
     }
 
     /**

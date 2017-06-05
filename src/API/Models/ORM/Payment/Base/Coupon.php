@@ -115,6 +115,13 @@ abstract class Coupon implements ActiveRecordInterface
     protected $value;
 
     /**
+     * The value for the is_deleted field.
+     * 
+     * @var        DateTime
+     */
+    protected $is_deleted;
+
+    /**
      * @var        Event
      */
     protected $aEvent;
@@ -456,6 +463,26 @@ abstract class Coupon implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [is_deleted] column value.
+     * 
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getIsDeleted($format = NULL)
+    {
+        if ($format === null) {
+            return $this->is_deleted;
+        } else {
+            return $this->is_deleted instanceof \DateTimeInterface ? $this->is_deleted->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [couponid] column.
      * 
      * @param int $v new value
@@ -584,6 +611,26 @@ abstract class Coupon implements ActiveRecordInterface
     } // setValue()
 
     /**
+     * Sets the value of [is_deleted] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\ORM\Payment\Coupon The current object (for fluent API support)
+     */
+    public function setIsDeleted($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->is_deleted !== null || $dt !== null) {
+            if ($this->is_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->is_deleted->format("Y-m-d H:i:s.u")) {
+                $this->is_deleted = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[CouponTableMap::COL_IS_DELETED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setIsDeleted()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -639,6 +686,12 @@ abstract class Coupon implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : CouponTableMap::translateFieldName('Value', TableMap::TYPE_PHPNAME, $indexType)];
             $this->value = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : CouponTableMap::translateFieldName('IsDeleted', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->is_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -647,7 +700,7 @@ abstract class Coupon implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = CouponTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = CouponTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\ORM\\Payment\\Coupon'), 0, $e);
@@ -942,6 +995,9 @@ abstract class Coupon implements ActiveRecordInterface
         if ($this->isColumnModified(CouponTableMap::COL_VALUE)) {
             $modifiedColumns[':p' . $index++]  = '`value`';
         }
+        if ($this->isColumnModified(CouponTableMap::COL_IS_DELETED)) {
+            $modifiedColumns[':p' . $index++]  = '`is_deleted`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `coupon` (%s) VALUES (%s)',
@@ -970,6 +1026,9 @@ abstract class Coupon implements ActiveRecordInterface
                         break;
                     case '`value`':                        
                         $stmt->bindValue($identifier, $this->value, PDO::PARAM_STR);
+                        break;
+                    case '`is_deleted`':                        
+                        $stmt->bindValue($identifier, $this->is_deleted ? $this->is_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1051,6 +1110,9 @@ abstract class Coupon implements ActiveRecordInterface
             case 5:
                 return $this->getValue();
                 break;
+            case 6:
+                return $this->getIsDeleted();
+                break;
             default:
                 return null;
                 break;
@@ -1087,9 +1149,14 @@ abstract class Coupon implements ActiveRecordInterface
             $keys[3] => $this->getCode(),
             $keys[4] => $this->getCreated(),
             $keys[5] => $this->getValue(),
+            $keys[6] => $this->getIsDeleted(),
         );
         if ($result[$keys[4]] instanceof \DateTime) {
             $result[$keys[4]] = $result[$keys[4]]->format('c');
+        }
+        
+        if ($result[$keys[6]] instanceof \DateTime) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
         }
         
         $virtualColumns = $this->virtualColumns;
@@ -1195,6 +1262,9 @@ abstract class Coupon implements ActiveRecordInterface
             case 5:
                 $this->setValue($value);
                 break;
+            case 6:
+                $this->setIsDeleted($value);
+                break;
         } // switch()
 
         return $this;
@@ -1238,6 +1308,9 @@ abstract class Coupon implements ActiveRecordInterface
         }
         if (array_key_exists($keys[5], $arr)) {
             $this->setValue($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setIsDeleted($arr[$keys[6]]);
         }
     }
 
@@ -1297,6 +1370,9 @@ abstract class Coupon implements ActiveRecordInterface
         }
         if ($this->isColumnModified(CouponTableMap::COL_VALUE)) {
             $criteria->add(CouponTableMap::COL_VALUE, $this->value);
+        }
+        if ($this->isColumnModified(CouponTableMap::COL_IS_DELETED)) {
+            $criteria->add(CouponTableMap::COL_IS_DELETED, $this->is_deleted);
         }
 
         return $criteria;
@@ -1389,6 +1465,7 @@ abstract class Coupon implements ActiveRecordInterface
         $copyObj->setCode($this->getCode());
         $copyObj->setCreated($this->getCreated());
         $copyObj->setValue($this->getValue());
+        $copyObj->setIsDeleted($this->getIsDeleted());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2064,6 +2141,7 @@ abstract class Coupon implements ActiveRecordInterface
         $this->code = null;
         $this->created = null;
         $this->value = null;
+        $this->is_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

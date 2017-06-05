@@ -59,7 +59,7 @@ class MenuPossibleExtraTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 5;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class MenuPossibleExtraTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /**
      * the column name for the menu_possible_extraid field
@@ -92,6 +92,11 @@ class MenuPossibleExtraTableMap extends TableMap
     const COL_PRICE = 'menu_possible_extra.price';
 
     /**
+     * the column name for the is_deleted field
+     */
+    const COL_IS_DELETED = 'menu_possible_extra.is_deleted';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -103,11 +108,11 @@ class MenuPossibleExtraTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('MenuPossibleExtraid', 'MenuExtraid', 'Menuid', 'Price', ),
-        self::TYPE_CAMELNAME     => array('menuPossibleExtraid', 'menuExtraid', 'menuid', 'price', ),
-        self::TYPE_COLNAME       => array(MenuPossibleExtraTableMap::COL_MENU_POSSIBLE_EXTRAID, MenuPossibleExtraTableMap::COL_MENU_EXTRAID, MenuPossibleExtraTableMap::COL_MENUID, MenuPossibleExtraTableMap::COL_PRICE, ),
-        self::TYPE_FIELDNAME     => array('menu_possible_extraid', 'menu_extraid', 'menuid', 'price', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('MenuPossibleExtraid', 'MenuExtraid', 'Menuid', 'Price', 'IsDeleted', ),
+        self::TYPE_CAMELNAME     => array('menuPossibleExtraid', 'menuExtraid', 'menuid', 'price', 'isDeleted', ),
+        self::TYPE_COLNAME       => array(MenuPossibleExtraTableMap::COL_MENU_POSSIBLE_EXTRAID, MenuPossibleExtraTableMap::COL_MENU_EXTRAID, MenuPossibleExtraTableMap::COL_MENUID, MenuPossibleExtraTableMap::COL_PRICE, MenuPossibleExtraTableMap::COL_IS_DELETED, ),
+        self::TYPE_FIELDNAME     => array('menu_possible_extraid', 'menu_extraid', 'menuid', 'price', 'is_deleted', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -117,11 +122,11 @@ class MenuPossibleExtraTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('MenuPossibleExtraid' => 0, 'MenuExtraid' => 1, 'Menuid' => 2, 'Price' => 3, ),
-        self::TYPE_CAMELNAME     => array('menuPossibleExtraid' => 0, 'menuExtraid' => 1, 'menuid' => 2, 'price' => 3, ),
-        self::TYPE_COLNAME       => array(MenuPossibleExtraTableMap::COL_MENU_POSSIBLE_EXTRAID => 0, MenuPossibleExtraTableMap::COL_MENU_EXTRAID => 1, MenuPossibleExtraTableMap::COL_MENUID => 2, MenuPossibleExtraTableMap::COL_PRICE => 3, ),
-        self::TYPE_FIELDNAME     => array('menu_possible_extraid' => 0, 'menu_extraid' => 1, 'menuid' => 2, 'price' => 3, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('MenuPossibleExtraid' => 0, 'MenuExtraid' => 1, 'Menuid' => 2, 'Price' => 3, 'IsDeleted' => 4, ),
+        self::TYPE_CAMELNAME     => array('menuPossibleExtraid' => 0, 'menuExtraid' => 1, 'menuid' => 2, 'price' => 3, 'isDeleted' => 4, ),
+        self::TYPE_COLNAME       => array(MenuPossibleExtraTableMap::COL_MENU_POSSIBLE_EXTRAID => 0, MenuPossibleExtraTableMap::COL_MENU_EXTRAID => 1, MenuPossibleExtraTableMap::COL_MENUID => 2, MenuPossibleExtraTableMap::COL_PRICE => 3, MenuPossibleExtraTableMap::COL_IS_DELETED => 4, ),
+        self::TYPE_FIELDNAME     => array('menu_possible_extraid' => 0, 'menu_extraid' => 1, 'menuid' => 2, 'price' => 3, 'is_deleted' => 4, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -146,6 +151,7 @@ class MenuPossibleExtraTableMap extends TableMap
         $this->addForeignKey('menu_extraid', 'MenuExtraid', 'INTEGER', 'menu_extra', 'menu_extraid', true, null, null);
         $this->addForeignKey('menuid', 'Menuid', 'INTEGER', 'menu', 'menuid', true, null, null);
         $this->addColumn('price', 'Price', 'DECIMAL', true, 7, null);
+        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -322,11 +328,13 @@ class MenuPossibleExtraTableMap extends TableMap
             $criteria->addSelectColumn(MenuPossibleExtraTableMap::COL_MENU_EXTRAID);
             $criteria->addSelectColumn(MenuPossibleExtraTableMap::COL_MENUID);
             $criteria->addSelectColumn(MenuPossibleExtraTableMap::COL_PRICE);
+            $criteria->addSelectColumn(MenuPossibleExtraTableMap::COL_IS_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.menu_possible_extraid');
             $criteria->addSelectColumn($alias . '.menu_extraid');
             $criteria->addSelectColumn($alias . '.menuid');
             $criteria->addSelectColumn($alias . '.price');
+            $criteria->addSelectColumn($alias . '.is_deleted');
         }
     }
 

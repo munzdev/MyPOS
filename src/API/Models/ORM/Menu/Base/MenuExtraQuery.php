@@ -26,12 +26,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuExtraQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     ChildMenuExtraQuery orderByAvailabilityid($order = Criteria::ASC) Order by the availabilityid column
  * @method     ChildMenuExtraQuery orderByAvailabilityAmount($order = Criteria::ASC) Order by the availability_amount column
+ * @method     ChildMenuExtraQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
  *
  * @method     ChildMenuExtraQuery groupByMenuExtraid() Group by the menu_extraid column
  * @method     ChildMenuExtraQuery groupByEventid() Group by the eventid column
  * @method     ChildMenuExtraQuery groupByName() Group by the name column
  * @method     ChildMenuExtraQuery groupByAvailabilityid() Group by the availabilityid column
  * @method     ChildMenuExtraQuery groupByAvailabilityAmount() Group by the availability_amount column
+ * @method     ChildMenuExtraQuery groupByIsDeleted() Group by the is_deleted column
  *
  * @method     ChildMenuExtraQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildMenuExtraQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -80,7 +82,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuExtra findOneByEventid(int $eventid) Return the first ChildMenuExtra filtered by the eventid column
  * @method     ChildMenuExtra findOneByName(string $name) Return the first ChildMenuExtra filtered by the name column
  * @method     ChildMenuExtra findOneByAvailabilityid(int $availabilityid) Return the first ChildMenuExtra filtered by the availabilityid column
- * @method     ChildMenuExtra findOneByAvailabilityAmount(int $availability_amount) Return the first ChildMenuExtra filtered by the availability_amount column *
+ * @method     ChildMenuExtra findOneByAvailabilityAmount(int $availability_amount) Return the first ChildMenuExtra filtered by the availability_amount column
+ * @method     ChildMenuExtra findOneByIsDeleted(string $is_deleted) Return the first ChildMenuExtra filtered by the is_deleted column *
 
  * @method     ChildMenuExtra requirePk($key, ConnectionInterface $con = null) Return the ChildMenuExtra by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMenuExtra requireOne(ConnectionInterface $con = null) Return the first ChildMenuExtra matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -90,6 +93,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuExtra requireOneByName(string $name) Return the first ChildMenuExtra filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMenuExtra requireOneByAvailabilityid(int $availabilityid) Return the first ChildMenuExtra filtered by the availabilityid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMenuExtra requireOneByAvailabilityAmount(int $availability_amount) Return the first ChildMenuExtra filtered by the availability_amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMenuExtra requireOneByIsDeleted(string $is_deleted) Return the first ChildMenuExtra filtered by the is_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildMenuExtra[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMenuExtra objects based on current ModelCriteria
  * @method     ChildMenuExtra[]|ObjectCollection findByMenuExtraid(int $menu_extraid) Return ChildMenuExtra objects filtered by the menu_extraid column
@@ -97,6 +101,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuExtra[]|ObjectCollection findByName(string $name) Return ChildMenuExtra objects filtered by the name column
  * @method     ChildMenuExtra[]|ObjectCollection findByAvailabilityid(int $availabilityid) Return ChildMenuExtra objects filtered by the availabilityid column
  * @method     ChildMenuExtra[]|ObjectCollection findByAvailabilityAmount(int $availability_amount) Return ChildMenuExtra objects filtered by the availability_amount column
+ * @method     ChildMenuExtra[]|ObjectCollection findByIsDeleted(string $is_deleted) Return ChildMenuExtra objects filtered by the is_deleted column
  * @method     ChildMenuExtra[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -195,7 +200,7 @@ abstract class MenuExtraQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT `menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount` FROM `menu_extra` WHERE `menu_extraid` = :p0';
+        $sql = 'SELECT `menu_extraid`, `eventid`, `name`, `availabilityid`, `availability_amount`, `is_deleted` FROM `menu_extra` WHERE `menu_extraid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -476,6 +481,49 @@ abstract class MenuExtraQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MenuExtraTableMap::COL_AVAILABILITY_AMOUNT, $availabilityAmount, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_deleted column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsDeleted('2011-03-14'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted('now'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted(array('max' => 'yesterday')); // WHERE is_deleted > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $isDeleted The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildMenuExtraQuery The current query, for fluid interface
+     */
+    public function filterByIsDeleted($isDeleted = null, $comparison = null)
+    {
+        if (is_array($isDeleted)) {
+            $useMinMax = false;
+            if (isset($isDeleted['min'])) {
+                $this->addUsingAlias(MenuExtraTableMap::COL_IS_DELETED, $isDeleted['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($isDeleted['max'])) {
+                $this->addUsingAlias(MenuExtraTableMap::COL_IS_DELETED, $isDeleted['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(MenuExtraTableMap::COL_IS_DELETED, $isDeleted, $comparison);
     }
 
     /**

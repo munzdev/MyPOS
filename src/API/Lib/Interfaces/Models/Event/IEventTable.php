@@ -31,6 +31,11 @@ interface IEventTable extends IModel {
     function getData();
 
     /**
+     * @return \DateTime
+     */
+    function getIsDeleted();
+
+    /**
      * @param int $eventTableid Description
      * @return IEventTable Description
      */
@@ -59,4 +64,10 @@ interface IEventTable extends IModel {
      * @return IEventTable Description
      */
     function setData($data);
+
+    /**
+     * @param \DateTime $deleted
+     * @return IEventTable Description
+     */
+    function setIsDeleted($isDeleted);
 }

@@ -102,9 +102,9 @@ class UserTableMap extends TableMap
     const COL_AUTOLOGIN_HASH = 'user.autologin_hash';
 
     /**
-     * the column name for the active field
+     * the column name for the is_deleted field
      */
-    const COL_ACTIVE = 'user.active';
+    const COL_IS_DELETED = 'user.is_deleted';
 
     /**
      * the column name for the phonenumber field
@@ -133,10 +133,10 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Userid', 'Username', 'Password', 'Firstname', 'Lastname', 'AutologinHash', 'Active', 'Phonenumber', 'CallRequest', 'IsAdmin', ),
-        self::TYPE_CAMELNAME     => array('userid', 'username', 'password', 'firstname', 'lastname', 'autologinHash', 'active', 'phonenumber', 'callRequest', 'isAdmin', ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_USERID, UserTableMap::COL_USERNAME, UserTableMap::COL_PASSWORD, UserTableMap::COL_FIRSTNAME, UserTableMap::COL_LASTNAME, UserTableMap::COL_AUTOLOGIN_HASH, UserTableMap::COL_ACTIVE, UserTableMap::COL_PHONENUMBER, UserTableMap::COL_CALL_REQUEST, UserTableMap::COL_IS_ADMIN, ),
-        self::TYPE_FIELDNAME     => array('userid', 'username', 'password', 'firstname', 'lastname', 'autologin_hash', 'active', 'phonenumber', 'call_request', 'is_admin', ),
+        self::TYPE_PHPNAME       => array('Userid', 'Username', 'Password', 'Firstname', 'Lastname', 'AutologinHash', 'IsDeleted', 'Phonenumber', 'CallRequest', 'IsAdmin', ),
+        self::TYPE_CAMELNAME     => array('userid', 'username', 'password', 'firstname', 'lastname', 'autologinHash', 'isDeleted', 'phonenumber', 'callRequest', 'isAdmin', ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_USERID, UserTableMap::COL_USERNAME, UserTableMap::COL_PASSWORD, UserTableMap::COL_FIRSTNAME, UserTableMap::COL_LASTNAME, UserTableMap::COL_AUTOLOGIN_HASH, UserTableMap::COL_IS_DELETED, UserTableMap::COL_PHONENUMBER, UserTableMap::COL_CALL_REQUEST, UserTableMap::COL_IS_ADMIN, ),
+        self::TYPE_FIELDNAME     => array('userid', 'username', 'password', 'firstname', 'lastname', 'autologin_hash', 'is_deleted', 'phonenumber', 'call_request', 'is_admin', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
@@ -147,10 +147,10 @@ class UserTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Userid' => 0, 'Username' => 1, 'Password' => 2, 'Firstname' => 3, 'Lastname' => 4, 'AutologinHash' => 5, 'Active' => 6, 'Phonenumber' => 7, 'CallRequest' => 8, 'IsAdmin' => 9, ),
-        self::TYPE_CAMELNAME     => array('userid' => 0, 'username' => 1, 'password' => 2, 'firstname' => 3, 'lastname' => 4, 'autologinHash' => 5, 'active' => 6, 'phonenumber' => 7, 'callRequest' => 8, 'isAdmin' => 9, ),
-        self::TYPE_COLNAME       => array(UserTableMap::COL_USERID => 0, UserTableMap::COL_USERNAME => 1, UserTableMap::COL_PASSWORD => 2, UserTableMap::COL_FIRSTNAME => 3, UserTableMap::COL_LASTNAME => 4, UserTableMap::COL_AUTOLOGIN_HASH => 5, UserTableMap::COL_ACTIVE => 6, UserTableMap::COL_PHONENUMBER => 7, UserTableMap::COL_CALL_REQUEST => 8, UserTableMap::COL_IS_ADMIN => 9, ),
-        self::TYPE_FIELDNAME     => array('userid' => 0, 'username' => 1, 'password' => 2, 'firstname' => 3, 'lastname' => 4, 'autologin_hash' => 5, 'active' => 6, 'phonenumber' => 7, 'call_request' => 8, 'is_admin' => 9, ),
+        self::TYPE_PHPNAME       => array('Userid' => 0, 'Username' => 1, 'Password' => 2, 'Firstname' => 3, 'Lastname' => 4, 'AutologinHash' => 5, 'IsDeleted' => 6, 'Phonenumber' => 7, 'CallRequest' => 8, 'IsAdmin' => 9, ),
+        self::TYPE_CAMELNAME     => array('userid' => 0, 'username' => 1, 'password' => 2, 'firstname' => 3, 'lastname' => 4, 'autologinHash' => 5, 'isDeleted' => 6, 'phonenumber' => 7, 'callRequest' => 8, 'isAdmin' => 9, ),
+        self::TYPE_COLNAME       => array(UserTableMap::COL_USERID => 0, UserTableMap::COL_USERNAME => 1, UserTableMap::COL_PASSWORD => 2, UserTableMap::COL_FIRSTNAME => 3, UserTableMap::COL_LASTNAME => 4, UserTableMap::COL_AUTOLOGIN_HASH => 5, UserTableMap::COL_IS_DELETED => 6, UserTableMap::COL_PHONENUMBER => 7, UserTableMap::COL_CALL_REQUEST => 8, UserTableMap::COL_IS_ADMIN => 9, ),
+        self::TYPE_FIELDNAME     => array('userid' => 0, 'username' => 1, 'password' => 2, 'firstname' => 3, 'lastname' => 4, 'autologin_hash' => 5, 'is_deleted' => 6, 'phonenumber' => 7, 'call_request' => 8, 'is_admin' => 9, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
     );
 
@@ -177,7 +177,7 @@ class UserTableMap extends TableMap
         $this->addColumn('firstname', 'Firstname', 'VARCHAR', true, 64, null);
         $this->addColumn('lastname', 'Lastname', 'VARCHAR', true, 64, null);
         $this->addColumn('autologin_hash', 'AutologinHash', 'VARCHAR', false, 255, null);
-        $this->addColumn('active', 'Active', 'TINYINT', true, null, null);
+        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
         $this->addColumn('phonenumber', 'Phonenumber', 'VARCHAR', true, 45, null);
         $this->addColumn('call_request', 'CallRequest', 'TIMESTAMP', false, null, null);
         $this->addColumn('is_admin', 'IsAdmin', 'BOOLEAN', false, 1, null);
@@ -400,7 +400,7 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn(UserTableMap::COL_FIRSTNAME);
             $criteria->addSelectColumn(UserTableMap::COL_LASTNAME);
             $criteria->addSelectColumn(UserTableMap::COL_AUTOLOGIN_HASH);
-            $criteria->addSelectColumn(UserTableMap::COL_ACTIVE);
+            $criteria->addSelectColumn(UserTableMap::COL_IS_DELETED);
             $criteria->addSelectColumn(UserTableMap::COL_PHONENUMBER);
             $criteria->addSelectColumn(UserTableMap::COL_CALL_REQUEST);
             $criteria->addSelectColumn(UserTableMap::COL_IS_ADMIN);
@@ -411,7 +411,7 @@ class UserTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.firstname');
             $criteria->addSelectColumn($alias . '.lastname');
             $criteria->addSelectColumn($alias . '.autologin_hash');
-            $criteria->addSelectColumn($alias . '.active');
+            $criteria->addSelectColumn($alias . '.is_deleted');
             $criteria->addSelectColumn($alias . '.phonenumber');
             $criteria->addSelectColumn($alias . '.call_request');
             $criteria->addSelectColumn($alias . '.is_admin');

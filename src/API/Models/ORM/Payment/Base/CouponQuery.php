@@ -28,6 +28,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCouponQuery orderByCode($order = Criteria::ASC) Order by the code column
  * @method     ChildCouponQuery orderByCreated($order = Criteria::ASC) Order by the created column
  * @method     ChildCouponQuery orderByValue($order = Criteria::ASC) Order by the value column
+ * @method     ChildCouponQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
  *
  * @method     ChildCouponQuery groupByCouponid() Group by the couponid column
  * @method     ChildCouponQuery groupByEventid() Group by the eventid column
@@ -35,6 +36,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCouponQuery groupByCode() Group by the code column
  * @method     ChildCouponQuery groupByCreated() Group by the created column
  * @method     ChildCouponQuery groupByValue() Group by the value column
+ * @method     ChildCouponQuery groupByIsDeleted() Group by the is_deleted column
  *
  * @method     ChildCouponQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildCouponQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -84,7 +86,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCoupon findOneByCreatedByUserid(int $created_by_userid) Return the first ChildCoupon filtered by the created_by_userid column
  * @method     ChildCoupon findOneByCode(string $code) Return the first ChildCoupon filtered by the code column
  * @method     ChildCoupon findOneByCreated(string $created) Return the first ChildCoupon filtered by the created column
- * @method     ChildCoupon findOneByValue(string $value) Return the first ChildCoupon filtered by the value column *
+ * @method     ChildCoupon findOneByValue(string $value) Return the first ChildCoupon filtered by the value column
+ * @method     ChildCoupon findOneByIsDeleted(string $is_deleted) Return the first ChildCoupon filtered by the is_deleted column *
 
  * @method     ChildCoupon requirePk($key, ConnectionInterface $con = null) Return the ChildCoupon by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOne(ConnectionInterface $con = null) Return the first ChildCoupon matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -95,6 +98,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCoupon requireOneByCode(string $code) Return the first ChildCoupon filtered by the code column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOneByCreated(string $created) Return the first ChildCoupon filtered by the created column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildCoupon requireOneByValue(string $value) Return the first ChildCoupon filtered by the value column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildCoupon requireOneByIsDeleted(string $is_deleted) Return the first ChildCoupon filtered by the is_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildCoupon[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildCoupon objects based on current ModelCriteria
  * @method     ChildCoupon[]|ObjectCollection findByCouponid(int $couponid) Return ChildCoupon objects filtered by the couponid column
@@ -103,6 +107,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildCoupon[]|ObjectCollection findByCode(string $code) Return ChildCoupon objects filtered by the code column
  * @method     ChildCoupon[]|ObjectCollection findByCreated(string $created) Return ChildCoupon objects filtered by the created column
  * @method     ChildCoupon[]|ObjectCollection findByValue(string $value) Return ChildCoupon objects filtered by the value column
+ * @method     ChildCoupon[]|ObjectCollection findByIsDeleted(string $is_deleted) Return ChildCoupon objects filtered by the is_deleted column
  * @method     ChildCoupon[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -201,7 +206,7 @@ abstract class CouponQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT `couponid`, `eventid`, `created_by_userid`, `code`, `created`, `value` FROM `coupon` WHERE `couponid` = :p0';
+        $sql = 'SELECT `couponid`, `eventid`, `created_by_userid`, `code`, `created`, `value`, `is_deleted` FROM `coupon` WHERE `couponid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -525,6 +530,49 @@ abstract class CouponQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(CouponTableMap::COL_VALUE, $value, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_deleted column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsDeleted('2011-03-14'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted('now'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted(array('max' => 'yesterday')); // WHERE is_deleted > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $isDeleted The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildCouponQuery The current query, for fluid interface
+     */
+    public function filterByIsDeleted($isDeleted = null, $comparison = null)
+    {
+        if (is_array($isDeleted)) {
+            $useMinMax = false;
+            if (isset($isDeleted['min'])) {
+                $this->addUsingAlias(CouponTableMap::COL_IS_DELETED, $isDeleted['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($isDeleted['max'])) {
+                $this->addUsingAlias(CouponTableMap::COL_IS_DELETED, $isDeleted['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(CouponTableMap::COL_IS_DELETED, $isDeleted, $comparison);
     }
 
     /**

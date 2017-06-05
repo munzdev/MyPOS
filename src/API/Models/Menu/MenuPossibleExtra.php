@@ -63,6 +63,11 @@ class MenuPossibleExtra extends Model implements IMenuPossibleExtra
         return $this->model->getPrice();
     }
 
+    public function getIsDeleted(): ?\DateTime
+    {
+        return $this->model->getIsDeleted();
+    }
+
     public function setMenu($menu): IMenuPossibleExtra
     {
         $this->model->setMenu($menu);
@@ -99,4 +104,9 @@ class MenuPossibleExtra extends Model implements IMenuPossibleExtra
         return $this;
     }
 
+    public function setIsDeleted($isDeleted): IMenuPossibleExtra
+    {
+        $this->model->setIsDeleted($isDeleted);
+        return $this;
+    }
 }

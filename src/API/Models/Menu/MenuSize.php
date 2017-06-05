@@ -52,6 +52,11 @@ class MenuSize extends Model implements IMenuSize
         return $this->model->getName();
     }
 
+    public function getIsDeleted(): ?\DateTime
+    {
+        return $this->model->getIsDeleted();
+    }
+
     public function setEvent($event): IMenuSize
     {
         $this->model->setEvent($event);
@@ -82,4 +87,9 @@ class MenuSize extends Model implements IMenuSize
         return $this;
     }
 
+    public function setIsDeleted($isDeleted): IMenuSize
+    {
+        $this->model->setIsDeleted($isDeleted);
+        return $this;
+    }
 }

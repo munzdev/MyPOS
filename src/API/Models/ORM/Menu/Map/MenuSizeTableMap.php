@@ -59,7 +59,7 @@ class MenuSizeTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 5;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class MenuSizeTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /**
      * the column name for the menu_sizeid field
@@ -92,6 +92,11 @@ class MenuSizeTableMap extends TableMap
     const COL_FACTOR = 'menu_size.factor';
 
     /**
+     * the column name for the is_deleted field
+     */
+    const COL_IS_DELETED = 'menu_size.is_deleted';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -103,11 +108,11 @@ class MenuSizeTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('MenuSizeid', 'Eventid', 'Name', 'Factor', ),
-        self::TYPE_CAMELNAME     => array('menuSizeid', 'eventid', 'name', 'factor', ),
-        self::TYPE_COLNAME       => array(MenuSizeTableMap::COL_MENU_SIZEID, MenuSizeTableMap::COL_EVENTID, MenuSizeTableMap::COL_NAME, MenuSizeTableMap::COL_FACTOR, ),
-        self::TYPE_FIELDNAME     => array('menu_sizeid', 'eventid', 'name', 'factor', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('MenuSizeid', 'Eventid', 'Name', 'Factor', 'IsDeleted', ),
+        self::TYPE_CAMELNAME     => array('menuSizeid', 'eventid', 'name', 'factor', 'isDeleted', ),
+        self::TYPE_COLNAME       => array(MenuSizeTableMap::COL_MENU_SIZEID, MenuSizeTableMap::COL_EVENTID, MenuSizeTableMap::COL_NAME, MenuSizeTableMap::COL_FACTOR, MenuSizeTableMap::COL_IS_DELETED, ),
+        self::TYPE_FIELDNAME     => array('menu_sizeid', 'eventid', 'name', 'factor', 'is_deleted', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -117,11 +122,11 @@ class MenuSizeTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('MenuSizeid' => 0, 'Eventid' => 1, 'Name' => 2, 'Factor' => 3, ),
-        self::TYPE_CAMELNAME     => array('menuSizeid' => 0, 'eventid' => 1, 'name' => 2, 'factor' => 3, ),
-        self::TYPE_COLNAME       => array(MenuSizeTableMap::COL_MENU_SIZEID => 0, MenuSizeTableMap::COL_EVENTID => 1, MenuSizeTableMap::COL_NAME => 2, MenuSizeTableMap::COL_FACTOR => 3, ),
-        self::TYPE_FIELDNAME     => array('menu_sizeid' => 0, 'eventid' => 1, 'name' => 2, 'factor' => 3, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('MenuSizeid' => 0, 'Eventid' => 1, 'Name' => 2, 'Factor' => 3, 'IsDeleted' => 4, ),
+        self::TYPE_CAMELNAME     => array('menuSizeid' => 0, 'eventid' => 1, 'name' => 2, 'factor' => 3, 'isDeleted' => 4, ),
+        self::TYPE_COLNAME       => array(MenuSizeTableMap::COL_MENU_SIZEID => 0, MenuSizeTableMap::COL_EVENTID => 1, MenuSizeTableMap::COL_NAME => 2, MenuSizeTableMap::COL_FACTOR => 3, MenuSizeTableMap::COL_IS_DELETED => 4, ),
+        self::TYPE_FIELDNAME     => array('menu_sizeid' => 0, 'eventid' => 1, 'name' => 2, 'factor' => 3, 'is_deleted' => 4, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -145,6 +150,7 @@ class MenuSizeTableMap extends TableMap
         $this->addForeignKey('eventid', 'Eventid', 'INTEGER', 'event', 'eventid', true, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 32, null);
         $this->addColumn('factor', 'Factor', 'DECIMAL', true, 3, null);
+        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -320,11 +326,13 @@ class MenuSizeTableMap extends TableMap
             $criteria->addSelectColumn(MenuSizeTableMap::COL_EVENTID);
             $criteria->addSelectColumn(MenuSizeTableMap::COL_NAME);
             $criteria->addSelectColumn(MenuSizeTableMap::COL_FACTOR);
+            $criteria->addSelectColumn(MenuSizeTableMap::COL_IS_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.menu_sizeid');
             $criteria->addSelectColumn($alias . '.eventid');
             $criteria->addSelectColumn($alias . '.name');
             $criteria->addSelectColumn($alias . '.factor');
+            $criteria->addSelectColumn($alias . '.is_deleted');
         }
     }
 

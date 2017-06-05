@@ -203,6 +203,13 @@ class OrderTableMap extends TableMap
     1 => ':userid',
   ),
 ), null, null, null, false);
+        $this->addRelation('Invoice', '\\API\\Models\\ORM\\Invoice\\Invoice', RelationMap::ONE_TO_MANY, array (
+  0 =>
+  array (
+    0 => ':orderid',
+    1 => ':orderid',
+  ),
+), null, null, 'Invoices', false);
         $this->addRelation('OrderDetail', '\\API\\Models\\ORM\\Ordering\\OrderDetail', RelationMap::ONE_TO_MANY, array (
   0 =>
   array (

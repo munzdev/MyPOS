@@ -27,6 +27,11 @@ interface IEvent extends IModel {
     function getActive();
 
     /**
+     * @return DateTime
+     */
+    function getIsDeleted();
+
+    /**
      * @param int $eventid Description
      * @return IEvent Description
      */
@@ -49,4 +54,10 @@ interface IEvent extends IModel {
      * @return IEvent Description
      */
     function setActive($active);
+
+    /**
+     * @param DateTime $deleted Description
+     * @return IEvent Description
+     */
+    function setIsDeleted($isDeleted);
 }

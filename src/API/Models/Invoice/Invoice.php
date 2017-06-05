@@ -8,6 +8,7 @@ use API\Lib\Interfaces\Models\Event\IEventContact;
 use API\Lib\Interfaces\Models\Invoice\IInvoice;
 use API\Lib\Interfaces\Models\Invoice\IInvoiceItemCollection;
 use API\Lib\Interfaces\Models\Invoice\IInvoiceType;
+use API\Lib\Interfaces\Models\Ordering\IOrder;
 use API\Lib\Interfaces\Models\User\IUser;
 use API\Models\Model;
 use API\Models\ORM\Invoice\Invoice as InvoiceORM;
@@ -157,6 +158,21 @@ class Invoice extends Model implements IInvoice
         return $invoiceItemCollection;
     }
 
+    public function getOrderid() : int
+    {
+        return $this->model->getOrderid();
+    }
+
+    function getOrder() : ?IOrder
+    {
+        $order = $this->model->getOrder();
+
+        $orderModel = $this->container->get(IOrder::class);
+        $orderModel->setModel($order);
+
+        return $orderModel;
+    }
+
     public function setAmount($amount): IInvoice
     {
         $this->model->setAmount($amount);
@@ -265,4 +281,15 @@ class Invoice extends Model implements IInvoice
         return $this;
     }
 
+    public function setOrderid($orderid) : IInvoice
+    {
+        $this->model->setOrderid($orderid);
+        return $this;
+    }
+
+    public function setOrder($order) : IInvoice
+    {
+        $this->model->setOrder($order);
+        return $this;
+    }
 }

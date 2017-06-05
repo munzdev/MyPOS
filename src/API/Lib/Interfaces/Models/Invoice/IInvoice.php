@@ -5,6 +5,7 @@ namespace API\Lib\Interfaces\Models\Invoice;
 use API\Lib\Interfaces\Models\Event\IEventBankinformation;
 use API\Lib\Interfaces\Models\Event\IEventContact;
 use API\Lib\Interfaces\Models\IModel;
+use API\Lib\Interfaces\Models\Ordering\IOrder;
 use API\Lib\Interfaces\Models\User\IUser;
 use DateTime;
 
@@ -103,6 +104,16 @@ interface IInvoice extends IModel {
      * @return IInvoiceItemCollection
      */
     public function getInvoiceItems() : IInvoiceItemCollection;
+
+    /**
+     * @return int
+     */
+    function getOrderid();
+
+    /**
+     * @return ?IOrder
+     */
+    function getOrder();
 
     /**
      *
@@ -229,4 +240,18 @@ interface IInvoice extends IModel {
      * @return IInvoice Description
      */
     function setAmountRecieved($amountRecieved);
+
+    /**
+     *
+     * @param int $orderid Description
+     * @return IInvoice Description
+     */
+    function setOrderid($orderid);
+
+    /**
+     *
+     * @param ?IOrder $order Description
+     * @return IInvoice Description
+     */
+    function setOrder($order);
 }

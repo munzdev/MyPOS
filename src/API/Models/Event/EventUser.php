@@ -68,6 +68,11 @@ class EventUser extends Model implements IEventUser
         return $this->model->getUserid();
     }
 
+    public function getIsDeleted() : ?\DateTime
+    {
+        return $this->model->getIsDeleted();
+    }
+
     public function setBeginMoney($beginMoney): IEventUser
     {
         $this->model->setBeginMoney($beginMoney);
@@ -107,6 +112,12 @@ class EventUser extends Model implements IEventUser
     public function setUserid($userid): IEventUser
     {
         $this->model->setUserid($userid);
+        return $this;
+    }
+
+    public function setIsDeleted($isDeleted) : IEventUser
+    {
+        $this->model->setIsDeleted($isDeleted);
         return $this;
     }
 }

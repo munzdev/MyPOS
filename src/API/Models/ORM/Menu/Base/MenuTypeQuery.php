@@ -26,12 +26,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuTypeQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     ChildMenuTypeQuery orderByTax($order = Criteria::ASC) Order by the tax column
  * @method     ChildMenuTypeQuery orderByAllowmixing($order = Criteria::ASC) Order by the allowMixing column
+ * @method     ChildMenuTypeQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
  *
  * @method     ChildMenuTypeQuery groupByMenuTypeid() Group by the menu_typeid column
  * @method     ChildMenuTypeQuery groupByEventid() Group by the eventid column
  * @method     ChildMenuTypeQuery groupByName() Group by the name column
  * @method     ChildMenuTypeQuery groupByTax() Group by the tax column
  * @method     ChildMenuTypeQuery groupByAllowmixing() Group by the allowMixing column
+ * @method     ChildMenuTypeQuery groupByIsDeleted() Group by the is_deleted column
  *
  * @method     ChildMenuTypeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildMenuTypeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -70,7 +72,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuType findOneByEventid(int $eventid) Return the first ChildMenuType filtered by the eventid column
  * @method     ChildMenuType findOneByName(string $name) Return the first ChildMenuType filtered by the name column
  * @method     ChildMenuType findOneByTax(int $tax) Return the first ChildMenuType filtered by the tax column
- * @method     ChildMenuType findOneByAllowmixing(boolean $allowMixing) Return the first ChildMenuType filtered by the allowMixing column *
+ * @method     ChildMenuType findOneByAllowmixing(boolean $allowMixing) Return the first ChildMenuType filtered by the allowMixing column
+ * @method     ChildMenuType findOneByIsDeleted(string $is_deleted) Return the first ChildMenuType filtered by the is_deleted column *
 
  * @method     ChildMenuType requirePk($key, ConnectionInterface $con = null) Return the ChildMenuType by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMenuType requireOne(ConnectionInterface $con = null) Return the first ChildMenuType matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -80,6 +83,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuType requireOneByName(string $name) Return the first ChildMenuType filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMenuType requireOneByTax(int $tax) Return the first ChildMenuType filtered by the tax column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMenuType requireOneByAllowmixing(boolean $allowMixing) Return the first ChildMenuType filtered by the allowMixing column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMenuType requireOneByIsDeleted(string $is_deleted) Return the first ChildMenuType filtered by the is_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildMenuType[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMenuType objects based on current ModelCriteria
  * @method     ChildMenuType[]|ObjectCollection findByMenuTypeid(int $menu_typeid) Return ChildMenuType objects filtered by the menu_typeid column
@@ -87,6 +91,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuType[]|ObjectCollection findByName(string $name) Return ChildMenuType objects filtered by the name column
  * @method     ChildMenuType[]|ObjectCollection findByTax(int $tax) Return ChildMenuType objects filtered by the tax column
  * @method     ChildMenuType[]|ObjectCollection findByAllowmixing(boolean $allowMixing) Return ChildMenuType objects filtered by the allowMixing column
+ * @method     ChildMenuType[]|ObjectCollection findByIsDeleted(string $is_deleted) Return ChildMenuType objects filtered by the is_deleted column
  * @method     ChildMenuType[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -185,7 +190,7 @@ abstract class MenuTypeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT `menu_typeid`, `eventid`, `name`, `tax`, `allowMixing` FROM `menu_type` WHERE `menu_typeid` = :p0';
+        $sql = 'SELECT `menu_typeid`, `eventid`, `name`, `tax`, `allowMixing`, `is_deleted` FROM `menu_type` WHERE `menu_typeid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -450,6 +455,49 @@ abstract class MenuTypeQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MenuTypeTableMap::COL_ALLOWMIXING, $allowmixing, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_deleted column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsDeleted('2011-03-14'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted('now'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted(array('max' => 'yesterday')); // WHERE is_deleted > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $isDeleted The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildMenuTypeQuery The current query, for fluid interface
+     */
+    public function filterByIsDeleted($isDeleted = null, $comparison = null)
+    {
+        if (is_array($isDeleted)) {
+            $useMinMax = false;
+            if (isset($isDeleted['min'])) {
+                $this->addUsingAlias(MenuTypeTableMap::COL_IS_DELETED, $isDeleted['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($isDeleted['max'])) {
+                $this->addUsingAlias(MenuTypeTableMap::COL_IS_DELETED, $isDeleted['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(MenuTypeTableMap::COL_IS_DELETED, $isDeleted, $comparison);
     }
 
     /**

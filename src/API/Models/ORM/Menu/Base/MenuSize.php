@@ -2,6 +2,7 @@
 
 namespace API\Models\ORM\Menu\Base;
 
+use \DateTime;
 use \Exception;
 use \PDO;
 use API\Models\ORM\Event\Event;
@@ -28,6 +29,7 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Propel\Runtime\Util\PropelDateTime;
 
 /**
  * Base class that represents a row from the 'menu_size' table.
@@ -97,6 +99,13 @@ abstract class MenuSize implements ActiveRecordInterface
      * @var        string
      */
     protected $factor;
+
+    /**
+     * The value for the is_deleted field.
+     * 
+     * @var        DateTime
+     */
+    protected $is_deleted;
 
     /**
      * @var        Event
@@ -401,6 +410,26 @@ abstract class MenuSize implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [is_deleted] column value.
+     * 
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getIsDeleted($format = NULL)
+    {
+        if ($format === null) {
+            return $this->is_deleted;
+        } else {
+            return $this->is_deleted instanceof \DateTimeInterface ? $this->is_deleted->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [menu_sizeid] column.
      * 
      * @param int $v new value
@@ -485,6 +514,26 @@ abstract class MenuSize implements ActiveRecordInterface
     } // setFactor()
 
     /**
+     * Sets the value of [is_deleted] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\ORM\Menu\MenuSize The current object (for fluent API support)
+     */
+    public function setIsDeleted($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->is_deleted !== null || $dt !== null) {
+            if ($this->is_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->is_deleted->format("Y-m-d H:i:s.u")) {
+                $this->is_deleted = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[MenuSizeTableMap::COL_IS_DELETED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setIsDeleted()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -531,6 +580,12 @@ abstract class MenuSize implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : MenuSizeTableMap::translateFieldName('Factor', TableMap::TYPE_PHPNAME, $indexType)];
             $this->factor = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : MenuSizeTableMap::translateFieldName('IsDeleted', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->is_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -539,7 +594,7 @@ abstract class MenuSize implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = MenuSizeTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = MenuSizeTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\ORM\\Menu\\MenuSize'), 0, $e);
@@ -807,6 +862,9 @@ abstract class MenuSize implements ActiveRecordInterface
         if ($this->isColumnModified(MenuSizeTableMap::COL_FACTOR)) {
             $modifiedColumns[':p' . $index++]  = '`factor`';
         }
+        if ($this->isColumnModified(MenuSizeTableMap::COL_IS_DELETED)) {
+            $modifiedColumns[':p' . $index++]  = '`is_deleted`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `menu_size` (%s) VALUES (%s)',
@@ -829,6 +887,9 @@ abstract class MenuSize implements ActiveRecordInterface
                         break;
                     case '`factor`':                        
                         $stmt->bindValue($identifier, $this->factor, PDO::PARAM_STR);
+                        break;
+                    case '`is_deleted`':                        
+                        $stmt->bindValue($identifier, $this->is_deleted ? $this->is_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -904,6 +965,9 @@ abstract class MenuSize implements ActiveRecordInterface
             case 3:
                 return $this->getFactor();
                 break;
+            case 4:
+                return $this->getIsDeleted();
+                break;
             default:
                 return null;
                 break;
@@ -938,7 +1002,12 @@ abstract class MenuSize implements ActiveRecordInterface
             $keys[1] => $this->getEventid(),
             $keys[2] => $this->getName(),
             $keys[3] => $this->getFactor(),
+            $keys[4] => $this->getIsDeleted(),
         );
+        if ($result[$keys[4]] instanceof \DateTime) {
+            $result[$keys[4]] = $result[$keys[4]]->format('c');
+        }
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
@@ -1036,6 +1105,9 @@ abstract class MenuSize implements ActiveRecordInterface
             case 3:
                 $this->setFactor($value);
                 break;
+            case 4:
+                $this->setIsDeleted($value);
+                break;
         } // switch()
 
         return $this;
@@ -1073,6 +1145,9 @@ abstract class MenuSize implements ActiveRecordInterface
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setFactor($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setIsDeleted($arr[$keys[4]]);
         }
     }
 
@@ -1126,6 +1201,9 @@ abstract class MenuSize implements ActiveRecordInterface
         }
         if ($this->isColumnModified(MenuSizeTableMap::COL_FACTOR)) {
             $criteria->add(MenuSizeTableMap::COL_FACTOR, $this->factor);
+        }
+        if ($this->isColumnModified(MenuSizeTableMap::COL_IS_DELETED)) {
+            $criteria->add(MenuSizeTableMap::COL_IS_DELETED, $this->is_deleted);
         }
 
         return $criteria;
@@ -1216,6 +1294,7 @@ abstract class MenuSize implements ActiveRecordInterface
         $copyObj->setEventid($this->getEventid());
         $copyObj->setName($this->getName());
         $copyObj->setFactor($this->getFactor());
+        $copyObj->setIsDeleted($this->getIsDeleted());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1948,6 +2027,7 @@ abstract class MenuSize implements ActiveRecordInterface
         $this->eventid = null;
         $this->name = null;
         $this->factor = null;
+        $this->is_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

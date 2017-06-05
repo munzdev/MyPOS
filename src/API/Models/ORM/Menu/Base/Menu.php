@@ -2,6 +2,7 @@
 
 namespace API\Models\ORM\Menu\Base;
 
+use \DateTime;
 use \Exception;
 use \PDO;
 use API\Models\ORM\Menu\Availability as ChildAvailability;
@@ -37,6 +38,7 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Propel\Runtime\Util\PropelDateTime;
 
 /**
  * Base class that represents a row from the 'menu' table.
@@ -120,6 +122,13 @@ abstract class Menu implements ActiveRecordInterface
      * @var        int
      */
     protected $availability_amount;
+
+    /**
+     * The value for the is_deleted field.
+     * 
+     * @var        DateTime
+     */
+    protected $is_deleted;
 
     /**
      * @var        ChildAvailability
@@ -473,6 +482,26 @@ abstract class Menu implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [is_deleted] column value.
+     * 
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getIsDeleted($format = NULL)
+    {
+        if ($format === null) {
+            return $this->is_deleted;
+        } else {
+            return $this->is_deleted instanceof \DateTimeInterface ? $this->is_deleted->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [menuid] column.
      * 
      * @param int $v new value
@@ -601,6 +630,26 @@ abstract class Menu implements ActiveRecordInterface
     } // setAvailabilityAmount()
 
     /**
+     * Sets the value of [is_deleted] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\ORM\Menu\Menu The current object (for fluent API support)
+     */
+    public function setIsDeleted($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->is_deleted !== null || $dt !== null) {
+            if ($this->is_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->is_deleted->format("Y-m-d H:i:s.u")) {
+                $this->is_deleted = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[MenuTableMap::COL_IS_DELETED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setIsDeleted()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -653,6 +702,12 @@ abstract class Menu implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : MenuTableMap::translateFieldName('AvailabilityAmount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->availability_amount = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : MenuTableMap::translateFieldName('IsDeleted', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->is_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -661,7 +716,7 @@ abstract class Menu implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 6; // 6 = MenuTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 7; // 7 = MenuTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\ORM\\Menu\\Menu'), 0, $e);
@@ -984,6 +1039,9 @@ abstract class Menu implements ActiveRecordInterface
         if ($this->isColumnModified(MenuTableMap::COL_AVAILABILITY_AMOUNT)) {
             $modifiedColumns[':p' . $index++]  = '`availability_amount`';
         }
+        if ($this->isColumnModified(MenuTableMap::COL_IS_DELETED)) {
+            $modifiedColumns[':p' . $index++]  = '`is_deleted`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `menu` (%s) VALUES (%s)',
@@ -1012,6 +1070,9 @@ abstract class Menu implements ActiveRecordInterface
                         break;
                     case '`availability_amount`':                        
                         $stmt->bindValue($identifier, $this->availability_amount, PDO::PARAM_INT);
+                        break;
+                    case '`is_deleted`':                        
+                        $stmt->bindValue($identifier, $this->is_deleted ? $this->is_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1093,6 +1154,9 @@ abstract class Menu implements ActiveRecordInterface
             case 5:
                 return $this->getAvailabilityAmount();
                 break;
+            case 6:
+                return $this->getIsDeleted();
+                break;
             default:
                 return null;
                 break;
@@ -1129,7 +1193,12 @@ abstract class Menu implements ActiveRecordInterface
             $keys[3] => $this->getPrice(),
             $keys[4] => $this->getAvailabilityid(),
             $keys[5] => $this->getAvailabilityAmount(),
+            $keys[6] => $this->getIsDeleted(),
         );
+        if ($result[$keys[6]] instanceof \DateTime) {
+            $result[$keys[6]] = $result[$keys[6]]->format('c');
+        }
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
@@ -1278,6 +1347,9 @@ abstract class Menu implements ActiveRecordInterface
             case 5:
                 $this->setAvailabilityAmount($value);
                 break;
+            case 6:
+                $this->setIsDeleted($value);
+                break;
         } // switch()
 
         return $this;
@@ -1321,6 +1393,9 @@ abstract class Menu implements ActiveRecordInterface
         }
         if (array_key_exists($keys[5], $arr)) {
             $this->setAvailabilityAmount($arr[$keys[5]]);
+        }
+        if (array_key_exists($keys[6], $arr)) {
+            $this->setIsDeleted($arr[$keys[6]]);
         }
     }
 
@@ -1380,6 +1455,9 @@ abstract class Menu implements ActiveRecordInterface
         }
         if ($this->isColumnModified(MenuTableMap::COL_AVAILABILITY_AMOUNT)) {
             $criteria->add(MenuTableMap::COL_AVAILABILITY_AMOUNT, $this->availability_amount);
+        }
+        if ($this->isColumnModified(MenuTableMap::COL_IS_DELETED)) {
+            $criteria->add(MenuTableMap::COL_IS_DELETED, $this->is_deleted);
         }
 
         return $criteria;
@@ -1472,6 +1550,7 @@ abstract class Menu implements ActiveRecordInterface
         $copyObj->setPrice($this->getPrice());
         $copyObj->setAvailabilityid($this->getAvailabilityid());
         $copyObj->setAvailabilityAmount($this->getAvailabilityAmount());
+        $copyObj->setIsDeleted($this->getIsDeleted());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2781,6 +2860,7 @@ abstract class Menu implements ActiveRecordInterface
         $this->price = null;
         $this->availabilityid = null;
         $this->availability_amount = null;
+        $this->is_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

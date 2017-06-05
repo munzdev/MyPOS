@@ -42,7 +42,7 @@ class UserQuery extends Query implements IUserQuery
         $user = UserQueryORM::create()
                     ->filterByUsername($username)
                     ->filterByIsAdmin(true)
-                    ->filterByActive(true)
+                    ->filterByIsDeleted()
                     ->findOne();
 
         if(!$user) {
@@ -64,7 +64,7 @@ class UserQuery extends Query implements IUserQuery
                         ->endUse()
                     ->endUse()
                     ->filterByUsername($username)
-                    ->filterByActive(true)
+                    ->filterByIsDeleted()
                     ->with(EventUserTableMap::getTableMap()->getPhpName())
                     ->find();
 

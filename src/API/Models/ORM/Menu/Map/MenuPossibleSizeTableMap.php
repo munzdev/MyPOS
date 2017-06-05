@@ -59,7 +59,7 @@ class MenuPossibleSizeTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 4;
+    const NUM_COLUMNS = 5;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class MenuPossibleSizeTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 4;
+    const NUM_HYDRATE_COLUMNS = 5;
 
     /**
      * the column name for the menu_possible_sizeid field
@@ -92,6 +92,11 @@ class MenuPossibleSizeTableMap extends TableMap
     const COL_PRICE = 'menu_possible_size.price';
 
     /**
+     * the column name for the is_deleted field
+     */
+    const COL_IS_DELETED = 'menu_possible_size.is_deleted';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -103,11 +108,11 @@ class MenuPossibleSizeTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('MenuPossibleSizeid', 'MenuSizeid', 'Menuid', 'Price', ),
-        self::TYPE_CAMELNAME     => array('menuPossibleSizeid', 'menuSizeid', 'menuid', 'price', ),
-        self::TYPE_COLNAME       => array(MenuPossibleSizeTableMap::COL_MENU_POSSIBLE_SIZEID, MenuPossibleSizeTableMap::COL_MENU_SIZEID, MenuPossibleSizeTableMap::COL_MENUID, MenuPossibleSizeTableMap::COL_PRICE, ),
-        self::TYPE_FIELDNAME     => array('menu_possible_sizeid', 'menu_sizeid', 'menuid', 'price', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('MenuPossibleSizeid', 'MenuSizeid', 'Menuid', 'Price', 'IsDeleted', ),
+        self::TYPE_CAMELNAME     => array('menuPossibleSizeid', 'menuSizeid', 'menuid', 'price', 'isDeleted', ),
+        self::TYPE_COLNAME       => array(MenuPossibleSizeTableMap::COL_MENU_POSSIBLE_SIZEID, MenuPossibleSizeTableMap::COL_MENU_SIZEID, MenuPossibleSizeTableMap::COL_MENUID, MenuPossibleSizeTableMap::COL_PRICE, MenuPossibleSizeTableMap::COL_IS_DELETED, ),
+        self::TYPE_FIELDNAME     => array('menu_possible_sizeid', 'menu_sizeid', 'menuid', 'price', 'is_deleted', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -117,11 +122,11 @@ class MenuPossibleSizeTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('MenuPossibleSizeid' => 0, 'MenuSizeid' => 1, 'Menuid' => 2, 'Price' => 3, ),
-        self::TYPE_CAMELNAME     => array('menuPossibleSizeid' => 0, 'menuSizeid' => 1, 'menuid' => 2, 'price' => 3, ),
-        self::TYPE_COLNAME       => array(MenuPossibleSizeTableMap::COL_MENU_POSSIBLE_SIZEID => 0, MenuPossibleSizeTableMap::COL_MENU_SIZEID => 1, MenuPossibleSizeTableMap::COL_MENUID => 2, MenuPossibleSizeTableMap::COL_PRICE => 3, ),
-        self::TYPE_FIELDNAME     => array('menu_possible_sizeid' => 0, 'menu_sizeid' => 1, 'menuid' => 2, 'price' => 3, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, )
+        self::TYPE_PHPNAME       => array('MenuPossibleSizeid' => 0, 'MenuSizeid' => 1, 'Menuid' => 2, 'Price' => 3, 'IsDeleted' => 4, ),
+        self::TYPE_CAMELNAME     => array('menuPossibleSizeid' => 0, 'menuSizeid' => 1, 'menuid' => 2, 'price' => 3, 'isDeleted' => 4, ),
+        self::TYPE_COLNAME       => array(MenuPossibleSizeTableMap::COL_MENU_POSSIBLE_SIZEID => 0, MenuPossibleSizeTableMap::COL_MENU_SIZEID => 1, MenuPossibleSizeTableMap::COL_MENUID => 2, MenuPossibleSizeTableMap::COL_PRICE => 3, MenuPossibleSizeTableMap::COL_IS_DELETED => 4, ),
+        self::TYPE_FIELDNAME     => array('menu_possible_sizeid' => 0, 'menu_sizeid' => 1, 'menuid' => 2, 'price' => 3, 'is_deleted' => 4, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
     );
 
     /**
@@ -146,6 +151,7 @@ class MenuPossibleSizeTableMap extends TableMap
         $this->addForeignKey('menu_sizeid', 'MenuSizeid', 'INTEGER', 'menu_size', 'menu_sizeid', true, null, null);
         $this->addForeignKey('menuid', 'Menuid', 'INTEGER', 'menu', 'menuid', true, null, null);
         $this->addColumn('price', 'Price', 'DECIMAL', false, 7, null);
+        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -314,11 +320,13 @@ class MenuPossibleSizeTableMap extends TableMap
             $criteria->addSelectColumn(MenuPossibleSizeTableMap::COL_MENU_SIZEID);
             $criteria->addSelectColumn(MenuPossibleSizeTableMap::COL_MENUID);
             $criteria->addSelectColumn(MenuPossibleSizeTableMap::COL_PRICE);
+            $criteria->addSelectColumn(MenuPossibleSizeTableMap::COL_IS_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.menu_possible_sizeid');
             $criteria->addSelectColumn($alias . '.menu_sizeid');
             $criteria->addSelectColumn($alias . '.menuid');
             $criteria->addSelectColumn($alias . '.price');
+            $criteria->addSelectColumn($alias . '.is_deleted');
         }
     }
 

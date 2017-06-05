@@ -76,21 +76,14 @@ interface IEventContact extends IModel {
     function getEmail();
 
     /**
-     * @return boolean
+     * @return \DateTime
      */
-    function getActive();
+    function getIsDeleted();
 
     /**
      * @return boolean
      */
     function getDefault();
-
-
-
-
-
-
-
 
     /**
      * @param int $eventContactid Description
@@ -177,10 +170,10 @@ interface IEventContact extends IModel {
     function setEmail($email);
 
     /**
-     * @param boolean $active Description
+     * @param \DateTime $deleted Description
      * @return IEventContact Description
      */
-    function setActive($active);
+    function setIsDeleted($isDeleted);
 
     /**
      * @param boolean $default Description

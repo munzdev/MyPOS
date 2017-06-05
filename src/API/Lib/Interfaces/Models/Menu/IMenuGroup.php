@@ -31,6 +31,11 @@ interface IMenuGroup extends IModel {
     function getMenus();
 
     /**
+     * @return \DateTime
+     */
+    function getIsDeleted();
+
+    /**
      *
      * @param int $menuGroupid Description
      * @return IMenuGroup Description
@@ -57,4 +62,11 @@ interface IMenuGroup extends IModel {
      * @return IMenuGroup Description
      */
     function setName($name);
+
+    /**
+     *
+     * @param \DateTime $deleted Description
+     * @return IMenuGroup Description
+     */
+    function setIsDeleted($isDeleted);
 }

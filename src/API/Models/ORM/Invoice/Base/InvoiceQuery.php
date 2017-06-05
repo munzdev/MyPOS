@@ -9,6 +9,7 @@ use API\Models\ORM\Event\EventContact;
 use API\Models\ORM\Invoice\Invoice as ChildInvoice;
 use API\Models\ORM\Invoice\InvoiceQuery as ChildInvoiceQuery;
 use API\Models\ORM\Invoice\Map\InvoiceTableMap;
+use API\Models\ORM\Ordering\Order;
 use API\Models\ORM\Payment\PaymentRecieved;
 use API\Models\ORM\User\User;
 use Propel\Runtime\Propel;
@@ -31,6 +32,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery orderByEventBankinformationid($order = Criteria::ASC) Order by the event_bankinformationid column
  * @method     ChildInvoiceQuery orderByCustomerEventContactid($order = Criteria::ASC) Order by the customer_event_contactid column
  * @method     ChildInvoiceQuery orderByCanceledInvoiceid($order = Criteria::ASC) Order by the canceled_invoiceid column
+ * @method     ChildInvoiceQuery orderByOrderid($order = Criteria::ASC) Order by the orderid column
  * @method     ChildInvoiceQuery orderByDate($order = Criteria::ASC) Order by the date column
  * @method     ChildInvoiceQuery orderByAmount($order = Criteria::ASC) Order by the amount column
  * @method     ChildInvoiceQuery orderByMaturityDate($order = Criteria::ASC) Order by the maturity_date column
@@ -44,6 +46,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery groupByEventBankinformationid() Group by the event_bankinformationid column
  * @method     ChildInvoiceQuery groupByCustomerEventContactid() Group by the customer_event_contactid column
  * @method     ChildInvoiceQuery groupByCanceledInvoiceid() Group by the canceled_invoiceid column
+ * @method     ChildInvoiceQuery groupByOrderid() Group by the orderid column
  * @method     ChildInvoiceQuery groupByDate() Group by the date column
  * @method     ChildInvoiceQuery groupByAmount() Group by the amount column
  * @method     ChildInvoiceQuery groupByMaturityDate() Group by the maturity_date column
@@ -108,6 +111,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery rightJoinWithInvoiceType() Adds a RIGHT JOIN clause and with to the query using the InvoiceType relation
  * @method     ChildInvoiceQuery innerJoinWithInvoiceType() Adds a INNER JOIN clause and with to the query using the InvoiceType relation
  *
+ * @method     ChildInvoiceQuery leftJoinOrder($relationAlias = null) Adds a LEFT JOIN clause to the query using the Order relation
+ * @method     ChildInvoiceQuery rightJoinOrder($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Order relation
+ * @method     ChildInvoiceQuery innerJoinOrder($relationAlias = null) Adds a INNER JOIN clause to the query using the Order relation
+ *
+ * @method     ChildInvoiceQuery joinWithOrder($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Order relation
+ *
+ * @method     ChildInvoiceQuery leftJoinWithOrder() Adds a LEFT JOIN clause and with to the query using the Order relation
+ * @method     ChildInvoiceQuery rightJoinWithOrder() Adds a RIGHT JOIN clause and with to the query using the Order relation
+ * @method     ChildInvoiceQuery innerJoinWithOrder() Adds a INNER JOIN clause and with to the query using the Order relation
+ *
  * @method     ChildInvoiceQuery leftJoinUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the User relation
  * @method     ChildInvoiceQuery rightJoinUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the User relation
  * @method     ChildInvoiceQuery innerJoinUser($relationAlias = null) Adds a INNER JOIN clause to the query using the User relation
@@ -138,16 +151,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery rightJoinWithInvoiceItem() Adds a RIGHT JOIN clause and with to the query using the InvoiceItem relation
  * @method     ChildInvoiceQuery innerJoinWithInvoiceItem() Adds a INNER JOIN clause and with to the query using the InvoiceItem relation
  *
- * @method     ChildInvoiceQuery leftJoinPaymentRecieved($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentRecieved relation
- * @method     ChildInvoiceQuery rightJoinPaymentRecieved($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentRecieved relation
- * @method     ChildInvoiceQuery innerJoinPaymentRecieved($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentRecieved relation
- *
- * @method     ChildInvoiceQuery joinWithPaymentRecieved($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentRecieved relation
- *
- * @method     ChildInvoiceQuery leftJoinWithPaymentRecieved() Adds a LEFT JOIN clause and with to the query using the PaymentRecieved relation
- * @method     ChildInvoiceQuery rightJoinWithPaymentRecieved() Adds a RIGHT JOIN clause and with to the query using the PaymentRecieved relation
- * @method     ChildInvoiceQuery innerJoinWithPaymentRecieved() Adds a INNER JOIN clause and with to the query using the PaymentRecieved relation
- *
  * @method     ChildInvoiceQuery leftJoinInvoiceWarning($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceWarning relation
  * @method     ChildInvoiceQuery rightJoinInvoiceWarning($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceWarning relation
  * @method     ChildInvoiceQuery innerJoinInvoiceWarning($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceWarning relation
@@ -158,7 +161,17 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoiceQuery rightJoinWithInvoiceWarning() Adds a RIGHT JOIN clause and with to the query using the InvoiceWarning relation
  * @method     ChildInvoiceQuery innerJoinWithInvoiceWarning() Adds a INNER JOIN clause and with to the query using the InvoiceWarning relation
  *
- * @method     \API\Models\ORM\Event\EventContactQuery|\API\Models\ORM\Event\EventBankinformationQuery|\API\Models\ORM\Invoice\InvoiceQuery|\API\Models\ORM\Invoice\InvoiceTypeQuery|\API\Models\ORM\User\UserQuery|\API\Models\ORM\Invoice\InvoiceItemQuery|\API\Models\ORM\Payment\PaymentRecievedQuery|\API\Models\ORM\Invoice\InvoiceWarningQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     ChildInvoiceQuery leftJoinPaymentRecieved($relationAlias = null) Adds a LEFT JOIN clause to the query using the PaymentRecieved relation
+ * @method     ChildInvoiceQuery rightJoinPaymentRecieved($relationAlias = null) Adds a RIGHT JOIN clause to the query using the PaymentRecieved relation
+ * @method     ChildInvoiceQuery innerJoinPaymentRecieved($relationAlias = null) Adds a INNER JOIN clause to the query using the PaymentRecieved relation
+ *
+ * @method     ChildInvoiceQuery joinWithPaymentRecieved($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the PaymentRecieved relation
+ *
+ * @method     ChildInvoiceQuery leftJoinWithPaymentRecieved() Adds a LEFT JOIN clause and with to the query using the PaymentRecieved relation
+ * @method     ChildInvoiceQuery rightJoinWithPaymentRecieved() Adds a RIGHT JOIN clause and with to the query using the PaymentRecieved relation
+ * @method     ChildInvoiceQuery innerJoinWithPaymentRecieved() Adds a INNER JOIN clause and with to the query using the PaymentRecieved relation
+ *
+ * @method     \API\Models\ORM\Event\EventContactQuery|\API\Models\ORM\Event\EventBankinformationQuery|\API\Models\ORM\Invoice\InvoiceQuery|\API\Models\ORM\Invoice\InvoiceTypeQuery|\API\Models\ORM\Ordering\OrderQuery|\API\Models\ORM\User\UserQuery|\API\Models\ORM\Invoice\InvoiceItemQuery|\API\Models\ORM\Invoice\InvoiceWarningQuery|\API\Models\ORM\Payment\PaymentRecievedQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildInvoice findOne(ConnectionInterface $con = null) Return the first ChildInvoice matching the query
  * @method     ChildInvoice findOneOrCreate(ConnectionInterface $con = null) Return the first ChildInvoice matching the query, or a new ChildInvoice object populated from the query conditions when no match is found
@@ -170,6 +183,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoice findOneByEventBankinformationid(int $event_bankinformationid) Return the first ChildInvoice filtered by the event_bankinformationid column
  * @method     ChildInvoice findOneByCustomerEventContactid(int $customer_event_contactid) Return the first ChildInvoice filtered by the customer_event_contactid column
  * @method     ChildInvoice findOneByCanceledInvoiceid(int $canceled_invoiceid) Return the first ChildInvoice filtered by the canceled_invoiceid column
+ * @method     ChildInvoice findOneByOrderid(int $orderid) Return the first ChildInvoice filtered by the orderid column
  * @method     ChildInvoice findOneByDate(string $date) Return the first ChildInvoice filtered by the date column
  * @method     ChildInvoice findOneByAmount(string $amount) Return the first ChildInvoice filtered by the amount column
  * @method     ChildInvoice findOneByMaturityDate(string $maturity_date) Return the first ChildInvoice filtered by the maturity_date column
@@ -186,6 +200,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoice requireOneByEventBankinformationid(int $event_bankinformationid) Return the first ChildInvoice filtered by the event_bankinformationid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByCustomerEventContactid(int $customer_event_contactid) Return the first ChildInvoice filtered by the customer_event_contactid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByCanceledInvoiceid(int $canceled_invoiceid) Return the first ChildInvoice filtered by the canceled_invoiceid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildInvoice requireOneByOrderid(int $orderid) Return the first ChildInvoice filtered by the orderid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByDate(string $date) Return the first ChildInvoice filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByAmount(string $amount) Return the first ChildInvoice filtered by the amount column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildInvoice requireOneByMaturityDate(string $maturity_date) Return the first ChildInvoice filtered by the maturity_date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -200,6 +215,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildInvoice[]|ObjectCollection findByEventBankinformationid(int $event_bankinformationid) Return ChildInvoice objects filtered by the event_bankinformationid column
  * @method     ChildInvoice[]|ObjectCollection findByCustomerEventContactid(int $customer_event_contactid) Return ChildInvoice objects filtered by the customer_event_contactid column
  * @method     ChildInvoice[]|ObjectCollection findByCanceledInvoiceid(int $canceled_invoiceid) Return ChildInvoice objects filtered by the canceled_invoiceid column
+ * @method     ChildInvoice[]|ObjectCollection findByOrderid(int $orderid) Return ChildInvoice objects filtered by the orderid column
  * @method     ChildInvoice[]|ObjectCollection findByDate(string $date) Return ChildInvoice objects filtered by the date column
  * @method     ChildInvoice[]|ObjectCollection findByAmount(string $amount) Return ChildInvoice objects filtered by the amount column
  * @method     ChildInvoice[]|ObjectCollection findByMaturityDate(string $maturity_date) Return ChildInvoice objects filtered by the maturity_date column
@@ -303,7 +319,7 @@ abstract class InvoiceQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT `invoiceid`, `invoice_typeid`, `event_contactid`, `userid`, `event_bankinformationid`, `customer_event_contactid`, `canceled_invoiceid`, `date`, `amount`, `maturity_date`, `payment_finished`, `amount_recieved` FROM `invoice` WHERE `invoiceid` = :p0';
+        $sql = 'SELECT `invoiceid`, `invoice_typeid`, `event_contactid`, `userid`, `event_bankinformationid`, `customer_event_contactid`, `canceled_invoiceid`, `orderid`, `date`, `amount`, `maturity_date`, `payment_finished`, `amount_recieved` FROM `invoice` WHERE `invoiceid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -690,6 +706,49 @@ abstract class InvoiceQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(InvoiceTableMap::COL_CANCELED_INVOICEID, $canceledInvoiceid, $comparison);
+    }
+
+    /**
+     * Filter the query on the orderid column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByOrderid(1234); // WHERE orderid = 1234
+     * $query->filterByOrderid(array(12, 34)); // WHERE orderid IN (12, 34)
+     * $query->filterByOrderid(array('min' => 12)); // WHERE orderid > 12
+     * </code>
+     *
+     * @see       filterByOrder()
+     *
+     * @param     mixed $orderid The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildInvoiceQuery The current query, for fluid interface
+     */
+    public function filterByOrderid($orderid = null, $comparison = null)
+    {
+        if (is_array($orderid)) {
+            $useMinMax = false;
+            if (isset($orderid['min'])) {
+                $this->addUsingAlias(InvoiceTableMap::COL_ORDERID, $orderid['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($orderid['max'])) {
+                $this->addUsingAlias(InvoiceTableMap::COL_ORDERID, $orderid['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(InvoiceTableMap::COL_ORDERID, $orderid, $comparison);
     }
 
     /**
@@ -1289,6 +1348,83 @@ abstract class InvoiceQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related \API\Models\ORM\Ordering\Order object
+     *
+     * @param \API\Models\ORM\Ordering\Order|ObjectCollection $order The related object(s) to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @throws \Propel\Runtime\Exception\PropelException
+     *
+     * @return ChildInvoiceQuery The current query, for fluid interface
+     */
+    public function filterByOrder($order, $comparison = null)
+    {
+        if ($order instanceof \API\Models\ORM\Ordering\Order) {
+            return $this
+                ->addUsingAlias(InvoiceTableMap::COL_ORDERID, $order->getOrderid(), $comparison);
+        } elseif ($order instanceof ObjectCollection) {
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+
+            return $this
+                ->addUsingAlias(InvoiceTableMap::COL_ORDERID, $order->toKeyValue('PrimaryKey', 'Orderid'), $comparison);
+        } else {
+            throw new PropelException('filterByOrder() only accepts arguments of type \API\Models\ORM\Ordering\Order or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the Order relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildInvoiceQuery The current query, for fluid interface
+     */
+    public function joinOrder($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('Order');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'Order');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the Order relation Order object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\ORM\Ordering\OrderQuery A secondary query class using the current class as primary query
+     */
+    public function useOrderQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    {
+        return $this
+            ->joinOrder($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'Order', '\API\Models\ORM\Ordering\OrderQuery');
+    }
+
+    /**
      * Filter the query by a related \API\Models\ORM\User\User object
      *
      * @param \API\Models\ORM\User\User|ObjectCollection $user The related object(s) to use as filter
@@ -1512,79 +1648,6 @@ abstract class InvoiceQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query by a related \API\Models\ORM\Payment\PaymentRecieved object
-     *
-     * @param \API\Models\ORM\Payment\PaymentRecieved|ObjectCollection $paymentRecieved the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildInvoiceQuery The current query, for fluid interface
-     */
-    public function filterByPaymentRecieved($paymentRecieved, $comparison = null)
-    {
-        if ($paymentRecieved instanceof \API\Models\ORM\Payment\PaymentRecieved) {
-            return $this
-                ->addUsingAlias(InvoiceTableMap::COL_INVOICEID, $paymentRecieved->getInvoiceid(), $comparison);
-        } elseif ($paymentRecieved instanceof ObjectCollection) {
-            return $this
-                ->usePaymentRecievedQuery()
-                ->filterByPrimaryKeys($paymentRecieved->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByPaymentRecieved() only accepts arguments of type \API\Models\ORM\Payment\PaymentRecieved or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the PaymentRecieved relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildInvoiceQuery The current query, for fluid interface
-     */
-    public function joinPaymentRecieved($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('PaymentRecieved');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'PaymentRecieved');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the PaymentRecieved relation PaymentRecieved object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \API\Models\ORM\Payment\PaymentRecievedQuery A secondary query class using the current class as primary query
-     */
-    public function usePaymentRecievedQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinPaymentRecieved($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'PaymentRecieved', '\API\Models\ORM\Payment\PaymentRecievedQuery');
-    }
-
-    /**
      * Filter the query by a related \API\Models\ORM\Invoice\InvoiceWarning object
      *
      * @param \API\Models\ORM\Invoice\InvoiceWarning|ObjectCollection $invoiceWarning the related object to use as filter
@@ -1655,6 +1718,79 @@ abstract class InvoiceQuery extends ModelCriteria
         return $this
             ->joinInvoiceWarning($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'InvoiceWarning', '\API\Models\ORM\Invoice\InvoiceWarningQuery');
+    }
+
+    /**
+     * Filter the query by a related \API\Models\ORM\Payment\PaymentRecieved object
+     *
+     * @param \API\Models\ORM\Payment\PaymentRecieved|ObjectCollection $paymentRecieved the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildInvoiceQuery The current query, for fluid interface
+     */
+    public function filterByPaymentRecieved($paymentRecieved, $comparison = null)
+    {
+        if ($paymentRecieved instanceof \API\Models\ORM\Payment\PaymentRecieved) {
+            return $this
+                ->addUsingAlias(InvoiceTableMap::COL_INVOICEID, $paymentRecieved->getInvoiceid(), $comparison);
+        } elseif ($paymentRecieved instanceof ObjectCollection) {
+            return $this
+                ->usePaymentRecievedQuery()
+                ->filterByPrimaryKeys($paymentRecieved->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByPaymentRecieved() only accepts arguments of type \API\Models\ORM\Payment\PaymentRecieved or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the PaymentRecieved relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildInvoiceQuery The current query, for fluid interface
+     */
+    public function joinPaymentRecieved($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('PaymentRecieved');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'PaymentRecieved');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the PaymentRecieved relation PaymentRecieved object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\ORM\Payment\PaymentRecievedQuery A secondary query class using the current class as primary query
+     */
+    public function usePaymentRecievedQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinPaymentRecieved($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'PaymentRecieved', '\API\Models\ORM\Payment\PaymentRecievedQuery');
     }
 
     /**

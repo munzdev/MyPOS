@@ -34,7 +34,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery orderByFirstname($order = Criteria::ASC) Order by the firstname column
  * @method     ChildUserQuery orderByLastname($order = Criteria::ASC) Order by the lastname column
  * @method     ChildUserQuery orderByAutologinHash($order = Criteria::ASC) Order by the autologin_hash column
- * @method     ChildUserQuery orderByActive($order = Criteria::ASC) Order by the active column
+ * @method     ChildUserQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
  * @method     ChildUserQuery orderByPhonenumber($order = Criteria::ASC) Order by the phonenumber column
  * @method     ChildUserQuery orderByCallRequest($order = Criteria::ASC) Order by the call_request column
  * @method     ChildUserQuery orderByIsAdmin($order = Criteria::ASC) Order by the is_admin column
@@ -45,7 +45,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery groupByFirstname() Group by the firstname column
  * @method     ChildUserQuery groupByLastname() Group by the lastname column
  * @method     ChildUserQuery groupByAutologinHash() Group by the autologin_hash column
- * @method     ChildUserQuery groupByActive() Group by the active column
+ * @method     ChildUserQuery groupByIsDeleted() Group by the is_deleted column
  * @method     ChildUserQuery groupByPhonenumber() Group by the phonenumber column
  * @method     ChildUserQuery groupByCallRequest() Group by the call_request column
  * @method     ChildUserQuery groupByIsAdmin() Group by the is_admin column
@@ -159,7 +159,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser findOneByFirstname(string $firstname) Return the first ChildUser filtered by the firstname column
  * @method     ChildUser findOneByLastname(string $lastname) Return the first ChildUser filtered by the lastname column
  * @method     ChildUser findOneByAutologinHash(string $autologin_hash) Return the first ChildUser filtered by the autologin_hash column
- * @method     ChildUser findOneByActive(int $active) Return the first ChildUser filtered by the active column
+ * @method     ChildUser findOneByIsDeleted(string $is_deleted) Return the first ChildUser filtered by the is_deleted column
  * @method     ChildUser findOneByPhonenumber(string $phonenumber) Return the first ChildUser filtered by the phonenumber column
  * @method     ChildUser findOneByCallRequest(string $call_request) Return the first ChildUser filtered by the call_request column
  * @method     ChildUser findOneByIsAdmin(boolean $is_admin) Return the first ChildUser filtered by the is_admin column *
@@ -173,7 +173,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser requireOneByFirstname(string $firstname) Return the first ChildUser filtered by the firstname column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByLastname(string $lastname) Return the first ChildUser filtered by the lastname column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByAutologinHash(string $autologin_hash) Return the first ChildUser filtered by the autologin_hash column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildUser requireOneByActive(int $active) Return the first ChildUser filtered by the active column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildUser requireOneByIsDeleted(string $is_deleted) Return the first ChildUser filtered by the is_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByPhonenumber(string $phonenumber) Return the first ChildUser filtered by the phonenumber column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByCallRequest(string $call_request) Return the first ChildUser filtered by the call_request column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildUser requireOneByIsAdmin(boolean $is_admin) Return the first ChildUser filtered by the is_admin column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -185,7 +185,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUser[]|ObjectCollection findByFirstname(string $firstname) Return ChildUser objects filtered by the firstname column
  * @method     ChildUser[]|ObjectCollection findByLastname(string $lastname) Return ChildUser objects filtered by the lastname column
  * @method     ChildUser[]|ObjectCollection findByAutologinHash(string $autologin_hash) Return ChildUser objects filtered by the autologin_hash column
- * @method     ChildUser[]|ObjectCollection findByActive(int $active) Return ChildUser objects filtered by the active column
+ * @method     ChildUser[]|ObjectCollection findByIsDeleted(string $is_deleted) Return ChildUser objects filtered by the is_deleted column
  * @method     ChildUser[]|ObjectCollection findByPhonenumber(string $phonenumber) Return ChildUser objects filtered by the phonenumber column
  * @method     ChildUser[]|ObjectCollection findByCallRequest(string $call_request) Return ChildUser objects filtered by the call_request column
  * @method     ChildUser[]|ObjectCollection findByIsAdmin(boolean $is_admin) Return ChildUser objects filtered by the is_admin column
@@ -287,7 +287,7 @@ abstract class UserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT `userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `active`, `phonenumber`, `call_request`, `is_admin` FROM `user` WHERE `userid` = :p0';
+        $sql = 'SELECT `userid`, `username`, `password`, `firstname`, `lastname`, `autologin_hash`, `is_deleted`, `phonenumber`, `call_request`, `is_admin` FROM `user` WHERE `userid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -544,16 +544,18 @@ abstract class UserQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the active column
+     * Filter the query on the is_deleted column
      *
      * Example usage:
      * <code>
-     * $query->filterByActive(1234); // WHERE active = 1234
-     * $query->filterByActive(array(12, 34)); // WHERE active IN (12, 34)
-     * $query->filterByActive(array('min' => 12)); // WHERE active > 12
+     * $query->filterByIsDeleted('2011-03-14'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted('now'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted(array('max' => 'yesterday')); // WHERE is_deleted > '2011-03-13'
      * </code>
      *
-     * @param     mixed $active The value to use as filter.
+     * @param     mixed $isDeleted The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
      *              Use scalar values for equality.
      *              Use array values for in_array() equivalent.
      *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -561,16 +563,16 @@ abstract class UserQuery extends ModelCriteria
      *
      * @return $this|ChildUserQuery The current query, for fluid interface
      */
-    public function filterByActive($active = null, $comparison = null)
+    public function filterByIsDeleted($isDeleted = null, $comparison = null)
     {
-        if (is_array($active)) {
+        if (is_array($isDeleted)) {
             $useMinMax = false;
-            if (isset($active['min'])) {
-                $this->addUsingAlias(UserTableMap::COL_ACTIVE, $active['min'], Criteria::GREATER_EQUAL);
+            if (isset($isDeleted['min'])) {
+                $this->addUsingAlias(UserTableMap::COL_IS_DELETED, $isDeleted['min'], Criteria::GREATER_EQUAL);
                 $useMinMax = true;
             }
-            if (isset($active['max'])) {
-                $this->addUsingAlias(UserTableMap::COL_ACTIVE, $active['max'], Criteria::LESS_EQUAL);
+            if (isset($isDeleted['max'])) {
+                $this->addUsingAlias(UserTableMap::COL_IS_DELETED, $isDeleted['max'], Criteria::LESS_EQUAL);
                 $useMinMax = true;
             }
             if ($useMinMax) {
@@ -581,7 +583,7 @@ abstract class UserQuery extends ModelCriteria
             }
         }
 
-        return $this->addUsingAlias(UserTableMap::COL_ACTIVE, $active, $comparison);
+        return $this->addUsingAlias(UserTableMap::COL_IS_DELETED, $isDeleted, $comparison);
     }
 
     /**

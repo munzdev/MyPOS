@@ -34,7 +34,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventContactQuery orderByTelephon($order = Criteria::ASC) Order by the telephon column
  * @method     ChildEventContactQuery orderByFax($order = Criteria::ASC) Order by the fax column
  * @method     ChildEventContactQuery orderByEmail($order = Criteria::ASC) Order by the email column
- * @method     ChildEventContactQuery orderByActive($order = Criteria::ASC) Order by the active column
+ * @method     ChildEventContactQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
  * @method     ChildEventContactQuery orderByDefault($order = Criteria::ASC) Order by the default column
  *
  * @method     ChildEventContactQuery groupByEventContactid() Group by the event_contactid column
@@ -50,7 +50,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventContactQuery groupByTelephon() Group by the telephon column
  * @method     ChildEventContactQuery groupByFax() Group by the fax column
  * @method     ChildEventContactQuery groupByEmail() Group by the email column
- * @method     ChildEventContactQuery groupByActive() Group by the active column
+ * @method     ChildEventContactQuery groupByIsDeleted() Group by the is_deleted column
  * @method     ChildEventContactQuery groupByDefault() Group by the default column
  *
  * @method     ChildEventContactQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
@@ -109,7 +109,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventContact findOneByTelephon(string $telephon) Return the first ChildEventContact filtered by the telephon column
  * @method     ChildEventContact findOneByFax(string $fax) Return the first ChildEventContact filtered by the fax column
  * @method     ChildEventContact findOneByEmail(string $email) Return the first ChildEventContact filtered by the email column
- * @method     ChildEventContact findOneByActive(boolean $active) Return the first ChildEventContact filtered by the active column
+ * @method     ChildEventContact findOneByIsDeleted(string $is_deleted) Return the first ChildEventContact filtered by the is_deleted column
  * @method     ChildEventContact findOneByDefault(boolean $default) Return the first ChildEventContact filtered by the default column *
 
  * @method     ChildEventContact requirePk($key, ConnectionInterface $con = null) Return the ChildEventContact by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -128,7 +128,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventContact requireOneByTelephon(string $telephon) Return the first ChildEventContact filtered by the telephon column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventContact requireOneByFax(string $fax) Return the first ChildEventContact filtered by the fax column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventContact requireOneByEmail(string $email) Return the first ChildEventContact filtered by the email column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
- * @method     ChildEventContact requireOneByActive(boolean $active) Return the first ChildEventContact filtered by the active column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEventContact requireOneByIsDeleted(string $is_deleted) Return the first ChildEventContact filtered by the is_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventContact requireOneByDefault(boolean $default) Return the first ChildEventContact filtered by the default column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEventContact[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEventContact objects based on current ModelCriteria
@@ -145,7 +145,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventContact[]|ObjectCollection findByTelephon(string $telephon) Return ChildEventContact objects filtered by the telephon column
  * @method     ChildEventContact[]|ObjectCollection findByFax(string $fax) Return ChildEventContact objects filtered by the fax column
  * @method     ChildEventContact[]|ObjectCollection findByEmail(string $email) Return ChildEventContact objects filtered by the email column
- * @method     ChildEventContact[]|ObjectCollection findByActive(boolean $active) Return ChildEventContact objects filtered by the active column
+ * @method     ChildEventContact[]|ObjectCollection findByIsDeleted(string $is_deleted) Return ChildEventContact objects filtered by the is_deleted column
  * @method     ChildEventContact[]|ObjectCollection findByDefault(boolean $default) Return ChildEventContact objects filtered by the default column
  * @method     ChildEventContact[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
@@ -245,7 +245,7 @@ abstract class EventContactQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT `event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `active`, `default` FROM `event_contact` WHERE `event_contactid` = :p0';
+        $sql = 'SELECT `event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `is_deleted`, `default` FROM `event_contact` WHERE `event_contactid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -695,30 +695,46 @@ abstract class EventContactQuery extends ModelCriteria
     }
 
     /**
-     * Filter the query on the active column
+     * Filter the query on the is_deleted column
      *
      * Example usage:
      * <code>
-     * $query->filterByActive(true); // WHERE active = true
-     * $query->filterByActive('yes'); // WHERE active = true
+     * $query->filterByIsDeleted('2011-03-14'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted('now'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted(array('max' => 'yesterday')); // WHERE is_deleted > '2011-03-13'
      * </code>
      *
-     * @param     boolean|string $active The value to use as filter.
-     *              Non-boolean arguments are converted using the following rules:
-     *                * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *                * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     *              Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * @param     mixed $isDeleted The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
      * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
      *
      * @return $this|ChildEventContactQuery The current query, for fluid interface
      */
-    public function filterByActive($active = null, $comparison = null)
+    public function filterByIsDeleted($isDeleted = null, $comparison = null)
     {
-        if (is_string($active)) {
-            $active = in_array(strtolower($active), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+        if (is_array($isDeleted)) {
+            $useMinMax = false;
+            if (isset($isDeleted['min'])) {
+                $this->addUsingAlias(EventContactTableMap::COL_IS_DELETED, $isDeleted['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($isDeleted['max'])) {
+                $this->addUsingAlias(EventContactTableMap::COL_IS_DELETED, $isDeleted['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
         }
 
-        return $this->addUsingAlias(EventContactTableMap::COL_ACTIVE, $active, $comparison);
+        return $this->addUsingAlias(EventContactTableMap::COL_IS_DELETED, $isDeleted, $comparison);
     }
 
     /**

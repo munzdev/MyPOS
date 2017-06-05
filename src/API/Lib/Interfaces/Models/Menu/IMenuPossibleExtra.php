@@ -36,6 +36,11 @@ interface IMenuPossibleExtra extends IModel {
     function getPrice();
 
     /**
+     * @return \DateTime
+     */
+    function getIsDeleted();
+
+    /**
      *
      * @param int $menuPossibleExtraid Description
      * @return IMenuPossibleExtra Description
@@ -76,4 +81,11 @@ interface IMenuPossibleExtra extends IModel {
      * @return IMenuPossibleExtra Description
      */
     function setPrice($price);
+
+    /**
+     *
+     * @param \DateTime $deleted Description
+     * @return IMenuPossibleExtra Description
+     */
+    function setIsDeleted($isDeleted);
 }

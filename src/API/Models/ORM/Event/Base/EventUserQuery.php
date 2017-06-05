@@ -27,12 +27,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventUserQuery orderByUserid($order = Criteria::ASC) Order by the userid column
  * @method     ChildEventUserQuery orderByUserRoles($order = Criteria::ASC) Order by the user_roles column
  * @method     ChildEventUserQuery orderByBeginMoney($order = Criteria::ASC) Order by the begin_money column
+ * @method     ChildEventUserQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
  *
  * @method     ChildEventUserQuery groupByEventUserid() Group by the event_userid column
  * @method     ChildEventUserQuery groupByEventid() Group by the eventid column
  * @method     ChildEventUserQuery groupByUserid() Group by the userid column
  * @method     ChildEventUserQuery groupByUserRoles() Group by the user_roles column
  * @method     ChildEventUserQuery groupByBeginMoney() Group by the begin_money column
+ * @method     ChildEventUserQuery groupByIsDeleted() Group by the is_deleted column
  *
  * @method     ChildEventUserQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildEventUserQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -91,7 +93,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventUser findOneByEventid(int $eventid) Return the first ChildEventUser filtered by the eventid column
  * @method     ChildEventUser findOneByUserid(int $userid) Return the first ChildEventUser filtered by the userid column
  * @method     ChildEventUser findOneByUserRoles(int $user_roles) Return the first ChildEventUser filtered by the user_roles column
- * @method     ChildEventUser findOneByBeginMoney(string $begin_money) Return the first ChildEventUser filtered by the begin_money column *
+ * @method     ChildEventUser findOneByBeginMoney(string $begin_money) Return the first ChildEventUser filtered by the begin_money column
+ * @method     ChildEventUser findOneByIsDeleted(string $is_deleted) Return the first ChildEventUser filtered by the is_deleted column *
 
  * @method     ChildEventUser requirePk($key, ConnectionInterface $con = null) Return the ChildEventUser by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventUser requireOne(ConnectionInterface $con = null) Return the first ChildEventUser matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -101,6 +104,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventUser requireOneByUserid(int $userid) Return the first ChildEventUser filtered by the userid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventUser requireOneByUserRoles(int $user_roles) Return the first ChildEventUser filtered by the user_roles column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEventUser requireOneByBeginMoney(string $begin_money) Return the first ChildEventUser filtered by the begin_money column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEventUser requireOneByIsDeleted(string $is_deleted) Return the first ChildEventUser filtered by the is_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEventUser[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEventUser objects based on current ModelCriteria
  * @method     ChildEventUser[]|ObjectCollection findByEventUserid(int $event_userid) Return ChildEventUser objects filtered by the event_userid column
@@ -108,6 +112,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventUser[]|ObjectCollection findByUserid(int $userid) Return ChildEventUser objects filtered by the userid column
  * @method     ChildEventUser[]|ObjectCollection findByUserRoles(int $user_roles) Return ChildEventUser objects filtered by the user_roles column
  * @method     ChildEventUser[]|ObjectCollection findByBeginMoney(string $begin_money) Return ChildEventUser objects filtered by the begin_money column
+ * @method     ChildEventUser[]|ObjectCollection findByIsDeleted(string $is_deleted) Return ChildEventUser objects filtered by the is_deleted column
  * @method     ChildEventUser[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -206,7 +211,7 @@ abstract class EventUserQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT `event_userid`, `eventid`, `userid`, `user_roles`, `begin_money` FROM `event_user` WHERE `event_userid` = :p0';
+        $sql = 'SELECT `event_userid`, `eventid`, `userid`, `user_roles`, `begin_money`, `is_deleted` FROM `event_user` WHERE `event_userid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -503,6 +508,49 @@ abstract class EventUserQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(EventUserTableMap::COL_BEGIN_MONEY, $beginMoney, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_deleted column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsDeleted('2011-03-14'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted('now'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted(array('max' => 'yesterday')); // WHERE is_deleted > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $isDeleted The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildEventUserQuery The current query, for fluid interface
+     */
+    public function filterByIsDeleted($isDeleted = null, $comparison = null)
+    {
+        if (is_array($isDeleted)) {
+            $useMinMax = false;
+            if (isset($isDeleted['min'])) {
+                $this->addUsingAlias(EventUserTableMap::COL_IS_DELETED, $isDeleted['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($isDeleted['max'])) {
+                $this->addUsingAlias(EventUserTableMap::COL_IS_DELETED, $isDeleted['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EventUserTableMap::COL_IS_DELETED, $isDeleted, $comparison);
     }
 
     /**

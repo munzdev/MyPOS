@@ -26,11 +26,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuSizeQuery orderByEventid($order = Criteria::ASC) Order by the eventid column
  * @method     ChildMenuSizeQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     ChildMenuSizeQuery orderByFactor($order = Criteria::ASC) Order by the factor column
+ * @method     ChildMenuSizeQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
  *
  * @method     ChildMenuSizeQuery groupByMenuSizeid() Group by the menu_sizeid column
  * @method     ChildMenuSizeQuery groupByEventid() Group by the eventid column
  * @method     ChildMenuSizeQuery groupByName() Group by the name column
  * @method     ChildMenuSizeQuery groupByFactor() Group by the factor column
+ * @method     ChildMenuSizeQuery groupByIsDeleted() Group by the is_deleted column
  *
  * @method     ChildMenuSizeQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildMenuSizeQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -78,7 +80,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuSize findOneByMenuSizeid(int $menu_sizeid) Return the first ChildMenuSize filtered by the menu_sizeid column
  * @method     ChildMenuSize findOneByEventid(int $eventid) Return the first ChildMenuSize filtered by the eventid column
  * @method     ChildMenuSize findOneByName(string $name) Return the first ChildMenuSize filtered by the name column
- * @method     ChildMenuSize findOneByFactor(string $factor) Return the first ChildMenuSize filtered by the factor column *
+ * @method     ChildMenuSize findOneByFactor(string $factor) Return the first ChildMenuSize filtered by the factor column
+ * @method     ChildMenuSize findOneByIsDeleted(string $is_deleted) Return the first ChildMenuSize filtered by the is_deleted column *
 
  * @method     ChildMenuSize requirePk($key, ConnectionInterface $con = null) Return the ChildMenuSize by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMenuSize requireOne(ConnectionInterface $con = null) Return the first ChildMenuSize matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -87,12 +90,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildMenuSize requireOneByEventid(int $eventid) Return the first ChildMenuSize filtered by the eventid column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMenuSize requireOneByName(string $name) Return the first ChildMenuSize filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildMenuSize requireOneByFactor(string $factor) Return the first ChildMenuSize filtered by the factor column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildMenuSize requireOneByIsDeleted(string $is_deleted) Return the first ChildMenuSize filtered by the is_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildMenuSize[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildMenuSize objects based on current ModelCriteria
  * @method     ChildMenuSize[]|ObjectCollection findByMenuSizeid(int $menu_sizeid) Return ChildMenuSize objects filtered by the menu_sizeid column
  * @method     ChildMenuSize[]|ObjectCollection findByEventid(int $eventid) Return ChildMenuSize objects filtered by the eventid column
  * @method     ChildMenuSize[]|ObjectCollection findByName(string $name) Return ChildMenuSize objects filtered by the name column
  * @method     ChildMenuSize[]|ObjectCollection findByFactor(string $factor) Return ChildMenuSize objects filtered by the factor column
+ * @method     ChildMenuSize[]|ObjectCollection findByIsDeleted(string $is_deleted) Return ChildMenuSize objects filtered by the is_deleted column
  * @method     ChildMenuSize[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -191,7 +196,7 @@ abstract class MenuSizeQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT `menu_sizeid`, `eventid`, `name`, `factor` FROM `menu_size` WHERE `menu_sizeid` = :p0';
+        $sql = 'SELECT `menu_sizeid`, `eventid`, `name`, `factor`, `is_deleted` FROM `menu_size` WHERE `menu_sizeid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -429,6 +434,49 @@ abstract class MenuSizeQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(MenuSizeTableMap::COL_FACTOR, $factor, $comparison);
+    }
+
+    /**
+     * Filter the query on the is_deleted column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsDeleted('2011-03-14'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted('now'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted(array('max' => 'yesterday')); // WHERE is_deleted > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $isDeleted The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildMenuSizeQuery The current query, for fluid interface
+     */
+    public function filterByIsDeleted($isDeleted = null, $comparison = null)
+    {
+        if (is_array($isDeleted)) {
+            $useMinMax = false;
+            if (isset($isDeleted['min'])) {
+                $this->addUsingAlias(MenuSizeTableMap::COL_IS_DELETED, $isDeleted['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($isDeleted['max'])) {
+                $this->addUsingAlias(MenuSizeTableMap::COL_IS_DELETED, $isDeleted['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(MenuSizeTableMap::COL_IS_DELETED, $isDeleted, $comparison);
     }
 
     /**

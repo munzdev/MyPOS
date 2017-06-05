@@ -63,6 +63,11 @@ class MenuPossibleSize extends Model implements IMenuPossibleSize
         return $this->model->getPrice();
     }
 
+    public function getIsDeleted(): ?\DateTime
+    {
+        return $this->model->getIsDeleted();
+    }
+
     public function setMenu($menu): IMenuPossibleSize
     {
         $this->model->setMenu($menu);
@@ -99,4 +104,9 @@ class MenuPossibleSize extends Model implements IMenuPossibleSize
         return $this;
     }
 
+    public function setIsDeleted($isDeleted): IMenuPossibleSize
+    {
+        $this->model->setIsDeleted($isDeleted);
+        return $this;
+    }
 }

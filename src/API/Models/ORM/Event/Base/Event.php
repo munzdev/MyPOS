@@ -131,10 +131,23 @@ abstract class Event implements ActiveRecordInterface
     protected $active;
 
     /**
+     * The value for the is_deleted field.
+     * 
+     * @var        DateTime
+     */
+    protected $is_deleted;
+
+    /**
      * @var        ObjectCollection|Coupon[] Collection to store aggregation of Coupon objects.
      */
     protected $collCoupons;
     protected $collCouponsPartial;
+
+    /**
+     * @var        ObjectCollection|DistributionPlace[] Collection to store aggregation of DistributionPlace objects.
+     */
+    protected $collDistributionPlaces;
+    protected $collDistributionPlacesPartial;
 
     /**
      * @var        ObjectCollection|ChildEventBankinformation[] Collection to store aggregation of ChildEventBankinformation objects.
@@ -147,12 +160,6 @@ abstract class Event implements ActiveRecordInterface
      */
     protected $collEventContacts;
     protected $collEventContactsPartial;
-
-    /**
-     * @var        ObjectCollection|DistributionPlace[] Collection to store aggregation of DistributionPlace objects.
-     */
-    protected $collDistributionPlaces;
-    protected $collDistributionPlacesPartial;
 
     /**
      * @var        ObjectCollection|ChildEventPrinter[] Collection to store aggregation of ChildEventPrinter objects.
@@ -173,6 +180,12 @@ abstract class Event implements ActiveRecordInterface
     protected $collEventUsersPartial;
 
     /**
+     * @var        ObjectCollection|InvoiceWarningType[] Collection to store aggregation of InvoiceWarningType objects.
+     */
+    protected $collInvoiceWarningTypes;
+    protected $collInvoiceWarningTypesPartial;
+
+    /**
      * @var        ObjectCollection|MenuExtra[] Collection to store aggregation of MenuExtra objects.
      */
     protected $collMenuExtras;
@@ -191,12 +204,6 @@ abstract class Event implements ActiveRecordInterface
     protected $collMenuTypesPartial;
 
     /**
-     * @var        ObjectCollection|InvoiceWarningType[] Collection to store aggregation of InvoiceWarningType objects.
-     */
-    protected $collInvoiceWarningTypes;
-    protected $collInvoiceWarningTypesPartial;
-
-    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
@@ -212,6 +219,12 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
+     * @var ObjectCollection|DistributionPlace[]
+     */
+    protected $distributionPlacesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
      * @var ObjectCollection|ChildEventBankinformation[]
      */
     protected $eventBankinformationsScheduledForDeletion = null;
@@ -221,12 +234,6 @@ abstract class Event implements ActiveRecordInterface
      * @var ObjectCollection|ChildEventContact[]
      */
     protected $eventContactsScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|DistributionPlace[]
-     */
-    protected $distributionPlacesScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -248,6 +255,12 @@ abstract class Event implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
+     * @var ObjectCollection|InvoiceWarningType[]
+     */
+    protected $invoiceWarningTypesScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
      * @var ObjectCollection|MenuExtra[]
      */
     protected $menuExtrasScheduledForDeletion = null;
@@ -263,12 +276,6 @@ abstract class Event implements ActiveRecordInterface
      * @var ObjectCollection|MenuType[]
      */
     protected $menuTypesScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|InvoiceWarningType[]
-     */
-    protected $invoiceWarningTypesScheduledForDeletion = null;
 
     /**
      * Initializes internal state of API\Models\ORM\Event\Base\Event object.
@@ -556,6 +563,26 @@ abstract class Event implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [is_deleted] column value.
+     * 
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getIsDeleted($format = NULL)
+    {
+        if ($format === null) {
+            return $this->is_deleted;
+        } else {
+            return $this->is_deleted instanceof \DateTimeInterface ? $this->is_deleted->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [eventid] column.
      * 
      * @param int $v new value
@@ -644,6 +671,26 @@ abstract class Event implements ActiveRecordInterface
     } // setActive()
 
     /**
+     * Sets the value of [is_deleted] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\ORM\Event\Event The current object (for fluent API support)
+     */
+    public function setIsDeleted($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->is_deleted !== null || $dt !== null) {
+            if ($this->is_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->is_deleted->format("Y-m-d H:i:s.u")) {
+                $this->is_deleted = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[EventTableMap::COL_IS_DELETED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setIsDeleted()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -693,6 +740,12 @@ abstract class Event implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : EventTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
             $this->active = (null !== $col) ? (boolean) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : EventTableMap::translateFieldName('IsDeleted', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->is_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -701,7 +754,7 @@ abstract class Event implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 4; // 4 = EventTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 5; // 5 = EventTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\ORM\\Event\\Event'), 0, $e);
@@ -764,11 +817,11 @@ abstract class Event implements ActiveRecordInterface
 
             $this->collCoupons = null;
 
+            $this->collDistributionPlaces = null;
+
             $this->collEventBankinformations = null;
 
             $this->collEventContacts = null;
-
-            $this->collDistributionPlaces = null;
 
             $this->collEventPrinters = null;
 
@@ -776,13 +829,13 @@ abstract class Event implements ActiveRecordInterface
 
             $this->collEventUsers = null;
 
+            $this->collInvoiceWarningTypes = null;
+
             $this->collMenuExtras = null;
 
             $this->collMenuSizes = null;
 
             $this->collMenuTypes = null;
-
-            $this->collInvoiceWarningTypes = null;
 
         } // if (deep)
     }
@@ -915,6 +968,23 @@ abstract class Event implements ActiveRecordInterface
                 }
             }
 
+            if ($this->distributionPlacesScheduledForDeletion !== null) {
+                if (!$this->distributionPlacesScheduledForDeletion->isEmpty()) {
+                    \API\Models\ORM\DistributionPlace\DistributionPlaceQuery::create()
+                        ->filterByPrimaryKeys($this->distributionPlacesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->distributionPlacesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collDistributionPlaces !== null) {
+                foreach ($this->collDistributionPlaces as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->eventBankinformationsScheduledForDeletion !== null) {
                 if (!$this->eventBankinformationsScheduledForDeletion->isEmpty()) {
                     \API\Models\ORM\Event\EventBankinformationQuery::create()
@@ -943,23 +1013,6 @@ abstract class Event implements ActiveRecordInterface
 
             if ($this->collEventContacts !== null) {
                 foreach ($this->collEventContacts as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->distributionPlacesScheduledForDeletion !== null) {
-                if (!$this->distributionPlacesScheduledForDeletion->isEmpty()) {
-                    \API\Models\ORM\DistributionPlace\DistributionPlaceQuery::create()
-                        ->filterByPrimaryKeys($this->distributionPlacesScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->distributionPlacesScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collDistributionPlaces !== null) {
-                foreach ($this->collDistributionPlaces as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1017,6 +1070,23 @@ abstract class Event implements ActiveRecordInterface
                 }
             }
 
+            if ($this->invoiceWarningTypesScheduledForDeletion !== null) {
+                if (!$this->invoiceWarningTypesScheduledForDeletion->isEmpty()) {
+                    \API\Models\ORM\Invoice\InvoiceWarningTypeQuery::create()
+                        ->filterByPrimaryKeys($this->invoiceWarningTypesScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->invoiceWarningTypesScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collInvoiceWarningTypes !== null) {
+                foreach ($this->collInvoiceWarningTypes as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
             if ($this->menuExtrasScheduledForDeletion !== null) {
                 if (!$this->menuExtrasScheduledForDeletion->isEmpty()) {
                     \API\Models\ORM\Menu\MenuExtraQuery::create()
@@ -1068,23 +1138,6 @@ abstract class Event implements ActiveRecordInterface
                 }
             }
 
-            if ($this->invoiceWarningTypesScheduledForDeletion !== null) {
-                if (!$this->invoiceWarningTypesScheduledForDeletion->isEmpty()) {
-                    \API\Models\ORM\Invoice\InvoiceWarningTypeQuery::create()
-                        ->filterByPrimaryKeys($this->invoiceWarningTypesScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->invoiceWarningTypesScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collInvoiceWarningTypes !== null) {
-                foreach ($this->collInvoiceWarningTypes as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
             $this->alreadyInSave = false;
 
         }
@@ -1123,6 +1176,9 @@ abstract class Event implements ActiveRecordInterface
         if ($this->isColumnModified(EventTableMap::COL_ACTIVE)) {
             $modifiedColumns[':p' . $index++]  = '`active`';
         }
+        if ($this->isColumnModified(EventTableMap::COL_IS_DELETED)) {
+            $modifiedColumns[':p' . $index++]  = '`is_deleted`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `event` (%s) VALUES (%s)',
@@ -1145,6 +1201,9 @@ abstract class Event implements ActiveRecordInterface
                         break;
                     case '`active`':
                         $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
+                        break;
+                    case '`is_deleted`':                        
+                        $stmt->bindValue($identifier, $this->is_deleted ? $this->is_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -1220,6 +1279,9 @@ abstract class Event implements ActiveRecordInterface
             case 3:
                 return $this->getActive();
                 break;
+            case 4:
+                return $this->getIsDeleted();
+                break;
             default:
                 return null;
                 break;
@@ -1254,9 +1316,14 @@ abstract class Event implements ActiveRecordInterface
             $keys[1] => $this->getName(),
             $keys[2] => $this->getDate(),
             $keys[3] => $this->getActive(),
+            $keys[4] => $this->getIsDeleted(),
         );
         if ($result[$keys[2]] instanceof \DateTime) {
             $result[$keys[2]] = $result[$keys[2]]->format('c');
+        }
+        
+        if ($result[$keys[4]] instanceof \DateTime) {
+            $result[$keys[4]] = $result[$keys[4]]->format('c');
         }
         
         $virtualColumns = $this->virtualColumns;
@@ -1279,6 +1346,21 @@ abstract class Event implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->collCoupons->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collDistributionPlaces) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'distributionPlaces';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'distribution_places';
+                        break;
+                    default:
+                        $key = 'DistributionPlaces';
+                }
+        
+                $result[$key] = $this->collDistributionPlaces->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventBankinformations) {
                 
@@ -1309,21 +1391,6 @@ abstract class Event implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->collEventContacts->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collDistributionPlaces) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'distributionPlaces';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'distribution_places';
-                        break;
-                    default:
-                        $key = 'DistributionPlaces';
-                }
-        
-                $result[$key] = $this->collDistributionPlaces->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
             if (null !== $this->collEventPrinters) {
                 
@@ -1370,6 +1437,21 @@ abstract class Event implements ActiveRecordInterface
         
                 $result[$key] = $this->collEventUsers->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
+            if (null !== $this->collInvoiceWarningTypes) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'invoiceWarningTypes';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'invoice_warning_types';
+                        break;
+                    default:
+                        $key = 'InvoiceWarningTypes';
+                }
+        
+                $result[$key] = $this->collInvoiceWarningTypes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
             if (null !== $this->collMenuExtras) {
                 
                 switch ($keyType) {
@@ -1414,21 +1496,6 @@ abstract class Event implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->collMenuTypes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
-            if (null !== $this->collInvoiceWarningTypes) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'invoiceWarningTypes';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'invoice_warning_types';
-                        break;
-                    default:
-                        $key = 'InvoiceWarningTypes';
-                }
-        
-                $result[$key] = $this->collInvoiceWarningTypes->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1476,6 +1543,9 @@ abstract class Event implements ActiveRecordInterface
             case 3:
                 $this->setActive($value);
                 break;
+            case 4:
+                $this->setIsDeleted($value);
+                break;
         } // switch()
 
         return $this;
@@ -1513,6 +1583,9 @@ abstract class Event implements ActiveRecordInterface
         }
         if (array_key_exists($keys[3], $arr)) {
             $this->setActive($arr[$keys[3]]);
+        }
+        if (array_key_exists($keys[4], $arr)) {
+            $this->setIsDeleted($arr[$keys[4]]);
         }
     }
 
@@ -1566,6 +1639,9 @@ abstract class Event implements ActiveRecordInterface
         }
         if ($this->isColumnModified(EventTableMap::COL_ACTIVE)) {
             $criteria->add(EventTableMap::COL_ACTIVE, $this->active);
+        }
+        if ($this->isColumnModified(EventTableMap::COL_IS_DELETED)) {
+            $criteria->add(EventTableMap::COL_IS_DELETED, $this->is_deleted);
         }
 
         return $criteria;
@@ -1656,6 +1732,7 @@ abstract class Event implements ActiveRecordInterface
         $copyObj->setName($this->getName());
         $copyObj->setDate($this->getDate());
         $copyObj->setActive($this->getActive());
+        $copyObj->setIsDeleted($this->getIsDeleted());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1668,6 +1745,12 @@ abstract class Event implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getDistributionPlaces() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addDistributionPlace($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getEventBankinformations() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addEventBankinformation($relObj->copy($deepCopy));
@@ -1677,12 +1760,6 @@ abstract class Event implements ActiveRecordInterface
             foreach ($this->getEventContacts() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addEventContact($relObj->copy($deepCopy));
-                }
-            }
-
-            foreach ($this->getDistributionPlaces() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addDistributionPlace($relObj->copy($deepCopy));
                 }
             }
 
@@ -1704,6 +1781,12 @@ abstract class Event implements ActiveRecordInterface
                 }
             }
 
+            foreach ($this->getInvoiceWarningTypes() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addInvoiceWarningType($relObj->copy($deepCopy));
+                }
+            }
+
             foreach ($this->getMenuExtras() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addMenuExtra($relObj->copy($deepCopy));
@@ -1719,12 +1802,6 @@ abstract class Event implements ActiveRecordInterface
             foreach ($this->getMenuTypes() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addMenuType($relObj->copy($deepCopy));
-                }
-            }
-
-            foreach ($this->getInvoiceWarningTypes() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addInvoiceWarningType($relObj->copy($deepCopy));
                 }
             }
 
@@ -1772,14 +1849,14 @@ abstract class Event implements ActiveRecordInterface
         if ('Coupon' == $relationName) {
             return $this->initCoupons();
         }
+        if ('DistributionPlace' == $relationName) {
+            return $this->initDistributionPlaces();
+        }
         if ('EventBankinformation' == $relationName) {
             return $this->initEventBankinformations();
         }
         if ('EventContact' == $relationName) {
             return $this->initEventContacts();
-        }
-        if ('DistributionPlace' == $relationName) {
-            return $this->initDistributionPlaces();
         }
         if ('EventPrinter' == $relationName) {
             return $this->initEventPrinters();
@@ -1790,6 +1867,9 @@ abstract class Event implements ActiveRecordInterface
         if ('EventUser' == $relationName) {
             return $this->initEventUsers();
         }
+        if ('InvoiceWarningType' == $relationName) {
+            return $this->initInvoiceWarningTypes();
+        }
         if ('MenuExtra' == $relationName) {
             return $this->initMenuExtras();
         }
@@ -1798,9 +1878,6 @@ abstract class Event implements ActiveRecordInterface
         }
         if ('MenuType' == $relationName) {
             return $this->initMenuTypes();
-        }
-        if ('InvoiceWarningType' == $relationName) {
-            return $this->initInvoiceWarningTypes();
         }
     }
 
@@ -2052,6 +2129,231 @@ abstract class Event implements ActiveRecordInterface
         $query->joinWith('User', $joinBehavior);
 
         return $this->getCoupons($query, $con);
+    }
+
+    /**
+     * Clears out the collDistributionPlaces collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addDistributionPlaces()
+     */
+    public function clearDistributionPlaces()
+    {
+        $this->collDistributionPlaces = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collDistributionPlaces collection loaded partially.
+     */
+    public function resetPartialDistributionPlaces($v = true)
+    {
+        $this->collDistributionPlacesPartial = $v;
+    }
+
+    /**
+     * Initializes the collDistributionPlaces collection.
+     *
+     * By default this just sets the collDistributionPlaces collection to an empty array (like clearcollDistributionPlaces());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initDistributionPlaces($overrideExisting = true)
+    {
+        if (null !== $this->collDistributionPlaces && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = DistributionPlaceTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collDistributionPlaces = new $collectionClassName;
+        $this->collDistributionPlaces->setModel('\API\Models\ORM\DistributionPlace\DistributionPlace');
+    }
+
+    /**
+     * Gets an array of DistributionPlace objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildEvent is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|DistributionPlace[] List of DistributionPlace objects
+     * @throws PropelException
+     */
+    public function getDistributionPlaces(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collDistributionPlacesPartial && !$this->isNew();
+        if (null === $this->collDistributionPlaces || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collDistributionPlaces) {
+                // return empty collection
+                $this->initDistributionPlaces();
+            } else {
+                $collDistributionPlaces = DistributionPlaceQuery::create(null, $criteria)
+                    ->filterByEvent($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collDistributionPlacesPartial && count($collDistributionPlaces)) {
+                        $this->initDistributionPlaces(false);
+
+                        foreach ($collDistributionPlaces as $obj) {
+                            if (false == $this->collDistributionPlaces->contains($obj)) {
+                                $this->collDistributionPlaces->append($obj);
+                            }
+                        }
+
+                        $this->collDistributionPlacesPartial = true;
+                    }
+
+                    return $collDistributionPlaces;
+                }
+
+                if ($partial && $this->collDistributionPlaces) {
+                    foreach ($this->collDistributionPlaces as $obj) {
+                        if ($obj->isNew()) {
+                            $collDistributionPlaces[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collDistributionPlaces = $collDistributionPlaces;
+                $this->collDistributionPlacesPartial = false;
+            }
+        }
+
+        return $this->collDistributionPlaces;
+    }
+
+    /**
+     * Sets a collection of DistributionPlace objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $distributionPlaces A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildEvent The current object (for fluent API support)
+     */
+    public function setDistributionPlaces(Collection $distributionPlaces, ConnectionInterface $con = null)
+    {
+        /** @var DistributionPlace[] $distributionPlacesToDelete */
+        $distributionPlacesToDelete = $this->getDistributionPlaces(new Criteria(), $con)->diff($distributionPlaces);
+
+        
+        $this->distributionPlacesScheduledForDeletion = $distributionPlacesToDelete;
+
+        foreach ($distributionPlacesToDelete as $distributionPlaceRemoved) {
+            $distributionPlaceRemoved->setEvent(null);
+        }
+
+        $this->collDistributionPlaces = null;
+        foreach ($distributionPlaces as $distributionPlace) {
+            $this->addDistributionPlace($distributionPlace);
+        }
+
+        $this->collDistributionPlaces = $distributionPlaces;
+        $this->collDistributionPlacesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related BaseDistributionPlace objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related BaseDistributionPlace objects.
+     * @throws PropelException
+     */
+    public function countDistributionPlaces(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collDistributionPlacesPartial && !$this->isNew();
+        if (null === $this->collDistributionPlaces || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collDistributionPlaces) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getDistributionPlaces());
+            }
+
+            $query = DistributionPlaceQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEvent($this)
+                ->count($con);
+        }
+
+        return count($this->collDistributionPlaces);
+    }
+
+    /**
+     * Method called to associate a DistributionPlace object to this object
+     * through the DistributionPlace foreign key attribute.
+     *
+     * @param  DistributionPlace $l DistributionPlace
+     * @return $this|\API\Models\ORM\Event\Event The current object (for fluent API support)
+     */
+    public function addDistributionPlace(DistributionPlace $l)
+    {
+        if ($this->collDistributionPlaces === null) {
+            $this->initDistributionPlaces();
+            $this->collDistributionPlacesPartial = true;
+        }
+
+        if (!$this->collDistributionPlaces->contains($l)) {
+            $this->doAddDistributionPlace($l);
+
+            if ($this->distributionPlacesScheduledForDeletion and $this->distributionPlacesScheduledForDeletion->contains($l)) {
+                $this->distributionPlacesScheduledForDeletion->remove($this->distributionPlacesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param DistributionPlace $distributionPlace The DistributionPlace object to add.
+     */
+    protected function doAddDistributionPlace(DistributionPlace $distributionPlace)
+    {
+        $this->collDistributionPlaces[]= $distributionPlace;
+        $distributionPlace->setEvent($this);
+    }
+
+    /**
+     * @param  DistributionPlace $distributionPlace The DistributionPlace object to remove.
+     * @return $this|ChildEvent The current object (for fluent API support)
+     */
+    public function removeDistributionPlace(DistributionPlace $distributionPlace)
+    {
+        if ($this->getDistributionPlaces()->contains($distributionPlace)) {
+            $pos = $this->collDistributionPlaces->search($distributionPlace);
+            $this->collDistributionPlaces->remove($pos);
+            if (null === $this->distributionPlacesScheduledForDeletion) {
+                $this->distributionPlacesScheduledForDeletion = clone $this->collDistributionPlaces;
+                $this->distributionPlacesScheduledForDeletion->clear();
+            }
+            $this->distributionPlacesScheduledForDeletion[]= clone $distributionPlace;
+            $distributionPlace->setEvent(null);
+        }
+
+        return $this;
     }
 
     /**
@@ -2499,231 +2801,6 @@ abstract class Event implements ActiveRecordInterface
             }
             $this->eventContactsScheduledForDeletion[]= clone $eventContact;
             $eventContact->setEvent(null);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Clears out the collDistributionPlaces collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addDistributionPlaces()
-     */
-    public function clearDistributionPlaces()
-    {
-        $this->collDistributionPlaces = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collDistributionPlaces collection loaded partially.
-     */
-    public function resetPartialDistributionPlaces($v = true)
-    {
-        $this->collDistributionPlacesPartial = $v;
-    }
-
-    /**
-     * Initializes the collDistributionPlaces collection.
-     *
-     * By default this just sets the collDistributionPlaces collection to an empty array (like clearcollDistributionPlaces());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initDistributionPlaces($overrideExisting = true)
-    {
-        if (null !== $this->collDistributionPlaces && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = DistributionPlaceTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collDistributionPlaces = new $collectionClassName;
-        $this->collDistributionPlaces->setModel('\API\Models\ORM\DistributionPlace\DistributionPlace');
-    }
-
-    /**
-     * Gets an array of DistributionPlace objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildEvent is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|DistributionPlace[] List of DistributionPlace objects
-     * @throws PropelException
-     */
-    public function getDistributionPlaces(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collDistributionPlacesPartial && !$this->isNew();
-        if (null === $this->collDistributionPlaces || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collDistributionPlaces) {
-                // return empty collection
-                $this->initDistributionPlaces();
-            } else {
-                $collDistributionPlaces = DistributionPlaceQuery::create(null, $criteria)
-                    ->filterByEvent($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collDistributionPlacesPartial && count($collDistributionPlaces)) {
-                        $this->initDistributionPlaces(false);
-
-                        foreach ($collDistributionPlaces as $obj) {
-                            if (false == $this->collDistributionPlaces->contains($obj)) {
-                                $this->collDistributionPlaces->append($obj);
-                            }
-                        }
-
-                        $this->collDistributionPlacesPartial = true;
-                    }
-
-                    return $collDistributionPlaces;
-                }
-
-                if ($partial && $this->collDistributionPlaces) {
-                    foreach ($this->collDistributionPlaces as $obj) {
-                        if ($obj->isNew()) {
-                            $collDistributionPlaces[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collDistributionPlaces = $collDistributionPlaces;
-                $this->collDistributionPlacesPartial = false;
-            }
-        }
-
-        return $this->collDistributionPlaces;
-    }
-
-    /**
-     * Sets a collection of DistributionPlace objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $distributionPlaces A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildEvent The current object (for fluent API support)
-     */
-    public function setDistributionPlaces(Collection $distributionPlaces, ConnectionInterface $con = null)
-    {
-        /** @var DistributionPlace[] $distributionPlacesToDelete */
-        $distributionPlacesToDelete = $this->getDistributionPlaces(new Criteria(), $con)->diff($distributionPlaces);
-
-        
-        $this->distributionPlacesScheduledForDeletion = $distributionPlacesToDelete;
-
-        foreach ($distributionPlacesToDelete as $distributionPlaceRemoved) {
-            $distributionPlaceRemoved->setEvent(null);
-        }
-
-        $this->collDistributionPlaces = null;
-        foreach ($distributionPlaces as $distributionPlace) {
-            $this->addDistributionPlace($distributionPlace);
-        }
-
-        $this->collDistributionPlaces = $distributionPlaces;
-        $this->collDistributionPlacesPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related BaseDistributionPlace objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related BaseDistributionPlace objects.
-     * @throws PropelException
-     */
-    public function countDistributionPlaces(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collDistributionPlacesPartial && !$this->isNew();
-        if (null === $this->collDistributionPlaces || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collDistributionPlaces) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getDistributionPlaces());
-            }
-
-            $query = DistributionPlaceQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByEvent($this)
-                ->count($con);
-        }
-
-        return count($this->collDistributionPlaces);
-    }
-
-    /**
-     * Method called to associate a DistributionPlace object to this object
-     * through the DistributionPlace foreign key attribute.
-     *
-     * @param  DistributionPlace $l DistributionPlace
-     * @return $this|\API\Models\ORM\Event\Event The current object (for fluent API support)
-     */
-    public function addDistributionPlace(DistributionPlace $l)
-    {
-        if ($this->collDistributionPlaces === null) {
-            $this->initDistributionPlaces();
-            $this->collDistributionPlacesPartial = true;
-        }
-
-        if (!$this->collDistributionPlaces->contains($l)) {
-            $this->doAddDistributionPlace($l);
-
-            if ($this->distributionPlacesScheduledForDeletion and $this->distributionPlacesScheduledForDeletion->contains($l)) {
-                $this->distributionPlacesScheduledForDeletion->remove($this->distributionPlacesScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param DistributionPlace $distributionPlace The DistributionPlace object to add.
-     */
-    protected function doAddDistributionPlace(DistributionPlace $distributionPlace)
-    {
-        $this->collDistributionPlaces[]= $distributionPlace;
-        $distributionPlace->setEvent($this);
-    }
-
-    /**
-     * @param  DistributionPlace $distributionPlace The DistributionPlace object to remove.
-     * @return $this|ChildEvent The current object (for fluent API support)
-     */
-    public function removeDistributionPlace(DistributionPlace $distributionPlace)
-    {
-        if ($this->getDistributionPlaces()->contains($distributionPlace)) {
-            $pos = $this->collDistributionPlaces->search($distributionPlace);
-            $this->collDistributionPlaces->remove($pos);
-            if (null === $this->distributionPlacesScheduledForDeletion) {
-                $this->distributionPlacesScheduledForDeletion = clone $this->collDistributionPlaces;
-                $this->distributionPlacesScheduledForDeletion->clear();
-            }
-            $this->distributionPlacesScheduledForDeletion[]= clone $distributionPlace;
-            $distributionPlace->setEvent(null);
         }
 
         return $this;
@@ -3430,6 +3507,231 @@ abstract class Event implements ActiveRecordInterface
     }
 
     /**
+     * Clears out the collInvoiceWarningTypes collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addInvoiceWarningTypes()
+     */
+    public function clearInvoiceWarningTypes()
+    {
+        $this->collInvoiceWarningTypes = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collInvoiceWarningTypes collection loaded partially.
+     */
+    public function resetPartialInvoiceWarningTypes($v = true)
+    {
+        $this->collInvoiceWarningTypesPartial = $v;
+    }
+
+    /**
+     * Initializes the collInvoiceWarningTypes collection.
+     *
+     * By default this just sets the collInvoiceWarningTypes collection to an empty array (like clearcollInvoiceWarningTypes());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initInvoiceWarningTypes($overrideExisting = true)
+    {
+        if (null !== $this->collInvoiceWarningTypes && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = InvoiceWarningTypeTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collInvoiceWarningTypes = new $collectionClassName;
+        $this->collInvoiceWarningTypes->setModel('\API\Models\ORM\Invoice\InvoiceWarningType');
+    }
+
+    /**
+     * Gets an array of InvoiceWarningType objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildEvent is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|InvoiceWarningType[] List of InvoiceWarningType objects
+     * @throws PropelException
+     */
+    public function getInvoiceWarningTypes(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collInvoiceWarningTypesPartial && !$this->isNew();
+        if (null === $this->collInvoiceWarningTypes || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collInvoiceWarningTypes) {
+                // return empty collection
+                $this->initInvoiceWarningTypes();
+            } else {
+                $collInvoiceWarningTypes = InvoiceWarningTypeQuery::create(null, $criteria)
+                    ->filterByEvent($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collInvoiceWarningTypesPartial && count($collInvoiceWarningTypes)) {
+                        $this->initInvoiceWarningTypes(false);
+
+                        foreach ($collInvoiceWarningTypes as $obj) {
+                            if (false == $this->collInvoiceWarningTypes->contains($obj)) {
+                                $this->collInvoiceWarningTypes->append($obj);
+                            }
+                        }
+
+                        $this->collInvoiceWarningTypesPartial = true;
+                    }
+
+                    return $collInvoiceWarningTypes;
+                }
+
+                if ($partial && $this->collInvoiceWarningTypes) {
+                    foreach ($this->collInvoiceWarningTypes as $obj) {
+                        if ($obj->isNew()) {
+                            $collInvoiceWarningTypes[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collInvoiceWarningTypes = $collInvoiceWarningTypes;
+                $this->collInvoiceWarningTypesPartial = false;
+            }
+        }
+
+        return $this->collInvoiceWarningTypes;
+    }
+
+    /**
+     * Sets a collection of InvoiceWarningType objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $invoiceWarningTypes A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildEvent The current object (for fluent API support)
+     */
+    public function setInvoiceWarningTypes(Collection $invoiceWarningTypes, ConnectionInterface $con = null)
+    {
+        /** @var InvoiceWarningType[] $invoiceWarningTypesToDelete */
+        $invoiceWarningTypesToDelete = $this->getInvoiceWarningTypes(new Criteria(), $con)->diff($invoiceWarningTypes);
+
+        
+        $this->invoiceWarningTypesScheduledForDeletion = $invoiceWarningTypesToDelete;
+
+        foreach ($invoiceWarningTypesToDelete as $invoiceWarningTypeRemoved) {
+            $invoiceWarningTypeRemoved->setEvent(null);
+        }
+
+        $this->collInvoiceWarningTypes = null;
+        foreach ($invoiceWarningTypes as $invoiceWarningType) {
+            $this->addInvoiceWarningType($invoiceWarningType);
+        }
+
+        $this->collInvoiceWarningTypes = $invoiceWarningTypes;
+        $this->collInvoiceWarningTypesPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related BaseInvoiceWarningType objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related BaseInvoiceWarningType objects.
+     * @throws PropelException
+     */
+    public function countInvoiceWarningTypes(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collInvoiceWarningTypesPartial && !$this->isNew();
+        if (null === $this->collInvoiceWarningTypes || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collInvoiceWarningTypes) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getInvoiceWarningTypes());
+            }
+
+            $query = InvoiceWarningTypeQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByEvent($this)
+                ->count($con);
+        }
+
+        return count($this->collInvoiceWarningTypes);
+    }
+
+    /**
+     * Method called to associate a InvoiceWarningType object to this object
+     * through the InvoiceWarningType foreign key attribute.
+     *
+     * @param  InvoiceWarningType $l InvoiceWarningType
+     * @return $this|\API\Models\ORM\Event\Event The current object (for fluent API support)
+     */
+    public function addInvoiceWarningType(InvoiceWarningType $l)
+    {
+        if ($this->collInvoiceWarningTypes === null) {
+            $this->initInvoiceWarningTypes();
+            $this->collInvoiceWarningTypesPartial = true;
+        }
+
+        if (!$this->collInvoiceWarningTypes->contains($l)) {
+            $this->doAddInvoiceWarningType($l);
+
+            if ($this->invoiceWarningTypesScheduledForDeletion and $this->invoiceWarningTypesScheduledForDeletion->contains($l)) {
+                $this->invoiceWarningTypesScheduledForDeletion->remove($this->invoiceWarningTypesScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param InvoiceWarningType $invoiceWarningType The InvoiceWarningType object to add.
+     */
+    protected function doAddInvoiceWarningType(InvoiceWarningType $invoiceWarningType)
+    {
+        $this->collInvoiceWarningTypes[]= $invoiceWarningType;
+        $invoiceWarningType->setEvent($this);
+    }
+
+    /**
+     * @param  InvoiceWarningType $invoiceWarningType The InvoiceWarningType object to remove.
+     * @return $this|ChildEvent The current object (for fluent API support)
+     */
+    public function removeInvoiceWarningType(InvoiceWarningType $invoiceWarningType)
+    {
+        if ($this->getInvoiceWarningTypes()->contains($invoiceWarningType)) {
+            $pos = $this->collInvoiceWarningTypes->search($invoiceWarningType);
+            $this->collInvoiceWarningTypes->remove($pos);
+            if (null === $this->invoiceWarningTypesScheduledForDeletion) {
+                $this->invoiceWarningTypesScheduledForDeletion = clone $this->collInvoiceWarningTypes;
+                $this->invoiceWarningTypesScheduledForDeletion->clear();
+            }
+            $this->invoiceWarningTypesScheduledForDeletion[]= clone $invoiceWarningType;
+            $invoiceWarningType->setEvent(null);
+        }
+
+        return $this;
+    }
+
+    /**
      * Clears out the collMenuExtras collection
      *
      * This does not modify the database; however, it will remove any associated objects, causing
@@ -4130,231 +4432,6 @@ abstract class Event implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collInvoiceWarningTypes collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addInvoiceWarningTypes()
-     */
-    public function clearInvoiceWarningTypes()
-    {
-        $this->collInvoiceWarningTypes = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collInvoiceWarningTypes collection loaded partially.
-     */
-    public function resetPartialInvoiceWarningTypes($v = true)
-    {
-        $this->collInvoiceWarningTypesPartial = $v;
-    }
-
-    /**
-     * Initializes the collInvoiceWarningTypes collection.
-     *
-     * By default this just sets the collInvoiceWarningTypes collection to an empty array (like clearcollInvoiceWarningTypes());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initInvoiceWarningTypes($overrideExisting = true)
-    {
-        if (null !== $this->collInvoiceWarningTypes && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = InvoiceWarningTypeTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collInvoiceWarningTypes = new $collectionClassName;
-        $this->collInvoiceWarningTypes->setModel('\API\Models\ORM\Invoice\InvoiceWarningType');
-    }
-
-    /**
-     * Gets an array of InvoiceWarningType objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildEvent is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|InvoiceWarningType[] List of InvoiceWarningType objects
-     * @throws PropelException
-     */
-    public function getInvoiceWarningTypes(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collInvoiceWarningTypesPartial && !$this->isNew();
-        if (null === $this->collInvoiceWarningTypes || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collInvoiceWarningTypes) {
-                // return empty collection
-                $this->initInvoiceWarningTypes();
-            } else {
-                $collInvoiceWarningTypes = InvoiceWarningTypeQuery::create(null, $criteria)
-                    ->filterByEvent($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collInvoiceWarningTypesPartial && count($collInvoiceWarningTypes)) {
-                        $this->initInvoiceWarningTypes(false);
-
-                        foreach ($collInvoiceWarningTypes as $obj) {
-                            if (false == $this->collInvoiceWarningTypes->contains($obj)) {
-                                $this->collInvoiceWarningTypes->append($obj);
-                            }
-                        }
-
-                        $this->collInvoiceWarningTypesPartial = true;
-                    }
-
-                    return $collInvoiceWarningTypes;
-                }
-
-                if ($partial && $this->collInvoiceWarningTypes) {
-                    foreach ($this->collInvoiceWarningTypes as $obj) {
-                        if ($obj->isNew()) {
-                            $collInvoiceWarningTypes[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collInvoiceWarningTypes = $collInvoiceWarningTypes;
-                $this->collInvoiceWarningTypesPartial = false;
-            }
-        }
-
-        return $this->collInvoiceWarningTypes;
-    }
-
-    /**
-     * Sets a collection of InvoiceWarningType objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $invoiceWarningTypes A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildEvent The current object (for fluent API support)
-     */
-    public function setInvoiceWarningTypes(Collection $invoiceWarningTypes, ConnectionInterface $con = null)
-    {
-        /** @var InvoiceWarningType[] $invoiceWarningTypesToDelete */
-        $invoiceWarningTypesToDelete = $this->getInvoiceWarningTypes(new Criteria(), $con)->diff($invoiceWarningTypes);
-
-        
-        $this->invoiceWarningTypesScheduledForDeletion = $invoiceWarningTypesToDelete;
-
-        foreach ($invoiceWarningTypesToDelete as $invoiceWarningTypeRemoved) {
-            $invoiceWarningTypeRemoved->setEvent(null);
-        }
-
-        $this->collInvoiceWarningTypes = null;
-        foreach ($invoiceWarningTypes as $invoiceWarningType) {
-            $this->addInvoiceWarningType($invoiceWarningType);
-        }
-
-        $this->collInvoiceWarningTypes = $invoiceWarningTypes;
-        $this->collInvoiceWarningTypesPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related BaseInvoiceWarningType objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related BaseInvoiceWarningType objects.
-     * @throws PropelException
-     */
-    public function countInvoiceWarningTypes(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collInvoiceWarningTypesPartial && !$this->isNew();
-        if (null === $this->collInvoiceWarningTypes || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collInvoiceWarningTypes) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getInvoiceWarningTypes());
-            }
-
-            $query = InvoiceWarningTypeQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByEvent($this)
-                ->count($con);
-        }
-
-        return count($this->collInvoiceWarningTypes);
-    }
-
-    /**
-     * Method called to associate a InvoiceWarningType object to this object
-     * through the InvoiceWarningType foreign key attribute.
-     *
-     * @param  InvoiceWarningType $l InvoiceWarningType
-     * @return $this|\API\Models\ORM\Event\Event The current object (for fluent API support)
-     */
-    public function addInvoiceWarningType(InvoiceWarningType $l)
-    {
-        if ($this->collInvoiceWarningTypes === null) {
-            $this->initInvoiceWarningTypes();
-            $this->collInvoiceWarningTypesPartial = true;
-        }
-
-        if (!$this->collInvoiceWarningTypes->contains($l)) {
-            $this->doAddInvoiceWarningType($l);
-
-            if ($this->invoiceWarningTypesScheduledForDeletion and $this->invoiceWarningTypesScheduledForDeletion->contains($l)) {
-                $this->invoiceWarningTypesScheduledForDeletion->remove($this->invoiceWarningTypesScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param InvoiceWarningType $invoiceWarningType The InvoiceWarningType object to add.
-     */
-    protected function doAddInvoiceWarningType(InvoiceWarningType $invoiceWarningType)
-    {
-        $this->collInvoiceWarningTypes[]= $invoiceWarningType;
-        $invoiceWarningType->setEvent($this);
-    }
-
-    /**
-     * @param  InvoiceWarningType $invoiceWarningType The InvoiceWarningType object to remove.
-     * @return $this|ChildEvent The current object (for fluent API support)
-     */
-    public function removeInvoiceWarningType(InvoiceWarningType $invoiceWarningType)
-    {
-        if ($this->getInvoiceWarningTypes()->contains($invoiceWarningType)) {
-            $pos = $this->collInvoiceWarningTypes->search($invoiceWarningType);
-            $this->collInvoiceWarningTypes->remove($pos);
-            if (null === $this->invoiceWarningTypesScheduledForDeletion) {
-                $this->invoiceWarningTypesScheduledForDeletion = clone $this->collInvoiceWarningTypes;
-                $this->invoiceWarningTypesScheduledForDeletion->clear();
-            }
-            $this->invoiceWarningTypesScheduledForDeletion[]= clone $invoiceWarningType;
-            $invoiceWarningType->setEvent(null);
-        }
-
-        return $this;
-    }
-
-    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -4365,6 +4442,7 @@ abstract class Event implements ActiveRecordInterface
         $this->name = null;
         $this->date = null;
         $this->active = null;
+        $this->is_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -4388,6 +4466,11 @@ abstract class Event implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collDistributionPlaces) {
+                foreach ($this->collDistributionPlaces as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collEventBankinformations) {
                 foreach ($this->collEventBankinformations as $o) {
                     $o->clearAllReferences($deep);
@@ -4395,11 +4478,6 @@ abstract class Event implements ActiveRecordInterface
             }
             if ($this->collEventContacts) {
                 foreach ($this->collEventContacts as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
-            if ($this->collDistributionPlaces) {
-                foreach ($this->collDistributionPlaces as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -4418,6 +4496,11 @@ abstract class Event implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
+            if ($this->collInvoiceWarningTypes) {
+                foreach ($this->collInvoiceWarningTypes as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
             if ($this->collMenuExtras) {
                 foreach ($this->collMenuExtras as $o) {
                     $o->clearAllReferences($deep);
@@ -4433,24 +4516,19 @@ abstract class Event implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collInvoiceWarningTypes) {
-                foreach ($this->collInvoiceWarningTypes as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
         } // if ($deep)
 
         $this->collCoupons = null;
+        $this->collDistributionPlaces = null;
         $this->collEventBankinformations = null;
         $this->collEventContacts = null;
-        $this->collDistributionPlaces = null;
         $this->collEventPrinters = null;
         $this->collEventTables = null;
         $this->collEventUsers = null;
+        $this->collInvoiceWarningTypes = null;
         $this->collMenuExtras = null;
         $this->collMenuSizes = null;
         $this->collMenuTypes = null;
-        $this->collInvoiceWarningTypes = null;
     }
 
     /**

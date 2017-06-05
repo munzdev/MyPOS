@@ -137,9 +137,9 @@ class EventContactTableMap extends TableMap
     const COL_EMAIL = 'event_contact.email';
 
     /**
-     * the column name for the active field
+     * the column name for the is_deleted field
      */
-    const COL_ACTIVE = 'event_contact.active';
+    const COL_IS_DELETED = 'event_contact.is_deleted';
 
     /**
      * the column name for the default field
@@ -158,10 +158,10 @@ class EventContactTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('EventContactid', 'Eventid', 'Title', 'Name', 'ContactPerson', 'Address', 'Address2', 'City', 'Zip', 'TaxIdentificationNr', 'Telephon', 'Fax', 'Email', 'Active', 'Default', ),
-        self::TYPE_CAMELNAME     => array('eventContactid', 'eventid', 'title', 'name', 'contactPerson', 'address', 'address2', 'city', 'zip', 'taxIdentificationNr', 'telephon', 'fax', 'email', 'active', 'default', ),
-        self::TYPE_COLNAME       => array(EventContactTableMap::COL_EVENT_CONTACTID, EventContactTableMap::COL_EVENTID, EventContactTableMap::COL_TITLE, EventContactTableMap::COL_NAME, EventContactTableMap::COL_CONTACT_PERSON, EventContactTableMap::COL_ADDRESS, EventContactTableMap::COL_ADDRESS2, EventContactTableMap::COL_CITY, EventContactTableMap::COL_ZIP, EventContactTableMap::COL_TAX_IDENTIFICATION_NR, EventContactTableMap::COL_TELEPHON, EventContactTableMap::COL_FAX, EventContactTableMap::COL_EMAIL, EventContactTableMap::COL_ACTIVE, EventContactTableMap::COL_DEFAULT, ),
-        self::TYPE_FIELDNAME     => array('event_contactid', 'eventid', 'title', 'name', 'contact_person', 'address', 'address2', 'city', 'zip', 'tax_identification_nr', 'telephon', 'fax', 'email', 'active', 'default', ),
+        self::TYPE_PHPNAME       => array('EventContactid', 'Eventid', 'Title', 'Name', 'ContactPerson', 'Address', 'Address2', 'City', 'Zip', 'TaxIdentificationNr', 'Telephon', 'Fax', 'Email', 'IsDeleted', 'Default', ),
+        self::TYPE_CAMELNAME     => array('eventContactid', 'eventid', 'title', 'name', 'contactPerson', 'address', 'address2', 'city', 'zip', 'taxIdentificationNr', 'telephon', 'fax', 'email', 'isDeleted', 'default', ),
+        self::TYPE_COLNAME       => array(EventContactTableMap::COL_EVENT_CONTACTID, EventContactTableMap::COL_EVENTID, EventContactTableMap::COL_TITLE, EventContactTableMap::COL_NAME, EventContactTableMap::COL_CONTACT_PERSON, EventContactTableMap::COL_ADDRESS, EventContactTableMap::COL_ADDRESS2, EventContactTableMap::COL_CITY, EventContactTableMap::COL_ZIP, EventContactTableMap::COL_TAX_IDENTIFICATION_NR, EventContactTableMap::COL_TELEPHON, EventContactTableMap::COL_FAX, EventContactTableMap::COL_EMAIL, EventContactTableMap::COL_IS_DELETED, EventContactTableMap::COL_DEFAULT, ),
+        self::TYPE_FIELDNAME     => array('event_contactid', 'eventid', 'title', 'name', 'contact_person', 'address', 'address2', 'city', 'zip', 'tax_identification_nr', 'telephon', 'fax', 'email', 'is_deleted', 'default', ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
     );
 
@@ -172,10 +172,10 @@ class EventContactTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('EventContactid' => 0, 'Eventid' => 1, 'Title' => 2, 'Name' => 3, 'ContactPerson' => 4, 'Address' => 5, 'Address2' => 6, 'City' => 7, 'Zip' => 8, 'TaxIdentificationNr' => 9, 'Telephon' => 10, 'Fax' => 11, 'Email' => 12, 'Active' => 13, 'Default' => 14, ),
-        self::TYPE_CAMELNAME     => array('eventContactid' => 0, 'eventid' => 1, 'title' => 2, 'name' => 3, 'contactPerson' => 4, 'address' => 5, 'address2' => 6, 'city' => 7, 'zip' => 8, 'taxIdentificationNr' => 9, 'telephon' => 10, 'fax' => 11, 'email' => 12, 'active' => 13, 'default' => 14, ),
-        self::TYPE_COLNAME       => array(EventContactTableMap::COL_EVENT_CONTACTID => 0, EventContactTableMap::COL_EVENTID => 1, EventContactTableMap::COL_TITLE => 2, EventContactTableMap::COL_NAME => 3, EventContactTableMap::COL_CONTACT_PERSON => 4, EventContactTableMap::COL_ADDRESS => 5, EventContactTableMap::COL_ADDRESS2 => 6, EventContactTableMap::COL_CITY => 7, EventContactTableMap::COL_ZIP => 8, EventContactTableMap::COL_TAX_IDENTIFICATION_NR => 9, EventContactTableMap::COL_TELEPHON => 10, EventContactTableMap::COL_FAX => 11, EventContactTableMap::COL_EMAIL => 12, EventContactTableMap::COL_ACTIVE => 13, EventContactTableMap::COL_DEFAULT => 14, ),
-        self::TYPE_FIELDNAME     => array('event_contactid' => 0, 'eventid' => 1, 'title' => 2, 'name' => 3, 'contact_person' => 4, 'address' => 5, 'address2' => 6, 'city' => 7, 'zip' => 8, 'tax_identification_nr' => 9, 'telephon' => 10, 'fax' => 11, 'email' => 12, 'active' => 13, 'default' => 14, ),
+        self::TYPE_PHPNAME       => array('EventContactid' => 0, 'Eventid' => 1, 'Title' => 2, 'Name' => 3, 'ContactPerson' => 4, 'Address' => 5, 'Address2' => 6, 'City' => 7, 'Zip' => 8, 'TaxIdentificationNr' => 9, 'Telephon' => 10, 'Fax' => 11, 'Email' => 12, 'IsDeleted' => 13, 'Default' => 14, ),
+        self::TYPE_CAMELNAME     => array('eventContactid' => 0, 'eventid' => 1, 'title' => 2, 'name' => 3, 'contactPerson' => 4, 'address' => 5, 'address2' => 6, 'city' => 7, 'zip' => 8, 'taxIdentificationNr' => 9, 'telephon' => 10, 'fax' => 11, 'email' => 12, 'isDeleted' => 13, 'default' => 14, ),
+        self::TYPE_COLNAME       => array(EventContactTableMap::COL_EVENT_CONTACTID => 0, EventContactTableMap::COL_EVENTID => 1, EventContactTableMap::COL_TITLE => 2, EventContactTableMap::COL_NAME => 3, EventContactTableMap::COL_CONTACT_PERSON => 4, EventContactTableMap::COL_ADDRESS => 5, EventContactTableMap::COL_ADDRESS2 => 6, EventContactTableMap::COL_CITY => 7, EventContactTableMap::COL_ZIP => 8, EventContactTableMap::COL_TAX_IDENTIFICATION_NR => 9, EventContactTableMap::COL_TELEPHON => 10, EventContactTableMap::COL_FAX => 11, EventContactTableMap::COL_EMAIL => 12, EventContactTableMap::COL_IS_DELETED => 13, EventContactTableMap::COL_DEFAULT => 14, ),
+        self::TYPE_FIELDNAME     => array('event_contactid' => 0, 'eventid' => 1, 'title' => 2, 'name' => 3, 'contact_person' => 4, 'address' => 5, 'address2' => 6, 'city' => 7, 'zip' => 8, 'tax_identification_nr' => 9, 'telephon' => 10, 'fax' => 11, 'email' => 12, 'is_deleted' => 13, 'default' => 14, ),
         self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
     );
 
@@ -209,7 +209,7 @@ class EventContactTableMap extends TableMap
         $this->addColumn('telephon', 'Telephon', 'VARCHAR', false, 32, null);
         $this->addColumn('fax', 'Fax', 'VARCHAR', false, 32, null);
         $this->addColumn('email', 'Email', 'VARCHAR', false, 254, null);
-        $this->addColumn('active', 'Active', 'BOOLEAN', true, 1, null);
+        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
         $this->addColumn('default', 'Default', 'BOOLEAN', true, 1, null);
     } // initialize()
 
@@ -395,7 +395,7 @@ class EventContactTableMap extends TableMap
             $criteria->addSelectColumn(EventContactTableMap::COL_TELEPHON);
             $criteria->addSelectColumn(EventContactTableMap::COL_FAX);
             $criteria->addSelectColumn(EventContactTableMap::COL_EMAIL);
-            $criteria->addSelectColumn(EventContactTableMap::COL_ACTIVE);
+            $criteria->addSelectColumn(EventContactTableMap::COL_IS_DELETED);
             $criteria->addSelectColumn(EventContactTableMap::COL_DEFAULT);
         } else {
             $criteria->addSelectColumn($alias . '.event_contactid');
@@ -411,7 +411,7 @@ class EventContactTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.telephon');
             $criteria->addSelectColumn($alias . '.fax');
             $criteria->addSelectColumn($alias . '.email');
-            $criteria->addSelectColumn($alias . '.active');
+            $criteria->addSelectColumn($alias . '.is_deleted');
             $criteria->addSelectColumn($alias . '.default');
         }
     }

@@ -20,6 +20,8 @@ use API\Models\ORM\Invoice\InvoiceWarningQuery as ChildInvoiceWarningQuery;
 use API\Models\ORM\Invoice\Map\InvoiceItemTableMap;
 use API\Models\ORM\Invoice\Map\InvoiceTableMap;
 use API\Models\ORM\Invoice\Map\InvoiceWarningTableMap;
+use API\Models\ORM\Ordering\Order;
+use API\Models\ORM\Ordering\OrderQuery;
 use API\Models\ORM\Payment\PaymentRecieved;
 use API\Models\ORM\Payment\PaymentRecievedQuery;
 use API\Models\ORM\Payment\Base\PaymentRecieved as BasePaymentRecieved;
@@ -131,6 +133,13 @@ abstract class Invoice implements ActiveRecordInterface
     protected $canceled_invoiceid;
 
     /**
+     * The value for the orderid field.
+     * 
+     * @var        int
+     */
+    protected $orderid;
+
+    /**
      * The value for the date field.
      * 
      * @var        DateTime
@@ -191,6 +200,11 @@ abstract class Invoice implements ActiveRecordInterface
     protected $aInvoiceType;
 
     /**
+     * @var        Order
+     */
+    protected $aOrder;
+
+    /**
      * @var        User
      */
     protected $aUser;
@@ -208,16 +222,16 @@ abstract class Invoice implements ActiveRecordInterface
     protected $collInvoiceItemsPartial;
 
     /**
-     * @var        ObjectCollection|PaymentRecieved[] Collection to store aggregation of PaymentRecieved objects.
-     */
-    protected $collPaymentRecieveds;
-    protected $collPaymentRecievedsPartial;
-
-    /**
      * @var        ObjectCollection|ChildInvoiceWarning[] Collection to store aggregation of ChildInvoiceWarning objects.
      */
     protected $collInvoiceWarnings;
     protected $collInvoiceWarningsPartial;
+
+    /**
+     * @var        ObjectCollection|PaymentRecieved[] Collection to store aggregation of PaymentRecieved objects.
+     */
+    protected $collPaymentRecieveds;
+    protected $collPaymentRecievedsPartial;
 
     /**
      * Flag to prevent endless save loop, if this object is referenced
@@ -241,15 +255,15 @@ abstract class Invoice implements ActiveRecordInterface
 
     /**
      * An array of objects scheduled for deletion.
-     * @var ObjectCollection|PaymentRecieved[]
-     */
-    protected $paymentRecievedsScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
      * @var ObjectCollection|ChildInvoiceWarning[]
      */
     protected $invoiceWarningsScheduledForDeletion = null;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|PaymentRecieved[]
+     */
+    protected $paymentRecievedsScheduledForDeletion = null;
 
     /**
      * Initializes internal state of API\Models\ORM\Invoice\Base\Invoice object.
@@ -547,6 +561,16 @@ abstract class Invoice implements ActiveRecordInterface
     }
 
     /**
+     * Get the [orderid] column value.
+     * 
+     * @return int
+     */
+    public function getOrderid()
+    {
+        return $this->orderid;
+    }
+
+    /**
      * Get the [optionally formatted] temporal [date] column value.
      * 
      *
@@ -791,6 +815,30 @@ abstract class Invoice implements ActiveRecordInterface
     } // setCanceledInvoiceid()
 
     /**
+     * Set the value of [orderid] column.
+     * 
+     * @param int $v new value
+     * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
+     */
+    public function setOrderid($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->orderid !== $v) {
+            $this->orderid = $v;
+            $this->modifiedColumns[InvoiceTableMap::COL_ORDERID] = true;
+        }
+
+        if ($this->aOrder !== null && $this->aOrder->getOrderid() !== $v) {
+            $this->aOrder = null;
+        }
+
+        return $this;
+    } // setOrderid()
+
+    /**
      * Sets the value of [date] column to a normalized version of the date/time value specified.
      * 
      * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
@@ -947,28 +995,31 @@ abstract class Invoice implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : InvoiceTableMap::translateFieldName('CanceledInvoiceid', TableMap::TYPE_PHPNAME, $indexType)];
             $this->canceled_invoiceid = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : InvoiceTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : InvoiceTableMap::translateFieldName('Orderid', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->orderid = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : InvoiceTableMap::translateFieldName('Date', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : InvoiceTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : InvoiceTableMap::translateFieldName('Amount', TableMap::TYPE_PHPNAME, $indexType)];
             $this->amount = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : InvoiceTableMap::translateFieldName('MaturityDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : InvoiceTableMap::translateFieldName('MaturityDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->maturity_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : InvoiceTableMap::translateFieldName('PaymentFinished', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : InvoiceTableMap::translateFieldName('PaymentFinished', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->payment_finished = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : InvoiceTableMap::translateFieldName('AmountRecieved', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : InvoiceTableMap::translateFieldName('AmountRecieved', TableMap::TYPE_PHPNAME, $indexType)];
             $this->amount_recieved = (null !== $col) ? (string) $col : null;
             $this->resetModified();
 
@@ -978,7 +1029,7 @@ abstract class Invoice implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = InvoiceTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = InvoiceTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\ORM\\Invoice\\Invoice'), 0, $e);
@@ -1017,6 +1068,9 @@ abstract class Invoice implements ActiveRecordInterface
         }
         if ($this->aInvoiceRelatedByCanceledInvoiceid !== null && $this->canceled_invoiceid !== $this->aInvoiceRelatedByCanceledInvoiceid->getInvoiceid()) {
             $this->aInvoiceRelatedByCanceledInvoiceid = null;
+        }
+        if ($this->aOrder !== null && $this->orderid !== $this->aOrder->getOrderid()) {
+            $this->aOrder = null;
         }
     } // ensureConsistency
 
@@ -1062,14 +1116,15 @@ abstract class Invoice implements ActiveRecordInterface
             $this->aEventContactRelatedByEventContactid = null;
             $this->aInvoiceRelatedByCanceledInvoiceid = null;
             $this->aInvoiceType = null;
+            $this->aOrder = null;
             $this->aUser = null;
             $this->collInvoicesRelatedByInvoiceid = null;
 
             $this->collInvoiceItems = null;
 
-            $this->collPaymentRecieveds = null;
-
             $this->collInvoiceWarnings = null;
+
+            $this->collPaymentRecieveds = null;
 
         } // if (deep)
     }
@@ -1214,6 +1269,13 @@ abstract class Invoice implements ActiveRecordInterface
                 $this->setInvoiceType($this->aInvoiceType);
             }
 
+            if ($this->aOrder !== null) {
+                if ($this->aOrder->isModified() || $this->aOrder->isNew()) {
+                    $affectedRows += $this->aOrder->save($con);
+                }
+                $this->setOrder($this->aOrder);
+            }
+
             if ($this->aUser !== null) {
                 if ($this->aUser->isModified() || $this->aUser->isNew()) {
                     $affectedRows += $this->aUser->save($con);
@@ -1267,23 +1329,6 @@ abstract class Invoice implements ActiveRecordInterface
                 }
             }
 
-            if ($this->paymentRecievedsScheduledForDeletion !== null) {
-                if (!$this->paymentRecievedsScheduledForDeletion->isEmpty()) {
-                    \API\Models\ORM\Payment\PaymentRecievedQuery::create()
-                        ->filterByPrimaryKeys($this->paymentRecievedsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
-                    $this->paymentRecievedsScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collPaymentRecieveds !== null) {
-                foreach ($this->collPaymentRecieveds as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
             if ($this->invoiceWarningsScheduledForDeletion !== null) {
                 if (!$this->invoiceWarningsScheduledForDeletion->isEmpty()) {
                     \API\Models\ORM\Invoice\InvoiceWarningQuery::create()
@@ -1295,6 +1340,23 @@ abstract class Invoice implements ActiveRecordInterface
 
             if ($this->collInvoiceWarnings !== null) {
                 foreach ($this->collInvoiceWarnings as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
+            }
+
+            if ($this->paymentRecievedsScheduledForDeletion !== null) {
+                if (!$this->paymentRecievedsScheduledForDeletion->isEmpty()) {
+                    \API\Models\ORM\Payment\PaymentRecievedQuery::create()
+                        ->filterByPrimaryKeys($this->paymentRecievedsScheduledForDeletion->getPrimaryKeys(false))
+                        ->delete($con);
+                    $this->paymentRecievedsScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPaymentRecieveds !== null) {
+                foreach ($this->collPaymentRecieveds as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1348,6 +1410,9 @@ abstract class Invoice implements ActiveRecordInterface
         if ($this->isColumnModified(InvoiceTableMap::COL_CANCELED_INVOICEID)) {
             $modifiedColumns[':p' . $index++]  = '`canceled_invoiceid`';
         }
+        if ($this->isColumnModified(InvoiceTableMap::COL_ORDERID)) {
+            $modifiedColumns[':p' . $index++]  = '`orderid`';
+        }
         if ($this->isColumnModified(InvoiceTableMap::COL_DATE)) {
             $modifiedColumns[':p' . $index++]  = '`date`';
         }
@@ -1394,6 +1459,9 @@ abstract class Invoice implements ActiveRecordInterface
                         break;
                     case '`canceled_invoiceid`':                        
                         $stmt->bindValue($identifier, $this->canceled_invoiceid, PDO::PARAM_INT);
+                        break;
+                    case '`orderid`':                        
+                        $stmt->bindValue($identifier, $this->orderid, PDO::PARAM_INT);
                         break;
                     case '`date`':                        
                         $stmt->bindValue($identifier, $this->date ? $this->date->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
@@ -1494,18 +1562,21 @@ abstract class Invoice implements ActiveRecordInterface
                 return $this->getCanceledInvoiceid();
                 break;
             case 7:
-                return $this->getDate();
+                return $this->getOrderid();
                 break;
             case 8:
-                return $this->getAmount();
+                return $this->getDate();
                 break;
             case 9:
-                return $this->getMaturityDate();
+                return $this->getAmount();
                 break;
             case 10:
-                return $this->getPaymentFinished();
+                return $this->getMaturityDate();
                 break;
             case 11:
+                return $this->getPaymentFinished();
+                break;
+            case 12:
                 return $this->getAmountRecieved();
                 break;
             default:
@@ -1545,22 +1616,23 @@ abstract class Invoice implements ActiveRecordInterface
             $keys[4] => $this->getEventBankinformationid(),
             $keys[5] => $this->getCustomerEventContactid(),
             $keys[6] => $this->getCanceledInvoiceid(),
-            $keys[7] => $this->getDate(),
-            $keys[8] => $this->getAmount(),
-            $keys[9] => $this->getMaturityDate(),
-            $keys[10] => $this->getPaymentFinished(),
-            $keys[11] => $this->getAmountRecieved(),
+            $keys[7] => $this->getOrderid(),
+            $keys[8] => $this->getDate(),
+            $keys[9] => $this->getAmount(),
+            $keys[10] => $this->getMaturityDate(),
+            $keys[11] => $this->getPaymentFinished(),
+            $keys[12] => $this->getAmountRecieved(),
         );
-        if ($result[$keys[7]] instanceof \DateTime) {
-            $result[$keys[7]] = $result[$keys[7]]->format('c');
-        }
-        
-        if ($result[$keys[9]] instanceof \DateTime) {
-            $result[$keys[9]] = $result[$keys[9]]->format('c');
+        if ($result[$keys[8]] instanceof \DateTime) {
+            $result[$keys[8]] = $result[$keys[8]]->format('c');
         }
         
         if ($result[$keys[10]] instanceof \DateTime) {
             $result[$keys[10]] = $result[$keys[10]]->format('c');
+        }
+        
+        if ($result[$keys[11]] instanceof \DateTime) {
+            $result[$keys[11]] = $result[$keys[11]]->format('c');
         }
         
         $virtualColumns = $this->virtualColumns;
@@ -1644,6 +1716,21 @@ abstract class Invoice implements ActiveRecordInterface
         
                 $result[$key] = $this->aInvoiceType->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
             }
+            if (null !== $this->aOrder) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'order';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'order';
+                        break;
+                    default:
+                        $key = 'Order';
+                }
+        
+                $result[$key] = $this->aOrder->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
             if (null !== $this->aUser) {
                 
                 switch ($keyType) {
@@ -1689,21 +1776,6 @@ abstract class Invoice implements ActiveRecordInterface
         
                 $result[$key] = $this->collInvoiceItems->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collPaymentRecieveds) {
-                
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'paymentRecieveds';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'payment_recieveds';
-                        break;
-                    default:
-                        $key = 'PaymentRecieveds';
-                }
-        
-                $result[$key] = $this->collPaymentRecieveds->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
             if (null !== $this->collInvoiceWarnings) {
                 
                 switch ($keyType) {
@@ -1718,6 +1790,21 @@ abstract class Invoice implements ActiveRecordInterface
                 }
         
                 $result[$key] = $this->collInvoiceWarnings->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+            }
+            if (null !== $this->collPaymentRecieveds) {
+                
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'paymentRecieveds';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'payment_recieveds';
+                        break;
+                    default:
+                        $key = 'PaymentRecieveds';
+                }
+        
+                $result[$key] = $this->collPaymentRecieveds->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1775,18 +1862,21 @@ abstract class Invoice implements ActiveRecordInterface
                 $this->setCanceledInvoiceid($value);
                 break;
             case 7:
-                $this->setDate($value);
+                $this->setOrderid($value);
                 break;
             case 8:
-                $this->setAmount($value);
+                $this->setDate($value);
                 break;
             case 9:
-                $this->setMaturityDate($value);
+                $this->setAmount($value);
                 break;
             case 10:
-                $this->setPaymentFinished($value);
+                $this->setMaturityDate($value);
                 break;
             case 11:
+                $this->setPaymentFinished($value);
+                break;
+            case 12:
                 $this->setAmountRecieved($value);
                 break;
         } // switch()
@@ -1837,19 +1927,22 @@ abstract class Invoice implements ActiveRecordInterface
             $this->setCanceledInvoiceid($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setDate($arr[$keys[7]]);
+            $this->setOrderid($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setAmount($arr[$keys[8]]);
+            $this->setDate($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setMaturityDate($arr[$keys[9]]);
+            $this->setAmount($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setPaymentFinished($arr[$keys[10]]);
+            $this->setMaturityDate($arr[$keys[10]]);
         }
         if (array_key_exists($keys[11], $arr)) {
-            $this->setAmountRecieved($arr[$keys[11]]);
+            $this->setPaymentFinished($arr[$keys[11]]);
+        }
+        if (array_key_exists($keys[12], $arr)) {
+            $this->setAmountRecieved($arr[$keys[12]]);
         }
     }
 
@@ -1912,6 +2005,9 @@ abstract class Invoice implements ActiveRecordInterface
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_CANCELED_INVOICEID)) {
             $criteria->add(InvoiceTableMap::COL_CANCELED_INVOICEID, $this->canceled_invoiceid);
+        }
+        if ($this->isColumnModified(InvoiceTableMap::COL_ORDERID)) {
+            $criteria->add(InvoiceTableMap::COL_ORDERID, $this->orderid);
         }
         if ($this->isColumnModified(InvoiceTableMap::COL_DATE)) {
             $criteria->add(InvoiceTableMap::COL_DATE, $this->date);
@@ -2020,6 +2116,7 @@ abstract class Invoice implements ActiveRecordInterface
         $copyObj->setEventBankinformationid($this->getEventBankinformationid());
         $copyObj->setCustomerEventContactid($this->getCustomerEventContactid());
         $copyObj->setCanceledInvoiceid($this->getCanceledInvoiceid());
+        $copyObj->setOrderid($this->getOrderid());
         $copyObj->setDate($this->getDate());
         $copyObj->setAmount($this->getAmount());
         $copyObj->setMaturityDate($this->getMaturityDate());
@@ -2043,15 +2140,15 @@ abstract class Invoice implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getPaymentRecieveds() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addPaymentRecieved($relObj->copy($deepCopy));
-                }
-            }
-
             foreach ($this->getInvoiceWarnings() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addInvoiceWarning($relObj->copy($deepCopy));
+                }
+            }
+
+            foreach ($this->getPaymentRecieveds() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPaymentRecieved($relObj->copy($deepCopy));
                 }
             }
 
@@ -2341,6 +2438,57 @@ abstract class Invoice implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a Order object.
+     *
+     * @param  Order $v
+     * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
+     * @throws PropelException
+     */
+    public function setOrder(Order $v = null)
+    {
+        if ($v === null) {
+            $this->setOrderid(NULL);
+        } else {
+            $this->setOrderid($v->getOrderid());
+        }
+
+        $this->aOrder = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the Order object, it will not be re-added.
+        if ($v !== null) {
+            $v->addInvoice($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated Order object
+     *
+     * @param  ConnectionInterface $con Optional Connection object.
+     * @return Order The associated Order object.
+     * @throws PropelException
+     */
+    public function getOrder(ConnectionInterface $con = null)
+    {
+        if ($this->aOrder === null && ($this->orderid !== null)) {
+            $this->aOrder = OrderQuery::create()->findPk($this->orderid, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aOrder->addInvoices($this);
+             */
+        }
+
+        return $this->aOrder;
+    }
+
+    /**
      * Declares an association between this object and a User object.
      *
      * @param  User $v
@@ -2408,11 +2556,11 @@ abstract class Invoice implements ActiveRecordInterface
         if ('InvoiceItem' == $relationName) {
             return $this->initInvoiceItems();
         }
-        if ('PaymentRecieved' == $relationName) {
-            return $this->initPaymentRecieveds();
-        }
         if ('InvoiceWarning' == $relationName) {
             return $this->initInvoiceWarnings();
+        }
+        if ('PaymentRecieved' == $relationName) {
+            return $this->initPaymentRecieveds();
         }
     }
 
@@ -2758,6 +2906,31 @@ abstract class Invoice implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|ChildInvoice[] List of ChildInvoice objects
      */
+    public function getInvoicesRelatedByInvoiceidJoinOrder(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildInvoiceQuery::create(null, $criteria);
+        $query->joinWith('Order', $joinBehavior);
+
+        return $this->getInvoicesRelatedByInvoiceid($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Invoice is new, it will return
+     * an empty collection; or if this Invoice has previously
+     * been saved, it will retrieve related InvoicesRelatedByInvoiceid from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Invoice.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildInvoice[] List of ChildInvoice objects
+     */
     public function getInvoicesRelatedByInvoiceidJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = ChildInvoiceQuery::create(null, $criteria);
@@ -3014,6 +3187,256 @@ abstract class Invoice implements ActiveRecordInterface
         $query->joinWith('OrderDetail', $joinBehavior);
 
         return $this->getInvoiceItems($query, $con);
+    }
+
+    /**
+     * Clears out the collInvoiceWarnings collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return void
+     * @see        addInvoiceWarnings()
+     */
+    public function clearInvoiceWarnings()
+    {
+        $this->collInvoiceWarnings = null; // important to set this to NULL since that means it is uninitialized
+    }
+
+    /**
+     * Reset is the collInvoiceWarnings collection loaded partially.
+     */
+    public function resetPartialInvoiceWarnings($v = true)
+    {
+        $this->collInvoiceWarningsPartial = $v;
+    }
+
+    /**
+     * Initializes the collInvoiceWarnings collection.
+     *
+     * By default this just sets the collInvoiceWarnings collection to an empty array (like clearcollInvoiceWarnings());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param      boolean $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initInvoiceWarnings($overrideExisting = true)
+    {
+        if (null !== $this->collInvoiceWarnings && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = InvoiceWarningTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collInvoiceWarnings = new $collectionClassName;
+        $this->collInvoiceWarnings->setModel('\API\Models\ORM\Invoice\InvoiceWarning');
+    }
+
+    /**
+     * Gets an array of ChildInvoiceWarning objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildInvoice is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildInvoiceWarning[] List of ChildInvoiceWarning objects
+     * @throws PropelException
+     */
+    public function getInvoiceWarnings(Criteria $criteria = null, ConnectionInterface $con = null)
+    {
+        $partial = $this->collInvoiceWarningsPartial && !$this->isNew();
+        if (null === $this->collInvoiceWarnings || null !== $criteria  || $partial) {
+            if ($this->isNew() && null === $this->collInvoiceWarnings) {
+                // return empty collection
+                $this->initInvoiceWarnings();
+            } else {
+                $collInvoiceWarnings = ChildInvoiceWarningQuery::create(null, $criteria)
+                    ->filterByInvoice($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collInvoiceWarningsPartial && count($collInvoiceWarnings)) {
+                        $this->initInvoiceWarnings(false);
+
+                        foreach ($collInvoiceWarnings as $obj) {
+                            if (false == $this->collInvoiceWarnings->contains($obj)) {
+                                $this->collInvoiceWarnings->append($obj);
+                            }
+                        }
+
+                        $this->collInvoiceWarningsPartial = true;
+                    }
+
+                    return $collInvoiceWarnings;
+                }
+
+                if ($partial && $this->collInvoiceWarnings) {
+                    foreach ($this->collInvoiceWarnings as $obj) {
+                        if ($obj->isNew()) {
+                            $collInvoiceWarnings[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collInvoiceWarnings = $collInvoiceWarnings;
+                $this->collInvoiceWarningsPartial = false;
+            }
+        }
+
+        return $this->collInvoiceWarnings;
+    }
+
+    /**
+     * Sets a collection of ChildInvoiceWarning objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param      Collection $invoiceWarnings A Propel collection.
+     * @param      ConnectionInterface $con Optional connection object
+     * @return $this|ChildInvoice The current object (for fluent API support)
+     */
+    public function setInvoiceWarnings(Collection $invoiceWarnings, ConnectionInterface $con = null)
+    {
+        /** @var ChildInvoiceWarning[] $invoiceWarningsToDelete */
+        $invoiceWarningsToDelete = $this->getInvoiceWarnings(new Criteria(), $con)->diff($invoiceWarnings);
+
+        
+        $this->invoiceWarningsScheduledForDeletion = $invoiceWarningsToDelete;
+
+        foreach ($invoiceWarningsToDelete as $invoiceWarningRemoved) {
+            $invoiceWarningRemoved->setInvoice(null);
+        }
+
+        $this->collInvoiceWarnings = null;
+        foreach ($invoiceWarnings as $invoiceWarning) {
+            $this->addInvoiceWarning($invoiceWarning);
+        }
+
+        $this->collInvoiceWarnings = $invoiceWarnings;
+        $this->collInvoiceWarningsPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related InvoiceWarning objects.
+     *
+     * @param      Criteria $criteria
+     * @param      boolean $distinct
+     * @param      ConnectionInterface $con
+     * @return int             Count of related InvoiceWarning objects.
+     * @throws PropelException
+     */
+    public function countInvoiceWarnings(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
+    {
+        $partial = $this->collInvoiceWarningsPartial && !$this->isNew();
+        if (null === $this->collInvoiceWarnings || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collInvoiceWarnings) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getInvoiceWarnings());
+            }
+
+            $query = ChildInvoiceWarningQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByInvoice($this)
+                ->count($con);
+        }
+
+        return count($this->collInvoiceWarnings);
+    }
+
+    /**
+     * Method called to associate a ChildInvoiceWarning object to this object
+     * through the ChildInvoiceWarning foreign key attribute.
+     *
+     * @param  ChildInvoiceWarning $l ChildInvoiceWarning
+     * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
+     */
+    public function addInvoiceWarning(ChildInvoiceWarning $l)
+    {
+        if ($this->collInvoiceWarnings === null) {
+            $this->initInvoiceWarnings();
+            $this->collInvoiceWarningsPartial = true;
+        }
+
+        if (!$this->collInvoiceWarnings->contains($l)) {
+            $this->doAddInvoiceWarning($l);
+
+            if ($this->invoiceWarningsScheduledForDeletion and $this->invoiceWarningsScheduledForDeletion->contains($l)) {
+                $this->invoiceWarningsScheduledForDeletion->remove($this->invoiceWarningsScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildInvoiceWarning $invoiceWarning The ChildInvoiceWarning object to add.
+     */
+    protected function doAddInvoiceWarning(ChildInvoiceWarning $invoiceWarning)
+    {
+        $this->collInvoiceWarnings[]= $invoiceWarning;
+        $invoiceWarning->setInvoice($this);
+    }
+
+    /**
+     * @param  ChildInvoiceWarning $invoiceWarning The ChildInvoiceWarning object to remove.
+     * @return $this|ChildInvoice The current object (for fluent API support)
+     */
+    public function removeInvoiceWarning(ChildInvoiceWarning $invoiceWarning)
+    {
+        if ($this->getInvoiceWarnings()->contains($invoiceWarning)) {
+            $pos = $this->collInvoiceWarnings->search($invoiceWarning);
+            $this->collInvoiceWarnings->remove($pos);
+            if (null === $this->invoiceWarningsScheduledForDeletion) {
+                $this->invoiceWarningsScheduledForDeletion = clone $this->collInvoiceWarnings;
+                $this->invoiceWarningsScheduledForDeletion->clear();
+            }
+            $this->invoiceWarningsScheduledForDeletion[]= clone $invoiceWarning;
+            $invoiceWarning->setInvoice(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Invoice is new, it will return
+     * an empty collection; or if this Invoice has previously
+     * been saved, it will retrieve related InvoiceWarnings from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Invoice.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildInvoiceWarning[] List of ChildInvoiceWarning objects
+     */
+    public function getInvoiceWarningsJoinInvoiceWarningType(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildInvoiceWarningQuery::create(null, $criteria);
+        $query->joinWith('InvoiceWarningType', $joinBehavior);
+
+        return $this->getInvoiceWarnings($query, $con);
     }
 
     /**
@@ -3292,256 +3715,6 @@ abstract class Invoice implements ActiveRecordInterface
     }
 
     /**
-     * Clears out the collInvoiceWarnings collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return void
-     * @see        addInvoiceWarnings()
-     */
-    public function clearInvoiceWarnings()
-    {
-        $this->collInvoiceWarnings = null; // important to set this to NULL since that means it is uninitialized
-    }
-
-    /**
-     * Reset is the collInvoiceWarnings collection loaded partially.
-     */
-    public function resetPartialInvoiceWarnings($v = true)
-    {
-        $this->collInvoiceWarningsPartial = $v;
-    }
-
-    /**
-     * Initializes the collInvoiceWarnings collection.
-     *
-     * By default this just sets the collInvoiceWarnings collection to an empty array (like clearcollInvoiceWarnings());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param      boolean $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initInvoiceWarnings($overrideExisting = true)
-    {
-        if (null !== $this->collInvoiceWarnings && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = InvoiceWarningTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collInvoiceWarnings = new $collectionClassName;
-        $this->collInvoiceWarnings->setModel('\API\Models\ORM\Invoice\InvoiceWarning');
-    }
-
-    /**
-     * Gets an array of ChildInvoiceWarning objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildInvoice is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildInvoiceWarning[] List of ChildInvoiceWarning objects
-     * @throws PropelException
-     */
-    public function getInvoiceWarnings(Criteria $criteria = null, ConnectionInterface $con = null)
-    {
-        $partial = $this->collInvoiceWarningsPartial && !$this->isNew();
-        if (null === $this->collInvoiceWarnings || null !== $criteria  || $partial) {
-            if ($this->isNew() && null === $this->collInvoiceWarnings) {
-                // return empty collection
-                $this->initInvoiceWarnings();
-            } else {
-                $collInvoiceWarnings = ChildInvoiceWarningQuery::create(null, $criteria)
-                    ->filterByInvoice($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collInvoiceWarningsPartial && count($collInvoiceWarnings)) {
-                        $this->initInvoiceWarnings(false);
-
-                        foreach ($collInvoiceWarnings as $obj) {
-                            if (false == $this->collInvoiceWarnings->contains($obj)) {
-                                $this->collInvoiceWarnings->append($obj);
-                            }
-                        }
-
-                        $this->collInvoiceWarningsPartial = true;
-                    }
-
-                    return $collInvoiceWarnings;
-                }
-
-                if ($partial && $this->collInvoiceWarnings) {
-                    foreach ($this->collInvoiceWarnings as $obj) {
-                        if ($obj->isNew()) {
-                            $collInvoiceWarnings[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collInvoiceWarnings = $collInvoiceWarnings;
-                $this->collInvoiceWarningsPartial = false;
-            }
-        }
-
-        return $this->collInvoiceWarnings;
-    }
-
-    /**
-     * Sets a collection of ChildInvoiceWarning objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param      Collection $invoiceWarnings A Propel collection.
-     * @param      ConnectionInterface $con Optional connection object
-     * @return $this|ChildInvoice The current object (for fluent API support)
-     */
-    public function setInvoiceWarnings(Collection $invoiceWarnings, ConnectionInterface $con = null)
-    {
-        /** @var ChildInvoiceWarning[] $invoiceWarningsToDelete */
-        $invoiceWarningsToDelete = $this->getInvoiceWarnings(new Criteria(), $con)->diff($invoiceWarnings);
-
-        
-        $this->invoiceWarningsScheduledForDeletion = $invoiceWarningsToDelete;
-
-        foreach ($invoiceWarningsToDelete as $invoiceWarningRemoved) {
-            $invoiceWarningRemoved->setInvoice(null);
-        }
-
-        $this->collInvoiceWarnings = null;
-        foreach ($invoiceWarnings as $invoiceWarning) {
-            $this->addInvoiceWarning($invoiceWarning);
-        }
-
-        $this->collInvoiceWarnings = $invoiceWarnings;
-        $this->collInvoiceWarningsPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related InvoiceWarning objects.
-     *
-     * @param      Criteria $criteria
-     * @param      boolean $distinct
-     * @param      ConnectionInterface $con
-     * @return int             Count of related InvoiceWarning objects.
-     * @throws PropelException
-     */
-    public function countInvoiceWarnings(Criteria $criteria = null, $distinct = false, ConnectionInterface $con = null)
-    {
-        $partial = $this->collInvoiceWarningsPartial && !$this->isNew();
-        if (null === $this->collInvoiceWarnings || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collInvoiceWarnings) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getInvoiceWarnings());
-            }
-
-            $query = ChildInvoiceWarningQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByInvoice($this)
-                ->count($con);
-        }
-
-        return count($this->collInvoiceWarnings);
-    }
-
-    /**
-     * Method called to associate a ChildInvoiceWarning object to this object
-     * through the ChildInvoiceWarning foreign key attribute.
-     *
-     * @param  ChildInvoiceWarning $l ChildInvoiceWarning
-     * @return $this|\API\Models\ORM\Invoice\Invoice The current object (for fluent API support)
-     */
-    public function addInvoiceWarning(ChildInvoiceWarning $l)
-    {
-        if ($this->collInvoiceWarnings === null) {
-            $this->initInvoiceWarnings();
-            $this->collInvoiceWarningsPartial = true;
-        }
-
-        if (!$this->collInvoiceWarnings->contains($l)) {
-            $this->doAddInvoiceWarning($l);
-
-            if ($this->invoiceWarningsScheduledForDeletion and $this->invoiceWarningsScheduledForDeletion->contains($l)) {
-                $this->invoiceWarningsScheduledForDeletion->remove($this->invoiceWarningsScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ChildInvoiceWarning $invoiceWarning The ChildInvoiceWarning object to add.
-     */
-    protected function doAddInvoiceWarning(ChildInvoiceWarning $invoiceWarning)
-    {
-        $this->collInvoiceWarnings[]= $invoiceWarning;
-        $invoiceWarning->setInvoice($this);
-    }
-
-    /**
-     * @param  ChildInvoiceWarning $invoiceWarning The ChildInvoiceWarning object to remove.
-     * @return $this|ChildInvoice The current object (for fluent API support)
-     */
-    public function removeInvoiceWarning(ChildInvoiceWarning $invoiceWarning)
-    {
-        if ($this->getInvoiceWarnings()->contains($invoiceWarning)) {
-            $pos = $this->collInvoiceWarnings->search($invoiceWarning);
-            $this->collInvoiceWarnings->remove($pos);
-            if (null === $this->invoiceWarningsScheduledForDeletion) {
-                $this->invoiceWarningsScheduledForDeletion = clone $this->collInvoiceWarnings;
-                $this->invoiceWarningsScheduledForDeletion->clear();
-            }
-            $this->invoiceWarningsScheduledForDeletion[]= clone $invoiceWarning;
-            $invoiceWarning->setInvoice(null);
-        }
-
-        return $this;
-    }
-
-
-    /**
-     * If this collection has already been initialized with
-     * an identical criteria, it returns the collection.
-     * Otherwise if this Invoice is new, it will return
-     * an empty collection; or if this Invoice has previously
-     * been saved, it will retrieve related InvoiceWarnings from storage.
-     *
-     * This method is protected by default in order to keep the public
-     * api reasonable.  You can provide public methods for those you
-     * actually need in Invoice.
-     *
-     * @param      Criteria $criteria optional Criteria object to narrow the query
-     * @param      ConnectionInterface $con optional connection object
-     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-     * @return ObjectCollection|ChildInvoiceWarning[] List of ChildInvoiceWarning objects
-     */
-    public function getInvoiceWarningsJoinInvoiceWarningType(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
-    {
-        $query = ChildInvoiceWarningQuery::create(null, $criteria);
-        $query->joinWith('InvoiceWarningType', $joinBehavior);
-
-        return $this->getInvoiceWarnings($query, $con);
-    }
-
-    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -3563,6 +3736,9 @@ abstract class Invoice implements ActiveRecordInterface
         if (null !== $this->aInvoiceType) {
             $this->aInvoiceType->removeInvoice($this);
         }
+        if (null !== $this->aOrder) {
+            $this->aOrder->removeInvoice($this);
+        }
         if (null !== $this->aUser) {
             $this->aUser->removeInvoice($this);
         }
@@ -3573,6 +3749,7 @@ abstract class Invoice implements ActiveRecordInterface
         $this->event_bankinformationid = null;
         $this->customer_event_contactid = null;
         $this->canceled_invoiceid = null;
+        $this->orderid = null;
         $this->date = null;
         $this->amount = null;
         $this->maturity_date = null;
@@ -3606,13 +3783,13 @@ abstract class Invoice implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collPaymentRecieveds) {
-                foreach ($this->collPaymentRecieveds as $o) {
+            if ($this->collInvoiceWarnings) {
+                foreach ($this->collInvoiceWarnings as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collInvoiceWarnings) {
-                foreach ($this->collInvoiceWarnings as $o) {
+            if ($this->collPaymentRecieveds) {
+                foreach ($this->collPaymentRecieveds as $o) {
                     $o->clearAllReferences($deep);
                 }
             }
@@ -3620,13 +3797,14 @@ abstract class Invoice implements ActiveRecordInterface
 
         $this->collInvoicesRelatedByInvoiceid = null;
         $this->collInvoiceItems = null;
-        $this->collPaymentRecieveds = null;
         $this->collInvoiceWarnings = null;
+        $this->collPaymentRecieveds = null;
         $this->aEventContactRelatedByCustomerEventContactid = null;
         $this->aEventBankinformation = null;
         $this->aEventContactRelatedByEventContactid = null;
         $this->aInvoiceRelatedByCanceledInvoiceid = null;
         $this->aInvoiceType = null;
+        $this->aOrder = null;
         $this->aUser = null;
     }
 

@@ -2,6 +2,7 @@
 
 namespace API\Models\ORM\Event\Base;
 
+use \DateTime;
 use \Exception;
 use \PDO;
 use API\Models\ORM\Event\Event as ChildEvent;
@@ -25,6 +26,7 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Propel\Runtime\Util\PropelDateTime;
 
 /**
  * Base class that represents a row from the 'event_contact' table.
@@ -159,11 +161,11 @@ abstract class EventContact implements ActiveRecordInterface
     protected $email;
 
     /**
-     * The value for the active field.
+     * The value for the is_deleted field.
      * 
-     * @var        boolean
+     * @var        DateTime
      */
-    protected $active;
+    protected $is_deleted;
 
     /**
      * The value for the default field.
@@ -565,23 +567,23 @@ abstract class EventContact implements ActiveRecordInterface
     }
 
     /**
-     * Get the [active] column value.
+     * Get the [optionally formatted] temporal [is_deleted] column value.
      * 
-     * @return boolean
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
      */
-    public function getActive()
+    public function getIsDeleted($format = NULL)
     {
-        return $this->active;
-    }
-
-    /**
-     * Get the [active] column value.
-     * 
-     * @return boolean
-     */
-    public function isActive()
-    {
-        return $this->getActive();
+        if ($format === null) {
+            return $this->is_deleted;
+        } else {
+            return $this->is_deleted instanceof \DateTimeInterface ? $this->is_deleted->format($format) : null;
+        }
     }
 
     /**
@@ -869,32 +871,24 @@ abstract class EventContact implements ActiveRecordInterface
     } // setEmail()
 
     /**
-     * Sets the value of the [active] column.
-     * Non-boolean arguments are converted using the following rules:
-     *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
-     *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
-     * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
+     * Sets the value of [is_deleted] column to a normalized version of the date/time value specified.
      * 
-     * @param  boolean|integer|string $v The new value
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
      * @return $this|\API\Models\ORM\Event\EventContact The current object (for fluent API support)
      */
-    public function setActive($v)
+    public function setIsDeleted($v)
     {
-        if ($v !== null) {
-            if (is_string($v)) {
-                $v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
-            } else {
-                $v = (boolean) $v;
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->is_deleted !== null || $dt !== null) {
+            if ($this->is_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->is_deleted->format("Y-m-d H:i:s.u")) {
+                $this->is_deleted = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[EventContactTableMap::COL_IS_DELETED] = true;
             }
-        }
-
-        if ($this->active !== $v) {
-            $this->active = $v;
-            $this->modifiedColumns[EventContactTableMap::COL_ACTIVE] = true;
-        }
+        } // if either are not null
 
         return $this;
-    } // setActive()
+    } // setIsDeleted()
 
     /**
      * Sets the value of the [default] column.
@@ -999,8 +993,11 @@ abstract class EventContact implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : EventContactTableMap::translateFieldName('Email', TableMap::TYPE_PHPNAME, $indexType)];
             $this->email = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : EventContactTableMap::translateFieldName('Active', TableMap::TYPE_PHPNAME, $indexType)];
-            $this->active = (null !== $col) ? (boolean) $col : null;
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : EventContactTableMap::translateFieldName('IsDeleted', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->is_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 14 + $startcol : EventContactTableMap::translateFieldName('Default', TableMap::TYPE_PHPNAME, $indexType)];
             $this->default = (null !== $col) ? (boolean) $col : null;
@@ -1307,8 +1304,8 @@ abstract class EventContact implements ActiveRecordInterface
         if ($this->isColumnModified(EventContactTableMap::COL_EMAIL)) {
             $modifiedColumns[':p' . $index++]  = '`email`';
         }
-        if ($this->isColumnModified(EventContactTableMap::COL_ACTIVE)) {
-            $modifiedColumns[':p' . $index++]  = '`active`';
+        if ($this->isColumnModified(EventContactTableMap::COL_IS_DELETED)) {
+            $modifiedColumns[':p' . $index++]  = '`is_deleted`';
         }
         if ($this->isColumnModified(EventContactTableMap::COL_DEFAULT)) {
             $modifiedColumns[':p' . $index++]  = '`default`';
@@ -1363,8 +1360,8 @@ abstract class EventContact implements ActiveRecordInterface
                     case '`email`':                        
                         $stmt->bindValue($identifier, $this->email, PDO::PARAM_STR);
                         break;
-                    case '`active`':
-                        $stmt->bindValue($identifier, (int) $this->active, PDO::PARAM_INT);
+                    case '`is_deleted`':                        
+                        $stmt->bindValue($identifier, $this->is_deleted ? $this->is_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                     case '`default`':
                         $stmt->bindValue($identifier, (int) $this->default, PDO::PARAM_INT);
@@ -1471,7 +1468,7 @@ abstract class EventContact implements ActiveRecordInterface
                 return $this->getEmail();
                 break;
             case 13:
-                return $this->getActive();
+                return $this->getIsDeleted();
                 break;
             case 14:
                 return $this->getDefault();
@@ -1519,9 +1516,13 @@ abstract class EventContact implements ActiveRecordInterface
             $keys[10] => $this->getTelephon(),
             $keys[11] => $this->getFax(),
             $keys[12] => $this->getEmail(),
-            $keys[13] => $this->getActive(),
+            $keys[13] => $this->getIsDeleted(),
             $keys[14] => $this->getDefault(),
         );
+        if ($result[$keys[13]] instanceof \DateTime) {
+            $result[$keys[13]] = $result[$keys[13]]->format('c');
+        }
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
@@ -1647,7 +1648,7 @@ abstract class EventContact implements ActiveRecordInterface
                 $this->setEmail($value);
                 break;
             case 13:
-                $this->setActive($value);
+                $this->setIsDeleted($value);
                 break;
             case 14:
                 $this->setDefault($value);
@@ -1718,7 +1719,7 @@ abstract class EventContact implements ActiveRecordInterface
             $this->setEmail($arr[$keys[12]]);
         }
         if (array_key_exists($keys[13], $arr)) {
-            $this->setActive($arr[$keys[13]]);
+            $this->setIsDeleted($arr[$keys[13]]);
         }
         if (array_key_exists($keys[14], $arr)) {
             $this->setDefault($arr[$keys[14]]);
@@ -1803,8 +1804,8 @@ abstract class EventContact implements ActiveRecordInterface
         if ($this->isColumnModified(EventContactTableMap::COL_EMAIL)) {
             $criteria->add(EventContactTableMap::COL_EMAIL, $this->email);
         }
-        if ($this->isColumnModified(EventContactTableMap::COL_ACTIVE)) {
-            $criteria->add(EventContactTableMap::COL_ACTIVE, $this->active);
+        if ($this->isColumnModified(EventContactTableMap::COL_IS_DELETED)) {
+            $criteria->add(EventContactTableMap::COL_IS_DELETED, $this->is_deleted);
         }
         if ($this->isColumnModified(EventContactTableMap::COL_DEFAULT)) {
             $criteria->add(EventContactTableMap::COL_DEFAULT, $this->default);
@@ -1907,7 +1908,7 @@ abstract class EventContact implements ActiveRecordInterface
         $copyObj->setTelephon($this->getTelephon());
         $copyObj->setFax($this->getFax());
         $copyObj->setEmail($this->getEmail());
-        $copyObj->setActive($this->getActive());
+        $copyObj->setIsDeleted($this->getIsDeleted());
         $copyObj->setDefault($this->getDefault());
 
         if ($deepCopy) {
@@ -2344,6 +2345,31 @@ abstract class EventContact implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Invoice[] List of Invoice objects
      */
+    public function getInvoicesRelatedByCustomerEventContactidJoinOrder(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = InvoiceQuery::create(null, $criteria);
+        $query->joinWith('Order', $joinBehavior);
+
+        return $this->getInvoicesRelatedByCustomerEventContactid($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this EventContact is new, it will return
+     * an empty collection; or if this EventContact has previously
+     * been saved, it will retrieve related InvoicesRelatedByCustomerEventContactid from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in EventContact.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|Invoice[] List of Invoice objects
+     */
     public function getInvoicesRelatedByCustomerEventContactidJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = InvoiceQuery::create(null, $criteria);
@@ -2669,6 +2695,31 @@ abstract class EventContact implements ActiveRecordInterface
      * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
      * @return ObjectCollection|Invoice[] List of Invoice objects
      */
+    public function getInvoicesRelatedByEventContactidJoinOrder(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = InvoiceQuery::create(null, $criteria);
+        $query->joinWith('Order', $joinBehavior);
+
+        return $this->getInvoicesRelatedByEventContactid($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this EventContact is new, it will return
+     * an empty collection; or if this EventContact has previously
+     * been saved, it will retrieve related InvoicesRelatedByEventContactid from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in EventContact.
+     *
+     * @param      Criteria $criteria optional Criteria object to narrow the query
+     * @param      ConnectionInterface $con optional connection object
+     * @param      string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|Invoice[] List of Invoice objects
+     */
     public function getInvoicesRelatedByEventContactidJoinUser(Criteria $criteria = null, ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
     {
         $query = InvoiceQuery::create(null, $criteria);
@@ -2700,7 +2751,7 @@ abstract class EventContact implements ActiveRecordInterface
         $this->telephon = null;
         $this->fax = null;
         $this->email = null;
-        $this->active = null;
+        $this->is_deleted = null;
         $this->default = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();

@@ -56,6 +56,11 @@ interface IMenu extends IModel {
     function getMenuPossibleSizes();
 
     /**
+     * @return \DateTime
+     */
+    function getIsDeleted();
+
+    /**
      *
      * @param int $menuid Description
      * @return IMenu Description
@@ -110,4 +115,11 @@ interface IMenu extends IModel {
      * @return IMenu Description
      */
     function setAvailabilityAmount($availabilityAmount);
+
+    /**
+     *
+     * @param \DateTime $deleted Description
+     * @return IMenu Description
+     */
+    function setIsDeleted($isDeleted);
 }

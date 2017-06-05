@@ -33,14 +33,14 @@ interface IUser extends IModel {
     function getLastname();
 
     /**
-     * @return string
+     * @return ?string
      */
     function getAutologinHash();
 
     /**
-     * @return bool Description
+     * @return DateTime Description
      */
-    function getActive();
+    function getIsDeleted();
 
     /**
      * @return string Description
@@ -100,10 +100,10 @@ interface IUser extends IModel {
     function setAutologinHash($autologinHash);
 
     /**
-     * @param boolean $active Description
+     * @param DateTime $deleted Description
      * @return IUser Description
      */
-    function setActive($active);
+    function setIsDeleted($isDeleted);
 
     /**
      * @param string $phonenumber Description

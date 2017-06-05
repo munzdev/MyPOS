@@ -30,11 +30,13 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     ChildEventQuery orderByDate($order = Criteria::ASC) Order by the date column
  * @method     ChildEventQuery orderByActive($order = Criteria::ASC) Order by the active column
+ * @method     ChildEventQuery orderByIsDeleted($order = Criteria::ASC) Order by the is_deleted column
  *
  * @method     ChildEventQuery groupByEventid() Group by the eventid column
  * @method     ChildEventQuery groupByName() Group by the name column
  * @method     ChildEventQuery groupByDate() Group by the date column
  * @method     ChildEventQuery groupByActive() Group by the active column
+ * @method     ChildEventQuery groupByIsDeleted() Group by the is_deleted column
  *
  * @method     ChildEventQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildEventQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -53,6 +55,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery leftJoinWithCoupon() Adds a LEFT JOIN clause and with to the query using the Coupon relation
  * @method     ChildEventQuery rightJoinWithCoupon() Adds a RIGHT JOIN clause and with to the query using the Coupon relation
  * @method     ChildEventQuery innerJoinWithCoupon() Adds a INNER JOIN clause and with to the query using the Coupon relation
+ *
+ * @method     ChildEventQuery leftJoinDistributionPlace($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlace relation
+ * @method     ChildEventQuery rightJoinDistributionPlace($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlace relation
+ * @method     ChildEventQuery innerJoinDistributionPlace($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlace relation
+ *
+ * @method     ChildEventQuery joinWithDistributionPlace($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlace relation
+ *
+ * @method     ChildEventQuery leftJoinWithDistributionPlace() Adds a LEFT JOIN clause and with to the query using the DistributionPlace relation
+ * @method     ChildEventQuery rightJoinWithDistributionPlace() Adds a RIGHT JOIN clause and with to the query using the DistributionPlace relation
+ * @method     ChildEventQuery innerJoinWithDistributionPlace() Adds a INNER JOIN clause and with to the query using the DistributionPlace relation
  *
  * @method     ChildEventQuery leftJoinEventBankinformation($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventBankinformation relation
  * @method     ChildEventQuery rightJoinEventBankinformation($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventBankinformation relation
@@ -73,16 +85,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery leftJoinWithEventContact() Adds a LEFT JOIN clause and with to the query using the EventContact relation
  * @method     ChildEventQuery rightJoinWithEventContact() Adds a RIGHT JOIN clause and with to the query using the EventContact relation
  * @method     ChildEventQuery innerJoinWithEventContact() Adds a INNER JOIN clause and with to the query using the EventContact relation
- *
- * @method     ChildEventQuery leftJoinDistributionPlace($relationAlias = null) Adds a LEFT JOIN clause to the query using the DistributionPlace relation
- * @method     ChildEventQuery rightJoinDistributionPlace($relationAlias = null) Adds a RIGHT JOIN clause to the query using the DistributionPlace relation
- * @method     ChildEventQuery innerJoinDistributionPlace($relationAlias = null) Adds a INNER JOIN clause to the query using the DistributionPlace relation
- *
- * @method     ChildEventQuery joinWithDistributionPlace($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the DistributionPlace relation
- *
- * @method     ChildEventQuery leftJoinWithDistributionPlace() Adds a LEFT JOIN clause and with to the query using the DistributionPlace relation
- * @method     ChildEventQuery rightJoinWithDistributionPlace() Adds a RIGHT JOIN clause and with to the query using the DistributionPlace relation
- * @method     ChildEventQuery innerJoinWithDistributionPlace() Adds a INNER JOIN clause and with to the query using the DistributionPlace relation
  *
  * @method     ChildEventQuery leftJoinEventPrinter($relationAlias = null) Adds a LEFT JOIN clause to the query using the EventPrinter relation
  * @method     ChildEventQuery rightJoinEventPrinter($relationAlias = null) Adds a RIGHT JOIN clause to the query using the EventPrinter relation
@@ -114,6 +116,16 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery rightJoinWithEventUser() Adds a RIGHT JOIN clause and with to the query using the EventUser relation
  * @method     ChildEventQuery innerJoinWithEventUser() Adds a INNER JOIN clause and with to the query using the EventUser relation
  *
+ * @method     ChildEventQuery leftJoinInvoiceWarningType($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceWarningType relation
+ * @method     ChildEventQuery rightJoinInvoiceWarningType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceWarningType relation
+ * @method     ChildEventQuery innerJoinInvoiceWarningType($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceWarningType relation
+ *
+ * @method     ChildEventQuery joinWithInvoiceWarningType($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceWarningType relation
+ *
+ * @method     ChildEventQuery leftJoinWithInvoiceWarningType() Adds a LEFT JOIN clause and with to the query using the InvoiceWarningType relation
+ * @method     ChildEventQuery rightJoinWithInvoiceWarningType() Adds a RIGHT JOIN clause and with to the query using the InvoiceWarningType relation
+ * @method     ChildEventQuery innerJoinWithInvoiceWarningType() Adds a INNER JOIN clause and with to the query using the InvoiceWarningType relation
+ *
  * @method     ChildEventQuery leftJoinMenuExtra($relationAlias = null) Adds a LEFT JOIN clause to the query using the MenuExtra relation
  * @method     ChildEventQuery rightJoinMenuExtra($relationAlias = null) Adds a RIGHT JOIN clause to the query using the MenuExtra relation
  * @method     ChildEventQuery innerJoinMenuExtra($relationAlias = null) Adds a INNER JOIN clause to the query using the MenuExtra relation
@@ -144,17 +156,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEventQuery rightJoinWithMenuType() Adds a RIGHT JOIN clause and with to the query using the MenuType relation
  * @method     ChildEventQuery innerJoinWithMenuType() Adds a INNER JOIN clause and with to the query using the MenuType relation
  *
- * @method     ChildEventQuery leftJoinInvoiceWarningType($relationAlias = null) Adds a LEFT JOIN clause to the query using the InvoiceWarningType relation
- * @method     ChildEventQuery rightJoinInvoiceWarningType($relationAlias = null) Adds a RIGHT JOIN clause to the query using the InvoiceWarningType relation
- * @method     ChildEventQuery innerJoinInvoiceWarningType($relationAlias = null) Adds a INNER JOIN clause to the query using the InvoiceWarningType relation
- *
- * @method     ChildEventQuery joinWithInvoiceWarningType($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the InvoiceWarningType relation
- *
- * @method     ChildEventQuery leftJoinWithInvoiceWarningType() Adds a LEFT JOIN clause and with to the query using the InvoiceWarningType relation
- * @method     ChildEventQuery rightJoinWithInvoiceWarningType() Adds a RIGHT JOIN clause and with to the query using the InvoiceWarningType relation
- * @method     ChildEventQuery innerJoinWithInvoiceWarningType() Adds a INNER JOIN clause and with to the query using the InvoiceWarningType relation
- *
- * @method     \API\Models\ORM\Payment\CouponQuery|\API\Models\ORM\Event\EventBankinformationQuery|\API\Models\ORM\Event\EventContactQuery|\API\Models\ORM\DistributionPlace\DistributionPlaceQuery|\API\Models\ORM\Event\EventPrinterQuery|\API\Models\ORM\Event\EventTableQuery|\API\Models\ORM\Event\EventUserQuery|\API\Models\ORM\Menu\MenuExtraQuery|\API\Models\ORM\Menu\MenuSizeQuery|\API\Models\ORM\Menu\MenuTypeQuery|\API\Models\ORM\Invoice\InvoiceWarningTypeQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \API\Models\ORM\Payment\CouponQuery|\API\Models\ORM\DistributionPlace\DistributionPlaceQuery|\API\Models\ORM\Event\EventBankinformationQuery|\API\Models\ORM\Event\EventContactQuery|\API\Models\ORM\Event\EventPrinterQuery|\API\Models\ORM\Event\EventTableQuery|\API\Models\ORM\Event\EventUserQuery|\API\Models\ORM\Invoice\InvoiceWarningTypeQuery|\API\Models\ORM\Menu\MenuExtraQuery|\API\Models\ORM\Menu\MenuSizeQuery|\API\Models\ORM\Menu\MenuTypeQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildEvent findOne(ConnectionInterface $con = null) Return the first ChildEvent matching the query
  * @method     ChildEvent findOneOrCreate(ConnectionInterface $con = null) Return the first ChildEvent matching the query, or a new ChildEvent object populated from the query conditions when no match is found
@@ -162,7 +164,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEvent findOneByEventid(int $eventid) Return the first ChildEvent filtered by the eventid column
  * @method     ChildEvent findOneByName(string $name) Return the first ChildEvent filtered by the name column
  * @method     ChildEvent findOneByDate(string $date) Return the first ChildEvent filtered by the date column
- * @method     ChildEvent findOneByActive(boolean $active) Return the first ChildEvent filtered by the active column *
+ * @method     ChildEvent findOneByActive(boolean $active) Return the first ChildEvent filtered by the active column
+ * @method     ChildEvent findOneByIsDeleted(string $is_deleted) Return the first ChildEvent filtered by the is_deleted column *
 
  * @method     ChildEvent requirePk($key, ConnectionInterface $con = null) Return the ChildEvent by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOne(ConnectionInterface $con = null) Return the first ChildEvent matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -171,12 +174,14 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildEvent requireOneByName(string $name) Return the first ChildEvent filtered by the name column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOneByDate(string $date) Return the first ChildEvent filtered by the date column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildEvent requireOneByActive(boolean $active) Return the first ChildEvent filtered by the active column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildEvent requireOneByIsDeleted(string $is_deleted) Return the first ChildEvent filtered by the is_deleted column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildEvent[]|ObjectCollection find(ConnectionInterface $con = null) Return ChildEvent objects based on current ModelCriteria
  * @method     ChildEvent[]|ObjectCollection findByEventid(int $eventid) Return ChildEvent objects filtered by the eventid column
  * @method     ChildEvent[]|ObjectCollection findByName(string $name) Return ChildEvent objects filtered by the name column
  * @method     ChildEvent[]|ObjectCollection findByDate(string $date) Return ChildEvent objects filtered by the date column
  * @method     ChildEvent[]|ObjectCollection findByActive(boolean $active) Return ChildEvent objects filtered by the active column
+ * @method     ChildEvent[]|ObjectCollection findByIsDeleted(string $is_deleted) Return ChildEvent objects filtered by the is_deleted column
  * @method     ChildEvent[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  *
  */
@@ -275,7 +280,7 @@ abstract class EventQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT `eventid`, `name`, `date`, `active` FROM `event` WHERE `eventid` = :p0';
+        $sql = 'SELECT `eventid`, `name`, `date`, `active`, `is_deleted` FROM `event` WHERE `eventid` = :p0';
         try {
             $stmt = $con->prepare($sql);            
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -502,6 +507,49 @@ abstract class EventQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the is_deleted column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByIsDeleted('2011-03-14'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted('now'); // WHERE is_deleted = '2011-03-14'
+     * $query->filterByIsDeleted(array('max' => 'yesterday')); // WHERE is_deleted > '2011-03-13'
+     * </code>
+     *
+     * @param     mixed $isDeleted The value to use as filter.
+     *              Values can be integers (unix timestamps), DateTime objects, or strings.
+     *              Empty strings are treated as NULL.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this|ChildEventQuery The current query, for fluid interface
+     */
+    public function filterByIsDeleted($isDeleted = null, $comparison = null)
+    {
+        if (is_array($isDeleted)) {
+            $useMinMax = false;
+            if (isset($isDeleted['min'])) {
+                $this->addUsingAlias(EventTableMap::COL_IS_DELETED, $isDeleted['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($isDeleted['max'])) {
+                $this->addUsingAlias(EventTableMap::COL_IS_DELETED, $isDeleted['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(EventTableMap::COL_IS_DELETED, $isDeleted, $comparison);
+    }
+
+    /**
      * Filter the query by a related \API\Models\ORM\Payment\Coupon object
      *
      * @param \API\Models\ORM\Payment\Coupon|ObjectCollection $coupon the related object to use as filter
@@ -572,6 +620,79 @@ abstract class EventQuery extends ModelCriteria
         return $this
             ->joinCoupon($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'Coupon', '\API\Models\ORM\Payment\CouponQuery');
+    }
+
+    /**
+     * Filter the query by a related \API\Models\ORM\DistributionPlace\DistributionPlace object
+     *
+     * @param \API\Models\ORM\DistributionPlace\DistributionPlace|ObjectCollection $distributionPlace the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildEventQuery The current query, for fluid interface
+     */
+    public function filterByDistributionPlace($distributionPlace, $comparison = null)
+    {
+        if ($distributionPlace instanceof \API\Models\ORM\DistributionPlace\DistributionPlace) {
+            return $this
+                ->addUsingAlias(EventTableMap::COL_EVENTID, $distributionPlace->getEventid(), $comparison);
+        } elseif ($distributionPlace instanceof ObjectCollection) {
+            return $this
+                ->useDistributionPlaceQuery()
+                ->filterByPrimaryKeys($distributionPlace->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByDistributionPlace() only accepts arguments of type \API\Models\ORM\DistributionPlace\DistributionPlace or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the DistributionPlace relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildEventQuery The current query, for fluid interface
+     */
+    public function joinDistributionPlace($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('DistributionPlace');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'DistributionPlace');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the DistributionPlace relation DistributionPlace object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\ORM\DistributionPlace\DistributionPlaceQuery A secondary query class using the current class as primary query
+     */
+    public function useDistributionPlaceQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinDistributionPlace($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'DistributionPlace', '\API\Models\ORM\DistributionPlace\DistributionPlaceQuery');
     }
 
     /**
@@ -718,79 +839,6 @@ abstract class EventQuery extends ModelCriteria
         return $this
             ->joinEventContact($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'EventContact', '\API\Models\ORM\Event\EventContactQuery');
-    }
-
-    /**
-     * Filter the query by a related \API\Models\ORM\DistributionPlace\DistributionPlace object
-     *
-     * @param \API\Models\ORM\DistributionPlace\DistributionPlace|ObjectCollection $distributionPlace the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildEventQuery The current query, for fluid interface
-     */
-    public function filterByDistributionPlace($distributionPlace, $comparison = null)
-    {
-        if ($distributionPlace instanceof \API\Models\ORM\DistributionPlace\DistributionPlace) {
-            return $this
-                ->addUsingAlias(EventTableMap::COL_EVENTID, $distributionPlace->getEventid(), $comparison);
-        } elseif ($distributionPlace instanceof ObjectCollection) {
-            return $this
-                ->useDistributionPlaceQuery()
-                ->filterByPrimaryKeys($distributionPlace->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByDistributionPlace() only accepts arguments of type \API\Models\ORM\DistributionPlace\DistributionPlace or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the DistributionPlace relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildEventQuery The current query, for fluid interface
-     */
-    public function joinDistributionPlace($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('DistributionPlace');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'DistributionPlace');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the DistributionPlace relation DistributionPlace object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \API\Models\ORM\DistributionPlace\DistributionPlaceQuery A secondary query class using the current class as primary query
-     */
-    public function useDistributionPlaceQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinDistributionPlace($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'DistributionPlace', '\API\Models\ORM\DistributionPlace\DistributionPlaceQuery');
     }
 
     /**
@@ -1013,6 +1061,79 @@ abstract class EventQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query by a related \API\Models\ORM\Invoice\InvoiceWarningType object
+     *
+     * @param \API\Models\ORM\Invoice\InvoiceWarningType|ObjectCollection $invoiceWarningType the related object to use as filter
+     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildEventQuery The current query, for fluid interface
+     */
+    public function filterByInvoiceWarningType($invoiceWarningType, $comparison = null)
+    {
+        if ($invoiceWarningType instanceof \API\Models\ORM\Invoice\InvoiceWarningType) {
+            return $this
+                ->addUsingAlias(EventTableMap::COL_EVENTID, $invoiceWarningType->getEventid(), $comparison);
+        } elseif ($invoiceWarningType instanceof ObjectCollection) {
+            return $this
+                ->useInvoiceWarningTypeQuery()
+                ->filterByPrimaryKeys($invoiceWarningType->getPrimaryKeys())
+                ->endUse();
+        } else {
+            throw new PropelException('filterByInvoiceWarningType() only accepts arguments of type \API\Models\ORM\Invoice\InvoiceWarningType or Collection');
+        }
+    }
+
+    /**
+     * Adds a JOIN clause to the query using the InvoiceWarningType relation
+     *
+     * @param     string $relationAlias optional alias for the relation
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return $this|ChildEventQuery The current query, for fluid interface
+     */
+    public function joinInvoiceWarningType($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        $tableMap = $this->getTableMap();
+        $relationMap = $tableMap->getRelation('InvoiceWarningType');
+
+        // create a ModelJoin object for this join
+        $join = new ModelJoin();
+        $join->setJoinType($joinType);
+        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+        if ($previousJoin = $this->getPreviousJoin()) {
+            $join->setPreviousJoin($previousJoin);
+        }
+
+        // add the ModelJoin to the current object
+        if ($relationAlias) {
+            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+            $this->addJoinObject($join, $relationAlias);
+        } else {
+            $this->addJoinObject($join, 'InvoiceWarningType');
+        }
+
+        return $this;
+    }
+
+    /**
+     * Use the InvoiceWarningType relation InvoiceWarningType object
+     *
+     * @see useQuery()
+     *
+     * @param     string $relationAlias optional alias for the relation,
+     *                                   to be used as main alias in the secondary query
+     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+     *
+     * @return \API\Models\ORM\Invoice\InvoiceWarningTypeQuery A secondary query class using the current class as primary query
+     */
+    public function useInvoiceWarningTypeQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    {
+        return $this
+            ->joinInvoiceWarningType($relationAlias, $joinType)
+            ->useQuery($relationAlias ? $relationAlias : 'InvoiceWarningType', '\API\Models\ORM\Invoice\InvoiceWarningTypeQuery');
+    }
+
+    /**
      * Filter the query by a related \API\Models\ORM\Menu\MenuExtra object
      *
      * @param \API\Models\ORM\Menu\MenuExtra|ObjectCollection $menuExtra the related object to use as filter
@@ -1229,79 +1350,6 @@ abstract class EventQuery extends ModelCriteria
         return $this
             ->joinMenuType($relationAlias, $joinType)
             ->useQuery($relationAlias ? $relationAlias : 'MenuType', '\API\Models\ORM\Menu\MenuTypeQuery');
-    }
-
-    /**
-     * Filter the query by a related \API\Models\ORM\Invoice\InvoiceWarningType object
-     *
-     * @param \API\Models\ORM\Invoice\InvoiceWarningType|ObjectCollection $invoiceWarningType the related object to use as filter
-     * @param string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return ChildEventQuery The current query, for fluid interface
-     */
-    public function filterByInvoiceWarningType($invoiceWarningType, $comparison = null)
-    {
-        if ($invoiceWarningType instanceof \API\Models\ORM\Invoice\InvoiceWarningType) {
-            return $this
-                ->addUsingAlias(EventTableMap::COL_EVENTID, $invoiceWarningType->getEventid(), $comparison);
-        } elseif ($invoiceWarningType instanceof ObjectCollection) {
-            return $this
-                ->useInvoiceWarningTypeQuery()
-                ->filterByPrimaryKeys($invoiceWarningType->getPrimaryKeys())
-                ->endUse();
-        } else {
-            throw new PropelException('filterByInvoiceWarningType() only accepts arguments of type \API\Models\ORM\Invoice\InvoiceWarningType or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the InvoiceWarningType relation
-     *
-     * @param     string $relationAlias optional alias for the relation
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this|ChildEventQuery The current query, for fluid interface
-     */
-    public function joinInvoiceWarningType($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('InvoiceWarningType');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'InvoiceWarningType');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the InvoiceWarningType relation InvoiceWarningType object
-     *
-     * @see useQuery()
-     *
-     * @param     string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \API\Models\ORM\Invoice\InvoiceWarningTypeQuery A secondary query class using the current class as primary query
-     */
-    public function useInvoiceWarningTypeQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-    {
-        return $this
-            ->joinInvoiceWarningType($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'InvoiceWarningType', '\API\Models\ORM\Invoice\InvoiceWarningTypeQuery');
     }
 
     /**

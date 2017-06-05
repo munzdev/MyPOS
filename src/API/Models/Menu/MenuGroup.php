@@ -57,6 +57,11 @@ class MenuGroup extends Model implements IMenuGroup
         return $menuCollection;
     }
 
+    public function getIsDeleted(): ?\DateTime
+    {
+        return $this->model->getIsDeleted();
+    }
+
     public function setMenuGroupid($menuGroupid): IMenuGroup
     {
         $this->model->setMenuGroupid($menuGroupid);
@@ -81,4 +86,9 @@ class MenuGroup extends Model implements IMenuGroup
         return $this;
     }
 
+    public function setIsDeleted($isDeleted): IMenuGroup
+    {
+        $this->model->setIsDeleted($isDeleted);
+        return $this;
+    }
 }

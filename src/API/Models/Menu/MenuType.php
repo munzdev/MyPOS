@@ -67,6 +67,11 @@ class MenuType extends Model implements IMenuType
         return $menuGroupCollection;
     }
 
+    public function getIsDeleted(): ?\DateTime
+    {
+        return $this->model->getIsDeleted();
+    }
+
     public function setAllowMixing($allowMixing): IMenuType
     {
         $this->model->setAllowMixing($allowMixing);
@@ -103,4 +108,9 @@ class MenuType extends Model implements IMenuType
         return $this;
     }
 
+    public function setIsDeleted($isDeleted): IMenuType
+    {
+        $this->model->setIsDeleted($isDeleted);
+        return $this;
+    }
 }

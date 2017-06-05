@@ -2,6 +2,7 @@
 
 namespace API\Models\ORM\Menu\Base;
 
+use \DateTime;
 use \Exception;
 use \PDO;
 use API\Models\ORM\DistributionPlace\DistributionPlaceGroup;
@@ -36,6 +37,7 @@ use Propel\Runtime\Exception\LogicException;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Parser\AbstractParser;
+use Propel\Runtime\Util\PropelDateTime;
 
 /**
  * Base class that represents a row from the 'menu_group' table.
@@ -98,6 +100,13 @@ abstract class MenuGroup implements ActiveRecordInterface
      * @var        string
      */
     protected $name;
+
+    /**
+     * The value for the is_deleted field.
+     * 
+     * @var        DateTime
+     */
+    protected $is_deleted;
 
     /**
      * @var        ChildMenuType
@@ -416,6 +425,26 @@ abstract class MenuGroup implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [is_deleted] column value.
+     * 
+     *
+     * @param      string $format The date/time format string (either date()-style or strftime()-style).
+     *                            If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+     *
+     * @throws PropelException - if unable to parse/validate the date/time value.
+     */
+    public function getIsDeleted($format = NULL)
+    {
+        if ($format === null) {
+            return $this->is_deleted;
+        } else {
+            return $this->is_deleted instanceof \DateTimeInterface ? $this->is_deleted->format($format) : null;
+        }
+    }
+
+    /**
      * Set the value of [menu_groupid] column.
      * 
      * @param int $v new value
@@ -480,6 +509,26 @@ abstract class MenuGroup implements ActiveRecordInterface
     } // setName()
 
     /**
+     * Sets the value of [is_deleted] column to a normalized version of the date/time value specified.
+     * 
+     * @param  mixed $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this|\API\Models\ORM\Menu\MenuGroup The current object (for fluent API support)
+     */
+    public function setIsDeleted($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->is_deleted !== null || $dt !== null) {
+            if ($this->is_deleted === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->is_deleted->format("Y-m-d H:i:s.u")) {
+                $this->is_deleted = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[MenuGroupTableMap::COL_IS_DELETED] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    } // setIsDeleted()
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -523,6 +572,12 @@ abstract class MenuGroup implements ActiveRecordInterface
 
             $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : MenuGroupTableMap::translateFieldName('Name', TableMap::TYPE_PHPNAME, $indexType)];
             $this->name = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : MenuGroupTableMap::translateFieldName('IsDeleted', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->is_deleted = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
             $this->resetModified();
 
             $this->setNew(false);
@@ -531,7 +586,7 @@ abstract class MenuGroup implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 3; // 3 = MenuGroupTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 4; // 4 = MenuGroupTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\API\\Models\\ORM\\Menu\\MenuGroup'), 0, $e);
@@ -834,6 +889,9 @@ abstract class MenuGroup implements ActiveRecordInterface
         if ($this->isColumnModified(MenuGroupTableMap::COL_NAME)) {
             $modifiedColumns[':p' . $index++]  = '`name`';
         }
+        if ($this->isColumnModified(MenuGroupTableMap::COL_IS_DELETED)) {
+            $modifiedColumns[':p' . $index++]  = '`is_deleted`';
+        }
 
         $sql = sprintf(
             'INSERT INTO `menu_group` (%s) VALUES (%s)',
@@ -853,6 +911,9 @@ abstract class MenuGroup implements ActiveRecordInterface
                         break;
                     case '`name`':                        
                         $stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+                        break;
+                    case '`is_deleted`':                        
+                        $stmt->bindValue($identifier, $this->is_deleted ? $this->is_deleted->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
                         break;
                 }
             }
@@ -925,6 +986,9 @@ abstract class MenuGroup implements ActiveRecordInterface
             case 2:
                 return $this->getName();
                 break;
+            case 3:
+                return $this->getIsDeleted();
+                break;
             default:
                 return null;
                 break;
@@ -958,7 +1022,12 @@ abstract class MenuGroup implements ActiveRecordInterface
             $keys[0] => $this->getMenuGroupid(),
             $keys[1] => $this->getMenuTypeid(),
             $keys[2] => $this->getName(),
+            $keys[3] => $this->getIsDeleted(),
         );
+        if ($result[$keys[3]] instanceof \DateTime) {
+            $result[$keys[3]] = $result[$keys[3]]->format('c');
+        }
+        
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
             $result[$key] = $virtualColumn;
@@ -1083,6 +1152,9 @@ abstract class MenuGroup implements ActiveRecordInterface
             case 2:
                 $this->setName($value);
                 break;
+            case 3:
+                $this->setIsDeleted($value);
+                break;
         } // switch()
 
         return $this;
@@ -1117,6 +1189,9 @@ abstract class MenuGroup implements ActiveRecordInterface
         }
         if (array_key_exists($keys[2], $arr)) {
             $this->setName($arr[$keys[2]]);
+        }
+        if (array_key_exists($keys[3], $arr)) {
+            $this->setIsDeleted($arr[$keys[3]]);
         }
     }
 
@@ -1167,6 +1242,9 @@ abstract class MenuGroup implements ActiveRecordInterface
         }
         if ($this->isColumnModified(MenuGroupTableMap::COL_NAME)) {
             $criteria->add(MenuGroupTableMap::COL_NAME, $this->name);
+        }
+        if ($this->isColumnModified(MenuGroupTableMap::COL_IS_DELETED)) {
+            $criteria->add(MenuGroupTableMap::COL_IS_DELETED, $this->is_deleted);
         }
 
         return $criteria;
@@ -1256,6 +1334,7 @@ abstract class MenuGroup implements ActiveRecordInterface
     {
         $copyObj->setMenuTypeid($this->getMenuTypeid());
         $copyObj->setName($this->getName());
+        $copyObj->setIsDeleted($this->getIsDeleted());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -2530,6 +2609,7 @@ abstract class MenuGroup implements ActiveRecordInterface
         $this->menu_groupid = null;
         $this->menu_typeid = null;
         $this->name = null;
+        $this->is_deleted = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();

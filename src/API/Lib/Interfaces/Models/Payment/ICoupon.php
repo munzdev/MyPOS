@@ -49,6 +49,11 @@ interface ICoupon extends IModel {
     function getValue();
 
     /**
+     * @return DateTime
+     */
+    function getIsDeleted();
+
+    /**
      *
      * @param int $couponid Description
      * @return ICoupon Description
@@ -103,4 +108,11 @@ interface ICoupon extends IModel {
      * @return ICoupon Description
      */
     function setValue($value);
+
+    /**
+     *
+     * @param DateTime $deleted Description
+     * @return ICoupon Description
+     */
+    function setIsDeleted($isDeleted);
 }

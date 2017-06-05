@@ -24,7 +24,7 @@ class EventTable extends Model implements IEventTable
 
     public function getData(): string
     {
-        return $$this->model->getData();
+        return $this->model->getData();
     }
 
     public function getEvent(): IEvent
@@ -39,17 +39,22 @@ class EventTable extends Model implements IEventTable
 
     public function getEventTableid(): int
     {
-        return $$this->model->getEventTableid();
+        return $this->model->getEventTableid();
     }
 
     public function getEventid(): int
     {
-        return $$this->model->getEventid();
+        return $this->model->getEventid();
     }
 
     public function getName(): string
     {
-        return $$this->model->getName();
+        return $this->model->getName();
+    }
+
+    public function getIsDeleted() : ?\DateTime
+    {
+        return $this->model->getIsDeleted();
     }
 
     public function setData($data): IEventTable
@@ -82,4 +87,9 @@ class EventTable extends Model implements IEventTable
         return $this;
     }
 
+    public function setIsDeleted($isDeleted) : IEventTable
+    {
+        $this->model->setIsDeleted($isDeleted);
+        return $this;
+    }
 }

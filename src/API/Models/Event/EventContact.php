@@ -22,9 +22,9 @@ class EventContact extends Model implements IEventContact
         $this->setModel(new EventContactORM());
     }
 
-    public function getActive(): boolean
+    public function getIsDeleted(): ?\DateTime
     {
-        return $this->model->getActive();
+        return $this->model->getIsDeleted();
     }
 
     public function getAddress(): string
@@ -107,9 +107,9 @@ class EventContact extends Model implements IEventContact
         return $this->model->getZip();
     }
 
-    public function setActive($active): IEventContact
+    public function setIsDeleted($isDeleted): IEventContact
     {
-        $this->model->setActive($active);
+        $this->model->setIsDeleted($isDeleted);
         return $this;
     }
 
@@ -202,5 +202,4 @@ class EventContact extends Model implements IEventContact
         $this->model->setZip($zip);
         return $this;
     }
-
 }

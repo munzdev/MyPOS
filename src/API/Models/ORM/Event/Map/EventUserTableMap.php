@@ -59,7 +59,7 @@ class EventUserTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 5;
+    const NUM_COLUMNS = 6;
 
     /**
      * The number of lazy-loaded columns
@@ -69,7 +69,7 @@ class EventUserTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 5;
+    const NUM_HYDRATE_COLUMNS = 6;
 
     /**
      * the column name for the event_userid field
@@ -97,6 +97,11 @@ class EventUserTableMap extends TableMap
     const COL_BEGIN_MONEY = 'event_user.begin_money';
 
     /**
+     * the column name for the is_deleted field
+     */
+    const COL_IS_DELETED = 'event_user.is_deleted';
+
+    /**
      * The default string format for model objects of the related table
      */
     const DEFAULT_STRING_FORMAT = 'YAML';
@@ -108,11 +113,11 @@ class EventUserTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('EventUserid', 'Eventid', 'Userid', 'UserRoles', 'BeginMoney', ),
-        self::TYPE_CAMELNAME     => array('eventUserid', 'eventid', 'userid', 'userRoles', 'beginMoney', ),
-        self::TYPE_COLNAME       => array(EventUserTableMap::COL_EVENT_USERID, EventUserTableMap::COL_EVENTID, EventUserTableMap::COL_USERID, EventUserTableMap::COL_USER_ROLES, EventUserTableMap::COL_BEGIN_MONEY, ),
-        self::TYPE_FIELDNAME     => array('event_userid', 'eventid', 'userid', 'user_roles', 'begin_money', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('EventUserid', 'Eventid', 'Userid', 'UserRoles', 'BeginMoney', 'IsDeleted', ),
+        self::TYPE_CAMELNAME     => array('eventUserid', 'eventid', 'userid', 'userRoles', 'beginMoney', 'isDeleted', ),
+        self::TYPE_COLNAME       => array(EventUserTableMap::COL_EVENT_USERID, EventUserTableMap::COL_EVENTID, EventUserTableMap::COL_USERID, EventUserTableMap::COL_USER_ROLES, EventUserTableMap::COL_BEGIN_MONEY, EventUserTableMap::COL_IS_DELETED, ),
+        self::TYPE_FIELDNAME     => array('event_userid', 'eventid', 'userid', 'user_roles', 'begin_money', 'is_deleted', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -122,11 +127,11 @@ class EventUserTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('EventUserid' => 0, 'Eventid' => 1, 'Userid' => 2, 'UserRoles' => 3, 'BeginMoney' => 4, ),
-        self::TYPE_CAMELNAME     => array('eventUserid' => 0, 'eventid' => 1, 'userid' => 2, 'userRoles' => 3, 'beginMoney' => 4, ),
-        self::TYPE_COLNAME       => array(EventUserTableMap::COL_EVENT_USERID => 0, EventUserTableMap::COL_EVENTID => 1, EventUserTableMap::COL_USERID => 2, EventUserTableMap::COL_USER_ROLES => 3, EventUserTableMap::COL_BEGIN_MONEY => 4, ),
-        self::TYPE_FIELDNAME     => array('event_userid' => 0, 'eventid' => 1, 'userid' => 2, 'user_roles' => 3, 'begin_money' => 4, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, )
+        self::TYPE_PHPNAME       => array('EventUserid' => 0, 'Eventid' => 1, 'Userid' => 2, 'UserRoles' => 3, 'BeginMoney' => 4, 'IsDeleted' => 5, ),
+        self::TYPE_CAMELNAME     => array('eventUserid' => 0, 'eventid' => 1, 'userid' => 2, 'userRoles' => 3, 'beginMoney' => 4, 'isDeleted' => 5, ),
+        self::TYPE_COLNAME       => array(EventUserTableMap::COL_EVENT_USERID => 0, EventUserTableMap::COL_EVENTID => 1, EventUserTableMap::COL_USERID => 2, EventUserTableMap::COL_USER_ROLES => 3, EventUserTableMap::COL_BEGIN_MONEY => 4, EventUserTableMap::COL_IS_DELETED => 5, ),
+        self::TYPE_FIELDNAME     => array('event_userid' => 0, 'eventid' => 1, 'userid' => 2, 'user_roles' => 3, 'begin_money' => 4, 'is_deleted' => 5, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, )
     );
 
     /**
@@ -151,6 +156,7 @@ class EventUserTableMap extends TableMap
         $this->addForeignKey('userid', 'Userid', 'INTEGER', 'user', 'userid', true, null, null);
         $this->addColumn('user_roles', 'UserRoles', 'INTEGER', true, null, null);
         $this->addColumn('begin_money', 'BeginMoney', 'DECIMAL', true, null, null);
+        $this->addColumn('is_deleted', 'IsDeleted', 'TIMESTAMP', false, null, null);
     } // initialize()
 
     /**
@@ -334,12 +340,14 @@ class EventUserTableMap extends TableMap
             $criteria->addSelectColumn(EventUserTableMap::COL_USERID);
             $criteria->addSelectColumn(EventUserTableMap::COL_USER_ROLES);
             $criteria->addSelectColumn(EventUserTableMap::COL_BEGIN_MONEY);
+            $criteria->addSelectColumn(EventUserTableMap::COL_IS_DELETED);
         } else {
             $criteria->addSelectColumn($alias . '.event_userid');
             $criteria->addSelectColumn($alias . '.eventid');
             $criteria->addSelectColumn($alias . '.userid');
             $criteria->addSelectColumn($alias . '.user_roles');
             $criteria->addSelectColumn($alias . '.begin_money');
+            $criteria->addSelectColumn($alias . '.is_deleted');
         }
     }
 

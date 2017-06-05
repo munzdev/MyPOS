@@ -68,6 +68,11 @@ class MenuExtra extends Model implements IMenuExtra
         return $this->model->getName();
     }
 
+    public function getIsDeleted(): ?\DateTime
+    {
+        return $this->model->getIsDeleted();
+    }
+
     public function setAvailability($availability): IMenuExtra
     {
         $this->model->setAvailability($availability);
@@ -107,6 +112,12 @@ class MenuExtra extends Model implements IMenuExtra
     public function setName($name): IMenuExtra
     {
         $this->model->setName($name);
+        return $this;
+    }
+
+    public function setIsDeleted($isDeleted): IMenuExtra
+    {
+        $this->model->setIsDeleted($isDeleted);
         return $this;
     }
 }

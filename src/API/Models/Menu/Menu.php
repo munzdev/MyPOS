@@ -93,6 +93,11 @@ class Menu extends Model implements IMenu
         return $menuPossibleSizeCollection;
     }
 
+    public function getIsDeleted() : ?\DateTime
+    {
+        return $this->model->getIsDeleted();
+    }
+
     public function setAvailability($availability): IMenu
     {
         $this->model->setAvailability($availability);
@@ -141,4 +146,9 @@ class Menu extends Model implements IMenu
         return $this;
     }
 
+    public function setIsDeleted($isDeleted): IMenu
+    {
+        $this->model->setIsDeleted($isDeleted);
+        return $this;
+    }
 }

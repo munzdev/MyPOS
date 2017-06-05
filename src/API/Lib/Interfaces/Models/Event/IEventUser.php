@@ -42,6 +42,11 @@ interface IEventUser extends IModel {
     function getUserRoles();
 
     /**
+     * @return \DateTime
+     */
+    function getIsDeleted();
+
+    /**
      *
      * @param float $beginMoney Description
      * @return IEventUser Description
@@ -83,4 +88,10 @@ interface IEventUser extends IModel {
      * @return IEventUser Description
      */
     function setUserRoles($userRoles);
+
+    /**
+     * @param \DateTime $deleted Description
+     * @return IEventUser Description
+     */
+    function setIsDeleted($isDeleted);
 }
