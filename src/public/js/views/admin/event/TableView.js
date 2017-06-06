@@ -1,7 +1,9 @@
 define(['views/admin/event/AdminEventView',
-        'text!templates/admin/event/table.phtml'
+        'text!templates/admin/event/table.phtml',
+        'text!templates/admin/event/table-item.phtml'
 ], function(AdminEventView,
-            Template) {
+            Template,
+            TemplateItem) {
     "use strict";
 
     return class TableView extends AdminEventView {
@@ -17,10 +19,34 @@ define(['views/admin/event/AdminEventView',
             super.initialize(options);
 
             this.tables = new app.collections.Event.EventTableCollection();
-            this.tables.fetch({url: this.tables.url() + '/Eventid/' + this.eventid})
-                        .done(() => {
-                            this.render();
-                        });
+            this.refresh();
+        }
+
+        onClose() {
+            if (this.fetching) {
+                this.fetching.abort();
+            }
+        }
+
+        refresh() {
+            this.$('#tables-list').empty();
+
+            if(!this.rendered) {
+                this.render();
+                this.rendered = true;
+            }
+
+            $.mobile.loading("show", {
+                text: 'Lade Tabellen ...',
+                textVisible: true,
+                theme: 'b'
+            });
+
+            this.fetching = this.tables.fetch({url: this.tables.url() + '/Eventid/' + this.eventid})
+                                        .done(() => {
+                                            this.fetching = null;
+                                            this.renderTableList();
+                                        });
         }
 
         click_add_btn() {
@@ -51,8 +77,19 @@ define(['views/admin/event/AdminEventView',
                 });
         }
 
+        renderTableList() {
+            $.mobile.loading("hide");
+            let template = _.template(TemplateItem);
+            let i18n = this.i18n();
+
+            this.tables.each((table) => {
+                this.$('#tables-list').append(template({table: table,
+                                                        t: i18n}));
+            });
+        }
+
         render() {
-            this.renderTemplate(Template, {tables: this.tables});
+            this.renderTemplate(Template);
 
             this.changePage(this);
 

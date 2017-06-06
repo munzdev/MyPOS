@@ -1,7 +1,9 @@
 define(['views/admin/event/AdminEventView',
-        'text!templates/admin/event/printer.phtml'
+        'text!templates/admin/event/printer.phtml',
+        'text!templates/admin/event/printer-item.phtml'
 ], function(AdminEventView,
-            Template) {
+            Template,
+            TemplateItem) {
     "use strict";
 
     return class PrinterView extends AdminEventView {
@@ -18,10 +20,34 @@ define(['views/admin/event/AdminEventView',
             super.initialize(options);
 
             this.printers = new app.collections.Event.EventPrinterCollection();
-            this.printers.fetch({url: this.printers.url() + '/Eventid/' + this.eventid})
-                .done(() => {
-                    this.render();
-                });
+            this.refresh();
+        }
+
+        onClose() {
+            if (this.fetching) {
+               this.fetching.abort();
+            }
+        }
+
+        refresh() {
+            this.$('#printers-list').empty();
+
+            if(!this.rendered) {
+                this.render();
+                this.rendered = true;
+            }
+
+            $.mobile.loading("show", {
+                text: 'Lade Drucker ...',
+                textVisible: true,
+                theme: 'b'
+            });
+
+            this.fetching = this.printers.fetch({url: this.printers.url() + '/Eventid/' + this.eventid})
+                                        .done(() => {
+                                            this.fetching = null;
+                                            this.renderPrinterList();
+                                        });
         }
 
         click_add_btn() {
@@ -61,8 +87,19 @@ define(['views/admin/event/AdminEventView',
                     });
         }
 
+        renderPrinterList() {
+            $.mobile.loading("hide");
+            let template = _.template(TemplateItem);
+            let i18n = this.i18n();
+
+            this.printers.each((printer) => {
+                this.$('#printers-list').append(template({printer: printer,
+                                                          t: i18n}));
+            });
+        }
+
         render() {
-            this.renderTemplate(Template, {printers: this.printers});
+            this.renderTemplate(Template);
 
             this.changePage(this);
 

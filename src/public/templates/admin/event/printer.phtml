@@ -12,21 +12,7 @@
                 <th>Optionen</th>
             </tr>
         </thead>
-        <tbody>
-            <% printers.each(function(printer){ %>
-                <tr>
-                    <th><%- printer.get('Name') %></th>
-                    <td><% if(printer.get('Default') == 1) { print('Ja'); } else { print('Nein'); } %></td>
-                    <td><%- printer.get('Attr1') %></td>
-                    <td><%- printer.get('Attr2') %></td>
-                    <td><%- printer.get('CharactersPerRow') %></td>
-                    <td>
-                        <a data-printer-cid="<%- printer.cid %>" class="default-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left">Als Standard setzen</a>
-                        <a data-printer-cid="<%- printer.cid %>" class="edit-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left">Bearbeiten</a>
-                        <a data-printer-cid="<%- printer.cid %>" class="delete-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left">Löschen</a>
-                    </td>
-                </tr>
-            <% }); %>
+        <tbody id="printers-list">
         </tbody>
     </table>
 </div>
