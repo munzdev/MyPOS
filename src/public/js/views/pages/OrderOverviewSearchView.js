@@ -87,7 +87,7 @@ define(['text!templates/pages/order-overview-search.phtml'
         }
 
         render() {
-            this.renderTemplate(Template, {user: app.user});
+            this.renderTemplate(Template, {userList: app.userList});
 
             this.changePage(this);
         }

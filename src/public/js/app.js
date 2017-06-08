@@ -71,7 +71,7 @@ function( Webservice,
                 app.sideMenu = new SideMenuView();
                 
                 $.when(app.productList.fetch(),
-                       app.user.fetch()).then(() => {
+                       app.userList.fetch()).then(() => {
                             initApp();
                            
                             var fragment = Backbone.history.getFragment();                                                        
@@ -129,7 +129,7 @@ function( Webservice,
             
             // create a products collection/model for later to fetch
             app.productList = new ProductCollection();
-            app.user = new UserCollection();
+            app.userList = new UserCollection();
 
             // Init websocket services
             app.ws = {};

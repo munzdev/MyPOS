@@ -122,7 +122,7 @@ define(['views/helpers/CustomerSelectView',
         render() {
             this.registerAppendview(this.customerSelectView);
 
-            this.renderTemplate(Template, {userList: app.user,
+            this.renderTemplate(Template, {userList: app.userList,
                                            invoiceTypeList: this.invoiceTypeCollection});
 
             this.changePage(this);
