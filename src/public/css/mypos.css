@@ -90,3 +90,9 @@
 .ui-li-static.ui-collapsible > .ui-collapsible-content {
     border-left-width: 0;
 }
+
+/* Dirty Fix page header. With default page transitions = none, somehow the header gets brigen and
+overlaps the main content. This will pad down the main conentn so it will not get overlapped */
+.ui-page {
+    padding-top: 2.5em !important;
+}

@@ -1,10 +1,8 @@
 define(['collections/custom/invoice/InvoiceOverviewCollection',
-        'views/helpers/HeaderView',
         'views/helpers/PaginationView',
         'text!templates/pages/invoice-overview.phtml',
         'text!templates/pages/invoice-overview-item.phtml'
 ], function(InvoiceOverviewCollection,
-            HeaderView,
             PaginationView,
             Template,
             TemplateItem) {
@@ -165,14 +163,9 @@ define(['collections/custom/invoice/InvoiceOverviewCollection',
             this.pagination.setTotalPages(Math.ceil(this.invoiceList.count / this.elementsPerPage));
             this.registerSubview(".nav-pagination", this.pagination);
 
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-
             this.renderTemplate(Template, {invoiceid: this.search.invoiceid});
 
             this.changePage(this);
-
-            return this;
         }
     }
 

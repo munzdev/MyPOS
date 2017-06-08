@@ -2,6 +2,9 @@
     "errorLoadingApp": "App Ladefehler",
     "errorLoadingAppRouteText": "Es wurde keine Startseite gefunden. Haben Sie irgendeine Berechtigung bekommen?",
     "errorLoadingAppText": "Bitte laden Sie die App neu",
+    "errorLoadingDataText": "Daten konnten nicht geladen werden! Bitte prüfen Sie das Netzwerk und versuchen Sie es erneut!",
+    "errorReloadPageText": "Seite neu laden",
+    "loading": "Lade...",
     "currency": "€",
     "SideMenuView": {
         "callRequestSuccessfully": "Anfrage erfolgreich",

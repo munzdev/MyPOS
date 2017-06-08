@@ -64,6 +64,7 @@ function(I18n) {
     $.mobile.pushStateEnabled = false; // Dont use Push State listening as this also gets handled by Backbone
     $.mobile.changePage.defaults.changeHash = false;  // Don't change the URLS hash on link clicking. Will be done manuly by code events
     $.mobile.autoInitializePage = false; // As no Page is in the DOM by default, don't try to init them
+    $.mobile.defaultPageTransition = 'none'; // disable transitions effects for performance and displaying reasons
     $.ajaxSetup({ cache: false });      // force ajax call on all browsers, no caching
 
     var app = window.app = {

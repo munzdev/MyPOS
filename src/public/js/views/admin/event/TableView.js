@@ -22,12 +22,6 @@ define(['views/admin/event/AdminEventView',
             this.refresh();
         }
 
-        onClose() {
-            if (this.fetching) {
-                this.fetching.abort();
-            }
-        }
-
         refresh() {
             this.$('#tables-list').empty();
 
@@ -35,18 +29,8 @@ define(['views/admin/event/AdminEventView',
                 this.render();
                 this.rendered = true;
             }
-
-            $.mobile.loading("show", {
-                text: 'Lade Tabellen ...',
-                textVisible: true,
-                theme: 'b'
-            });
-
-            this.fetching = this.tables.fetch({url: this.tables.url() + '/Eventid/' + this.eventid})
-                                        .done(() => {
-                                            this.fetching = null;
-                                            this.renderTableList();
-                                        });
+            
+            this.fetchData(this.tables.fetch({url: this.tables.url() + '/Eventid/' + this.eventid}), 'Lade Tabellen ...');
         }
 
         click_add_btn() {
@@ -77,8 +61,7 @@ define(['views/admin/event/AdminEventView',
                 });
         }
 
-        renderTableList() {
-            $.mobile.loading("hide");
+        onDataFetched() {
             let template = _.template(TemplateItem);
             let i18n = this.i18n();
 
@@ -92,8 +75,6 @@ define(['views/admin/event/AdminEventView',
             this.renderTemplate(Template);
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

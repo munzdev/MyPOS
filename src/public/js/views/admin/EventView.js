@@ -1,7 +1,5 @@
-define(['views/helpers/HeaderView',
-        'text!templates/admin/event.phtml'
-], function(HeaderView,
-            Template) {
+define(['text!templates/admin/event.phtml'
+], function(Template) {
     "use strict";
 
     return class EventView extends app.AdminView {
@@ -73,14 +71,9 @@ define(['views/helpers/HeaderView',
 
         // Renders all of the Category models on the UI
         render() {
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-
             this.renderTemplate(Template, {events: this.events});
 
-            this.changePage(this);
-
-            return this;            
+            this.changePage(this);         
         }
     }
 

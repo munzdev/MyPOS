@@ -1,12 +1,10 @@
 define(['Webservice',
         'models/custom/invoice/InvoiceModel',
-        'views/helpers/HeaderView',
-        'views/helpers/CustomerSelectView',
+       'views/helpers/CustomerSelectView',
         'text!templates/pages/invoice-add.phtml',
         'text!templates/pages/invoice-add-item.phtml'
 ], function(Webservice,
             InvoiceModel,
-            HeaderView,
             CustomerSelectView,
             Template,
             TemplateItem) {
@@ -147,8 +145,6 @@ define(['Webservice',
         render() {
             let t = this.i18n();
 
-            let header = new HeaderView();
-            this.registerSubview(".nav-header", header);
             this.registerAppendview(this.customerSelectView);
 
             this.renderTemplate(Template, {invoiceTypeList: this.invoiceTypeCollection});
@@ -176,8 +172,6 @@ define(['Webservice',
             });
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

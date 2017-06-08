@@ -2,6 +2,9 @@
     "errorLoadingApp": "Error Loading App",
     "errorLoadingAppRouteText": "There was no initial route found! Do you have any permission set?",
     "errorLoadingAppText": "Please reload the App",
+    "errorLoadingDataText": "Datas couldn't be loaded! Please check your network and try it again!",
+    "errorReloadPageText": "Refresh page",
+    "loading": "Loading...",
     "currency": "$",
     "SideMenuView": {
         "callRequestSuccessfully": "Request successfully",
@@ -13,6 +16,11 @@
         "TRAINING": "Training",
         "DAY_DOCUMENT": "Day document",
         "MONTH_DOCUMENT": "Month document"
+    },
+    "Availability": {
+        "AVAILABLE": "Available",
+        "DELAYED": "Delayed",
+        "OUT_OF_ORDER": "Out of order"
     },
     "PaymentType": {
         "CASH": "Cash",

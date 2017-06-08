@@ -1,9 +1,6 @@
 define(['collections/custom/manager/CallbackCollection',
-        'views/helpers/HeaderView',
-        'text!templates/manager/callback.phtml',
-        'jquery-dateFormat'
+        'text!templates/manager/callback.phtml'
 ], function(CallbackCollection,
-            HeaderView,
             Template) {
     "use strict";
 
@@ -44,16 +41,10 @@ define(['collections/custom/manager/CallbackCollection',
             }
         }
 
-        // Renders all of the Category models on the UI
         render() {
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-
             this.renderTemplate(Template, {callbacks: this.callbacks});
 
             this.changePage(this);
-
-            return this;
         }
 
     }

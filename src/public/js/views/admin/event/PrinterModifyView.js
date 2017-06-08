@@ -14,15 +14,12 @@ define(['views/admin/event/AdminEventView',
             super.initialize(options);
 
             this.eventPrinter = new app.models.Event.EventPrinter();
+            this.isNew = options.printerid === 'new';
+            this.render();
 
-            if(options.printerid === 'new') {
-                this.render();
-            } else {
+            if (!this.isNew) {
                 this.eventPrinter.set('EventPrinterid', options.printerid);
-                this.eventPrinter.fetch()
-                                    .done(() => {
-                                        this.render();
-                                    });
+                this.fetchData(this.eventPrinter.fetch());
             }
         }
 
@@ -42,10 +39,18 @@ define(['views/admin/event/AdminEventView',
                                 this.changeHash(this.getMenuLink() + '/printer');
                             });
         }
+        
+        onDataFetched() {
+            this.$('#name').val(this.eventPrinter.get('Name'));
+            this.$('#type').val(this.eventPrinter.get('Type')).selectmenu("refresh");
+            this.$('#attr1').val(this.eventPrinter.get('Attr1'));
+            this.$('#attr2').val(this.eventPrinter.get('Attr2'));
+            this.$('#charactersPerRow').val(this.eventPrinter.get('CharactersPerRow'));
+        }
 
         render() {
             let t = this.i18n();
-            this.renderTemplate(Template, {eventPrinter: this.eventPrinter});
+            this.renderTemplate(Template, {isNew: this.isNew});
 
             this.$('#form').validate({
                 rules: {
@@ -67,8 +72,6 @@ define(['views/admin/event/AdminEventView',
             });
 
             this.changePage(this);
-
-            return this;
         }
 
     }

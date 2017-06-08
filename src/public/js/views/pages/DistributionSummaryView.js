@@ -1,8 +1,6 @@
-define(['views/helpers/HeaderView',
-        'collections/custom/distributionPlace/DistributionSummaryCollection',
+define(['collections/custom/distributionPlace/DistributionSummaryCollection',
         'text!templates/pages/distribution-summary.phtml'
-], function(HeaderView,
-            DistributionSummaryCollection,
+], function(DistributionSummaryCollection,
             Template) {
     "use strict";
 
@@ -27,14 +25,9 @@ define(['views/helpers/HeaderView',
         }
 
         render() {
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-
             this.renderTemplate(Template, {distributionSummary: this.distributionSummary});
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

@@ -4,7 +4,6 @@ define(['Webservice',
         'models/custom/order/OrderUnbilled',
         'models/custom/payment/VerifyCoupon',
         'models/custom/invoice/CustomerModel',
-        'views/helpers/HeaderView',
         'text!templates/pages/order-invoice.phtml',
         'text!templates/pages/order-item.phtml',
         'jquery-validate'
@@ -14,7 +13,6 @@ define(['Webservice',
             OrderUnbilled,
             VerifyCoupon,
             CustomerModel,
-            HeaderView,
             Template,
             TemplateItem) {
     "use strict";
@@ -423,8 +421,6 @@ define(['Webservice',
         // Renders all of the Category models on the UI
         render() {
             let t = this.i18n();
-            let header = new HeaderView();
-            this.registerSubview(".nav-header", header);
 
             this.renderTemplate(Template, {printers: this.printers,
                                            paymentTypes: this.paymentTypes});
@@ -458,8 +454,6 @@ define(['Webservice',
             });
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

@@ -1,12 +1,7 @@
-// Options Dialog View
-// =============
-
-// Includes file dependencies
 define(["Webservice",
-        'text!templates/dialoges/messages-dialog.phtml',
-        "jquery-dateFormat"],
-function(Webservice,
-         Template )
+        'text!templates/dialoges/messages-dialog.phtml'
+], function(Webservice,
+            Template)
 {
     "use strict";
     
@@ -299,13 +294,10 @@ function(Webservice,
                 this._updateChatText();
         }
 
-        // Renders all of the Category models on the UI
         render() {
             this.renderTemplate(Template);            
 
             this.checkMessagesStatus();
-
-            return this;
         }
     }
 

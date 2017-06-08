@@ -1,9 +1,7 @@
 define(['Webservice',
-        'views/helpers/HeaderView',
         'models/custom/distributionPlace/DistributionOrderDetail',
         'text!templates/pages/distribution.phtml'
 ], function(Webservice,
-            HeaderView,
             DistributionOrderDetail,
             Template) {
     "use strict";
@@ -138,9 +136,6 @@ define(['Webservice',
         }
 
         render() {
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-
             this.renderTemplate(Template, {distributionOrderDetail: this.distributionOrderDetail,
                                            products: app.productList});
 
@@ -153,8 +148,6 @@ define(['Webservice',
             });
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

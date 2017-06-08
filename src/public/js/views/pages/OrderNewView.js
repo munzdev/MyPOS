@@ -1,7 +1,5 @@
-define(['views/helpers/HeaderView',
-        'text!templates/pages/order-new.phtml'
-], function(HeaderView,
-            Template) {
+define(['text!templates/pages/order-new.phtml'
+], function(Template) {
     "use strict";
     
     return class OrderNewView extends app.PageView
@@ -44,16 +42,10 @@ define(['views/helpers/HeaderView',
             this.changeHash("order-modify/tableNr/" + tableNr);
         }
 
-        // Renders all of the Category models on the UI
         render() {
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-            
             this.renderTemplate(Template);
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

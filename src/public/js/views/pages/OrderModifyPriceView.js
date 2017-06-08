@@ -1,10 +1,8 @@
 define(['models/custom/order/OrderModify',
-        'views/helpers/HeaderView',
         'text!templates/pages/order-modify-price.phtml',
         'text!templates/pages/order-item.phtml',
         'sprintf'
 ], function(OrderModify,
-            HeaderView,
             Template,
             TemplateItem) {
     "use strict";
@@ -200,16 +198,10 @@ define(['models/custom/order/OrderModify',
             this.$('#list').listview('refresh');
         }
 
-        // Renders all of the Category models on the UI
         render() {
-            let header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-
             this.renderTemplate(Template);
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

@@ -1,7 +1,5 @@
-define(['views/helpers/HeaderView',
-        'text!templates/admin/event-copy.phtml'
-], function(HeaderView,
-            Template) {
+define(['text!templates/admin/event-copy.phtml'
+], function(Template) {
     "use strict";
 
     return class EventCopyView extends app.AdminView {
@@ -28,8 +26,6 @@ define(['views/helpers/HeaderView',
        
         render() {
             let t = this.i18n();
-            let header = new HeaderView();
-            this.registerSubview(".nav-header", header);
 
             this.renderTemplate(Template, {event: this.event});
             
@@ -44,9 +40,7 @@ define(['views/helpers/HeaderView',
                 }
             });
 
-            this.changePage(this);
-            
-            return this;                              
+            this.changePage(this);                    
         }
 
     }

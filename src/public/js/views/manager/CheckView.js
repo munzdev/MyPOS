@@ -1,10 +1,7 @@
 define(['collections/custom/manager/CheckCollection',
-        'views/helpers/HeaderView',
         'text!templates/manager/check.phtml',
-        'text!templates/manager/check-item.phtml',
-        'jquery-dateFormat'
+        'text!templates/manager/check-item.phtml'
 ], function(CheckCollection,
-            HeaderView,
             Template,
             TemplateItem) {
     "use strict";
@@ -176,8 +173,6 @@ define(['collections/custom/manager/CheckCollection',
         // Renders all of the Category models on the UI
         render() {
             let t = this.i18n();
-            let header = new HeaderView();
-            this.registerSubview(".nav-header", header);
 
             this.renderTemplate(Template, {verifiedStatus: this.verifiedStatus,
                                            checks: this.checkCollection,
@@ -208,8 +203,6 @@ define(['collections/custom/manager/CheckCollection',
             });
 
             this.changePage(this);
-
-            return this;
         }
 
     }

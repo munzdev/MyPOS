@@ -1,7 +1,5 @@
-define(['views/helpers/HeaderView',
-        'views/helpers/AdminFooterView'
-], function(HeaderView,
-            AdminFooterView) {
+define(['views/helpers/AdminFooterView'
+], function(AdminFooterView) {
     "use strict";
 
     return class AdminEventView extends app.PageView {
@@ -15,9 +13,7 @@ define(['views/helpers/HeaderView',
         }
 
         renderTemplate(Template, Datas) {
-            let header = new HeaderView();
             let footer = new AdminFooterView(this.eventid);
-            this.registerSubview(".nav-header", header);
             this.registerSubview(".nav-footer", footer);
 
             super.renderTemplate(Template, Datas);

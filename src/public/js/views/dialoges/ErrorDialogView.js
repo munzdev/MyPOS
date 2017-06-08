@@ -1,9 +1,5 @@
-// Login View
-// =============
-
-// Includes file dependencies
 define(['text!templates/dialoges/error.phtml'],
-function(Template ) {
+function(Template) {
     "use strict";
 
     return class ErrorDialogView extends app.DialogView
@@ -23,8 +19,7 @@ function(Template ) {
         }
         
         render() {
-            this.renderTemplate(Template);            
-            return this;
+            this.renderTemplate(Template);
         }
 
         // Show alert classes and hide after specified timeout

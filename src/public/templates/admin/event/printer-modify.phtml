@@ -1,41 +1,40 @@
 <div data-role="content">
-    <div class="nav-header"></div>
     <div data-role="header">
-        <h2><% if(eventPrinter.isNew()) { print('Neuer Drucker'); } else { print('Drucker Bearbeiten'); } %></h2>
+        <h2><% if(isNew) { print('Neuer Drucker'); } else { print('Drucker Bearbeiten'); } %></h2>
     </div>
     <form id="form">
         <fieldset data-role="controlgroup">
             <legend>Name:</legend>
-            <input type="text" id="name" value="<%- eventPrinter.get('Name') %>" name="name">
+            <input type="text" id="name" name="name">
             <label for="name"></label>
         </fieldset>
 
         <fieldset data-role="controlgroup">
             <legend>Type:</legend>
             <select id="type" name="type">
-                <option value="<%- PRINTER_TYPE_NETWORK %>" <% if(eventPrinter.get('Type') == PRINTER_TYPE_NETWORK) { print('selected="true"')} %>>Netzwerk</option>
-                <option value="<%- PRINTER_TYPE_FILE %>" <% if(eventPrinter.get('Type') == PRINTER_TYPE_FILE) { print('selected="true"')} %>>Datei</option>
-                <option value="<%- PRINTER_TYPE_WINDOWS %>" <% if(eventPrinter.get('Type') == PRINTER_TYPE_WINDOWS) { print('selected="true"')} %>>Windows</option>
-                <option value="<%- PRINTER_TYPE_CUPS %>" <% if(eventPrinter.get('Type') == PRINTER_TYPE_CUPS) { print('selected="true"')} %>>CUPS</option>
-                <option value="<%- PRINTER_TYPE_DUMMY %>" <% if(eventPrinter.get('Type') == PRINTER_TYPE_DUMMY) { print('selected="true"')} %>>Dummy</option>
+                <option value="<%- PRINTER_TYPE_NETWORK %>">Netzwerk</option>
+                <option value="<%- PRINTER_TYPE_FILE %>">Datei</option>
+                <option value="<%- PRINTER_TYPE_WINDOWS %>">Windows</option>
+                <option value="<%- PRINTER_TYPE_CUPS %>">CUPS</option>
+                <option value="<%- PRINTER_TYPE_DUMMY %>">Dummy</option>
             </select>
         </fieldset>
 
         <fieldset data-role="controlgroup">
             <legend>Attribute 1:</legend>
-            <input type="text" id="attr1" value="<%- eventPrinter.get('Attr1') %>" name="">
+            <input type="text" id="attr1" name="">
             <label for="attr1"></label>
         </fieldset>
 
         <fieldset data-role="controlgroup">
             <legend>Attribute 2:</legend>
-            <input type="number" id="attr2" value="<%- eventPrinter.get('Attr2') %>" name="">
+            <input type="number" id="attr2" name="">
             <label for="attr2"></label>
         </fieldset>
 
         <fieldset data-role="controlgroup">
             <legend>Druckergröße:</legend>
-            <input type="number" id="charactersPerRow" value="<%- eventPrinter.get('CharactersPerRow') %>" name="charactersPerRow">
+            <input type="number" id="charactersPerRow" name="charactersPerRow">
             <label for="charactersPerRow"></label>
         </fieldset>
 

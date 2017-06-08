@@ -1,10 +1,8 @@
 define(['collections/custom/order/OrderOverviewCollection',
-        'views/helpers/HeaderView',
         'views/helpers/PaginationView',
         'text!templates/pages/order-overview.phtml',
         'text!templates/pages/order-overview-item.phtml'
 ], function(OrderOverviewCollection,
-            HeaderView,
             PaginationView,
             Template,
             TemplateItem) {
@@ -197,14 +195,9 @@ define(['collections/custom/order/OrderOverviewCollection',
             this.pagination.setTotalPages(Math.ceil(this.ordersList.count / this.elementsPerPage));
             this.registerSubview(".nav-pagination", this.pagination);
 
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-
             this.renderTemplate(Template, {tableNr: this.search.tableNr});
 
             this.changePage(this);
-
-            return this;
         }
     }
 

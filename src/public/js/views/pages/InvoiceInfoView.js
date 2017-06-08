@@ -1,10 +1,8 @@
 define(['models/custom/invoice/InvoiceInfo',
         'models/custom/invoice/InvoiceModel',
-        'views/helpers/HeaderView',
         'text!templates/pages/invoice-info.phtml'
 ], function(InvoiceInfo,
             InvoiceModel,
-            HeaderView,
             Template) {
     "use strict";
 
@@ -54,16 +52,10 @@ define(['models/custom/invoice/InvoiceInfo',
             this.changeHash("invoice/id/" + this.invoiceInfo.get('Invoiceid') + '/payment');
         }
 
-        // Renders all of the Category models on the UI
         render() {
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-
             this.renderTemplate(Template, {invoiceInfo: this.invoiceInfo});
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

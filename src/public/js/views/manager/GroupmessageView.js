@@ -1,7 +1,5 @@
-define(['views/helpers/HeaderView',
-        'text!templates/manager/groupmessage.phtml'
-], function(HeaderView,
-            Template) {
+define(['text!templates/manager/groupmessage.phtml'
+], function(Template) {
     "use strict";
 
     return class GroupmessageView extends app.ManagerView {
@@ -64,8 +62,6 @@ define(['views/helpers/HeaderView',
         // Renders all of the Category models on the UI
         render() {
             let t = this.i18n();
-            let header = new HeaderView()
-            this.registerSubview(".nav-header", header);
 
             this.renderTemplate(Template, {userRoleCollection: this.userRoleCollection});
 
@@ -81,8 +77,6 @@ define(['views/helpers/HeaderView',
             });
 
             this.changePage(this);
-
-            return this;
         }
 
     }

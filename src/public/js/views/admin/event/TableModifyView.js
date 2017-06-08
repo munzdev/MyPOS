@@ -13,16 +13,13 @@ define(['views/admin/event/AdminEventView',
         initialize(options) {
             super.initialize(options);
 
-            this.eventTable = new app.models.Event.EventTable();
+            this.eventTable = new app.models.Event.EventTable();    
+            this.isNew = options.tableid === 'new';
+            this.render();
 
-            if(options.tableid === 'new') {
-                this.render();
-            } else {
-                this.eventTable.set('EventTableid', options.tableid);
-                this.eventTable.fetch()
-                    .done(() => {
-                        this.render();
-                    });
+            if (!this.isNew) {
+                this.eventTable.set('EventTableid', options.tableid);                
+                this.fetchData(this.eventTable.fetch());
             }
         }
 
@@ -38,10 +35,15 @@ define(['views/admin/event/AdminEventView',
                     this.changeHash(this.getMenuLink() + '/table');
                 });
         }
+        
+        onDataFetched() {
+            this.$('#name').val(this.eventTable.get('Name'));
+            this.$('#data').val(this.eventTable.get('Data'));
+        }
 
         render() {
             let t = this.i18n();
-            this.renderTemplate(Template, {eventTable: this.eventTable});
+            this.renderTemplate(Template, {isNew: this.isNew});
 
             this.$('#form').validate({
                 rules: {
@@ -53,8 +55,6 @@ define(['views/admin/event/AdminEventView',
             });
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

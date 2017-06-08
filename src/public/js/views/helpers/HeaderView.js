@@ -1,12 +1,10 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define(['text!templates/helpers/navbar.phtml'],
- function(Template ) {
+define(["views/HeaderView",
+        'text!templates/helpers/navbar.phtml'
+], function(HeaderViewBase,
+            Template) {
     "use strict";
     
-    return class HeaderView extends app.HeaderView
+    return class HeaderView extends HeaderViewBase
     {
         events() {
             return {"click #messages": "popupMessages"}

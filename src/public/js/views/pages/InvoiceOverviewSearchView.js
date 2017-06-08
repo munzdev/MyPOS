@@ -1,14 +1,11 @@
 define(['views/helpers/CustomerSelectView',
-        'views/helpers/HeaderView',
         'text!templates/pages/invoice-overview-search.phtml'
 ], function(CustomerSelectView,
-            HeaderView,
             Template) {
     "use strict";
 
     return class InvoiceOverviewSearchView extends app.PageView {
         initialize(options) {
-
             this.search = options;
             this.invoiceTypeCollection = new app.collections.Invoice.InvoiceTypeCollection();
             this.customerSelectView = new CustomerSelectView({selectCallback: this.select_customer,
@@ -122,18 +119,13 @@ define(['views/helpers/CustomerSelectView',
             this.changeHash('invoice' + searchString);
         }
 
-        // Renders all of the Category models on the UI
         render() {
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
             this.registerAppendview(this.customerSelectView);
 
-            this.renderTemplate(Template, {user: app.user,
+            this.renderTemplate(Template, {userList: app.user,
                                            invoiceTypeList: this.invoiceTypeCollection});
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

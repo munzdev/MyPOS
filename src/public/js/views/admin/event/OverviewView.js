@@ -14,9 +14,7 @@ define(['views/admin/event/AdminEventView',
         render() {
             this.renderTemplate(Template, {event: this.event});
 
-            this.changePage(this);
-            
-            return this;                     
+            this.changePage(this);      
         }
 
     }

@@ -1,7 +1,5 @@
-define(['views/helpers/HeaderView',
-        'text!templates/admin/user-modify.phtml'
-], function(HeaderView,
-            Template ) {
+define(['text!templates/admin/user-modify.phtml'
+], function(Template ) {
     "use strict";
 
     return class UserModifyView extends app.AdminView {
@@ -44,9 +42,7 @@ define(['views/helpers/HeaderView',
 
         render() {
             let t = this.i18n();
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-
+            
             this.renderTemplate(Template, {user: this.user});
             
             this.$('#form').validate({
@@ -71,8 +67,6 @@ define(['views/helpers/HeaderView',
             });
 
             this.changePage(this);
-
-            return this;
         }
 
     }

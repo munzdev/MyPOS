@@ -1,20 +1,19 @@
 <div data-role="content">
-    <div class="nav-header"></div>
     <div data-role="header">
-        <h2><% if(eventTable.isNew()) { print('Neuer Tisch'); } else { print('Tisch Bearbeiten'); } %></h2>
+        <h2><% if(isNew) { print('Neuer Tisch'); } else { print('Tisch Bearbeiten'); } %></h2>
     </div>
     <form id="form">
         <fieldset data-role="controlgroup">
             <legend>Tischnummer:</legend>
-            <input type="text" name="name" id="name" value="<%- eventTable.get('Name') %>">
+            <input type="text" name="name" id="name">
             <label for="name"></label>
         </fieldset>
 
         <fieldset data-role="controlgroup">
             <legend>Daten:</legend>
-            <input type="text" name="data" id="data" value="<%- eventTable.get('Data') %>">
+            <input type="text" name="data" id="data">
             <label for="data"></label>
-        </fieldset>´
+        </fieldset>
 
         <div class="ui-field-contain">
             <a id="save-btn" class="ui-btn ui-btn-inline">Speichern</a>

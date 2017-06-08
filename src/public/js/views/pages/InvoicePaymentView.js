@@ -1,11 +1,9 @@
 define(['models/custom/payment/PaymentRecievedModel',
         'models/custom/payment/VerifyCoupon',
-        'views/helpers/HeaderView',
         'text!templates/pages/invoice-payment.phtml',
         'text!templates/pages/invoice-payment-item.phtml'
 ], function(PaymentRecievedModel,
             VerifyCoupon,
-            HeaderView,
             Template,
             TemplateItem) {
     "use strict";
@@ -163,11 +161,8 @@ define(['models/custom/payment/PaymentRecievedModel',
             this.$('#totalSum').text(app.i18n.toCurrency(this.amount));
         }
 
-        // Renders all of the Category models on the UI
         render() {
             let t = this.i18n();
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
 
             this.renderTemplate(Template, {paymentTypes: this.paymentTypes});
 
@@ -188,8 +183,6 @@ define(['models/custom/payment/PaymentRecievedModel',
             });
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

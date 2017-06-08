@@ -1,12 +1,10 @@
 define(["models/custom/order/OrderModify",
         "models/db/Ordering/OrderDetail",
-        'views/helpers/HeaderView',
         'text!templates/pages/order-modify.phtml',
         'text!templates/pages/order-modify-panel.phtml',
         'text!templates/pages/order-item.phtml'
 ], function(OrderModify,
             OrderDetail,
-            HeaderView,
             Template,
             TemplatePanel,
             TemplateItem) {
@@ -452,11 +450,7 @@ define(["models/custom/order/OrderModify",
             this.$('#selected').listview('refresh');
         }
 
-        // Renders all of the Category models on the UI
         render() {
-            let header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-
             this.renderTemplate(Template, { mode: this.mode,
                                             order: this.orderModify,
                                             products: app.productList});
@@ -469,8 +463,6 @@ define(["models/custom/order/OrderModify",
             });
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

@@ -1,17 +1,14 @@
 define(['models/custom/order/OrderInfo',
-        'views/helpers/HeaderView',
         'text!templates/pages/order-info.phtml',
         'text!templates/pages/order-item.phtml',
         'jquery-dateFormat'
 ], function(OrderInfo,
-            HeaderView,
             Template,
             TemplateItem) {
     "use strict";
     
     return class OrderInfoView extends app.PageView
     {            
-        // The View Constructor
         initialize(options) {
             _.bindAll(this, "render",
                             "renderOrder");
@@ -139,17 +136,12 @@ define(['models/custom/order/OrderInfo',
             this.$('#total').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
         }
 
-        // Renders all of the Category models on the UI
         render() {
-            let header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-            
             this.renderTemplate(Template, {orderInfo: this.orderInfo});
 
             this.renderOrder();
 
             this.changePage(this);
-            return this;
         }
     }
 } );

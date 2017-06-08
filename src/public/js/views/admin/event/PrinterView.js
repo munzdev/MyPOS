@@ -23,12 +23,6 @@ define(['views/admin/event/AdminEventView',
             this.refresh();
         }
 
-        onClose() {
-            if (this.fetching) {
-               this.fetching.abort();
-            }
-        }
-
         refresh() {
             this.$('#printers-list').empty();
 
@@ -36,18 +30,8 @@ define(['views/admin/event/AdminEventView',
                 this.render();
                 this.rendered = true;
             }
-
-            $.mobile.loading("show", {
-                text: 'Lade Drucker ...',
-                textVisible: true,
-                theme: 'b'
-            });
-
-            this.fetching = this.printers.fetch({url: this.printers.url() + '/Eventid/' + this.eventid})
-                                        .done(() => {
-                                            this.fetching = null;
-                                            this.renderPrinterList();
-                                        });
+            
+            this.fetchData(this.printers.fetch({url: this.printers.url() + '/Eventid/' + this.eventid}), 'Lade Drucker ...');
         }
 
         click_add_btn() {
@@ -87,8 +71,7 @@ define(['views/admin/event/AdminEventView',
                     });
         }
 
-        renderPrinterList() {
-            $.mobile.loading("hide");
+        onDataFetched() {
             let template = _.template(TemplateItem);
             let i18n = this.i18n();
 
@@ -102,8 +85,6 @@ define(['views/admin/event/AdminEventView',
             this.renderTemplate(Template);
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

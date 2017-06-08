@@ -1,16 +1,12 @@
-// Login Vew
-// =============
-
-// Includes file dependencies
 define(['text!templates/helpers/side-menu.phtml',
-        'Webservice'],
- function(Template,
-          Webservice) {
+        'Webservice'
+], function(Template,
+            Webservice) {
     "use strict";
     
     return class SideMenuView extends app.PanelView
     {
-        initialize(options) {
+        initialize() {
             _.bindAll(this, "open",
                             "clicked");
                             
@@ -24,7 +20,7 @@ define(['text!templates/helpers/side-menu.phtml',
         events() {
             return {"click #callRequest": "callRequest",
                     "click #logout": "logout",
-                    "click .header-link": "clicked"}
+                    "click .header-link": "clicked"};
         }
         
         clicked(event) {
@@ -57,13 +53,11 @@ define(['text!templates/helpers/side-menu.phtml',
             this.$el.panel( "open");
         }
 
-        // Renders all of the Category models on the UI
         render() {
             this.renderTemplate(Template, {activeButton: this.activeButton,
                                            rights: app.auth.authUser.get('EventUser').get('UserRoles'),
                                            unreadedMessages: app.messagesDialog.unreadedMessages,
                                            isAdmin: app.auth.authUser.get('IsAdmin')});
-            return this;
         }
     }
 } );

@@ -1,7 +1,5 @@
-define(['views/helpers/HeaderView',
-        'text!templates/pages/order-overview-search.phtml'
-], function(HeaderView,
-            Template) {
+define(['text!templates/pages/order-overview-search.phtml'
+], function(Template) {
     "use strict";
 
     return class OrderOverviewSearchView extends app.PageView {
@@ -88,16 +86,10 @@ define(['views/helpers/HeaderView',
             this.changeHash('order-overview' + searchString);
         }
 
-        // Renders all of the Category models on the UI
         render() {
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-
             this.renderTemplate(Template, {user: app.user});
 
             this.changePage(this);
-
-            return this;
         }
     }
 } );

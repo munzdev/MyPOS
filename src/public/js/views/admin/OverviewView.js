@@ -1,7 +1,5 @@
-define(['views/helpers/HeaderView',
-        'text!templates/admin/overview.phtml'
-], function(HeaderView,
-            Template) {
+define(['text!templates/admin/overview.phtml'
+], function(Template) {
     "use strict";
 
     return class OverviewView extends app.AdminView {
@@ -11,14 +9,9 @@ define(['views/helpers/HeaderView',
         }
 
         render() {
-            var header = new HeaderView();
-            this.registerSubview(".nav-header", header);
-
             this.renderTemplate(Template);
 
             this.changePage(this);
-
-            return this;
         }
     }
 

@@ -1,9 +1,5 @@
-// Login View
-// =============
-
-// Includes file dependencies
-define([ 'text!templates/dialoges/login.phtml'],
-function( Template ) {              
+define(['text!templates/dialoges/login.phtml'],
+function(Template) {              
     "use strict";
     
     return class LoginView extends app.DialogView
@@ -14,15 +10,11 @@ function( Template ) {
     	}
         
         initialize() {
-            _.bindAll(this, "render");
-
             this.render();
         }
         
         render() {
-            this.renderTemplate(Template);            
-
-            return this;
+            this.renderTemplate(Template);
         }
         
         onPasswordKeyup(evt) {
