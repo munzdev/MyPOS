@@ -10,15 +10,12 @@ define(['text!templates/admin/event-modify.phtml'
         
         initialize(options) {
             this.event = new app.models.Event.Event();
+            this.isNew = options.eventid === 'new';
+            this.render();
 
-            if(options.eventid === 'new') {
-                this.render();
-            } else {
+            if (!this.isNew) {
                 this.event.set('Eventid', options.eventid);
-                this.event.fetch()
-                        .done(() => {
-                           this.render();
-                        });
+                this.fetchData(this.event.fetch());
             }
         }
 
@@ -33,13 +30,17 @@ define(['text!templates/admin/event-modify.phtml'
                     .done(() => {
                         this.changeHash('admin/event');
                     });
-        }       
+        }      
+        
+        onDataFetched() {
+            this.$('#name').val(this.event.get('Name'));
+            this.$('#date').val(app.i18n.toDate(this.event.get('Date')));
+        }
 
-        // Renders all of the Category models on the UI
         render() {
             let t = this.i18n();
 
-            this.renderTemplate(Template, {event: this.event});
+            this.renderTemplate(Template, {isNew: this.isNew});
             
             this.$('#form').validate({
                 rules: {

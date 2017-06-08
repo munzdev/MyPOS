@@ -1,5 +1,7 @@
-define(['text!templates/admin/user.phtml'
-], function(Template) {
+define(['text!templates/admin/user.phtml',
+        'text!templates/admin/user-item.phtml'
+], function(Template,
+            TemplateItem) {
     "use strict";
 
     return class UserView extends app.AdminView {
@@ -12,11 +14,20 @@ define(['text!templates/admin/user.phtml'
         }
 
         initialize() {
-            this.user = new app.collections.User.UserCollection();
-            this.user.fetch()
-                               .done(() => {
-                                   this.render();
-                               });
+            this.users = new app.collections.User.UserCollection();
+            this.refresh(); 
+        }
+        
+        refresh() {
+            let i18n = this.i18n();
+            this.$('#users-list').empty();
+
+            if(!this.rendered) {
+                this.render();
+                this.rendered = true;
+            }
+            
+            this.fetchData(this.users.fetch(), i18n.loading);
         }
 
         click_add_btn()
@@ -26,7 +37,7 @@ define(['text!templates/admin/user.phtml'
 
         click_edit_btn(event)
         {
-            var user = this.user.get({cid: $(event.currentTarget).attr('data-user-cid')});
+            var user = this.users.get({cid: $(event.currentTarget).attr('data-user-cid')});
 
             this.changeHash("admin/user/" + user.get('Userid'));
         }
@@ -44,15 +55,25 @@ define(['text!templates/admin/user.phtml'
         {
             this.$('#delete-dialog').popup('close');
 
-            var user = this.user.get({cid: this.deleteId});
+            var user = this.users.get({cid: this.deleteId});
             user.destroy()
                 .done(() => {
                     this.reload();
                 });
         }
+        
+        onDataFetched() {
+            let template = _.template(TemplateItem);
+            let i18n = this.i18n();
+
+            this.users.each((user) => {
+                this.$('#users-list').append(template({user: user,
+                                                        t: i18n}));
+            });
+        }
 
         render() {
-            this.renderTemplate(Template, {users: this.user});
+            this.renderTemplate(Template);
 
             this.changePage(this);
         }

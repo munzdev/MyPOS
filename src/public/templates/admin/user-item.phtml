@@ -1,0 +1,10 @@
+<tr>
+    <th><%- user.get('Username') %></th>
+    <td><%- user.get('Firstname') %> <%- user.get('Lastname') %></td>
+    <td><% if(user.get('Active') ) { print(t.yes); } else { print(t.no); } %></td>
+    <td><% if(user.get('IsAdmin')) { print(t.yes); } else { print(t.no); } %></td>
+    <td>
+        <a data-user-cid="<%- user.cid %>" class="edit-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left"><%= t.edit %></a>
+        <a data-user-cid="<%- user.cid %>" class="delete-btn ui-btn ui-icon-delete ui-mini ui-btn-icon-left"><%= t.delete %></a>
+    </td>
+</tr>                                

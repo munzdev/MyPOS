@@ -487,6 +487,7 @@
     },
     "Admin": {
         "UserView": {
+            "loading": "Lade Benutzer ...",
             "add": "Add",
             "username": "Username",
             "name": "Name",
@@ -523,6 +524,7 @@
             "errorPassword2EqualTo": "The passwords to not match!"
         },
         "EventView": {
+            "loading": "Loading events ...",
             "add": "Add",
             "name": "Name",
             "date": "Date",

@@ -10,15 +10,12 @@ define(['text!templates/admin/user-modify.phtml'
 
         initialize(options) {
             this.user = new app.models.User.User();
+            this.isNew = options.userid === 'new';
+            this.render();
 
-            if(options.userid === 'new') {
-                this.render();
-            } else {
+            if (!this.isNew) {
                 this.user.set('Userid', options.userid);
-                this.user.fetch()
-                        .done(() => {
-                           this.render();
-                        });
+                this.fetchData(this.user.fetch());
             }
         }
 
@@ -33,17 +30,24 @@ define(['text!templates/admin/user-modify.phtml'
             this.user.set('Lastname', $.trim(this.$('#lastname').val()));
             this.user.set('Phonenumber', $.trim(this.$('#phonenumber').val()));
             this.user.set('IsAdmin', this.$('#isAdmin').prop('checked'));
-            this.user.set('Active', this.$('#active').prop('checked'));
             this.user.save()
                     .done(() => {
                         this.changePage('#admin/user');
                     });
         }
+        
+        onDataFetched() {
+            this.$('#username').val(this.user.get('Username'));
+            this.$('#firstname').val(this.user.get('Firstname'));
+            this.$('#lastname').val(this.user.get('Lastname'));
+            this.$('#phonenumber').val(this.user.get('Phonenumber'));
+            this.$('#isAdmin').prop('checked', this.user.get('IsAdmin')).checkboxradio('refresh');
+        }
 
         render() {
             let t = this.i18n();
             
-            this.renderTemplate(Template, {user: this.user});
+            this.renderTemplate(Template, {isNew: this.isNew});
             
             this.$('#form').validate({
                 rules: {

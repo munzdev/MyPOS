@@ -1,5 +1,7 @@
-define(['text!templates/admin/event.phtml'
-], function(Template) {
+define(['text!templates/admin/event.phtml',
+        'text!templates/admin/event-item.phtml'
+], function(Template,
+            TemplateItem) {
     "use strict";
 
     return class EventView extends app.AdminView {
@@ -14,11 +16,20 @@ define(['text!templates/admin/event.phtml'
         }
         
         initialize() {
-            this.events = new app.collections.Event.EventCollection();
-            this.events.fetch()
-                        .done(() => {
-                            this.render();
-                        });
+            this.events = new app.collections.Event.EventCollection();           
+            this.refresh();            
+        }
+        
+        refresh() {
+            let i18n = this.i18n();
+            this.$('#events-list').empty();
+
+            if(!this.rendered) {
+                this.render();
+                this.rendered = true;
+            }
+            
+            this.fetchData(this.events.fetch(), i18n.loading);
         }
 
         click_add_btn()
@@ -68,10 +79,19 @@ define(['text!templates/admin/event.phtml'
 
             this.$('#activate-dialog').popup('open');
         }
+        
+        onDataFetched() {
+            let template = _.template(TemplateItem);
+            let i18n = this.i18n();
 
-        // Renders all of the Category models on the UI
+            this.events.each((event) => {
+                this.$('#events-list').append(template({event: event,
+                                                        t: i18n}));
+            });
+        }
+
         render() {
-            this.renderTemplate(Template, {events: this.events});
+            this.renderTemplate(Template);
 
             this.changePage(this);         
         }

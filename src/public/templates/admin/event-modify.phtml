@@ -1,17 +1,17 @@
 <div data-role="content">
     <div data-role="header">
-        <h2><% if(event.isNew()) { print(t.newEvent); } else { print(t.editEvent); } %></h2>
+        <h2><% if(isNew) { print(t.newEvent); } else { print(t.editEvent); } %></h2>
     </div>
     <form id="form">
         <fieldset data-role="controlgroup">
             <legend><%= t.name %>:</legend>
-            <input type="text" id="name" name="name" value="<%- event.get('Name') %>">
+            <input type="text" id="name" name="name">
             <label for="admin-event-modify-name"></label>
         </fieldset>
 
         <fieldset data-role="controlgroup">
             <legend><%= t.date %>:</legend>
-            <input type="text" id="date" name="date" data-role="datebox" data-options='{"mode":"calbox", "overrideDateFormat": "%d.%m.%Y"}'  value="<% if(!event.isNew()) { print(app.i18n.toDate(event.get('Date'))); } %>">
+            <input type="text" id="date" name="date" data-role="datebox" data-options='{"mode":"calbox", "overrideDateFormat": "%d.%m.%Y"}'>
         </fieldset>
         <div class="ui-field-contain">
             <a id="save-btn" class="ui-btn ui-btn-inline"><%= t.save %></a>

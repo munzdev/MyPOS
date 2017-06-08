@@ -488,6 +488,7 @@
     },
     "Admin": {
         "UserView": {
+            "loading": "Lade Benutzer ...",
             "add": "Hinzufügen",
             "username": "Benutzername",
             "name": "Name",
@@ -524,6 +525,7 @@
             "errorPassword2EqualTo": "Die Passwörter stimmen nicht überein!"
         },
         "EventView": {
+            "loading": "Lade Events ...",
             "add": "Hinzufügen",
             "name": "Name",
             "date": "Datum",

@@ -1,11 +1,11 @@
 <div data-role="content">
     <div data-role="header">
-        <h2><% if(user.isNew()) { print(t.newUser); } else { print(t.editUser); } %></h2>
+        <h2><% if(isNew) { print(t.newUser); } else { print(t.editUser); } %></h2>
     </div>
     <form id='form'>
         <fieldset data-role="controlgroup">
             <legend><%= t.username %>:</legend>
-            <input type="text" id="username" name='username' value="<%- user.get('Username') %>">
+            <input type="text" id="username" name='username'>
             <label for="username"></label>
         </fieldset>
 
@@ -19,28 +19,26 @@
 
         <fieldset data-role="controlgroup">
             <legend><%= t.firstname %>:</legend>
-            <input type="text" id="firstname" name='firstname' value="<%- user.get('Firstname') %>">
+            <input type="text" id="firstname" name='firstname'>
             <label for="firstname"></label>
         </fieldset>
 
         <fieldset data-role="controlgroup">
             <legend><%= t.lastname %>:</legend>
-            <input type="text" id="lastname" name='lastname' value="<%- user.get('Lastname') %>">
+            <input type="text" id="lastname" name='lastname'>
             <label for="lastname"></label>
         </fieldset>
 
         <fieldset data-role="controlgroup">
             <legend><%= t.phonenumber %>:</legend>
-            <input type="text" id="phonenumber" name='phonenumber' value="<%- user.get('Phonenumber') %>">
+            <input type="text" id="phonenumber" name='phonenumber'>
             <label for="phonenumber"></label>
         </fieldset>
 
         <fieldset data-role="controlgroup">
             <legend><%= t.options %>:</legend>
-            <input type="checkbox" name="isAdmin" id="isAdmin" <% if(user.get('IsAdmin')) { print('checked="checked"'); } %>>
+            <input type="checkbox" name="isAdmin" id="isAdmin">
             <label for="isAdmin"><%= t.admin %></label>
-            <input type="checkbox" name="active" id="active"  <% if(user.get('Active')) { print('checked="checked"'); } %>>
-            <label for="active"><%= t.active %></label>
         </fieldset>
 
         <div class="ui-field-contain">

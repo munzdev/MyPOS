@@ -9,20 +9,7 @@
                 <th><%= t.options %></th>
             </tr>
         </thead>
-        <tbody>
-            <% events.each(function(event){ %>
-                <tr>
-                    <th><%- event.get('Name') %></th>
-                    <td><%- app.i18n.toDate(event.get('Date')) %></td>
-                    <td><% if(event.get('Active') == 1) { print(t.yes); } else { print(t.no); } %></td>
-                    <td>
-                        <a data-event-cid="<%- event.cid %>" class="copy-btn ui-btn ui-icon-files-o ui-mini ui-btn-icon-left"><%= t.copy %></a>
-                        <a data-event-cid="<%- event.cid %>" class="edit-settings-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left"><%= t.editSettings %></a>
-                        <a data-event-cid="<%- event.cid %>" class="edit-details-btn ui-btn ui-icon-edit ui-mini ui-btn-icon-left"><%= t.editDetails %></a>
-                        <a data-event-cid="<%- event.cid %>" class="active-btn ui-btn ui-icon-star ui-mini ui-btn-icon-left"><%= t.setActive %></a>
-                    </td>
-                </tr>
-            <% }); %>
+        <tbody id="events-list">
         </tbody>
     </table>
 </div>
