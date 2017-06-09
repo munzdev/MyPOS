@@ -9,12 +9,11 @@ define(['text!templates/admin/event-copy.phtml'
         }
         
         initialize(options) {
+            this.render();
+
             this.event = new app.models.Event.Event();
             this.event.set('Eventid', options.eventid);
-            this.event.fetch()
-                    .done(() => {
-                       this.render();
-                    });
+            this.fetchData(this.event.fetch());
         }
 
         click_finished_btn()
@@ -23,11 +22,16 @@ define(['text!templates/admin/event-copy.phtml'
                 return;
             }
         }
+
+        onDataFetched() {
+            this.$('#name').val(this.event.get('Name'));
+            this.$('#date').val(app.i18n.toDate(this.event.get('Date')));
+        }
        
         render() {
             let t = this.i18n();
 
-            this.renderTemplate(Template, {event: this.event});
+            this.renderTemplate(Template);
             
             this.$('#form').validate({
                 rules: {

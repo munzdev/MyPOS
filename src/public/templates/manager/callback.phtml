@@ -8,15 +8,7 @@
                 <th><%= t.options %></th>
             </tr>
         </thead>
-        <tbody>
-            <% callbacks.each(function(user){ %>
-                <tr>
-                    <th><%- user.get('Firstname') %> <%- user.get('Lastname') %></th>
-                    <td><%- app.i18n.toDateTime(user.get('CallRequest')) %></td>
-                    <td><%- user.get('Phonenumber') %></td>
-                    <td><a data-user-cid="<%- user.cid %>" class="done-btn ui-btn ui-icon-check ui-mini ui-btn-icon-left"><%= t.markDone %></a></td>
-               </tr>
-            <% }); %>
+        <tbody id="callbacks-list">
         </tbody>
     </table>
 </div>

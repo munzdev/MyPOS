@@ -16,7 +16,6 @@ define(['collections/custom/manager/CheckCollection',
                     'click #verify-finished-btn': 'click_btn_verify_finished'}
         }
 
-        // The View Constructor
         initialize(options) {
             if(options.verified == null)
                 this.verifiedStatus = '0';
@@ -24,8 +23,19 @@ define(['collections/custom/manager/CheckCollection',
                 this.verifiedStatus = options.verified;
 
             this.checkCollection = new CheckCollection();
-
             this.refresh();
+        }
+
+        refresh() {
+            let i18n = this.i18n();
+            this.$('#check-list').empty();
+
+            if(!this.rendered) {
+                this.render();
+                this.rendered = true;
+            }
+
+            this.fetchData(this.checkCollection.fetch({data: {verified: this.verifiedStatus}}), i18n.loading);
         }
 
         click_btn_status(event)
@@ -143,23 +153,7 @@ define(['collections/custom/manager/CheckCollection',
             }
         }
 
-        refresh() {
-            if (!this.rendered) {
-                this.render();
-                this.rendered = true;
-            }
-
-            this.$('#check-list').empty();
-            $.mobile.loading("show");
-
-            this.checkCollection.fetch({data: {verified: this.verifiedStatus}})
-                .done(() => {
-                    this.renderCheckList();
-                });
-        }
-
-        renderCheckList() {
-            $.mobile.loading("hide");
+        onDataFetched() {
             let template = _.template(TemplateItem);
             let i18n = this.i18n();
 
@@ -170,12 +164,10 @@ define(['collections/custom/manager/CheckCollection',
             });
         }
 
-        // Renders all of the Category models on the UI
         render() {
             let t = this.i18n();
 
             this.renderTemplate(Template, {verifiedStatus: this.verifiedStatus,
-                                           checks: this.checkCollection,
                                            products: app.productList});
 
             this.$('#edit-form').validate({

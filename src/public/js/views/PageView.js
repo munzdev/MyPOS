@@ -14,7 +14,7 @@ define(["views/AbstractView",
             let header = new HeaderView();
             this.registerSubview("#nav-header", header);
             
-            Template = "<div id=\"nav-header\"></div>" + Template;
+            Template = '<div id="nav-header"></div>' + Template;
             super.renderTemplate(Template, Datas);
 
             // Verify global menu swipe is available on page

@@ -1,5 +1,7 @@
-define(['text!templates/manager/groupmessage.phtml'
-], function(Template) {
+define(['text!templates/manager/groupmessage.phtml',
+        'text!templates/manager/groupmessage-item.phtml',
+], function(Template,
+            TemplateItem) {
     "use strict";
 
     return class GroupmessageView extends app.ManagerView {
@@ -9,13 +11,21 @@ define(['text!templates/manager/groupmessage.phtml'
                     'keyup #message': 'onMessageKeyup'};
         }
 
-        // The View Constructor
         initialize() {
             this.userRoleCollection = new app.collections.User.UserRoleCollection();
-            this.userRoleCollection.fetch()
-                                   .done(() => {
-                                       this.render();
-                                   });
+            this.refresh();
+        }
+
+        refresh() {
+            let i18n = this.i18n();
+            this.$('#userRoles-list').empty();
+
+            if(!this.rendered) {
+                this.render();
+                this.rendered = true;
+            }
+
+            this.fetchData(this.userRoleCollection.fetch(), i18n.loading);
         }
 
         onMessageKeyup(evt) {
@@ -59,11 +69,19 @@ define(['text!templates/manager/groupmessage.phtml'
             });
         }
 
-        // Renders all of the Category models on the UI
+        onDataFetched() {
+            let template = _.template(TemplateItem);
+
+            this.userRoleCollection.each((userRole) => {
+                this.$('#userRoles-list').append(template({userRole: userRole}));
+            });
+
+            this.$el.trigger('create');
+        }
+
         render() {
             let t = this.i18n();
-
-            this.renderTemplate(Template, {userRoleCollection: this.userRoleCollection});
+            this.renderTemplate(Template);
 
             this.$('#form').validate({
                 rules: {

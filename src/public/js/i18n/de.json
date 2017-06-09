@@ -441,6 +441,7 @@
     },
     "Manager": {
         "CallbackView": {
+            "loading": "Lade Rückfragen ...",
             "user": "Benutzer",
             "callRequest": "Anforderungszeit",
             "phonenumber": "Telefonnummer",
@@ -449,6 +450,7 @@
             "systemMessage": "Ihr Rückruf wurde als erledigt markiert von %(name)s"
         },
         "CheckView": {
+            "loading": "Lade Prüfungen ...",
             "errorPrice": "Bitte einen gültigen Preis eingeben!",
             "errorMenuGroup": "Bitte Menügruppe auswählen!",
             "errorAvailability": "Bitte Verfügbarkeit auswählen!",
@@ -479,6 +481,7 @@
             "systemMessage": "Ihre aufgenommene Bestellung mit Sonderwunsch vom Tisch %(table)s mit der Bestellnummer %(orderid)s wurde von %(name)s geprüft und kann nun kassiert werden."
         },
         "GroupmessageView": {
+            "loading": "Lade Gruppennachrichten ...",
             "userRoles": "Benutzergruppen",
             "message": "Nachricht",
             "send": "Senden",

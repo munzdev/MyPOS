@@ -1,0 +1,6 @@
+<tr>
+    <th><%- callback.get('Firstname') %> <%- callback.get('Lastname') %></th>
+    <td><%- app.i18n.toDateTime(callback.get('CallRequest')) %></td>
+    <td><%- callback.get('Phonenumber') %></td>
+    <td><a data-user-cid="<%- callback.cid %>" class="done-btn ui-btn ui-icon-check ui-mini ui-btn-icon-left"><%= t.markDone %></a></td>
+</tr>

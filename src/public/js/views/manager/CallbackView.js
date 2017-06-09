@@ -1,7 +1,9 @@
 define(['collections/custom/manager/CallbackCollection',
-        'text!templates/manager/callback.phtml'
+        'text!templates/manager/callback.phtml',
+        'text!templates/manager/callback-item.phtml'
 ], function(CallbackCollection,
-            Template) {
+            Template,
+            TemplateItem) {
     "use strict";
 
     return class CallbackView extends app.ManagerView {
@@ -10,13 +12,21 @@ define(['collections/custom/manager/CallbackCollection',
             return {'click .done-btn': 'click_btn_done'};
         }
 
-        // The View Constructor
         initialize() {
             this.callbacks = new CallbackCollection();
-            this.callbacks.fetch()
-                          .done(() => {
-                               this.render();
-                          });
+            this.refresh();
+        }
+
+        refresh() {
+            let i18n = this.i18n();
+            this.$('#callbacks-list').empty();
+
+            if(!this.rendered) {
+                this.render();
+                this.rendered = true;
+            }
+
+            this.fetchData(this.callbacks.fetch(), i18n.loading);
         }
 
         click_btn_done(event)
@@ -41,8 +51,18 @@ define(['collections/custom/manager/CallbackCollection',
             }
         }
 
+        onDataFetched() {
+            let template = _.template(TemplateItem);
+            let i18n = this.i18n();
+
+            this.callbacks.each((callback) => {
+                this.$('#callbacks-list').append(template({callback: callback,
+                    t: i18n}));
+            });
+        }
+
         render() {
-            this.renderTemplate(Template, {callbacks: this.callbacks});
+            this.renderTemplate(Template);
 
             this.changePage(this);
         }
