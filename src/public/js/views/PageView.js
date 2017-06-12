@@ -32,6 +32,10 @@ define(["views/AbstractView",
                 textVisible: true,
                 theme: 'b'
             });
+
+            if (this.fetching) {
+                this.fetching.abort();
+            }
             
             this.fetching = hxr.done((data) => {
                                         this.fetching = null;

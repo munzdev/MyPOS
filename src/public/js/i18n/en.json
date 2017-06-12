@@ -37,6 +37,7 @@
         "submit": "Login"
     },
     "OrderOverviewView": {
+        "loading": "Loading orders ...",
         "waiting": "Waiting",
         "inProgress": "in Progress",
         "finished": "Finished",
@@ -75,6 +76,25 @@
         "waiter": "Waiter",
         "back": "Back",
         "search": "Search"
+    },
+    "OrderInfoView": {
+        "loading": "Lade Bestellung ...",
+        "waiting": "Waiting",
+        "inProgress": "in Progress",
+        "finished": "Finished",
+        "billed": "Billed",
+        "unbilled": "Unbilled",
+        "informations": "Informations",
+        "orderid": "Orderid",
+        "table": "Table",
+        "ordertime": "Ordertime",
+        "waiter": "Waiter",
+        "status": "Status",
+        "lastPayment": "Last payment",
+        "finished": "Finished",
+        "amountBilled": "Amount Billed",
+        "sum": "Sum",
+        "back": "Back"
     },
     "OrderNewView": {
         "error": "Error!",

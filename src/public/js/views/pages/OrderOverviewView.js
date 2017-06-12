@@ -10,28 +10,6 @@ define(['collections/custom/order/OrderOverviewCollection',
 
     return class OrderOverviewView extends app.PageView
     {
-        initialize(options) {
-            _.bindAll(this, "render",
-                            "refresh",
-                            "renderOrdersList",
-                            "cancel_order_popup",
-                            "cancel_order",
-                            "success_popup_close");
-
-            this.search = null;
-            this.pagination = new PaginationView(this.refresh);
-            this.elementsPerPage = 10;
-
-            if(options)
-                this.search = _.extend(this.defaultSearch(), options.search);
-            else
-                this.search = this.defaultSearch();
-
-            this.ordersList = new OrderOverviewCollection();
-
-            this.refresh();
-        }
-
         events() {
             return {
                 'click .cancel-btn': 'cancel_order_popup',
@@ -47,6 +25,20 @@ define(['collections/custom/order/OrderOverviewCollection',
             };
         }
 
+        initialize(options) {
+            this.search = null;
+            this.pagination = new PaginationView(this.refresh.bind(this));
+            this.elementsPerPage = 10;
+
+            if(options)
+                this.search = _.extend(this.defaultSearch(), options.search);
+            else
+                this.search = this.defaultSearch();
+
+            this.ordersList = new OrderOverviewCollection();
+            this.refresh();
+        }
+
         defaultSearch() {
             return {status: 'open',
                     orderid: null,
@@ -57,13 +49,18 @@ define(['collections/custom/order/OrderOverviewCollection',
         }
 
         refresh() {
-            this.$('#order-list').empty();
-            $.mobile.loading("show");
+            let i18n = this.i18n();
 
-            this.ordersList.fetch({data: {search: this.search,
-                                          page: this.pagination.currentPage,
-                                          elementsPerPage: this.elementsPerPage}})
-                           .done(this.renderOrdersList);
+            if(!this.rendered) {
+                this.render();
+                this.rendered = true;
+            }
+
+            this.$('#order-list').empty();
+
+            this.fetchData(this.ordersList.fetch({data: {search: this.search,
+                                                         page: this.pagination.currentPage,
+                                                         elementsPerPage: this.elementsPerPage}}), i18n.loading);
         }
 
         change_tableNr_search(event) {
@@ -171,16 +168,13 @@ define(['collections/custom/order/OrderOverviewCollection',
             this.reload();
         }
 
-        renderOrdersList() {
-            if(!this.rendered) {
-                this.render();
-                this.rendered = true;
-            }
-
-            $.mobile.loading("hide");
+        onDataFetched() {
             let template = _.template(TemplateItem);
             let i18n = this.i18n();
             let userRoles = app.auth.authUser.get('EventUser').get('UserRoles');
+
+            this.pagination.setTotalPages(Math.ceil(this.ordersList.count / this.elementsPerPage));
+            this.renderSubview("#nav-pagination", this.pagination);
 
             this.ordersList.each((order) => {
                 this.$('#order-list').append(template({order: order,
@@ -190,13 +184,8 @@ define(['collections/custom/order/OrderOverviewCollection',
             });
         }
 
-        // Renders all of the Category models on the UI
         render() {
-            this.pagination.setTotalPages(Math.ceil(this.ordersList.count / this.elementsPerPage));
-            this.registerSubview(".nav-pagination", this.pagination);
-
             this.renderTemplate(Template, {tableNr: this.search.tableNr});
-
             this.changePage(this);
         }
     }

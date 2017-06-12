@@ -72,29 +72,39 @@ define(function() {
             this.$el.attr(this.jqmAttributes());
             this.$el.html(template(Datas));
 
-            if(this.subViews) {
+            if (this.subViews) {
                 for (let [ target, view ] of this.subViews.entries()) {
-                    let targetContent = view.render().el.outerHTML;
-                    let targetObject = this.$(target);
-                    targetObject.html(targetContent);
-                    view.setElement(targetObject);
+                    this.renderSubview(target, view);
                 }
             }
 
-            if(this.appendViews) {
+            if (this.appendViews) {
                 for (let [ view, type ] of this.appendViews.entries()) {
-                    let targetContent = view.render().$el.html();
-
-                    if(type == "end")
-                        this.$el.append(targetContent)
-                    else
-                        this.$el.prepend(targetContent)
-
-                    view.setElement(this.$el);
+                    this.renderAppendview(view, type);
                 }
             }
 
             return this;
+        }
+
+        renderSubview(target, view) {
+            let targetContent = view.render().el.outerHTML;
+            let targetObject = this.$(target);
+            targetObject.html(targetContent);
+            view.setElement(targetObject);
+            view.$el.trigger("create");
+        }
+
+        renderAppendview(view, type) {
+            let targetContent = view.render().$el.html();
+
+            if (type == "end")
+                this.$el.append(targetContent)
+            else
+                this.$el.prepend(targetContent)
+
+            view.setElement(this.$el);
+            view.$el.trigger("create");
         }
 
         jqmAttributes() {

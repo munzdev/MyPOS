@@ -1,38 +1,24 @@
 <div data-role="content">
     <ul data-role="listview" data-inset="true">
-        <li data-role="list-divider" style="white-space: normal;">Informationen</li>
-        <li style="white-space: normal;">Bestellungsnummer: <%- orderInfo.get('Orderid') %></li>
-        <li style="white-space: normal;">Tisch: <%- orderInfo.get('EventTable').get('Name') %></li>
-        <li style="white-space: normal;">Bestellzeit: <%- orderInfo.get('Ordertime') %></li>
-        <li style="white-space: normal;">Kellner: <%- orderInfo.get('User').get('Firstname') %> <%- orderInfo.get('User').get('Lastname') %></li>
-        <li style="white-space: normal;">Status:
-            <%  if(orderInfo.get('OrderInProgresses').length == 0) {
-                    print(t.waiting);
-                } else if(orderInfo.get('InvoiceFinished') == null) {
-                    print(t.inProgress);
-                } else {
-                    print(t.finished);
-                } %>
-            -
-            <% if(orderInfo.get('open') == 0) { %>
-                <span style="color: green;">Bezahlt</span>
-            <% } else { %>
-                <span style="color: red;">Unbezahlt</span>
-            <% } %>
-        </li>
-        <li style="white-space: normal;">Letzte Bezahlung: <% if(orderInfo.get('last_paydate')) { print($.format.date(MyPOS.DateFromMysql(orderInfo.get('last_paydate')), DATE_JS_TIMEFORMAT)) } %></li>
-        <li style="white-space: normal;">Fertig: <% if(orderInfo.get('InvoiceFinished')) { print(orderInfo.get('Finished')) } %></li>
-        <li style="white-space: normal;">Bisher verrechnet: <%- orderInfo.get('amountBilled') %> €</li>
+        <li data-role="list-divider" style="white-space: normal;"><%- t.informations %></li>
+        <li style="white-space: normal;" id="orderid"><%- t.orderid %>: </li>
+        <li style="white-space: normal;" id="table-name"><%- t.table %>: </li>
+        <li style="white-space: normal;" id="ordertime"><%- t.ordertime %>: </li>
+        <li style="white-space: normal;" id="waiter"><%- t.waiter %>: </li>
+        <li style="white-space: normal;" id="status"><%- t.status %>: </li>
+        <li style="white-space: normal;" id="last-paydate"><%- t.lastPayment %>: </li>
+        <li style="white-space: normal;" id="finished"><%- t.finished %>: </li>
+        <li style="white-space: normal;" id="amount-billed"><%- t.amountBilled %>: </li>
     </ul>
     <div>
         <ul data-role="listview" data-inset="true" id="details">
         </ul>
-        <h3 class="ui-bar ui-bar-a ui-corner-all">Summe</h3>
+        <h3 class="ui-bar ui-bar-a ui-corner-all"><%- t.sum %></h3>
         <div class="ui-body ui-body-a ui-corner-all">
-            <h1 style="margin: 0; padding: 0" id='total'>0,00€</h1>
+            <h1 style="margin: 0; padding: 0" id='total'>0,00 <%- i18n.currency %></h1>
         </div>
     </div>
 </div>
 <div data-role="footer" data-theme="b" data-position="fixed" >
-    <a data-rel="back" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-carat-l">Zurück</a>
+    <a data-rel="back" class="ui-btn ui-corner-all ui-btn-inline ui-mini ui-btn-icon-left ui-icon-carat-l"><%- t.back %></a>
 </div>

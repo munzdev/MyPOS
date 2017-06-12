@@ -37,6 +37,7 @@
         "submit": "Login"
     },
     "OrderOverviewView": {
+        "loading": "Lade Bestellungen ...",
         "waiting": "in Warteschlange",
         "inProgress": "in Bearbeitung",
         "finished": "Fertig",
@@ -75,6 +76,25 @@
         "waiter": "Kellner",
         "back": "Zurück",
         "search": "Suchen"
+    },
+    "OrderInfoView": {
+        "loading": "Lade Bestellung ...",
+        "waiting": "in Warteschlange",
+        "inProgress": "in Bearbeitung",
+        "finished": "Fertig",
+        "billed": "Verrechnet",
+        "unbilled": "Unverrechnet",
+        "informations": "Informationen",
+        "orderid": "Bestellnummer",
+        "table": "Tisch",
+        "ordertime": "Bestellzeit",
+        "waiter": "Kellner",
+        "status": "Status",
+        "lastPayment": "Letzte Bezahlung",
+        "finished": "Fertig",
+        "amountBilled": "Bisher verrechnet",
+        "sum": "Summe",
+        "back": "Zurück"
     },
     "OrderNewView": {
         "error": "Fehler!",

@@ -8,18 +8,17 @@ define(['models/custom/order/OrderInfo',
     "use strict";
     
     return class OrderInfoView extends app.PageView
-    {            
+    {
         initialize(options) {
-            _.bindAll(this, "render",
-                            "renderOrder");
+            let i18n = this.i18n();
+            this.render();
 
             this.orderInfo = new OrderInfo();
             this.orderInfo.set('Orderid', options.orderid);
-            this.orderInfo.fetch()
-                          .done(this.render);
+            this.fetchData(this.orderInfo.fetch(), i18n.loading);
         }
 
-        renderOrder() {
+        onDataFetched() {
             var itemTemplate = _.template(TemplateItem);
 
             this.$('#details').empty();
@@ -30,7 +29,42 @@ define(['models/custom/order/OrderInfo',
             let t = this.i18n();
             let i18n = app.i18n.template;
             let currency = i18n.currency;
-            
+
+            let statusText;
+            if (this.orderInfo.get('OrderInProgresses').length == 0) {
+                statusText = t.waiting;
+            } else if(this.orderInfo.get('InvoiceFinished') == null) {
+                statusText = t.inProgress;
+            } else {
+                statusText = t.finished;
+            }
+
+            statusText = statusText + ' - ';
+
+            if (this.orderInfo.get('open') == 0) {
+                statusText += '<span style="color: green;">' + t.billed + '</span>';
+            } else {
+                statusText += '<span style="color: red;">' + t.unbilled + '</span>';
+            }
+
+            this.$('#orderid').append(this.orderInfo.get('Orderid'));
+            this.$('#table-name').append(this.orderInfo.get('EventTable').get('Name'));
+            this.$('#ordertime').append(app.i18n.toDateTime(this.orderInfo.get('Ordertime')));
+            this.$('#waiter').append(this.orderInfo.get('User').get('Firstname') + " " + this.orderInfo.get('User').get('Lastname'));
+            this.$('#status').append(statusText);
+
+            if (this.orderInfo.get('last_paydate')) {
+                this.$('#last-paydate').append(app.i18n.toDateTime(this.orderInfo.get('last_paydate')));
+            }
+
+            if (this.orderInfo.get('InvoiceFinished')) {
+                this.$('#finished').append(app.i18n.toDateTime(this.orderInfo.get('InvoiceFinished')));
+            }
+
+            if (this.orderInfo.get('amountBilled')) {
+                this.$('#amount-billed').append(this.orderInfo.get('amountBilled') + " " + currency);
+            }
+
             // Presort the list by categorys
             this.orderInfo.get('OrderDetails').each((orderDetail) => {
                 let menuid = orderDetail.get('Menuid');
@@ -107,6 +141,7 @@ define(['models/custom/order/OrderInfo',
                         status = ORDER_STATUS_FINISHED;
                     }
 
+                    // TODO Positions, Status, ... needs to be displayed correctly.
                     var datas = {name: isSpecialOrder ? t.specialOrder : menuSearch.Menu.get('Name'),
                                 extras: extras,
                                 mode: 'modify',
@@ -133,14 +168,11 @@ define(['models/custom/order/OrderInfo',
                 }
             }
 
-            this.$('#total').text(parseFloat(totalSumPrice).toFixed(2) + ' €');
+            this.$('#total').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
         }
 
         render() {
-            this.renderTemplate(Template, {orderInfo: this.orderInfo});
-
-            this.renderOrder();
-
+            this.renderTemplate(Template);
             this.changePage(this);
         }
     }
