@@ -23,12 +23,11 @@ define(['models/custom/order/OrderInfo',
 
             this.$('#details').empty();
 
-            let counter = 0;
+            let counter;
             let totalSumPrice = 0;
             let sortedCategorys = new Map();
             let t = this.i18n();
             let i18n = app.i18n.template;
-            let currency = i18n.currency;
 
             let statusText;
             if (this.orderInfo.get('OrderInProgresses').length == 0) {
@@ -62,7 +61,7 @@ define(['models/custom/order/OrderInfo',
             }
 
             if (this.orderInfo.get('amountBilled')) {
-                this.$('#amount-billed').append(this.orderInfo.get('amountBilled') + " " + currency);
+                this.$('#amount-billed').append(app.i18n.toCurrency('amountBilled'));
             }
 
             // Presort the list by categorys
@@ -168,7 +167,7 @@ define(['models/custom/order/OrderInfo',
                 }
             }
 
-            this.$('#total').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
+            this.$('#total').text(app.i18n.toCurrency(totalSumPrice));
         }
 
         render() {

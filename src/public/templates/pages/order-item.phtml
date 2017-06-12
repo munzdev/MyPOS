@@ -17,9 +17,9 @@
         <% if(isSpecialOrder == true) { %>
             <strong><%= t.managerNeedsToSetPrice %></strong>
         <% } else { %>
-            <%= t.singlePrice %>: <strong><%- parseFloat(price).toFixed(2) %><%= i18n.currency %></strong>
+            <%= t.singlePrice %>: <strong><%- app.i18n.toCurrency(price) %></strong>
             <br/>
-            <%= t.total %>: <strong><%- parseFloat(totalPrice).toFixed(2) %><%= i18n.currency %></strong>
+            <%= t.total %>: <strong><%- app.i18n.toCurrency(totalPrice) %></strong>
         <% } %>
         <% if(typeof edit !== "undefined") { %>
             <br/>
@@ -40,7 +40,7 @@
             <% } else if(status == ORDER_STATUS_IN_PROGRESS) { %>
                 <p style="color:orange;">
                     <%= t.inProgressSince %>
-                    <%- $.format.date(MyPOS.DateFromMysql(in_progress_begin), DATE_JS_TIMEFORMAT) %>
+                    <%- app.i18n.toDateTime(in_progress_begin) %>
                     <%= t.position %> <%- rank %>
                 </p>
                 <p><%= t.editor %>: <%- handled_by_name %></p>
@@ -48,22 +48,22 @@
                 <p><%= t.deliveries %>:</p>
                 <ul class="ui-mini">
                     <% _.each(amount_recieved, function(current_amount, current_date){ %>
-                        <li><%- $.format.date(MyPOS.DateFromMysql(current_date), DATE_JS_TIMEFORMAT) %>: <%- current_amount %></li>
+                        <li><%- app.i18n.toDateTime(current_date) %>: <%- current_amount %></li>
                     <% }) %>
                 </ul>
             <% } else if(status == ORDER_STATUS_FINISHED) { %>
                 <p style="color:green;">
                         <%= t.doneEditFrom %>
-                        <%- $.format.date(MyPOS.DateFromMysql(in_progress_begin), DATE_JS_TIMEFORMAT) %>
+                        <%- app.i18n.toDateTime(in_progress_begin) %>
                         <%= t.doneEditTo %>
-                        <%- $.format.date(MyPOS.DateFromMysql(in_progress_done), DATE_JS_TIMEFORMAT) %>
+                        <%- app.i18n.toDateTime(in_progress_done) %>
                 </p>
                 <p><%= t.editor %>: <%- handled_by_name %></p>
                 <p><%= t.recieved %>: <%- amount_recieved_total %></p>
                 <p><%= t.deliveries %>:</p>
                 <ul class="ui-mini">
                     <% _.each(amount_recieved, function(current_amount, current_date){ %>
-                        <li><%- $.format.date(MyPOS.DateFromMysql(current_date), DATE_JS_TIMEFORMAT) %>: <%- current_amount %></li>
+                        <li><%- app.i18n.toDateTime(current_date) %>: <%- current_amount %></li>
                     <% }) %>
                 </ul>
             <% } %>
