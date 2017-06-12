@@ -62,7 +62,7 @@ class OrderDetail extends Model implements IOrderDetail
         return $this->model->getDistributionFinished();
     }
 
-    public function getExtraDetail(): string
+    public function getExtraDetail(): ?string
     {
         return $this->model->getExtraDetail();
     }
@@ -107,12 +107,12 @@ class OrderDetail extends Model implements IOrderDetail
         return $menuSizeModel;
     }
 
-    public function getMenuSizeid(): int
+    public function getMenuSizeid(): ?int
     {
         return $this->model->getMenuSizeid();
     }
 
-    public function getMenuid(): int
+    public function getMenuid(): ?int
     {
         return $this->model->getMenuid();
     }

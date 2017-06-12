@@ -29,7 +29,7 @@ interface IOrderDetail extends IModel {
     function getOrder();
 
     /**
-     * @return int
+     * @return ?int
      */
     function getMenuid();
 
@@ -79,7 +79,7 @@ interface IOrderDetail extends IModel {
     function getSinglePriceModifiedByUser();
 
     /**
-     * @return string
+     * @return ?string
      */
     function getExtraDetail();
 

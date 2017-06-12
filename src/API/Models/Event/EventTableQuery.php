@@ -52,18 +52,22 @@ class EventTableQuery extends Query implements IEventTableQuery
 
     }
 
-    public function findByOrderid(int $orderid) : IEventTableCollection
+    public function findByOrderid(int $orderid) : ?IEventTable
     {
-        $eventTables = EventTableQueryORM::create()
+        $eventTable = EventTableQueryORM::create()
             ->useOrderQuery()
                 ->filterByOrderid($orderid)
             ->endUse()
             ->findOne();
 
-        $eventTableCollection = $this->container->get(IEventTableCollection::class);
-        $eventTableCollection->setCollection($eventTables);
+        if(!$eventTable) {
+            return null;
+        }
 
-        return $eventTableCollection;
+        $eventTableModel = $this->container->get(IEventTable::class);
+        $eventTableModel->setModel($eventTable);
+
+        return $eventTableModel;
     }
 
     public function findByEventid(int $eventid) : IEventTableCollection

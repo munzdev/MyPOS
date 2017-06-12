@@ -303,12 +303,12 @@ class OrderUnbilled extends SecurityController
         $eventTableQuery = $this->container->get(IEventTableQuery::class);
         $orderDetailQuery = $this->container->get(IOrderDetailQuery::class);
 
-        $eventTable = null;
+        $eventTableid = null;
         if ($all) {
-            $eventTable = $eventTableQuery->findByOrderid($orderid);
+            $eventTableid = $eventTableQuery->findByOrderid($orderid)->getEventTableid();
         }
 
-        $unbilledOrderDetails = $orderDetailQuery->findUnbilled($orderid, $eventTable);
+        $unbilledOrderDetails = $orderDetailQuery->findUnbilled($orderid, $eventTableid);
 
         return $unbilledOrderDetails;
     }
@@ -360,7 +360,7 @@ class OrderUnbilled extends SecurityController
                 }
 
                 if (!isset($unbilledOrderDetailsArray[$index])) {
-                    $unbilledOrderDetailsArray[$index] = $orderDetail->toArray();
+                    $unbilledOrderDetailsArray[$index] = $orderDetail->toArray(true);
                     $unbilledOrderDetailsArray[$index]['AmountLeft'] = $amountLeft;
                 } else {
                     $unbilledOrderDetailsArray[$index]['Amount'] += $orderDetail->getAmount();

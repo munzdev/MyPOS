@@ -134,12 +134,12 @@ class OrderDetailQuery extends Query implements IOrderDetailQuery
         return $orderDetailCollection;
     }
 
-    public function findUnbilled($orderid, $eventTable = null): IOrderDetailUnbilledCollection
+    public function findUnbilled($orderid, $eventTableid = null): IOrderDetailUnbilledCollection
     {
         $orderDetails = OrderDetailQueryORM::create()
-            ->_if($eventTable)
+            ->_if($eventTableid)
                 ->useOrderQuery()
-                    ->filterByEventTable($eventTable)
+                    ->filterByEventTableid($eventTableid)
                 ->endUse()
             ->_else()
                 ->filterByOrderid($orderid)
