@@ -2,18 +2,6 @@
     <div data-role="popup" data-overlay-theme="b" data-theme="b" data-position-to="window" id="success-popup" class="ui-content">
          <h3><%= t.paymentSuccessfull %></h3>
     </div>
-    <div data-role="popup" data-position-to="window" id="add-coupon-popup" data-overlay-theme="b" data-theme="b">
-         <div data-role="header">
-            <h1><%= t.addCoupon %></h1>
-        </div>
-        <div role="main" class="ui-content">
-            <label for="coupon-code"><%= t.code %></label>
-            <input type="text" id="coupon-code" />
-
-            <a class="ui-btn ui-corner-all ui-shadow ui-btn-b" data-rel="back"><%= t.abort %></a>
-            <a id='coupon-code-verify' class="ui-btn ui-corner-all ui-shadow ui-btn-b"><%= t.verify %></a>
-        </div>
-    </div>
     <div data-role="navbar">
         <ul>
             <li><a id="show-all" class="ui-btn-active ui-mini"><%= t.openOnTable %></a></li>

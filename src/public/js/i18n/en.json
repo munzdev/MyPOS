@@ -378,6 +378,16 @@
         "errorCity": "Enter city!",
         "errorZip": "Emter zip!"
     },
+    "CouponSelectView": {
+        "addCoupon": "Add coupon",
+        "code": "Code",
+        "abort": "Abort",
+        "verify": "Verify",
+        "error": "Error!",
+        "errorCodeUsed": "Coupon is allready in use!",
+        "errorCouponCode": "Please enter a coupon code to verify!",
+        "errorInvalidCode": "Invalid code given or coupon allready fully consumed!"
+    },
     "InvoiceAddView": {
         "maturityDate": "Maturity date",
         "customerid": "Customer-Nr",

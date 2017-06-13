@@ -379,6 +379,16 @@
         "errorCity": "Ort eingeben!",
         "errorZip": "PLZ eingeben!"
     },
+    "CouponSelectView": {
+        "addCoupon": "Gutschein hinzufügen",
+        "code": "Code",
+        "abort": "Abbrechen",
+        "verify": "Prüfen",
+        "error": "Fehler",
+        "errorCodeUsed": "Gutschein wurde bereits hinzugefügt!",
+        "errorCouponCode": "Bitte geben Sie einen Gutschein Code ein!",
+        "errorInvalidCode": "Code nicht gültig oder Gutschein bereits verbraucht!"
+    },
     "InvoiceAddView": {
         "maturityDate": "Zahlbar bis",
         "customerid": "Kunden-Nr",

@@ -1,16 +1,16 @@
 define(['Webservice',
         'collections/custom/event/PrinterCollection',
         'views/helpers/CustomerSelectView',
+        'views/helpers/CouponSelectView',
         'models/custom/order/OrderUnbilled',
-        'models/custom/payment/VerifyCoupon',
         'text!templates/pages/order-invoice.phtml',
         'text!templates/pages/order-item.phtml',
         'jquery-validate'
 ], function(Webservice,
             PrinterCollection,
             CustomerSelectView,
+            CouponSelectView,
             OrderUnbilled,
-            VerifyCoupon,
             Template,
             TemplateItem) {
     "use strict";
@@ -40,6 +40,7 @@ define(['Webservice',
             this.paymentTypes = new app.collections.Payment.PaymentTypeCollection;
             this.printers = new PrinterCollection;
             this.customerSelectView = new CustomerSelectView({selectCallback: this.click_btn_select_customer.bind(this)});
+            this.couponSelectView = new CouponSelectView({selectCallback: this.click_btn_select_coupon.bind(this)});
 
             $.when(this.printers.fetch(),
                    this.paymentTypes.fetch())
@@ -130,7 +131,7 @@ define(['Webservice',
         }
 
         use_coupon() {
-            this.$('#add-coupon-popup').popup("open");
+            this.couponSelectView.show();
         }
 
         use_customer() {
@@ -151,38 +152,9 @@ define(['Webservice',
             this.renderOpenOrders();
         }
 
-        verify_coupon() {
-            let code = $.trim(this.$('#coupon-code').val());
-            let hasCode = false;
-
-            if(code == '')
-                return;
-
-            this.orderUnbilled.get('UsedCoupons').find((coupon) => {
-                if(code == coupon.get('Code')) {
-                    hasCode = true;
-                    return code;
-                }
-            });
-
-            if(hasCode) {
-                this.$('#add-coupon-popup').popup("close");
-                app.error.showAlert('Fehler!', 'Gutschein wurde bereits hinzugefügt!');
-                return;
-            }
-
-            let verifyCoupon = new VerifyCoupon();
-            verifyCoupon.set('Code', code);
-            verifyCoupon.fetch()
-                        .done((coupon) => {
-                            this.orderUnbilled.get('UsedCoupons').add(coupon);
-                            this.$('#add-coupon-popup').popup("close");
-                            this.renderOpenOrders();
-                        })
-                        .fail(() => {
-                            this.$('#add-coupon-popup').popup("close");
-                            app.error.showAlert('Fehler!', 'Code nicht gültig oder Gutschein bereits verbraucht!');
-                        });
+        click_btn_select_coupon(coupon) {
+            this.orderUnbilled.get('UsedCoupons').add(coupon);
+            this.renderOpenOrders();
         }
 
         success_popup_close() {
@@ -195,10 +167,6 @@ define(['Webservice',
             }
             else
                 this.changeHash("order-overview");
-        }
-
-        add_coupon_popup_close() {
-            this.$('#coupon-code').val('');
         }
 
         renderOpenOrders() {
@@ -350,6 +318,7 @@ define(['Webservice',
             let t = this.i18n();
 
             this.registerAppendview(this.customerSelectView);
+            this.registerAppendview(this.couponSelectView);
 
             this.renderTemplate(Template, {printers: this.printers,
                                            paymentTypes: this.paymentTypes});
