@@ -321,8 +321,8 @@ COMMIT;
 -- Data for table `event_contact`
 -- -----------------------------------------------------
 START TRANSACTION;
-INSERT INTO `event_contact` (`event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `is_deleted`, `default`) VALUES (DEFAULT, 1, 'Herr', 'Max Mustermann', NULL, 'Strasse 1', NULL, 'Olstadt', '21123', '1213', NULL, NULL, 'customer@email.com', 'true', false);
-INSERT INTO `event_contact` (`event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `is_deleted`, `default`) VALUES (DEFAULT, 1, 'Firma', 'Company Test', NULL, 'Street whatever 1', NULL, 'City', '1234', '141231', '0664/123456', NULL, 'company@test.at', 'true', true);
+INSERT INTO `event_contact` (`event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `is_deleted`, `default`) VALUES (DEFAULT, 1, 'Herr', 'Max Mustermann', NULL, 'Strasse 1', NULL, 'Olstadt', '21123', '1213', NULL, NULL, 'customer@email.com', NULL, false);
+INSERT INTO `event_contact` (`event_contactid`, `eventid`, `title`, `name`, `contact_person`, `address`, `address2`, `city`, `zip`, `tax_identification_nr`, `telephon`, `fax`, `email`, `is_deleted`, `default`) VALUES (DEFAULT, 1, 'Firma', 'Company Test', NULL, 'Street whatever 1', NULL, 'City', '1234', '141231', '0664/123456', NULL, 'company@test.at', NULL, true);
 
 COMMIT;
 

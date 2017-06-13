@@ -56,7 +56,7 @@ class EventContactQuery extends Query implements IEventContactQuery
     {
         $eventContacts = EventContactQueryORM::create()
             ->filterByEventid($eventid)
-            ->filterByActive(true)
+            ->filterByIsDeleted()
             ->filterByName('%'.$name.'%', Criteria::LIKE)
             ->find();
 
