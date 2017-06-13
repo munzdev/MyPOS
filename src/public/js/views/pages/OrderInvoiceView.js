@@ -1,18 +1,16 @@
 define(['Webservice',
         'collections/custom/event/PrinterCollection',
-        'collections/custom/invoice/CustomerSearchCollection',
+        'views/helpers/CustomerSelectView',
         'models/custom/order/OrderUnbilled',
         'models/custom/payment/VerifyCoupon',
-        'models/custom/invoice/CustomerModel',
         'text!templates/pages/order-invoice.phtml',
         'text!templates/pages/order-item.phtml',
         'jquery-validate'
 ], function(Webservice,
             PrinterCollection,
-            CustomerSearchCollection,
+            CustomerSelectView,
             OrderUnbilled,
             VerifyCoupon,
-            CustomerModel,
             Template,
             TemplateItem) {
     "use strict";
@@ -25,19 +23,15 @@ define(['Webservice',
                     'click #show-single': 'set_mode_single',
                     'click #use-coupon': 'use_coupon',
                     'click #use-customer': 'use_customer',
-                    'click #customer-add': 'use_customer_add',
-                    'click #customer-search': "customer_search",
                     'click #coupon-code-verify': 'verify_coupon',
                     'click #submit': 'finish',
                     'change #paymentTypeList': 'change_payment_type',
-                    'popupafterclose #select-customer-popup': 'select_customer_popup_close',
                     'popupafterclose #success-popup': 'success_popup_close',
                     'popupafterclose #add-coupon-popup': 'add_coupon_popup_close'};
         }
 
         initialize(options) {
             _.bindAll(this, "renderOpenOrders",
-                            "customer_save",
                             "order_count_up",
                             "order_count_down");
 
@@ -45,7 +39,7 @@ define(['Webservice',
             this.orderUnbilled.set('Orderid', options.orderid);
             this.paymentTypes = new app.collections.Payment.PaymentTypeCollection;
             this.printers = new PrinterCollection;
-            this.customerSearch = new CustomerSearchCollection;
+            this.customerSelectView = new CustomerSelectView({selectCallback: this.click_btn_select_customer.bind(this)});
 
             $.when(this.printers.fetch(),
                    this.paymentTypes.fetch())
@@ -140,12 +134,7 @@ define(['Webservice',
         }
 
         use_customer() {
-            this.$('#select-customer-popup').popup("open");
-        }
-
-        use_customer_add() {
-            this.$('#select-customer-popup').popup("close");
-            this.$('#add-customer-popup').popup("open");
+            this.customerSelectView.show();
         }
 
         change_payment_type() {
@@ -157,65 +146,9 @@ define(['Webservice',
                 this.$('#print-receipt-text').text(t.printInvoice);
         }
 
-        customer_search() {
-            let name = $.trim(this.$('#customer-search-name').val());
-
-            if(name == '')
-                return;
-
-            this.customerSearch.name = name;
-            this.customerSearch.fetch()
-                                .done(() => {
-                                    this.$('#customer-search-result').empty();
-                                    let t = this.i18n();
-
-                                    let divider = $('<li/>').attr('data-role', 'list-divider').text(t.searchResult);
-                                    this.$('#customer-search-result').append(divider);
-
-                                    if(this.customerSearch.length == 0) {
-                                        this.$('#customer-search-result').append($('<li/>').text(t.noSearchResult));
-                                    } else {
-                                        this.customerSearch.each((customer) => {
-                                            let a = $('<a/>').attr('class', "customer-search-result-btn ui-btn ui-corner-all ui-shadow ui-btn-b ui-mini ui-icon-check ui-btn-icon-right")
-                                                             .attr('data-customercid', customer.cid)
-                                                             .text(customer.get('Name'));
-
-                                            this.$('#customer-search-result').append($('<li/>').append(a));
-                                        });
-                                    }
-
-                                    this.$('.customer-search-result-btn').click((event) => {
-                                        let cid = $(event.currentTarget).attr('data-customercid');
-                                        this.orderUnbilled.set('Customer', this.customerSearch.get({cid: cid}));
-                                        this.$('#select-customer-popup').popup("close");
-                                        this.renderOpenOrders();
-                                    });
-                                    this.$('#customer-search-result').listview('refresh');
-                                });
-        }
-
-        customer_save() {
-            if(this.$('#customer-form').valid()) {
-                let customer = new CustomerModel;
-                customer.set('Title', this.$('#customer-title').val());
-                customer.set('Name', this.$('#customer-name').val());
-                customer.set('ContactPerson', this.$('#customer-contact-person').val() == '' ? null : this.$('#customer-contact-person').val());
-                customer.set('Address', this.$('#customer-address').val());
-                customer.set('Address2', this.$('#customer-address2').val() == '' ? null : this.$('#customer-address2').val());
-                customer.set('City', this.$('#customer-city').val());
-                customer.set('Zip', this.$('#customer-zip').val());
-                customer.set('TaxIdentificationNr', this.$('#customer-tin').val() == '' ? null : this.$('#customer-tin').val());
-                customer.set('Telephon', this.$('#customer-telephone').val() == '' ? null : this.$('#customer-telephone').val());
-                customer.set('Fax', this.$('#customer-fax').val() == '' ? null : this.$('#customer-fax').val());
-                customer.set('Email', this.$('#customer-email').val() == '' ? null : this.$('#customer-email').val());
-                customer.save()
-                        .done(() => {
-                            this.orderUnbilled.set('Customer', customer);
-                            this.$('#add-customer-popup').popup("close");
-                            this.renderOpenOrders();
-                        });
-                return false;
-            }
+        click_btn_select_customer(customer) {
+            this.orderUnbilled.set('Customer', customer);
+            this.renderOpenOrders();
         }
 
         verify_coupon() {
@@ -250,11 +183,6 @@ define(['Webservice',
                             this.$('#add-coupon-popup').popup("close");
                             app.error.showAlert('Fehler!', 'Code nicht gültig oder Gutschein bereits verbraucht!');
                         });
-        }
-
-        select_customer_popup_close() {
-            this.$('#customer-search-name').val('');
-            this.$('#customer-search-result').empty();
         }
 
         success_popup_close() {
@@ -418,40 +346,13 @@ define(['Webservice',
             this.$('#coupons-list').listview('refresh');
         }
 
-        // Renders all of the Category models on the UI
         render() {
             let t = this.i18n();
 
+            this.registerAppendview(this.customerSelectView);
+
             this.renderTemplate(Template, {printers: this.printers,
                                            paymentTypes: this.paymentTypes});
-
-            // TODO: Somehow this event is not fired when registered in the events() method.
-            // Manualy fix this
-            this.$('#customer-save').click(this.customer_save);
-
-            // Register new customer form validation
-            this.$('#customer-form').validate({
-                rules: {
-                    title: {required: true},
-                    name: {required: true},
-                    address: {required: true},
-                    city: {required: true},
-                    zip: {required: true}
-                },
-                messages: {
-                    title: {required: t.errorTitle},
-                    name: {required: t.errorName},
-                    address: {required: t.errorAddress},
-                    city: {required: t.errorCity},
-                    zip: {required: t.errorZip}
-                },
-                errorPlacement: function (error, element) {
-                    if(element.is('select'))
-                        error.appendTo(element.parent().parent().prev());
-                    else
-                        error.appendTo(element.parent().prev());
-                }
-            });
 
             this.changePage(this);
         }
