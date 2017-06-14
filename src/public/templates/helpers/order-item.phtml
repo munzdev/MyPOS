@@ -21,7 +21,7 @@
             <br/>
             <%= t.total %>: <strong><%- app.i18n.toCurrency(totalPrice) %></strong>
         <% } %>
-        <% if(typeof edit !== "undefined") { %>
+        <% if(edit) { %>
             <br/>
             <a data-menu-typeid="<%- menuTypeid %>" data-index="<%- index %>" class="order-item-edit ui-btn ui-btn-inline ui-icon-edit ui-btn-icon-left ui-mini"><%= t.edit %></a>
         <% } %>
@@ -32,7 +32,7 @@
         <% } %>
     </div>
 </div>
-<% if(typeof statusInformation !== 'undefined') { %>
+<% if(statusInformation) { %>
     <div class="ui-grid-solo">
         <div class="ui-block-a">
             <% if(status == ORDER_STATUS_WAITING) { %>

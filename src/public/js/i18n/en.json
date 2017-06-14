@@ -133,7 +133,7 @@
         "specialOrder": "Special Order",
         "mixedWith": "Mixed with"
     },
-    "OrderItem": {
+    "OrderItemsView": {
         "inInvoice": "in Invoice",
         "open": "Open",
         "amount": "Amount",
@@ -150,7 +150,10 @@
         "recieved": "Recieved",
         "deliveries": "Deliveries",
         "doneEditFrom": "Done - Edited from",
-        "doneEditTo": "to"
+        "doneEditTo": "to",
+        "specialOrders": "Special Orders",
+        "specialOrder": "Special Order",
+        "mixedWith": "Mixed with"
     },
     "OrderInvoiceView": {
         "specialOrders": "Special Orders",

@@ -1,17 +1,16 @@
 define(['models/custom/order/OrderModify',
+        'views/helpers/OrderItemsView',
         'text!templates/pages/order-modify-price.phtml',
-        'text!templates/pages/order-item.phtml',
         'sprintf'
 ], function(OrderModify,
-            Template,
-            TemplateItem) {
+            OrderItemsView,
+            Template) {
     "use strict";
 
     return class OrderModifyPriceView extends app.PageView
     {
         events() {
-            return {'click #list .order-item-edit': 'item_edit',
-                    'click #submit': 'finish',
+            return {'click #submit': 'finish',
                     'click #dialog-continue': 'click_btn_continue',
                     'popupafterclose #success-popup': 'success_popup_close'}
     	}
@@ -20,6 +19,12 @@ define(['models/custom/order/OrderModify',
             this.orderid = options.orderid;
                         
             $.mobile.loading("show");
+            
+            this.orderItemsView = new OrderItemsView({mode: 'modify',
+                                                      skipCounts: true,
+                                                      edit: true,
+                                                      statusInformation: false,
+                                                      editCallback: this.item_edit.bind(this)});  
             
             this.orderModify = new OrderModify();
             this.orderModify.set('Orderid', options.orderid);                        
@@ -33,19 +38,15 @@ define(['models/custom/order/OrderModify',
             this.modifications = {};
         }
 
-        item_edit(event) {
-            let index = $(event.currentTarget).attr('data-index');
-            let orderDetail = this.orderModify.get('OrderDetails').get({cid: index});
-
+        item_edit(orderDetail) {
             this.$('#dialog-input').val(orderDetail.get('SinglePrice'));
-            this.$('#dialog-continue').attr('data-index', index);
+            this.editItem = orderDetail;
 
             this.$('#dialog').popup('open');
         }
 
         click_btn_continue(event) {
-            let index = $(event.currentTarget).attr('data-index');
-            let orderDetail = this.orderModify.get('OrderDetails').get({cid: index});
+            let orderDetail = this.editItem;
             var value = parseFloat(this.$('#dialog-input').val());
             let i18n = this.i18n();
 
@@ -59,7 +60,7 @@ define(['models/custom/order/OrderModify',
 
             orderDetail.set('SinglePrice', value);
 
-            this.modifications[index] = value;
+            this.modifications[orderDetail.get('OrderDetailid')] = value;
 
             this.$('#dialog').popup('close');
             this.renderOpenOrders();
@@ -89,113 +90,22 @@ define(['models/custom/order/OrderModify',
         }
 
         renderOpenOrders() {
-            var itemTemplate = _.template(TemplateItem);
+            let t = this.i18n();
 
             this.$('#list').empty();
-
-            let counter = 0;
-            let totalSumPrice = 0;
-            let sortedCategorys = new Map();
-            let t = this.i18n();
-            let currency = app.i18n.template.currency;
-
-            // Presort the list by categorys
-            this.orderModify.get('OrderDetails').each((orderDetail) => {
-                let menuid = orderDetail.get('Menuid');
-                let key = null;
-                
-                if(menuid === null && !orderDetail.get('Verified'))
-                    return;
-
-                if(menuid === null && sortedCategorys.get(key) == null) {
-                    sortedCategorys.set(key, {name: t.specialOrders,
-                                              orders: new Set()});
-                } else if(menuid !== null) {
-                    let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});
-                    key = menuSearch.MenuTypeid;
-
-                    if(sortedCategorys.get(key) == null) {
-                        let menuType = app.productList.findWhere({MenuTypeid: key});
-                        sortedCategorys.set(key, {name: menuType.get('Name'),
-                                                  orders: new Set()});
-                    }
-                }
-
-                sortedCategorys.get(key).orders.add(orderDetail);
-            });
-
-            for(let[menuTypeid, val] of sortedCategorys.entries()) {
-                let divider = $('<li/>').attr('data-role', 'list-divider').text(val.name);
-                this.$('#list').append(divider);
-                counter = 0;
-                let isSpecialOrder = (menuTypeid == null);
-
-                for (let orderDetail of val.orders.values()) {
-                    let menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetail.get('Menuid'); });
-                    let extras = '';
-                    let price = parseFloat(orderDetail.get('SinglePrice'));
-
-                    let menuSize = orderDetail.get('MenuSize');
-
-                    // Add size text if multible sizes are avaible for the product
-                    if(!isSpecialOrder && menuSearch.Menu.get('MenuPossibleSize').length > 1)
-                        extras = menuSize.get('Name') + ", ";
-
-                    if(orderDetail.get('OrderDetailMixedWiths').length > 0) {
-                        extras += t.mixedWith + ": ";
-
-                        orderDetail.get('OrderDetailMixedWiths').each((orderDetailMixedWith) => {
-                            let menuToMixWith = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetailMixedWith.get('Menuid'); });
-                            extras += menuToMixWith.Menu.get('Name') + " - ";
-                        });
-
-                        extras = extras.slice(0, -3);
-                        extras += ", ";
-                    }
-
-                    orderDetail.get('OrderDetailExtras').each(function(extra) {
-                        let menuPossibleExtra = menuSearch.Menu.get('MenuPossibleExtra')
-                                                                .findWhere({MenuPossibleExtraid: extra.get('MenuPossibleExtraid')});
-                        extras += menuPossibleExtra.get('MenuExtra').get('Name') + ", ";
-                    });
-
-                    if(orderDetail.get('ExtraDetail') && orderDetail.get('ExtraDetail').length > 0)
-                        extras += orderDetail.get('ExtraDetail') + ", ";
-
-                    if(extras.length > 0)
-                        extras = extras.slice(0, -2);
-
-                    let totalPrice = price * orderDetail.get('Amount');
-                    totalSumPrice += totalPrice;
-
-                    let datas = {name: isSpecialOrder ? t.specialOrder : menuSearch.Menu.get('Name'),
-                                extras: extras,
-                                mode: 'modify',
-                                amount: orderDetail.get('Amount'),
-                                price: price,
-                                totalPrice: totalPrice,
-                                menuTypeid: menuTypeid,
-                                index: orderDetail.cid,
-                                isSpecialOrder: isSpecialOrder,
-                                edit: true,
-                                skipCounts: true,
-                                t: app.i18n.template.OrderItem,
-                                i18n: app.i18n.template};
-
-                    this.$('#list').append("<li>" + itemTemplate(datas) + "</li>");
-                    counter++;
-                }
-            }
+            
+            this.orderItemsView.orderDetails = this.orderModify.get('OrderDetails');
+            let detailData = this.orderItemsView.render();
+            let totalSumPrice = detailData.totalSumPrice;
+            this.$('#list').append(this.orderItemsView.$el);         
 
             if(this.oldPrice === undefined) {
                 this.oldPrice = parseFloat(totalSumPrice);
-                this.$('#total-old').text(this.oldPrice.toFixed(2) + ' ' + currency);
+                this.$('#total-old').text(app.i18n.toCurrency(this.oldPrice));
             }
 
-            this.$('#total-new').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
-            this.$('#total-difference').text(parseFloat(totalSumPrice - this.oldPrice).toFixed(2) + ' ' + currency);
-
-            this.$('#list').listview('refresh');
+            this.$('#total-new').text(app.i18n.toCurrency(totalSumPrice));
+            this.$('#total-difference').text(app.i18n.toCurrency(totalSumPrice - this.oldPrice));
         }
 
         render() {

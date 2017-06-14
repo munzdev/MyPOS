@@ -1,13 +1,13 @@
 define(["models/custom/order/OrderModify",
         "models/db/Ordering/OrderDetail",
+        'views/helpers/OrderItemsView',
         'text!templates/pages/order-modify.phtml',
-        'text!templates/pages/order-modify-panel.phtml',
-        'text!templates/pages/order-item.phtml'
+        'text!templates/pages/order-modify-panel.phtml'
 ], function(OrderModify,
             OrderDetail,
+            OrderItemsView,
             Template,
-            TemplatePanel,
-            TemplateItem) {
+            TemplatePanel) {
     "use strict";
 
     // Extends Backbone.View
@@ -29,13 +29,14 @@ define(["models/custom/order/OrderModify",
 
         // The View Constructor
         initialize(options) {
-            _.bindAll(this, "order_count_up",
-                            "order_count_down");
-
             this.options = options;
             this.isMixing = null;
 
             this.orderModify = new OrderModify();
+            this.orderItemsView = new OrderItemsView({mode: 'modify',
+                                                      skipCounts: false,
+                                                      statusInformation: false,
+                                                      countCallback: this.renderOrder.bind(this)});
 
             if(options.orderid === null) {
                 this.mode = 'new';
@@ -238,29 +239,6 @@ define(["models/custom/order/OrderModify",
             }
         }
 
-        order_count_up(event) {
-            let index = $(event.currentTarget).attr('data-index');
-
-            let orderDetail = this.orderModify.get('OrderDetails').get({cid: index});
-            orderDetail.set('Amount', orderDetail.get('Amount') + 1);
-
-            this.renderOrder();
-        }
-
-        order_count_down(event) {
-            let index = $(event.currentTarget).attr('data-index');
-
-            let orderDetail = this.orderModify.get('OrderDetails').get({cid: index});
-            let newAmount = orderDetail.get('Amount') - 1;
-
-            // If number is allready zero, nothing todo
-            if(newAmount == -1) return;
-
-            orderDetail.set('Amount', newAmount);
-
-            this.renderOrder();
-        }
-
         footer_back(event) {
             event.preventDefault();
             window.history.back();
@@ -294,160 +272,24 @@ define(["models/custom/order/OrderModify",
         }
 
         renderOrder() {
-            let itemTemplate = _.template(TemplateItem);
-
             this.$('#selected').empty();
 
-            let counter = 0;
-            let totalSumPrice = 0;
-            let sortedCategorys = new Map();
-            let t = this.i18n();
-            let currency = app.i18n.template.currency;
-
-            // Presort the list by categorys
-            this.orderModify.get('OrderDetails').each((orderDetail) => {
-                let menuid = orderDetail.get('Menuid');
-                let key = null;
-
-                if(menuid === null && sortedCategorys.get(key) == null) {
-                    sortedCategorys.set(key, {name: t.specialOrders,
-                                              orders: new Set()});
-                } else if(menuid !== null) {
-                    let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});
-                    key = menuSearch.MenuTypeid;
-
-                    if(sortedCategorys.get(key) == null) {
-                        let menuType = app.productList.findWhere({MenuTypeid: key});
-                        sortedCategorys.set(key, {name: menuType.get('Name'),
-                                                  orders: new Set()});
-                    }
-                }
-
-                sortedCategorys.get(key).orders.add(orderDetail);
-            });
-
-            for(let[menuTypeid, val] of sortedCategorys.entries()) {
-                let divider = $('<li/>').attr('data-role', 'list-divider').text(val.name);
-                this.$('#selected').append(divider);
-                counter = 0;
-                let isSpecialOrder = (menuTypeid == null);
-
-                for (let orderDetail of val.orders.values()) {
-                    let menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetail.get('Menuid'); });
-                    let extras = '';
-                    let price = parseFloat(orderDetail.get('SinglePrice'));
-                    let isNew = orderDetail.isNew();
-
-                    let menuSize = orderDetail.get('MenuSize');
-
-                    // Add size text if multible sizes are avaible for the product
-                    if(!isSpecialOrder && menuSearch.Menu.get('MenuPossibleSize').length > 1)
-                        extras = menuSize.get('Name') + ", ";
-
-                    if(isNew && !isSpecialOrder)
-                        price += parseFloat(menuSearch.Menu.get('MenuPossibleSize')
-                                                            .findWhere({MenuSizeid: menuSize.get('MenuSizeid')})
-                                                            .get('Price'));
-
-                    if(orderDetail.get('OrderDetailMixedWiths').length > 0) {
-                        extras += t.mixedWith + ": ";
-
-                        orderDetail.get('OrderDetailMixedWiths').each((orderDetailMixedWith) => {
-                            let menuToMixWith = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetailMixedWith.get('Menuid'); });
-                            extras += menuToMixWith.Menu.get('Name') + " - ";
-
-                            let sizesOfMenuToMixWith = app.productList.findWhere({MenuTypeid: menuToMixWith.MenuTypeid})
-                                                                        .get('MenuGroup')
-                                                                        .findWhere({MenuGroupid: menuToMixWith.MenuGroupid})
-                                                                        .get('Menu')
-                                                                        .findWhere({Menuid: menuToMixWith.Menuid})
-                                                                        .get('MenuPossibleSize');
-
-                            // -- Price calculation --
-                            // First: try to find the same size for the mixing product and get this price
-                            let menuToMixWithHasSameSizeAsOriginal = sizesOfMenuToMixWith.findWhere({MenuSizeid: menuSize.get('MenuSizeid')});
-                            let menuToMixWithDefaultPrice = parseFloat(menuToMixWith.Menu.get('Price'));
-
-                            if(menuToMixWithHasSameSizeAsOriginal) {
-                                let priceToAdd = menuToMixWithDefaultPrice + parseFloat(menuToMixWithHasSameSizeAsOriginal.get('Price'));
-
-                                if(DEBUG) console.log("Mixing same size found: " + priceToAdd);
-
-                                if(isNew) price += priceToAdd;
-                                return;
-                            }
-
-                            // Second: Try to calculate the price based on factor value
-                            let menuToMixWithSize = menuToMixWith.Menu.get('MenuPossibleSize').at(0);
-
-                            let factor = menuSize.get('Factor') / menuToMixWithSize.get('MenuSize').get('Factor');
-
-                            let priceToAdd = (menuToMixWithDefaultPrice + parseFloat(menuToMixWithSize.get('Price')) ) * factor;
-
-                            if(DEBUG) console.log("Mixing factor calculation: " + priceToAdd + " - " + priceToAdd.toFixed(1));
-
-                            if(isNew) price += priceToAdd;
-                            // -- End Price calculation --
-                        });
-
-                        if(isNew) {
-                            price = parseFloat( ( price / (orderDetail.get('OrderDetailMixedWiths').length + 1) ) );
-                            price = Math.round(price * 10)/10;// avoid peanuts
-                        }
-
-                        extras = extras.slice(0, -3);
-                        extras += ", ";
-                    }
-
-                    orderDetail.get('OrderDetailExtras').each(function(extra) {
-                        let menuPossibleExtra = menuSearch.Menu.get('MenuPossibleExtra')
-                                                                .findWhere({MenuPossibleExtraid: extra.get('MenuPossibleExtraid')});
-                        extras += menuPossibleExtra.get('MenuExtra').get('Name') + ", ";
-                        if(isNew) price += parseFloat(menuPossibleExtra.get('Price'));
-                    });
-
-                    if(orderDetail.get('ExtraDetail') && orderDetail.get('ExtraDetail').length > 0)
-                        extras += orderDetail.get('ExtraDetail') + ", ";
-
-                    if(extras.length > 0)
-                        extras = extras.slice(0, -2);
-
-                    let totalPrice = price * orderDetail.get('Amount');
-                    totalSumPrice += totalPrice;
-
-                    let datas = {name: isSpecialOrder ? t.specialOrder : menuSearch.Menu.get('Name'),
-                                extras: extras,
-                                mode: 'modify',
-                                amount: orderDetail.get('Amount'),
-                                price: price,
-                                totalPrice: totalPrice,
-                                menuTypeid: menuTypeid,
-                                index: orderDetail.cid,
-                                isSpecialOrder: isSpecialOrder,
-                                skipCounts: false,
-                                t: app.i18n.template.OrderItem,
-                                i18n: app.i18n.template};
-
-                    this.$('#selected').append("<li>" + itemTemplate(datas) + "</li>");
-                    counter++;
-                }
-            }
+            this.orderItemsView.orderDetails = this.orderModify.get('OrderDetails');
+            let detailData = this.orderItemsView.render();
+            let totalSumPrice = detailData.totalSumPrice;            
+            this.$('#selected').append(this.orderItemsView.$el);   
 
             if(this.mode == 'edit' && this.oldPrice === undefined) {
                 this.oldPrice = parseFloat(totalSumPrice);
-                this.$('#total-old').text(this.oldPrice.toFixed(2) + ' ' + currency);
+                this.$('#total-old').text(app.i18n.toCurrency(this.oldPrice));
             }
 
             if(this.mode == 'new') {
-                this.$('#total').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
+                this.$('#total').text(app.i18n.toCurrency(totalSumPrice));
             } else {
-                this.$('#total-new').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
-                this.$('#total-difference').text(parseFloat(totalSumPrice - this.oldPrice).toFixed(2) + ' ' + currency);
+                this.$('#total-new').text(app.i18n.toCurrency(totalSumPrice));
+                this.$('#total-difference').text(app.i18n.toCurrency(totalSumPrice - this.oldPrice));
             }
-
-            this.$('.order-item-up').click(this.order_count_up);
-            this.$('.order-item-down').click(this.order_count_down);
-            this.$('#selected').listview('refresh');
         }
 
         render() {

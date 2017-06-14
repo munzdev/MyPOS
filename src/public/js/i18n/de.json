@@ -133,7 +133,7 @@
         "specialOrder": "Sonderwunsch",
         "mixedWith": "Gemischt mit"
     },
-    "OrderItem": {
+    "OrderItemsView": {
         "inInvoice": "in Rechnung",
         "open": "Offen",
         "amount": "Anzahl",
@@ -150,7 +150,10 @@
         "recieved": "Erhalten",
         "deliveries": "Auslieferungen",
         "doneEditFrom": "Fertig - Bearbeitet von",
-        "doneEditTo": "bis"
+        "doneEditTo": "bis",
+        "specialOrders": "Sonderwünsche",
+        "specialOrder": "Sonderwunsch",
+        "mixedWith": "Gemischt mit"
     },
     "OrderInvoiceView": {
         "specialOrders": "Sonderwünsche",

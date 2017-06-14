@@ -2,17 +2,16 @@ define(['Webservice',
         'collections/custom/event/PrinterCollection',
         'views/helpers/CustomerSelectView',
         'views/helpers/CouponSelectView',
+        'views/helpers/OrderItemsView',
         'models/custom/order/OrderUnbilled',
-        'text!templates/pages/order-invoice.phtml',
-        'text!templates/pages/order-item.phtml',
-        'jquery-validate'
+        'text!templates/pages/order-invoice.phtml'
 ], function(Webservice,
             PrinterCollection,
             CustomerSelectView,
             CouponSelectView,
+            OrderItemsView,
             OrderUnbilled,
-            Template,
-            TemplateItem) {
+            Template) {
     "use strict";
 
     return class OrderInvoiceView extends app.PageView
@@ -31,9 +30,7 @@ define(['Webservice',
         }
 
         initialize(options) {
-            _.bindAll(this, "renderOpenOrders",
-                            "order_count_up",
-                            "order_count_down");
+            _.bindAll(this, "renderOpenOrders");
 
             this.orderUnbilled = new OrderUnbilled();
             this.orderUnbilled.set('Orderid', options.orderid);
@@ -41,6 +38,10 @@ define(['Webservice',
             this.printers = new PrinterCollection;
             this.customerSelectView = new CustomerSelectView({selectCallback: this.click_btn_select_customer.bind(this)});
             this.couponSelectView = new CouponSelectView({selectCallback: this.click_btn_select_coupon.bind(this)});
+            this.orderItemsView = new OrderItemsView({mode: 'pay',
+                                                      skipCounts: false,
+                                                      statusInformation: false,
+                                                      countCallback: this.renderOpenOrders});       
 
             $.when(this.printers.fetch(),
                    this.paymentTypes.fetch())
@@ -70,46 +71,6 @@ define(['Webservice',
             this.orderUnbilled.get('UnbilledOrderDetails').each(function(orderDetail) {
                 orderDetail.set('AmountSelected', orderDetail.get('AmountLeft')) ;
             });
-
-            this.renderOpenOrders();
-        }
-
-        order_count_up(event) {
-            if(DEBUG) console.log("Up");
-
-            let index = $(event.currentTarget).attr('data-index');
-            let orderDetail = this.orderUnbilled.get('UnbilledOrderDetails').get({cid: index});
-
-            var amount_open = orderDetail.get('AmountLeft');
-            var current_amount = parseFloat(orderDetail.get('AmountSelected'));
-            current_amount++;
-
-            if(current_amount > amount_open && amount_open > 0)
-                current_amount = amount_open;
-            else if(current_amount > 0 && amount_open < 0)
-                current_amount = 0;
-
-            orderDetail.set('AmountSelected', current_amount);
-
-            this.renderOpenOrders();
-        }
-
-        order_count_down(event) {
-            if(DEBUG) console.log("Down");
-
-            let index = $(event.currentTarget).attr('data-index');
-            let orderDetail = this.orderUnbilled.get('UnbilledOrderDetails').get({cid: index});
-
-            var amount_open = orderDetail.get('AmountLeft');
-            var current_amount = parseFloat(orderDetail.get('AmountSelected'));
-            current_amount--;
-
-            if((current_amount < 0 && amount_open > 0))
-                current_amount = 0;
-            else if(current_amount < amount_open && amount_open < 0)
-                current_amount = amount_open;
-
-            orderDetail.set('AmountSelected', current_amount);
 
             this.renderOpenOrders();
         }
@@ -170,103 +131,17 @@ define(['Webservice',
         }
 
         renderOpenOrders() {
-            var itemTemplate = _.template(TemplateItem);
-
-            this.$('#open-orders-list').empty();
-            this.$('#coupons-list').empty();
-
-            let sortedCategorys = new Map();
-            var totalSumPrice = 0;
-            var totalOpenProducts = 0;
-            var totalProductsInInvoice = 0;
             let t = this.i18n();
-            let currency = app.i18n.template.currency;
-
-            // Presort the list by categorys
-            this.orderUnbilled.get('UnbilledOrderDetails').each((orderDetail) => {
-                let menuid = orderDetail.get('Menuid');
-                let key = null;
-
-                if(menuid === null && sortedCategorys.get(key) == null) {
-                    sortedCategorys.set(key, {name: t.specialOrders,
-                                              orders: new Set()});
-                } else if(menuid !== null) {
-                    let menuSearch = _.find(app.productList.searchHelper, function(obj) {return obj.Menuid == menuid});
-                    key = menuSearch.MenuTypeid;
-
-                    if(sortedCategorys.get(key) == null) {
-                        let menuType = app.productList.findWhere({MenuTypeid: key});
-                        sortedCategorys.set(key, {name: menuType.get('Name'),
-                                                  orders: new Set()});
-                    }
-                }
-
-                sortedCategorys.get(key).orders.add(orderDetail);
-            });
-
-            for(let[menuTypeid, val] of sortedCategorys.entries()) {
-                let divider = $('<li/>').attr('data-role', 'list-divider').text(val.name);
-                this.$('#open-orders-list').append(divider);
-                let isSpecialOrder = (menuTypeid == null);
-
-                for (let orderDetail of val.orders.values()) {
-                    let menuSearch = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetail.get('Menuid'); });
-                    var extras = '';
-
-                    let menuSize = orderDetail.get('MenuSize');
-
-                    if(!isSpecialOrder && menuSearch.Menu.get('MenuPossibleSize').length > 1)
-                        extras = menuSize.get('Name') + ", ";
-
-                    if(orderDetail.get('OrderDetailMixedWiths').length > 0) {
-                        extras += t.mixedWith + ": ";
-
-                        orderDetail.get('OrderDetailMixedWiths').each((orderDetailMixedWith) => {
-                            let menuToMixWith = _.find(app.productList.searchHelper, function(obj) { return obj.Menuid == orderDetailMixedWith.get('Menuid'); });
-                            extras += menuToMixWith.Menu.get('Name') + " - ";
-                        });
-                        extras = extras.slice(0, -3);
-                        extras += ", ";
-                    }
-
-                    orderDetail.get('OrderDetailExtras').each(function(extra) {
-                        let menuPossibleExtra = menuSearch.Menu.get('MenuPossibleExtra')
-                                                                .findWhere({MenuPossibleExtraid: extra.get('MenuPossibleExtraid')});
-                        extras += menuPossibleExtra.get('MenuExtra').get('Name') + ", ";
-                    });
-
-                    if(orderDetail.get('ExtraDetail') && orderDetail.get('ExtraDetail').length > 0)
-                        extras += orderDetail.get('ExtraDetail') + ", ";
-
-                    if(extras.length > 0)
-                        extras = extras.slice(0, -2);
-
-                    if(!orderDetail.get('AmountSelected'))
-                        orderDetail.set('AmountSelected', 0);
-
-                    let price = parseFloat(orderDetail.get('SinglePrice')) * parseFloat(orderDetail.get('AmountSelected'));
-                    totalSumPrice += price;
-
-                    totalOpenProducts += orderDetail.get('AmountLeft');
-                    totalProductsInInvoice += parseFloat(orderDetail.get('AmountSelected'));
-
-                    var datas = {mode: 'pay',
-                                name: isSpecialOrder ? t.specialOrder : menuSearch.Menu.get('Name'),
-                                extras: extras,
-                                amount: orderDetail.get('AmountSelected') ? orderDetail.get('AmountSelected') : 0,
-                                open: orderDetail.get('AmountLeft'),
-                                isSpecialOrder: isSpecialOrder,
-                                price: orderDetail.get('SinglePrice'),
-                                totalPrice: price,
-                                menuTypeid: menuTypeid,
-                                index: orderDetail.cid,
-                                skipCounts: false,
-                                t: app.i18n.template.OrderItem,
-                                i18n: app.i18n.template};
-
-                    this.$('#open-orders-list').append("<li>" + itemTemplate(datas) + "</li>");
-                }
-            }
+            
+            this.$('#coupons-list').empty();
+            this.$('#open-orders-list').empty();
+            
+            this.orderItemsView.orderDetails = this.orderUnbilled.get('UnbilledOrderDetails');
+            let detailData = this.orderItemsView.render();
+            let totalSumPrice = detailData.totalSumPrice;
+            let totalOpenProducts = detailData.totalOpenProducts;
+            let totalProductsInInvoice = detailData.totalProductsInInvoice;
+            this.$('#open-orders-list').append(this.orderItemsView.$el);                                   
 
             let totalSumPriceWithoutCoupon = totalSumPrice;
 
@@ -285,8 +160,8 @@ define(['Webservice',
                     let usedValue = totalSumPrice > 0 ? coupon.get('Value') : orgTotalSumPrice.toFixed(2);
 
                     let text = t.code + ": " + coupon.get('Code');
-                    text +=  ", " + t.value + ": " + coupon.get('Value') + currency;
-                    text +=  ", " + t.consumed + ": " + usedValue + currency;
+                    text +=  ", " + t.value + ": " + app.i18n.toCurrency(coupon.get('Value'));
+                    text +=  ", " + t.consumed + ": " + app.i18n.toCurrency(usedValue);
 
                     let li = $('<li/>').text(text);
 
@@ -305,12 +180,9 @@ define(['Webservice',
                 this.$('#selected-customer-display').append('<b>' + t.currentCustomer + ':</b> ' + customer.get('Title') + ' ' + customer.get('Name'));
             }
 
-            this.$('#invoice-price').text(parseFloat(totalSumPrice).toFixed(2) + ' ' + currency);
-            this.$('#invoice-price-without-coupon').text(t.withoutCoupon + ': ' + totalSumPriceWithoutCoupon.toFixed(2) + currency);
+            this.$('#invoice-price').text(app.i18n.toCurrency(totalSumPrice));
+            this.$('#invoice-price-without-coupon').text(t.withoutCoupon + ': ' + app.i18n.toCurrency(totalSumPriceWithoutCoupon));
 
-            this.$('.order-item-up').click(this.order_count_up);
-            this.$('.order-item-down').click(this.order_count_down);
-            this.$('#open-orders-list').listview('refresh');
             this.$('#coupons-list').listview('refresh');
         }
 
