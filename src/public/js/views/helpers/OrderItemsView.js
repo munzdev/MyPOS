@@ -180,12 +180,12 @@ define(['text!templates/helpers/order-item.phtml'
                         orderDetail.set('AmountSelected', 0);
 
                     let priceSelected = singlePrice * parseFloat(orderDetail.get('AmountSelected'));
-                    totalSumPrice += priceSelected;
 
                     totalOpenProducts += orderDetail.get('AmountLeft');
                     totalProductsInInvoice += parseFloat(orderDetail.get('AmountSelected'));
 
                     let totalPrice = singlePrice * orderDetail.get('Amount');
+                    
                     totalSumPrice += this.mode == 'pay' ? priceSelected : totalPrice;
 
                     var status = ORDER_STATUS_WAITING;
@@ -208,7 +208,7 @@ define(['text!templates/helpers/order-item.phtml'
                                 menuTypeid: menuTypeid,
                                 index: orderDetail.cid,
                                 isSpecialOrder: isSpecialOrder,
-                                skipCounts: this.skipCounts,
+                                skipCounts: (this.mode != 'pay' || orderDetail.get('Verified')) ? this.skipCounts : true,
                                 statusInformation: this.statusInformation,
                                 rank: "TODO",
                                 handled_by_name: "TODO",
