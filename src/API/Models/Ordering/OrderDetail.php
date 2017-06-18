@@ -47,7 +47,7 @@ class OrderDetail extends Model implements IOrderDetail
         return $availabilityModel;
     }
 
-    public function getAvailabilityAmount(): int
+    public function getAvailabilityAmount(): ?int
     {
         return $this->model->getAvailabilityAmount();
     }
@@ -57,7 +57,7 @@ class OrderDetail extends Model implements IOrderDetail
         return $this->model->getAvailabilityid();
     }
 
-    public function getDistributionFinished(): DateTime
+    public function getDistributionFinished(): ?DateTime
     {
         return $this->model->getDistributionFinished();
     }
@@ -67,7 +67,7 @@ class OrderDetail extends Model implements IOrderDetail
         return $this->model->getExtraDetail();
     }
 
-    public function getInvoiceFinished(): DateTime
+    public function getInvoiceFinished(): ?DateTime
     {
         return $this->model->getInvoiceFinished();
     }

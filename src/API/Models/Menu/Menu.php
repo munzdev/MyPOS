@@ -10,6 +10,7 @@ use API\Lib\Interfaces\Models\Menu\IMenuPossibleExtraCollection;
 use API\Lib\Interfaces\Models\Menu\IMenuPossibleSizeCollection;
 use API\Models\Model;
 use API\Models\ORM\Menu\Menu as MenuORM;
+use DateTime;
 
 /**
  * Skeleton subclass for representing a row from the 'menu' table.
@@ -35,7 +36,7 @@ class Menu extends Model implements IMenu
         return $availabilityModel;
     }
 
-    public function getAvailabilityAmount(): int
+    public function getAvailabilityAmount(): ?int
     {
         return $this->model->getAvailabilityAmount();
     }
@@ -93,7 +94,7 @@ class Menu extends Model implements IMenu
         return $menuPossibleSizeCollection;
     }
 
-    public function getIsDeleted() : ?\DateTime
+    public function getIsDeleted() : ?DateTime
     {
         return $this->model->getIsDeleted();
     }

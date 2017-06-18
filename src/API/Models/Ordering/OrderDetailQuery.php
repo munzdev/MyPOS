@@ -7,6 +7,7 @@ use API\Lib\Interfaces\Models\Ordering\IOrderDetailCollection;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailUnbilledCollection;
 use API\Models\ORM\Invoice\Map\InvoiceItemTableMap;
+use API\Models\ORM\OIP\Map\OrderInProgressRecievedTableMap;
 use API\Models\ORM\Ordering\Map\OrderDetailTableMap;
 use API\Models\ORM\Ordering\OrderDetailQuery as OrderDetailQueryORM;
 use API\Models\Query;

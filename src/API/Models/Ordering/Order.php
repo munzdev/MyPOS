@@ -25,7 +25,7 @@ class Order extends Model implements IOrder
         $this->setModel(new OrderORM());
     }
 
-    public function getCancellation(): DateTime
+    public function getCancellation(): ?DateTime
     {
         return $this->model->getCancellation();
     }
