@@ -94,7 +94,7 @@ interface IOrderDetail extends IModel {
     function getAvailability();
 
     /**
-     * @return int
+     * @return ?int
      */
     function getAvailabilityAmount();
 
@@ -104,12 +104,12 @@ interface IOrderDetail extends IModel {
     function getVerified();
 
     /**
-     * @return DateTime
+     * @return ?DateTime
      */
     function getDistributionFinished();
 
     /**
-     * @return DateTime
+     * @return ?DateTime
      */
     function getInvoiceFinished();
 

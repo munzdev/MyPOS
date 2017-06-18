@@ -41,7 +41,7 @@ interface IMenu extends IModel {
     function getAvailability();
 
     /**
-     * @return int
+     * @return ?int
      */
     function getAvailabilityAmount();
 

@@ -54,7 +54,7 @@ interface IOrder extends IModel {
     function getInvoiceFinished();
 
     /**
-     * @return DateTime
+     * @return ?DateTime
      */
     function getCancellation();
 
