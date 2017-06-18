@@ -78,7 +78,7 @@
         "search": "Search"
     },
     "OrderInfoView": {
-        "loading": "Lade Bestellung ...",
+        "loading": "Loading order ...",
         "waiting": "Waiting",
         "inProgress": "in Progress",
         "finished": "Finished",
@@ -103,6 +103,7 @@
         "next": "Next"
     },
     "OrderModifyView": {
+        "loading": "Loading order ...",
         "overview": "Overview",
         "addSpecialOrder": "Add special order",
         "sum": "Sum",
@@ -156,6 +157,8 @@
         "mixedWith": "Mixed with"
     },
     "OrderInvoiceView": {
+        "loadingPreFetchDatas": "Loading informations ...",
+        "loadingOrder": "Loading order ...",
         "specialOrders": "Special Orders",
         "specialOrder": "Special Order",
         "openOnTable": "Open on table",
@@ -200,13 +203,8 @@
         "save": "Save",
         "payType": "Paytype",
         "moreOptions": "more Options",
-        "CASH": "Cash",
-        "BANK_TRANSFER": "Invoice/Bank Transfer",
-        "errorTitle": "Select Title!",
-        "errorName": "Enter name!",
-        "errorAddress": "Enter address!",
-        "errorCity": "Enter city!",
-        "errorZip": "Emter zip!",
+        "error": "Error!",
+        "errorNothingSelected": "No positions selected for invoice!",
         "currentCustomer": "Current customer"
     },
     "ReciepPrint": {
@@ -251,6 +249,7 @@
         "page": "Page"
     },
     "OrderModifyPriceView": {
+        "loading": "Loading order ...",
         "editSinglePrice": "Edit single price",
         "singlePrice": "Single price",
         "abort": "Abort",

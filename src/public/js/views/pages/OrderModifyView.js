@@ -29,32 +29,24 @@ define(["models/custom/order/OrderModify",
 
         // The View Constructor
         initialize(options) {
+            let t = this.i18n();
             this.options = options;
             this.isMixing = null;
 
-            this.orderModify = new OrderModify();
+            this.orderModify = new OrderModify();            
             this.orderItemsView = new OrderItemsView({mode: 'modify',
                                                       skipCounts: false,
                                                       statusInformation: false,
                                                       countCallback: this.renderOrder.bind(this)});
+                                                        
+            this.isNew = options.orderid === null;
+            this.render();
 
-            if(options.orderid === null) {
-                this.mode = 'new';
+            if (this.isNew) {
                 this.orderModify.set('EventTable', new app.models.Event.EventTable({Name: options.tableNr}));
-                this.render();
             } else {
-                this.mode = 'edit';
-
-                $.mobile.loading("show");
-
-                this.orderModify.set('Orderid', options.orderid);
-                this.orderModify.fetch()
-                                .done(() => {
-                                    $.mobile.loading("hide");
-                                    this.render();
-                                    this.renderOrder();
-                                    this.showOverview();
-                                });
+                this.orderModify.set('Orderid', options.orderid);                
+                this.fetchData(this.orderModify.fetch(), t.loading);
             }
         }
 
@@ -244,7 +236,7 @@ define(["models/custom/order/OrderModify",
             window.history.back();
         }
 
-        footer_finish(event) {
+        footer_finish() {
             this.$('#verify-dialog').popup('open');
         }
 
@@ -270,6 +262,11 @@ define(["models/custom/order/OrderModify",
                                 app.error.showAlert(t.error, t.errorOrder);
                             });
         }
+        
+        onDataFetched() {
+            this.renderOrder();
+            this.showOverview();
+        }
 
         renderOrder() {
             this.$('#selected').empty();
@@ -279,12 +276,12 @@ define(["models/custom/order/OrderModify",
             let totalSumPrice = detailData.totalSumPrice;            
             this.$('#selected').append(this.orderItemsView.$el);   
 
-            if(this.mode == 'edit' && this.oldPrice === undefined) {
+            if(!this.isNew && this.oldPrice === undefined) {
                 this.oldPrice = parseFloat(totalSumPrice);
                 this.$('#total-old').text(app.i18n.toCurrency(this.oldPrice));
             }
 
-            if(this.mode == 'new') {
+            if(this.isNew) {
                 this.$('#total').text(app.i18n.toCurrency(totalSumPrice));
             } else {
                 this.$('#total-new').text(app.i18n.toCurrency(totalSumPrice));
@@ -293,9 +290,8 @@ define(["models/custom/order/OrderModify",
         }
 
         render() {
-            this.renderTemplate(Template, { mode: this.mode,
-                                            order: this.orderModify,
-                                            products: app.productList});
+            this.renderTemplate(Template, {isNew: this.isNew,
+                                           products: app.productList});
 
             // Broken Tabs widget with Backbone pushstate enabled  - manual fix it
             this.hideTabs();

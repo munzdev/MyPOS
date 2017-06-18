@@ -16,10 +16,12 @@ define(['models/custom/order/OrderModify',
     	}
 
         initialize(options) {
+            let t = this.i18n();
             this.orderid = options.orderid;
-                        
-            $.mobile.loading("show");
             
+            this.render();
+            
+            this.modifications = {};
             this.orderItemsView = new OrderItemsView({mode: 'modify',
                                                       skipCounts: true,
                                                       edit: true,
@@ -27,15 +29,9 @@ define(['models/custom/order/OrderModify',
                                                       editCallback: this.item_edit.bind(this)});  
             
             this.orderModify = new OrderModify();
-            this.orderModify.set('Orderid', options.orderid);                        
-            this.orderModify.fetch()
-                            .done(() => {                     
-                                $.mobile.loading("hide");
-                                this.render();
-                                this.renderOpenOrders();
-                            });
-
-            this.modifications = {};
+            this.orderModify.set('Orderid', options.orderid);   
+                            
+            this.fetchData(this.orderModify.fetch(), t.loading);             
         }
 
         item_edit(orderDetail) {
@@ -63,7 +59,7 @@ define(['models/custom/order/OrderModify',
             this.modifications[orderDetail.get('OrderDetailid')] = value;
 
             this.$('#dialog').popup('close');
-            this.renderOpenOrders();
+            this.onDataFetched();
         }
 
         finish() {
@@ -71,7 +67,7 @@ define(['models/custom/order/OrderModify',
             let modifiedOrders = new Set();
             
             _.each(this.modifications, (value, index) => {
-                let orderDetail = this.orderModify.get('OrderDetails').get({cid: index}).clone();
+                let orderDetail = this.orderModify.get('OrderDetails').findWhere({OrderDetailid: parseInt(index)}).clone();
                 orderDetail.set('SinglePrice', value);
                 modifiedOrders.add(orderDetail);
             });
@@ -89,9 +85,7 @@ define(['models/custom/order/OrderModify',
             this.changeHash("order-overview");
         }
 
-        renderOpenOrders() {
-            let t = this.i18n();
-
+        onDataFetched() {
             this.$('#list').empty();
             
             this.orderItemsView.orderDetails = this.orderModify.get('OrderDetails');

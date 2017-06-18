@@ -37,16 +37,10 @@
                     <input type="checkbox" name="print" id="print">
                     <label for="print" id="print-receipt-text"><%= t.printReceipt %></label>
                     <select name="checkbox-printer" id="printer">
-                        <% printers.each(function(printer){ %>
-                            <option value="<%- printer.get('EventPrinterid') %>"><%= t.printer %>: <%- printer.get('Name') %></option>
-                        <% }) %>
                     </select>
                 </fieldset>
                 <fieldset data-role="controlgroup" data-mini="true">
                     <select name="checkbox-printer" id="paymentTypeList">
-                        <% paymentTypes.each(function(paymenType){ %>
-                            <option value="<%- paymenType.get('PaymentTypeid') %>"><%= t.payType %>: <%- t[paymenType.get('Name')] %></option>
-                        <% }) %>
                     </select>
                 </fieldset>
                 <fieldset data-role="controlgroup" data-mini="true">

@@ -217,7 +217,7 @@ define(['text!templates/helpers/order-item.phtml'
                                 amount_recieved_total: "TODO",
                                 amount_recieved: "TODO",
                                 status: status,
-                                edit: this.edit,
+                                edit: orderDetail.get('Verified') ? this.edit : false,
                                 t: t,
                                 i18n: app.i18n.template};                 
                             

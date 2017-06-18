@@ -103,6 +103,7 @@
         "next": "Weiter"
     },
     "OrderModifyView": {
+        "loading": "Lade Bestellung ...",
         "overview": "Übersicht",
         "addSpecialOrder": "Sonderwunsch hinzufügen",
         "sum": "Summe",
@@ -156,6 +157,8 @@
         "mixedWith": "Gemischt mit"
     },
     "OrderInvoiceView": {
+        "loadingPreFetchDatas": "Lade Informationen ...",
+        "loadingOrder": "Lade Bestellung ...",
         "specialOrders": "Sonderwünsche",
         "specialOrder": "Sonderwunsch",
         "openOnTable": "Offen am Tisch",
@@ -200,13 +203,8 @@
         "save": "Speichern",
         "payType": "Zahlart",
         "moreOptions": "weitere Optionen",
-        "CASH": "Bar",
-        "BANK_TRANSFER": "Rechnung/Überweisung",
-        "errorTitle": "Titel auswählen!",
-        "errorName": "Name eingeben!",
-        "errorAddress": "Adresse eingeben!",
-        "errorCity": "Ort eingeben!",
-        "errorZip": "PLZ eingeben!",
+        "error": "Fehler!",
+        "errorNothingSelected": "Keine Positionen für Rechnung ausgewählt!",
         "currentCustomer": "Aktueller Kunde"
     },
     "ReciepPrint": {
@@ -251,6 +249,7 @@
         "page": "Seite"
     },
     "OrderModifyPriceView": {
+        "loading": "Lade Bestellung ...",
         "editSinglePrice": "Einzelpreis bearbeiten",
         "singlePrice": "Einzelpreis",
         "abort": "Abbrechen",

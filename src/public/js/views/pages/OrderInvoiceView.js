@@ -30,52 +30,87 @@ define(['Webservice',
         }
 
         initialize(options) {
-            _.bindAll(this, "renderOpenOrders");
+            let i18n = this.i18n();            
 
             this.orderUnbilled = new OrderUnbilled();
             this.orderUnbilled.set('Orderid', options.orderid);
-            this.paymentTypes = new app.collections.Payment.PaymentTypeCollection;
-            this.printers = new PrinterCollection;
+            this.paymentTypes = new app.collections.Payment.PaymentTypeCollection();
+            this.printers = new PrinterCollection();
             this.customerSelectView = new CustomerSelectView({selectCallback: this.click_btn_select_customer.bind(this)});
             this.couponSelectView = new CouponSelectView({selectCallback: this.click_btn_select_coupon.bind(this)});
             this.orderItemsView = new OrderItemsView({mode: 'pay',
                                                       skipCounts: false,
                                                       statusInformation: false,
-                                                      countCallback: this.renderOpenOrders});       
-
-            $.when(this.printers.fetch(),
-                   this.paymentTypes.fetch())
-             .then(() => {
-                 this.render();
-                 this.set_mode_all();
-             });
+                                                      countCallback: this.onDataFetched.bind(this)});  
+                                                  
+            this.render();
+                          
+            let preFetchDataHandler = $.when(this.printers.fetch(), this.paymentTypes.fetch());
+            this.fetchData(preFetchDataHandler, i18n.loadingPreFetchDatas, this.renderPreFetchDatas.bind(this));          
+        }
+        
+        renderPreFetchDatas() {
+            let t = this.i18n();
+            
+            this.printers.each((printer) => {
+                let option = $('<option/>', {value: printer.get('EventPrinterid')});
+                option.html(t.printer + ': ' + printer.get('Name'));
+                this.$('#printer').append(option);
+            });               
+            
+            this.paymentTypes.each((paymentType) => {
+                let option = $('<option/>', {value: paymentType.get('PaymentTypeid')});
+                option.html(t.payType + ': ' + app.i18n.template.PaymentType[paymentType.get('Name')]);
+                this.$('#paymentTypeList').append(option);
+            });
+            
+            this.$('#printer').selectmenu('refresh');
+            this.$('#paymentTypeList').selectmenu('refresh');
+            
+            this.set_mode_all();
         }
 
         set_mode_all() {
             if(DEBUG) console.log("MODE: all");
+            
+            let t = this.i18n();
 
             this.orderUnbilled.set('All', true);
-            this.orderUnbilled.fetch()
-                                .done(this.renderOpenOrders);
+            this.fetchData(this.orderUnbilled.fetch(), t.loadingOrder); 
         }
 
         set_mode_single() {
             if(DEBUG) console.log("MODE: single");
+            
+            let t = this.i18n();
 
             this.orderUnbilled.set('All', false);
-            this.orderUnbilled.fetch()
-                                .done(this.renderOpenOrders);
+            this.fetchData(this.orderUnbilled.fetch(), t.loadingOrder); 
         }
 
-        select_all(event) {
+        select_all() {
             this.orderUnbilled.get('UnbilledOrderDetails').each(function(orderDetail) {
-                orderDetail.set('AmountSelected', orderDetail.get('AmountLeft')) ;
+                if (orderDetail.get('Verified')) {
+                    orderDetail.set('AmountSelected', orderDetail.get('AmountLeft')) ;
+                }   
             });
 
-            this.renderOpenOrders();
+            this.onDataFetched();
         }
 
         finish() {
+            let t = this.i18n();
+            let amountSelected = 0;
+            
+            this.orderUnbilled.get('UnbilledOrderDetails').each((orderDetail) => {
+                amountSelected += orderDetail.get('AmountSelected');
+            });
+            
+            if (!amountSelected) {
+                app.error.showAlert(t.error, t.errorNothingSelected);
+                return;
+            }
+            
             this.orderUnbilled.set('PaymentTypeid', this.$('#paymentTypeList').val());
             this.orderUnbilled.save()
                               .done(() => {
@@ -110,12 +145,12 @@ define(['Webservice',
 
         click_btn_select_customer(customer) {
             this.orderUnbilled.set('Customer', customer);
-            this.renderOpenOrders();
+            this.onDataFetched();
         }
 
         click_btn_select_coupon(coupon) {
             this.orderUnbilled.get('UsedCoupons').add(coupon);
-            this.renderOpenOrders();
+            this.onDataFetched();
         }
 
         success_popup_close() {
@@ -130,7 +165,7 @@ define(['Webservice',
                 this.changeHash("order-overview");
         }
 
-        renderOpenOrders() {
+        onDataFetched() {
             let t = this.i18n();
             
             this.$('#coupons-list').empty();
@@ -187,13 +222,10 @@ define(['Webservice',
         }
 
         render() {
-            let t = this.i18n();
-
             this.registerAppendview(this.customerSelectView);
             this.registerAppendview(this.couponSelectView);
 
-            this.renderTemplate(Template, {printers: this.printers,
-                                           paymentTypes: this.paymentTypes});
+            this.renderTemplate(Template);
 
             this.changePage(this);
         }
