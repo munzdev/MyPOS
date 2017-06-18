@@ -5,15 +5,8 @@ use API\Lib\Interfaces\IStatusCheck;
 use API\Lib\Interfaces\Models\Invoice\IInvoiceQuery;
 use API\Lib\Interfaces\Models\OIP\IOrderInProgressQuery;
 use API\Lib\Interfaces\Models\Ordering\IOrderDetailQuery;
-use API\Models\ORM\Invoice\Base\InvoiceQuery;
-use API\Models\ORM\Invoice\Map\InvoiceItemTableMap;
-use API\Models\ORM\OIP\Map\OrderInProgressRecievedTableMap;
-use API\Models\ORM\OIP\OrderInProgressQuery;
-use API\Models\ORM\Ordering\Map\OrderDetailTableMap;
-use API\Models\ORM\Ordering\OrderDetailQuery;
-use API\Models\ORM\Ordering\OrderQuery;
+use API\Lib\Interfaces\Models\Ordering\IOrderQuery;
 use DateTime;
-use Propel\Runtime\ActiveQuery\Criteria;
 use const API\ORDER_AVAILABILITY_AVAILABLE;
 use const API\ORDER_AVAILABILITY_OUT_OF_ORDER;
 
