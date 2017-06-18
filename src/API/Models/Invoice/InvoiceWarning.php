@@ -76,13 +76,13 @@ class InvoiceWarning extends Model implements IInvoiceWarning
 
     public function setInvoice($invoice): IInvoiceWarning
     {
-        $this->model->setInvoice($invoice);
+        $this->model->setInvoice($invoice->getModel());
         return $this;
     }
 
     public function setInvoiceWarningType($invoiceWarningType): IInvoiceWarning
     {
-        $this->model->setInvoiceWarningType($invoiceWarningType);
+        $this->model->setInvoiceWarningType($invoiceWarningType->getModel());
         return $this;
     }
 

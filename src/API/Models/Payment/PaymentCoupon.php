@@ -60,7 +60,7 @@ class PaymentCoupon extends Model implements IPaymentCoupon
 
     public function setCoupon($coupon): IPaymentCoupon
     {
-        $this->model->setCoupon($coupon);
+        $this->model->setCoupon($coupon->getModel());
         return $this;
     }
 
@@ -72,7 +72,7 @@ class PaymentCoupon extends Model implements IPaymentCoupon
 
     public function setPaymentRecieved($paymentRecieved): IPaymentCoupon
     {
-        $this->model->setPaymentRecieved($paymentRecieved);
+        $this->model->setPaymentRecieved($paymentRecieved->getModel());
         return $this;
     }
 

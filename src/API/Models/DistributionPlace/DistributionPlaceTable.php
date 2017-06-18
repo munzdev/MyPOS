@@ -49,7 +49,7 @@ class DistributionPlaceTable extends Model implements IDistributionPlaceTable
     }
 
     public function setDistributionPlaceGroup($distributionPlaceGroup): IDistributionPlaceTable {
-        $this->model->setDistributionPlaceGroup($distributionPlaceGroup);
+        $this->model->setDistributionPlaceGroup($distributionPlaceGroup->getModel());
         return $this;
     }
 
@@ -59,7 +59,7 @@ class DistributionPlaceTable extends Model implements IDistributionPlaceTable
     }
 
     public function setEventTable($eventTable): IDistributionPlaceTable {
-        $this->model->setEventTable($eventTable);
+        $this->model->setEventTable($eventTable->getModel());
         return $this;
     }
 

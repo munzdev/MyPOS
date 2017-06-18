@@ -151,7 +151,7 @@ class EventContact extends Model implements IEventContact
 
     public function setEvent($event): IEventContact
     {
-        $this->model->setEvent($event);
+        $this->model->setEvent($event->getModel());
         return $this;
     }
 

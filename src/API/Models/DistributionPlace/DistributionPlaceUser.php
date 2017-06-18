@@ -63,7 +63,7 @@ class DistributionPlaceUser extends Model implements IDistributionPlaceUser
     }
 
     public function setDistributionPlace($distributionPlace): IDistributionPlaceUser {
-        $this->model->setDistributionPlace($distributionPlace);
+        $this->model->setDistributionPlace($distributionPlace->getModel());
         return $this;
     }
 
@@ -73,7 +73,7 @@ class DistributionPlaceUser extends Model implements IDistributionPlaceUser
     }
 
     public function setEventPrinter($eventPrinter): IDistributionPlaceUser {
-        $this->model->setEventPrinter($eventPrinter);
+        $this->model->setEventPrinter($eventPrinter->getModel());
         return $this;
     }
 
@@ -83,7 +83,7 @@ class DistributionPlaceUser extends Model implements IDistributionPlaceUser
     }
 
     public function setUser($user): IDistributionPlaceUser {
-        $this->model->setUser($user);
+        $this->model->setUser($user->getModel());
         return $this;
     }
 

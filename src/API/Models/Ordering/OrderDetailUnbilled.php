@@ -12,6 +12,10 @@ class OrderDetailUnbilled extends OrderDetail implements IOrderDetailUnbilled
      */
     function getAmountSelected()
     {
+        if (!$this->model->hasVirtualColumn('AmountSelected')) {
+            return null;
+        }
+        
         return $this->model->getVirtualColumn('AmountSelected');
     }
 
@@ -20,6 +24,10 @@ class OrderDetailUnbilled extends OrderDetail implements IOrderDetailUnbilled
      */
     function getAmountLeft()
     {
+        if (!$this->model->hasVirtualColumn('AmountLeft')) {
+            return null;
+        }
+        
         return $this->model->getVirtualColumn('AmountLeft');
     }
 

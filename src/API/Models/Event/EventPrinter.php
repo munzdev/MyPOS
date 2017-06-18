@@ -98,7 +98,7 @@ class EventPrinter extends Model implements IEventPrinter
 
     public function setEvent($event): IEventPrinter
     {
-        $this->model->setEvent($event);
+        $this->model->setEvent($event->getModel());
         return $this;
     }
 

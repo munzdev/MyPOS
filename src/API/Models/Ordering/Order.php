@@ -117,7 +117,7 @@ class Order extends Model implements IOrder
 
     public function setCancellationCreatedByUser($user): IOrder
     {
-        $this->model->setCancellationCreatedByUser($user);
+        $this->model->setCancellationCreatedByUser($user->getModel());
         return $this;
     }
 
@@ -135,7 +135,7 @@ class Order extends Model implements IOrder
 
     public function setEventTable($eventTable): IOrder
     {
-        $this->model->setEventTable($eventTable);
+        $this->model->setEventTable($eventTable->getModel());
         return $this;
     }
 
@@ -171,7 +171,7 @@ class Order extends Model implements IOrder
 
     public function setUser($user): IOrder
     {
-        $this->model->setUser($user);
+        $this->model->setUser($user->getModel());
         return $this;
     }
 

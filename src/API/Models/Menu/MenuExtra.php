@@ -75,7 +75,7 @@ class MenuExtra extends Model implements IMenuExtra
 
     public function setAvailability($availability): IMenuExtra
     {
-        $this->model->setAvailability($availability);
+        $this->model->setAvailability($availability->getModel());
         return $this;
     }
 
@@ -93,7 +93,7 @@ class MenuExtra extends Model implements IMenuExtra
 
     public function setEvent($event): IMenuExtra
     {
-        $this->model->setEvent($event);
+        $this->model->setEvent($event->getModel());
         return $this;
     }
 

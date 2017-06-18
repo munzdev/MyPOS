@@ -92,7 +92,7 @@ class InvoiceItem extends Model implements IInvoiceItem
 
     public function setInvoice($invoice): IInvoiceItem
     {
-        $this->model->setInvoice($invoice);
+        $this->model->setInvoice($invoice->getModel());
         return $this;
     }
 
@@ -110,7 +110,7 @@ class InvoiceItem extends Model implements IInvoiceItem
 
     public function setOrderDetail($orderDetail): IInvoiceItem
     {
-        $this->model->setOrderDetail($orderDetail);
+        $this->model->setOrderDetail($orderDetail->getModel());
         return $this;
     }
 

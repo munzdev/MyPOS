@@ -187,7 +187,7 @@ class Invoice extends Model implements IInvoice
 
     public function setCanceledInvoice($invoice): IInvoice
     {
-        $this->model->setCanceledInvoice($invoice);
+        $this->model->setCanceledInvoice($invoice->getModel());
         return $this;
     }
 
@@ -199,7 +199,7 @@ class Invoice extends Model implements IInvoice
 
     public function setCustomerEventContact($eventContact): IInvoice
     {
-        $this->model->setCustomerEventContact($eventContact);
+        $this->model->setCustomerEventContact($eventContact->getModel());
         return $this;
     }
 
@@ -217,7 +217,7 @@ class Invoice extends Model implements IInvoice
 
     public function setEventBankinformation($eventBankinformation): IInvoice
     {
-        $this->model->setEventBankinformation($eventBankinformation);
+        $this->model->setEventBankinformation($eventBankinformation->getModel());
         return $this;
     }
 
@@ -229,7 +229,7 @@ class Invoice extends Model implements IInvoice
 
     public function setEventContact($eventContact): IInvoice
     {
-        $this->model->setEventContact($eventContact);
+        $this->model->setEventContact($eventContact->getModel());
         return $this;
     }
 
@@ -241,7 +241,7 @@ class Invoice extends Model implements IInvoice
 
     public function setInvoiceType($invoiceType): IInvoice
     {
-        $this->model->setInvoiceType($invoiceType);
+        $this->model->setInvoiceType($invoiceType->getModel());
         return $this;
     }
 
@@ -271,7 +271,7 @@ class Invoice extends Model implements IInvoice
 
     public function setUser($user): IInvoice
     {
-        $this->model->setUser($user);
+        $this->model->setUser($user->getModel());
         return $this;
     }
 
@@ -289,7 +289,7 @@ class Invoice extends Model implements IInvoice
 
     public function setOrder($order) : IInvoice
     {
-        $this->model->setOrder($order);
+        $this->model->setOrder($order->getModel());
         return $this;
     }
 }

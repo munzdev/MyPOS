@@ -70,7 +70,7 @@ class MenuGroup extends Model implements IMenuGroup
 
     public function setMenuType($menuType): IMenuGroup
     {
-        $this->model->setMenuType($menuType);
+        $this->model->setMenuType($menuType->getModel());
         return $this;
     }
 

@@ -66,7 +66,7 @@ class EventBankinformation extends Model implements IEventBankinformation
     }
 
     public function setEvent($event): IEventBankinformation {
-        $this->model->setEvent($event);
+        $this->model->setEvent($event->getModel());
         return $this;
     }
 

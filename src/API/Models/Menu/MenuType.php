@@ -80,7 +80,7 @@ class MenuType extends Model implements IMenuType
 
     public function setEvent($event): IMenuType
     {
-        $this->model->setEvent($event);
+        $this->model->setEvent($event->getModel());
         return $this;
     }
 

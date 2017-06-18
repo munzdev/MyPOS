@@ -70,7 +70,7 @@ class MenuPossibleSize extends Model implements IMenuPossibleSize
 
     public function setMenu($menu): IMenuPossibleSize
     {
-        $this->model->setMenu($menu);
+        $this->model->setMenu($menu->getModel());
         return $this;
     }
 
@@ -82,7 +82,7 @@ class MenuPossibleSize extends Model implements IMenuPossibleSize
 
     public function setMenuSize($menuSize): IMenuPossibleSize
     {
-        $this->model->setMenuSize($menuSize);
+        $this->model->setMenuSize($menuSize->getModel());
         return $this;
     }
 

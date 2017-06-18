@@ -45,13 +45,13 @@ class UserMessage extends Model implements IUserMessage
 
     public function setFromEventUser($user): IUserMessage
     {
-        $this->model->setEventUserRelatedByFromEventUserid($user);
+        $this->model->setEventUserRelatedByFromEventUserid($user->getModel());
         return $this;
     }
 
     public function setToEventUser($user): IUserMessage
     {
-        $this->model->setEventUserRelatedByToEventUserid($user);
+        $this->model->setEventUserRelatedByToEventUserid($user->getModel());
         return $this;
     }
 

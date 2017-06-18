@@ -59,7 +59,7 @@ class MenuSize extends Model implements IMenuSize
 
     public function setEvent($event): IMenuSize
     {
-        $this->model->setEvent($event);
+        $this->model->setEvent($event->getModel());
         return $this;
     }
 

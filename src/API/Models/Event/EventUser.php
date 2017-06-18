@@ -87,7 +87,7 @@ class EventUser extends Model implements IEventUser
 
     public function setEvent(IEvent $event = null): IEventUser
     {
-        $this->model->setEvent($event);
+        $this->model->setEvent($event->getModel());
         return $this;
     }
 
@@ -99,7 +99,7 @@ class EventUser extends Model implements IEventUser
 
     public function setUser($user): IEventUser
     {
-        $this->model->setUser($user);
+        $this->model->setUser($user->getModel());
         return $this;
     }
 

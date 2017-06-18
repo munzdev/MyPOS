@@ -55,7 +55,7 @@ class OrderDetailExtra extends Model implements IOrderDetailExtra
 
     public function setMenuPossibleExtra($menuPossibleExtra): IOrderDetailExtra
     {
-        $this->model->setMenuPossibleExtra($menuPossibleExtra);
+        $this->model->setMenuPossibleExtra($menuPossibleExtra->getModel());
         return $this;
     }
 
@@ -67,7 +67,7 @@ class OrderDetailExtra extends Model implements IOrderDetailExtra
 
     public function setOrderDetail($orderDetail): IOrderDetailExtra
     {
-        $this->model->setOrderDetail($orderDetail);
+        $this->model->setOrderDetail($orderDetail->getModel());
         return $this;
     }
 

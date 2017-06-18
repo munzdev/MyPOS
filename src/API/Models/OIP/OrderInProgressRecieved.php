@@ -87,7 +87,7 @@ class OrderInProgressRecieved extends Model implements IOrderInProgressRecieved
 
     public function setDistributionGivingOut($distributionGivingOut): IOrderInProgressRecieved
     {
-        $this->model->setDistributionGivingOut($distributionGivingOut);
+        $this->model->setDistributionGivingOut($distributionGivingOut->getModel());
         return $this;
     }
 
@@ -111,7 +111,7 @@ class OrderInProgressRecieved extends Model implements IOrderInProgressRecieved
 
     public function setOrderInProgress($orderInProgress): IOrderInProgressRecieved
     {
-        $this->model->setOrderInProgress($orderInProgress);
+        $this->model->setOrderInProgress($orderInProgress->getModel());
         return $this;
     }
 

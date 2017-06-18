@@ -99,7 +99,7 @@ class Coupon extends Model implements ICoupon
 
     public function setCreatedByUser($user): ICoupon
     {
-        $this->model->setCreatedByUser($user);
+        $this->model->setCreatedByUser($user->getModel());
         return $this;
     }
 
@@ -111,7 +111,7 @@ class Coupon extends Model implements ICoupon
 
     public function setEvent($event): ICoupon
     {
-        $this->model->setEvent($event);
+        $this->model->setEvent($event->getModel());
         return $this;
     }
 

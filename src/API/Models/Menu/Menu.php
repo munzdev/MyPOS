@@ -100,7 +100,7 @@ class Menu extends Model implements IMenu
 
     public function setAvailability($availability): IMenu
     {
-        $this->model->setAvailability($availability);
+        $this->model->setAvailability($availability->getModel());
         return $this;
     }
 
@@ -118,7 +118,7 @@ class Menu extends Model implements IMenu
 
     public function setMenuGroup($menuGroup): IMenu
     {
-        $this->model->setMenuGroup($menuGroup);
+        $this->model->setMenuGroup($menuGroup->getModel());
         return $this;
     }
 

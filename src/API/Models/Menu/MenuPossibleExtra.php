@@ -70,13 +70,13 @@ class MenuPossibleExtra extends Model implements IMenuPossibleExtra
 
     public function setMenu($menu): IMenuPossibleExtra
     {
-        $this->model->setMenu($menu);
+        $this->model->setMenu($menu->getModel());
         return $this;
     }
 
     public function setMenuExtra($menuExtra): IMenuPossibleExtra
     {
-        $this->model->setMenuExtra($menuExtra);
+        $this->model->setMenuExtra($menuExtra->getModel());
         return $this;
     }
 

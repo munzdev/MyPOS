@@ -49,7 +49,7 @@ class DistributionPlace extends Model implements IDistributionPlace
     }
 
     public function setEvent($event): IDistributionPlace {
-        $this->model->setEvent($event);
+        $this->model->setEvent($event->getModel());
         return $this;
     }
 

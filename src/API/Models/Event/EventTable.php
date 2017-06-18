@@ -65,7 +65,7 @@ class EventTable extends Model implements IEventTable
 
     public function setEvent($event): IEventTable
     {
-        $this->model->setEvent($event);
+        $this->model->setEvent($event->getModel());
         return $this;
     }
 

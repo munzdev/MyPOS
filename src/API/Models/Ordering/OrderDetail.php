@@ -210,7 +210,7 @@ class OrderDetail extends Model implements IOrderDetail
 
     public function setAvailability($availability): IOrderDetail
     {
-        $this->model->setAvailability($availability);
+        $this->model->setAvailability($availability->getModel());
         return $this;
     }
 
@@ -246,13 +246,23 @@ class OrderDetail extends Model implements IOrderDetail
 
     public function setMenu($menu): IOrderDetail
     {
-        $this->model->setMenu($menu);
+        if ($menu == null) {
+            $this->model->setMenu(null);
+        } else {
+            $this->model->setMenu($menu->getModel());
+        }
+        
         return $this;
     }
 
     public function setMenuGroup($menuGroup): IOrderDetail
     {
-        $this->model->setMenuGroup($menuGroup);
+        if ($menuGroup == null) {
+            $this->model->setMenuGroup(null);
+        } else {
+            $this->model->setMenuGroup($menuGroup->getModel());
+        }
+        
         return $this;
     }
 
@@ -264,7 +274,12 @@ class OrderDetail extends Model implements IOrderDetail
 
     public function setMenuSize($menuSize): IOrderDetail
     {
-        $this->model->setMenuSize($menuSize);
+        if ($menuSize == null) {
+            $this->model->setMenuSize(null);
+        } else {
+            $this->model->setMenuSize($menuSize->getModel());
+        }
+        
         return $this;
     }
 
@@ -282,7 +297,7 @@ class OrderDetail extends Model implements IOrderDetail
 
     public function setOrder($order): IOrderDetail
     {
-        $this->model->setOrder($order);
+        $this->model->setOrder($order->getModel());
         return $this;
     }
 
@@ -306,7 +321,7 @@ class OrderDetail extends Model implements IOrderDetail
 
     public function setSinglePriceModifiedByUser($user): IOrderDetail
     {
-        $this->model->setSinglePriceModifiedByUser($user);
+        $this->model->setSinglePriceModifiedByUser($user->getModel());
         return $this;
     }
 

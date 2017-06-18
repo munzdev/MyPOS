@@ -110,7 +110,7 @@ class PaymentRecieved extends Model implements IPaymentRecieved
 
     public function setInvoice($invoice): IPaymentRecieved
     {
-        $this->model->setInvoice($invoice);
+        $this->model->setInvoice($invoice->getModel());
         return $this;
     }
 
@@ -128,7 +128,7 @@ class PaymentRecieved extends Model implements IPaymentRecieved
 
     public function setPaymentType($paymentType): IPaymentRecieved
     {
-        $this->model->setPaymentType($paymentType);
+        $this->model->setPaymentType($paymentType->getModel());
         return $this;
     }
 
@@ -140,7 +140,7 @@ class PaymentRecieved extends Model implements IPaymentRecieved
 
     public function setUser($user): IPaymentRecieved
     {
-        $this->model->setUser($user);
+        $this->model->setUser($user->getModel());
         return $this;
     }
 

@@ -54,7 +54,7 @@ class InvoiceWarningType extends Model implements IInvoiceWarningType
 
     public function setEvent($event): IInvoiceWarningType
     {
-        $this->model->setEvent($event);
+        $this->model->setEvent($event->getModel());
         return $this;
     }
 

@@ -99,7 +99,7 @@ class OrderInProgress extends Model implements IOrderInProgress
 
     public function setMenuGroup($menuGroup): IOrderInProgress
     {
-        $this->model->setMenuGroup($menuGroup);
+        $this->model->setMenuGroup($menuGroup->getModel());
         return $this;
     }
 

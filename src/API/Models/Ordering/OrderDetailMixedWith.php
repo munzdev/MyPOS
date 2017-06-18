@@ -55,7 +55,7 @@ class OrderDetailMixedWith extends Model implements IOrderDetailMixedWith
 
     public function setMenu($menu): IOrderDetailMixedWith
     {
-        $this->model->setMenu($menu);
+        $this->model->setMenu($menu->getModel());
         return $this;
     }
 
@@ -67,7 +67,7 @@ class OrderDetailMixedWith extends Model implements IOrderDetailMixedWith
 
     public function setOrderDetail($orderDetail): IOrderDetailMixedWith
     {
-        $this->model->setOrderDetail($orderDetail);
+        $this->model->setOrderDetail($orderDetail->getModel());
         return $this;
     }
 
