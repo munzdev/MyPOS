@@ -265,6 +265,7 @@
         "specialOrder": "Sonderwunsch"
     },
     "InvoiceOverviewView": {
+        "loading": "Lade Rechnungen ...",
         "canceled": "Storniert",
         "entry": "Gebucht",
         "payed": "Bezahlt",
@@ -287,6 +288,7 @@
         "createInvoice": "Rechnung erstellen"
     },
     "InvoiceOverviewSearchView": {
+        "loading": "Lade Rechnungssuche ...",
         "type": "Typ",
         "status": "Status",
         "all": "Alle",

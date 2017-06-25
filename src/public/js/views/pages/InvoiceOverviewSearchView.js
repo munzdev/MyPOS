@@ -11,41 +11,26 @@ define(['views/helpers/CustomerSelectView',
             this.customerSelectView = new CustomerSelectView({selectCallback: this.select_customer,
                                                               allowAdd: false});
 
-            $.mobile.loading("show");
-            this.invoiceTypeCollection.fetch()
-                                      .done(() => {
-                                            $.mobile.loading("hide");
-                                            this.render();
-
-                                            this.$('#' + options.status).attr("checked", true).checkboxradio("refresh");
-                                            this.$('#' + options.canceled).attr("checked", true).checkboxradio("refresh");
-
-                                            if(options.invoiceid)
-                                                this.$('#invoiceid').val(options.invoiceid);
-
-                                            if(options.customerid)
-                                                this.$('#customerid').val(options.customerid);
-
-                                            if(options.typeid)
-                                                this.$('#typeid').val(options.typeid).selectmenu('refresh');;
-
-                                            if(options.from)
-                                                this.$('#from').val(options.from);
-
-                                            if(options.to)
-                                                this.$('#to').val(options.to);
-
-                                            if(options.userid)
-                                                this.$('#userid').val(options.userid).selectmenu('refresh');
-                                            else
-                                                this.$('#userid').val(app.auth.authUser.get('Userid')).selectmenu('refresh');
-                                      });
+            this.refresh();
         }
 
         events() {
             return {'click #back': 'click_btn_back',
                     'click #search': 'click_btn_search',
                     'click #select-customer': "click_select_customer"}
+        }
+
+        refresh() {
+            let i18n = this.i18n();
+
+            if(!this.rendered) {
+                this.render();
+                this.rendered = true;
+            }
+
+            this.$('#typeid').empty();
+
+            this.fetchData(this.invoiceTypeCollection.fetch(), i18n.loading);
         }
 
         click_select_customer() {
@@ -119,11 +104,48 @@ define(['views/helpers/CustomerSelectView',
             this.changeHash('invoice' + searchString);
         }
 
+        onDataFetched() {
+            let i18n = this.i18n();
+            let optionAll = $('<option/>', {value: ''});
+            optionAll.text(i18n.all);
+
+            this.$('#typeid').append(optionAll);
+
+            this.invoiceTypeCollection.each((invoiceType) => {
+                let option = $('<option/>', {value: invoiceType.get('InvoiceTypeid')});
+                option.text(app.i18n.template.InvoiceType[invoiceType.get('Name')]);
+
+                this.$('#typeid').append(option);
+            });
+
+            this.$('#typeid').selectmenu("refresh");
+            this.$('#' + this.search.status).attr("checked", true).checkboxradio("refresh");
+            this.$('#' + this.search.canceled).attr("checked", true).checkboxradio("refresh");
+
+            if(this.search.invoiceid)
+                this.$('#invoiceid').val(this.search.invoiceid);
+
+            if(this.search.customerid)
+                this.$('#customerid').val(this.search.customerid);
+
+            if(this.search.typeid)
+                this.$('#typeid').val(this.search.typeid).selectmenu('refresh');;
+
+            if(this.search.from)
+                this.$('#from').val(this.search.from);
+
+            if(this.search.to)
+                this.$('#to').val(this.search.to);
+
+            if(this.search.userid)
+                this.$('#userid').val(this.search.userid).selectmenu('refresh');
+            else
+                this.$('#userid').val(app.auth.authUser.get('Userid')).selectmenu('refresh')
+        }
+
         render() {
             this.registerAppendview(this.customerSelectView);
-
-            this.renderTemplate(Template, {userList: app.userList,
-                                           invoiceTypeList: this.invoiceTypeCollection});
+            this.renderTemplate(Template, {userList: app.userList});
 
             this.changePage(this);
         }

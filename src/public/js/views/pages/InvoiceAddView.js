@@ -1,6 +1,6 @@
 define(['Webservice',
         'models/custom/invoice/InvoiceModel',
-       'views/helpers/CustomerSelectView',
+        'views/helpers/CustomerSelectView',
         'text!templates/pages/invoice-add.phtml',
         'text!templates/pages/invoice-add-item.phtml'
 ], function(Webservice,

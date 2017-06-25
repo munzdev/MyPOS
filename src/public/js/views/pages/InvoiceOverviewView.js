@@ -11,14 +11,8 @@ define(['collections/custom/invoice/InvoiceOverviewCollection',
     return class InvoiceOverviewView extends app.PageView
     {
         initialize(options) {
-            _.bindAll(this, "refresh",
-                            "renderInvoiceList",
-                            "cancel_invoice_popup",
-                            "cancel_invoice",
-                            "success_popup_close");
-
             this.search = null;
-            this.pagination = new PaginationView(this.refresh);
+            this.pagination = new PaginationView(this.refresh.bind(this));
             this.elementsPerPage = 10;
 
             if(options)
@@ -27,7 +21,6 @@ define(['collections/custom/invoice/InvoiceOverviewCollection',
                 this.search = this.defaultSearch();
 
             this.invoiceList = new InvoiceOverviewCollection();
-
             this.refresh();
         }
 
@@ -56,13 +49,18 @@ define(['collections/custom/invoice/InvoiceOverviewCollection',
         }
 
         refresh() {
-            this.$('#invoice-list').empty();
-            $.mobile.loading("show");
+            let i18n = this.i18n();
 
-            this.invoiceList.fetch({data: {search: this.search,
-                                           page: this.pagination.currentPage,
-                                           elementsPerPage: this.elementsPerPage}})
-                            .done(this.renderInvoiceList);
+            if(!this.rendered) {
+                this.render();
+                this.rendered = true;
+            }
+
+            this.$('#invoice-list').empty();
+
+            this.fetchData(this.invoiceList.fetch({data: {search: this.search,
+                                                          page: this.pagination.currentPage,
+                                                          elementsPerPage: this.elementsPerPage}}), i18n.loading);
         }
 
         change_invoiceid_search(event) {
@@ -139,16 +137,13 @@ define(['collections/custom/invoice/InvoiceOverviewCollection',
             this.reload();
         }
 
-        renderInvoiceList() {
-            if(!this.rendered) {
-                this.render();
-                this.rendered = true;
-            }
-
-            $.mobile.loading("hide");
+        onDataFetched() {
             let template = _.template(TemplateItem);
             let i18n = this.i18n();
             let userRoles = app.auth.authUser.get('EventUser').get('UserRoles');
+
+            this.pagination.setTotalPages(Math.ceil(this.invoiceList.count / this.elementsPerPage));
+            this.renderSubview("#nav-pagination", this.pagination);
 
             this.invoiceList.each((invoice) => {
                 this.$('#invoice-list').append(template({invoice: invoice,
@@ -158,13 +153,8 @@ define(['collections/custom/invoice/InvoiceOverviewCollection',
             });
         }
 
-        // Renders all of the Category models on the UI
         render() {
-            this.pagination.setTotalPages(Math.ceil(this.invoiceList.count / this.elementsPerPage));
-            this.registerSubview(".nav-pagination", this.pagination);
-
             this.renderTemplate(Template, {invoiceid: this.search.invoiceid});
-
             this.changePage(this);
         }
     }

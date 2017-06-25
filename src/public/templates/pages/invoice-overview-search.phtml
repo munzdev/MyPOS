@@ -29,10 +29,6 @@
 
         <label for="typeid"><%= t.type %>:</label>
         <select id="typeid" data-mini="true">
-            <option value=""><%= t.all %></option>
-            <% invoiceTypeList.each(function(invoiceType) { %>
-                <option value="<%- invoiceType.get('InvoiceTypeid') %>"><%- i18n.InvoiceType[invoiceType.get('Name')] %></option>
-            <% }) %>
         </select>
 
         <fieldset data-role="controlgroup" data-type="vertical" data-mini="true">

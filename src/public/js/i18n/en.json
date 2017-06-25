@@ -265,6 +265,7 @@
         "specialOrder": "Special Order"
     },
     "InvoiceOverviewView": {
+        "loading": "Loading invoices ...",
         "canceled": "Canceled",
         "entry": "Entry",
         "payed": "Payed",
@@ -287,6 +288,7 @@
         "bookPayment": "Add Payment"
     },
     "InvoiceOverviewSearchView": {
+        "loading": "Loading invoice search ...",
         "type": "Type",
         "status": "Status",
         "all": "All",
