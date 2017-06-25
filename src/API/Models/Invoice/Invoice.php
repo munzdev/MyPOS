@@ -53,7 +53,7 @@ class Invoice extends Model implements IInvoice
         return $this->model->getCanceledInvoiceid();
     }
 
-    public function getCustomerEventContact(): IEventContact
+    public function getCustomerEventContact(): ?IEventContact
     {
         $customerEventContact = $this->model->getCustomerEventContact();
 
@@ -63,7 +63,7 @@ class Invoice extends Model implements IInvoice
         return $customerEventContactModel;
     }
 
-    public function getCustomerEventContactid(): int
+    public function getCustomerEventContactid(): ?int
     {
         return $this->model->getCustomerEventContactid();
     }
@@ -229,7 +229,7 @@ class Invoice extends Model implements IInvoice
 
     public function setEventContact($eventContact): IInvoice
     {
-        $this->model->setEventContact($eventContact->getModel());
+        $this->model->setEventContactRelatedByEventContactid($eventContact->getModel());
         return $this;
     }
 

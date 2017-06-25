@@ -56,12 +56,12 @@ interface IInvoice extends IModel {
     function getEventBankinformation();
 
     /**
-     * @return int
+     * @return ?int
      */
     function getCustomerEventContactid();
 
     /**
-     * @return IEventContact
+     * @return ?IEventContact
      */
     function getCustomerEventContact();
 
