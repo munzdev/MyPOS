@@ -9,15 +9,32 @@ use API\Lib\Printer\PrintingType\Invoice;
 use API\Lib\PrintingInformation;
 use API\Models\Event\EventPrinter;
 use const API\PRINTER_LOGO_BIT_IMAGE_COLUMN;
+use const API\PRINTER_TYPE_NETWORK;
 
 $json = file_get_contents("../../src/public/js/i18n/de.json");
 $localization = json_decode($json);
 
-$eventPrinter = new EventPrinter();
+$container = new \API\Lib\Container();
+
+$eventPrinter = new EventPrinter($container);
+$eventPrinter->setType(PRINTER_TYPE_NETWORK);
 $eventPrinter->setEventPrinterid(1);
 $eventPrinter->setCharactersPerRow(48);
 $eventPrinter->setAttr1("192.168.0.50");
 $eventPrinter->setAttr2(9100);
+
+$contact = new \API\Models\Event\EventContact($container);
+$contact->setContactPerson("");
+$contact->setAddress2("");
+$contact->setTaxIdentificationNr("");
+$contact->setFax("");
+$contact->setEmail("");
+$contact->setTelephon("");
+$contact->setTitle("Mr");
+$contact->setName("Test Name");
+$contact->setAddress("Street 1");
+$contact->setZip(1234);
+$contact->setCity("City");
 
 $printingInformation = new PrintingInformation();
 $printingInformation->setLogoFile("resources/escpos-php.png");
@@ -26,6 +43,7 @@ $printingInformation->setHeader("HEADER TOP LINE\nSECOND LINE\n THIRD LINE");
 $printingInformation->setInvoiceid(587472);
 $printingInformation->setTableNr("B32");
 $printingInformation->setName("Test Cashier");
+$printingInformation->setContact($contact);
 
 $printingInformation->addRow("Colla 0.5L", "2", "5.00", "20");
 $printingInformation->addRow("Colla 0.5L mit Zitronne", "1", "5.20", "20");

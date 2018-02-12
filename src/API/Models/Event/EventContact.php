@@ -79,7 +79,7 @@ class EventContact extends Model implements IEventContact
 
     public function getFax(): string
     {
-        return $this->model->getEventid();
+        return $this->model->getFax();
     }
 
     public function getName(): string
@@ -99,7 +99,7 @@ class EventContact extends Model implements IEventContact
 
     public function getTitle(): string
     {
-        return $this->model->getTaxIdentificationNr();
+        return $this->model->getTitle();
     }
 
     public function getZip(): string

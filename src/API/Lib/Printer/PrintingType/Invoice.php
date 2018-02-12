@@ -38,7 +38,7 @@ class Invoice extends AbstractPrintingType
         $total = 0;
         $taxes = array();
 
-        foreach ($this->entries as $taxPercent => $entries) {
+        foreach ($this->printingInformation->getRows() as $taxPercent => $entries) {
             if (!isset($taxes[$taxPercent])) {
                 $taxes[$taxPercent] = 0;
             }
@@ -60,7 +60,7 @@ class Invoice extends AbstractPrintingType
         }
 
         // add payments if given
-        if (count($this->paymentRecieved)) {
+        if (count($this->printingInformation->getPaymentRecieveds())) {
             foreach ($this->paymentRecieved as $paymentRecieved) {
                 $total = bcsub($total, $paymentRecieved->getAmount(), 2);
                 $this->printerConnector->addPayment($paymentRecieved);
