@@ -379,7 +379,7 @@ class ThermalPrinter implements IPrinterConnector
         /* Details Header */
         if ($this->detailsHeader) {
             $this->printer->setEmphasis(true);
-            $this->printItemColumnsFormatted(detailsHeader[0], detailsHeader[1], detailsHeader[2]);
+            $this->printItemColumnsFormatted($this->detailsHeader[0], $this->detailsHeader[1], $this->detailsHeader[2]);
             $this->printer->setEmphasis(false);
         }
 

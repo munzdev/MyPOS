@@ -16,6 +16,8 @@ $localization = json_decode($json);
 
 $container = new \API\Lib\Container();
 
+require __DIR__ . '/../../src/API/serviceLocator.php';
+
 $eventPrinter = new EventPrinter($container);
 $eventPrinter->setType(PRINTER_TYPE_NETWORK);
 $eventPrinter->setEventPrinterid(1);

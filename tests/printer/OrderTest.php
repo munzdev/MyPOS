@@ -8,11 +8,17 @@ use API\Lib\Printer\PrinterConnector\ThermalPrinter;
 use API\Lib\Printer\PrintingType\Order;
 use API\Lib\PrintingInformation;
 use API\Models\Event\EventPrinter;
+use const API\PRINTER_TYPE_NETWORK;
 
 $json = file_get_contents("../../src/public/js/i18n/de.json");
 $localization = json_decode($json);
 
-$eventPrinter = new EventPrinter();
+$container = new \API\Lib\Container();
+
+require __DIR__ . '/../../src/API/serviceLocator.php';
+
+$eventPrinter = new EventPrinter($container);
+$eventPrinter->setType(PRINTER_TYPE_NETWORK);
 $eventPrinter->setEventPrinterid(1);
 $eventPrinter->setCharactersPerRow(48);
 $eventPrinter->setAttr1("192.168.0.50");

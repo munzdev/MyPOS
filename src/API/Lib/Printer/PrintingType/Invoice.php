@@ -61,7 +61,7 @@ class Invoice extends AbstractPrintingType
 
         // add payments if given
         if (count($this->printingInformation->getPaymentRecieveds())) {
-            foreach ($this->paymentRecieved as $paymentRecieved) {
+            foreach ($this->printingInformation->getPaymentRecieveds() as $paymentRecieved) {
                 $total = bcsub($total, $paymentRecieved->getAmount(), 2);
                 $this->printerConnector->addPayment($paymentRecieved);
             }

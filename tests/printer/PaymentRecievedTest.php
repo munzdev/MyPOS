@@ -8,6 +8,7 @@ use API\Lib\Printer;
 use API\Lib\Printer\PrinterConnector\ThermalPrinter;
 use API\Lib\PrintingInformation;
 use API\Models\Event\EventBankinformation;
+use API\Models\Event\EventContact;
 use API\Models\Event\EventPrinter;
 use API\Models\Payment\Coupon;
 use API\Models\Payment\PaymentCoupon;
@@ -16,29 +17,35 @@ use API\Models\User\User;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use const API\PAYMENT_TYPE_BANK_TRANSFER;
 use const API\PRINTER_LOGO_BIT_IMAGE_COLUMN;
+use const API\PRINTER_TYPE_NETWORK;
 
 $json = file_get_contents("../../src/public/js/i18n/de.json");
 $localization = json_decode($json);
 
-$eventPrinter = new EventPrinter();
+$container = new \API\Lib\Container();
+
+require __DIR__ . '/../../src/API/serviceLocator.php';
+
+$eventPrinter = new EventPrinter($container);
+$eventPrinter->setType(PRINTER_TYPE_NETWORK);
 $eventPrinter->setEventPrinterid(1);
 $eventPrinter->setCharactersPerRow(48);
 $eventPrinter->setAttr1("192.168.0.50");
 $eventPrinter->setAttr2(9100);
 
-$coupon = new Coupon();
+$coupon = new Coupon($container);
 $coupon->setCode("1234");
 $coupon->setValue(20);
 
-$paymentCoupon = new PaymentCoupon();
+$paymentCoupon = new PaymentCoupon($container);
 $paymentCoupon->setValueUsed(5);
 $paymentCoupon->setCoupon($coupon);
 
-$user = new User();
+$user = new User($container);
 $user->setFirstname("Test");
 $user->setLastname("Cashier");
 
-$paymentRecieved = new PaymentRecieved();
+$paymentRecieved = new PaymentRecieved($container);
 $paymentRecieved->setPaymentRecievedid(5232);
 $paymentRecieved->setAmount(12.4);
 $paymentRecieved->setDate(new DateTime);
@@ -46,10 +53,23 @@ $paymentRecieved->setPaymentTypeid(PAYMENT_TYPE_BANK_TRANSFER);
 $paymentRecieved->setUser($user);
 $paymentRecieved->addPaymentCoupon($paymentCoupon);
 
-$eventBankinformation = new EventBankinformation();
+$eventBankinformation = new EventBankinformation($container);
 $eventBankinformation->setName("Test Bank Int.");
 $eventBankinformation->setIban("AT32123456");
 $eventBankinformation->setBic("ATOO12354");
+
+$contact = new EventContact($container);
+$contact->setContactPerson("");
+$contact->setAddress2("");
+$contact->setTaxIdentificationNr("");
+$contact->setFax("");
+$contact->setEmail("");
+$contact->setTelephon("");
+$contact->setTitle("Mr");
+$contact->setName("Test Name");
+$contact->setAddress("Street 1");
+$contact->setZip(1234);
+$contact->setCity("City");
 
 $printingInformation = new PrintingInformation();
 $printingInformation->setLogoFile("resources/escpos-php.png");
@@ -58,6 +78,7 @@ $printingInformation->setHeader("Company bon printed\nStreet whatever 1\nCity 12
 $printingInformation->setInvoiceid(587472);
 $printingInformation->addPaymentRecieved($paymentRecieved);
 $printingInformation->setBankinformation($eventBankinformation);
+$printingInformation->setContact($contact);
 
 $printerConnector = new ThermalPrinter($eventPrinter, $localization->ReciepPrint);
 $paymentRecievedType = new Printer\PrintingType\PaymentRecieved($printingInformation, $printerConnector, $localization->ReciepPrint);

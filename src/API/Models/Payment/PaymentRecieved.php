@@ -86,6 +86,11 @@ class PaymentRecieved extends Model implements IPaymentRecieved
         return $this->model->getUserid();
     }
 
+    public function addPaymentCoupon(PaymentCoupon $paymentCoupon)
+    {
+		$this->model->addPaymentCoupon($paymentCoupon->getModel());
+    }
+
     public function getPaymentCoupons() : IPaymentCouponCollection
     {
         $paymentCoupons = $this->model->getPaymentCoupons();

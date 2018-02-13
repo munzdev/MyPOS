@@ -6,7 +6,7 @@ class PaymentRecieved extends AbstractPrintingType
 {
     public function printType()
     {
-        $paymentRecieved = $this->printingInformation->getPaymentRecieved()[0];
+        $paymentRecieved = $this->printingInformation->getPaymentRecieveds()[0];
         $user = $paymentRecieved->getUser();
 
         /* Print top logo and header */

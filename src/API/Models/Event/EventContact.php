@@ -32,7 +32,7 @@ class EventContact extends Model implements IEventContact
         return $this->model->getAddress();
     }
 
-    public function getAddress2(): string
+    public function getAddress2(): ?string
     {
         return $this->model->getAddress2();
     }
@@ -42,7 +42,7 @@ class EventContact extends Model implements IEventContact
         return $this->model->getCity();
     }
 
-    public function getContactPerson(): string
+    public function getContactPerson(): ?string
     {
         return $this->model->getContactPerson();
     }
